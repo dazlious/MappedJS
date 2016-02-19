@@ -1,0 +1,21 @@
+{
+  "name": "MappedJS Creator",
+  "main": "content/index.html",
+  "window": {
+    "width": 1440,
+    "height": 800,
+    "toolbar": false,
+    "frame": false,
+    "min_width": 1200,
+    "min_height": 800,
+    "position": "center"
+  },
+  "webkit": {
+    "plugin": true
+  },
+  "version": "0.0.1",
+  "dependencies": {},
+  "devDependencies": {
+    "fs-extra": "^0.26.5"
+  }
+}

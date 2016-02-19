@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de" ng-app="mjs-creator">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MappedJS - Creator</title>
+    <link href="css/app.css" rel="stylesheet">
+</head>
+<body>
+
+    <main class="app-main" ng-controller="mjs-app">
+
+    </main>
+
+    <script src="js/angular.min.js"></script>
+    <script src="js/app.js"></script>
+
+    <script type="text/javascript">
+        var path = './',
+            gui = require('nw.gui'),
+            fse = require('fs-extra'),
+            win = gui.Window.get();
+
+        fse.watch(path, {
+            recursive: true
+        }, function(event, filename) {
+            console.log(event + ": File "+filename+" - reloading")
+            win.reload();
+        });
+
+    </script>
+
+</body>
+</html>
