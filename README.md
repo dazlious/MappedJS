@@ -1,4 +1,4 @@
 # MappedJS
 
 ## Documentation
-Documentation for browser plugin can be found [here](./blob/master/docs/plugin.md)
+Documentation for browser plugin can be found [here](./docs/plugin.md)
