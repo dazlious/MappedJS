@@ -1,3 +1,6 @@
-/node_modules/
+# files
 .DS_Store
-/built/
+
+# folders
+built/
+node_modules/
