@@ -1,0 +1,21 @@
+{
+  "name": "MappedJS",
+  "version": "0.0.1",
+  "author": "Michael Duve",
+  "email": "mduve@designmail.net",
+  "homepage": "https://github.com/dazlious/MappedJS",
+  "engines": {
+    "node": "~5.0.0",
+    "npm": "~3.7.1"
+  },
+  "scripts": {
+    "docs-plugin": "jsdoc2md plugin/src/**/*.js > docs/plugin/readme.md"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-jsdoc-to-markdown": "^1.2.0",
+    "jsdoc-to-markdown": "^1.3.3"
+  },
+  "dependencies": {}
+}
