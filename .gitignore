@@ -4,3 +4,4 @@
 # folders
 built/
 node_modules/
+.sass-cache/

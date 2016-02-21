@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>CSS Stats</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <style>
+        body{font-family:"Helvetica Neue", Arial, Helvetica, sans-serif;font-size:16px;box-sizing:border-box;min-height:100vh;color:#444}@media (max-width: 768px){h1,h2,.cssstats_col{float:none;display:block;width:100% !important;text-align:center;box-sizing:border-box;margin:0 0 25px !important}}h1{font-size:50px;padding:0 25px;margin:10px 0}@media (max-width: 768px){h1{padding:0}}h2{font-size:26px;margin-left:10px}section[class*=cssstats_]{border-top:1px solid #666;padding:25px;box-sizing:border-box}section[class*=cssstats_]:before,section[class*=cssstats_]:after{display:table;content:" ";clear:both}.cssstats_col{float:left;margin:0 10px 25px}.cssstats_multiplier{font-style:italic;font-family:serif;font-size:16px;font-weight:600;opacity:.3}.cssstats_chart{margin:0 10px 25px;height:auto;width:100%;background:#eee;fill:currentcolor}.cssstats_chart line{stroke:currentColor;stroke-width:1;opacity:.5}.cssstats_chart text,.cssstats_chart path{fill:currentColor}.cssstats_fileSize,.cssstats_selectorSpecifity{width:45%;float:left}@media (max-width: 768px){.cssstats_fileSize,.cssstats_selectorSpecifity{width:100%;float:none}}.cssstats_fileSize .cssstats_col,.cssstats_selectorSpecifity .cssstats_col{width:calc(50% - 20px)}.cssstats_fileSize_prop,.cssstats_selectorSpecifity_prop{display:block}.cssstats_fileSize_value,.cssstats_selectorSpecifity_value{font-size:24px}.cssstats_totals .cssstats_col,.cssstats_uniqueDeclarations .cssstats_col,.cssstats_selectors .cssstats_col,.cssstats_propertyResets .cssstats_col{text-align:center}.cssstats_totals_prop,.cssstats_uniqueDeclarations_prop,.cssstats_selectors_prop,.cssstats_propertyResets_prop{display:block}.cssstats_totals_value,.cssstats_uniqueDeclarations_value,.cssstats_selectors_value,.cssstats_propertyResets_value{font-size:3em;font-weight:600;display:block}.cssstats_totals .cssstats_col{width:calc(14.28571% - 20px)}.cssstats_uniqueDeclarations .cssstats_col{width:calc(16.66667% - 20px)}.cssstats_selectors .cssstats_col{width:calc(20% - 20px)}.cssstats_propertyResets .cssstats_col{width:calc(20% - 20px)}.cssstats_colors{font-size:40px}.cssstats_colors .cssstats_col{width:calc(20% - 20px);font-size:70px;font-weight:600;text-align:center;box-sizing:border-box;padding:10px;border:1px solid #d8d8d8}.cssstats_colors_prop{display:block;font-size:16px;font-weight:400}.cssstats_backgroundColors .cssstats_col{width:calc(20% - 20px);display:block;height:calc(20vw - 20px);position:relative;box-sizing:border-box}.cssstats_backgroundColors_prop{position:absolute;bottom:0;background:#fff;display:block;padding:3px;width:100%;margin-bottom:5px;text-align:center}.cssstats_fontSizes .cssstats_col,.cssstats_fontFamilies .cssstats_col,.cssstats_uniqueMediaQueries .cssstats_col{width:calc(100% - 20px)}.cssstats_rawCss_code pre{width:100%;height:400px;overflow:auto;background:#d9d9d9;padding:10px}.cssstats_lint h3,.cssstats_lint hr{margin-left:10px;margin-right:10px}.cssstats_lint hr{border:1px solid #eee}.cssstats_lint_results{width:100%}.cssstats_lint_results th{background:#888;color:#fff}.cssstats_lint_results caption{text-align:left;font-size:20px;font-weight:bold}.cssstats_lint_results tr:nth-child(even){background:#eee}.cssstats_lint_results tr:nth-child(odd){background:#fff}.cssstats_lint_results td,.cssstats_lint_results th,.cssstats_lint_results caption{padding:5px;vertical-align:top}.cssstats_lint_results p{margin-top:0}.cssstats_lint_occurrences{border-left:10px solid}.cssstats_lint_file,.cssstats_lint_rule{display:block;font-style:italic;font-size:.8em;margin-bottom:5px;color:#888}.cssstats_lint .cssstats_col{margin-top:25px;margin-bottom:25px}
+[object Object]
+
+    </style>
+</head>
+<body>
+
+<header>
+            <h1>
+                CSS Stats
+            </h1>
+</header>
+
+<main>
+    <section class="cssstats_fileSize">
+<h2>File Size</h2>
+<div class="cssstats_col cssstats_fileSize_size"><span class="cssstats_fileSize_prop">Size:</span><span class="cssstats_fileSize_value">0.14 KB</span></div><div class="cssstats_col cssstats_fileSize_gzipSize"><span class="cssstats_fileSize_prop">Gzip Size:</span><span class="cssstats_fileSize_value">0.13 KB</span></div>
+</section>
+<section class="cssstats_selectorSpecifity">
+<h2>Selector Specifity</h2>
+<div class="cssstats_col cssstats_selectorSpecifity_max"><span class="cssstats_selectorSpecifity_prop">Max:</span><span class="cssstats_selectorSpecifity_value">10</span></div><div class="cssstats_col cssstats_selectorSpecifity_average"><span class="cssstats_selectorSpecifity_prop">Average:</span><span class="cssstats_selectorSpecifity_value">10</span></div>
+</section>
+<section class="cssstats_totals">
+<h2>Totals</h2>
+<div class="cssstats_col cssstats_totals_rules"><span class="cssstats_totals_value">1</span><span class="cssstats_totals_prop">rules</span></div><div class="cssstats_col cssstats_totals_selectors"><span class="cssstats_totals_value">1</span><span class="cssstats_totals_prop">selectors</span></div><div class="cssstats_col cssstats_totals_declarations"><span class="cssstats_totals_value">1</span><span class="cssstats_totals_prop">declarations</span></div><div class="cssstats_col cssstats_totals_properties"><span class="cssstats_totals_value">1</span><span class="cssstats_totals_prop">properties</span></div><div class="cssstats_col cssstats_totals_vendorPrefixes"><span class="cssstats_totals_value">0</span><span class="cssstats_totals_prop">vendorPrefixes</span></div><div class="cssstats_col cssstats_totals_mediaQueries"><span class="cssstats_totals_value">0</span><span class="cssstats_totals_prop">mediaQueries</span></div><div class="cssstats_col cssstats_totals_importants"><span class="cssstats_totals_value">0</span><span class="cssstats_totals_prop">importants</span></div>
+</section>
+<section class="cssstats_uniqueDeclarations">
+<h2>Unique Declarations</h2>
+
+</section>
+<section class="cssstats_selectors">
+<h2>Selectors</h2>
+<div class="cssstats_col cssstats_selectors_type"><span class="cssstats_selectors_value">0</span><span class="cssstats_selectors_prop">type</span></div><div class="cssstats_col cssstats_selectors_class"><span class="cssstats_selectors_value">1</span><span class="cssstats_selectors_prop">class</span></div><div class="cssstats_col cssstats_selectors_id"><span class="cssstats_selectors_value">0</span><span class="cssstats_selectors_prop">id</span></div><div class="cssstats_col cssstats_selectors_pseudoClass"><span class="cssstats_selectors_value">0</span><span class="cssstats_selectors_prop">pseudoClass</span></div><div class="cssstats_col cssstats_selectors_pseudoElement"><span class="cssstats_selectors_value">0</span><span class="cssstats_selectors_prop">pseudoElement</span></div>
+</section>
+<section class="cssstats_propertyResets">
+<h2>Property Resets</h2>
+
+</section>
+<section class="cssstats_colors">
+<h2>Colors</h2>
+</section>
+<section class="cssstats_backgroundColors">
+<h2>Background Colors</h2>
+</section>
+<section class="cssstats_fontSizes">
+<h2>0  Font  Sizes</h2>
+</section>
+<section class="cssstats_fontFamilies">
+<h2>Font Families</h2>
+</section>
+
+<section class="cssstats_uniqueMediaQueries">
+<h2>Unique Media Queries</h2>
+
+</section>
+<section class="cssstats_selectorSpecificity">
+<h2>Selector Specificity</h2>
+<svg viewBox="0 0 1200 320" class="cssstats_chart" preserveAspectRatio="none">
+<line x1="0" y1="0.5" x2="1200" y2="0.5"/>
+<text x="3" y="15.5">10</text>
+<line x1="0" y1="64.5" x2="1200" y2="64.5"/>
+<text x="3" y="79.5">5</text>
+<line x1="0" y1="128.5" x2="1200" y2="128.5"/>
+<text x="3" y="143.5">3</text>
+<line x1="0" y1="192.5" x2="1200" y2="192.5"/>
+<text x="3" y="207.5">3</text>
+<line x1="0" y1="256.5" x2="1200" y2="256.5"/>
+<text x="3" y="271.5">2</text>
+<line x1="0" y1="320.5" x2="1200" y2="320.5"/>
+<text x="3" y="335.5">2</text>
+<path d="M 0 320 L 
+1200 0 L 
+1200 320 z"/>
+</svg>
+<p class="cssstats_col">Base 10 specificity score for each selector by source order. Generally, lower scores and flatter curves are better for maintainability. <a href="http://csswizardry.com/2014/10/the-specificity-graph/">Learn More</a></p>
+</section>
+<section class="cssstats_rulesetSize">
+<h2>Ruleset Size</h2>
+<svg viewBox="0 0 1200 320" class="cssstats_chart" preserveAspectRatio="none">
+<line x1="0" y1="0.5" x2="1200" y2="0.5"/>
+<text x="3" y="15.5">1</text>
+<line x1="0" y1="64.5" x2="1200" y2="64.5"/>
+<text x="3" y="79.5">1</text>
+<line x1="0" y1="128.5" x2="1200" y2="128.5"/>
+<text x="3" y="143.5">0</text>
+<line x1="0" y1="192.5" x2="1200" y2="192.5"/>
+<text x="3" y="207.5">0</text>
+<line x1="0" y1="256.5" x2="1200" y2="256.5"/>
+<text x="3" y="271.5">0</text>
+<line x1="0" y1="320.5" x2="1200" y2="320.5"/>
+<text x="3" y="335.5">0</text>
+<path d="M 0 320 L 
+1200 0 L 
+1200 320 z"/>
+</svg>
+<p class="cssstats_col">Number of declarations per ruleset</p>
+</section>
+
+
+
+
+</main>
+
+</body>
+</html>
+
