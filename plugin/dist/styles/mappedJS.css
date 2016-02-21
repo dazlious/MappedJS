@@ -1,4 +1,8 @@
-/* line 4, ../../src/styles/mappedJS.scss */
-.mappedJS * {
-  box-sizing: border-box;
+@charset "UTF-8";
+
+.mappedJS {
+    * {
+        -moz-box-sizing: border-box;
+             box-sizing: border-box;
+    }
 }

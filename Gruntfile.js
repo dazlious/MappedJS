@@ -57,6 +57,34 @@ module.exports = function(grunt) {
                     'docs/index.html': 'docs/src/**.md'
                 }
             }
+        },
+        postcss: {
+            options: {
+                syntax: require('postcss-scss')
+            },
+            dev: {
+                options: {
+                    processors: [
+                        require('autoprefixer')({
+                            browsers: ["Firefox ESR", "Opera 12", "ff >= 10", "ios >= 5", "ie > 8"]
+                        })
+                    ]
+                },
+                src: 'plugin/src/styles/mappedJS.scss',
+                dest: 'plugin/dist/styles/mappedJS.css'
+            },
+            prod: {
+                options: {
+                    processors: [
+                        require('autoprefixer')({
+                            browsers: ["Firefox ESR", "Opera 12", "ff >= 10", "ios >= 5", "ie > 8"]
+                        }),
+                        require('cssnano')()
+                    ]
+                },
+                src: 'plugin/src/styles/mappedJS.scss',
+                dest: 'plugin/dist/styles/mappedJS.min.css'
+            }
         }
     });
 
@@ -64,15 +92,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jsdoc-to-markdown');
     grunt.loadNpmTasks('grunt-plato');
     grunt.loadNpmTasks('grunt-css-statistics');
-    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-markdown');
+    grunt.loadNpmTasks('grunt-postcss');
+
 
     // Register grunt tasks
     grunt.registerTask('default', []);
     grunt.registerTask('docs', ["jsdoc2md:plugin"]);
     grunt.registerTask('report', ["plato:plugin"]);
     grunt.registerTask('stats', ["cssstats:plugin"]);
-    grunt.registerTask('scss', ["sass:plugin"]);
-
+    grunt.registerTask('css', ["postcss:dev"]);
 
 };
