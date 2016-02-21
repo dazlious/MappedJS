@@ -11,7 +11,7 @@ module.exports = function(grunt) {
                     "property-list-format": "list"
                 },
                 src: 'plugin/src/js/**/*.js',
-                dest: 'docs/plugin.md'
+                dest: 'docs/src/plugin.md'
             }
         },
         plato: {
@@ -50,6 +50,13 @@ module.exports = function(grunt) {
                     'plugin/dist/styles/mappedJS.css': 'plugin/src/styles/**/*.scss'
                 }
             }
+        },
+        markdown: {
+            all: {
+                files: {
+                    'docs/index.html': 'docs/src/**.md'
+                }
+            }
         }
     });
 
@@ -58,6 +65,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-plato');
     grunt.loadNpmTasks('grunt-css-statistics');
     grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-markdown');
 
     // Register grunt tasks
     grunt.registerTask('default', []);
