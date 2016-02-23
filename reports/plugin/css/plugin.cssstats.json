@@ -1,0 +1,45 @@
+{
+    "fileSize": {
+        "size": "0.17 KB",
+        "gzipSize": "0.13 KB"
+    },
+    "selectorSpecifity": {
+        "max": 10,
+        "average": 5
+    },
+    "totals": {
+        "rules": 2,
+        "selectors": 2,
+        "declarations": 4,
+        "properties": 2,
+        "vendorPrefixes": 2,
+        "mediaQueries": 0,
+        "importants": 0
+    },
+    "uniqueDeclarations": {},
+    "selectors": {
+        "type": 0,
+        "class": 1,
+        "id": 0,
+        "pseudoClass": 0,
+        "pseudoElement": 0
+    },
+    "propertyResets": {},
+    "uniqueValues": {
+        "colors": {},
+        "backgroundColors": {},
+        "fontSizes": [],
+        "fontFamilies": {}
+    },
+    "uniqueMediaQueries": {},
+    "graphs": {
+        "selectorSpecificity": [
+            10,
+            0
+        ],
+        "rulesetSize": [
+            0,
+            2
+        ]
+    }
+}
