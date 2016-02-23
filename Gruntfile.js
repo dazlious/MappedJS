@@ -169,8 +169,10 @@ module.exports = function(grunt) {
     // Register grunt tasks
     grunt.registerTask('default', []);
 
-    grunt.registerTask('docs', ["jsdoc2md:plugin", "markdown:plugin", "shell:deployDocs"]);
+    grunt.registerTask('docs', ["jsdoc2md:plugin", "markdown:plugin"]);
     grunt.registerTask('report', ["babel:plugin", "jsbeautifier", "plato:plugin", "postcss", "cssstats:plugin"]);
+
+    grunt.registerTask('deployDocs', ["docs", "reports", "shell:deployDocs"]);
 
     grunt.registerTask('bundle', ["webpack:dev", "postcss:dev"]);
     grunt.registerTask('ship', ["webpack:prod", "postcss:prod"]);
