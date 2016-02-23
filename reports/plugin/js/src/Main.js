@@ -47,4 +47,3 @@ var MappedJS = exports.MappedJS = function() {
 
     return MappedJS;
 }();
-// Test
