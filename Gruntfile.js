@@ -174,7 +174,7 @@ module.exports = function(grunt) {
     grunt.registerTask('docs', ["jsdoc2md:plugin", "md:plugin"]);
     grunt.registerTask('report', ["babel:plugin", "jsbeautifier", "plato:plugin", "postcss", "cssstats:plugin"]);
 
-    grunt.registerTask('deployDocs', ["docs", "report", "shell:deployDocs"]);
+    grunt.registerTask('deployDocs', ["docs", "report"]);
 
     grunt.registerTask('bundle', ["webpack:dev", "postcss:dev"]);
     grunt.registerTask('ship', ["webpack:prod", "postcss:prod"]);
