@@ -39,11 +39,13 @@ module.exports = function(grunt) {
                 }
             }
         },
-        markdown: {
+        md: {
+            options: {
+                wrapper: 'docs/template.html'
+            },
             plugin: {
-                files: {
-                    'docs/index.html': 'docs/src/**.md'
-                }
+                src: 'docs/src/**.md',
+                dest: 'docs/index.html'
             }
         },
         postcss: {
@@ -159,7 +161,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jsdoc-to-markdown');
     grunt.loadNpmTasks('grunt-plato');
     grunt.loadNpmTasks('grunt-css-statistics');
-    grunt.loadNpmTasks('grunt-markdown');
+    grunt.loadNpmTasks('grunt-md');
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
@@ -169,7 +171,7 @@ module.exports = function(grunt) {
     // Register grunt tasks
     grunt.registerTask('default', []);
 
-    grunt.registerTask('docs', ["jsdoc2md:plugin", "markdown:plugin"]);
+    grunt.registerTask('docs', ["jsdoc2md:plugin", "md:plugin"]);
     grunt.registerTask('report', ["babel:plugin", "jsbeautifier", "plato:plugin", "postcss", "cssstats:plugin"]);
 
     grunt.registerTask('deployDocs', ["docs", "report", "shell:deployDocs"]);

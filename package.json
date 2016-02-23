@@ -20,7 +20,7 @@
     "grunt-css-statistics": "^0.9.6",
     "grunt-jsbeautifier": "^0.2.10",
     "grunt-jsdoc-to-markdown": "^1.2.0",
-    "grunt-markdown": "^0.7.0",
+    "grunt-md": "0.0.4",
     "grunt-plato": "^1.2.1",
     "grunt-postcss": "^0.7.2",
     "grunt-shell": "^1.1.2",
