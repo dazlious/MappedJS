@@ -145,7 +145,12 @@ module.exports = function(grunt) {
             files: ["reports/plugin/js/src/**.js"],
             options: {
                 jslint_happy: true,
-                break_chained_methods: true   
+                break_chained_methods: true
+            }
+        },
+        shell: {
+            deployDocs: {
+                command: 'sh ./deploy-pages.sh'
             }
         }
     });
@@ -159,11 +164,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks("grunt-jsbeautifier");
+    grunt.loadNpmTasks("grunt-shell");
 
     // Register grunt tasks
     grunt.registerTask('default', []);
 
-    grunt.registerTask('docs', ["jsdoc2md:plugin", "markdown:plugin"]);
+    grunt.registerTask('docs', ["jsdoc2md:plugin", "markdown:plugin", "shell:deployDocs"]);
     grunt.registerTask('report', ["babel:plugin", "jsbeautifier", "plato:plugin", "postcss", "cssstats:plugin"]);
 
     grunt.registerTask('bundle', ["webpack:dev", "postcss:dev"]);

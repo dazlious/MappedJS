@@ -1,5 +1,12 @@
 #!/bin/bash
 
+git add ./reports
+git add ./docs
+git add ./README.md
+
+git commit -m 'Updated docs/reports'
+git push origin master
+
 rm -rf ~/mappedJS
 mkdir ~/mappedJS
 cp -R ./reports ~/mappedJS/reports
