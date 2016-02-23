@@ -1,18 +1,18 @@
 {
     "fileSize": {
-        "size": "0.14 KB",
+        "size": "0.17 KB",
         "gzipSize": "0.13 KB"
     },
     "selectorSpecifity": {
         "max": 10,
-        "average": 10
+        "average": 5
     },
     "totals": {
-        "rules": 1,
-        "selectors": 1,
-        "declarations": 1,
-        "properties": 1,
-        "vendorPrefixes": 0,
+        "rules": 2,
+        "selectors": 2,
+        "declarations": 4,
+        "properties": 2,
+        "vendorPrefixes": 2,
         "mediaQueries": 0,
         "importants": 0
     },
@@ -34,10 +34,12 @@
     "uniqueMediaQueries": {},
     "graphs": {
         "selectorSpecificity": [
-            10
+            10,
+            0
         ],
         "rulesetSize": [
-            1
+            0,
+            2
         ]
     }
 }

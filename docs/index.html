@@ -1,73 +1,139 @@
-<!DOCTYPE html>
+<!DOCTYPE  html>
 <html>
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="http://dazlious.github.io/MappedJS/stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="http://dazlious.github.io/MappedJS/stylesheets/github-light.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="http://dazlious.github.io/MappedJS/stylesheets/print.css" media="print">
-
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <title>MappedJS by dazlious</title>
+    <meta charset="utf-8">
+    
+    <title>doc</title>
+    <style>
+      /*github.com style (c) Vasily Polovnyov <vast@whiteants.net>*/
+      pre code {
+        display: block; padding: 0.5em;
+        color: #333;
+        background: #f8f8ff
+      }
+      pre .comment,
+      pre .template_comment,
+      pre .diff .header,
+      pre .javadoc {
+        color: #998;
+        font-style: italic
+      }
+      pre .keyword,
+      pre .css .rule .keyword,
+      pre .winutils,
+      pre .javascript .title,
+      pre .nginx .title,
+      pre .subst,
+      pre .request,
+      pre .status {
+        color: #333;
+        font-weight: bold
+      }
+      pre .number,
+      pre .hexcolor,
+      pre .ruby .constant {
+        color: #099;
+      }
+      pre .string,
+      pre .tag .value,
+      pre .phpdoc,
+      pre .tex .formula {
+        color: #d14
+      }
+      pre .title,
+      pre .id {
+        color: #900;
+        font-weight: bold
+      }
+      pre .javascript .title,
+      pre .lisp .title,
+      pre .clojure .title,
+      pre .subst {
+        font-weight: normal
+      }
+      pre .class .title,
+      pre .haskell .type,
+      pre .vhdl .literal,
+      pre .tex .command {
+        color: #458;
+        font-weight: bold
+      }
+      pre .tag,
+      pre .tag .title,
+      pre .rules .property,
+      pre .django .tag .keyword {
+        color: #000080;
+        font-weight: normal
+      }
+      pre .attribute,
+      pre .variable,
+      pre .lisp .body {
+        color: #008080
+      }
+      pre .regexp {
+        color: #009926
+      }
+      pre .class {
+        color: #458;
+        font-weight: bold
+      }
+      pre .symbol,
+      pre .ruby .symbol .string,
+      pre .lisp .keyword,
+      pre .tex .special,
+      pre .prompt {
+        color: #990073
+      }
+      pre .built_in,
+      pre .lisp .title,
+      pre .clojure .built_in {
+        color: #0086b3
+      }
+      pre .preprocessor,
+      pre .pi,
+      pre .doctype,
+      pre .shebang,
+      pre .cdata {
+        color: #999;
+        font-weight: bold
+      }
+      pre .deletion {
+        background: #fdd
+      }
+      pre .addition {
+        background: #dfd
+      }
+      pre .diff .change {
+        background: #0086b3
+      }
+      pre .chunk {
+        color: #aaa
+      }
+    </style>
   </head>
-
-  <body>
-    <header>
-      <div class="inner">
-        <h1>MappedJS</h1>
-        <h2></h2>
-        <a href="https://github.com/dazlious/MappedJS" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
-
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <p><a name="Point"></a></p>
+  <body>  
+    <p><a name="Point"></a></p>
 <h2 id="point">Point</h2>
-<p><strong>Kind</strong>: global class<br><a name="new_Point_new"></a></p>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Point">Point</a><ul>
+<li><a href="#new_Point_new">new Point(x, y)</a></li>
+<li><a href="#Point+toString">.toString()</a> ⇒ <code>String</code></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_Point_new"></a></p>
 <h3 id="new-point-x-y-">new Point(x, y)</h3>
-<p>Initializes a Point</p>
+<p>Initializes a x-y-point</p>
 <p><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - Representation of a Point (x, y)<br><strong>Params</strong></p>
 <ul>
 <li>x <code>Number</code> <code> = 0</code> - =             0 x-coordinate</li>
 <li>y <code>Number</code> <code> = 0</code> - =             0 y-coordinat</li>
 </ul>
-
-        </section>
-
-        <aside id="sidebar">
-          <a href="https://github.com/dazlious/MappedJS/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/dazlious/MappedJS/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
-
-          <p class="repo-owner"><a href="https://github.com/dazlious/MappedJS"></a> is maintained by <a href="https://github.com/dazlious">dazlious</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
-
-            <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-74095960-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
+<p><a name="Point+toString"></a></p>
+<h3 id="point-tostring-code-string-code-">point.toString() ⇒ <code>String</code></h3>
+<p>Representation of a point</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code>String</code> - String representation of a point  </p>
 
   </body>
 </html>

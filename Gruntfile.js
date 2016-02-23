@@ -1,6 +1,8 @@
 module.exports = function(grunt) {
     "use strict";
 
+    var webpack = require('webpack');
+
     grunt.initConfig({
         banner: '/*! <%= pkg.name %> - v.<%= pkg.version %>, <%= grunt.template.today("yyyymmdd-HHMMss") %>  */\n',
         pkg: grunt.file.readJSON('package.json'),
@@ -20,7 +22,7 @@ module.exports = function(grunt) {
             },
             plugin: {
                 files: {
-                    'reports/plugin/js': ['plugin/src/js/**/*.js']
+                    'reports/plugin/js': "reports/plugin/js/src/**.js"
                 }
             }
         },
@@ -33,26 +35,12 @@ module.exports = function(grunt) {
             },
             plugin: {
                 files: {
-                    'reports/plugin/css': ['plugin/dist/styles/**.css']
-                }
-            }
-        },
-        sass: {
-            options: {
-                sourcemap: 'none'
-            },
-            dev: {
-                options: {
-                    style: 'expanded',
-                    lineNumbers: true
-                },
-                files: {
-                    'plugin/dist/styles/mappedJS.css': 'plugin/src/styles/**/*.scss'
+                    'reports/plugin/css': ['plugin/dist/styles/**.css', '!plugin/dist/styles/**.min.css']
                 }
             }
         },
         markdown: {
-            all: {
+            plugin: {
                 files: {
                     'docs/index.html': 'docs/src/**.md'
                 }
@@ -85,6 +73,80 @@ module.exports = function(grunt) {
                 src: 'plugin/src/styles/mappedJS.scss',
                 dest: 'plugin/dist/styles/mappedJS.min.css'
             }
+        },
+        webpack: {
+            options: {
+                entry: {
+                    mappedJS: __dirname + '/plugin/src/js/Main.js'
+                },
+                output: {
+                    path: 'plugin/dist/js/',
+                    filename: '[name].js',
+                    libraryTarget: "umd",
+                    library: ["de"]
+                },
+                devtool: "cheap-module-source-map",
+                stats: {
+                    colors: true,
+                    modules: true,
+                    reasons: true
+                },
+                progress: false,
+                failOnError: false,
+                watch: false,
+                keepalive: false,
+                inline: true,
+                externals: {
+                    jquery: "jQuery"
+                },
+                target: "web",
+                module: {
+                    loaders: [{
+                        test: /\.js?$/,
+                        loader: 'babel-loader',
+                        exclude: /node_modules/,
+                        query: {
+                            presets: ['es2015']
+                        }
+                    }],
+                    preLoaders: [{
+                        test: /\.js$/,
+                        exclude: /node_modules/,
+                        loader: "jshint-loader"
+                    }]
+                }
+            },
+            dev: {
+
+            },
+            prod: {
+                output: {
+                    filename: '[name].min.js'
+                },
+                plugins: [
+                    new webpack.optimize.UglifyJsPlugin()
+                ]
+            }
+        },
+        babel: {
+            options: {
+                presets: ['es2015']
+            },
+            plugin: {
+                files: [{
+                    expand: true,
+                    cwd: 'plugin/src/js/',
+                    src: ['**.js'],
+                    dest: 'reports/plugin/js/src'
+                }]
+            }
+        },
+        jsbeautifier: {
+            files: ["reports/plugin/js/src/**.js"],
+            options: {
+                jslint_happy: true,
+                break_chained_methods: true   
+            }
         }
     });
 
@@ -94,13 +156,16 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-css-statistics');
     grunt.loadNpmTasks('grunt-markdown');
     grunt.loadNpmTasks('grunt-postcss');
-
+    grunt.loadNpmTasks('grunt-webpack');
+    grunt.loadNpmTasks('grunt-babel');
+    grunt.loadNpmTasks("grunt-jsbeautifier");
 
     // Register grunt tasks
     grunt.registerTask('default', []);
-    grunt.registerTask('docs', ["jsdoc2md:plugin"]);
-    grunt.registerTask('report', ["plato:plugin"]);
-    grunt.registerTask('stats', ["cssstats:plugin"]);
-    grunt.registerTask('css', ["postcss:dev"]);
 
+    grunt.registerTask('docs', ["jsdoc2md:plugin", "markdown:plugin"]);
+    grunt.registerTask('report', ["babel:plugin", "jsbeautifier", "plato:plugin", "postcss", "cssstats:plugin"]);
+
+    grunt.registerTask('bundle', ["webpack:dev", "postcss:dev"]);
+    grunt.registerTask('ship', ["webpack:prod", "postcss:prod"]);
 };
