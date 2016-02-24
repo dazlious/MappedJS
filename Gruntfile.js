@@ -110,11 +110,6 @@ module.exports = function(grunt) {
                         query: {
                             presets: ['es2015']
                         }
-                    }],
-                    preLoaders: [{
-                        test: /\.js$/,
-                        exclude: /node_modules/,
-                        loader: "jshint-loader"
                     }]
                 }
             },
@@ -154,6 +149,12 @@ module.exports = function(grunt) {
             deployDocs: {
                 command: 'sh ./deploy-pages.sh'
             }
+        },
+        watch: {
+            plugin: {
+                files: ['plugin/src/**/*.js', 'plugin/src/**/*.scss'],
+                tasks: ['bundle']
+            }
         }
     });
 
@@ -167,6 +168,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks("grunt-jsbeautifier");
     grunt.loadNpmTasks("grunt-shell");
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
 
     // Register grunt tasks
     grunt.registerTask('default', []);
@@ -176,7 +179,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('deployDocs', ["docs", "report"]);
     grunt.registerTask('gh-pages', ["shell:deployDocs"]);
-    
+
+    grunt.registerTask('dev', ["watch:plugin"]);
     grunt.registerTask('bundle', ["webpack:dev", "postcss:dev"]);
     grunt.registerTask('ship', ["webpack:prod", "postcss:prod"]);
 };

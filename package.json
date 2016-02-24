@@ -17,6 +17,7 @@
     "grunt": "^0.4.5",
     "grunt-babel": "^6.0.0",
     "grunt-cli": "^0.1.13",
+    "grunt-contrib-watch": "^0.6.1",
     "grunt-css-statistics": "^0.9.6",
     "grunt-jsbeautifier": "^0.2.10",
     "grunt-jsdoc-to-markdown": "^1.2.0",
