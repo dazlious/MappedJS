@@ -5,10 +5,11 @@ export class MappedJS {
 
     constructor({container=".mjs"}) {
         this.initializeApi();
-
         this.initializeSettings(container);
 
         this.initializeMap();
+
+        this.bindEvents();
     }
 
     initializeSettings(container) {
@@ -29,6 +30,14 @@ export class MappedJS {
         this.api = {
             MapController: MapController
         };
+    }
+
+    bindEvents() {
+        $(window).on("resize orientationchange", this.resizeHandler.bind(this));
+    }
+
+    resizeHandler() {
+        this.$canvas.resize();
     }
 
 }

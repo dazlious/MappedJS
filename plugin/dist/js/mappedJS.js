@@ -77,10 +77,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, MappedJS);
 
 	        this.initializeApi();
-
 	        this.initializeSettings(container);
 
 	        this.initializeMap();
+
+	        this.bindEvents();
 	    }
 
 	    _createClass(MappedJS, [{
@@ -105,6 +106,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.api = {
 	                MapController: MapController
 	            };
+	        }
+	    }, {
+	        key: 'bindEvents',
+	        value: function bindEvents() {
+	            $(window).on("resize orientationchange", this.resizeHandler.bind(this));
+	        }
+	    }, {
+	        key: 'resizeHandler',
+	        value: function resizeHandler() {
+	            this.$canvas.resize();
 	        }
 	    }]);
 
@@ -160,7 +171,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.canvasContext.canvas.width = this.canvasWidth;
 	            this.canvasContext.canvas.height = this.canvasHeight;
+
+	            this.redraw();
 	        }
+	    }, {
+	        key: "redraw",
+	        value: function redraw() {}
 	    }]);
 
 	    return MapController;

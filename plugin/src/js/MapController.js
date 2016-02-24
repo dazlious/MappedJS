@@ -27,5 +27,11 @@ export class MapController {
 
         this.canvasContext.canvas.width = this.canvasWidth;
         this.canvasContext.canvas.height = this.canvasHeight;
+
+        this.redraw();
+    }
+
+    redraw() {
+        
     }
 }
