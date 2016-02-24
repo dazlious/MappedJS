@@ -66,7 +66,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Point = __webpack_require__(1);
+	var MapController = __webpack_require__(1).MapController;
 	var $ = __webpack_require__(2);
 
 	var MappedJS = exports.MappedJS = function () {
@@ -79,6 +79,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.initializeApi();
 
 	        this.initializeSettings(container);
+
+	        this.initializeMap();
 	    }
 
 	    _createClass(MappedJS, [{
@@ -88,12 +90,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!(this.$container instanceof jQuery)) {
 	                throw new Error("Container " + container + " not found");
 	            }
+	            this.$container.addClass("mappedJS");
+	        }
+	    }, {
+	        key: 'initializeMap',
+	        value: function initializeMap() {
+	            this.$canvas = new MapController({
+	                container: this.$container
+	            });
 	        }
 	    }, {
 	        key: 'initializeApi',
 	        value: function initializeApi() {
 	            this.api = {
-	                Point: Point
+	                MapController: MapController
 	            };
 	        }
 	    }]);
@@ -103,7 +113,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
@@ -115,39 +125,45 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Point = exports.Point = function () {
+	var $ = __webpack_require__(2);
 
-	    /**
-	     * Initializes a x-y-point
-	     * @param  {Number} x =             0 x-coordinate
-	     * @param  {Number} y =             0 y-coordinat
-	     * @return {Point}   Representation of a Point (x, y)
-	     */
+	var MapController = exports.MapController = function () {
+	    function MapController(_ref) {
+	        var container = _ref.container;
 
-	    function Point() {
-	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	        _classCallCheck(this, MapController);
 
-	        _classCallCheck(this, Point);
+	        if (!container) {
+	            throw Error("You must define a container to initialize a map");
+	        }
 
-	        this.x = x;
-	        this.y = y;
+	        this.$container = container;
+	        this.initialize();
 	    }
 
-	    /**
-	     * Representation of a point
-	     * @return {String} String representation of a point
-	     */
+	    _createClass(MapController, [{
+	        key: "initialize",
+	        value: function initialize() {
+	            this.$canvas = $("<canvas class='mjs-canvas' />");
+	            this.canvas = this.$canvas[0];
 
+	            this.$container.append(this.$canvas);
 
-	    _createClass(Point, [{
-	        key: "toString",
-	        value: function toString() {
-	            return "({this.x}, {this.y})";
+	            this.canvasContext = this.canvas.getContext("2d");
+	            this.resize();
+	        }
+	    }, {
+	        key: "resize",
+	        value: function resize() {
+	            this.canvasWidth = this.$container.innerWidth();
+	            this.canvasHeight = this.$container.innerHeight();
+
+	            this.canvasContext.canvas.width = this.canvasWidth;
+	            this.canvasContext.canvas.height = this.canvasHeight;
 	        }
 	    }]);
 
-	    return Point;
+	    return MapController;
 	}();
 
 /***/ },

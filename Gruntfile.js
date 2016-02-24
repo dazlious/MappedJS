@@ -49,9 +49,6 @@ module.exports = function(grunt) {
             }
         },
         postcss: {
-            options: {
-                syntax: require('postcss-scss')
-            },
             dev: {
                 options: {
                     processors: [
@@ -60,7 +57,7 @@ module.exports = function(grunt) {
                         })
                     ]
                 },
-                src: 'plugin/src/styles/mappedJS.scss',
+                src: 'plugin/dist/styles/mappedJS.css',
                 dest: 'plugin/dist/styles/mappedJS.css'
             },
             prod: {
@@ -72,7 +69,7 @@ module.exports = function(grunt) {
                         require('cssnano')()
                     ]
                 },
-                src: 'plugin/src/styles/mappedJS.scss',
+                src: 'plugin/dist/styles/mappedJS.css',
                 dest: 'plugin/dist/styles/mappedJS.min.css'
             }
         },
@@ -155,6 +152,22 @@ module.exports = function(grunt) {
                 files: ['plugin/src/**/*.js', 'plugin/src/**/*.scss'],
                 tasks: ['bundle']
             }
+        },
+        sass: {
+            options: {
+                sourceMap: true,
+                indentType: "tab",
+                indentWidth: 1
+            },
+            plugin: {
+                options: {
+                    sourceComments: true,
+                    outputStyle: "expanded"
+                },
+                files: {
+                    "plugin/dist/styles/mappedJS.css": "plugin/src/styles/mappedJS.scss"
+                }
+            }
         }
     });
 
@@ -169,7 +182,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-jsbeautifier");
     grunt.loadNpmTasks("grunt-shell");
     grunt.loadNpmTasks('grunt-contrib-watch');
-
+    grunt.loadNpmTasks('grunt-sass');
 
     // Register grunt tasks
     grunt.registerTask('default', []);
@@ -181,6 +194,6 @@ module.exports = function(grunt) {
     grunt.registerTask('gh-pages', ["shell:deployDocs"]);
 
     grunt.registerTask('dev', ["watch:plugin"]);
-    grunt.registerTask('bundle', ["webpack:dev", "postcss:dev"]);
-    grunt.registerTask('ship', ["webpack:prod", "postcss:prod"]);
+    grunt.registerTask('bundle', ["sass:plugin", "postcss:dev", "webpack:dev"]);
+    grunt.registerTask('ship', ["sass:plugin", "postcss:prod", "webpack:prod"]);
 };

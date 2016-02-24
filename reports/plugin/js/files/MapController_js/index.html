@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Plato - Main.js</title>
+  <title>Plato - MapController.js</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
@@ -36,7 +36,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>Main.js</h1>
+    <h1>MapController.js</h1>
   </div>
 </div>
 
@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">73.93</p>
+      <p class="stat">72.05</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">79</p>
+      <p class="stat">69</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">30.81</p>
+      <p class="stat">23.83</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.69</p>
+      <p class="stat">0.54</p>
     </div>
   </div>
 </div>
@@ -89,17 +89,11 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">&#039;use strict&#039;;
+    <textarea id="file-source" class="col-md-12">&quot;use strict&quot;;
 
 Object.defineProperty(exports, &quot;__esModule&quot;, {
     value: true
 });
-
-var _typeof = typeof Symbol === &quot;function&quot; &amp;&amp; typeof Symbol.iterator === &quot;symbol&quot; ? function(obj) {
-    return typeof obj;
-} : function(obj) {
-    return obj &amp;&amp; typeof Symbol === &quot;function&quot; &amp;&amp; obj.constructor === Symbol ? &quot;symbol&quot; : typeof obj;
-};
 
 var _createClass = function() {
     function defineProperties(target, props) {
@@ -124,49 +118,45 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var MapController = require(&#039;./MapController.js&#039;).MapController;
 var $ = require(&#039;jquery&#039;);
 
-var MappedJS = exports.MappedJS = function() {
-    function MappedJS(_ref) {
-        var _ref$container = _ref.container;
-        var container = _ref$container === undefined ? &quot;.mjs&quot; : _ref$container;
+var MapController = exports.MapController = function() {
+    function MapController(_ref) {
+        var container = _ref.container;
 
-        _classCallCheck(this, MappedJS);
+        _classCallCheck(this, MapController);
 
-        this.initializeApi();
+        if (!container) {
+            throw Error(&quot;You must define a container to initialize a map&quot;);
+        }
 
-        this.initializeSettings(container);
-
-        this.initializeMap();
+        this.$container = container;
+        this.initialize();
     }
 
-    _createClass(MappedJS, [{
-        key: &#039;initializeSettings&#039;,
-        value: function initializeSettings(container) {
-            this.$container = typeof container === &quot;string&quot; ? $(container) : (typeof container === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(container)) === &quot;object&quot; &amp;&amp; container instanceof jQuery ? container : $(container);
-            if (!(this.$container instanceof jQuery)) {
-                throw new Error(&quot;Container &quot; + container + &quot; not found&quot;);
-            }
-            this.$container.addClass(&quot;mappedJS&quot;);
+    _createClass(MapController, [{
+        key: &quot;initialize&quot;,
+        value: function initialize() {
+            this.$canvas = $(&quot;&lt;canvas class=&#039;mjs-canvas&#039; /&gt;&quot;);
+            this.canvas = this.$canvas[0];
+
+            this.$container.append(this.$canvas);
+
+            this.canvasContext = this.canvas.getContext(&quot;2d&quot;);
+            this.resize();
         }
     }, {
-        key: &#039;initializeMap&#039;,
-        value: function initializeMap() {
-            this.$canvas = new MapController({
-                container: this.$container
-            });
-        }
-    }, {
-        key: &#039;initializeApi&#039;,
-        value: function initializeApi() {
-            this.api = {
-                MapController: MapController
-            };
+        key: &quot;resize&quot;,
+        value: function resize() {
+            this.canvasWidth = this.$container.innerWidth();
+            this.canvasHeight = this.$container.innerHeight();
+
+            this.canvasContext.canvas.width = this.canvasWidth;
+            this.canvasContext.canvas.height = this.canvasHeight;
         }
     }]);
 
-    return MappedJS;
+    return MapController;
 }();</textarea>
   </div>
 </div>

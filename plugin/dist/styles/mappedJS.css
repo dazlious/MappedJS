@@ -1,8 +1,10 @@
-@charset "UTF-8";
+/* line 4, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
+.mappedJS * {
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+}
 
-.mappedJS {
-    * {
-        -moz-box-sizing: border-box;
-             box-sizing: border-box;
-    }
+/* line 7, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
+.mappedJS > canvas {
+	display: block;
 }

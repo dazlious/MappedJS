@@ -1,4 +1,4 @@
-var Point = require('./Point.js');
+var MapController = require('./MapController.js').MapController;
 var $ = require('jquery');
 
 export class MappedJS {
@@ -7,6 +7,8 @@ export class MappedJS {
         this.initializeApi();
 
         this.initializeSettings(container);
+
+        this.initializeMap();
     }
 
     initializeSettings(container) {
@@ -14,12 +16,18 @@ export class MappedJS {
         if (!(this.$container instanceof jQuery)) {
             throw new Error("Container " + container + " not found");
         }
+        this.$container.addClass("mappedJS");
+    }
 
+    initializeMap() {
+        this.$canvas = new MapController({
+            container: this.$container
+        });
     }
 
     initializeApi() {
         this.api = {
-            Point: Point
+            MapController: MapController
         };
     }
 
