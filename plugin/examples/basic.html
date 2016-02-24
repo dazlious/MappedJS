@@ -9,6 +9,9 @@
         <meta name="viewport" content="width=device-width, user-scalable=yes">
         <meta name="format-detection" content="telephone=no">
         <meta name="robots" content="index,follow,noarchive">
+
+        <script src="../../vendor/js/jquery-2.2.1.min.js"></script>
+
         <style>
             body {
                 margin: 0;
@@ -17,6 +20,16 @@
     </head>
     <body>
 
+        <div class="mjs">
+
+        </div>
+
         <script src="../dist/js/mappedJS.js"></script>
+        <script>
+            var mappedJS = new de.MappedJS({
+                container: ".mjs",
+            });
+            console.info(mappedJS);
+        </script>
     </body>
 </html>

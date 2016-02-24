@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
+		module.exports = factory(require("jQuery"));
 	else if(typeof define === 'function' && define.amd)
-		define([], factory);
+		define(["jQuery"], factory);
 	else if(typeof exports === 'object')
-		exports["de"] = factory();
+		exports["de"] = factory(require("jQuery"));
 	else
-		root["de"] = factory();
-})(this, function() {
+		root["de"] = factory(root["jQuery"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -60,20 +60,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Point = __webpack_require__(1);
+	var $ = __webpack_require__(2);
 
 	var MappedJS = exports.MappedJS = function () {
-	    function MappedJS() {
+	    function MappedJS(_ref) {
+	        var _ref$container = _ref.container;
+	        var container = _ref$container === undefined ? ".mjs" : _ref$container;
+
 	        _classCallCheck(this, MappedJS);
 
 	        this.initializeApi();
+
+	        this.initializeSettings(container);
 	    }
 
 	    _createClass(MappedJS, [{
+	        key: 'initializeSettings',
+	        value: function initializeSettings(container) {
+	            this.$container = typeof container === "string" ? $(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : $(container);
+	            if (!(this.$container instanceof jQuery)) {
+	                throw new Error("Container " + container + " not found");
+	            }
+	        }
+	    }, {
 	        key: 'initializeApi',
 	        value: function initializeApi() {
 	            this.api = {
@@ -133,6 +149,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return Point;
 	}();
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 
 /***/ }
 /******/ ])
