@@ -71,6 +71,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Helper = __webpack_require__(3).Helper;
 
 	var MappedJS = exports.MappedJS = function () {
+
+	    /**
+	     * Constructor
+	     * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
+	     * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
+	     * @param  {Object} events={loaded: "mjs-loaded"}} - List of events
+	     */
+
 	    function MappedJS(_ref) {
 	        var _ref$container = _ref.container;
 	        var container = _ref$container === undefined ? ".mjs" : _ref$container;
@@ -92,6 +100,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    }
 
+	    /**
+	     * initializes the settings and handles errors
+	     * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
+	     * @param  {object} events - List of events
+	     */
+
+
 	    _createClass(MappedJS, [{
 	        key: 'initializeSettings',
 	        value: function initializeSettings(container, events) {
@@ -103,13 +118,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.events = events;
 	        }
+
+	        /**
+	         * initializes the data, asynchronous
+	         * @param  {Object} mapData - data of map tiles, can be json or path to file
+	         * @param  {Function} cb - called, when data is received
+	         */
+
 	    }, {
 	        key: 'initializeData',
 	        value: function initializeData(mapData, cb) {
-	            var data = undefined;
 	            var _this = this;
 	            if (typeof mapData === "string") {
-	                Helper.request(mapData, function (data) {
+	                Helper.requestJSON(mapData, function (data) {
 	                    _this.mapData = data;
 	                    cb();
 	                });
@@ -118,6 +139,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                cb();
 	            }
 	        }
+
+	        /**
+	         * initializes Map module
+	         */
+
 	    }, {
 	        key: 'initializeMap',
 	        value: function initializeMap() {
@@ -125,23 +151,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	                container: this.$container
 	            });
 	        }
+
+	        /**
+	         * initializes the public Api
+	         */
+
 	    }, {
 	        key: 'initializeApi',
 	        value: function initializeApi() {
 	            this.api = {
-	                MapController: MapController
+	                MapController: MapController,
+	                Helper: Helper
 	            };
 	        }
+
+	        /**
+	         * binds all events to handlers
+	         */
+
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
 	            $(window).on("resize orientationchange", this.resizeHandler.bind(this));
 	        }
+
+	        /**
+	         * handles resizing of window
+	         */
+
 	    }, {
 	        key: 'resizeHandler',
 	        value: function resizeHandler() {
 	            this.$canvas.resize();
 	        }
+
+	        /**
+	         * called when loading and initialization is finisehd
+	         */
+
 	    }, {
 	        key: 'loadingFinished',
 	        value: function loadingFinished() {
@@ -169,6 +216,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var $ = __webpack_require__(2);
 
 	var MapController = exports.MapController = function () {
+
+	    /**
+	     * Constructor
+	     * @param  {Object} container - jQuery-object holding the container
+	     */
+
 	    function MapController(_ref) {
 	        var container = _ref.container;
 
@@ -182,6 +235,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.initialize();
 	    }
 
+	    /**
+	     * initializes the MapController
+	     */
+
+
 	    _createClass(MapController, [{
 	        key: "initialize",
 	        value: function initialize() {
@@ -193,6 +251,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.canvasContext = this.canvas.getContext("2d");
 	            this.resize();
 	        }
+
+	        /**
+	         * Handles resizing of map
+	         */
+
 	    }, {
 	        key: "resize",
 	        value: function resize() {
@@ -204,6 +267,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.redraw();
 	        }
+
+	        /**
+	         * Handles the redraw of the map
+	         */
+
 	    }, {
 	        key: "redraw",
 	        value: function redraw() {}
@@ -230,7 +298,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var $ = __webpack_require__(2);
 
 	var Helper = exports.Helper = {
-	    request: function request(filename, callback) {
+	    /**
+	     * request json-data from given file and calls callback on success
+	     * @param  {string} filename - path to file
+	     * @param  {Function} callback - function called when data is loaded successfully
+	     */
+	    requestJSON: function requestJSON(filename, callback) {
 	        "use strict";
 
 	        $.ajax({

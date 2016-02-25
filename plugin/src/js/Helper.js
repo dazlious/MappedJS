@@ -1,9 +1,13 @@
 var $ = require('jquery');
 
 export var Helper = {
-    request: function(filename, callback) {
+    /**
+     * request json-data from given file and calls callback on success
+     * @param  {string} filename - path to file
+     * @param  {Function} callback - function called when data is loaded successfully
+     */
+    requestJSON: function(filename, callback) {
         "use strict";
-
         $.ajax({
             type: "GET",
             url: filename,

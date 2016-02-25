@@ -2,6 +2,10 @@ var $ = require('jquery');
 
 export class MapController {
 
+    /**
+     * Constructor
+     * @param  {Object} container - jQuery-object holding the container
+     */
     constructor({container}) {
         if (!container) {
             throw Error("You must define a container to initialize a map");
@@ -11,6 +15,9 @@ export class MapController {
         this.initialize();
     }
 
+    /**
+     * initializes the MapController
+     */
     initialize() {
         this.$canvas = $("<canvas class='mjs-canvas' />");
         this.canvas = this.$canvas[0];
@@ -21,6 +28,9 @@ export class MapController {
         this.resize();
     }
 
+    /**
+     * Handles resizing of map
+     */
     resize() {
         this.canvasWidth = this.$container.innerWidth();
         this.canvasHeight = this.$container.innerHeight();
@@ -31,7 +41,10 @@ export class MapController {
         this.redraw();
     }
 
+    /**
+     * Handles the redraw of the map
+     */
     redraw() {
-        
+
     }
 }

@@ -4,6 +4,12 @@ var Helper = require('./Helper.js').Helper;
 
 export class MappedJS {
 
+    /**
+     * Constructor
+     * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
+     * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
+     * @param  {Object} events={loaded: "mjs-loaded"}} - List of events
+     */
     constructor({container=".mjs", mapData={}, events={loaded:"mjs-loaded"}}) {
         this.initializeApi();
         this.initializeSettings(container, events);
@@ -17,6 +23,11 @@ export class MappedJS {
 
     }
 
+    /**
+     * initializes the settings and handles errors
+     * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
+     * @param  {object} events - List of events
+     */
     initializeSettings(container, events) {
         this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
         if (!(this.$container instanceof jQuery)) {
@@ -27,11 +38,15 @@ export class MappedJS {
         this.events = events;
     }
 
+    /**
+     * initializes the data, asynchronous
+     * @param  {Object} mapData - data of map tiles, can be json or path to file
+     * @param  {Function} cb - called, when data is received
+     */
     initializeData(mapData, cb) {
-        let data;
         let _this = this;
         if (typeof mapData === "string") {
-            Helper.request(mapData, function(data) {
+            Helper.requestJSON(mapData, function(data) {
                 _this.mapData = data;
                 cb();
             });
@@ -41,26 +56,42 @@ export class MappedJS {
         }
     }
 
+    /**
+     * initializes Map module
+     */
     initializeMap() {
         this.$canvas = new MapController({
             container: this.$container
         });
     }
 
+    /**
+     * initializes the public Api
+     */
     initializeApi() {
         this.api = {
-            MapController: MapController
+            MapController: MapController,
+            Helper: Helper
         };
     }
 
+    /**
+     * binds all events to handlers
+     */
     bindEvents() {
         $(window).on("resize orientationchange", this.resizeHandler.bind(this));
     }
 
+    /**
+     * handles resizing of window
+     */
     resizeHandler() {
         this.$canvas.resize();
     }
 
+    /**
+     * called when loading and initialization is finisehd
+     */
     loadingFinished() {
         this.$container.trigger(this.events.loaded);
     }
