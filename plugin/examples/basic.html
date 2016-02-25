@@ -10,6 +10,7 @@
         <meta name="format-detection" content="telephone=no">
         <meta name="robots" content="index,follow,noarchive">
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser-polyfill.min.js"></script>
         <link rel="stylesheet" type="text/css" href="../dist/styles/mappedJS.css">
 
         <script src="../../vendor/js/jquery-2.2.1.min.js"></script>
@@ -42,8 +43,16 @@
         <script>
             var mappedJS = new de.MappedJS({
                 container: ".mjs",
+                mapData: "mapData.json",
+                events: {
+                    loaded: "mjs-loaded"
+                }
             });
-            console.info(mappedJS);
+
+            $(".mjs").on("mjs-loaded", function() {
+                console.info(mappedJS);
+            });
+
         </script>
     </body>
 </html>

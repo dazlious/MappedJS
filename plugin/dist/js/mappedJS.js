@@ -68,30 +68,55 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var MapController = __webpack_require__(1).MapController;
 	var $ = __webpack_require__(2);
+	var Helper = __webpack_require__(3).Helper;
 
 	var MappedJS = exports.MappedJS = function () {
 	    function MappedJS(_ref) {
 	        var _ref$container = _ref.container;
 	        var container = _ref$container === undefined ? ".mjs" : _ref$container;
+	        var _ref$mapData = _ref.mapData;
+	        var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
+	        var _ref$events = _ref.events;
+	        var events = _ref$events === undefined ? { loaded: "mjs-loaded" } : _ref$events;
 
 	        _classCallCheck(this, MappedJS);
 
 	        this.initializeApi();
-	        this.initializeSettings(container);
+	        this.initializeSettings(container, events);
 
-	        this.initializeMap();
-
-	        this.bindEvents();
+	        var _this = this;
+	        this.initializeData(mapData, function () {
+	            _this.initializeMap();
+	            _this.bindEvents();
+	            _this.loadingFinished();
+	        });
 	    }
 
 	    _createClass(MappedJS, [{
 	        key: 'initializeSettings',
-	        value: function initializeSettings(container) {
+	        value: function initializeSettings(container, events) {
 	            this.$container = typeof container === "string" ? $(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : $(container);
 	            if (!(this.$container instanceof jQuery)) {
 	                throw new Error("Container " + container + " not found");
 	            }
 	            this.$container.addClass("mappedJS");
+
+	            this.events = events;
+	        }
+	    }, {
+	        key: 'initializeData',
+	        value: function initializeData(mapData, cb) {
+	            var data = undefined;
+	            var _this = this;
+	            if (typeof mapData === "string") {
+	                Helper.request(mapData, function (data) {
+	                    _this.mapData = data;
+	                    cb();
+	                });
+	            } else {
+	                this.mapData = (typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null;
+	                cb();
+	            }
 	        }
 	    }, {
 	        key: 'initializeMap',
@@ -116,6 +141,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'resizeHandler',
 	        value: function resizeHandler() {
 	            this.$canvas.resize();
+	        }
+	    }, {
+	        key: 'loadingFinished',
+	        value: function loadingFinished() {
+	            this.$container.trigger(this.events.loaded);
 	        }
 	    }]);
 
@@ -187,6 +217,39 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var $ = __webpack_require__(2);
+
+	var Helper = exports.Helper = {
+	    request: function request(filename, callback) {
+	        "use strict";
+
+	        $.ajax({
+	            type: "GET",
+	            url: filename,
+	            dataType: "json",
+	            success: function success(data, status, request) {
+	                try {
+	                    callback(data);
+	                } catch (msg) {
+	                    throw Error("The JSON submitted seems not valid");
+	                }
+	            },
+	            error: function error(response) {
+	                console.error("Error requesting file: ", response);
+	            }
+	        });
+	    }
+		};
 
 /***/ }
 /******/ ])
