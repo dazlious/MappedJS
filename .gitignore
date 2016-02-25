@@ -6,3 +6,4 @@ built/
 node_modules/
 .sass-cache/
 assets%F0scripts/
+.idea/
