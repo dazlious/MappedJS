@@ -25,28 +25,99 @@
         <h1>
             Documentation
         </h1>
-        <p><a name="Point"></a></p>
-<h2 id="point">Point</h2>
+        <h2 id="classes">Classes</h2>
+<dl>
+<dt><a href="#MappedJS">MappedJS</a></dt>
+<dd></dd>
+<dt><a href="#MapController">MapController</a></dt>
+<dd></dd>
+</dl>
+
+<p><a name="MappedJS"></a></p>
+<h2 id="mappedjs">MappedJS</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
-<li><a href="#Point">Point</a><ul>
-<li><a href="#new_Point_new">new Point(x, y)</a></li>
-<li><a href="#Point+toString">.toString()</a> ⇒ <code>String</code></li>
+<li><a href="#MappedJS">MappedJS</a><ul>
+<li><a href="#new_MappedJS_new">new MappedJS(container, mapData, events)</a></li>
+<li><a href="#MappedJS+initializeSettings">.initializeSettings(container, events)</a></li>
+<li><a href="#MappedJS+initializeData">.initializeData(mapData, cb)</a></li>
+<li><a href="#MappedJS+initializeMap">.initializeMap()</a></li>
+<li><a href="#MappedJS+initializeApi">.initializeApi()</a></li>
+<li><a href="#MappedJS+bindEvents">.bindEvents()</a></li>
+<li><a href="#MappedJS+resizeHandler">.resizeHandler()</a></li>
+<li><a href="#MappedJS+loadingFinished">.loadingFinished()</a></li>
 </ul>
 </li>
 </ul>
-<p><a name="new_Point_new"></a></p>
-<h3 id="new-point-x-y-">new Point(x, y)</h3>
-<p>Initializes a x-y-point</p>
-<p><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - Representation of a Point (x, y)<br><strong>Params</strong></p>
+<p><a name="new_MappedJS_new"></a></p>
+<h3 id="new-mappedjs-container-mapdata-events-">new MappedJS(container, mapData, events)</h3>
+<p>Constructor</p>
+<p><strong>Params</strong></p>
 <ul>
-<li>x <code>Number</code> <code> = 0</code> - =             0 x-coordinate</li>
-<li>y <code>Number</code> <code> = 0</code> - =             0 y-coordinat</li>
+<li>container <code>string</code> | <code>Object</code> <code> = &quot;\&quot;.mjs\&quot;&quot;</code> - Container, either string, jQuery-object or dom-object</li>
+<li>mapData <code>string</code> | <code>Object</code> <code> = &quot;{}&quot;</code> - data of map tiles, can be json or path to file</li>
+<li>events <code>Object</code> <code> = {loaded:</code> - &quot;mjs-loaded&quot;}} - List of events</li>
 </ul>
-<p><a name="Point+toString"></a></p>
-<h3 id="point-tostring-code-string-code-">point.toString() ⇒ <code>String</code></h3>
-<p>Representation of a point</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code>String</code> - String representation of a point  </p>
+<p><a name="MappedJS+initializeSettings"></a></p>
+<h3 id="mappedjs-initializesettings-container-events-">mappedJS.initializeSettings(container, events)</h3>
+<p>initializes the settings and handles errors</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Params</strong></p>
+<ul>
+<li>container <code>string</code> | <code>Object</code> - Container, either string, jQuery-object or dom-object</li>
+<li>events <code>object</code> - List of events</li>
+</ul>
+<p><a name="MappedJS+initializeData"></a></p>
+<h3 id="mappedjs-initializedata-mapdata-cb-">mappedJS.initializeData(mapData, cb)</h3>
+<p>initializes the data, asynchronous</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Params</strong></p>
+<ul>
+<li>mapData <code>Object</code> - data of map tiles, can be json or path to file</li>
+<li>cb <code>function</code> - called, when data is received</li>
+</ul>
+<p><a name="MappedJS+initializeMap"></a></p>
+<h3 id="mappedjs-initializemap-">mappedJS.initializeMap()</h3>
+<p>initializes Map module</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><a name="MappedJS+initializeApi"></a></p>
+<h3 id="mappedjs-initializeapi-">mappedJS.initializeApi()</h3>
+<p>initializes the public Api</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><a name="MappedJS+bindEvents"></a></p>
+<h3 id="mappedjs-bindevents-">mappedJS.bindEvents()</h3>
+<p>binds all events to handlers</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><a name="MappedJS+resizeHandler"></a></p>
+<h3 id="mappedjs-resizehandler-">mappedJS.resizeHandler()</h3>
+<p>handles resizing of window</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><a name="MappedJS+loadingFinished"></a></p>
+<h3 id="mappedjs-loadingfinished-">mappedJS.loadingFinished()</h3>
+<p>called when loading and initialization is finisehd</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><a name="MapController"></a></p>
+<h2 id="mapcontroller">MapController</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#MapController">MapController</a><ul>
+<li><a href="#new_MapController_new">new MapController(container)</a></li>
+<li><a href="#MapController+initialize">.initialize()</a></li>
+<li><a href="#MapController+resize">.resize()</a></li>
+<li><a href="#MapController+redraw">.redraw()</a></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_MapController_new"></a></p>
+<h3 id="new-mapcontroller-container-">new MapController(container)</h3>
+<p>Constructor</p>
+<p><strong>Params</strong></p>
+<ul>
+<li>container <code>Object</code> - jQuery-object holding the container</li>
+</ul>
+<p><a name="MapController+initialize"></a></p>
+<h3 id="mapcontroller-initialize-">mapController.initialize()</h3>
+<p>initializes the MapController</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MapController">MapController</a></code><br><a name="MapController+resize"></a></p>
+<h3 id="mapcontroller-resize-">mapController.resize()</h3>
+<p>Handles resizing of map</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MapController">MapController</a></code><br><a name="MapController+redraw"></a></p>
+<h3 id="mapcontroller-redraw-">mapController.redraw()</h3>
+<p>Handles the redraw of the map</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MapController">MapController</a></code>  </p>
         <footer class="site-footer">
             <span class="site-footer-owner"><a href="https://github.com/dazlious/MappedJS">MappedJS</a> is maintained by <a href="https://github.com/dazlious">dazlious</a>.</span>
 

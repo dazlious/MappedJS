@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">73.93</p>
+      <p class="stat">72.66</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">79</p>
+      <p class="stat">169</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">30.81</p>
+      <p class="stat">36.44</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.69</p>
+      <p class="stat">1.16</p>
     </div>
   </div>
 </div>
@@ -126,30 +126,84 @@ function _classCallCheck(instance, Constructor) {
 
 var MapController = require(&#039;./MapController.js&#039;).MapController;
 var $ = require(&#039;jquery&#039;);
+var Helper = require(&#039;./Helper.js&#039;).Helper;
 
 var MappedJS = exports.MappedJS = function() {
+
+    /**
+     * Constructor
+     * @param  {string|Object} container=&quot;.mjs&quot; - Container, either string, jQuery-object or dom-object
+     * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
+     * @param  {Object} events={loaded: &quot;mjs-loaded&quot;}} - List of events
+     */
+
     function MappedJS(_ref) {
         var _ref$container = _ref.container;
         var container = _ref$container === undefined ? &quot;.mjs&quot; : _ref$container;
+        var _ref$mapData = _ref.mapData;
+        var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
+        var _ref$events = _ref.events;
+        var events = _ref$events === undefined ? {
+            loaded: &quot;mjs-loaded&quot;
+        } : _ref$events;
 
         _classCallCheck(this, MappedJS);
 
         this.initializeApi();
+        this.initializeSettings(container, events);
 
-        this.initializeSettings(container);
-
-        this.initializeMap();
+        var _this = this;
+        this.initializeData(mapData, function() {
+            _this.initializeMap();
+            _this.bindEvents();
+            _this.loadingFinished();
+        });
     }
+
+    /**
+     * initializes the settings and handles errors
+     * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
+     * @param  {object} events - List of events
+     */
+
 
     _createClass(MappedJS, [{
         key: &#039;initializeSettings&#039;,
-        value: function initializeSettings(container) {
+        value: function initializeSettings(container, events) {
             this.$container = typeof container === &quot;string&quot; ? $(container) : (typeof container === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(container)) === &quot;object&quot; &amp;&amp; container instanceof jQuery ? container : $(container);
             if (!(this.$container instanceof jQuery)) {
                 throw new Error(&quot;Container &quot; + container + &quot; not found&quot;);
             }
             this.$container.addClass(&quot;mappedJS&quot;);
+
+            this.events = events;
         }
+
+        /**
+         * initializes the data, asynchronous
+         * @param  {Object} mapData - data of map tiles, can be json or path to file
+         * @param  {Function} cb - called, when data is received
+         */
+
+    }, {
+        key: &#039;initializeData&#039;,
+        value: function initializeData(mapData, cb) {
+            var _this = this;
+            if (typeof mapData === &quot;string&quot;) {
+                Helper.requestJSON(mapData, function(data) {
+                    _this.mapData = data;
+                    cb();
+                });
+            } else {
+                this.mapData = (typeof mapData === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(mapData)) === &quot;object&quot; ? mapData : null;
+                cb();
+            }
+        }
+
+        /**
+         * initializes Map module
+         */
+
     }, {
         key: &#039;initializeMap&#039;,
         value: function initializeMap() {
@@ -157,12 +211,48 @@ var MappedJS = exports.MappedJS = function() {
                 container: this.$container
             });
         }
+
+        /**
+         * initializes the public Api
+         */
+
     }, {
         key: &#039;initializeApi&#039;,
         value: function initializeApi() {
             this.api = {
-                MapController: MapController
+                MapController: MapController,
+                Helper: Helper
             };
+        }
+
+        /**
+         * binds all events to handlers
+         */
+
+    }, {
+        key: &#039;bindEvents&#039;,
+        value: function bindEvents() {
+            $(window).on(&quot;resize orientationchange&quot;, this.resizeHandler.bind(this));
+        }
+
+        /**
+         * handles resizing of window
+         */
+
+    }, {
+        key: &#039;resizeHandler&#039;,
+        value: function resizeHandler() {
+            this.$canvas.resize();
+        }
+
+        /**
+         * called when loading and initialization is finisehd
+         */
+
+    }, {
+        key: &#039;loadingFinished&#039;,
+        value: function loadingFinished() {
+            this.$container.trigger(this.events.loaded);
         }
     }]);
 
