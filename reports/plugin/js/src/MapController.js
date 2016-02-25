@@ -30,6 +30,12 @@ function _classCallCheck(instance, Constructor) {
 var $ = require('jquery');
 
 var MapController = exports.MapController = function() {
+
+    /**
+     * Constructor
+     * @param  {Object} container - jQuery-object holding the container
+     */
+
     function MapController(_ref) {
         var container = _ref.container;
 
@@ -43,6 +49,11 @@ var MapController = exports.MapController = function() {
         this.initialize();
     }
 
+    /**
+     * initializes the MapController
+     */
+
+
     _createClass(MapController, [{
         key: "initialize",
         value: function initialize() {
@@ -54,6 +65,11 @@ var MapController = exports.MapController = function() {
             this.canvasContext = this.canvas.getContext("2d");
             this.resize();
         }
+
+        /**
+         * Handles resizing of map
+         */
+
     }, {
         key: "resize",
         value: function resize() {
@@ -62,7 +78,17 @@ var MapController = exports.MapController = function() {
 
             this.canvasContext.canvas.width = this.canvasWidth;
             this.canvasContext.canvas.height = this.canvasHeight;
+
+            this.redraw();
         }
+
+        /**
+         * Handles the redraw of the map
+         */
+
+    }, {
+        key: "redraw",
+        value: function redraw() {}
     }]);
 
     return MapController;
