@@ -61,7 +61,8 @@ export class MappedJS {
      */
     initializeMap() {
         this.$canvas = new MapController({
-            container: this.$container
+            container: this.$container,
+            tilesData: this.mapData
         });
     }
 

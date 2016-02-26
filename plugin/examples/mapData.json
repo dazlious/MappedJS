@@ -1,22 +1,22 @@
 {
     "images": {
         "zoom-1": [
-            "map_0_0.jpg",
-            "map_0_1.jpg",
-            "map_0_2.jpg",
-            "map_0_3.jpg",
-            "map_1_0.jpg",
-            "map_1_1.jpg",
-            "map_1_2.jpg",
-            "map_1_3.jpg",
-            "map_2_0.jpg",
-            "map_2_1.jpg",
-            "map_2_2.jpg",
-            "map_2_3.jpg",
-            "map_3_0.jpg",
-            "map_3_1.jpg",
-            "map_3_2.jpg",
-            "map_3_3.jpg"
+            "img/map_0_0.jpg",
+            "img/map_0_1.jpg",
+            "img/map_0_2.jpg",
+            "img/map_0_3.jpg",
+            "img/map_1_0.jpg",
+            "img/map_1_1.jpg",
+            "img/map_1_2.jpg",
+            "img/map_1_3.jpg",
+            "img/map_2_0.jpg",
+            "img/map_2_1.jpg",
+            "img/map_2_2.jpg",
+            "img/map_2_3.jpg",
+            "img/map_3_0.jpg",
+            "img/map_3_1.jpg",
+            "img/map_3_2.jpg",
+            "img/map_3_3.jpg"
         ]
     }
 }

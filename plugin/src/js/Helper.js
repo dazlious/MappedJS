@@ -13,13 +13,12 @@ export var Helper = {
             url: filename,
             dataType: "json",
             success: function(data, status, request) {
-                try {
-                    callback(data);
-                } catch (msg) {
-                    throw Error("The JSON submitted seems not valid");
-                }
+                callback(data);
             },
             error: function(response) {
+                if (response.status === 200) {
+                    throw new Error("The JSON submitted seems not valid");
+                }
                 console.error("Error requesting file: ", response);
             }
         });

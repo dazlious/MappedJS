@@ -1,4 +1,5 @@
 var $ = require('jquery');
+var Tile = require("./Tile.js").Tile;
 
 export class MapController {
 
@@ -6,13 +7,16 @@ export class MapController {
      * Constructor
      * @param  {Object} container - jQuery-object holding the container
      */
-    constructor({container}) {
+    constructor({container, tilesData={}}) {
         if (!container) {
             throw Error("You must define a container to initialize a map");
         }
 
         this.$container = container;
+        this.data = tilesData;
+
         this.initialize();
+        this.initializeTiles();
     }
 
     /**
@@ -26,6 +30,20 @@ export class MapController {
 
         this.canvasContext = this.canvas.getContext("2d");
         this.resize();
+    }
+
+    initializeTiles() {
+        for (let zoomLevel in this.data.images) {
+            let tilesInZoomLevel = this.data.images[zoomLevel];
+            for (let tile in tilesInZoomLevel) {
+                let currentTilePath = tilesInZoomLevel[tile];
+
+                let _tile = new Tile({
+                    path: currentTilePath
+                });
+
+            }
+        }
     }
 
     /**

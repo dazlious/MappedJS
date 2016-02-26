@@ -68,7 +68,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var MapController = __webpack_require__(1).MapController;
 	var $ = __webpack_require__(2);
-	var Helper = __webpack_require__(3).Helper;
+	var Helper = __webpack_require__(4).Helper;
 
 	var MappedJS = exports.MappedJS = function () {
 
@@ -148,7 +148,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'initializeMap',
 	        value: function initializeMap() {
 	            this.$canvas = new MapController({
-	                container: this.$container
+	                container: this.$container,
+	                tilesData: this.mapData
 	            });
 	        }
 
@@ -214,6 +215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var $ = __webpack_require__(2);
+	var Tile = __webpack_require__(3).Tile;
 
 	var MapController = exports.MapController = function () {
 
@@ -224,6 +226,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function MapController(_ref) {
 	        var container = _ref.container;
+	        var _ref$tilesData = _ref.tilesData;
+	        var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
 
 	        _classCallCheck(this, MapController);
 
@@ -232,7 +236,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        this.$container = container;
+	        this.data = tilesData;
+
 	        this.initialize();
+	        this.initializeTiles();
 	    }
 
 	    /**
@@ -250,6 +257,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.canvasContext = this.canvas.getContext("2d");
 	            this.resize();
+	        }
+	    }, {
+	        key: "initializeTiles",
+	        value: function initializeTiles() {
+	            for (var zoomLevel in this.data.images) {
+	                var tilesInZoomLevel = this.data.images[zoomLevel];
+	                for (var tile in tilesInZoomLevel) {
+	                    var currentTilePath = tilesInZoomLevel[tile];
+
+	                    var _tile = new Tile({
+	                        path: currentTilePath
+	                    });
+	                }
+	            }
 	        }
 
 	        /**
@@ -290,6 +311,79 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var $ = __webpack_require__(2);
+
+	var ReadyState = exports.ReadyState = {
+	    STARTING: { value: 0, description: 'Starting' },
+	    INITIALIZED: { value: 1, description: 'Initialized' },
+	    LOADED: { value: 2, description: 'Loaded' },
+	    DRAWN: { value: 3, description: 'Drawn' }
+	};
+
+	var Tile = exports.Tile = function () {
+	    function Tile(_ref) {
+	        var _ref$path = _ref.path;
+	        var path = _ref$path === undefined ? null : _ref$path;
+	        var _mapController = _ref._mapController;
+
+	        _classCallCheck(this, Tile);
+
+	        this.state = ReadyState.STARTING;
+
+	        if (!path || typeof path !== "string" || path.length === 0) {
+	            throw new Error('Path {path} needs to be of type string and should not be empty');
+	        }
+	        this.path = path;
+
+	        this._mapController = _mapController;
+
+	        this.initialize();
+	    }
+
+	    _createClass(Tile, [{
+	        key: 'initialize',
+	        value: function initialize() {
+	            this.state = ReadyState.INITIALIZED;
+
+	            var _this = this;
+	            this.loadImage(function () {
+	                _this.state = ReadyState.LOADED;
+	                //this._mapController.notify("loaded");
+	            });
+	        }
+	    }, {
+	        key: 'loadImage',
+	        value: function loadImage(cb) {
+	            var img = new Image();
+	            img.src = this.path;
+	            img.onLoad = function () {
+	                cb();
+	            };
+	        }
+	    }, {
+	        key: 'toString',
+	        value: function toString() {
+	            return 'Tile({path})';
+	        }
+	    }]);
+
+	    return Tile;
+	}();
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -311,13 +405,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            url: filename,
 	            dataType: "json",
 	            success: function success(data, status, request) {
-	                try {
-	                    callback(data);
-	                } catch (msg) {
-	                    throw Error("The JSON submitted seems not valid");
-	                }
+	                callback(data);
 	            },
 	            error: function error(response) {
+	                if (response.status === 200) {
+	                    throw new Error("The JSON submitted seems not valid");
+	                }
 	                console.error("Error requesting file: ", response);
 	            }
 	        });
