@@ -117,7 +117,8 @@ var MappedJS = exports.MappedJS = function() {
         key: 'initializeMap',
         value: function initializeMap() {
             this.$canvas = new MapController({
-                container: this.$container
+                container: this.$container,
+                tilesData: this.mapData
             });
         }
 
