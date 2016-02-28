@@ -47,6 +47,7 @@ export class MapController {
 
     onTilesLoaded(tile) {
         this.canvasContext.drawImage(tile.img, tile.x, tile.y, tile.width, tile.height);
+        tile.state.next();
     }
 
     /**
