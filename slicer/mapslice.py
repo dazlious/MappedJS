@@ -46,7 +46,7 @@ def save_data_to_json(output, slices, path):
             data = {
                 "path": path + "map_"+str(y)+"_"+str(x)+".jpg",
                 "x": current_slice[0],
-                "y": current_slice[0],
+                "y": current_slice[1],
                 "w": current_slice[2] - current_slice[0],
                 "h": current_slice[3] - current_slice[1]
             }
