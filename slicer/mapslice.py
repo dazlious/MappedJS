@@ -22,7 +22,7 @@ def main():
         img = open_image(settings.input)
         slices = calculate_slices(img, settings.size, settings.minsize)
 
-        save_data_to_json(settings.output, slices)
+        save_data_to_json(settings.output, slices, settings.path)
 
         slice_img(img, slices)
 
@@ -39,19 +39,16 @@ def main():
         print "-> Aborted through user interaction"
 
 
-def save_data_to_json(output, slices):
-    print(slices)
-
+def save_data_to_json(output, slices, path):
     for y in range(len(slices)):
         for x in range(len(slices[y])):
-            currentSlice = slices[y][x]
-            print(currentSlice)
+            current_slice = slices[y][x]
             data = {
-                "path": "map_"+str(y)+"_"+str(x)+".jpg",
-                "x": currentSlice[0],
-                "y": currentSlice[0],
-                "w": currentSlice[2] - currentSlice[0],
-                "h": currentSlice[3] - currentSlice[1]
+                "path": path + "map_"+str(y)+"_"+str(x)+".jpg",
+                "x": current_slice[0],
+                "y": current_slice[0],
+                "w": current_slice[2] - current_slice[0],
+                "h": current_slice[3] - current_slice[1]
             }
             json_data["images"].append(data)
 
@@ -142,6 +139,7 @@ def init_settings():
     parser.add_argument('-o', '--output', help='path to destination', required=True, type=str)
     parser.add_argument('-s', '--size', help='size of a tile', default=512, type=int)
     parser.add_argument('-m', '--minsize', help='minimum size of a tile', default=128, type=int)
+    parser.add_argument('-p', '--path', help='additional path information for relative paths', default="", type=str)
 
     args = parser.parse_args()
 
