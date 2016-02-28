@@ -84,7 +84,7 @@ called when loading and initialization is finisehd
     * [new MapController(container)](#new_MapController_new)
     * [.initialize()](#MapController+initialize)
     * [.resize()](#MapController+resize)
-    * [.redraw()](#MapController+redraw)
+    * [.draw()](#MapController+draw)
 
 <a name="new_MapController_new"></a>
 ### new MapController(container)
@@ -104,8 +104,8 @@ initializes the MapController
 Handles resizing of map
 
 **Kind**: instance method of <code>[MapController](#MapController)</code>  
-<a name="MapController+redraw"></a>
-### mapController.redraw()
+<a name="MapController+draw"></a>
+### mapController.draw()
 Handles the redraw of the map
 
 **Kind**: instance method of <code>[MapController](#MapController)</code>  

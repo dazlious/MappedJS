@@ -28,6 +28,10 @@ function _classCallCheck(instance, Constructor) {
 }
 
 var $ = require('jquery');
+var Tile = require("./Tile.js").Tile;
+var Publisher = require("./Publisher.js").Publisher;
+
+var PUBLISHER = new Publisher();
 
 var MapController = exports.MapController = function() {
 
@@ -38,6 +42,8 @@ var MapController = exports.MapController = function() {
 
     function MapController(_ref) {
         var container = _ref.container;
+        var _ref$tilesData = _ref.tilesData;
+        var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
 
         _classCallCheck(this, MapController);
 
@@ -46,7 +52,10 @@ var MapController = exports.MapController = function() {
         }
 
         this.$container = container;
+        this.data = tilesData;
+
         this.initialize();
+        this.initializeTiles();
     }
 
     /**
@@ -57,13 +66,30 @@ var MapController = exports.MapController = function() {
     _createClass(MapController, [{
         key: "initialize",
         value: function initialize() {
+
+            PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
+
             this.$canvas = $("<canvas class='mjs-canvas' />");
             this.canvas = this.$canvas[0];
-
             this.$container.append(this.$canvas);
-
             this.canvasContext = this.canvas.getContext("2d");
             this.resize();
+        }
+    }, {
+        key: "initializeTiles",
+        value: function initializeTiles() {
+            this.tiles = [];
+            for (var tile in this.data.images) {
+                var currentTileData = this.data.images[tile];
+                var _tile = new Tile(currentTileData);
+                this.tiles.push(_tile);
+            }
+        }
+    }, {
+        key: "onTilesLoaded",
+        value: function onTilesLoaded(tile) {
+            this.canvasContext.drawImage(tile.img, tile.x, tile.y, tile.width, tile.height);
+            tile.state.next();
         }
 
         /**
@@ -79,7 +105,7 @@ var MapController = exports.MapController = function() {
             this.canvasContext.canvas.width = this.canvasWidth;
             this.canvasContext.canvas.height = this.canvasHeight;
 
-            this.redraw();
+            this.draw();
         }
 
         /**
@@ -87,8 +113,8 @@ var MapController = exports.MapController = function() {
          */
 
     }, {
-        key: "redraw",
-        value: function redraw() {}
+        key: "draw",
+        value: function draw() {}
     }]);
 
     return MapController;
