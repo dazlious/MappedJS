@@ -68,7 +68,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var MapController = __webpack_require__(1).MapController;
 	var $ = __webpack_require__(2);
-	var Helper = __webpack_require__(4).Helper;
+	var Helper = __webpack_require__(6).Helper;
 
 	var MappedJS = exports.MappedJS = function () {
 
@@ -216,6 +216,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var $ = __webpack_require__(2);
 	var Tile = __webpack_require__(3).Tile;
+	var Publisher = __webpack_require__(5).Publisher;
+
+	var PUBLISHER = new Publisher();
 
 	var MapController = exports.MapController = function () {
 
@@ -250,27 +253,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(MapController, [{
 	        key: "initialize",
 	        value: function initialize() {
+
+	            PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
+
 	            this.$canvas = $("<canvas class='mjs-canvas' />");
 	            this.canvas = this.$canvas[0];
-
 	            this.$container.append(this.$canvas);
-
 	            this.canvasContext = this.canvas.getContext("2d");
 	            this.resize();
 	        }
 	    }, {
 	        key: "initializeTiles",
 	        value: function initializeTiles() {
-	            for (var zoomLevel in this.data.images) {
-	                var tilesInZoomLevel = this.data.images[zoomLevel];
-	                for (var tile in tilesInZoomLevel) {
-	                    var currentTilePath = tilesInZoomLevel[tile];
-
-	                    var _tile = new Tile({
-	                        path: currentTilePath
-	                    });
-	                }
+	            this.tiles = [];
+	            for (var tile in this.data.images) {
+	                var currentTileData = this.data.images[tile];
+	                var _tile = new Tile(currentTileData);
+	                this.tiles.push(_tile);
 	            }
+	        }
+	    }, {
+	        key: "onTilesLoaded",
+	        value: function onTilesLoaded(tile) {
+	            this.canvasContext.drawImage(tile.img, tile.x, tile.y, tile.width, tile.height);
 	        }
 
 	        /**
@@ -286,7 +291,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.canvasContext.canvas.width = this.canvasWidth;
 	            this.canvasContext.canvas.height = this.canvasHeight;
 
-	            this.redraw();
+	            this.draw();
 	        }
 
 	        /**
@@ -294,8 +299,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 
 	    }, {
-	        key: "redraw",
-	        value: function redraw() {}
+	        key: "draw",
+	        value: function draw() {}
 	    }]);
 
 	    return MapController;
@@ -322,30 +327,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var $ = __webpack_require__(2);
+	var State = __webpack_require__(4).State;
+	var Publisher = __webpack_require__(5).Publisher;
 
-	var ReadyState = exports.ReadyState = {
-	    STARTING: { value: 0, description: 'Starting' },
-	    INITIALIZED: { value: 1, description: 'Initialized' },
-	    LOADED: { value: 2, description: 'Loaded' },
-	    DRAWN: { value: 3, description: 'Drawn' }
-	};
+	var PUBLISHER = new Publisher();
 
 	var Tile = exports.Tile = function () {
 	    function Tile(_ref) {
 	        var _ref$path = _ref.path;
 	        var path = _ref$path === undefined ? null : _ref$path;
-	        var _mapController = _ref._mapController;
+	        var _ref$x = _ref.x;
+	        var x = _ref$x === undefined ? 0 : _ref$x;
+	        var _ref$y = _ref.y;
+	        var y = _ref$y === undefined ? 0 : _ref$y;
+	        var _ref$w = _ref.w;
+	        var w = _ref$w === undefined ? 0 : _ref$w;
+	        var _ref$h = _ref.h;
+	        var h = _ref$h === undefined ? 0 : _ref$h;
 
 	        _classCallCheck(this, Tile);
 
-	        this.state = ReadyState.STARTING;
+	        this.state = new State(Tile.STATES);
 
 	        if (!path || typeof path !== "string" || path.length === 0) {
 	            throw new Error('Path {path} needs to be of type string and should not be empty');
 	        }
 	        this.path = path;
 
-	        this._mapController = _mapController;
+	        this.x = x;
+	        this.y = y;
+	        this.width = w;
+	        this.height = h;
 
 	        this.initialize();
 	    }
@@ -353,12 +365,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(Tile, [{
 	        key: 'initialize',
 	        value: function initialize() {
-	            this.state = ReadyState.INITIALIZED;
+	            this.state.next();
 
 	            var _this = this;
-	            this.loadImage(function () {
-	                _this.state = ReadyState.LOADED;
-	                //this._mapController.notify("loaded");
+	            this.loadImage(function (img) {
+	                _this.img = img;
+	                _this.state.next();
+	                PUBLISHER.publish("tile-loaded", _this);
 	            });
 	        }
 	    }, {
@@ -366,8 +379,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function loadImage(cb) {
 	            var img = new Image();
 	            img.src = this.path;
-	            img.onLoad = function () {
-	                cb();
+	            img.onload = function () {
+	                cb(img);
 	            };
 	        }
 	    }, {
@@ -380,8 +393,142 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return Tile;
 	}();
 
+		Tile.STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Initialized' }, { value: 2, description: 'Loaded' }, { value: 3, description: 'Drawn' }];
+
 /***/ },
 /* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var State = exports.State = function () {
+	    function State() {
+	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+
+	        _classCallCheck(this, State);
+
+	        this.STATES = states_array;
+	        this.i = 0;
+	        this.state = this.getState();
+	    }
+
+	    _createClass(State, [{
+	        key: "getState",
+	        value: function getState() {
+	            return this.STATES[this.i];
+	        }
+	    }, {
+	        key: "next",
+	        value: function next() {
+	            if (this.hasNext()) {
+	                this.i++;
+	            }
+	            this.state = this.getState();
+	            return this;
+	        }
+	    }, {
+	        key: "hasNext",
+	        value: function hasNext() {
+	            return this.i < this.STATES.length;
+	        }
+	    }]);
+
+	    return State;
+	}();
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var instance = null;
+
+	var Publisher = exports.Publisher = function () {
+	    function Publisher() {
+	        _classCallCheck(this, Publisher);
+
+	        if (!instance) {
+	            this.subscribers = {
+	                any: []
+	            };
+	            instance = this;
+	        }
+
+	        return instance;
+	    }
+
+	    _createClass(Publisher, [{
+	        key: "subscribe",
+	        value: function subscribe() {
+	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	            var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
+
+	            if (!this.subscribers[type]) {
+	                this.subscribers[type] = [];
+	            }
+	            this.subscribers[type].push(fn);
+	            return this;
+	        }
+	    }, {
+	        key: "unsubscribe",
+	        value: function unsubscribe() {
+	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	            var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
+
+	            this.handle(Publisher.UNSUBSCRIBE, type, fn);
+	            return this;
+	        }
+	    }, {
+	        key: "publish",
+	        value: function publish() {
+	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	            var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+
+	            this.handle(Publisher.PUBLISH, type, arg);
+	            return this;
+	        }
+	    }, {
+	        key: "handle",
+	        value: function handle(action, type, data) {
+	            var subs = this.subscribers[type] ? this.subscribers[type] : [];
+	            for (var i = 0; i < subs.length; i++) {
+	                if (action === Publisher.PUBLISH) {
+	                    subs[i](data);
+	                } else {
+	                    if (subs[i] === data) {
+	                        subs.splice(i, 1);
+	                    }
+	                }
+	            }
+	            return this;
+	        }
+	    }]);
+
+	    return Publisher;
+	}();
+
+	Publisher.PUBLISH = "publish";
+	Publisher.UNSUBSCRIBE = "unsubscribe";
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

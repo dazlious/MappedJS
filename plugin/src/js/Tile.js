@@ -1,42 +1,43 @@
 var $ = require('jquery');
+var State = require('./State').State;
+var Publisher = require("./Publisher.js").Publisher;
 
-export const ReadyState = {
-    STARTING: {value: 0, description: 'Starting'},
-    INITIALIZED: {value: 1, description: 'Initialized'},
-    LOADED: {value: 2, description: 'Loaded'},
-    DRAWN: {value: 3, description: 'Drawn'}
-};
+const PUBLISHER = new Publisher();
 
 export class Tile {
 
-    constructor({path=null, _mapController}) {
-        this.state = ReadyState.STARTING;
+    constructor({path=null, x = 0, y = 0, w = 0, h = 0}) {
+        this.state = new State(Tile.STATES);
 
         if (!path || typeof path !== "string" || path.length === 0) {
             throw new Error(`Path {path} needs to be of type string and should not be empty`);
         }
         this.path = path;
 
-        this._mapController = _mapController;
+        this.x = x;
+        this.y = y;
+        this.width = w;
+        this.height = h;
 
         this.initialize();
     }
 
     initialize() {
-        this.state = ReadyState.INITIALIZED;
+        this.state.next();
 
         let _this = this;
-        this.loadImage(function() {
-            _this.state = ReadyState.LOADED;
-            //this._mapController.notify("loaded");
+        this.loadImage(function(img) {
+            _this.img = img;
+            _this.state.next();
+            PUBLISHER.publish("tile-loaded", _this);
         });
     }
 
     loadImage(cb) {
         let img = new Image();
         img.src = this.path;
-        img.onLoad = function() {
-            cb();
+        img.onload = function() {
+            cb(img);
         };
     }
 
@@ -45,3 +46,10 @@ export class Tile {
     }
 
 }
+
+Tile.STATES = [
+    {value: 0, description: 'Starting'},
+    {value: 1, description: 'Initialized'},
+    {value: 2, description: 'Loaded'},
+    {value: 3, description: 'Drawn'}
+];
