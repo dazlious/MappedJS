@@ -2,8 +2,14 @@ from PIL import Image
 import math
 import time
 import argparse
+import json
+
 
 settings = None
+
+json_data = {
+   "images": []
+}
 
 
 def main():
@@ -15,6 +21,8 @@ def main():
 
         img = open_image(settings.input)
         slices = calculate_slices(img, settings.size, settings.minsize)
+
+        save_data_to_json(settings.output, slices)
 
         slice_img(img, slices)
 
@@ -29,6 +37,26 @@ def main():
         print("-> Finished in: %.2fs" % round(elapsed, 2))
     except (KeyboardInterrupt, SystemExit):
         print "-> Aborted through user interaction"
+
+
+def save_data_to_json(output, slices):
+    print(slices)
+
+    for y in range(len(slices)):
+        for x in range(len(slices[y])):
+            currentSlice = slices[y][x]
+            print(currentSlice)
+            data = {
+                "path": "map_"+str(y)+"_"+str(x)+".jpg",
+                "x": currentSlice[0],
+                "y": currentSlice[0],
+                "w": currentSlice[2] - currentSlice[0],
+                "h": currentSlice[3] - currentSlice[1]
+            }
+            json_data["images"].append(data)
+
+    with open(output + 'mapData.json', 'w') as f:
+            json.dump(json_data, f)
 
 
 def slice_img(image, slices):
