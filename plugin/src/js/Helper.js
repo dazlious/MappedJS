@@ -1,6 +1,7 @@
 var $ = require('jquery');
 
 export var Helper = {
+
     /**
      * request json-data from given file and calls callback on success
      * @param  {string} filename - path to file
@@ -23,4 +24,5 @@ export var Helper = {
             }
         });
     }
+    
 };

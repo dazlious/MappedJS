@@ -9,6 +9,7 @@ export class MappedJS {
      * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
      * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
      * @param  {Object} events={loaded: "mjs-loaded"}} - List of events
+     * @return {MappedJS} instance of MappedJS
      */
     constructor({container=".mjs", mapData={}, events={loaded:"mjs-loaded"}}) {
         this.initializeApi();
@@ -21,12 +22,14 @@ export class MappedJS {
             _this.loadingFinished();
         });
 
+        return this;
     }
 
     /**
      * initializes the settings and handles errors
      * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
      * @param  {object} events - List of events
+     * @return {MappedJS} instance of MappedJS
      */
     initializeSettings(container, events) {
         this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
@@ -36,12 +39,15 @@ export class MappedJS {
         this.$container.addClass("mappedJS");
 
         this.events = events;
+
+        return this;
     }
 
     /**
      * initializes the data, asynchronous
      * @param  {Object} mapData - data of map tiles, can be json or path to file
      * @param  {Function} cb - called, when data is received
+     * @return {MappedJS} instance of MappedJS
      */
     initializeData(mapData, cb) {
         let _this = this;
@@ -54,47 +60,58 @@ export class MappedJS {
             this.mapData = (typeof mapData === "object") ? mapData : null;
             cb();
         }
+        return this;
     }
 
     /**
      * initializes Map module
+     * @return {MappedJS} instance of MappedJS
      */
     initializeMap() {
         this.$canvas = new MapController({
             container: this.$container,
             tilesData: this.mapData
         });
+        return this;
     }
 
     /**
      * initializes the public Api
+     * @return {MappedJS} instance of MappedJS
      */
     initializeApi() {
         this.api = {
             MapController: MapController,
             Helper: Helper
         };
+        return this;
     }
 
     /**
      * binds all events to handlers
+     * @return {MappedJS} instance of MappedJS
      */
     bindEvents() {
         $(window).on("resize orientationchange", this.resizeHandler.bind(this));
+        return this;
     }
 
     /**
      * handles resizing of window
+     * @return {MappedJS} instance of MappedJS
      */
     resizeHandler() {
         this.$canvas.resize();
+        return this;
     }
 
     /**
-     * called when loading and initialization is finisehd
+     * called when loading and initialization is finished
+     * @return {MappedJS} instance of MappedJS
      */
     loadingFinished() {
         this.$container.trigger(this.events.loaded);
+        return this;
     }
 
 }

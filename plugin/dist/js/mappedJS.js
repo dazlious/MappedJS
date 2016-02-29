@@ -77,6 +77,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
 	     * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
 	     * @param  {Object} events={loaded: "mjs-loaded"}} - List of events
+	     * @return {MappedJS} instance of MappedJS
 	     */
 
 	    function MappedJS(_ref) {
@@ -98,12 +99,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this.bindEvents();
 	            _this.loadingFinished();
 	        });
+
+	        return this;
 	    }
 
 	    /**
 	     * initializes the settings and handles errors
 	     * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
 	     * @param  {object} events - List of events
+	     * @return {MappedJS} instance of MappedJS
 	     */
 
 
@@ -117,12 +121,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.$container.addClass("mappedJS");
 
 	            this.events = events;
+
+	            return this;
 	        }
 
 	        /**
 	         * initializes the data, asynchronous
 	         * @param  {Object} mapData - data of map tiles, can be json or path to file
 	         * @param  {Function} cb - called, when data is received
+	         * @return {MappedJS} instance of MappedJS
 	         */
 
 	    }, {
@@ -138,10 +145,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.mapData = (typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null;
 	                cb();
 	            }
+	            return this;
 	        }
 
 	        /**
 	         * initializes Map module
+	         * @return {MappedJS} instance of MappedJS
 	         */
 
 	    }, {
@@ -151,10 +160,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                container: this.$container,
 	                tilesData: this.mapData
 	            });
+	            return this;
 	        }
 
 	        /**
 	         * initializes the public Api
+	         * @return {MappedJS} instance of MappedJS
 	         */
 
 	    }, {
@@ -164,36 +175,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	                MapController: MapController,
 	                Helper: Helper
 	            };
+	            return this;
 	        }
 
 	        /**
 	         * binds all events to handlers
+	         * @return {MappedJS} instance of MappedJS
 	         */
 
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
 	            $(window).on("resize orientationchange", this.resizeHandler.bind(this));
+	            return this;
 	        }
 
 	        /**
 	         * handles resizing of window
+	         * @return {MappedJS} instance of MappedJS
 	         */
 
 	    }, {
 	        key: 'resizeHandler',
 	        value: function resizeHandler() {
 	            this.$canvas.resize();
+	            return this;
 	        }
 
 	        /**
-	         * called when loading and initialization is finisehd
+	         * called when loading and initialization is finished
+	         * @return {MappedJS} instance of MappedJS
 	         */
 
 	    }, {
 	        key: 'loadingFinished',
 	        value: function loadingFinished() {
 	            this.$container.trigger(this.events.loaded);
+	            return this;
 	        }
 	    }]);
 
@@ -218,13 +236,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Tile = __webpack_require__(3).Tile;
 	var Publisher = __webpack_require__(5).Publisher;
 
+	/**
+	 * Singleton instance of Publisher
+	 */
 	var PUBLISHER = new Publisher();
 
 	var MapController = exports.MapController = function () {
 
-	    /**
-	     * Constructor
+	    /** Constructor
 	     * @param  {Object} container - jQuery-object holding the container
+	     * @param  {Object} tilesData={} - json object representing data of map
+	     * @return {MapController} instance of MapController
 	     */
 
 	    function MapController(_ref) {
@@ -243,25 +265,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.initialize();
 	        this.initializeTiles();
+
+	        return this;
 	    }
 
 	    /**
 	     * initializes the MapController
+	     * @return {MapController} instance of MapController
 	     */
 
 
 	    _createClass(MapController, [{
 	        key: "initialize",
 	        value: function initialize() {
-
 	            PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
-
 	            this.$canvas = $("<canvas class='mjs-canvas' />");
 	            this.canvas = this.$canvas[0];
 	            this.$container.append(this.$canvas);
 	            this.canvasContext = this.canvas.getContext("2d");
 	            this.resize();
+	            return this;
 	        }
+
+	        /**
+	         * initializes tiles
+	         * @return {MapController} instance of MapController
+	         */
+
 	    }, {
 	        key: "initializeTiles",
 	        value: function initializeTiles() {
@@ -271,16 +301,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var _tile = new Tile(currentTileData);
 	                this.tiles.push(_tile);
 	            }
+	            return this;
 	        }
+
+	        /**
+	         * handles on load of a tile
+	         * @param  {Tile} tile a tile of the map
+	         * @return {MapController} instance of MapController
+	         */
+
 	    }, {
 	        key: "onTilesLoaded",
 	        value: function onTilesLoaded(tile) {
-	            this.canvasContext.drawImage(tile.img, tile.x, tile.y, tile.width, tile.height);
+	            this.drawTile(tile);
 	            tile.state.next();
+	            return this;
+	        }
+
+	        /**
+	         * draws tiles on canvas
+	         * @param  {Tile} tile a tile of the map
+	         * @return {MapController} instance of MapController
+	         */
+
+	    }, {
+	        key: "drawTile",
+	        value: function drawTile(tile) {
+	            this.canvasContext.drawImage(tile.img, tile.x, tile.y, tile.width, tile.height);
+	            return this;
 	        }
 
 	        /**
 	         * Handles resizing of map
+	         * @return {MapController} instance of MapController
 	         */
 
 	    }, {
@@ -293,15 +346,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.canvasContext.canvas.height = this.canvasHeight;
 
 	            this.draw();
+
+	            return this;
 	        }
 
 	        /**
-	         * Handles the redraw of the map
+	         * Handles draw of map
+	         * @return {MapController} instance of MapController
 	         */
 
 	    }, {
 	        key: "draw",
-	        value: function draw() {}
+	        value: function draw() {
+	            for (var tile in this.tiles) {
+	                var currentTile = this.tiles[tile];
+	                this.drawTile(currentTile);
+	            }
+	            return this;
+	        }
 	    }]);
 
 	    return MapController;
@@ -331,9 +393,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	var State = __webpack_require__(4).State;
 	var Publisher = __webpack_require__(5).Publisher;
 
+	/**
+	 * Singleton instance of Publisher
+	 */
 	var PUBLISHER = new Publisher();
 
 	var Tile = exports.Tile = function () {
+
+	    /**
+	     * Constructor
+	     * @param  {string} path=null - path to image
+	     * @param  {number} x=0 - position x of tile
+	     * @param  {[type]} y=0 - position y of tile
+	     * @param  {[type]} w=0 - tile width
+	     * @param  {[type]} h=0 - tile height
+	     * @return {Tile} instance of Tile
+	     */
+
 	    function Tile(_ref) {
 	        var _ref$path = _ref.path;
 	        var path = _ref$path === undefined ? null : _ref$path;
@@ -361,7 +437,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.height = h;
 
 	        this.initialize();
+
+	        return this;
 	    }
+
+	    /**
+	     * initializes tile and starts loading image
+	     * @return {Tile} instance of Tile
+	     */
+
 
 	    _createClass(Tile, [{
 	        key: 'initialize',
@@ -374,7 +458,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _this.state.next();
 	                PUBLISHER.publish("tile-loaded", _this);
 	            });
+	            return this;
 	        }
+
+	        /**
+	         * image loader, asynchronous
+	         * @param  {Function} cb - callback after loading image
+	         * @return {Tile} instance of Tile
+	         */
+
 	    }, {
 	        key: 'loadImage',
 	        value: function loadImage(cb) {
@@ -383,16 +475,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            img.onload = function () {
 	                cb(img);
 	            };
-	        }
-	    }, {
-	        key: 'toString',
-	        value: function toString() {
-	            return 'Tile({path})';
+	            return this;
 	        }
 	    }]);
 
 	    return Tile;
 	}();
+
+	/**
+	 * States of a tile
+	 * @type {Array}
+	 */
+
 
 		Tile.STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Initialized' }, { value: 2, description: 'Loaded' }, { value: 3, description: 'Drawn' }];
 
@@ -411,6 +505,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var State = exports.State = function () {
+
+	    /**
+	     * Constructor
+	     * @param  {Array} states_array=[] - [description]
+	     * @return {State} instance of State
+	     */
+
 	    function State() {
 	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 
@@ -419,13 +520,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.STATES = states_array;
 	        this.i = 0;
 	        this.state = this.getState();
+	        return this;
 	    }
+
+	    /**
+	     * get current state
+	     * @return {Object} a state from STATES-array
+	     */
+
 
 	    _createClass(State, [{
 	        key: "getState",
 	        value: function getState() {
 	            return this.STATES[this.i];
 	        }
+
+	        /**
+	         * get the next element
+	         * @return {State} instance of State
+	         */
+
 	    }, {
 	        key: "next",
 	        value: function next() {
@@ -435,6 +549,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.state = this.getState();
 	            return this;
 	        }
+
+	        /**
+	         * checks if there is a next element
+	         * @return {Boolean} wheter there is a next state or not
+	         */
+
 	    }, {
 	        key: "hasNext",
 	        value: function hasNext() {
@@ -459,9 +579,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+	/**
+	 * singleton instance
+	 * @type {Publisher}
+	 */
 	var instance = null;
 
 	var Publisher = exports.Publisher = function () {
+
+	    /**
+	     * Constructor
+	     * @return {Publisher} instance of Publisher
+	     */
+
 	    function Publisher() {
 	        _classCallCheck(this, Publisher);
 
@@ -475,6 +605,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return instance;
 	    }
 
+	    /**
+	     * subscribe to a topic
+	     * @param  {string} type="any" - a topic
+	     * @param  {Function} fn=function(){} - a function to callback
+	     * @return {Publisher} instance of Publisher
+	     */
+
+
 	    _createClass(Publisher, [{
 	        key: "subscribe",
 	        value: function subscribe() {
@@ -487,6 +625,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.subscribers[type].push(fn);
 	            return this;
 	        }
+
+	        /**
+	         * unsubscribe from a topic
+	         * @param  {string} type="any" - a topic
+	         * @param  {Function} fn=function(){} - a function to callback
+	         * @return {Publisher} instance of Publisher
+	         */
+
 	    }, {
 	        key: "unsubscribe",
 	        value: function unsubscribe() {
@@ -496,6 +642,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.handle(Publisher.UNSUBSCRIBE, type, fn);
 	            return this;
 	        }
+
+	        /**
+	         * publish to a topic
+	         * @param  {string} type="any" - a topic
+	         * @param  {Function} arg=[] - list of parameters
+	         * @return {Publisher} instance of Publisher
+	         */
+
 	    }, {
 	        key: "publish",
 	        value: function publish() {
@@ -505,6 +659,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.handle(Publisher.PUBLISH, type, arg);
 	            return this;
 	        }
+
+	        /**
+	         * handle subscribe to a topic
+	         * @param  {string} action - eventname
+	         * @param  {string} type="any" - a topic
+	         * @param  {Object} a function to callback or arguments
+	         * @return {Publisher} instance of Publisher
+	         */
+
 	    }, {
 	        key: "handle",
 	        value: function handle(action, type, data) {
@@ -525,8 +688,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return Publisher;
 	}();
 
+	/**
+	 * Eventname for publishing
+	 * @type {String}
+	 */
+
+
 	Publisher.PUBLISH = "publish";
-	Publisher.UNSUBSCRIBE = "unsubscribe";
+
+	/**
+	 * Eventname for unsubscribing
+	 * @type {String}
+	 */
+		Publisher.UNSUBSCRIBE = "unsubscribe";
 
 /***/ },
 /* 6 */
@@ -540,6 +714,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var $ = __webpack_require__(2);
 
 	var Helper = exports.Helper = {
+
 	    /**
 	     * request json-data from given file and calls callback on success
 	     * @param  {string} filename - path to file
@@ -563,6 +738,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        });
 	    }
+
 		};
 
 /***/ }

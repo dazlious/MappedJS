@@ -2,10 +2,22 @@ var $ = require('jquery');
 var State = require('./State').State;
 var Publisher = require("./Publisher.js").Publisher;
 
+/**
+ * Singleton instance of Publisher
+ */
 const PUBLISHER = new Publisher();
 
 export class Tile {
 
+    /**
+     * Constructor
+     * @param  {string} path=null - path to image
+     * @param  {number} x=0 - position x of tile
+     * @param  {[type]} y=0 - position y of tile
+     * @param  {[type]} w=0 - tile width
+     * @param  {[type]} h=0 - tile height
+     * @return {Tile} instance of Tile
+     */
     constructor({path=null, x = 0, y = 0, w = 0, h = 0}) {
         this.state = new State(Tile.STATES);
 
@@ -20,8 +32,14 @@ export class Tile {
         this.height = h;
 
         this.initialize();
+
+        return this;
     }
 
+    /**
+     * initializes tile and starts loading image
+     * @return {Tile} instance of Tile
+     */
     initialize() {
         this.state.next();
 
@@ -31,22 +49,29 @@ export class Tile {
             _this.state.next();
             PUBLISHER.publish("tile-loaded", _this);
         });
+        return this;
     }
 
+    /**
+     * image loader, asynchronous
+     * @param  {Function} cb - callback after loading image
+     * @return {Tile} instance of Tile
+     */
     loadImage(cb) {
         let img = new Image();
         img.src = this.path;
         img.onload = function() {
             cb(img);
         };
-    }
-
-    toString() {
-        return `Tile({path})`;
+        return this;
     }
 
 }
 
+/**
+ * States of a tile
+ * @type {Array}
+ */
 Tile.STATES = [
     {value: 0, description: 'Starting'},
     {value: 1, description: 'Initialized'},
