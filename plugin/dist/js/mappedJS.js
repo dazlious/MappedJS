@@ -69,6 +69,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var MapController = __webpack_require__(1).MapController;
 	var $ = __webpack_require__(2);
 	var Helper = __webpack_require__(6).Helper;
+	var Publisher = __webpack_require__(5).Publisher;
 
 	var MappedJS = exports.MappedJS = function () {
 
@@ -81,24 +82,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	    function MappedJS(_ref) {
+	        var _this2 = this;
+
 	        var _ref$container = _ref.container;
 	        var container = _ref$container === undefined ? ".mjs" : _ref$container;
 	        var _ref$mapData = _ref.mapData;
 	        var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
 	        var _ref$events = _ref.events;
 	        var events = _ref$events === undefined ? { loaded: "mjs-loaded" } : _ref$events;
+	        var _ref$jasmine = _ref.jasmine;
+	        var jasmine = _ref$jasmine === undefined ? false : _ref$jasmine;
 
 	        _classCallCheck(this, MappedJS);
 
 	        this.initializeApi();
-	        this.initializeSettings(container, events);
 
-	        var _this = this;
-	        this.initializeData(mapData, function () {
-	            _this.initializeMap();
-	            _this.bindEvents();
-	            _this.loadingFinished();
-	        });
+	        if (!jasmine) {
+	            (function () {
+	                _this2.initializeSettings(container, events);
+	                var _this = _this2;
+	                _this2.initializeData(mapData, function () {
+	                    _this.initializeMap();
+	                    _this.bindEvents();
+	                    _this.loadingFinished();
+	                });
+	            })();
+	        }
 
 	        return this;
 	    }
@@ -173,6 +182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function initializeApi() {
 	            this.api = {
 	                MapController: MapController,
+	                Publisher: Publisher,
 	                Helper: Helper
 	            };
 	            return this;

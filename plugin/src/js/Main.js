@@ -1,6 +1,7 @@
 var MapController = require('./MapController.js').MapController;
 var $ = require('jquery');
 var Helper = require('./Helper.js').Helper;
+var Publisher = require('./Publisher.js').Publisher;
 
 export class MappedJS {
 
@@ -11,16 +12,18 @@ export class MappedJS {
      * @param  {Object} events={loaded: "mjs-loaded"}} - List of events
      * @return {MappedJS} instance of MappedJS
      */
-    constructor({container=".mjs", mapData={}, events={loaded:"mjs-loaded"}}) {
+    constructor({container=".mjs", mapData={}, events={loaded:"mjs-loaded"}, jasmine=false}) {
         this.initializeApi();
-        this.initializeSettings(container, events);
 
-        let _this = this;
-        this.initializeData(mapData, function() {
-            _this.initializeMap();
-            _this.bindEvents();
-            _this.loadingFinished();
-        });
+        if (!jasmine) {
+            this.initializeSettings(container, events);
+            let _this = this;
+            this.initializeData(mapData, function() {
+                _this.initializeMap();
+                _this.bindEvents();
+                _this.loadingFinished();
+            });
+        }
 
         return this;
     }
@@ -82,6 +85,7 @@ export class MappedJS {
     initializeApi() {
         this.api = {
             MapController: MapController,
+            Publisher: Publisher,
             Helper: Helper
         };
         return this;
