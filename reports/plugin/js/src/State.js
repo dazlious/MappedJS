@@ -28,6 +28,13 @@ function _classCallCheck(instance, Constructor) {
 }
 
 var State = exports.State = function() {
+
+    /**
+     * Constructor
+     * @param  {Array} states_array=[] - [description]
+     * @return {State} instance of State
+     */
+
     function State() {
         var states_array = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 
@@ -36,13 +43,26 @@ var State = exports.State = function() {
         this.STATES = states_array;
         this.i = 0;
         this.state = this.getState();
+        return this;
     }
+
+    /**
+     * get current state
+     * @return {Object} a state from STATES-array
+     */
+
 
     _createClass(State, [{
         key: "getState",
         value: function getState() {
             return this.STATES[this.i];
         }
+
+        /**
+         * get the next element
+         * @return {State} instance of State
+         */
+
     }, {
         key: "next",
         value: function next() {
@@ -52,6 +72,12 @@ var State = exports.State = function() {
             this.state = this.getState();
             return this;
         }
+
+        /**
+         * checks if there is a next element
+         * @return {Boolean} wheter there is a next state or not
+         */
+
     }, {
         key: "hasNext",
         value: function hasNext() {

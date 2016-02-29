@@ -404,9 +404,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Constructor
 	     * @param  {string} path=null - path to image
 	     * @param  {number} x=0 - position x of tile
-	     * @param  {[type]} y=0 - position y of tile
-	     * @param  {[type]} w=0 - tile width
-	     * @param  {[type]} h=0 - tile height
+	     * @param  {number} y=0 - position y of tile
+	     * @param  {number} w=0 - tile width
+	     * @param  {number} h=0 - tile height
 	     * @return {Tile} instance of Tile
 	     */
 

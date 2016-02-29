@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 var $ = require('jquery');
 
 var Helper = exports.Helper = {
+
     /**
      * request json-data from given file and calls callback on success
      * @param  {string} filename - path to file
@@ -29,4 +30,5 @@ var Helper = exports.Helper = {
             }
         });
     }
+
 };
