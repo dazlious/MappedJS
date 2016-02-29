@@ -25,285 +25,29 @@
         <h1>
             Documentation
         </h1>
-        <h2 id="classes">Classes</h2>
+        <h2 id="members">Members</h2>
 <dl>
-<dt><a href="#MappedJS">MappedJS</a></dt>
-<dd></dd>
-<dt><a href="#MapController">MapController</a></dt>
-<dd></dd>
-<dt><a href="#Publisher">Publisher</a></dt>
-<dd></dd>
-<dt><a href="#State">State</a></dt>
-<dd></dd>
-<dt><a href="#Tile">Tile</a></dt>
-<dd></dd>
-</dl>
-
-<h2 id="members">Members</h2>
-<dl>
-<dt><a href="#instance">instance</a> : <code><a href="#Publisher">Publisher</a></code></dt>
+<dt><a href="#PUBLISHER">PUBLISHER</a></dt>
+<dd><p>Singleton instance of Publisher</p>
+</dd>
+<dt><a href="#instance">instance</a> : <code>Publisher</code></dt>
 <dd><p>singleton instance</p>
 </dd>
-</dl>
-
-<h2 id="constants">Constants</h2>
-<dl>
-<dt><a href="#PUBLISHER">PUBLISHER</a></dt>
-<dd><p>Singleton instance of Publisher</p>
-</dd>
 <dt><a href="#PUBLISHER">PUBLISHER</a></dt>
 <dd><p>Singleton instance of Publisher</p>
 </dd>
 </dl>
 
-<p><a name="MappedJS"></a></p>
-<h2 id="mappedjs">MappedJS</h2>
-<p><strong>Kind</strong>: global class  </p>
-<ul>
-<li><a href="#MappedJS">MappedJS</a><ul>
-<li><a href="#new_MappedJS_new">new MappedJS(container, mapData, events)</a></li>
-<li><a href="#MappedJS+initializeSettings">.initializeSettings(container, events)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+initializeData">.initializeData(mapData, cb)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+initializeMap">.initializeMap()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+initializeApi">.initializeApi()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+bindEvents">.bindEvents()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+resizeHandler">.resizeHandler()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+loadingFinished">.loadingFinished()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-</ul>
-</li>
-</ul>
-<p><a name="new_MappedJS_new"></a></p>
-<h3 id="new-mappedjs-container-mapdata-events-">new MappedJS(container, mapData, events)</h3>
-<p>Constructor</p>
-<p><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><strong>Params</strong></p>
-<ul>
-<li>container <code>string</code> | <code>Object</code> <code> = &quot;\&quot;.mjs\&quot;&quot;</code> - Container, either string, jQuery-object or dom-object</li>
-<li>mapData <code>string</code> | <code>Object</code> <code> = &quot;{}&quot;</code> - data of map tiles, can be json or path to file</li>
-<li>events <code>Object</code> <code> = {loaded:</code> - &quot;mjs-loaded&quot;}} - List of events</li>
-</ul>
-<p><a name="MappedJS+initializeSettings"></a></p>
-<h3 id="mappedjs-initializesettings-container-events-code-mappedjs-mappedjs-code-">mappedJS.initializeSettings(container, events) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>initializes the settings and handles errors</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><strong>Params</strong></p>
-<ul>
-<li>container <code>string</code> | <code>Object</code> - Container, either string, jQuery-object or dom-object</li>
-<li>events <code>object</code> - List of events</li>
-</ul>
-<p><a name="MappedJS+initializeData"></a></p>
-<h3 id="mappedjs-initializedata-mapdata-cb-code-mappedjs-mappedjs-code-">mappedJS.initializeData(mapData, cb) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>initializes the data, asynchronous</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><strong>Params</strong></p>
-<ul>
-<li>mapData <code>Object</code> - data of map tiles, can be json or path to file</li>
-<li>cb <code>function</code> - called, when data is received</li>
-</ul>
-<p><a name="MappedJS+initializeMap"></a></p>
-<h3 id="mappedjs-initializemap-code-mappedjs-mappedjs-code-">mappedJS.initializeMap() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>initializes Map module</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MappedJS+initializeApi"></a></p>
-<h3 id="mappedjs-initializeapi-code-mappedjs-mappedjs-code-">mappedJS.initializeApi() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>initializes the public Api</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MappedJS+bindEvents"></a></p>
-<h3 id="mappedjs-bindevents-code-mappedjs-mappedjs-code-">mappedJS.bindEvents() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>binds all events to handlers</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MappedJS+resizeHandler"></a></p>
-<h3 id="mappedjs-resizehandler-code-mappedjs-mappedjs-code-">mappedJS.resizeHandler() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>handles resizing of window</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MappedJS+loadingFinished"></a></p>
-<h3 id="mappedjs-loadingfinished-code-mappedjs-mappedjs-code-">mappedJS.loadingFinished() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>called when loading and initialization is finished</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MapController"></a></p>
-<h2 id="mapcontroller">MapController</h2>
-<p><strong>Kind</strong>: global class  </p>
-<ul>
-<li><a href="#MapController">MapController</a><ul>
-<li><a href="#new_MapController_new">new MapController(container, tilesData)</a></li>
-<li><a href="#MapController+initialize">.initialize()</a> ⇒ <code><a href="#MapController">MapController</a></code></li>
-<li><a href="#MapController+initializeTiles">.initializeTiles()</a> ⇒ <code><a href="#MapController">MapController</a></code></li>
-<li><a href="#MapController+onTilesLoaded">.onTilesLoaded(tile)</a> ⇒ <code><a href="#MapController">MapController</a></code></li>
-<li><a href="#MapController+drawTile">.drawTile(tile)</a> ⇒ <code><a href="#MapController">MapController</a></code></li>
-<li><a href="#MapController+resize">.resize()</a> ⇒ <code><a href="#MapController">MapController</a></code></li>
-<li><a href="#MapController+draw">.draw()</a> ⇒ <code><a href="#MapController">MapController</a></code></li>
-</ul>
-</li>
-</ul>
-<p><a name="new_MapController_new"></a></p>
-<h3 id="new-mapcontroller-container-tilesdata-">new MapController(container, tilesData)</h3>
-<p>Constructor</p>
-<p><strong>Returns</strong>: <code><a href="#MapController">MapController</a></code> - instance of MapController<br><strong>Params</strong></p>
-<ul>
-<li>container <code>Object</code> - jQuery-object holding the container</li>
-<li>tilesData <code>Object</code> <code> = {}</code> - json object representing data of map</li>
-</ul>
-<p><a name="MapController+initialize"></a></p>
-<h3 id="mapcontroller-initialize-code-mapcontroller-mapcontroller-code-">mapController.initialize() ⇒ <code><a href="#MapController">MapController</a></code></h3>
-<p>initializes the MapController</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MapController">MapController</a></code><br><strong>Returns</strong>: <code><a href="#MapController">MapController</a></code> - instance of MapController<br><a name="MapController+initializeTiles"></a></p>
-<h3 id="mapcontroller-initializetiles-code-mapcontroller-mapcontroller-code-">mapController.initializeTiles() ⇒ <code><a href="#MapController">MapController</a></code></h3>
-<p>initializes tiles</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MapController">MapController</a></code><br><strong>Returns</strong>: <code><a href="#MapController">MapController</a></code> - instance of MapController<br><a name="MapController+onTilesLoaded"></a></p>
-<h3 id="mapcontroller-ontilesloaded-tile-code-mapcontroller-mapcontroller-code-">mapController.onTilesLoaded(tile) ⇒ <code><a href="#MapController">MapController</a></code></h3>
-<p>handles on load of a tile</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MapController">MapController</a></code><br><strong>Returns</strong>: <code><a href="#MapController">MapController</a></code> - instance of MapController<br><strong>Params</strong></p>
-<ul>
-<li>tile <code><a href="#Tile">Tile</a></code> - a tile of the map</li>
-</ul>
-<p><a name="MapController+drawTile"></a></p>
-<h3 id="mapcontroller-drawtile-tile-code-mapcontroller-mapcontroller-code-">mapController.drawTile(tile) ⇒ <code><a href="#MapController">MapController</a></code></h3>
-<p>draws tiles on canvas</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MapController">MapController</a></code><br><strong>Returns</strong>: <code><a href="#MapController">MapController</a></code> - instance of MapController<br><strong>Params</strong></p>
-<ul>
-<li>tile <code><a href="#Tile">Tile</a></code> - a tile of the map</li>
-</ul>
-<p><a name="MapController+resize"></a></p>
-<h3 id="mapcontroller-resize-code-mapcontroller-mapcontroller-code-">mapController.resize() ⇒ <code><a href="#MapController">MapController</a></code></h3>
-<p>Handles resizing of map</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MapController">MapController</a></code><br><strong>Returns</strong>: <code><a href="#MapController">MapController</a></code> - instance of MapController<br><a name="MapController+draw"></a></p>
-<h3 id="mapcontroller-draw-code-mapcontroller-mapcontroller-code-">mapController.draw() ⇒ <code><a href="#MapController">MapController</a></code></h3>
-<p>Handles draw of map</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MapController">MapController</a></code><br><strong>Returns</strong>: <code><a href="#MapController">MapController</a></code> - instance of MapController<br><a name="Publisher"></a></p>
-<h2 id="publisher">Publisher</h2>
-<p><strong>Kind</strong>: global class  </p>
-<ul>
-<li><a href="#Publisher">Publisher</a><ul>
-<li><a href="#new_Publisher_new">new Publisher()</a></li>
-<li><em>instance</em><ul>
-<li><a href="#Publisher+subscribe">.subscribe(type, fn)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
-<li><a href="#Publisher+unsubscribe">.unsubscribe(type, fn)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
-<li><a href="#Publisher+publish">.publish(type, arg)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
-<li><a href="#Publisher+handle">.handle(action, type, a)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
-</ul>
-</li>
-<li><em>static</em><ul>
-<li><a href="#Publisher.PUBLISH">.PUBLISH</a> : <code>String</code></li>
-<li><a href="#Publisher.UNSUBSCRIBE">.UNSUBSCRIBE</a> : <code>String</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><a name="new_Publisher_new"></a></p>
-<h3 id="new-publisher-">new Publisher()</h3>
-<p>Constructor</p>
-<p><strong>Returns</strong>: <code><a href="#Publisher">Publisher</a></code> - instance of Publisher<br><a name="Publisher+subscribe"></a></p>
-<h3 id="publisher-subscribe-type-fn-code-publisher-publisher-code-">publisher.subscribe(type, fn) ⇒ <code><a href="#Publisher">Publisher</a></code></h3>
-<p>subscribe to a topic</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><strong>Returns</strong>: <code><a href="#Publisher">Publisher</a></code> - instance of Publisher<br><strong>Params</strong></p>
-<ul>
-<li>type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic</li>
-<li>fn <code>function</code> <code> = function(){}</code> - a function to callback</li>
-</ul>
-<p><a name="Publisher+unsubscribe"></a></p>
-<h3 id="publisher-unsubscribe-type-fn-code-publisher-publisher-code-">publisher.unsubscribe(type, fn) ⇒ <code><a href="#Publisher">Publisher</a></code></h3>
-<p>unsubscribe from a topic</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><strong>Returns</strong>: <code><a href="#Publisher">Publisher</a></code> - instance of Publisher<br><strong>Params</strong></p>
-<ul>
-<li>type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic</li>
-<li>fn <code>function</code> <code> = function(){}</code> - a function to callback</li>
-</ul>
-<p><a name="Publisher+publish"></a></p>
-<h3 id="publisher-publish-type-arg-code-publisher-publisher-code-">publisher.publish(type, arg) ⇒ <code><a href="#Publisher">Publisher</a></code></h3>
-<p>publish to a topic</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><strong>Returns</strong>: <code><a href="#Publisher">Publisher</a></code> - instance of Publisher<br><strong>Params</strong></p>
-<ul>
-<li>type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic</li>
-<li>arg <code>function</code> <code> = [</code> - list of parameters</li>
-</ul>
-<p><a name="Publisher+handle"></a></p>
-<h3 id="publisher-handle-action-type-a-code-publisher-publisher-code-">publisher.handle(action, type, a) ⇒ <code><a href="#Publisher">Publisher</a></code></h3>
-<p>handle subscribe to a topic</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><strong>Returns</strong>: <code><a href="#Publisher">Publisher</a></code> - instance of Publisher<br><strong>Params</strong></p>
-<ul>
-<li>action <code>string</code> - eventname</li>
-<li>type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic</li>
-<li>a <code>Object</code> - function to callback or arguments</li>
-</ul>
-<p><a name="Publisher.PUBLISH"></a></p>
-<h3 id="publisher-publish-code-string-code-">Publisher.PUBLISH : <code>String</code></h3>
-<p>Eventname for publishing</p>
-<p><strong>Kind</strong>: static property of <code><a href="#Publisher">Publisher</a></code><br><a name="Publisher.UNSUBSCRIBE"></a></p>
-<h3 id="publisher-unsubscribe-code-string-code-">Publisher.UNSUBSCRIBE : <code>String</code></h3>
-<p>Eventname for unsubscribing</p>
-<p><strong>Kind</strong>: static property of <code><a href="#Publisher">Publisher</a></code><br><a name="State"></a></p>
-<h2 id="state">State</h2>
-<p><strong>Kind</strong>: global class  </p>
-<ul>
-<li><a href="#State">State</a><ul>
-<li><a href="#new_State_new">new State(states_array)</a></li>
-<li><a href="#State+getState">.getState()</a> ⇒ <code>Object</code></li>
-<li><a href="#State+next">.next()</a> ⇒ <code><a href="#State">State</a></code></li>
-<li><a href="#State+hasNext">.hasNext()</a> ⇒ <code>Boolean</code></li>
-</ul>
-</li>
-</ul>
-<p><a name="new_State_new"></a></p>
-<h3 id="new-state-states_array-">new State(states_array)</h3>
-<p>Constructor</p>
-<p><strong>Returns</strong>: <code><a href="#State">State</a></code> - instance of State<br><strong>Params</strong></p>
-<ul>
-<li>states_array <code>Array</code> <code> = [</code> - [description]</li>
-</ul>
-<p><a name="State+getState"></a></p>
-<h3 id="state-getstate-code-object-code-">state.getState() ⇒ <code>Object</code></h3>
-<p>get current state</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code>Object</code> - a state from STATES-array<br><a name="State+next"></a></p>
-<h3 id="state-next-code-state-state-code-">state.next() ⇒ <code><a href="#State">State</a></code></h3>
-<p>get the next element</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code><a href="#State">State</a></code> - instance of State<br><a name="State+hasNext"></a></p>
-<h3 id="state-hasnext-code-boolean-code-">state.hasNext() ⇒ <code>Boolean</code></h3>
-<p>checks if there is a next element</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code>Boolean</code> - wheter there is a next state or not<br><a name="Tile"></a></p>
-<h2 id="tile">Tile</h2>
-<p><strong>Kind</strong>: global class  </p>
-<ul>
-<li><a href="#Tile">Tile</a><ul>
-<li><a href="#new_Tile_new">new Tile(path, x, y, w, h)</a></li>
-<li><em>instance</em><ul>
-<li><a href="#Tile+initialize">.initialize()</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
-<li><a href="#Tile+loadImage">.loadImage(cb)</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
-</ul>
-</li>
-<li><em>static</em><ul>
-<li><a href="#Tile.STATES">.STATES</a> : <code>Array</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><a name="new_Tile_new"></a></p>
-<h3 id="new-tile-path-x-y-w-h-">new Tile(path, x, y, w, h)</h3>
-<p>Constructor</p>
-<p><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile<br><strong>Params</strong></p>
-<ul>
-<li>path <code>string</code> <code> = null</code> - path to image</li>
-<li>x <code>number</code> <code> = 0</code> - position x of tile</li>
-<li>y <code>number</code> <code> = 0</code> - position y of tile</li>
-<li>w <code>number</code> <code> = 0</code> - tile width</li>
-<li>h <code>number</code> <code> = 0</code> - tile height</li>
-</ul>
-<p><a name="Tile+initialize"></a></p>
-<h3 id="tile-initialize-code-tile-tile-code-">tile.initialize() ⇒ <code><a href="#Tile">Tile</a></code></h3>
-<p>initializes tile and starts loading image</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile<br><a name="Tile+loadImage"></a></p>
-<h3 id="tile-loadimage-cb-code-tile-tile-code-">tile.loadImage(cb) ⇒ <code><a href="#Tile">Tile</a></code></h3>
-<p>image loader, asynchronous</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile<br><strong>Params</strong></p>
-<ul>
-<li>cb <code>function</code> - callback after loading image</li>
-</ul>
-<p><a name="Tile.STATES"></a></p>
-<h3 id="tile-states-code-array-code-">Tile.STATES : <code>Array</code></h3>
-<p>States of a tile</p>
-<p><strong>Kind</strong>: static property of <code><a href="#Tile">Tile</a></code><br><a name="instance"></a></p>
-<h2 id="instance-code-publisher-publisher-code-">instance : <code><a href="#Publisher">Publisher</a></code></h2>
+<p><a name="PUBLISHER"></a></p>
+<h2 id="publisher">PUBLISHER</h2>
+<p>Singleton instance of Publisher</p>
+<p><strong>Kind</strong>: global variable<br><a name="instance"></a></p>
+<h2 id="instance-code-publisher-code-">instance : <code>Publisher</code></h2>
 <p>singleton instance</p>
 <p><strong>Kind</strong>: global variable<br><a name="PUBLISHER"></a></p>
 <h2 id="publisher">PUBLISHER</h2>
 <p>Singleton instance of Publisher</p>
-<p><strong>Kind</strong>: global constant<br><a name="PUBLISHER"></a></p>
-<h2 id="publisher">PUBLISHER</h2>
-<p>Singleton instance of Publisher</p>
-<p><strong>Kind</strong>: global constant  </p>
+<p><strong>Kind</strong>: global variable  </p>
         <footer class="site-footer">
             <span class="site-footer-owner"><a href="https://github.com/dazlious/MappedJS">MappedJS</a> is maintained by <a href="https://github.com/dazlious">dazlious</a>.</span>
 
