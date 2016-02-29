@@ -31,9 +31,23 @@ var $ = require('jquery');
 var State = require('./State').State;
 var Publisher = require("./Publisher.js").Publisher;
 
+/**
+ * Singleton instance of Publisher
+ */
 var PUBLISHER = new Publisher();
 
 var Tile = exports.Tile = function() {
+
+    /**
+     * Constructor
+     * @param  {string} path=null - path to image
+     * @param  {number} x=0 - position x of tile
+     * @param  {number} y=0 - position y of tile
+     * @param  {number} w=0 - tile width
+     * @param  {number} h=0 - tile height
+     * @return {Tile} instance of Tile
+     */
+
     function Tile(_ref) {
         var _ref$path = _ref.path;
         var path = _ref$path === undefined ? null : _ref$path;
@@ -61,7 +75,15 @@ var Tile = exports.Tile = function() {
         this.height = h;
 
         this.initialize();
+
+        return this;
     }
+
+    /**
+     * initializes tile and starts loading image
+     * @return {Tile} instance of Tile
+     */
+
 
     _createClass(Tile, [{
         key: 'initialize',
@@ -74,7 +96,15 @@ var Tile = exports.Tile = function() {
                 _this.state.next();
                 PUBLISHER.publish("tile-loaded", _this);
             });
+            return this;
         }
+
+        /**
+         * image loader, asynchronous
+         * @param  {Function} cb - callback after loading image
+         * @return {Tile} instance of Tile
+         */
+
     }, {
         key: 'loadImage',
         value: function loadImage(cb) {
@@ -83,16 +113,18 @@ var Tile = exports.Tile = function() {
             img.onload = function() {
                 cb(img);
             };
-        }
-    }, {
-        key: 'toString',
-        value: function toString() {
-            return 'Tile({path})';
+            return this;
         }
     }]);
 
     return Tile;
 }();
+
+/**
+ * States of a tile
+ * @type {Array}
+ */
+
 
 Tile.STATES = [{
     value: 0,

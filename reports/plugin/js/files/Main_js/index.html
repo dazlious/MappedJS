@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">72.52</p>
+      <p class="stat">71.29</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">170</p>
+      <p class="stat">188</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">36.45</p>
+      <p class="stat">37.50</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.17</p>
+      <p class="stat">1.21</p>
     </div>
   </div>
 </div>
@@ -135,6 +135,7 @@ var MappedJS = exports.MappedJS = function() {
      * @param  {string|Object} container=&quot;.mjs&quot; - Container, either string, jQuery-object or dom-object
      * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
      * @param  {Object} events={loaded: &quot;mjs-loaded&quot;}} - List of events
+     * @return {MappedJS} instance of MappedJS
      */
 
     function MappedJS(_ref) {
@@ -158,12 +159,15 @@ var MappedJS = exports.MappedJS = function() {
             _this.bindEvents();
             _this.loadingFinished();
         });
+
+        return this;
     }
 
     /**
      * initializes the settings and handles errors
      * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
      * @param  {object} events - List of events
+     * @return {MappedJS} instance of MappedJS
      */
 
 
@@ -177,12 +181,15 @@ var MappedJS = exports.MappedJS = function() {
             this.$container.addClass(&quot;mappedJS&quot;);
 
             this.events = events;
+
+            return this;
         }
 
         /**
          * initializes the data, asynchronous
          * @param  {Object} mapData - data of map tiles, can be json or path to file
          * @param  {Function} cb - called, when data is received
+         * @return {MappedJS} instance of MappedJS
          */
 
     }, {
@@ -198,10 +205,12 @@ var MappedJS = exports.MappedJS = function() {
                 this.mapData = (typeof mapData === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(mapData)) === &quot;object&quot; ? mapData : null;
                 cb();
             }
+            return this;
         }
 
         /**
          * initializes Map module
+         * @return {MappedJS} instance of MappedJS
          */
 
     }, {
@@ -211,10 +220,12 @@ var MappedJS = exports.MappedJS = function() {
                 container: this.$container,
                 tilesData: this.mapData
             });
+            return this;
         }
 
         /**
          * initializes the public Api
+         * @return {MappedJS} instance of MappedJS
          */
 
     }, {
@@ -224,36 +235,43 @@ var MappedJS = exports.MappedJS = function() {
                 MapController: MapController,
                 Helper: Helper
             };
+            return this;
         }
 
         /**
          * binds all events to handlers
+         * @return {MappedJS} instance of MappedJS
          */
 
     }, {
         key: &#039;bindEvents&#039;,
         value: function bindEvents() {
             $(window).on(&quot;resize orientationchange&quot;, this.resizeHandler.bind(this));
+            return this;
         }
 
         /**
          * handles resizing of window
+         * @return {MappedJS} instance of MappedJS
          */
 
     }, {
         key: &#039;resizeHandler&#039;,
         value: function resizeHandler() {
             this.$canvas.resize();
+            return this;
         }
 
         /**
-         * called when loading and initialization is finisehd
+         * called when loading and initialization is finished
+         * @return {MappedJS} instance of MappedJS
          */
 
     }, {
         key: &#039;loadingFinished&#039;,
         value: function loadingFinished() {
             this.$container.trigger(this.events.loaded);
+            return this;
         }
     }]);
 

@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">70.64</p>
+      <p class="stat">69.17</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">121</p>
+      <p class="stat">165</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">28.57</p>
+      <p class="stat">30.80</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.93</p>
+      <p class="stat">1.05</p>
     </div>
   </div>
 </div>
@@ -122,13 +122,17 @@ var $ = require(&#039;jquery&#039;);
 var Tile = require(&quot;./Tile.js&quot;).Tile;
 var Publisher = require(&quot;./Publisher.js&quot;).Publisher;
 
+/**
+ * Singleton instance of Publisher
+ */
 var PUBLISHER = new Publisher();
 
 var MapController = exports.MapController = function() {
 
-    /**
-     * Constructor
+    /** Constructor
      * @param  {Object} container - jQuery-object holding the container
+     * @param  {Object} tilesData={} - json object representing data of map
+     * @return {MapController} instance of MapController
      */
 
     function MapController(_ref) {
@@ -147,25 +151,33 @@ var MapController = exports.MapController = function() {
 
         this.initialize();
         this.initializeTiles();
+
+        return this;
     }
 
     /**
      * initializes the MapController
+     * @return {MapController} instance of MapController
      */
 
 
     _createClass(MapController, [{
         key: &quot;initialize&quot;,
         value: function initialize() {
-
             PUBLISHER.subscribe(&quot;tile-loaded&quot;, this.onTilesLoaded.bind(this));
-
             this.$canvas = $(&quot;&lt;canvas class=&#039;mjs-canvas&#039; /&gt;&quot;);
             this.canvas = this.$canvas[0];
             this.$container.append(this.$canvas);
             this.canvasContext = this.canvas.getContext(&quot;2d&quot;);
             this.resize();
+            return this;
         }
+
+        /**
+         * initializes tiles
+         * @return {MapController} instance of MapController
+         */
+
     }, {
         key: &quot;initializeTiles&quot;,
         value: function initializeTiles() {
@@ -175,16 +187,39 @@ var MapController = exports.MapController = function() {
                 var _tile = new Tile(currentTileData);
                 this.tiles.push(_tile);
             }
+            return this;
         }
+
+        /**
+         * handles on load of a tile
+         * @param  {Tile} tile a tile of the map
+         * @return {MapController} instance of MapController
+         */
+
     }, {
         key: &quot;onTilesLoaded&quot;,
         value: function onTilesLoaded(tile) {
-            this.canvasContext.drawImage(tile.img, tile.x, tile.y, tile.width, tile.height);
+            this.drawTile(tile);
             tile.state.next();
+            return this;
+        }
+
+        /**
+         * draws tiles on canvas
+         * @param  {Tile} tile a tile of the map
+         * @return {MapController} instance of MapController
+         */
+
+    }, {
+        key: &quot;drawTile&quot;,
+        value: function drawTile(tile) {
+            this.canvasContext.drawImage(tile.img, tile.x, tile.y, tile.width, tile.height);
+            return this;
         }
 
         /**
          * Handles resizing of map
+         * @return {MapController} instance of MapController
          */
 
     }, {
@@ -197,15 +232,24 @@ var MapController = exports.MapController = function() {
             this.canvasContext.canvas.height = this.canvasHeight;
 
             this.draw();
+
+            return this;
         }
 
         /**
-         * Handles the redraw of the map
+         * Handles draw of map
+         * @return {MapController} instance of MapController
          */
 
     }, {
         key: &quot;draw&quot;,
-        value: function draw() {}
+        value: function draw() {
+            for (var tile in this.tiles) {
+                var currentTile = this.tiles[tile];
+                this.drawTile(currentTile);
+            }
+            return this;
+        }
     }]);
 
     return MapController;

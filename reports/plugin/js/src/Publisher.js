@@ -27,9 +27,19 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
+/**
+ * singleton instance
+ * @type {Publisher}
+ */
 var instance = null;
 
 var Publisher = exports.Publisher = function() {
+
+    /**
+     * Constructor
+     * @return {Publisher} instance of Publisher
+     */
+
     function Publisher() {
         _classCallCheck(this, Publisher);
 
@@ -43,6 +53,14 @@ var Publisher = exports.Publisher = function() {
         return instance;
     }
 
+    /**
+     * subscribe to a topic
+     * @param  {string} type="any" - a topic
+     * @param  {Function} fn=function(){} - a function to callback
+     * @return {Publisher} instance of Publisher
+     */
+
+
     _createClass(Publisher, [{
         key: "subscribe",
         value: function subscribe() {
@@ -55,6 +73,14 @@ var Publisher = exports.Publisher = function() {
             this.subscribers[type].push(fn);
             return this;
         }
+
+        /**
+         * unsubscribe from a topic
+         * @param  {string} type="any" - a topic
+         * @param  {Function} fn=function(){} - a function to callback
+         * @return {Publisher} instance of Publisher
+         */
+
     }, {
         key: "unsubscribe",
         value: function unsubscribe() {
@@ -64,6 +90,14 @@ var Publisher = exports.Publisher = function() {
             this.handle(Publisher.UNSUBSCRIBE, type, fn);
             return this;
         }
+
+        /**
+         * publish to a topic
+         * @param  {string} type="any" - a topic
+         * @param  {Function} arg=[] - list of parameters
+         * @return {Publisher} instance of Publisher
+         */
+
     }, {
         key: "publish",
         value: function publish() {
@@ -73,6 +107,15 @@ var Publisher = exports.Publisher = function() {
             this.handle(Publisher.PUBLISH, type, arg);
             return this;
         }
+
+        /**
+         * handle subscribe to a topic
+         * @param  {string} action - eventname
+         * @param  {string} type="any" - a topic
+         * @param  {Object} a function to callback or arguments
+         * @return {Publisher} instance of Publisher
+         */
+
     }, {
         key: "handle",
         value: function handle(action, type, data) {
@@ -93,5 +136,16 @@ var Publisher = exports.Publisher = function() {
     return Publisher;
 }();
 
+/**
+ * Eventname for publishing
+ * @type {String}
+ */
+
+
 Publisher.PUBLISH = "publish";
+
+/**
+ * Eventname for unsubscribing
+ * @type {String}
+ */
 Publisher.UNSUBSCRIBE = "unsubscribe";
