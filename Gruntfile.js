@@ -12,7 +12,7 @@ module.exports = function(grunt) {
                     "param-list-format": "list",
                     "property-list-format": "list"
                 },
-                src: 'plugin/src/js/**/*.js',
+                src: 'es5-transpiled/**.js',
                 dest: 'docs/src/plugin.md'
             }
         },
@@ -22,7 +22,7 @@ module.exports = function(grunt) {
             },
             plugin: {
                 files: {
-                    'reports/plugin/js': "reports/plugin/js/src/**.js"
+                    'reports/plugin/js': "es5-transpiled/**.js"
                 }
             }
         },
@@ -131,12 +131,12 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'plugin/src/js/',
                     src: ['**.js'],
-                    dest: 'reports/plugin/js/src'
+                    dest: 'es5-transpiled'
                 }]
             }
         },
         jsbeautifier: {
-            files: ["reports/plugin/js/src/**.js"],
+            files: ["es5-transpiled/**.js"],
             options: {
                 jslint_happy: true,
                 break_chained_methods: true
@@ -168,6 +168,11 @@ module.exports = function(grunt) {
                     "plugin/dist/styles/mappedJS.css": "plugin/src/styles/mappedJS.scss"
                 }
             }
+        },
+        karma: {
+            plugin: {
+                configFile: 'test/karma.config.js'
+            }
         }
     });
 
@@ -183,17 +188,22 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-shell");
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-karma');
 
     // Register grunt tasks
     grunt.registerTask('default', []);
 
+    grunt.registerTask("transpile", ["babel:plugin", "jsbeautifier"]);
     grunt.registerTask('docs', ["jsdoc2md:plugin", "md:plugin"]);
-    grunt.registerTask('report', ["babel:plugin", "jsbeautifier", "plato:plugin", "postcss", "cssstats:plugin"]);
+    grunt.registerTask('report', ["plato:plugin", "postcss", "cssstats:plugin"]);
 
-    grunt.registerTask('deployDocs', ["docs", "report"]);
+    grunt.registerTask('deployDocs', ["transpile", "docs", "report"]);
     grunt.registerTask('gh-pages', ["shell:deployDocs"]);
 
     grunt.registerTask('dev', ["watch:plugin"]);
     grunt.registerTask('bundle', ["sass:plugin", "postcss:dev", "webpack:dev"]);
     grunt.registerTask('ship', ["sass:plugin", "postcss:prod", "webpack:prod"]);
+
+    grunt.registerTask('tests', ["karma:plugin"]);
+
 };
