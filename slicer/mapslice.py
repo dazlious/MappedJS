@@ -3,6 +3,7 @@ import math
 import time
 import argparse
 import json
+import os
 
 
 settings = None
@@ -20,7 +21,18 @@ def main():
         start = time.time()
 
         img = open_image(settings.input)
+
+        json_data["dimensions"] = {
+            "width": img.width,
+            "height": img.height
+        }
+
         slices = calculate_slices(img, settings.size, settings.minsize)
+
+        if settings.clearfolder:
+            os.system("rm -rf " + settings.output)
+
+        create_output_path(settings.output)
 
         save_data_to_json(settings.output, slices, settings.path)
 
@@ -37,6 +49,16 @@ def main():
         print("-> Finished in: %.2fs" % round(elapsed, 2))
     except (KeyboardInterrupt, SystemExit):
         print "-> Aborted through user interaction"
+
+
+def create_output_path(filename):
+    if not os.path.exists(os.path.dirname(filename)):
+        try:
+            os.makedirs(os.path.dirname(filename))
+        except OSError as exc:
+            print(exc, exc.errno)
+            if exc.errno != errno.EEXIST:
+                raise
 
 
 def save_data_to_json(output, slices, path):
@@ -140,6 +162,8 @@ def init_settings():
     parser.add_argument('-s', '--size', help='size of a tile', default=512, type=int)
     parser.add_argument('-m', '--minsize', help='minimum size of a tile', default=128, type=int)
     parser.add_argument('-p', '--path', help='additional path information for relative paths', default="", type=str)
+    parser.add_argument('-c', '--clearfolder', help='empties output folder', default=False, type=bool)
+
 
     args = parser.parse_args()
 
