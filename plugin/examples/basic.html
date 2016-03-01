@@ -44,6 +44,18 @@
             var mappedJS = new de.MappedJS({
                 container: ".mjs",
                 mapData: "mapData.json",
+                mapSettings: {
+                    "center": {
+                        "lat": 51.1426884,
+                        "lng": 8.212372
+                    },
+                    "bounds": {
+                        "top": 57,
+                        "left": 3,
+                        "width": 15,
+                        "height": 12
+                    }
+                },
                 events: {
                     loaded: "mjs-loaded"
                 }

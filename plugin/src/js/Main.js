@@ -9,14 +9,16 @@ export class MappedJS {
      * Constructor
      * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
      * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
-     * @param  {Object} events={loaded: "mjs-loaded"}} - List of events
+     * @param  {Object} mapSettings={} - settings for map, must be json
+     * @param  {Object} events={loaded: "mjs-loaded"} - List of events
+     * @param  {Boolean} jasmine=false - Option for jasmine tests
      * @return {MappedJS} instance of MappedJS
      */
-    constructor({container=".mjs", mapData={}, events={loaded:"mjs-loaded"}, jasmine=false}) {
+    constructor({container=".mjs", mapData={}, mapSettings={}, events={loaded:"mjs-loaded"}, jasmine=false}) {
         this.initializeApi();
 
         if (!jasmine) {
-            this.initializeSettings(container, events);
+            this.initializeSettings(container, events, mapSettings);
             let _this = this;
             this.initializeData(mapData, function() {
                 _this.initializeMap();
@@ -34,12 +36,14 @@ export class MappedJS {
      * @param  {object} events - List of events
      * @return {MappedJS} instance of MappedJS
      */
-    initializeSettings(container, events) {
+    initializeSettings(container, events, mapSettings) {
         this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
         if (!(this.$container instanceof jQuery)) {
             throw new Error("Container " + container + " not found");
         }
         this.$container.addClass("mappedJS");
+
+        this.mapSettings = mapSettings;
 
         this.events = events;
 
@@ -73,7 +77,8 @@ export class MappedJS {
     initializeMap() {
         this.$canvas = new MapController({
             container: this.$container,
-            tilesData: this.mapData
+            tilesData: this.mapData,
+            settings: this.mapSettings
         });
         return this;
     }
