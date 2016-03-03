@@ -9,8 +9,10 @@ import os
 settings = None
 
 json_data = {
-   "images": []
+   "img_data": {}
 }
+
+level = 0
 
 
 def main():
@@ -20,35 +22,50 @@ def main():
 
         start = time.time()
 
-        img = open_image(settings.input)
-
-        json_data["dimensions"] = {
-            "width": img.width,
-            "height": img.height
-        }
-
-        slices = calculate_slices(img, settings.size, settings.minsize)
-
-        if settings.clearfolder:
-            os.system("rm -rf " + settings.output)
-
-        create_output_path(settings.output)
-
-        save_data_to_json(settings.output, slices, settings.path)
-
-        slice_img(img, slices)
-
-        result_rows = len(slices)
-        result_cols = len(slices[0])
-        result_number = result_cols * result_rows
+        build_level(settings.input, settings.output, settings.path, settings.size, settings.minsize)
 
         end = time.time()
         elapsed = end - start
 
-        print("Sliced image into %dx%d and created %d tiles" % (result_cols, result_rows, result_number))
+        with open(settings.output + 'mapData.json', 'w') as f:
+            json.dump(json_data, f)
+
         print("-> Finished in: %.2fs" % round(elapsed, 2))
     except (KeyboardInterrupt, SystemExit):
         print "-> Aborted through user interaction"
+
+
+def build_level(input_path, output, path, size, minsize):
+    global level
+
+    img = open_image(input_path)
+
+    data_in_current_level = {
+        "dimensions": {
+            "width": img.width,
+            "height": img.height
+        },
+        "tiles": []
+    }
+
+    slices = calculate_slices(img, size, minsize)
+
+    if settings.clearfolder:
+        os.system("rm -rf " + output)
+
+    create_output_path(output)
+
+    build_data_json(output, slices, path, data_in_current_level, level)
+
+    slice_img(img, slices)
+
+    result_rows = len(slices)
+    result_cols = len(slices[0])
+    result_number = result_cols * result_rows
+
+    print("Sliced image into %dx%d and created %d tiles" % (result_cols, result_rows, result_number))
+
+    level += 1
 
 
 def create_output_path(filename):
@@ -61,7 +78,7 @@ def create_output_path(filename):
                 raise
 
 
-def save_data_to_json(output, slices, path):
+def build_data_json(output, slices, path, current_data, level):
     for y in range(len(slices)):
         for x in range(len(slices[y])):
             current_slice = slices[y][x]
@@ -72,10 +89,9 @@ def save_data_to_json(output, slices, path):
                 "w": current_slice[2] - current_slice[0],
                 "h": current_slice[3] - current_slice[1]
             }
-            json_data["images"].append(data)
+            current_data["tiles"].append(data)
 
-    with open(output + 'mapData.json', 'w') as f:
-            json.dump(json_data, f)
+    json_data["img_data"]["level-" + str(level)] = current_data
 
 
 def slice_img(image, slices):
