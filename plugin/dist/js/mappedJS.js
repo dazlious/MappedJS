@@ -68,7 +68,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var MapController = __webpack_require__(1).MapController;
 	var $ = __webpack_require__(2);
-	var Helper = __webpack_require__(9).Helper;
+	var Helper = __webpack_require__(8).Helper;
 	var Publisher = __webpack_require__(5).Publisher;
 
 	var MappedJS = exports.MappedJS = function () {
@@ -251,8 +251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var $ = __webpack_require__(2),
 	    Tile = __webpack_require__(3).Tile,
-	    Coordinate = __webpack_require__(6).Coordinate,
-	    Rectangle = __webpack_require__(7).Rectangle,
+	    Rectangle = __webpack_require__(6).Rectangle,
 	    Publisher = __webpack_require__(5).Publisher;
 
 	/**
@@ -300,30 +299,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(MapController, [{
 	        key: "initialize",
 	        value: function initialize() {
-
-	            this.initialCenter = new Coordinate(this.settings.center.lat, this.settings.center.lng);
 	            this.center = this.initialCenter;
-
-	            this.distortion = this.calculateDistortion(this.center.lat);
-
+	            this.distortion = this.calculateDistortion(this.settings.center.lat);
 	            this.bounds = new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height);
 
 	            this.bindEvents().initializeCanvas();
 
-	            //this.layerSize = ()
-
-	            var rect1 = new Rectangle(0, 0, 100, 100);
-	            var rect2 = new Rectangle(0, 0, 150, 150);
-
-	            console.log(rect1.getDifferenceBetweenCenter(rect2));
-
-	            this.setPosition(this.center);
-
 	            return this;
 	        }
-	    }, {
-	        key: "setPosition",
-	        value: function setPosition(position) {}
 	    }, {
 	        key: "calculateDistortion",
 	        value: function calculateDistortion(latitude) {
@@ -775,25 +758,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 6 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Coordinate = exports.Coordinate = function Coordinate(lat, lng) {
-	    _classCallCheck(this, Coordinate);
-
-	    this.lat = lat;
-	    this.lng = lng;
-		};
-
-/***/ },
-/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -806,21 +770,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Point = __webpack_require__(8).Point;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	var Rectangle = exports.Rectangle = function () {
-	    function Rectangle(top, left, width, height) {
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Point = __webpack_require__(7).Point;
+
+	var Rectangle = exports.Rectangle = function (_Point) {
+	    _inherits(Rectangle, _Point);
+
+	    function Rectangle(x, y, width, height) {
 	        _classCallCheck(this, Rectangle);
 
-	        this.top = top;
-	        this.left = left;
-	        this.width = width;
-	        this.height = height;
-	        this.topLeft = new Point(top, left);
-	        this.topRight = new Point(top, left + width);
-	        this.bottomLeft = new Point(top + height, left);
-	        this.bottomRight = new Point(top + height, left + width);
-	        this.center = new Point(top + height / 2, left + width / 2);
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
+
+	        _this.width = width;
+	        _this.height = height;
+	        _this.center = new Point(y + height / 2, x + width / 2);
+	        return _this;
 	    }
 
 	    _createClass(Rectangle, [{
@@ -831,10 +798,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 
 	    return Rectangle;
-	}();
+		}(Point);
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -871,7 +838,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

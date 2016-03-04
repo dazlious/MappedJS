@@ -1,6 +1,5 @@
 var $ = require('jquery'),
     Tile = require("./Tile.js").Tile,
-    Coordinate = require("./Coordinate.js").Coordinate,
     Rectangle = require("./Rectangle.js").Rectangle,
     Publisher = require("./Publisher.js").Publisher;
 
@@ -36,30 +35,13 @@ export class MapController {
      * @return {MapController} instance of MapController
      */
     initialize() {
-
-        this.initialCenter = new Coordinate(this.settings.center.lat, this.settings.center.lng);
         this.center = this.initialCenter;
-
-        this.distortion = this.calculateDistortion(this.center.lat);
-
+        this.distortion = this.calculateDistortion(this.settings.center.lat);
         this.bounds = new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height);
 
         this.bindEvents().initializeCanvas();
 
-        //this.layerSize = ()
-
-        var rect1 = new Rectangle(0,0,100,100);
-        var rect2 = new Rectangle(0,0,150,150);
-
-        console.log(rect1.getDifferenceBetweenCenter(rect2));
-
-        this.setPosition(this.center);
-
         return this;
-    }
-
-    setPosition(position) {
-
     }
 
     calculateDistortion(latitude) {

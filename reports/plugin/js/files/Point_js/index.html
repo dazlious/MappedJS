@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Plato - MapController.js</title>
+  <title>Plato - Point.js</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
@@ -36,7 +36,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>MapController.js</h1>
+    <h1>Point.js</h1>
   </div>
 </div>
 
@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">69.26</p>
+      <p class="stat">75.30</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">202</p>
+      <p class="stat">51</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">33.98</p>
+      <p class="stat">30.15</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.40</p>
+      <p class="stat">0.39</p>
     </div>
   </div>
 </div>
@@ -118,178 +118,27 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var $ = require(&#039;jquery&#039;),
-    Tile = require(&quot;./Tile.js&quot;).Tile,
-    Rectangle = require(&quot;./Rectangle.js&quot;).Rectangle,
-    Publisher = require(&quot;./Publisher.js&quot;).Publisher;
+var Point = exports.Point = function() {
+    function Point(x, y) {
+        _classCallCheck(this, Point);
 
-/**
- * Singleton instance of Publisher
- */
-var PUBLISHER = new Publisher();
-
-var MapController = exports.MapController = function() {
-
-    /** Constructor
-     * @param  {Object} container - jQuery-object holding the container
-     * @param  {Object} tilesData={} - json object representing data of map
-     * @param  {Object} settings={} - json object representing settings of map
-     * @return {MapController} instance of MapController
-     */
-
-    function MapController(_ref) {
-        var container = _ref.container;
-        var _ref$tilesData = _ref.tilesData;
-        var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
-        var _ref$settings = _ref.settings;
-        var settings = _ref$settings === undefined ? {} : _ref$settings;
-
-        _classCallCheck(this, MapController);
-
-        if (!container) {
-            throw Error(&quot;You must define a container to initialize a map&quot;);
-        }
-
-        this.$container = container;
-        this.data = tilesData;
-        this.settings = settings;
-
-        this.initialize().initializeTiles();
-
-        return this;
+        this.x = x;
+        this.y = y;
     }
 
-    /**
-     * initializes the MapController
-     * @return {MapController} instance of MapController
-     */
-
-
-    _createClass(MapController, [{
-        key: &quot;initialize&quot;,
-        value: function initialize() {
-            this.center = this.initialCenter;
-            this.distortion = this.calculateDistortion(this.settings.center.lat);
-            this.bounds = new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height);
-
-            this.bindEvents().initializeCanvas();
-
-            return this;
+    _createClass(Point, [{
+        key: &quot;sub&quot;,
+        value: function sub(point) {
+            return new Point(this.x - point.x, this.y - point.y);
         }
     }, {
-        key: &quot;calculateDistortion&quot;,
-        value: function calculateDistortion(latitude) {
-            return Math.cos(latitude);
-        }
-
-        /**
-         * initializes the canvas, adds to DOM
-         * @return {MapController} instance of MapController
-         */
-
-    }, {
-        key: &quot;initializeCanvas&quot;,
-        value: function initializeCanvas() {
-            this.$canvas = $(&quot;&lt;canvas class=&#039;mjs-canvas&#039; /&gt;&quot;);
-            this.canvas = this.$canvas[0];
-            this.$container.append(this.$canvas);
-            this.canvasContext = this.canvas.getContext(&quot;2d&quot;);
-            this.resize();
-            return this;
-        }
-
-        /**
-         * Handles all events for class
-         * @return {MapController} instance of MapController
-         */
-
-    }, {
-        key: &quot;bindEvents&quot;,
-        value: function bindEvents() {
-            PUBLISHER.subscribe(&quot;tile-loaded&quot;, this.onTilesLoaded.bind(this));
-            return this;
-        }
-
-        /**
-         * initializes tiles
-         * @return {MapController} instance of MapController
-         */
-
-    }, {
-        key: &quot;initializeTiles&quot;,
-        value: function initializeTiles() {
-            this.tiles = [];
-            for (var tile in this.data.images) {
-                var currentTileData = this.data.images[tile];
-                var _tile = new Tile(currentTileData);
-                this.tiles.push(_tile);
-            }
-            return this;
-        }
-
-        /**
-         * handles on load of a tile
-         * @param  {Tile} tile a tile of the map
-         * @return {MapController} instance of MapController
-         */
-
-    }, {
-        key: &quot;onTilesLoaded&quot;,
-        value: function onTilesLoaded(tile) {
-            this.drawTile(tile);
-            tile.state.next();
-            return this;
-        }
-
-        /**
-         * draws tiles on canvas
-         * @param  {Tile} tile a tile of the map
-         * @return {MapController} instance of MapController
-         */
-
-    }, {
-        key: &quot;drawTile&quot;,
-        value: function drawTile(tile) {
-            this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
-            return this;
-        }
-
-        /**
-         * Handles resizing of map
-         * @return {MapController} instance of MapController
-         */
-
-    }, {
-        key: &quot;resize&quot;,
-        value: function resize() {
-            this.canvasWidth = this.$container.innerWidth();
-            this.canvasHeight = this.$container.innerHeight();
-
-            this.canvasContext.canvas.width = this.canvasWidth;
-            this.canvasContext.canvas.height = this.canvasHeight;
-
-            this.draw();
-
-            return this;
-        }
-
-        /**
-         * Handles draw of map
-         * @return {MapController} instance of MapController
-         */
-
-    }, {
-        key: &quot;draw&quot;,
-        value: function draw() {
-            for (var tile in this.tiles) {
-                var currentTile = this.tiles[tile];
-                this.drawTile(currentTile);
-            }
-            return this;
+        key: &quot;add&quot;,
+        value: function add(point) {
+            return new Point(this.x + point.x, this.y + point.y);
         }
     }]);
 
-    return MapController;
+    return Point;
 }();</textarea>
   </div>
 </div>

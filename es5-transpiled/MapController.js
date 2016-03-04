@@ -27,9 +27,10 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var $ = require('jquery');
-var Tile = require("./Tile.js").Tile;
-var Publisher = require("./Publisher.js").Publisher;
+var $ = require('jquery'),
+    Tile = require("./Tile.js").Tile,
+    Rectangle = require("./Rectangle.js").Rectangle,
+    Publisher = require("./Publisher.js").Publisher;
 
 /**
  * Singleton instance of Publisher
@@ -41,6 +42,7 @@ var MapController = exports.MapController = function() {
     /** Constructor
      * @param  {Object} container - jQuery-object holding the container
      * @param  {Object} tilesData={} - json object representing data of map
+     * @param  {Object} settings={} - json object representing settings of map
      * @return {MapController} instance of MapController
      */
 
@@ -48,6 +50,8 @@ var MapController = exports.MapController = function() {
         var container = _ref.container;
         var _ref$tilesData = _ref.tilesData;
         var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
+        var _ref$settings = _ref.settings;
+        var settings = _ref$settings === undefined ? {} : _ref$settings;
 
         _classCallCheck(this, MapController);
 
@@ -57,9 +61,9 @@ var MapController = exports.MapController = function() {
 
         this.$container = container;
         this.data = tilesData;
+        this.settings = settings;
 
-        this.initialize();
-        this.initializeTiles();
+        this.initialize().initializeTiles();
 
         return this;
     }
@@ -73,12 +77,45 @@ var MapController = exports.MapController = function() {
     _createClass(MapController, [{
         key: "initialize",
         value: function initialize() {
-            PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
+            this.center = this.initialCenter;
+            this.distortion = this.calculateDistortion(this.settings.center.lat);
+            this.bounds = new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height);
+
+            this.bindEvents().initializeCanvas();
+
+            return this;
+        }
+    }, {
+        key: "calculateDistortion",
+        value: function calculateDistortion(latitude) {
+            return Math.cos(latitude);
+        }
+
+        /**
+         * initializes the canvas, adds to DOM
+         * @return {MapController} instance of MapController
+         */
+
+    }, {
+        key: "initializeCanvas",
+        value: function initializeCanvas() {
             this.$canvas = $("<canvas class='mjs-canvas' />");
             this.canvas = this.$canvas[0];
             this.$container.append(this.$canvas);
             this.canvasContext = this.canvas.getContext("2d");
             this.resize();
+            return this;
+        }
+
+        /**
+         * Handles all events for class
+         * @return {MapController} instance of MapController
+         */
+
+    }, {
+        key: "bindEvents",
+        value: function bindEvents() {
+            PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
             return this;
         }
 
@@ -122,7 +159,7 @@ var MapController = exports.MapController = function() {
     }, {
         key: "drawTile",
         value: function drawTile(tile) {
-            this.canvasContext.drawImage(tile.img, tile.x, tile.y, tile.width, tile.height);
+            this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
             return this;
         }
 

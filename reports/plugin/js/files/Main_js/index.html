@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">71.29</p>
+      <p class="stat">70.28</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">188</p>
+      <p class="stat">205</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">37.50</p>
+      <p class="stat">38.71</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.21</p>
+      <p class="stat">1.37</p>
     </div>
   </div>
 </div>
@@ -127,6 +127,7 @@ function _classCallCheck(instance, Constructor) {
 var MapController = require(&#039;./MapController.js&#039;).MapController;
 var $ = require(&#039;jquery&#039;);
 var Helper = require(&#039;./Helper.js&#039;).Helper;
+var Publisher = require(&#039;./Publisher.js&#039;).Publisher;
 
 var MappedJS = exports.MappedJS = function() {
 
@@ -134,31 +135,43 @@ var MappedJS = exports.MappedJS = function() {
      * Constructor
      * @param  {string|Object} container=&quot;.mjs&quot; - Container, either string, jQuery-object or dom-object
      * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
-     * @param  {Object} events={loaded: &quot;mjs-loaded&quot;}} - List of events
+     * @param  {Object} mapSettings={} - settings for map, must be json
+     * @param  {Object} events={loaded: &quot;mjs-loaded&quot;} - List of events
+     * @param  {Boolean} jasmine=false - Option for jasmine tests
      * @return {MappedJS} instance of MappedJS
      */
 
     function MappedJS(_ref) {
+        var _this2 = this;
+
         var _ref$container = _ref.container;
         var container = _ref$container === undefined ? &quot;.mjs&quot; : _ref$container;
         var _ref$mapData = _ref.mapData;
         var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
+        var _ref$mapSettings = _ref.mapSettings;
+        var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
         var _ref$events = _ref.events;
         var events = _ref$events === undefined ? {
             loaded: &quot;mjs-loaded&quot;
         } : _ref$events;
+        var _ref$jasmine = _ref.jasmine;
+        var jasmine = _ref$jasmine === undefined ? false : _ref$jasmine;
 
         _classCallCheck(this, MappedJS);
 
         this.initializeApi();
-        this.initializeSettings(container, events);
 
-        var _this = this;
-        this.initializeData(mapData, function() {
-            _this.initializeMap();
-            _this.bindEvents();
-            _this.loadingFinished();
-        });
+        if (!jasmine) {
+            (function() {
+                _this2.initializeSettings(container, events, mapSettings);
+                var _this = _this2;
+                _this2.initializeData(mapData, function() {
+                    _this.initializeMap();
+                    _this.bindEvents();
+                    _this.loadingFinished();
+                });
+            })();
+        }
 
         return this;
     }
@@ -173,12 +186,14 @@ var MappedJS = exports.MappedJS = function() {
 
     _createClass(MappedJS, [{
         key: &#039;initializeSettings&#039;,
-        value: function initializeSettings(container, events) {
+        value: function initializeSettings(container, events, mapSettings) {
             this.$container = typeof container === &quot;string&quot; ? $(container) : (typeof container === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(container)) === &quot;object&quot; &amp;&amp; container instanceof jQuery ? container : $(container);
             if (!(this.$container instanceof jQuery)) {
                 throw new Error(&quot;Container &quot; + container + &quot; not found&quot;);
             }
             this.$container.addClass(&quot;mappedJS&quot;);
+
+            this.mapSettings = mapSettings;
 
             this.events = events;
 
@@ -218,7 +233,8 @@ var MappedJS = exports.MappedJS = function() {
         value: function initializeMap() {
             this.$canvas = new MapController({
                 container: this.$container,
-                tilesData: this.mapData
+                tilesData: this.mapData,
+                settings: this.mapSettings
             });
             return this;
         }
@@ -233,6 +249,7 @@ var MappedJS = exports.MappedJS = function() {
         value: function initializeApi() {
             this.api = {
                 MapController: MapController,
+                Publisher: Publisher,
                 Helper: Helper
             };
             return this;

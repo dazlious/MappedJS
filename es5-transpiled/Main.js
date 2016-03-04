@@ -36,6 +36,7 @@ function _classCallCheck(instance, Constructor) {
 var MapController = require('./MapController.js').MapController;
 var $ = require('jquery');
 var Helper = require('./Helper.js').Helper;
+var Publisher = require('./Publisher.js').Publisher;
 
 var MappedJS = exports.MappedJS = function() {
 
@@ -43,31 +44,43 @@ var MappedJS = exports.MappedJS = function() {
      * Constructor
      * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
      * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
-     * @param  {Object} events={loaded: "mjs-loaded"}} - List of events
+     * @param  {Object} mapSettings={} - settings for map, must be json
+     * @param  {Object} events={loaded: "mjs-loaded"} - List of events
+     * @param  {Boolean} jasmine=false - Option for jasmine tests
      * @return {MappedJS} instance of MappedJS
      */
 
     function MappedJS(_ref) {
+        var _this2 = this;
+
         var _ref$container = _ref.container;
         var container = _ref$container === undefined ? ".mjs" : _ref$container;
         var _ref$mapData = _ref.mapData;
         var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
+        var _ref$mapSettings = _ref.mapSettings;
+        var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
         var _ref$events = _ref.events;
         var events = _ref$events === undefined ? {
             loaded: "mjs-loaded"
         } : _ref$events;
+        var _ref$jasmine = _ref.jasmine;
+        var jasmine = _ref$jasmine === undefined ? false : _ref$jasmine;
 
         _classCallCheck(this, MappedJS);
 
         this.initializeApi();
-        this.initializeSettings(container, events);
 
-        var _this = this;
-        this.initializeData(mapData, function() {
-            _this.initializeMap();
-            _this.bindEvents();
-            _this.loadingFinished();
-        });
+        if (!jasmine) {
+            (function() {
+                _this2.initializeSettings(container, events, mapSettings);
+                var _this = _this2;
+                _this2.initializeData(mapData, function() {
+                    _this.initializeMap();
+                    _this.bindEvents();
+                    _this.loadingFinished();
+                });
+            })();
+        }
 
         return this;
     }
@@ -82,12 +95,14 @@ var MappedJS = exports.MappedJS = function() {
 
     _createClass(MappedJS, [{
         key: 'initializeSettings',
-        value: function initializeSettings(container, events) {
+        value: function initializeSettings(container, events, mapSettings) {
             this.$container = typeof container === "string" ? $(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : $(container);
             if (!(this.$container instanceof jQuery)) {
                 throw new Error("Container " + container + " not found");
             }
             this.$container.addClass("mappedJS");
+
+            this.mapSettings = mapSettings;
 
             this.events = events;
 
@@ -127,7 +142,8 @@ var MappedJS = exports.MappedJS = function() {
         value: function initializeMap() {
             this.$canvas = new MapController({
                 container: this.$container,
-                tilesData: this.mapData
+                tilesData: this.mapData,
+                settings: this.mapSettings
             });
             return this;
         }
@@ -142,6 +158,7 @@ var MappedJS = exports.MappedJS = function() {
         value: function initializeApi() {
             this.api = {
                 MapController: MapController,
+                Publisher: Publisher,
                 Helper: Helper
             };
             return this;
