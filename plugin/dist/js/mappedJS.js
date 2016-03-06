@@ -66,10 +66,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var MapController = __webpack_require__(1).MapController;
-	var $ = __webpack_require__(2);
-	var Helper = __webpack_require__(8).Helper;
-	var Publisher = __webpack_require__(5).Publisher;
+	var TileMap = __webpack_require__(1).TileMap,
+	    $ = __webpack_require__(2),
+	    Helper = __webpack_require__(8).Helper,
+	    Publisher = __webpack_require__(5).Publisher;
 
 	var MappedJS = exports.MappedJS = function () {
 
@@ -133,7 +133,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            this.$container.addClass("mappedJS");
 
-	            this.mapSettings = mapSettings;
+	            this.mapSettings = {
+	                level: mapSettings.level || 0,
+	                center: mapSettings.center || { "lat": 0, "lng": 0 },
+	                bounds: mapSettings.bounds || {
+	                    "top": 90,
+	                    "left": -180,
+	                    "width": 360,
+	                    "height": 180
+	                }
+	            };
 
 	            this.events = events;
 
@@ -171,7 +180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'initializeMap',
 	        value: function initializeMap() {
-	            this.$canvas = new MapController({
+	            this.$canvas = new TileMap({
 	                container: this.$container,
 	                tilesData: this.mapData,
 	                settings: this.mapSettings
@@ -188,7 +197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'initializeApi',
 	        value: function initializeApi() {
 	            this.api = {
-	                MapController: MapController,
+	                TileMap: TileMap,
 	                Publisher: Publisher,
 	                Helper: Helper
 	            };
@@ -259,30 +268,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	var PUBLISHER = new Publisher();
 
-	var MapController = exports.MapController = function () {
+	var IMG_DATA_NAME = "img_data";
+	var DIMENSION_DATA_NAME = "dimensions";
+
+	var TileMap = exports.TileMap = function () {
 
 	    /** Constructor
 	     * @param  {Object} container - jQuery-object holding the container
-	     * @param  {Object} tilesData={} - json object representing data of map
-	     * @param  {Object} settings={} - json object representing settings of map
-	     * @return {MapController} instance of MapController
+	     * @param  {Object} tilesData={} - json object representing data of TileMap
+	     * @param  {Object} settings={} - json object representing settings of TileMap
+	     * @return {TileMap} instance of TileMap
 	     */
 
-	    function MapController(_ref) {
+	    function TileMap(_ref) {
 	        var container = _ref.container;
 	        var _ref$tilesData = _ref.tilesData;
 	        var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
 	        var _ref$settings = _ref.settings;
 	        var settings = _ref$settings === undefined ? {} : _ref$settings;
 
-	        _classCallCheck(this, MapController);
+	        _classCallCheck(this, TileMap);
 
 	        if (!container) {
-	            throw Error("You must define a container to initialize a map");
+	            throw Error("You must define a container to initialize a TileMap");
 	        }
 
 	        this.$container = container;
-	        this.data = tilesData;
+	        this.dimensions = tilesData[DIMENSION_DATA_NAME];
+	        this.imgData = tilesData[IMG_DATA_NAME];
 	        this.settings = settings;
 
 	        this.initialize().initializeTiles();
@@ -291,12 +304,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * initializes the MapController
-	     * @return {MapController} instance of MapController
+	     * initializes the TileMap
+	     * @return {TileMap} instance of TileMap
 	     */
 
 
-	    _createClass(MapController, [{
+	    _createClass(TileMap, [{
 	        key: "initialize",
 	        value: function initialize() {
 	            this.center = this.initialCenter;
@@ -315,7 +328,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * initializes the canvas, adds to DOM
-	         * @return {MapController} instance of MapController
+	         * @return {TileMap} instance of TileMap
 	         */
 
 	    }, {
@@ -331,7 +344,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * Handles all events for class
-	         * @return {MapController} instance of MapController
+	         * @return {TileMap} instance of TileMap
 	         */
 
 	    }, {
@@ -343,25 +356,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * initializes tiles
-	         * @return {MapController} instance of MapController
+	         * @return {TileMap} instance of TileMap
 	         */
 
 	    }, {
 	        key: "initializeTiles",
 	        value: function initializeTiles() {
 	            this.tiles = [];
-	            for (var tile in this.data.images) {
-	                var currentTileData = this.data.images[tile];
+	            var currentLevel = this.getCurrentLevelData().tiles;
+	            for (var tile in currentLevel) {
+	                var currentTileData = currentLevel[tile];
 	                var _tile = new Tile(currentTileData);
 	                this.tiles.push(_tile);
 	            }
 	            return this;
 	        }
+	    }, {
+	        key: "getCurrentLevelData",
+	        value: function getCurrentLevelData() {
+	            console.log(this.imgData);
+	            return this.imgData["level-" + this.settings.level];
+	        }
 
 	        /**
 	         * handles on load of a tile
-	         * @param  {Tile} tile a tile of the map
-	         * @return {MapController} instance of MapController
+	         * @param  {Tile} tile a tile of the TileMap
+	         * @return {TileMap} instance of TileMap
 	         */
 
 	    }, {
@@ -374,8 +394,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * draws tiles on canvas
-	         * @param  {Tile} tile a tile of the map
-	         * @return {MapController} instance of MapController
+	         * @param  {Tile} tile a tile of the TileMap
+	         * @return {TileMap} instance of TileMap
 	         */
 
 	    }, {
@@ -386,8 +406,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * Handles resizing of map
-	         * @return {MapController} instance of MapController
+	         * Handles resizing of TileMap
+	         * @return {TileMap} instance of TileMap
 	         */
 
 	    }, {
@@ -405,8 +425,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * Handles draw of map
-	         * @return {MapController} instance of MapController
+	         * Handles draw of TileMap
+	         * @return {TileMap} instance of TileMap
 	         */
 
 	    }, {
@@ -420,7 +440,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }]);
 
-	    return MapController;
+	    return TileMap;
 	}();
 
 /***/ },

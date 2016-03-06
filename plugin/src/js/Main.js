@@ -1,7 +1,7 @@
-var MapController = require('./MapController.js').MapController;
-var $ = require('jquery');
-var Helper = require('./Helper.js').Helper;
-var Publisher = require('./Publisher.js').Publisher;
+var TileMap = require('./TileMap.js').TileMap,
+    $ = require('jquery'),
+    Helper = require('./Helper.js').Helper,
+    Publisher = require('./Publisher.js').Publisher;
 
 export class MappedJS {
 
@@ -43,7 +43,16 @@ export class MappedJS {
         }
         this.$container.addClass("mappedJS");
 
-        this.mapSettings = mapSettings;
+        this.mapSettings = {
+            level: mapSettings.level || 0,
+            center: mapSettings.center || {"lat": 0, "lng": 0},
+            bounds: mapSettings.bounds || {
+                "top": 90,
+                "left": -180,
+                "width": 360,
+                "height": 180
+            }
+        };
 
         this.events = events;
 
@@ -75,7 +84,7 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS
      */
     initializeMap() {
-        this.$canvas = new MapController({
+        this.$canvas = new TileMap({
             container: this.$container,
             tilesData: this.mapData,
             settings: this.mapSettings
@@ -89,7 +98,7 @@ export class MappedJS {
      */
     initializeApi() {
         this.api = {
-            MapController: MapController,
+            TileMap: TileMap,
             Publisher: Publisher,
             Helper: Helper
         };

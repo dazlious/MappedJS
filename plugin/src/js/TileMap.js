@@ -8,21 +8,25 @@ var $ = require('jquery'),
  */
 const PUBLISHER = new Publisher();
 
-export class MapController {
+const IMG_DATA_NAME = "img_data";
+const DIMENSION_DATA_NAME = "dimensions";
+
+export class TileMap {
 
     /** Constructor
      * @param  {Object} container - jQuery-object holding the container
-     * @param  {Object} tilesData={} - json object representing data of map
-     * @param  {Object} settings={} - json object representing settings of map
-     * @return {MapController} instance of MapController
+     * @param  {Object} tilesData={} - json object representing data of TileMap
+     * @param  {Object} settings={} - json object representing settings of TileMap
+     * @return {TileMap} instance of TileMap
      */
     constructor({container, tilesData={}, settings={}}) {
         if (!container) {
-            throw Error("You must define a container to initialize a map");
+            throw Error("You must define a container to initialize a TileMap");
         }
 
         this.$container = container;
-        this.data = tilesData;
+        this.dimensions = tilesData[DIMENSION_DATA_NAME];
+        this.imgData = tilesData[IMG_DATA_NAME];
         this.settings = settings;
 
         this.initialize().initializeTiles();
@@ -31,8 +35,8 @@ export class MapController {
     }
 
     /**
-     * initializes the MapController
-     * @return {MapController} instance of MapController
+     * initializes the TileMap
+     * @return {TileMap} instance of TileMap
      */
     initialize() {
         this.center = this.initialCenter;
@@ -50,7 +54,7 @@ export class MapController {
 
     /**
      * initializes the canvas, adds to DOM
-     * @return {MapController} instance of MapController
+     * @return {TileMap} instance of TileMap
      */
     initializeCanvas() {
         this.$canvas = $("<canvas class='mjs-canvas' />");
@@ -63,7 +67,7 @@ export class MapController {
 
     /**
      * Handles all events for class
-     * @return {MapController} instance of MapController
+     * @return {TileMap} instance of TileMap
      */
     bindEvents() {
         PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
@@ -72,22 +76,28 @@ export class MapController {
 
     /**
      * initializes tiles
-     * @return {MapController} instance of MapController
+     * @return {TileMap} instance of TileMap
      */
     initializeTiles() {
         this.tiles = [];
-        for (let tile in this.data.images) {
-            let currentTileData = this.data.images[tile];
+        let currentLevel = this.getCurrentLevelData().tiles;
+        for (let tile in currentLevel) {
+            let currentTileData = currentLevel[tile];
             let _tile = new Tile(currentTileData);
             this.tiles.push(_tile);
         }
         return this;
     }
 
+    getCurrentLevelData() {
+        console.log(this.imgData);
+        return this.imgData["level-" + this.settings.level];
+    }
+
     /**
      * handles on load of a tile
-     * @param  {Tile} tile a tile of the map
-     * @return {MapController} instance of MapController
+     * @param  {Tile} tile a tile of the TileMap
+     * @return {TileMap} instance of TileMap
      */
     onTilesLoaded(tile) {
         this.drawTile(tile);
@@ -97,8 +107,8 @@ export class MapController {
 
     /**
      * draws tiles on canvas
-     * @param  {Tile} tile a tile of the map
-     * @return {MapController} instance of MapController
+     * @param  {Tile} tile a tile of the TileMap
+     * @return {TileMap} instance of TileMap
      */
     drawTile(tile) {
         this.canvasContext.drawImage(tile.img, tile.x*this.distortion, tile.y, tile.width*this.distortion, tile.height);
@@ -106,8 +116,8 @@ export class MapController {
     }
 
     /**
-     * Handles resizing of map
-     * @return {MapController} instance of MapController
+     * Handles resizing of TileMap
+     * @return {TileMap} instance of TileMap
      */
     resize() {
         this.canvasWidth = this.$container.innerWidth();
@@ -122,8 +132,8 @@ export class MapController {
     }
 
     /**
-     * Handles draw of map
-     * @return {MapController} instance of MapController
+     * Handles draw of TileMap
+     * @return {TileMap} instance of TileMap
      */
     draw() {
         for(var tile in this.tiles) {
