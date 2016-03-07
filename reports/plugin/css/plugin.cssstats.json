@@ -1,17 +1,17 @@
 {
     "fileSize": {
-        "size": "0.32 KB",
-        "gzipSize": "0.18 KB"
+        "size": "0.43 KB",
+        "gzipSize": "0.20 KB"
     },
     "selectorSpecifity": {
         "max": 11,
-        "average": 10.5
+        "average": 10.333333333333334
     },
     "totals": {
-        "rules": 2,
-        "selectors": 2,
-        "declarations": 3,
-        "properties": 3,
+        "rules": 3,
+        "selectors": 3,
+        "declarations": 4,
+        "properties": 4,
         "vendorPrefixes": 1,
         "mediaQueries": 0,
         "importants": 0
@@ -19,7 +19,7 @@
     "uniqueDeclarations": {},
     "selectors": {
         "type": 1,
-        "class": 2,
+        "class": 3,
         "id": 0,
         "pseudoClass": 0,
         "pseudoElement": 0
@@ -35,9 +35,11 @@
     "graphs": {
         "selectorSpecificity": [
             10,
+            10,
             11
         ],
         "rulesetSize": [
+            1,
             2,
             1
         ]

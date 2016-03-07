@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">70.42</p>
+      <p class="stat">69.37</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">151</p>
+      <p class="stat">171</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">46.20</p>
+      <p class="stat">51.80</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.89</p>
+      <p class="stat">1.05</p>
     </div>
   </div>
 </div>
@@ -89,157 +89,177 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">&quot;use strict&quot;;
+    <textarea id="file-source" class="col-md-12">(function(global, factory) {
+    if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
+        define([&quot;exports&quot;], factory);
+    } else if (typeof exports !== &quot;undefined&quot;) {
+        factory(exports);
+    } else {
+        var mod = {
+            exports: {}
+        };
+        factory(mod.exports);
+        global.Publisher = mod.exports;
+    }
+})(this, function(exports) {
+    &quot;use strict&quot;;
 
-Object.defineProperty(exports, &quot;__esModule&quot;, {
-    value: true
-});
+    Object.defineProperty(exports, &quot;__esModule&quot;, {
+        value: true
+    });
 
-var _createClass = function() {
-    function defineProperties(target, props) {
-        for (var i = 0; i &lt; props.length; i++) {
-            var descriptor = props[i];
-            descriptor.enumerable = descriptor.enumerable || false;
-            descriptor.configurable = true;
-            if (&quot;value&quot; in descriptor) descriptor.writable = true;
-            Object.defineProperty(target, descriptor.key, descriptor);
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError(&quot;Cannot call a class as a function&quot;);
         }
     }
-    return function(Constructor, protoProps, staticProps) {
-        if (protoProps) defineProperties(Constructor.prototype, protoProps);
-        if (staticProps) defineProperties(Constructor, staticProps);
-        return Constructor;
-    };
-}();
 
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError(&quot;Cannot call a class as a function&quot;);
-    }
-}
-
-/**
- * singleton instance
- * @type {Publisher}
- */
-var instance = null;
-
-var Publisher = exports.Publisher = function() {
-
-    /**
-     * Constructor
-     * @return {Publisher} instance of Publisher
-     */
-
-    function Publisher() {
-        _classCallCheck(this, Publisher);
-
-        if (!instance) {
-            this.subscribers = {
-                any: []
-            };
-            instance = this;
-        }
-
-        return instance;
-    }
-
-    /**
-     * subscribe to a topic
-     * @param  {string} type=&quot;any&quot; - a topic
-     * @param  {Function} fn=function(){} - a function to callback
-     * @return {Publisher} instance of Publisher
-     */
-
-
-    _createClass(Publisher, [{
-        key: &quot;subscribe&quot;,
-        value: function subscribe() {
-            var type = arguments.length &lt;= 0 || arguments[0] === undefined ? &quot;any&quot; : arguments[0];
-            var fn = arguments.length &lt;= 1 || arguments[1] === undefined ? function() {} : arguments[1];
-
-            if (!this.subscribers[type]) {
-                this.subscribers[type] = [];
+    var _createClass = function() {
+        function defineProperties(target, props) {
+            for (var i = 0; i &lt; props.length; i++) {
+                var descriptor = props[i];
+                descriptor.enumerable = descriptor.enumerable || false;
+                descriptor.configurable = true;
+                if (&quot;value&quot; in descriptor) descriptor.writable = true;
+                Object.defineProperty(target, descriptor.key, descriptor);
             }
-            this.subscribers[type].push(fn);
-            return this;
+        }
+
+        return function(Constructor, protoProps, staticProps) {
+            if (protoProps) defineProperties(Constructor.prototype, protoProps);
+            if (staticProps) defineProperties(Constructor, staticProps);
+            return Constructor;
+        };
+    }();
+
+    /**
+     * singleton instance
+     * @type {Publisher}
+     */
+    var instance = null;
+
+    var Publisher = exports.Publisher = function() {
+
+        /**
+         * Constructor
+         * @return {Publisher} instance of Publisher
+         */
+
+        function Publisher() {
+            _classCallCheck(this, Publisher);
+
+            if (!instance) {
+                this.subscribers = {};
+                instance = this;
+            }
+            return instance;
         }
 
         /**
-         * unsubscribe from a topic
+         * subscribe to a topic
          * @param  {string} type=&quot;any&quot; - a topic
          * @param  {Function} fn=function(){} - a function to callback
          * @return {Publisher} instance of Publisher
          */
 
-    }, {
-        key: &quot;unsubscribe&quot;,
-        value: function unsubscribe() {
-            var type = arguments.length &lt;= 0 || arguments[0] === undefined ? &quot;any&quot; : arguments[0];
-            var fn = arguments.length &lt;= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
-            this.handle(Publisher.UNSUBSCRIBE, type, fn);
-            return this;
-        }
+        _createClass(Publisher, [{
+            key: &quot;subscribe&quot;,
+            value: function subscribe() {
+                var type = arguments.length &lt;= 0 || arguments[0] === undefined ? &quot;any&quot; : arguments[0];
+                var fn = arguments.length &lt;= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
-        /**
-         * publish to a topic
-         * @param  {string} type=&quot;any&quot; - a topic
-         * @param  {Function} arg=[] - list of parameters
-         * @return {Publisher} instance of Publisher
-         */
+                if (!this.subscribers[type]) {
+                    this.subscribers[type] = [];
+                }
+                this.subscribers[type].push(fn);
+                return this;
+            }
 
-    }, {
-        key: &quot;publish&quot;,
-        value: function publish() {
-            var type = arguments.length &lt;= 0 || arguments[0] === undefined ? &quot;any&quot; : arguments[0];
-            var arg = arguments.length &lt;= 1 || arguments[1] === undefined ? [] : arguments[1];
+            /**
+             * unsubscribe from a topic
+             * @param  {string} type=&quot;any&quot; - a topic
+             * @param  {Function} fn=function(){} - a function to callback
+             * @return {Publisher} instance of Publisher
+             */
 
-            this.handle(Publisher.PUBLISH, type, arg);
-            return this;
-        }
+        }, {
+            key: &quot;unsubscribe&quot;,
+            value: function unsubscribe() {
+                var type = arguments.length &lt;= 0 || arguments[0] === undefined ? &quot;any&quot; : arguments[0];
+                var fn = arguments.length &lt;= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
-        /**
-         * handle subscribe to a topic
-         * @param  {string} action - eventname
-         * @param  {string} type=&quot;any&quot; - a topic
-         * @param  {Object} a function to callback or arguments
-         * @return {Publisher} instance of Publisher
-         */
+                this.handle(Publisher.UNSUBSCRIBE, type, fn);
+                return this;
+            }
 
-    }, {
-        key: &quot;handle&quot;,
-        value: function handle(action, type, data) {
-            var subs = this.subscribers[type] ? this.subscribers[type] : [];
-            for (var i = 0; i &lt; subs.length; i++) {
-                if (action === Publisher.PUBLISH) {
-                    subs[i](data);
-                } else {
-                    if (subs[i] === data) {
-                        subs.splice(i, 1);
+            /**
+             * publish to a topic
+             * @param  {string} type=&quot;any&quot; - a topic
+             * @param  {Function} arg=[] - list of parameters
+             * @return {Publisher} instance of Publisher
+             */
+
+        }, {
+            key: &quot;publish&quot;,
+            value: function publish() {
+                var type = arguments.length &lt;= 0 || arguments[0] === undefined ? &quot;any&quot; : arguments[0];
+                var arg = arguments.length &lt;= 1 || arguments[1] === undefined ? [] : arguments[1];
+
+                this.handle(Publisher.PUBLISH, type, arg);
+                return this;
+            }
+
+            /**
+             * handle subscribe to a topic
+             * @param  {string} action - eventname
+             * @param  {string} type=&quot;any&quot; - a topic
+             * @param  {Object} a function to callback or arguments
+             * @return {Publisher} instance of Publisher
+             */
+
+        }, {
+            key: &quot;handle&quot;,
+            value: function handle(action, type, data) {
+                var subs = this.subscribers[type] ? this.subscribers[type] : [];
+                for (var i = 0; i &lt; subs.length; i++) {
+                    if (action === Publisher.PUBLISH) {
+                        subs[i](data);
+                    } else {
+                        if (subs[i] === data) {
+                            subs.splice(i, 1);
+                        }
                     }
                 }
+                return this;
             }
-            return this;
-        }
-    }]);
 
-    return Publisher;
-}();
+            /**
+             * destroys singleton instance
+             */
 
-/**
- * Eventname for publishing
- * @type {String}
- */
+        }, {
+            key: &quot;destroy&quot;,
+            value: function destroy() {
+                instance = null;
+            }
+        }]);
 
+        return Publisher;
+    }();
 
-Publisher.PUBLISH = &quot;publish&quot;;
+    /**
+     * Eventname for publishing
+     * @type {String}
+     */
+    Publisher.PUBLISH = &quot;publish&quot;;
 
-/**
- * Eventname for unsubscribing
- * @type {String}
- */
-Publisher.UNSUBSCRIBE = &quot;unsubscribe&quot;;</textarea>
+    /**
+     * Eventname for unsubscribing
+     * @type {String}
+     */
+    Publisher.UNSUBSCRIBE = &quot;unsubscribe&quot;;
+});</textarea>
   </div>
 </div>
 

@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">70.94</p>
+      <p class="stat">68.38</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">76</p>
+      <p class="stat">209</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">35.55</p>
+      <p class="stat">57.18</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.66</p>
+      <p class="stat">1.64</p>
     </div>
   </div>
 </div>
@@ -89,82 +89,215 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">&quot;use strict&quot;;
-
-Object.defineProperty(exports, &quot;__esModule&quot;, {
-    value: true
-});
-
-var _createClass = function() {
-    function defineProperties(target, props) {
-        for (var i = 0; i &lt; props.length; i++) {
-            var descriptor = props[i];
-            descriptor.enumerable = descriptor.enumerable || false;
-            descriptor.configurable = true;
-            if (&quot;value&quot; in descriptor) descriptor.writable = true;
-            Object.defineProperty(target, descriptor.key, descriptor);
-        }
+    <textarea id="file-source" class="col-md-12">(function(global, factory) {
+    if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
+        define([&#039;exports&#039;, &#039;./Point.js&#039;], factory);
+    } else if (typeof exports !== &quot;undefined&quot;) {
+        factory(exports, require(&#039;./Point.js&#039;));
+    } else {
+        var mod = {
+            exports: {}
+        };
+        factory(mod.exports, global.Point);
+        global.Rectangle = mod.exports;
     }
-    return function(Constructor, protoProps, staticProps) {
-        if (protoProps) defineProperties(Constructor.prototype, protoProps);
-        if (staticProps) defineProperties(Constructor, staticProps);
-        return Constructor;
-    };
-}();
+})(this, function(exports, _Point2) {
+    &#039;use strict&#039;;
 
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError(&quot;Cannot call a class as a function&quot;);
-    }
-}
-
-function _possibleConstructorReturn(self, call) {
-    if (!self) {
-        throw new ReferenceError(&quot;this hasn&#039;t been initialised - super() hasn&#039;t been called&quot;);
-    }
-    return call &amp;&amp; (typeof call === &quot;object&quot; || typeof call === &quot;function&quot;) ? call : self;
-}
-
-function _inherits(subClass, superClass) {
-    if (typeof superClass !== &quot;function&quot; &amp;&amp; superClass !== null) {
-        throw new TypeError(&quot;Super expression must either be null or a function, not &quot; + typeof superClass);
-    }
-    subClass.prototype = Object.create(superClass &amp;&amp; superClass.prototype, {
-        constructor: {
-            value: subClass,
-            enumerable: false,
-            writable: true,
-            configurable: true
-        }
+    Object.defineProperty(exports, &quot;__esModule&quot;, {
+        value: true
     });
-    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-}
+    exports.Rectangle = undefined;
 
-var Point = require(&quot;./Point.js&quot;).Point;
-
-var Rectangle = exports.Rectangle = function(_Point) {
-    _inherits(Rectangle, _Point);
-
-    function Rectangle(x, y, width, height) {
-        _classCallCheck(this, Rectangle);
-
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
-
-        _this.width = width;
-        _this.height = height;
-        _this.center = new Point(y + height / 2, x + width / 2);
-        return _this;
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError(&quot;Cannot call a class as a function&quot;);
+        }
     }
 
-    _createClass(Rectangle, [{
-        key: &quot;getDifferenceBetweenCenter&quot;,
-        value: function getDifferenceBetweenCenter(rectangle) {
-            return this.center.sub(rectangle.center);
+    function _possibleConstructorReturn(self, call) {
+        if (!self) {
+            throw new ReferenceError(&quot;this hasn&#039;t been initialised - super() hasn&#039;t been called&quot;);
         }
-    }]);
 
-    return Rectangle;
-}(Point);</textarea>
+        return call &amp;&amp; (typeof call === &quot;object&quot; || typeof call === &quot;function&quot;) ? call : self;
+    }
+
+    var _get = function get(object, property, receiver) {
+        if (object === null) object = Function.prototype;
+        var desc = Object.getOwnPropertyDescriptor(object, property);
+
+        if (desc === undefined) {
+            var parent = Object.getPrototypeOf(object);
+
+            if (parent === null) {
+                return undefined;
+            } else {
+                return get(parent, property, receiver);
+            }
+        } else if (&quot;value&quot; in desc) {
+            return desc.value;
+        } else {
+            var getter = desc.get;
+
+            if (getter === undefined) {
+                return undefined;
+            }
+
+            return getter.call(receiver);
+        }
+    };
+
+    var _createClass = function() {
+        function defineProperties(target, props) {
+            for (var i = 0; i &lt; props.length; i++) {
+                var descriptor = props[i];
+                descriptor.enumerable = descriptor.enumerable || false;
+                descriptor.configurable = true;
+                if (&quot;value&quot; in descriptor) descriptor.writable = true;
+                Object.defineProperty(target, descriptor.key, descriptor);
+            }
+        }
+
+        return function(Constructor, protoProps, staticProps) {
+            if (protoProps) defineProperties(Constructor.prototype, protoProps);
+            if (staticProps) defineProperties(Constructor, staticProps);
+            return Constructor;
+        };
+    }();
+
+    function _inherits(subClass, superClass) {
+        if (typeof superClass !== &quot;function&quot; &amp;&amp; superClass !== null) {
+            throw new TypeError(&quot;Super expression must either be null or a function, not &quot; + typeof superClass);
+        }
+
+        subClass.prototype = Object.create(superClass &amp;&amp; superClass.prototype, {
+            constructor: {
+                value: subClass,
+                enumerable: false,
+                writable: true,
+                configurable: true
+            }
+        });
+        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    }
+
+    var Rectangle = exports.Rectangle = function(_Point) {
+        _inherits(Rectangle, _Point);
+
+        _createClass(Rectangle, [{
+            key: &#039;center&#039;,
+
+
+            /**
+             * get center-position of rectangle
+             * @return {Point} center point
+             */
+            get: function get() {
+                return new _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
+            }
+
+            /**
+             * get top-left-position of rectangle
+             * @return {Point} top-left point
+             */
+
+        }, {
+            key: &#039;topLeft&#039;,
+            get: function get() {
+                return new _Point2.Point(this.x, this.y);
+            }
+
+            /**
+             * get top-right-position of rectangle
+             * @return {Point} top-right point
+             */
+
+        }, {
+            key: &#039;topRight&#039;,
+            get: function get() {
+                return new _Point2.Point(this.x + this.width, this.y);
+            }
+
+            /**
+             * get bottom-left-position of rectangle
+             * @return {Point} bottom-left point
+             */
+
+        }, {
+            key: &#039;bottomLeft&#039;,
+            get: function get() {
+                return new _Point2.Point(this.x, this.y + this.height);
+            }
+
+            /**
+             * get bottom-right-position of rectangle
+             * @return {Point} bottom-right point
+             */
+
+        }, {
+            key: &#039;bottomRight&#039;,
+            get: function get() {
+                return new _Point2.Point(this.x + this.width, this.y + this.height);
+            }
+
+            /**
+             * Constructor
+             * @param  {number} x=0 - x-position of specified rectangle
+             * @param  {number} y=0 - y-position of specified rectangle
+             * @param  {number} width=0 - width of specified rectangle
+             * @param  {number} height=0 - height of specified rectangle
+             * @return {Rectangle} new instance of Rectangle
+             */
+
+        }]);
+
+        function Rectangle() {
+            var x = arguments.length &lt;= 0 || arguments[0] === undefined ? 0 : arguments[0];
+            var y = arguments.length &lt;= 1 || arguments[1] === undefined ? 0 : arguments[1];
+            var width = arguments.length &lt;= 2 || arguments[2] === undefined ? 0 : arguments[2];
+
+            var _ret;
+
+            var height = arguments.length &lt;= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
+            _classCallCheck(this, Rectangle);
+
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
+
+            _this.width = width;
+            _this.height = height;
+            return _ret = _this, _possibleConstructorReturn(_this, _ret);
+        }
+
+        /**
+         * check if rectangles are equal
+         * @param  {Rectangle} rectangle - the specified rectangle to check against this
+         * @return {Boolean} is true, if x, y, width and height are the same
+         */
+
+
+        _createClass(Rectangle, [{
+            key: &#039;equals&#039;,
+            value: function equals(rectangle) {
+                return this.x === rectangle.x &amp;&amp; this.y === rectangle.y &amp;&amp; this.width === rectangle.width &amp;&amp; this.height === rectangle.height;
+            }
+
+            /**
+             * representation of a Rectangle as String
+             * @return {String} representation of this Rectangle
+             */
+
+        }, {
+            key: &#039;toString&#039;,
+            value: function toString() {
+                return &#039;(&#039; + _get(Object.getPrototypeOf(Rectangle.prototype), &#039;toString&#039;, this).call(this) + &#039;,&#039; + this.width + &#039;,&#039; + this.height + &#039;)&#039;;
+            }
+        }]);
+
+        return Rectangle;
+    }(_Point2.Point);
+});</textarea>
   </div>
 </div>
 

@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">75.30</p>
+      <p class="stat">72.39</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">51</p>
+      <p class="stat">164</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">30.15</p>
+      <p class="stat">52.46</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.39</p>
+      <p class="stat">0.98</p>
     </div>
   </div>
 </div>
@@ -89,57 +89,170 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">&quot;use strict&quot;;
+    <textarea id="file-source" class="col-md-12">(function(global, factory) {
+    if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
+        define([&quot;exports&quot;], factory);
+    } else if (typeof exports !== &quot;undefined&quot;) {
+        factory(exports);
+    } else {
+        var mod = {
+            exports: {}
+        };
+        factory(mod.exports);
+        global.Point = mod.exports;
+    }
+})(this, function(exports) {
+    &quot;use strict&quot;;
 
-Object.defineProperty(exports, &quot;__esModule&quot;, {
-    value: true
-});
+    Object.defineProperty(exports, &quot;__esModule&quot;, {
+        value: true
+    });
 
-var _createClass = function() {
-    function defineProperties(target, props) {
-        for (var i = 0; i &lt; props.length; i++) {
-            var descriptor = props[i];
-            descriptor.enumerable = descriptor.enumerable || false;
-            descriptor.configurable = true;
-            if (&quot;value&quot; in descriptor) descriptor.writable = true;
-            Object.defineProperty(target, descriptor.key, descriptor);
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError(&quot;Cannot call a class as a function&quot;);
         }
     }
-    return function(Constructor, protoProps, staticProps) {
-        if (protoProps) defineProperties(Constructor.prototype, protoProps);
-        if (staticProps) defineProperties(Constructor, staticProps);
-        return Constructor;
+
+    var _createClass = function() {
+        function defineProperties(target, props) {
+            for (var i = 0; i &lt; props.length; i++) {
+                var descriptor = props[i];
+                descriptor.enumerable = descriptor.enumerable || false;
+                descriptor.configurable = true;
+                if (&quot;value&quot; in descriptor) descriptor.writable = true;
+                Object.defineProperty(target, descriptor.key, descriptor);
+            }
+        }
+
+        return function(Constructor, protoProps, staticProps) {
+            if (protoProps) defineProperties(Constructor.prototype, protoProps);
+            if (staticProps) defineProperties(Constructor, staticProps);
+            return Constructor;
+        };
+    }();
+
+    var Point = exports.Point = function() {
+
+        /**
+         * Constructor
+         * @param  {number} x = 0 - representation of x coordinate
+         * @param  {number} y = 0 - representation of y coordinate
+         * @return {Point} new instance of point
+         */
+
+        function Point() {
+            var x = arguments.length &lt;= 0 || arguments[0] === undefined ? 0 : arguments[0];
+            var y = arguments.length &lt;= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+            _classCallCheck(this, Point);
+
+            this.x = x;
+            this.y = y;
+            return this;
+        }
+
+        /**
+         * substracts 2 points
+         * @param  {Point} point - the point to substract from this
+         * @return {Point} difference between this point and parameter point
+         */
+
+
+        _createClass(Point, [{
+            key: &quot;sub&quot;,
+            value: function sub(point) {
+                return new Point(this.x - point.x, this.y - point.y);
+            }
+
+            /**
+             * adds 2 points
+             * @param  {Point} point - the point to add to this
+             * @return {Point} addition of this point and parameter point
+             */
+
+        }, {
+            key: &quot;add&quot;,
+            value: function add(point) {
+                return new Point(this.x + point.x, this.y + point.y);
+            }
+
+            /**
+             * check if points are equal
+             * @param  {Point} point - the point to check against this
+             * @return {Boolean} is true, if x and y are the same
+             */
+
+        }, {
+            key: &quot;equals&quot;,
+            value: function equals(point) {
+                return this.x === point.x &amp;&amp; this.y === point.y;
+            }
+
+            /**
+             * Returns the difference from this Point to a specified Point
+             * @param  {Point} point - the specified point to be measured against this Point
+             * @return {Point} the difference between this Point and specified point
+             */
+
+        }, {
+            key: &quot;difference&quot;,
+            value: function difference(point) {
+                return new Point(this.x - point.x, this.y - point.y);
+            }
+
+            /**
+             * Returns the distance from this Point to a specified Point
+             * @param  {Point} point - the specified point to be measured against this Point
+             * @return {Point} the distance between this Point and specified point
+             */
+
+        }, {
+            key: &quot;distance&quot;,
+            value: function distance(point) {
+                var difference = this.difference(point);
+                return Math.sqrt(Math.pow(difference.x, 2) + Math.pow(difference.y, 2));
+            }
+
+            /**
+             * moves a point by x and y
+             * @param  {number} x - value to move x
+             * @param  {number} y - value to move y
+             * @return {Point} instance of Point
+             */
+
+        }, {
+            key: &quot;translate&quot;,
+            value: function translate(x, y) {
+                this.x += x;
+                this.y += y;
+                return this;
+            }
+
+            /**
+             * representation of a Point as String
+             * @return {String} representation of this Point
+             */
+
+        }, {
+            key: &quot;toString&quot;,
+            value: function toString() {
+                return &quot;(&quot; + this.x + &quot;,&quot; + this.y + &quot;)&quot;;
+            }
+        }]);
+
+        return Point;
+    }();
+
+    /**
+     * Creates a Point from specified point
+     * @param  {Point} point - specified point
+     * @return {Point} the point specified
+     */
+    Point.createFromPoint = function(point) {
+        return new Point(point.x, point.y);
     };
-}();
-
-function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-        throw new TypeError(&quot;Cannot call a class as a function&quot;);
-    }
-}
-
-var Point = exports.Point = function() {
-    function Point(x, y) {
-        _classCallCheck(this, Point);
-
-        this.x = x;
-        this.y = y;
-    }
-
-    _createClass(Point, [{
-        key: &quot;sub&quot;,
-        value: function sub(point) {
-            return new Point(this.x - point.x, this.y - point.y);
-        }
-    }, {
-        key: &quot;add&quot;,
-        value: function add(point) {
-            return new Point(this.x + point.x, this.y + point.y);
-        }
-    }]);
-
-    return Point;
-}();</textarea>
+});</textarea>
   </div>
 </div>
 
