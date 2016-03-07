@@ -1,15 +1,12 @@
-var $ = require('jquery'),
-    Tile = require("./Tile.js").Tile,
-    Rectangle = require("./Rectangle.js").Rectangle,
-    Publisher = require("./Publisher.js").Publisher;
+import {Tile} from './Tile.js';
+import $ from 'jquery';
+import {Rectangle} from './Rectangle.js';
+import {Publisher} from './Publisher.js';
 
 /**
  * Singleton instance of Publisher
  */
 const PUBLISHER = new Publisher();
-
-const IMG_DATA_NAME = "img_data";
-const DIMENSION_DATA_NAME = "dimensions";
 
 export class TileMap {
 
@@ -25,8 +22,7 @@ export class TileMap {
         }
 
         this.$container = container;
-        this.dimensions = tilesData[DIMENSION_DATA_NAME];
-        this.imgData = tilesData[IMG_DATA_NAME];
+        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
         this.settings = settings;
 
         this.initialize().initializeTiles();
@@ -48,6 +44,11 @@ export class TileMap {
         return this;
     }
 
+    /**
+     * calculates current distortion of centered latitude
+     * @param  {number} latitude - latitude where map is centered currently
+     * @return {float} - size of distortion, map should be applied to
+     */
     calculateDistortion(latitude) {
         return (Math.cos(latitude));
     }
@@ -89,8 +90,11 @@ export class TileMap {
         return this;
     }
 
+    /**
+     * gets data of current zoom level
+     * @return {Object} data for current level as json
+     */
     getCurrentLevelData() {
-        console.log(this.imgData);
         return this.imgData["level-" + this.settings.level];
     }
 
@@ -143,3 +147,9 @@ export class TileMap {
         return this;
     }
 }
+
+/**
+ * name of imagedata in data.json
+ * @type {String}
+ */
+TileMap.IMG_DATA_NAME = "img_data";

@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 export var Helper = {
 
@@ -14,7 +14,7 @@ export var Helper = {
             url: filename,
             dataType: "json",
             success: function(data, status, request) {
-                callback(data);
+                return callback(data);
             },
             error: function(response) {
                 if (response.status === 200) {
@@ -24,5 +24,5 @@ export var Helper = {
             }
         });
     }
-    
+
 };

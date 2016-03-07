@@ -13,11 +13,9 @@ export class Publisher {
     constructor() {
         if(!instance) {
             this.subscribers = {
-                any: []
             };
             instance = this;
         }
-
         return instance;
     }
 
@@ -76,6 +74,13 @@ export class Publisher {
             }
         }
         return this;
+    }
+
+    /**
+     * destroys singleton instance
+     */
+    destroy() {
+        instance = null;
     }
 
 }

@@ -5,12 +5,11 @@
 
 /* line 5, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS * {
-	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
 }
 
 /* line 8, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS > canvas {
 	display: block;
 }
-
-/*# sourceMappingURL=mappedJS.css.map */

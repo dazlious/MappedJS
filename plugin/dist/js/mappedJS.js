@@ -7,7 +7,7 @@
 		exports["de"] = factory(require("jQuery"));
 	else
 		root["de"] = factory(root["jQuery"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_3__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -59,17 +59,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.MappedJS = undefined;
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var _TileMap = __webpack_require__(1);
 
-	var TileMap = __webpack_require__(1).TileMap,
-	    $ = __webpack_require__(2),
-	    Helper = __webpack_require__(8).Helper,
-	    Publisher = __webpack_require__(5).Publisher;
+	var _jquery = __webpack_require__(3);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _Helper = __webpack_require__(8);
+
+	var _Publisher = __webpack_require__(5);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var MappedJS = exports.MappedJS = function () {
 
@@ -84,8 +92,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	    function MappedJS(_ref) {
-	        var _this2 = this;
-
 	        var _ref$container = _ref.container;
 	        var container = _ref$container === undefined ? ".mjs" : _ref$container;
 	        var _ref$mapData = _ref.mapData;
@@ -94,24 +100,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
 	        var _ref$events = _ref.events;
 	        var events = _ref$events === undefined ? { loaded: "mjs-loaded" } : _ref$events;
-	        var _ref$jasmine = _ref.jasmine;
-	        var jasmine = _ref$jasmine === undefined ? false : _ref$jasmine;
 
 	        _classCallCheck(this, MappedJS);
 
 	        this.initializeApi();
 
-	        if (!jasmine) {
-	            (function () {
-	                _this2.initializeSettings(container, events, mapSettings);
-	                var _this = _this2;
-	                _this2.initializeData(mapData, function () {
-	                    _this.initializeMap();
-	                    _this.bindEvents();
-	                    _this.loadingFinished();
-	                });
-	            })();
-	        }
+	        this.initializeSettings(container, events, mapSettings);
+
+	        this.initializeData(mapData, function () {
+	            this.initializeMap();
+	            this.bindEvents();
+	            this.loadingFinished();
+	        }.bind(this));
 
 	        return this;
 	    }
@@ -127,7 +127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(MappedJS, [{
 	        key: 'initializeSettings',
 	        value: function initializeSettings(container, events, mapSettings) {
-	            this.$container = typeof container === "string" ? $(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : $(container);
+	            this.$container = typeof container === "string" ? (0, _jquery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jquery2.default)(container);
 	            if (!(this.$container instanceof jQuery)) {
 	                throw new Error("Container " + container + " not found");
 	            }
@@ -161,7 +161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function initializeData(mapData, cb) {
 	            var _this = this;
 	            if (typeof mapData === "string") {
-	                Helper.requestJSON(mapData, function (data) {
+	                _Helper.Helper.requestJSON(mapData, function (data) {
 	                    _this.mapData = data;
 	                    cb();
 	                });
@@ -180,7 +180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'initializeMap',
 	        value: function initializeMap() {
-	            this.$canvas = new TileMap({
+	            this.$canvas = new _TileMap.TileMap({
 	                container: this.$container,
 	                tilesData: this.mapData,
 	                settings: this.mapSettings
@@ -197,9 +197,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'initializeApi',
 	        value: function initializeApi() {
 	            this.api = {
-	                TileMap: TileMap,
-	                Publisher: Publisher,
-	                Helper: Helper
+	                TileMap: _TileMap.TileMap,
+	                Publisher: _Publisher.Publisher,
+	                Helper: _Helper.Helper
 	            };
 	            return this;
 	        }
@@ -212,7 +212,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
-	            $(window).on("resize orientationchange", this.resizeHandler.bind(this));
+	            (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
 	            return this;
 	        }
 
@@ -248,28 +248,33 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.TileMap = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var _Tile = __webpack_require__(2);
 
-	var $ = __webpack_require__(2),
-	    Tile = __webpack_require__(3).Tile,
-	    Rectangle = __webpack_require__(6).Rectangle,
-	    Publisher = __webpack_require__(5).Publisher;
+	var _jquery = __webpack_require__(3);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _Rectangle = __webpack_require__(6);
+
+	var _Publisher = __webpack_require__(5);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
 	 * Singleton instance of Publisher
 	 */
-	var PUBLISHER = new Publisher();
-
-	var IMG_DATA_NAME = "img_data";
-	var DIMENSION_DATA_NAME = "dimensions";
+	var PUBLISHER = new _Publisher.Publisher();
 
 	var TileMap = exports.TileMap = function () {
 
@@ -294,8 +299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        this.$container = container;
-	        this.dimensions = tilesData[DIMENSION_DATA_NAME];
-	        this.imgData = tilesData[IMG_DATA_NAME];
+	        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
 	        this.settings = settings;
 
 	        this.initialize().initializeTiles();
@@ -310,18 +314,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    _createClass(TileMap, [{
-	        key: "initialize",
+	        key: 'initialize',
 	        value: function initialize() {
 	            this.center = this.initialCenter;
 	            this.distortion = this.calculateDistortion(this.settings.center.lat);
-	            this.bounds = new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height);
+	            this.bounds = new _Rectangle.Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height);
 
 	            this.bindEvents().initializeCanvas();
 
 	            return this;
 	        }
+
+	        /**
+	         * calculates current distortion of centered latitude
+	         * @param  {number} latitude - latitude where map is centered currently
+	         * @return {float} - size of distortion, map should be applied to
+	         */
+
 	    }, {
-	        key: "calculateDistortion",
+	        key: 'calculateDistortion',
 	        value: function calculateDistortion(latitude) {
 	            return Math.cos(latitude);
 	        }
@@ -332,9 +343,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 
 	    }, {
-	        key: "initializeCanvas",
+	        key: 'initializeCanvas',
 	        value: function initializeCanvas() {
-	            this.$canvas = $("<canvas class='mjs-canvas' />");
+	            this.$canvas = (0, _jquery2.default)("<canvas class='mjs-canvas' />");
 	            this.canvas = this.$canvas[0];
 	            this.$container.append(this.$canvas);
 	            this.canvasContext = this.canvas.getContext("2d");
@@ -348,7 +359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 
 	    }, {
-	        key: "bindEvents",
+	        key: 'bindEvents',
 	        value: function bindEvents() {
 	            PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
 	            return this;
@@ -360,21 +371,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 
 	    }, {
-	        key: "initializeTiles",
+	        key: 'initializeTiles',
 	        value: function initializeTiles() {
 	            this.tiles = [];
 	            var currentLevel = this.getCurrentLevelData().tiles;
 	            for (var tile in currentLevel) {
 	                var currentTileData = currentLevel[tile];
-	                var _tile = new Tile(currentTileData);
+	                var _tile = new _Tile.Tile(currentTileData);
 	                this.tiles.push(_tile);
 	            }
 	            return this;
 	        }
+
+	        /**
+	         * gets data of current zoom level
+	         * @return {Object} data for current level as json
+	         */
+
 	    }, {
-	        key: "getCurrentLevelData",
+	        key: 'getCurrentLevelData',
 	        value: function getCurrentLevelData() {
-	            console.log(this.imgData);
 	            return this.imgData["level-" + this.settings.level];
 	        }
 
@@ -385,7 +401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 
 	    }, {
-	        key: "onTilesLoaded",
+	        key: 'onTilesLoaded',
 	        value: function onTilesLoaded(tile) {
 	            this.drawTile(tile);
 	            tile.state.next();
@@ -399,7 +415,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 
 	    }, {
-	        key: "drawTile",
+	        key: 'drawTile',
 	        value: function drawTile(tile) {
 	            this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
 	            return this;
@@ -411,7 +427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 
 	    }, {
-	        key: "resize",
+	        key: 'resize',
 	        value: function resize() {
 	            this.canvasWidth = this.$container.innerWidth();
 	            this.canvasHeight = this.$container.innerHeight();
@@ -430,7 +446,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 
 	    }, {
-	        key: "draw",
+	        key: 'draw',
 	        value: function draw() {
 	            for (var tile in this.tiles) {
 	                var currentTile = this.tiles[tile];
@@ -443,14 +459,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return TileMap;
 	}();
 
+	/**
+	 * name of imagedata in data.json
+	 * @type {String}
+	 */
+
+
+		TileMap.IMG_DATA_NAME = "img_data";
+
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
-
-/***/ },
-/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -458,19 +476,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.Tile = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var _jquery = __webpack_require__(3);
 
-	var $ = __webpack_require__(2);
-	var State = __webpack_require__(4).State;
-	var Publisher = __webpack_require__(5).Publisher;
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _State = __webpack_require__(4);
+
+	var _Publisher = __webpack_require__(5);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
 	 * Singleton instance of Publisher
 	 */
-	var PUBLISHER = new Publisher();
+	var PUBLISHER = new _Publisher.Publisher();
 
 	var Tile = exports.Tile = function () {
 
@@ -498,7 +523,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Tile);
 
-	        this.state = new State(Tile.STATES);
+	        this.state = new _State.State(Tile.STATES);
 
 	        if (!path || typeof path !== "string" || path.length === 0) {
 	            throw new Error('Path {path} needs to be of type string and should not be empty');
@@ -563,6 +588,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 		Tile.STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Initialized' }, { value: 2, description: 'Loaded' }, { value: 3, description: 'Drawn' }];
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
 
 /***/ },
 /* 4 */
@@ -670,12 +701,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, Publisher);
 
 	        if (!instance) {
-	            this.subscribers = {
-	                any: []
-	            };
+	            this.subscribers = {};
 	            instance = this;
 	        }
-
 	        return instance;
 	    }
 
@@ -757,6 +785,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return this;
 	        }
+
+	        /**
+	         * destroys singleton instance
+	         */
+
+	    }, {
+	        key: "destroy",
+	        value: function destroy() {
+	            instance = null;
+	        }
 	    }]);
 
 	    return Publisher;
@@ -780,21 +818,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.Rectangle = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Point2 = __webpack_require__(7);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Point = __webpack_require__(7).Point;
 
 	var Rectangle = exports.Rectangle = function (_Point) {
 	    _inherits(Rectangle, _Point);
@@ -806,19 +845,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _this.width = width;
 	        _this.height = height;
-	        _this.center = new Point(y + height / 2, x + width / 2);
+	        _this.center = new _Point2.Point(y + height / 2, x + width / 2);
 	        return _this;
 	    }
 
 	    _createClass(Rectangle, [{
-	        key: "getDifferenceBetweenCenter",
+	        key: 'getDifferenceBetweenCenter',
 	        value: function getDifferenceBetweenCenter(rectangle) {
 	            return this.center.sub(rectangle.center);
 	        }
 	    }]);
 
 	    return Rectangle;
-		}(Point);
+	}(_Point2.Point);
 
 /***/ },
 /* 7 */
@@ -835,18 +874,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Point = exports.Point = function () {
-	    function Point(x, y) {
+
+	    /**
+	     * Constructor
+	     * @param  {number} x = 0 - representation of x coordinate
+	     * @param  {number} y = 0 - representation of y coordinate
+	     * @return {Point} new instance of point
+	     */
+
+	    function Point() {
+	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
 	        _classCallCheck(this, Point);
 
 	        this.x = x;
 	        this.y = y;
+	        return this;
 	    }
+
+	    /**
+	     * substracts 2 points
+	     * @param  {Point} point - the point to substract from this
+	     * @return {Point} difference between this point and parameter point
+	     */
+
 
 	    _createClass(Point, [{
 	        key: "sub",
 	        value: function sub(point) {
 	            return new Point(this.x - point.x, this.y - point.y);
 	        }
+
+	        /**
+	         * adds 2 points
+	         * @param  {Point} point - the point to add to this
+	         * @return {Point} addition of this point and parameter point
+	         */
+
 	    }, {
 	        key: "add",
 	        value: function add(point) {
@@ -857,6 +922,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return Point;
 	}();
 
+	Point.createFromPoint = function (point) {
+	    return new Point(point.x, point.y);
+		};
+
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
@@ -866,7 +935,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var $ = __webpack_require__(2);
+	exports.Helper = undefined;
+
+	var _jquery = __webpack_require__(3);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Helper = exports.Helper = {
 
@@ -878,12 +953,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    requestJSON: function requestJSON(filename, callback) {
 	        "use strict";
 
-	        $.ajax({
+	        _jquery2.default.ajax({
 	            type: "GET",
 	            url: filename,
 	            dataType: "json",
 	            success: function success(data, status, request) {
-	                callback(data);
+	                return callback(data);
 	            },
 	            error: function error(response) {
 	                if (response.status === 200) {

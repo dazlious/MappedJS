@@ -1,4 +1,4 @@
-var Point = require("./Point.js").Point;
+import {Point} from './Point.js';
 
 export class Rectangle extends Point {
 

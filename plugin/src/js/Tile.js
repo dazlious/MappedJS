@@ -1,6 +1,6 @@
-var $ = require('jquery');
-var State = require('./State').State;
-var Publisher = require("./Publisher.js").Publisher;
+import $ from 'jquery';
+import {State} from './State.js';
+import {Publisher} from './Publisher.js';
 
 /**
  * Singleton instance of Publisher

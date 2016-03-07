@@ -1,7 +1,7 @@
-var TileMap = require('./TileMap.js').TileMap,
-    $ = require('jquery'),
-    Helper = require('./Helper.js').Helper,
-    Publisher = require('./Publisher.js').Publisher;
+import {TileMap} from './TileMap.js';
+import $ from 'jquery';
+import {Helper} from './Helper.js';
+import {Publisher} from './Publisher.js';
 
 export class MappedJS {
 
@@ -14,18 +14,16 @@ export class MappedJS {
      * @param  {Boolean} jasmine=false - Option for jasmine tests
      * @return {MappedJS} instance of MappedJS
      */
-    constructor({container=".mjs", mapData={}, mapSettings={}, events={loaded:"mjs-loaded"}, jasmine=false}) {
+    constructor({container=".mjs", mapData={}, mapSettings={}, events={loaded:"mjs-loaded"}}) {
         this.initializeApi();
 
-        if (!jasmine) {
-            this.initializeSettings(container, events, mapSettings);
-            let _this = this;
-            this.initializeData(mapData, function() {
-                _this.initializeMap();
-                _this.bindEvents();
-                _this.loadingFinished();
-            });
-        }
+        this.initializeSettings(container, events, mapSettings);
+
+        this.initializeData(mapData, function() {
+            this.initializeMap();
+            this.bindEvents();
+            this.loadingFinished();
+        }.bind(this));
 
         return this;
     }

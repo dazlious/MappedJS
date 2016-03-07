@@ -124,7 +124,8 @@ module.exports = function(grunt) {
         },
         babel: {
             options: {
-                presets: ['es2015']
+                presets: ['es2015'],
+                plugins: ["transform-es2015-modules-umd"]
             },
             plugin: {
                 files: [{
@@ -170,8 +171,11 @@ module.exports = function(grunt) {
             }
         },
         karma: {
-            plugin: {
-                configFile: 'test/karma.config.js'
+            chrome: {
+                configFile: 'test/chrome.karma.config.js'
+            },
+            full: {
+                configFile: 'test/full.karma.config.js'
             }
         }
     });
@@ -204,6 +208,8 @@ module.exports = function(grunt) {
     grunt.registerTask('bundle', ["sass:plugin", "postcss:dev", "webpack:dev"]);
     grunt.registerTask('ship', ["sass:plugin", "postcss:prod", "webpack:prod"]);
 
-    grunt.registerTask('tests', ["karma:plugin"]);
+    grunt.registerTask('tests', ["transpile", "karma:chrome"]);
+    grunt.registerTask('testsFull', ["transpile", "karma:full"]);
+
 
 };

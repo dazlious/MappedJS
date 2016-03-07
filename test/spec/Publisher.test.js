@@ -1,53 +1,63 @@
-/*global de*/
+/*global Publisher*/
+
 describe('Publisher', function () {
     "use strict";
 
-    var api = (new de.MappedJS({
-        jasmine:true
-    })).api;
+    var Pub_Instance = null;
 
-    var Publisher = new api.Publisher();
-
-    it("Create a new instance and get singleton back", function() {
-        var secondInstance = new api.Publisher();
-        expect(Publisher).toEqual(secondInstance);
+    it("is a singleton", function() {
+        expect(new Publisher.Publisher()).toBe(new Publisher.Publisher());
     });
 
-    it("Subscribe to a topic", function() {
-        var handle = function(array_args) {
-
-        };
-        Publisher.subscribe("topic", handle);
-        expect(Publisher.subscribers.any.length).toEqual(0);
-        expect(Publisher.subscribers.topic.length).toEqual(1);
-        expect(Publisher.subscribers.any.length).toEqual(0);
+    it("is an instance of Publisher", function() {
+        var temp_instance = new Publisher.Publisher();
+        expect(temp_instance instanceof Publisher.Publisher).toEqual(true);
     });
 
-    it("Publish to a topic", function() {
-        var testStr = "test";
-        var handle = function(array_args) {
-            expect(array_args).toEqual(testStr);
-        };
-        Publisher.subscribe("topic", handle).publish("topic", "test");
+    it("destroy method is working", function() {
+        var temp_instance = new Publisher.Publisher();
+        expect(temp_instance).toBe(new Publisher.Publisher());
+        temp_instance.destroy();
+        expect(temp_instance).not.toBe(new Publisher.Publisher());
     });
 
-    it("Publish with no parameters to empty", function() {
-        var handle = function(array_args) {
-            expect(array_args).toEqual([]);
-        };
-        Publisher.subscribe("empty", handle).publish("empty");
+    it("subscribe with no parameters", function() {
+        Pub_Instance = new Publisher.Publisher();
+        expect(Pub_Instance.subscribers.any).toBeUndefined();
+        Pub_Instance.subscribe();
+        expect(Pub_Instance.subscribers.any).not.toBeUndefined();
+        expect(Pub_Instance.subscribers.any.length).toEqual(1);
+        Pub_Instance.destroy();
     });
 
-    it("Unsubscribe from unsub", function() {
-        var handle = function(array_args) {
+    it("subscribes to a topic", function() {
+        Pub_Instance = new Publisher.Publisher();
+        expect(Pub_Instance.subscribers.topic).toBeUndefined();
+        Pub_Instance.subscribe("topic", function() {
+        });
+        expect(Pub_Instance.subscribers.topic).not.toBeUndefined();
+        Pub_Instance.destroy();
+    });
 
-        };
-        expect(Publisher.subscribers.unsub).toEqual(undefined);
-        Publisher.subscribe("unsub", handle);
-        expect(Publisher.subscribers.unsub.length).toEqual(1);
-        Publisher.unsubscribe("unsub", handle);
-        expect(Publisher.subscribers.unsub.length).toEqual(0);
+    it("publishes a single argument to a topic", function() {
+        var test_str = "text";
+        Pub_Instance = new Publisher.Publisher();
+        Pub_Instance.subscribe("topic", function(a) {
+            expect(a).toEqual(test_str);
+        });
+        Pub_Instance.publish("topic", test_str);
+        Pub_Instance.destroy();
+    });
 
+    it("publishes an array of arguments to a topic", function() {
+        var test_str = "text";
+        Pub_Instance = new Publisher.Publisher();
+        Pub_Instance.subscribe("topic", function(a) {
+            expect(a instanceof Array).toEqual(true);
+            expect(a.length).toEqual(3);
+        });
+        Pub_Instance.publish("topic", [test_str, test_str, test_str]);
+        Pub_Instance.destroy();
     });
 
 });
