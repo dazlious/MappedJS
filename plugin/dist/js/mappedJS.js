@@ -926,13 +926,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * check if rectangles are equal
-	     * @param  {Rectangle} rectangle - the specified rectangle to check against this
-	     * @return {Boolean} is true, if x, y, width and height are the same
+	     * Checks whether Rectangle entirely contains the Rectangle or Point
+	     * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
+	     * @return {Boolean} true if containment is entirely
 	     */
 
 
 	    _createClass(Rectangle, [{
+	        key: 'contains',
+	        value: function contains(rectOrPoint) {
+	            return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
+	        }
+
+	        /**
+	         * Checks whether Rectangle entirely contains the Point
+	         * @param  {Point} point - the specified point to check against
+	         * @return {Boolean} true if containment is entirely
+	         */
+
+	    }, {
+	        key: 'containsPoint',
+	        value: function containsPoint(point) {
+	            return point.x >= this.x && point.y >= this.y && point.x <= this.width && point.y <= this.height;
+	        }
+
+	        /**
+	         * Checks whether Rectangle entirely contains the Rectangle
+	         * @param  {Rectangle} rect - the specified rectangle to check against
+	         * @return {Boolean} true if containment is entirely
+	         */
+
+	    }, {
+	        key: 'containsRect',
+	        value: function containsRect(rect) {
+	            return rect.x >= this.x && rect.y >= this.y && rect.width <= this.width && rect.height <= this.height;
+	        }
+
+	        /**
+	         * check if rectangles are equal
+	         * @param  {Rectangle} rectangle - the specified rectangle to check against this
+	         * @return {Boolean} is true, if x, y, width and height are the same
+	         */
+
+	    }, {
 	        key: 'equals',
 	        value: function equals(rectangle) {
 	            return this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height;

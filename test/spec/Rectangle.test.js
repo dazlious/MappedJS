@@ -82,4 +82,37 @@ describe('Rectangle', function () {
         expect(rect1.equals(rect6)).toBe(true);
     });
 
+    it("containsPoint works fine", function() {
+        var rect = new Rectangle.Rectangle(0, 0, 100, 100),
+            p1 = new Point.Point(0,0),
+            p2 = new Point.Point(-1,0),
+            p3 = new Point.Point(1,-1);
+        expect(rect.containsPoint(p1)).toBe(true);
+        expect(rect.containsPoint(p2)).toBe(false);
+        expect(rect.containsPoint(p3)).toBe(false);
+    });
+
+    it("containsRect works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 50, 50),
+            rect2 = new Rectangle.Rectangle(0, 0, 100, 100);
+        expect(rect1.containsRect(rect1)).toBe(true);
+        expect(rect1.containsRect(rect2)).toBe(false);
+        expect(rect2.containsRect(rect1)).toBe(true);
+    });
+
+    it("contains works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 50, 50),
+            rect2 = new Rectangle.Rectangle(0, 0, 100, 100),
+            rect3 = new Rectangle.Rectangle(0, 0, 100, 100),
+            p1 = new Point.Point(0,0),
+            p2 = new Point.Point(-1,0),
+            p3 = new Point.Point(1,-1);
+        expect(rect1.contains(rect1)).toBe(true);
+        expect(rect1.contains(rect2)).toBe(false);
+        expect(rect2.contains(rect1)).toBe(true);
+        expect(rect3.contains(p1)).toBe(true);
+        expect(rect3.contains(p2)).toBe(false);
+        expect(rect3.contains(p3)).toBe(false);
+    });
+
 });

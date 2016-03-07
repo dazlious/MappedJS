@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>55/55</span>
+        <span class='fraction'>73/73</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>11/11</span>
+        <span class='fraction'>14/14</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>55/55</span>
+        <span class='fraction'>73/73</span>
       </div>
     </div>
   </div>
@@ -128,7 +128,40 @@
 83
 84
 85
-86</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -205,6 +238,39 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -297,6 +363,39 @@ describe('Rectangle', function () {
         expect(rect1.equals(rect6)).toBe(true);
     });
 &nbsp;
+    it("containsPoint works fine", function() {
+        var rect = new Rectangle.Rectangle(0, 0, 100, 100),
+            p1 = new Point.Point(0,0),
+            p2 = new Point.Point(-1,0),
+            p3 = new Point.Point(1,-1);
+        expect(rect.containsPoint(p1)).toBe(true);
+        expect(rect.containsPoint(p2)).toBe(false);
+        expect(rect.containsPoint(p3)).toBe(false);
+    });
+&nbsp;
+    it("containsRect works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 50, 50),
+            rect2 = new Rectangle.Rectangle(0, 0, 100, 100);
+        expect(rect1.containsRect(rect1)).toBe(true);
+        expect(rect1.containsRect(rect2)).toBe(false);
+        expect(rect2.containsRect(rect1)).toBe(true);
+    });
+&nbsp;
+    it("contains works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 50, 50),
+            rect2 = new Rectangle.Rectangle(0, 0, 100, 100),
+            rect3 = new Rectangle.Rectangle(0, 0, 100, 100),
+            p1 = new Point.Point(0,0),
+            p2 = new Point.Point(-1,0),
+            p3 = new Point.Point(1,-1);
+        expect(rect1.contains(rect1)).toBe(true);
+        expect(rect1.contains(rect2)).toBe(false);
+        expect(rect2.contains(rect1)).toBe(true);
+        expect(rect3.contains(p1)).toBe(true);
+        expect(rect3.contains(p2)).toBe(false);
+        expect(rect3.contains(p3)).toBe(false);
+    });
+&nbsp;
 });
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -304,7 +403,7 @@ describe('Rectangle', function () {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Mar 07 2016 17:21:35 GMT+0100 (CET)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Mar 07 2016 19:14:54 GMT+0100 (CET)
 </div>
 </div>
 <script src="../prettify.js"></script>
