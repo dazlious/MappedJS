@@ -12,7 +12,7 @@ module.exports = function(grunt) {
                     "param-list-format": "list",
                     "property-list-format": "list"
                 },
-                src: 'es5-transpiled/**.js',
+                src: 'plugin/src/js/**.js',
                 dest: 'docs/src/plugin.md'
             }
         },

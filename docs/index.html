@@ -25,10 +25,485 @@
         <h1>
             Documentation
         </h1>
-        <p><a name="get"></a></p>
-<h2 id="get-code-point-code-">get() ⇒ <code>Point</code></h2>
+        <h2 id="classes">Classes</h2>
+<dl>
+<dt><a href="#MappedJS">MappedJS</a></dt>
+<dd></dd>
+<dt><a href="#Point">Point</a></dt>
+<dd></dd>
+<dt><a href="#Publisher">Publisher</a></dt>
+<dd></dd>
+<dt><a href="#Rectangle">Rectangle</a></dt>
+<dd></dd>
+<dt><a href="#State">State</a></dt>
+<dd></dd>
+<dt><a href="#Tile">Tile</a></dt>
+<dd></dd>
+<dt><a href="#TileMap">TileMap</a></dt>
+<dd></dd>
+</dl>
+
+<h2 id="members">Members</h2>
+<dl>
+<dt><a href="#instance">instance</a> : <code><a href="#Publisher">Publisher</a></code></dt>
+<dd><p>singleton instance</p>
+</dd>
+</dl>
+
+<h2 id="constants">Constants</h2>
+<dl>
+<dt><a href="#PUBLISHER">PUBLISHER</a></dt>
+<dd><p>Singleton instance of Publisher</p>
+</dd>
+<dt><a href="#PUBLISHER">PUBLISHER</a></dt>
+<dd><p>Singleton instance of Publisher</p>
+</dd>
+</dl>
+
+<p><a name="MappedJS"></a></p>
+<h2 id="mappedjs">MappedJS</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#MappedJS">MappedJS</a><ul>
+<li><a href="#new_MappedJS_new">new MappedJS(container, mapData, mapSettings, events, jasmine)</a></li>
+<li><a href="#MappedJS+initializeSettings">.initializeSettings(container, events)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
+<li><a href="#MappedJS+initializeData">.initializeData(mapData, cb)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
+<li><a href="#MappedJS+initializeMap">.initializeMap()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
+<li><a href="#MappedJS+initializeApi">.initializeApi()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
+<li><a href="#MappedJS+bindEvents">.bindEvents()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
+<li><a href="#MappedJS+resizeHandler">.resizeHandler()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
+<li><a href="#MappedJS+loadingFinished">.loadingFinished()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_MappedJS_new"></a></p>
+<h3 id="new-mappedjs-container-mapdata-mapsettings-events-jasmine-">new MappedJS(container, mapData, mapSettings, events, jasmine)</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><strong>Params</strong></p>
+<ul>
+<li>container <code>string</code> | <code>Object</code> <code> = &quot;\&quot;.mjs\&quot;&quot;</code> - Container, either string, jQuery-object or dom-object</li>
+<li>mapData <code>string</code> | <code>Object</code> <code> = &quot;{}&quot;</code> - data of map tiles, can be json or path to file</li>
+<li>mapSettings <code>Object</code> <code> = {}</code> - settings for map, must be json</li>
+<li>events <code>Object</code> <code> = {loaded:</code> - &quot;mjs-loaded&quot;} - List of events</li>
+<li>jasmine <code>Boolean</code> <code> = false</code> - Option for jasmine tests</li>
+</ul>
+<p><a name="MappedJS+initializeSettings"></a></p>
+<h3 id="mappedjs-initializesettings-container-events-code-mappedjs-mappedjs-code-">mappedJS.initializeSettings(container, events) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
+<p>initializes the settings and handles errors</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><strong>Params</strong></p>
+<ul>
+<li>container <code>string</code> | <code>Object</code> - Container, either string, jQuery-object or dom-object</li>
+<li>events <code>object</code> - List of events</li>
+</ul>
+<p><a name="MappedJS+initializeData"></a></p>
+<h3 id="mappedjs-initializedata-mapdata-cb-code-mappedjs-mappedjs-code-">mappedJS.initializeData(mapData, cb) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
+<p>initializes the data, asynchronous</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><strong>Params</strong></p>
+<ul>
+<li>mapData <code>Object</code> - data of map tiles, can be json or path to file</li>
+<li>cb <code>function</code> - called, when data is received</li>
+</ul>
+<p><a name="MappedJS+initializeMap"></a></p>
+<h3 id="mappedjs-initializemap-code-mappedjs-mappedjs-code-">mappedJS.initializeMap() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
+<p>initializes Map module</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MappedJS+initializeApi"></a></p>
+<h3 id="mappedjs-initializeapi-code-mappedjs-mappedjs-code-">mappedJS.initializeApi() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
+<p>initializes the public Api</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MappedJS+bindEvents"></a></p>
+<h3 id="mappedjs-bindevents-code-mappedjs-mappedjs-code-">mappedJS.bindEvents() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
+<p>binds all events to handlers</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MappedJS+resizeHandler"></a></p>
+<h3 id="mappedjs-resizehandler-code-mappedjs-mappedjs-code-">mappedJS.resizeHandler() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
+<p>handles resizing of window</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MappedJS+loadingFinished"></a></p>
+<h3 id="mappedjs-loadingfinished-code-mappedjs-mappedjs-code-">mappedJS.loadingFinished() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
+<p>called when loading and initialization is finished</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="Point"></a></p>
+<h2 id="point">Point</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Point">Point</a><ul>
+<li><a href="#new_Point_new">new Point(x, y)</a></li>
+<li><em>instance</em><ul>
+<li><a href="#Point+sub">.sub(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+add">.add(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+equals">.equals(point)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Point+difference">.difference(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+distance">.distance(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+translate">.translate(x, y)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+toString">.toString()</a> ⇒ <code>String</code></li>
+</ul>
+</li>
+<li><em>static</em><ul>
+<li><a href="#Point.createFromPoint">.createFromPoint(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="new_Point_new"></a></p>
+<h3 id="new-point-x-y-">new Point(x, y)</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - new instance of point<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> <code> = 0</code> - = 0 - representation of x coordinate</li>
+<li>y <code>number</code> <code> = 0</code> - = 0 - representation of y coordinate</li>
+</ul>
+<p><a name="Point+sub"></a></p>
+<h3 id="point-sub-point-code-point-point-code-">point.sub(point) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>substracts 2 points</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - difference between this point and parameter point<br><strong>Params</strong></p>
+<ul>
+<li>point <code><a href="#Point">Point</a></code> - the point to substract from this</li>
+</ul>
+<p><a name="Point+add"></a></p>
+<h3 id="point-add-point-code-point-point-code-">point.add(point) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>adds 2 points</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - addition of this point and parameter point<br><strong>Params</strong></p>
+<ul>
+<li>point <code><a href="#Point">Point</a></code> - the point to add to this</li>
+</ul>
+<p><a name="Point+equals"></a></p>
+<h3 id="point-equals-point-code-boolean-code-">point.equals(point) ⇒ <code>Boolean</code></h3>
+<p>check if points are equal</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code>Boolean</code> - is true, if x and y are the same<br><strong>Params</strong></p>
+<ul>
+<li>point <code><a href="#Point">Point</a></code> - the point to check against this</li>
+</ul>
+<p><a name="Point+difference"></a></p>
+<h3 id="point-difference-point-code-point-point-code-">point.difference(point) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>Returns the difference from this Point to a specified Point</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - the difference between this Point and specified point<br><strong>Params</strong></p>
+<ul>
+<li>point <code><a href="#Point">Point</a></code> - the specified point to be measured against this Point</li>
+</ul>
+<p><a name="Point+distance"></a></p>
+<h3 id="point-distance-point-code-point-point-code-">point.distance(point) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>Returns the distance from this Point to a specified Point</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - the distance between this Point and specified point<br><strong>Params</strong></p>
+<ul>
+<li>point <code><a href="#Point">Point</a></code> - the specified point to be measured against this Point</li>
+</ul>
+<p><a name="Point+translate"></a></p>
+<h3 id="point-translate-x-y-code-point-point-code-">point.translate(x, y) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>moves a point by x and y</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - instance of Point<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> - value to move x</li>
+<li>y <code>number</code> - value to move y</li>
+</ul>
+<p><a name="Point+toString"></a></p>
+<h3 id="point-tostring-code-string-code-">point.toString() ⇒ <code>String</code></h3>
+<p>representation of a Point as String</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code>String</code> - representation of this Point<br><a name="Point.createFromPoint"></a></p>
+<h3 id="point-createfrompoint-point-code-point-point-code-">Point.createFromPoint(point) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>Creates a Point from specified point</p>
+<p><strong>Kind</strong>: static method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - the point specified<br><strong>Params</strong></p>
+<ul>
+<li>point <code><a href="#Point">Point</a></code> - specified point</li>
+</ul>
+<p><a name="Publisher"></a></p>
+<h2 id="publisher">Publisher</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Publisher">Publisher</a><ul>
+<li><a href="#new_Publisher_new">new Publisher()</a></li>
+<li><em>instance</em><ul>
+<li><a href="#Publisher+subscribe">.subscribe(type, fn)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
+<li><a href="#Publisher+unsubscribe">.unsubscribe(type, fn)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
+<li><a href="#Publisher+publish">.publish(type, arg)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
+<li><a href="#Publisher+handle">.handle(action, type, a)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
+<li><a href="#Publisher+destroy">.destroy()</a></li>
+</ul>
+</li>
+<li><em>static</em><ul>
+<li><a href="#Publisher.PUBLISH">.PUBLISH</a> : <code>String</code></li>
+<li><a href="#Publisher.UNSUBSCRIBE">.UNSUBSCRIBE</a> : <code>String</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="new_Publisher_new"></a></p>
+<h3 id="new-publisher-">new Publisher()</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#Publisher">Publisher</a></code> - instance of Publisher<br><a name="Publisher+subscribe"></a></p>
+<h3 id="publisher-subscribe-type-fn-code-publisher-publisher-code-">publisher.subscribe(type, fn) ⇒ <code><a href="#Publisher">Publisher</a></code></h3>
+<p>subscribe to a topic</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><strong>Returns</strong>: <code><a href="#Publisher">Publisher</a></code> - instance of Publisher<br><strong>Params</strong></p>
+<ul>
+<li>type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic</li>
+<li>fn <code>function</code> <code> = function(){}</code> - a function to callback</li>
+</ul>
+<p><a name="Publisher+unsubscribe"></a></p>
+<h3 id="publisher-unsubscribe-type-fn-code-publisher-publisher-code-">publisher.unsubscribe(type, fn) ⇒ <code><a href="#Publisher">Publisher</a></code></h3>
+<p>unsubscribe from a topic</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><strong>Returns</strong>: <code><a href="#Publisher">Publisher</a></code> - instance of Publisher<br><strong>Params</strong></p>
+<ul>
+<li>type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic</li>
+<li>fn <code>function</code> <code> = function(){}</code> - a function to callback</li>
+</ul>
+<p><a name="Publisher+publish"></a></p>
+<h3 id="publisher-publish-type-arg-code-publisher-publisher-code-">publisher.publish(type, arg) ⇒ <code><a href="#Publisher">Publisher</a></code></h3>
+<p>publish to a topic</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><strong>Returns</strong>: <code><a href="#Publisher">Publisher</a></code> - instance of Publisher<br><strong>Params</strong></p>
+<ul>
+<li>type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic</li>
+<li>arg <code>function</code> <code> = [</code> - list of parameters</li>
+</ul>
+<p><a name="Publisher+handle"></a></p>
+<h3 id="publisher-handle-action-type-a-code-publisher-publisher-code-">publisher.handle(action, type, a) ⇒ <code><a href="#Publisher">Publisher</a></code></h3>
+<p>handle subscribe to a topic</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><strong>Returns</strong>: <code><a href="#Publisher">Publisher</a></code> - instance of Publisher<br><strong>Params</strong></p>
+<ul>
+<li>action <code>string</code> - eventname</li>
+<li>type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic</li>
+<li>a <code>Object</code> - function to callback or arguments</li>
+</ul>
+<p><a name="Publisher+destroy"></a></p>
+<h3 id="publisher-destroy-">publisher.destroy()</h3>
+<p>destroys singleton instance</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><a name="Publisher.PUBLISH"></a></p>
+<h3 id="publisher-publish-code-string-code-">Publisher.PUBLISH : <code>String</code></h3>
+<p>Eventname for publishing</p>
+<p><strong>Kind</strong>: static property of <code><a href="#Publisher">Publisher</a></code><br><a name="Publisher.UNSUBSCRIBE"></a></p>
+<h3 id="publisher-unsubscribe-code-string-code-">Publisher.UNSUBSCRIBE : <code>String</code></h3>
+<p>Eventname for unsubscribing</p>
+<p><strong>Kind</strong>: static property of <code><a href="#Publisher">Publisher</a></code><br><a name="Rectangle"></a></p>
+<h2 id="rectangle">Rectangle</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Rectangle">Rectangle</a><ul>
+<li><a href="#new_Rectangle_new">new Rectangle(x, y, width, height)</a></li>
+<li><a href="#Rectangle+center">.center</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Rectangle+topLeft">.topLeft</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Rectangle+topRight">.topRight</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Rectangle+bottomLeft">.bottomLeft</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Rectangle+bottomRight">.bottomRight</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Rectangle+contains">.contains(rectOrPoint)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Rectangle+containsPoint">.containsPoint(point)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Rectangle+containsRect">.containsRect(rect)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Rectangle+equals">.equals(rectangle)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Rectangle+toString">.toString()</a> ⇒ <code>String</code></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_Rectangle_new"></a></p>
+<h3 id="new-rectangle-x-y-width-height-">new Rectangle(x, y, width, height)</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - new instance of Rectangle<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> <code> = 0</code> - x-position of specified rectangle</li>
+<li>y <code>number</code> <code> = 0</code> - y-position of specified rectangle</li>
+<li>width <code>number</code> <code> = 0</code> - width of specified rectangle</li>
+<li>height <code>number</code> <code> = 0</code> - height of specified rectangle</li>
+</ul>
+<p><a name="Rectangle+center"></a></p>
+<h3 id="rectangle-center-code-point-point-code-">rectangle.center ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>get center-position of rectangle</p>
-<p><strong>Kind</strong>: global function<br><strong>Returns</strong>: <code>Point</code> - center point  </p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - center point<br><a name="Rectangle+topLeft"></a></p>
+<h3 id="rectangle-topleft-code-point-point-code-">rectangle.topLeft ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>get top-left-position of rectangle</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - top-left point<br><a name="Rectangle+topRight"></a></p>
+<h3 id="rectangle-topright-code-point-point-code-">rectangle.topRight ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>get top-right-position of rectangle</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - top-right point<br><a name="Rectangle+bottomLeft"></a></p>
+<h3 id="rectangle-bottomleft-code-point-point-code-">rectangle.bottomLeft ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>get bottom-left-position of rectangle</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - bottom-left point<br><a name="Rectangle+bottomRight"></a></p>
+<h3 id="rectangle-bottomright-code-point-point-code-">rectangle.bottomRight ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>get bottom-right-position of rectangle</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - bottom-right point<br><a name="Rectangle+contains"></a></p>
+<h3 id="rectangle-contains-rectorpoint-code-boolean-code-">rectangle.contains(rectOrPoint) ⇒ <code>Boolean</code></h3>
+<p>Checks whether Rectangle entirely contains the Rectangle or Point</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - true if containment is entirely<br><strong>Params</strong></p>
+<ul>
+<li>rectOrPoint <code><a href="#Rectangle">Rectangle</a></code> | <code><a href="#Point">Point</a></code> - the specified point or rectangle to check against</li>
+</ul>
+<p><a name="Rectangle+containsPoint"></a></p>
+<h3 id="rectangle-containspoint-point-code-boolean-code-">rectangle.containsPoint(point) ⇒ <code>Boolean</code></h3>
+<p>Checks whether Rectangle entirely contains the Point</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - true if containment is entirely<br><strong>Params</strong></p>
+<ul>
+<li>point <code><a href="#Point">Point</a></code> - the specified point to check against</li>
+</ul>
+<p><a name="Rectangle+containsRect"></a></p>
+<h3 id="rectangle-containsrect-rect-code-boolean-code-">rectangle.containsRect(rect) ⇒ <code>Boolean</code></h3>
+<p>Checks whether Rectangle entirely contains the Rectangle</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - true if containment is entirely<br><strong>Params</strong></p>
+<ul>
+<li>rect <code><a href="#Rectangle">Rectangle</a></code> - the specified rectangle to check against</li>
+</ul>
+<p><a name="Rectangle+equals"></a></p>
+<h3 id="rectangle-equals-rectangle-code-boolean-code-">rectangle.equals(rectangle) ⇒ <code>Boolean</code></h3>
+<p>check if rectangles are equal</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - is true, if x, y, width and height are the same<br><strong>Params</strong></p>
+<ul>
+<li>rectangle <code><a href="#Rectangle">Rectangle</a></code> - the specified rectangle to check against this</li>
+</ul>
+<p><a name="Rectangle+toString"></a></p>
+<h3 id="rectangle-tostring-code-string-code-">rectangle.toString() ⇒ <code>String</code></h3>
+<p>representation of a Rectangle as String</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>String</code> - representation of this Rectangle<br><a name="State"></a></p>
+<h2 id="state">State</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#State">State</a><ul>
+<li><a href="#new_State_new">new State(states_array)</a></li>
+<li><a href="#State+getState">.getState()</a> ⇒ <code>Object</code></li>
+<li><a href="#State+next">.next()</a> ⇒ <code><a href="#State">State</a></code></li>
+<li><a href="#State+hasNext">.hasNext()</a> ⇒ <code>Boolean</code></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_State_new"></a></p>
+<h3 id="new-state-states_array-">new State(states_array)</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#State">State</a></code> - instance of State<br><strong>Params</strong></p>
+<ul>
+<li>states_array <code>Array</code> <code> = [</code> - [description]</li>
+</ul>
+<p><a name="State+getState"></a></p>
+<h3 id="state-getstate-code-object-code-">state.getState() ⇒ <code>Object</code></h3>
+<p>get current state</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code>Object</code> - a state from STATES-array<br><a name="State+next"></a></p>
+<h3 id="state-next-code-state-state-code-">state.next() ⇒ <code><a href="#State">State</a></code></h3>
+<p>get the next element</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code><a href="#State">State</a></code> - instance of State<br><a name="State+hasNext"></a></p>
+<h3 id="state-hasnext-code-boolean-code-">state.hasNext() ⇒ <code>Boolean</code></h3>
+<p>checks if there is a next element</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code>Boolean</code> - wheter there is a next state or not<br><a name="Tile"></a></p>
+<h2 id="tile">Tile</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Tile">Tile</a><ul>
+<li><a href="#new_Tile_new">new Tile(path, x, y, w, h)</a></li>
+<li><em>instance</em><ul>
+<li><a href="#Tile+initialize">.initialize()</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
+<li><a href="#Tile+loadImage">.loadImage(cb)</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
+</ul>
+</li>
+<li><em>static</em><ul>
+<li><a href="#Tile.STATES">.STATES</a> : <code>Array</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="new_Tile_new"></a></p>
+<h3 id="new-tile-path-x-y-w-h-">new Tile(path, x, y, w, h)</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile<br><strong>Params</strong></p>
+<ul>
+<li>path <code>string</code> <code> = null</code> - path to image</li>
+<li>x <code>number</code> <code> = 0</code> - position x of tile</li>
+<li>y <code>number</code> <code> = 0</code> - position y of tile</li>
+<li>w <code>number</code> <code> = 0</code> - tile width</li>
+<li>h <code>number</code> <code> = 0</code> - tile height</li>
+</ul>
+<p><a name="Tile+initialize"></a></p>
+<h3 id="tile-initialize-code-tile-tile-code-">tile.initialize() ⇒ <code><a href="#Tile">Tile</a></code></h3>
+<p>initializes tile and starts loading image</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile<br><a name="Tile+loadImage"></a></p>
+<h3 id="tile-loadimage-cb-code-tile-tile-code-">tile.loadImage(cb) ⇒ <code><a href="#Tile">Tile</a></code></h3>
+<p>image loader, asynchronous</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile<br><strong>Params</strong></p>
+<ul>
+<li>cb <code>function</code> - callback after loading image</li>
+</ul>
+<p><a name="Tile.STATES"></a></p>
+<h3 id="tile-states-code-array-code-">Tile.STATES : <code>Array</code></h3>
+<p>States of a tile</p>
+<p><strong>Kind</strong>: static property of <code><a href="#Tile">Tile</a></code><br><a name="TileMap"></a></p>
+<h2 id="tilemap">TileMap</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#TileMap">TileMap</a><ul>
+<li><a href="#new_TileMap_new">new TileMap(container, tilesData, settings)</a></li>
+<li><em>instance</em><ul>
+<li><a href="#TileMap+initialize">.initialize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+calculateDistortion">.calculateDistortion(latitude)</a> ⇒ <code>float</code></li>
+<li><a href="#TileMap+initializeCanvas">.initializeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+bindEvents">.bindEvents()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+initializeTiles">.initializeTiles()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+getCurrentLevelData">.getCurrentLevelData()</a> ⇒ <code>Object</code></li>
+<li><a href="#TileMap+onTilesLoaded">.onTilesLoaded(tile)</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+drawTile">.drawTile(tile)</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+resize">.resize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+draw">.draw()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+</ul>
+</li>
+<li><em>static</em><ul>
+<li><a href="#TileMap.IMG_DATA_NAME">.IMG_DATA_NAME</a> : <code>String</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="new_TileMap_new"></a></p>
+<h3 id="new-tilemap-container-tilesdata-settings-">new TileMap(container, tilesData, settings)</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><strong>Params</strong></p>
+<ul>
+<li>container <code>Object</code> - jQuery-object holding the container</li>
+<li>tilesData <code>Object</code> <code> = {}</code> - json object representing data of TileMap</li>
+<li>settings <code>Object</code> <code> = {}</code> - json object representing settings of TileMap</li>
+</ul>
+<p><a name="TileMap+initialize"></a></p>
+<h3 id="tilemap-initialize-code-tilemap-tilemap-code-">tileMap.initialize() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>initializes the TileMap</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+calculateDistortion"></a></p>
+<h3 id="tilemap-calculatedistortion-latitude-code-float-code-">tileMap.calculateDistortion(latitude) ⇒ <code>float</code></h3>
+<p>calculates current distortion of centered latitude</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>float</code> - - size of distortion, map should be applied to<br><strong>Params</strong></p>
+<ul>
+<li>latitude <code>number</code> - latitude where map is centered currently</li>
+</ul>
+<p><a name="TileMap+initializeCanvas"></a></p>
+<h3 id="tilemap-initializecanvas-code-tilemap-tilemap-code-">tileMap.initializeCanvas() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>initializes the canvas, adds to DOM</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+bindEvents"></a></p>
+<h3 id="tilemap-bindevents-code-tilemap-tilemap-code-">tileMap.bindEvents() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>Handles all events for class</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+initializeTiles"></a></p>
+<h3 id="tilemap-initializetiles-code-tilemap-tilemap-code-">tileMap.initializeTiles() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>initializes tiles</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+getCurrentLevelData"></a></p>
+<h3 id="tilemap-getcurrentleveldata-code-object-code-">tileMap.getCurrentLevelData() ⇒ <code>Object</code></h3>
+<p>gets data of current zoom level</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>Object</code> - data for current level as json<br><a name="TileMap+onTilesLoaded"></a></p>
+<h3 id="tilemap-ontilesloaded-tile-code-tilemap-tilemap-code-">tileMap.onTilesLoaded(tile) ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>handles on load of a tile</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><strong>Params</strong></p>
+<ul>
+<li>tile <code><a href="#Tile">Tile</a></code> - a tile of the TileMap</li>
+</ul>
+<p><a name="TileMap+drawTile"></a></p>
+<h3 id="tilemap-drawtile-tile-code-tilemap-tilemap-code-">tileMap.drawTile(tile) ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>draws tiles on canvas</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><strong>Params</strong></p>
+<ul>
+<li>tile <code><a href="#Tile">Tile</a></code> - a tile of the TileMap</li>
+</ul>
+<p><a name="TileMap+resize"></a></p>
+<h3 id="tilemap-resize-code-tilemap-tilemap-code-">tileMap.resize() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>Handles resizing of TileMap</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+draw"></a></p>
+<h3 id="tilemap-draw-code-tilemap-tilemap-code-">tileMap.draw() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>Handles draw of TileMap</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap.IMG_DATA_NAME"></a></p>
+<h3 id="tilemap-img_data_name-code-string-code-">TileMap.IMG_DATA_NAME : <code>String</code></h3>
+<p>name of imagedata in data.json</p>
+<p><strong>Kind</strong>: static property of <code><a href="#TileMap">TileMap</a></code><br><a name="instance"></a></p>
+<h2 id="instance-code-publisher-publisher-code-">instance : <code><a href="#Publisher">Publisher</a></code></h2>
+<p>singleton instance</p>
+<p><strong>Kind</strong>: global variable<br><a name="PUBLISHER"></a></p>
+<h2 id="publisher">PUBLISHER</h2>
+<p>Singleton instance of Publisher</p>
+<p><strong>Kind</strong>: global constant<br><a name="PUBLISHER"></a></p>
+<h2 id="publisher">PUBLISHER</h2>
+<p>Singleton instance of Publisher</p>
+<p><strong>Kind</strong>: global constant  </p>
         <footer class="site-footer">
             <span class="site-footer-owner"><a href="https://github.com/dazlious/MappedJS">MappedJS</a> is maintained by <a href="https://github.com/dazlious">dazlious</a>.</span>
 
