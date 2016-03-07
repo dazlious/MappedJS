@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">77.11</p>
+      <p class="stat">70.71</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">34</p>
+      <p class="stat">56</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">8.25</p>
+      <p class="stat">18.00</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.14</p>
+      <p class="stat">0.34</p>
     </div>
   </div>
 </div>
@@ -89,40 +89,62 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">&quot;use strict&quot;;
+    <textarea id="file-source" class="col-md-12">(function(global, factory) {
+    if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
+        define([&quot;exports&quot;, &quot;jquery&quot;], factory);
+    } else if (typeof exports !== &quot;undefined&quot;) {
+        factory(exports, require(&quot;jquery&quot;));
+    } else {
+        var mod = {
+            exports: {}
+        };
+        factory(mod.exports, global.jquery);
+        global.Helper = mod.exports;
+    }
+})(this, function(exports, _jquery) {
+    &quot;use strict&quot;;
 
-Object.defineProperty(exports, &quot;__esModule&quot;, {
-    value: true
-});
-var $ = require(&#039;jquery&#039;);
+    Object.defineProperty(exports, &quot;__esModule&quot;, {
+        value: true
+    });
+    exports.Helper = undefined;
 
-var Helper = exports.Helper = {
+    var _jquery2 = _interopRequireDefault(_jquery);
 
-    /**
-     * request json-data from given file and calls callback on success
-     * @param  {string} filename - path to file
-     * @param  {Function} callback - function called when data is loaded successfully
-     */
-    requestJSON: function requestJSON(filename, callback) {
-        &quot;use strict&quot;;
-
-        $.ajax({
-            type: &quot;GET&quot;,
-            url: filename,
-            dataType: &quot;json&quot;,
-            success: function success(data, status, request) {
-                callback(data);
-            },
-            error: function error(response) {
-                if (response.status === 200) {
-                    throw new Error(&quot;The JSON submitted seems not valid&quot;);
-                }
-                console.error(&quot;Error requesting file: &quot;, response);
-            }
-        });
+    function _interopRequireDefault(obj) {
+        return obj &amp;&amp; obj.__esModule ? obj : {
+            default: obj
+        };
     }
 
-};</textarea>
+    var Helper = exports.Helper = {
+
+        /**
+         * request json-data from given file and calls callback on success
+         * @param  {string} filename - path to file
+         * @param  {Function} callback - function called when data is loaded successfully
+         */
+        requestJSON: function requestJSON(filename, callback) {
+            &quot;use strict&quot;;
+
+            _jquery2.default.ajax({
+                type: &quot;GET&quot;,
+                url: filename,
+                dataType: &quot;json&quot;,
+                success: function success(data, status, request) {
+                    return callback(data);
+                },
+                error: function error(response) {
+                    if (response.status === 200) {
+                        throw new Error(&quot;The JSON submitted seems not valid&quot;);
+                    }
+                    console.error(&quot;Error requesting file: &quot;, response);
+                }
+            });
+        }
+
+    };
+});</textarea>
   </div>
 </div>
 

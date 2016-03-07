@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Plato - Main.js</title>
+  <title>Plato - TileMap.js</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
@@ -36,7 +36,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>Main.js</h1>
+    <h1>TileMap.js</h1>
   </div>
 </div>
 
@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">68.04</p>
+      <p class="stat">68.41</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">228</p>
+      <p class="stat">246</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">41.99</p>
+      <p class="stat">42.00</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.72</p>
+      <p class="stat">1.76</p>
     </div>
   </div>
 </div>
@@ -91,23 +91,23 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&#039;exports&#039;, &#039;./TileMap.js&#039;, &#039;jquery&#039;, &#039;./Helper.js&#039;, &#039;./Publisher.js&#039;], factory);
+        define([&#039;exports&#039;, &#039;./Tile.js&#039;, &#039;jquery&#039;, &#039;./Rectangle.js&#039;, &#039;./Publisher.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports, require(&#039;./TileMap.js&#039;), require(&#039;jquery&#039;), require(&#039;./Helper.js&#039;), require(&#039;./Publisher.js&#039;));
+        factory(exports, require(&#039;./Tile.js&#039;), require(&#039;jquery&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./Publisher.js&#039;));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.TileMap, global.jquery, global.Helper, global.Publisher);
-        global.Main = mod.exports;
+        factory(mod.exports, global.Tile, global.jquery, global.Rectangle, global.Publisher);
+        global.TileMap = mod.exports;
     }
-})(this, function(exports, _TileMap, _jquery, _Helper, _Publisher) {
+})(this, function(exports, _Tile, _jquery, _Rectangle, _Publisher) {
     &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
         value: true
     });
-    exports.MappedJS = undefined;
+    exports.TileMap = undefined;
 
     var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -116,12 +116,6 @@
             default: obj
         };
     }
-
-    var _typeof = typeof Symbol === &quot;function&quot; &amp;&amp; typeof Symbol.iterator === &quot;symbol&quot; ? function(obj) {
-        return typeof obj;
-    } : function(obj) {
-        return obj &amp;&amp; typeof Symbol === &quot;function&quot; &amp;&amp; obj.constructor === Symbol ? &quot;symbol&quot; : typeof obj;
-    };
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -147,175 +141,199 @@
         };
     }();
 
-    var MappedJS = exports.MappedJS = function() {
+    /**
+     * Singleton instance of Publisher
+     */
+    var PUBLISHER = new _Publisher.Publisher();
 
-        /**
-         * Constructor
-         * @param  {string|Object} container=&quot;.mjs&quot; - Container, either string, jQuery-object or dom-object
-         * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
-         * @param  {Object} mapSettings={} - settings for map, must be json
-         * @param  {Object} events={loaded: &quot;mjs-loaded&quot;} - List of events
-         * @param  {Boolean} jasmine=false - Option for jasmine tests
-         * @return {MappedJS} instance of MappedJS
+    var TileMap = exports.TileMap = function() {
+
+        /** Constructor
+         * @param  {Object} container - jQuery-object holding the container
+         * @param  {Object} tilesData={} - json object representing data of TileMap
+         * @param  {Object} settings={} - json object representing settings of TileMap
+         * @return {TileMap} instance of TileMap
          */
 
-        function MappedJS(_ref) {
-            var _ref$container = _ref.container;
-            var container = _ref$container === undefined ? &quot;.mjs&quot; : _ref$container;
-            var _ref$mapData = _ref.mapData;
-            var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
-            var _ref$mapSettings = _ref.mapSettings;
-            var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
-            var _ref$events = _ref.events;
-            var events = _ref$events === undefined ? {
-                loaded: &quot;mjs-loaded&quot;
-            } : _ref$events;
+        function TileMap(_ref) {
+            var container = _ref.container;
+            var _ref$tilesData = _ref.tilesData;
+            var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
+            var _ref$settings = _ref.settings;
+            var settings = _ref$settings === undefined ? {} : _ref$settings;
 
-            _classCallCheck(this, MappedJS);
+            _classCallCheck(this, TileMap);
 
-            this.initializeApi();
+            if (!container) {
+                throw Error(&quot;You must define a container to initialize a TileMap&quot;);
+            }
 
-            this.initializeSettings(container, events, mapSettings);
+            this.$container = container;
+            this.imgData = tilesData[TileMap.IMG_DATA_NAME];
+            this.settings = settings;
 
-            this.initializeData(mapData, function() {
-                this.initializeMap();
-                this.bindEvents();
-                this.loadingFinished();
-            }.bind(this));
+            this.initialize().initializeTiles();
 
             return this;
         }
 
         /**
-         * initializes the settings and handles errors
-         * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
-         * @param  {object} events - List of events
-         * @return {MappedJS} instance of MappedJS
+         * initializes the TileMap
+         * @return {TileMap} instance of TileMap
          */
 
 
-        _createClass(MappedJS, [{
-            key: &#039;initializeSettings&#039;,
-            value: function initializeSettings(container, events, mapSettings) {
-                this.$container = typeof container === &quot;string&quot; ? (0, _jquery2.default)(container) : (typeof container === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(container)) === &quot;object&quot; &amp;&amp; container instanceof jQuery ? container : (0, _jquery2.default)(container);
-                if (!(this.$container instanceof jQuery)) {
-                    throw new Error(&quot;Container &quot; + container + &quot; not found&quot;);
-                }
-                this.$container.addClass(&quot;mappedJS&quot;);
+        _createClass(TileMap, [{
+            key: &#039;initialize&#039;,
+            value: function initialize() {
+                this.center = this.initialCenter;
+                this.distortion = this.calculateDistortion(this.settings.center.lat);
+                this.bounds = new _Rectangle.Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height);
 
-                this.mapSettings = {
-                    level: mapSettings.level || 0,
-                    center: mapSettings.center || {
-                        &quot;lat&quot;: 0,
-                        &quot;lng&quot;: 0
-                    },
-                    bounds: mapSettings.bounds || {
-                        &quot;top&quot;: 90,
-                        &quot;left&quot;: -180,
-                        &quot;width&quot;: 360,
-                        &quot;height&quot;: 180
-                    }
-                };
-
-                this.events = events;
+                this.bindEvents().initializeCanvas();
 
                 return this;
             }
 
             /**
-             * initializes the data, asynchronous
-             * @param  {Object} mapData - data of map tiles, can be json or path to file
-             * @param  {Function} cb - called, when data is received
-             * @return {MappedJS} instance of MappedJS
+             * calculates current distortion of centered latitude
+             * @param  {number} latitude - latitude where map is centered currently
+             * @return {float} - size of distortion, map should be applied to
              */
 
         }, {
-            key: &#039;initializeData&#039;,
-            value: function initializeData(mapData, cb) {
-                var _this = this;
-                if (typeof mapData === &quot;string&quot;) {
-                    _Helper.Helper.requestJSON(mapData, function(data) {
-                        _this.mapData = data;
-                        cb();
-                    });
-                } else {
-                    this.mapData = (typeof mapData === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(mapData)) === &quot;object&quot; ? mapData : null;
-                    cb();
-                }
-                return this;
+            key: &#039;calculateDistortion&#039;,
+            value: function calculateDistortion(latitude) {
+                return Math.cos(latitude);
             }
 
             /**
-             * initializes Map module
-             * @return {MappedJS} instance of MappedJS
+             * initializes the canvas, adds to DOM
+             * @return {TileMap} instance of TileMap
              */
 
         }, {
-            key: &#039;initializeMap&#039;,
-            value: function initializeMap() {
-                this.$canvas = new _TileMap.TileMap({
-                    container: this.$container,
-                    tilesData: this.mapData,
-                    settings: this.mapSettings
-                });
+            key: &#039;initializeCanvas&#039;,
+            value: function initializeCanvas() {
+                this.$canvas = (0, _jquery2.default)(&quot;&lt;canvas class=&#039;mjs-canvas&#039; /&gt;&quot;);
+                this.canvas = this.$canvas[0];
+                this.$container.append(this.$canvas);
+                this.canvasContext = this.canvas.getContext(&quot;2d&quot;);
+                this.resize();
                 return this;
             }
 
             /**
-             * initializes the public Api
-             * @return {MappedJS} instance of MappedJS
-             */
-
-        }, {
-            key: &#039;initializeApi&#039;,
-            value: function initializeApi() {
-                this.api = {
-                    TileMap: _TileMap.TileMap,
-                    Publisher: _Publisher.Publisher,
-                    Helper: _Helper.Helper
-                };
-                return this;
-            }
-
-            /**
-             * binds all events to handlers
-             * @return {MappedJS} instance of MappedJS
+             * Handles all events for class
+             * @return {TileMap} instance of TileMap
              */
 
         }, {
             key: &#039;bindEvents&#039;,
             value: function bindEvents() {
-                (0, _jquery2.default)(window).on(&quot;resize orientationchange&quot;, this.resizeHandler.bind(this));
+                PUBLISHER.subscribe(&quot;tile-loaded&quot;, this.onTilesLoaded.bind(this));
                 return this;
             }
 
             /**
-             * handles resizing of window
-             * @return {MappedJS} instance of MappedJS
+             * initializes tiles
+             * @return {TileMap} instance of TileMap
              */
 
         }, {
-            key: &#039;resizeHandler&#039;,
-            value: function resizeHandler() {
-                this.$canvas.resize();
+            key: &#039;initializeTiles&#039;,
+            value: function initializeTiles() {
+                this.tiles = [];
+                var currentLevel = this.getCurrentLevelData().tiles;
+                for (var tile in currentLevel) {
+                    var currentTileData = currentLevel[tile];
+                    var _tile = new _Tile.Tile(currentTileData);
+                    this.tiles.push(_tile);
+                }
                 return this;
             }
 
             /**
-             * called when loading and initialization is finished
-             * @return {MappedJS} instance of MappedJS
+             * gets data of current zoom level
+             * @return {Object} data for current level as json
              */
 
         }, {
-            key: &#039;loadingFinished&#039;,
-            value: function loadingFinished() {
-                this.$container.trigger(this.events.loaded);
+            key: &#039;getCurrentLevelData&#039;,
+            value: function getCurrentLevelData() {
+                return this.imgData[&quot;level-&quot; + this.settings.level];
+            }
+
+            /**
+             * handles on load of a tile
+             * @param  {Tile} tile a tile of the TileMap
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
+            key: &#039;onTilesLoaded&#039;,
+            value: function onTilesLoaded(tile) {
+                this.drawTile(tile);
+                tile.state.next();
+                return this;
+            }
+
+            /**
+             * draws tiles on canvas
+             * @param  {Tile} tile a tile of the TileMap
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
+            key: &#039;drawTile&#039;,
+            value: function drawTile(tile) {
+                this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
+                return this;
+            }
+
+            /**
+             * Handles resizing of TileMap
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
+            key: &#039;resize&#039;,
+            value: function resize() {
+                this.canvasWidth = this.$container.innerWidth();
+                this.canvasHeight = this.$container.innerHeight();
+
+                this.canvasContext.canvas.width = this.canvasWidth;
+                this.canvasContext.canvas.height = this.canvasHeight;
+
+                this.draw();
+
+                return this;
+            }
+
+            /**
+             * Handles draw of TileMap
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
+            key: &#039;draw&#039;,
+            value: function draw() {
+                for (var tile in this.tiles) {
+                    var currentTile = this.tiles[tile];
+                    this.drawTile(currentTile);
+                }
                 return this;
             }
         }]);
 
-        return MappedJS;
+        return TileMap;
     }();
+
+    /**
+     * name of imagedata in data.json
+     * @type {String}
+     */
+    TileMap.IMG_DATA_NAME = &quot;img_data&quot;;
 });</textarea>
   </div>
 </div>

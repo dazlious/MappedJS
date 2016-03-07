@@ -85,11 +85,79 @@
             value: function add(point) {
                 return new Point(this.x + point.x, this.y + point.y);
             }
+
+            /**
+             * check if points are equal
+             * @param  {Point} point - the point to check against this
+             * @return {Boolean} is true, if x and y are the same
+             */
+
+        }, {
+            key: "equals",
+            value: function equals(point) {
+                return this.x === point.x && this.y === point.y;
+            }
+
+            /**
+             * Returns the difference from this Point to a specified Point
+             * @param  {Point} point - the specified point to be measured against this Point
+             * @return {Point} the difference between this Point and specified point
+             */
+
+        }, {
+            key: "difference",
+            value: function difference(point) {
+                return new Point(this.x - point.x, this.y - point.y);
+            }
+
+            /**
+             * Returns the distance from this Point to a specified Point
+             * @param  {Point} point - the specified point to be measured against this Point
+             * @return {Point} the distance between this Point and specified point
+             */
+
+        }, {
+            key: "distance",
+            value: function distance(point) {
+                var difference = this.difference(point);
+                return Math.sqrt(Math.pow(difference.x, 2) + Math.pow(difference.y, 2));
+            }
+
+            /**
+             * moves a point by x and y
+             * @param  {number} x - value to move x
+             * @param  {number} y - value to move y
+             * @return {Point} instance of Point
+             */
+
+        }, {
+            key: "translate",
+            value: function translate(x, y) {
+                this.x += x;
+                this.y += y;
+                return this;
+            }
+
+            /**
+             * representation of a Point as String
+             * @return {String} representation of this Point
+             */
+
+        }, {
+            key: "toString",
+            value: function toString() {
+                return "(" + this.x + "," + this.y + ")";
+            }
         }]);
 
         return Point;
     }();
 
+    /**
+     * Creates a Point from specified point
+     * @param  {Point} point - specified point
+     * @return {Point} the point specified
+     */
     Point.createFromPoint = function(point) {
         return new Point(point.x, point.y);
     };
