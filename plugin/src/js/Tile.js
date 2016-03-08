@@ -81,7 +81,6 @@ export class Tile extends Rectangle {
      * @return {Boolean} is true, if x, y, width and height and path are the same
      */
     equals(tile) {
-        console.log(super.equals(tile), this.path === tile.path);
         return (tile instanceof Tile) ? super.equals(tile) && this.path === tile.path : false;
     }
 

@@ -211,5 +211,7 @@ module.exports = function(grunt) {
     grunt.registerTask('tests', ["transpile", "karma:chrome"]);
     grunt.registerTask('testsFull', ["transpile", "karma:full"]);
 
+    grunt.registerTask('full', ["testsFull", "bundle", "ship", "deployDocs"]);
+
 
 };

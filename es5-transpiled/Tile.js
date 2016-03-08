@@ -215,7 +215,6 @@
         }, {
             key: 'equals',
             value: function equals(tile) {
-                console.log(_get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile), this.path === tile.path);
                 return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
             }
         }]);
