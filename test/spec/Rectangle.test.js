@@ -1,6 +1,6 @@
 /*global Rectangle,Point*/
 
-describe('Rectangle', function () {
+describe('Rectangle', function() {
     "use strict";
 
     it("is an instanceof Rectangle", function() {
@@ -36,7 +36,7 @@ describe('Rectangle', function () {
         expect(rect.topLeft).toEqual(new Point.Point(-50, -50));
         rect.x = 0;
         rect.y = 0;
-        expect(rect.topLeft).toEqual(new Point.Point(0,0));
+        expect(rect.topLeft).toEqual(new Point.Point(0, 0));
     });
 
     it("top-right-position is set correctly", function() {
@@ -84,9 +84,9 @@ describe('Rectangle', function () {
 
     it("containsPoint works fine", function() {
         var rect = new Rectangle.Rectangle(0, 0, 100, 100),
-            p1 = new Point.Point(0,0),
-            p2 = new Point.Point(-1,0),
-            p3 = new Point.Point(1,-1);
+            p1 = new Point.Point(0, 0),
+            p2 = new Point.Point(-1, 0),
+            p3 = new Point.Point(1, -1);
         expect(rect.containsPoint(p1)).toBe(true);
         expect(rect.containsPoint(p2)).toBe(false);
         expect(rect.containsPoint(p3)).toBe(false);
@@ -104,9 +104,9 @@ describe('Rectangle', function () {
         var rect1 = new Rectangle.Rectangle(0, 0, 50, 50),
             rect2 = new Rectangle.Rectangle(0, 0, 100, 100),
             rect3 = new Rectangle.Rectangle(0, 0, 100, 100),
-            p1 = new Point.Point(0,0),
-            p2 = new Point.Point(-1,0),
-            p3 = new Point.Point(1,-1);
+            p1 = new Point.Point(0, 0),
+            p2 = new Point.Point(-1, 0),
+            p3 = new Point.Point(1, -1);
         expect(rect1.contains(rect1)).toBe(true);
         expect(rect1.contains(rect2)).toBe(false);
         expect(rect2.contains(rect1)).toBe(true);

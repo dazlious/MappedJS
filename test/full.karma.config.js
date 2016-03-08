@@ -62,7 +62,8 @@ module.exports = function(config) {
         },
         coverageReporter: {
             type : 'html',
-            dir : 'reports/'
+            dir : 'reports/',
+            subdir: 'coverage'
         }
     });
 };
