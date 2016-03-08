@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(8);
 
-	var _Publisher = __webpack_require__(5);
+	var _Publisher = __webpack_require__(7);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -263,9 +263,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _Rectangle = __webpack_require__(6);
+	var _Rectangle = __webpack_require__(5);
 
-	var _Publisher = __webpack_require__(5);
+	var _Publisher = __webpack_require__(7);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -486,18 +486,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _State = __webpack_require__(4);
 
-	var _Publisher = __webpack_require__(5);
+	var _Rectangle2 = __webpack_require__(5);
+
+	var _Publisher = __webpack_require__(7);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	/**
 	 * Singleton instance of Publisher
 	 */
 	var PUBLISHER = new _Publisher.Publisher();
 
-	var Tile = exports.Tile = function () {
+	var Tile = exports.Tile = function (_Rectangle) {
+	    _inherits(Tile, _Rectangle);
 
 	    /**
 	     * Constructor
@@ -510,6 +517,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	    function Tile(_ref) {
+	        var _ret;
+
 	        var _ref$path = _ref.path;
 	        var path = _ref$path === undefined ? null : _ref$path;
 	        var _ref$x = _ref.x;
@@ -523,21 +532,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Tile);
 
-	        this.state = new _State.State(Tile.STATES);
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
+	        _this.state = new _State.State(Tile.STATES);
 	        if (!path || typeof path !== "string" || path.length === 0) {
 	            throw new Error('Path {path} needs to be of type string and should not be empty');
 	        }
-	        this.path = path;
-
-	        this.x = x;
-	        this.y = y;
-	        this.width = w;
-	        this.height = h;
-
-	        this.initialize();
-
-	        return this;
+	        _this.path = path;
+	        _this.initialize();
+	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    /**
@@ -550,19 +553,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'initialize',
 	        value: function initialize() {
 	            this.state.next();
-
-	            var _this = this;
 	            this.loadImage(function (img) {
-	                _this.img = img;
-	                _this.state.next();
-	                PUBLISHER.publish("tile-loaded", _this);
-	            });
+	                this.img = img;
+	                this.state.next();
+	                PUBLISHER.publish("tile-loaded", this);
+	            }.bind(this));
 	            return this;
 	        }
 
 	        /**
 	         * image loader, asynchronous
-	         * @param  {Function} cb - callback after loading image
+	         * @param {Function} cb - callback after loading image
 	         * @return {Tile} instance of Tile
 	         */
 
@@ -579,7 +580,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 
 	    return Tile;
-	}();
+	}(_Rectangle2.Rectangle);
 
 	/**
 	 * States of a tile
@@ -672,6 +673,372 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Rectangle = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Point2 = __webpack_require__(6);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Rectangle = exports.Rectangle = function (_Point) {
+	    _inherits(Rectangle, _Point);
+
+	    _createClass(Rectangle, [{
+	        key: 'center',
+
+
+	        /**
+	         * get center-position of rectangle
+	         * @return {Point} center point
+	         */
+	        get: function get() {
+	            return new _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
+	        }
+
+	        /**
+	         * get top-left-position of rectangle
+	         * @return {Point} top-left point
+	         */
+
+	    }, {
+	        key: 'topLeft',
+	        get: function get() {
+	            return new _Point2.Point(this.x, this.y);
+	        }
+
+	        /**
+	         * get top-right-position of rectangle
+	         * @return {Point} top-right point
+	         */
+
+	    }, {
+	        key: 'topRight',
+	        get: function get() {
+	            return new _Point2.Point(this.x + this.width, this.y);
+	        }
+
+	        /**
+	         * get bottom-left-position of rectangle
+	         * @return {Point} bottom-left point
+	         */
+
+	    }, {
+	        key: 'bottomLeft',
+	        get: function get() {
+	            return new _Point2.Point(this.x, this.y + this.height);
+	        }
+
+	        /**
+	         * get bottom-right-position of rectangle
+	         * @return {Point} bottom-right point
+	         */
+
+	    }, {
+	        key: 'bottomRight',
+	        get: function get() {
+	            return new _Point2.Point(this.x + this.width, this.y + this.height);
+	        }
+
+	        /**
+	         * Returns right position of Rectangle
+	         * @return {number} right position
+	         */
+
+	    }, {
+	        key: 'right',
+	        get: function get() {
+	            return this.x + this.width;
+	        }
+
+	        /**
+	         * Returns left position of Rectangle
+	         * @return {number} left position
+	         */
+
+	    }, {
+	        key: 'left',
+	        get: function get() {
+	            return this.x;
+	        }
+
+	        /**
+	         * Returns top position of Rectangle
+	         * @return {number} top position
+	         */
+
+	    }, {
+	        key: 'top',
+	        get: function get() {
+	            return this.y;
+	        }
+
+	        /**
+	         * Returns bottom position of Rectangle
+	         * @return {number} bottom position
+	         */
+
+	    }, {
+	        key: 'bottom',
+	        get: function get() {
+	            return this.y + this.height;
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {number} x=0 - x-position of specified rectangle
+	         * @param  {number} y=0 - y-position of specified rectangle
+	         * @param  {number} width=0 - width of specified rectangle
+	         * @param  {number} height=0 - height of specified rectangle
+	         * @return {Rectangle} new instance of Rectangle
+	         */
+
+	    }]);
+
+	    function Rectangle() {
+	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	        var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+
+	        var _ret;
+
+	        var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
+	        _classCallCheck(this, Rectangle);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
+
+	        _this.width = width;
+	        _this.height = height;
+	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    /**
+	     * Checks whether Rectangle intersects with specified Rectangle
+	     * @param  {Rectangle} rect - the specified rectangle to check against
+	     * @return {Boolean} true if containment is entirely
+	     */
+
+
+	    _createClass(Rectangle, [{
+	        key: 'intersects',
+	        value: function intersects(rect) {
+	            return !(rect.left > this.right || rect.right < this.left || rect.top > this.bottom || rect.bottom < this.top);
+	        }
+
+	        /**
+	         * Checks whether Rectangle entirely contains the Rectangle or Point
+	         * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
+	         * @return {Boolean} true if containment is entirely
+	         */
+
+	    }, {
+	        key: 'contains',
+	        value: function contains(rectOrPoint) {
+	            return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
+	        }
+
+	        /**
+	         * Checks whether Rectangle entirely contains the Point
+	         * @param  {Point} point - the specified point to check against
+	         * @return {Boolean} true if containment is entirely
+	         */
+
+	    }, {
+	        key: 'containsPoint',
+	        value: function containsPoint(point) {
+	            return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
+	        }
+
+	        /**
+	         * Checks whether Rectangle entirely contains the Rectangle
+	         * @param  {Rectangle} rect - the specified rectangle to check against
+	         * @return {Boolean} true if containment is entirely
+	         */
+
+	    }, {
+	        key: 'containsRect',
+	        value: function containsRect(rect) {
+	            return rect instanceof Rectangle ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
+	        }
+
+	        /**
+	         * check if rectangles are equal
+	         * @param  {Rectangle} rectangle - the specified rectangle to check against this
+	         * @return {Boolean} is true, if x, y, width and height are the same
+	         */
+
+	    }, {
+	        key: 'equals',
+	        value: function equals(rectangle) {
+	            return rectangle instanceof Rectangle ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
+	        }
+
+	        /**
+	         * representation of a Rectangle as String
+	         * @return {String} representation of this Rectangle
+	         */
+
+	    }, {
+	        key: 'toString',
+	        value: function toString() {
+	            return '(' + this.x + ',' + this.y + ',' + this.width + ',' + this.height + ')';
+	        }
+	    }]);
+
+	    return Rectangle;
+	}(_Point2.Point);
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Point = exports.Point = function () {
+
+	  /**
+	   * Constructor
+	   * @param  {number} x = 0 - representation of x coordinate
+	   * @param  {number} y = 0 - representation of y coordinate
+	   * @return {Point} new instance of point
+	   */
+
+	  function Point() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	    _classCallCheck(this, Point);
+
+	    this.x = x;
+	    this.y = y;
+	    return this;
+	  }
+
+	  /**
+	   * substracts 2 points
+	   * @param  {Point} point - the point to substract from this
+	   * @return {Point} difference between this point and parameter point
+	   */
+
+
+	  _createClass(Point, [{
+	    key: "sub",
+	    value: function sub(point) {
+	      return new Point(this.x - point.x, this.y - point.y);
+	    }
+
+	    /**
+	     * adds 2 points
+	     * @param  {Point} point - the point to add to this
+	     * @return {Point} addition of this point and parameter point
+	     */
+
+	  }, {
+	    key: "add",
+	    value: function add(point) {
+	      return new Point(this.x + point.x, this.y + point.y);
+	    }
+
+	    /**
+	     * check if points are equal
+	     * @param  {Point} point - the point to check against this
+	     * @return {Boolean} is true, if x and y are the same
+	     */
+
+	  }, {
+	    key: "equals",
+	    value: function equals(point) {
+	      return this.x === point.x && this.y === point.y;
+	    }
+
+	    /**
+	     * Returns the difference from this Point to a specified Point
+	     * @param  {Point} point - the specified point to be measured against this Point
+	     * @return {Point} the difference between this Point and specified point
+	     */
+
+	  }, {
+	    key: "difference",
+	    value: function difference(point) {
+	      return new Point(this.x - point.x, this.y - point.y);
+	    }
+
+	    /**
+	     * Returns the distance from this Point to a specified Point
+	     * @param  {Point} point - the specified point to be measured against this Point
+	     * @return {Point} the distance between this Point and specified point
+	     */
+
+	  }, {
+	    key: "distance",
+	    value: function distance(point) {
+	      var difference = this.difference(point);
+	      return Math.sqrt(Math.pow(difference.x, 2) + Math.pow(difference.y, 2));
+	    }
+
+	    /**
+	     * moves a point by x and y
+	     * @param  {number} x - value to move x
+	     * @param  {number} y - value to move y
+	     * @return {Point} instance of Point
+	     */
+
+	  }, {
+	    key: "translate",
+	    value: function translate(x, y) {
+	      this.x += x;
+	      this.y += y;
+	      return this;
+	    }
+
+	    /**
+	     * representation of a Point as String
+	     * @return {String} representation of this Point
+	     */
+
+	  }, {
+	    key: "toString",
+	    value: function toString() {
+	      return "(" + this.x + "," + this.y + ")";
+	    }
+	  }]);
+
+	  return Point;
+	}();
+
+	/**
+	 * Creates a Point from specified point
+	 * @param  {Point} point - specified point
+	 * @return {Point} the point specified
+	 */
+
+
+	Point.createFromPoint = function (point) {
+	  return new Point(point.x, point.y);
+		};
+
+/***/ },
+/* 7 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -813,318 +1180,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @type {String}
 	 */
 		Publisher.UNSUBSCRIBE = "unsubscribe";
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Rectangle = undefined;
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _Point2 = __webpack_require__(7);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Rectangle = exports.Rectangle = function (_Point) {
-	    _inherits(Rectangle, _Point);
-
-	    _createClass(Rectangle, [{
-	        key: 'center',
-
-
-	        /**
-	         * get center-position of rectangle
-	         * @return {Point} center point
-	         */
-	        get: function get() {
-	            return new _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
-	        }
-
-	        /**
-	         * get top-left-position of rectangle
-	         * @return {Point} top-left point
-	         */
-
-	    }, {
-	        key: 'topLeft',
-	        get: function get() {
-	            return new _Point2.Point(this.x, this.y);
-	        }
-
-	        /**
-	         * get top-right-position of rectangle
-	         * @return {Point} top-right point
-	         */
-
-	    }, {
-	        key: 'topRight',
-	        get: function get() {
-	            return new _Point2.Point(this.x + this.width, this.y);
-	        }
-
-	        /**
-	         * get bottom-left-position of rectangle
-	         * @return {Point} bottom-left point
-	         */
-
-	    }, {
-	        key: 'bottomLeft',
-	        get: function get() {
-	            return new _Point2.Point(this.x, this.y + this.height);
-	        }
-
-	        /**
-	         * get bottom-right-position of rectangle
-	         * @return {Point} bottom-right point
-	         */
-
-	    }, {
-	        key: 'bottomRight',
-	        get: function get() {
-	            return new _Point2.Point(this.x + this.width, this.y + this.height);
-	        }
-
-	        /**
-	         * Constructor
-	         * @param  {number} x=0 - x-position of specified rectangle
-	         * @param  {number} y=0 - y-position of specified rectangle
-	         * @param  {number} width=0 - width of specified rectangle
-	         * @param  {number} height=0 - height of specified rectangle
-	         * @return {Rectangle} new instance of Rectangle
-	         */
-
-	    }]);
-
-	    function Rectangle() {
-	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-	        var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-
-	        var _ret;
-
-	        var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
-
-	        _classCallCheck(this, Rectangle);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
-
-	        _this.width = width;
-	        _this.height = height;
-	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
-	    }
-
-	    /**
-	     * Checks whether Rectangle entirely contains the Rectangle or Point
-	     * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
-	     * @return {Boolean} true if containment is entirely
-	     */
-
-
-	    _createClass(Rectangle, [{
-	        key: 'contains',
-	        value: function contains(rectOrPoint) {
-	            return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
-	        }
-
-	        /**
-	         * Checks whether Rectangle entirely contains the Point
-	         * @param  {Point} point - the specified point to check against
-	         * @return {Boolean} true if containment is entirely
-	         */
-
-	    }, {
-	        key: 'containsPoint',
-	        value: function containsPoint(point) {
-	            return point.x >= this.x && point.y >= this.y && point.x <= this.width && point.y <= this.height;
-	        }
-
-	        /**
-	         * Checks whether Rectangle entirely contains the Rectangle
-	         * @param  {Rectangle} rect - the specified rectangle to check against
-	         * @return {Boolean} true if containment is entirely
-	         */
-
-	    }, {
-	        key: 'containsRect',
-	        value: function containsRect(rect) {
-	            return rect.x >= this.x && rect.y >= this.y && rect.width <= this.width && rect.height <= this.height;
-	        }
-
-	        /**
-	         * check if rectangles are equal
-	         * @param  {Rectangle} rectangle - the specified rectangle to check against this
-	         * @return {Boolean} is true, if x, y, width and height are the same
-	         */
-
-	    }, {
-	        key: 'equals',
-	        value: function equals(rectangle) {
-	            return this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height;
-	        }
-
-	        /**
-	         * representation of a Rectangle as String
-	         * @return {String} representation of this Rectangle
-	         */
-
-	    }, {
-	        key: 'toString',
-	        value: function toString() {
-	            return '(' + _get(Object.getPrototypeOf(Rectangle.prototype), 'toString', this).call(this) + ',' + this.width + ',' + this.height + ')';
-	        }
-	    }]);
-
-	    return Rectangle;
-	}(_Point2.Point);
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Point = exports.Point = function () {
-
-	  /**
-	   * Constructor
-	   * @param  {number} x = 0 - representation of x coordinate
-	   * @param  {number} y = 0 - representation of y coordinate
-	   * @return {Point} new instance of point
-	   */
-
-	  function Point() {
-	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-
-	    _classCallCheck(this, Point);
-
-	    this.x = x;
-	    this.y = y;
-	    return this;
-	  }
-
-	  /**
-	   * substracts 2 points
-	   * @param  {Point} point - the point to substract from this
-	   * @return {Point} difference between this point and parameter point
-	   */
-
-
-	  _createClass(Point, [{
-	    key: "sub",
-	    value: function sub(point) {
-	      return new Point(this.x - point.x, this.y - point.y);
-	    }
-
-	    /**
-	     * adds 2 points
-	     * @param  {Point} point - the point to add to this
-	     * @return {Point} addition of this point and parameter point
-	     */
-
-	  }, {
-	    key: "add",
-	    value: function add(point) {
-	      return new Point(this.x + point.x, this.y + point.y);
-	    }
-
-	    /**
-	     * check if points are equal
-	     * @param  {Point} point - the point to check against this
-	     * @return {Boolean} is true, if x and y are the same
-	     */
-
-	  }, {
-	    key: "equals",
-	    value: function equals(point) {
-	      return this.x === point.x && this.y === point.y;
-	    }
-
-	    /**
-	     * Returns the difference from this Point to a specified Point
-	     * @param  {Point} point - the specified point to be measured against this Point
-	     * @return {Point} the difference between this Point and specified point
-	     */
-
-	  }, {
-	    key: "difference",
-	    value: function difference(point) {
-	      return new Point(this.x - point.x, this.y - point.y);
-	    }
-
-	    /**
-	     * Returns the distance from this Point to a specified Point
-	     * @param  {Point} point - the specified point to be measured against this Point
-	     * @return {Point} the distance between this Point and specified point
-	     */
-
-	  }, {
-	    key: "distance",
-	    value: function distance(point) {
-	      var difference = this.difference(point);
-	      return Math.sqrt(Math.pow(difference.x, 2) + Math.pow(difference.y, 2));
-	    }
-
-	    /**
-	     * moves a point by x and y
-	     * @param  {number} x - value to move x
-	     * @param  {number} y - value to move y
-	     * @return {Point} instance of Point
-	     */
-
-	  }, {
-	    key: "translate",
-	    value: function translate(x, y) {
-	      this.x += x;
-	      this.y += y;
-	      return this;
-	    }
-
-	    /**
-	     * representation of a Point as String
-	     * @return {String} representation of this Point
-	     */
-
-	  }, {
-	    key: "toString",
-	    value: function toString() {
-	      return "(" + this.x + "," + this.y + ")";
-	    }
-	  }]);
-
-	  return Point;
-	}();
-
-	/**
-	 * Creates a Point from specified point
-	 * @param  {Point} point - specified point
-	 * @return {Point} the point specified
-	 */
-
-
-	Point.createFromPoint = function (point) {
-	  return new Point(point.x, point.y);
-		};
 
 /***/ },
 /* 8 */

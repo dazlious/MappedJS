@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import {State} from './State.js';
+import {Rectangle} from './Rectangle.js';
 import {Publisher} from './Publisher.js';
 
 /**
@@ -7,7 +8,7 @@ import {Publisher} from './Publisher.js';
  */
 const PUBLISHER = new Publisher();
 
-export class Tile {
+export class Tile extends Rectangle {
 
     /**
      * Constructor
@@ -19,20 +20,13 @@ export class Tile {
      * @return {Tile} instance of Tile
      */
     constructor({path=null, x = 0, y = 0, w = 0, h = 0}) {
+        super(x, y, w, h);
         this.state = new State(Tile.STATES);
-
         if (!path || typeof path !== "string" || path.length === 0) {
             throw new Error(`Path {path} needs to be of type string and should not be empty`);
         }
         this.path = path;
-
-        this.x = x;
-        this.y = y;
-        this.width = w;
-        this.height = h;
-
         this.initialize();
-
         return this;
     }
 
@@ -42,19 +36,17 @@ export class Tile {
      */
     initialize() {
         this.state.next();
-
-        let _this = this;
         this.loadImage(function(img) {
-            _this.img = img;
-            _this.state.next();
-            PUBLISHER.publish("tile-loaded", _this);
-        });
+            this.img = img;
+            this.state.next();
+            PUBLISHER.publish("tile-loaded", this);
+        }.bind(this));
         return this;
     }
 
     /**
      * image loader, asynchronous
-     * @param  {Function} cb - callback after loading image
+     * @param {Function} cb - callback after loading image
      * @return {Tile} instance of Tile
      */
     loadImage(cb) {
@@ -65,7 +57,6 @@ export class Tile {
         };
         return this;
     }
-
 }
 
 /**

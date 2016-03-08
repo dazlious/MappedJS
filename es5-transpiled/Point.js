@@ -146,7 +146,7 @@
         }, {
             key: "toString",
             value: function toString() {
-                return "(" + this.x + "," + this.y + ")";
+                return this.constructor.name + "(" + this.x + "," + this.y + ")";
             }
         }]);
 

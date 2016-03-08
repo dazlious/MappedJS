@@ -32,31 +32,6 @@
         return call && (typeof call === "object" || typeof call === "function") ? call : self;
     }
 
-    var _get = function get(object, property, receiver) {
-        if (object === null) object = Function.prototype;
-        var desc = Object.getOwnPropertyDescriptor(object, property);
-
-        if (desc === undefined) {
-            var parent = Object.getPrototypeOf(object);
-
-            if (parent === null) {
-                return undefined;
-            } else {
-                return get(parent, property, receiver);
-            }
-        } else if ("value" in desc) {
-            return desc.value;
-        } else {
-            var getter = desc.get;
-
-            if (getter === undefined) {
-                return undefined;
-            }
-
-            return getter.call(receiver);
-        }
-    };
-
     var _createClass = function() {
         function defineProperties(target, props) {
             for (var i = 0; i < props.length; i++) {
@@ -151,6 +126,50 @@
             }
 
             /**
+             * Returns right position of Rectangle
+             * @return {number} right position
+             */
+
+        }, {
+            key: 'right',
+            get: function get() {
+                return this.x + this.width;
+            }
+
+            /**
+             * Returns left position of Rectangle
+             * @return {number} left position
+             */
+
+        }, {
+            key: 'left',
+            get: function get() {
+                return this.x;
+            }
+
+            /**
+             * Returns top position of Rectangle
+             * @return {number} top position
+             */
+
+        }, {
+            key: 'top',
+            get: function get() {
+                return this.y;
+            }
+
+            /**
+             * Returns bottom position of Rectangle
+             * @return {number} bottom position
+             */
+
+        }, {
+            key: 'bottom',
+            get: function get() {
+                return this.y + this.height;
+            }
+
+            /**
              * Constructor
              * @param  {number} x=0 - x-position of specified rectangle
              * @param  {number} y=0 - y-position of specified rectangle
@@ -180,13 +199,25 @@
         }
 
         /**
-         * Checks whether Rectangle entirely contains the Rectangle or Point
-         * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
+         * Checks whether Rectangle intersects with specified Rectangle
+         * @param  {Rectangle} rect - the specified rectangle to check against
          * @return {Boolean} true if containment is entirely
          */
 
 
         _createClass(Rectangle, [{
+            key: 'intersects',
+            value: function intersects(rect) {
+                return !(rect.left > this.right || rect.right < this.left || rect.top > this.bottom || rect.bottom < this.top);
+            }
+
+            /**
+             * Checks whether Rectangle entirely contains the Rectangle or Point
+             * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
+             * @return {Boolean} true if containment is entirely
+             */
+
+        }, {
             key: 'contains',
             value: function contains(rectOrPoint) {
                 return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
@@ -201,7 +232,7 @@
         }, {
             key: 'containsPoint',
             value: function containsPoint(point) {
-                return point.x >= this.x && point.y >= this.y && point.x <= this.width && point.y <= this.height;
+                return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
             }
 
             /**
@@ -213,7 +244,7 @@
         }, {
             key: 'containsRect',
             value: function containsRect(rect) {
-                return rect.x >= this.x && rect.y >= this.y && rect.width <= this.width && rect.height <= this.height;
+                return rect instanceof Rectangle ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
             }
 
             /**
@@ -225,7 +256,7 @@
         }, {
             key: 'equals',
             value: function equals(rectangle) {
-                return this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height;
+                return rectangle instanceof Rectangle ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
             }
 
             /**
@@ -236,7 +267,7 @@
         }, {
             key: 'toString',
             value: function toString() {
-                return '(' + _get(Object.getPrototypeOf(Rectangle.prototype), 'toString', this).call(this) + ',' + this.width + ',' + this.height + ')';
+                return this.constructor.name + '(' + this.x + ',' + this.y + ',' + this.width + ',' + this.height + ')';
             }
         }]);
 

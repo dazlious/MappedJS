@@ -65,7 +65,7 @@ describe('Rectangle', function () {
 
     it("toString works as expected", function() {
         var rect = new Rectangle.Rectangle(-50, -50, 100, 100);
-        expect(rect.toString()).toEqual("((-50,-50),100,100)");
+        expect(rect.toString()).toEqual("(-50,-50,100,100)");
     });
 
     it("equals works fine", function() {
