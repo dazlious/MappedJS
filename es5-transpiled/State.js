@@ -104,7 +104,7 @@
                 return this.i < _getPrivate(this).STATES.length - 1;
             }
         }, {
-            key: 'state',
+            key: 'current',
             get: function get() {
                 return _getPrivate(this).STATES[this.i];
             }

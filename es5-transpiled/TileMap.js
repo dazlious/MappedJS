@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Tile.js', 'jquery', './Rectangle.js', './Publisher.js'], factory);
+        define(['exports', './Tile.js', 'jquery', './Rectangle.js', './Publisher.js', './View.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Tile.js'), require('jquery'), require('./Rectangle.js'), require('./Publisher.js'));
+        factory(exports, require('./Tile.js'), require('jquery'), require('./Rectangle.js'), require('./Publisher.js'), require('./View.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Tile, global.jquery, global.Rectangle, global.Publisher);
+        factory(mod.exports, global.Tile, global.jquery, global.Rectangle, global.Publisher, global.View);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _Tile, _jquery, _Rectangle, _Publisher) {
+})(this, function(exports, _Tile, _jquery, _Rectangle, _Publisher, _View) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -56,13 +56,83 @@
     var PUBLISHER = new _Publisher.Publisher();
 
     var TileMap = exports.TileMap = function() {
+        _createClass(TileMap, [{
+            key: 'left',
 
-        /** Constructor
-         * @param  {Object} container - jQuery-object holding the container
-         * @param  {Object} tilesData={} - json object representing data of TileMap
-         * @param  {Object} settings={} - json object representing settings of TileMap
-         * @return {TileMap} instance of TileMap
-         */
+
+            /**
+             * Returns left offset of container
+             * @return {number} - left offset of container
+             */
+            get: function get() {
+                return this.$container.offset().left;
+            }
+
+            /**
+             * Returns top offset of container
+             * @return {number} - top offset of container
+             */
+
+        }, {
+            key: 'top',
+            get: function get() {
+                return this.$container.offset().top;
+            }
+
+            /**
+             * Returns width of container
+             * @return {number} - width of container
+             */
+
+        }, {
+            key: 'width',
+            get: function get() {
+                return this.$container.innerWidth();
+            }
+
+            /**
+             * Returns height of container
+             * @return {number} - height of container
+             */
+
+        }, {
+            key: 'height',
+            get: function get() {
+                return this.$container.innerHeight();
+            }
+
+            /**
+             * get all visible tiles
+             * @return {array} all tiles that are currently visible
+             */
+
+        }, {
+            key: 'visibleTiles',
+            get: function get() {
+                return this.tiles.filter(function(v, i, a) {
+                    return this.view.intersects(v.getDistortedRect(this.distortion));
+                }, this);
+            }
+
+            /**
+             * Returns current distortion
+             * @return {number} returns current distortion of latitude
+             */
+
+        }, {
+            key: 'distortion',
+            get: function get() {
+                return Math.cos(this.settings.center.lat);
+            }
+
+            /** Constructor
+             * @param  {Object} container - jQuery-object holding the container
+             * @param  {Object} tilesData={} - json object representing data of TileMap
+             * @param  {Object} settings={} - json object representing settings of TileMap
+             * @return {TileMap} instance of TileMap
+             */
+
+        }]);
 
         function TileMap(_ref) {
             var container = _ref.container;
@@ -81,7 +151,8 @@
             this.imgData = tilesData[TileMap.IMG_DATA_NAME];
             this.settings = settings;
 
-            this.initialize().initializeTiles();
+            this.tiles = [];
+            this.initialize().initializeTiles().draw();
 
             return this;
         }
@@ -95,25 +166,16 @@
         _createClass(TileMap, [{
             key: 'initialize',
             value: function initialize() {
-                this.center = this.initialCenter;
-                this.distortion = this.calculateDistortion(this.settings.center.lat);
-                this.bounds = new _Rectangle.Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height);
-
+                this.view = new _View.View({
+                    x: this.$container.offset().left,
+                    y: this.$container.offset().top,
+                    width: this.$container.width(),
+                    height: this.$container.height(),
+                    bounds: new _Rectangle.Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height)
+                });
                 this.bindEvents().initializeCanvas();
 
                 return this;
-            }
-
-            /**
-             * calculates current distortion of centered latitude
-             * @param  {number} latitude - latitude where map is centered currently
-             * @return {float} - size of distortion, map should be applied to
-             */
-
-        }, {
-            key: 'calculateDistortion',
-            value: function calculateDistortion(latitude) {
-                return Math.cos(latitude);
             }
 
             /**
@@ -152,11 +214,10 @@
         }, {
             key: 'initializeTiles',
             value: function initializeTiles() {
-                this.tiles = [];
                 var currentLevel = this.getCurrentLevelData().tiles;
                 for (var tile in currentLevel) {
                     var currentTileData = currentLevel[tile];
-                    var _tile = new _Tile.Tile(currentTileData).initialize();
+                    var _tile = new _Tile.Tile(currentTileData);
                     this.tiles.push(_tile);
                 }
                 return this;
@@ -196,7 +257,11 @@
         }, {
             key: 'drawTile',
             value: function drawTile(tile) {
-                this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
+                if (tile.state.current.value >= 2) {
+                    this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
+                } else if (tile.state.current.value === 0) {
+                    tile.initialize();
+                }
                 return this;
             }
 
@@ -208,14 +273,25 @@
         }, {
             key: 'resize',
             value: function resize() {
-                this.canvasWidth = this.$container.innerWidth();
-                this.canvasHeight = this.$container.innerHeight();
-
-                this.canvasContext.canvas.width = this.canvasWidth;
-                this.canvasContext.canvas.height = this.canvasHeight;
-
+                this.canvasContext.canvas.width = this.width;
+                this.canvasContext.canvas.height = this.height;
                 this.draw();
+                this.resizeView();
+                return this;
+            }
 
+            /**
+             * Handles resizing of view
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
+            key: 'resizeView',
+            value: function resizeView() {
+                this.view.x = this.left;
+                this.view.y = this.top;
+                this.view.width = this.width;
+                this.view.height = this.height;
                 return this;
             }
 
@@ -227,8 +303,9 @@
         }, {
             key: 'draw',
             value: function draw() {
-                for (var tile in this.tiles) {
-                    var currentTile = this.tiles[tile];
+                console.log(this.tiles.length, this.visibleTiles.length);
+                for (var tile in this.visibleTiles) {
+                    var currentTile = this.visibleTiles[tile];
                     this.drawTile(currentTile);
                 }
                 return this;

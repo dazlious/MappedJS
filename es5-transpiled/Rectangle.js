@@ -248,6 +248,18 @@
             }
 
             /**
+             * distort rectangle by factor
+             * @param  {number} factor - the specified factor of distortion
+             * @return {Rectangle} a new instance of Rectangle
+             */
+
+        }, {
+            key: 'getDistortedRect',
+            value: function getDistortedRect(factor) {
+                return new Rectangle(this.x * factor, this.y, this.width * factor, this.height);
+            }
+
+            /**
              * check if rectangles are equal
              * @param  {Rectangle} rectangle - the specified rectangle to check against this
              * @return {Boolean} is true, if x, y, width and height are the same

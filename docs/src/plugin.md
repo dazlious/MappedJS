@@ -15,6 +15,8 @@
 <dd></dd>
 <dt><a href="#TileMap">TileMap</a></dt>
 <dd></dd>
+<dt><a href="#View">View</a></dt>
+<dd></dd>
 </dl>
 
 ## Members
@@ -328,6 +330,7 @@ Eventname for unsubscribing
     * [.contains(rectOrPoint)](#Rectangle+contains) ⇒ <code>Boolean</code>
     * [.containsPoint(point)](#Rectangle+containsPoint) ⇒ <code>Boolean</code>
     * [.containsRect(rect)](#Rectangle+containsRect) ⇒ <code>Boolean</code>
+    * [.getDistortedRect(factor)](#Rectangle+getDistortedRect) ⇒ <code>[Rectangle](#Rectangle)</code>
     * [.equals(rectangle)](#Rectangle+equals) ⇒ <code>Boolean</code>
     * [.toString()](#Rectangle+toString) ⇒ <code>String</code>
 
@@ -437,6 +440,16 @@ Checks whether Rectangle entirely contains the Rectangle
 
 - rect <code>[Rectangle](#Rectangle)</code> - the specified rectangle to check against
 
+<a name="Rectangle+getDistortedRect"></a>
+### rectangle.getDistortedRect(factor) ⇒ <code>[Rectangle](#Rectangle)</code>
+distort rectangle by factor
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - a new instance of Rectangle  
+**Params**
+
+- factor <code>number</code> - the specified factor of distortion
+
 <a name="Rectangle+equals"></a>
 ### rectangle.equals(rectangle) ⇒ <code>Boolean</code>
 check if rectangles are equal
@@ -459,7 +472,7 @@ representation of a Rectangle as String
 
 * [State](#State)
     * [new State(states_array)](#new_State_new)
-    * [.state](#State+state) ⇒ <code>Object</code>
+    * [.current](#State+current) ⇒ <code>Object</code>
     * [.next()](#State+next) ⇒ <code>[State](#State)</code>
     * [.hasNext()](#State+hasNext) ⇒ <code>Boolean</code>
 
@@ -472,8 +485,8 @@ Constructor
 
 - states_array <code>Array</code> <code> = [{value:</code> - 0, description: 'Default'}] - [description]
 
-<a name="State+state"></a>
-### state.state ⇒ <code>Object</code>
+<a name="State+current"></a>
+### state.current ⇒ <code>Object</code>
 get current state
 
 **Kind**: instance property of <code>[State](#State)</code>  
@@ -541,8 +554,13 @@ check if tiles are equal
 * [TileMap](#TileMap)
     * [new TileMap(container, tilesData, settings)](#new_TileMap_new)
     * _instance_
+        * [.left](#TileMap+left) ⇒ <code>number</code>
+        * [.top](#TileMap+top) ⇒ <code>number</code>
+        * [.width](#TileMap+width) ⇒ <code>number</code>
+        * [.height](#TileMap+height) ⇒ <code>number</code>
+        * [.visibleTiles](#TileMap+visibleTiles) ⇒ <code>array</code>
+        * [.distortion](#TileMap+distortion) ⇒ <code>number</code>
         * [.initialize()](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.calculateDistortion(latitude)](#TileMap+calculateDistortion) ⇒ <code>float</code>
         * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.bindEvents()](#TileMap+bindEvents) ⇒ <code>[TileMap](#TileMap)</code>
         * [.initializeTiles()](#TileMap+initializeTiles) ⇒ <code>[TileMap](#TileMap)</code>
@@ -550,6 +568,7 @@ check if tiles are equal
         * [.onTilesLoaded(tile)](#TileMap+onTilesLoaded) ⇒ <code>[TileMap](#TileMap)</code>
         * [.drawTile(tile)](#TileMap+drawTile) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resize()](#TileMap+resize) ⇒ <code>[TileMap](#TileMap)</code>
+        * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
         * [.draw()](#TileMap+draw) ⇒ <code>[TileMap](#TileMap)</code>
     * _static_
         * [.IMG_DATA_NAME](#TileMap.IMG_DATA_NAME) : <code>String</code>
@@ -565,22 +584,48 @@ Constructor
 - tilesData <code>Object</code> <code> = {}</code> - json object representing data of TileMap
 - settings <code>Object</code> <code> = {}</code> - json object representing settings of TileMap
 
+<a name="TileMap+left"></a>
+### tileMap.left ⇒ <code>number</code>
+Returns left offset of container
+
+**Kind**: instance property of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>number</code> - - left offset of container  
+<a name="TileMap+top"></a>
+### tileMap.top ⇒ <code>number</code>
+Returns top offset of container
+
+**Kind**: instance property of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>number</code> - - top offset of container  
+<a name="TileMap+width"></a>
+### tileMap.width ⇒ <code>number</code>
+Returns width of container
+
+**Kind**: instance property of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>number</code> - - width of container  
+<a name="TileMap+height"></a>
+### tileMap.height ⇒ <code>number</code>
+Returns height of container
+
+**Kind**: instance property of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>number</code> - - height of container  
+<a name="TileMap+visibleTiles"></a>
+### tileMap.visibleTiles ⇒ <code>array</code>
+get all visible tiles
+
+**Kind**: instance property of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>array</code> - all tiles that are currently visible  
+<a name="TileMap+distortion"></a>
+### tileMap.distortion ⇒ <code>number</code>
+Returns current distortion
+
+**Kind**: instance property of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>number</code> - returns current distortion of latitude  
 <a name="TileMap+initialize"></a>
 ### tileMap.initialize() ⇒ <code>[TileMap](#TileMap)</code>
 initializes the TileMap
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
-<a name="TileMap+calculateDistortion"></a>
-### tileMap.calculateDistortion(latitude) ⇒ <code>float</code>
-calculates current distortion of centered latitude
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>float</code> - - size of distortion, map should be applied to  
-**Params**
-
-- latitude <code>number</code> - latitude where map is centered currently
-
 <a name="TileMap+initializeCanvas"></a>
 ### tileMap.initializeCanvas() ⇒ <code>[TileMap](#TileMap)</code>
 initializes the canvas, adds to DOM
@@ -631,6 +676,12 @@ Handles resizing of TileMap
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+<a name="TileMap+resizeView"></a>
+### tileMap.resizeView() ⇒ <code>[TileMap](#TileMap)</code>
+Handles resizing of view
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
 <a name="TileMap+draw"></a>
 ### tileMap.draw() ⇒ <code>[TileMap](#TileMap)</code>
 Handles draw of TileMap
@@ -642,6 +693,33 @@ Handles draw of TileMap
 name of imagedata in data.json
 
 **Kind**: static property of <code>[TileMap](#TileMap)</code>  
+<a name="View"></a>
+## View
+**Kind**: global class  
+
+* [View](#View)
+    * [new View(x, y, width, height, bounds)](#new_View_new)
+    * [.toString()](#View+toString) ⇒ <code>String</code>
+
+<a name="new_View_new"></a>
+### new View(x, y, width, height, bounds)
+Constructor
+
+**Returns**: <code>[View](#View)</code> - new instance of View  
+**Params**
+
+- x <code>number</code> <code> = 0</code> - x-position of specified view
+- y <code>number</code> <code> = 0</code> - y-position of specified view
+- width <code>number</code> <code> = 0</code> - width of specified view
+- height <code>number</code> <code> = 0</code> - height of specified view
+- bounds <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - bounding box of currentView
+
+<a name="View+toString"></a>
+### view.toString() ⇒ <code>String</code>
+representation of a Rectangle as String
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>String</code> - representation of this Rectangle  
 <a name="instance"></a>
 ## instance : <code>[Publisher](#Publisher)</code>
 singleton instance

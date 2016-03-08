@@ -74,7 +74,6 @@ export class Rectangle extends Point {
         return this.y + this.height;
     }
 
-
     /**
      * Constructor
      * @param  {number} x=0 - x-position of specified rectangle
@@ -126,6 +125,14 @@ export class Rectangle extends Point {
         return (rect instanceof Rectangle) ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
     }
 
+    /**
+     * distort rectangle by factor
+     * @param  {number} factor - the specified factor of distortion
+     * @return {Rectangle} a new instance of Rectangle
+     */
+    getDistortedRect(factor) {
+        return new Rectangle(this.x * factor, this.y, this.width * factor, this.height);
+    }
 
     /**
      * check if rectangles are equal

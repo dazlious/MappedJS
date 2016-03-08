@@ -267,6 +267,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Publisher = __webpack_require__(7);
 
+	var _View = __webpack_require__(9);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -277,13 +279,83 @@ return /******/ (function(modules) { // webpackBootstrap
 	var PUBLISHER = new _Publisher.Publisher();
 
 	var TileMap = exports.TileMap = function () {
+	    _createClass(TileMap, [{
+	        key: 'left',
 
-	    /** Constructor
-	     * @param  {Object} container - jQuery-object holding the container
-	     * @param  {Object} tilesData={} - json object representing data of TileMap
-	     * @param  {Object} settings={} - json object representing settings of TileMap
-	     * @return {TileMap} instance of TileMap
-	     */
+
+	        /**
+	         * Returns left offset of container
+	         * @return {number} - left offset of container
+	         */
+	        get: function get() {
+	            return this.$container.offset().left;
+	        }
+
+	        /**
+	         * Returns top offset of container
+	         * @return {number} - top offset of container
+	         */
+
+	    }, {
+	        key: 'top',
+	        get: function get() {
+	            return this.$container.offset().top;
+	        }
+
+	        /**
+	         * Returns width of container
+	         * @return {number} - width of container
+	         */
+
+	    }, {
+	        key: 'width',
+	        get: function get() {
+	            return this.$container.innerWidth();
+	        }
+
+	        /**
+	         * Returns height of container
+	         * @return {number} - height of container
+	         */
+
+	    }, {
+	        key: 'height',
+	        get: function get() {
+	            return this.$container.innerHeight();
+	        }
+
+	        /**
+	         * get all visible tiles
+	         * @return {array} all tiles that are currently visible
+	         */
+
+	    }, {
+	        key: 'visibleTiles',
+	        get: function get() {
+	            return this.tiles.filter(function (v, i, a) {
+	                return this.view.intersects(v.getDistortedRect(this.distortion));
+	            }, this);
+	        }
+
+	        /**
+	         * Returns current distortion
+	         * @return {number} returns current distortion of latitude
+	         */
+
+	    }, {
+	        key: 'distortion',
+	        get: function get() {
+	            return Math.cos(this.settings.center.lat);
+	        }
+
+	        /** Constructor
+	         * @param  {Object} container - jQuery-object holding the container
+	         * @param  {Object} tilesData={} - json object representing data of TileMap
+	         * @param  {Object} settings={} - json object representing settings of TileMap
+	         * @return {TileMap} instance of TileMap
+	         */
+
+	    }]);
 
 	    function TileMap(_ref) {
 	        var container = _ref.container;
@@ -302,7 +374,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
 	        this.settings = settings;
 
-	        this.initialize().initializeTiles();
+	        this.tiles = [];
+	        this.initialize().initializeTiles().draw();
 
 	        return this;
 	    }
@@ -316,25 +389,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(TileMap, [{
 	        key: 'initialize',
 	        value: function initialize() {
-	            this.center = this.initialCenter;
-	            this.distortion = this.calculateDistortion(this.settings.center.lat);
-	            this.bounds = new _Rectangle.Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height);
-
+	            this.view = new _View.View({
+	                x: this.$container.offset().left,
+	                y: this.$container.offset().top,
+	                width: this.$container.width(),
+	                height: this.$container.height(),
+	                bounds: new _Rectangle.Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height)
+	            });
 	            this.bindEvents().initializeCanvas();
 
 	            return this;
-	        }
-
-	        /**
-	         * calculates current distortion of centered latitude
-	         * @param  {number} latitude - latitude where map is centered currently
-	         * @return {float} - size of distortion, map should be applied to
-	         */
-
-	    }, {
-	        key: 'calculateDistortion',
-	        value: function calculateDistortion(latitude) {
-	            return Math.cos(latitude);
 	        }
 
 	        /**
@@ -373,11 +437,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'initializeTiles',
 	        value: function initializeTiles() {
-	            this.tiles = [];
 	            var currentLevel = this.getCurrentLevelData().tiles;
 	            for (var tile in currentLevel) {
 	                var currentTileData = currentLevel[tile];
-	                var _tile = new _Tile.Tile(currentTileData).initialize();
+	                var _tile = new _Tile.Tile(currentTileData);
 	                this.tiles.push(_tile);
 	            }
 	            return this;
@@ -417,7 +480,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'drawTile',
 	        value: function drawTile(tile) {
-	            this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
+	            if (tile.state.current.value >= 2) {
+	                this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
+	            } else if (tile.state.current.value === 0) {
+	                tile.initialize();
+	            }
 	            return this;
 	        }
 
@@ -429,14 +496,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resize',
 	        value: function resize() {
-	            this.canvasWidth = this.$container.innerWidth();
-	            this.canvasHeight = this.$container.innerHeight();
-
-	            this.canvasContext.canvas.width = this.canvasWidth;
-	            this.canvasContext.canvas.height = this.canvasHeight;
-
+	            this.canvasContext.canvas.width = this.width;
+	            this.canvasContext.canvas.height = this.height;
 	            this.draw();
+	            this.resizeView();
+	            return this;
+	        }
 
+	        /**
+	         * Handles resizing of view
+	         * @return {TileMap} instance of TileMap
+	         */
+
+	    }, {
+	        key: 'resizeView',
+	        value: function resizeView() {
+	            this.view.x = this.left;
+	            this.view.y = this.top;
+	            this.view.width = this.width;
+	            this.view.height = this.height;
 	            return this;
 	        }
 
@@ -448,8 +526,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'draw',
 	        value: function draw() {
-	            for (var tile in this.tiles) {
-	                var currentTile = this.tiles[tile];
+	            console.log(this.tiles.length, this.visibleTiles.length);
+	            for (var tile in this.visibleTiles) {
+	                var currentTile = this.visibleTiles[tile];
 	                this.drawTile(currentTile);
 	            }
 	            return this;
@@ -693,7 +772,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this.i < _getPrivate(this).STATES.length - 1;
 	        }
 	    }, {
-	        key: 'state',
+	        key: 'current',
 	        get: function get() {
 	            return _getPrivate(this).STATES[this.i];
 	        }
@@ -902,6 +981,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'containsRect',
 	        value: function containsRect(rect) {
 	            return rect instanceof Rectangle ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
+	        }
+
+	        /**
+	         * distort rectangle by factor
+	         * @param  {number} factor - the specified factor of distortion
+	         * @return {Rectangle} a new instance of Rectangle
+	         */
+
+	    }, {
+	        key: 'getDistortedRect',
+	        value: function getDistortedRect(factor) {
+	            return new Rectangle(this.x * factor, this.y, this.width * factor, this.height);
 	        }
 
 	        /**
@@ -1271,6 +1362,80 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 		};
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.View = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _jquery = __webpack_require__(3);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _Rectangle2 = __webpack_require__(5);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var View = exports.View = function (_Rectangle) {
+	    _inherits(View, _Rectangle);
+
+	    /**
+	     * Constructor
+	     * @param  {number} x=0 - x-position of specified view
+	     * @param  {number} y=0 - y-position of specified view
+	     * @param  {number} width=0 - width of specified view
+	     * @param  {number} height=0 - height of specified view
+	     * @param  {Rectangle} bounds = new Rectangle() - bounding box of currentView
+	     * @return {View} new instance of View
+	     */
+
+	    function View(_ref) {
+	        var _ret;
+
+	        var x = _ref.x;
+	        var y = _ref.y;
+	        var width = _ref.width;
+	        var height = _ref.height;
+	        var _ref$bounds = _ref.bounds;
+	        var bounds = _ref$bounds === undefined ? new _Rectangle2.Rectangle() : _ref$bounds;
+
+	        _classCallCheck(this, View);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(View).call(this, x, y, width, height));
+
+	        _this.bounds = bounds;
+	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	    }
+
+	    /**
+	     * representation of a Rectangle as String
+	     * @return {String} representation of this Rectangle
+	     */
+
+
+	    _createClass(View, [{
+	        key: 'toString',
+	        value: function toString() {
+	            return '(' + this.x + ',' + this.y + ',' + this.width + ',' + this.height + ',(' + this.bounds + '))';
+	        }
+	    }]);
+
+	    return View;
+	}(_Rectangle2.Rectangle);
 
 /***/ }
 /******/ ])

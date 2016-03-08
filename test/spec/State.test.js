@@ -20,28 +20,28 @@ describe('State', function() {
 
     it("initializes empty zeros", function() {
         var state_instance = new State.State();
-        expect(state_instance.state.value).toEqual(0);
-        expect(state_instance.state.description).toEqual('Default');
+        expect(state_instance.current.value).toEqual(0);
+        expect(state_instance.current.description).toEqual('Default');
     });
 
     it("next if one state", function() {
         var state_instance = new State.State();
-        expect(state_instance.state.value).toEqual(0);
-        expect(state_instance.state.description).toEqual('Default');
+        expect(state_instance.current.value).toEqual(0);
+        expect(state_instance.current.description).toEqual('Default');
         state_instance.next();
-        expect(state_instance.state.value).toEqual(0);
-        expect(state_instance.state.description).toEqual('Default');
+        expect(state_instance.current.value).toEqual(0);
+        expect(state_instance.current.description).toEqual('Default');
     });
 
     it("next if multiple states", function() {
         var state_instance = new State.State(STATES);
-        expect(state_instance.state).toEqual(STATES[0]);
+        expect(state_instance.current).toEqual(STATES[0]);
         state_instance.next();
-        expect(state_instance.state).toEqual(STATES[1]);
+        expect(state_instance.current).toEqual(STATES[1]);
         state_instance.next();
-        expect(state_instance.state).toEqual(STATES[2]);
+        expect(state_instance.current).toEqual(STATES[2]);
         state_instance.next();
-        expect(state_instance.state).toEqual(STATES[2]);
+        expect(state_instance.current).toEqual(STATES[2]);
     });
 
     it("hasNext if one states", function() {

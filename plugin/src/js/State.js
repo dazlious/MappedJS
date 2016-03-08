@@ -21,7 +21,7 @@ export class State {
      * get current state
      * @return {Object} a state from STATES-array
      */
-    get state() {
+    get current() {
         return _getPrivate(this).STATES[this.i];
     }
 
