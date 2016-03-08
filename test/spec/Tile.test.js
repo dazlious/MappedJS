@@ -42,9 +42,9 @@ describe('Tile', function() {
             done();
         };
         t.Publisher.subscribe("tile-loaded", _listener);
-        expect(t.state.state.value).toEqual(0);
+        expect(t.state.current.value).toEqual(0);
         t.initialize();
-        expect(t.state.state.value).toEqual(1);
+        expect(t.state.current.value).toEqual(1);
     });
 
     it("calls event after loading", function(done) {
@@ -57,9 +57,9 @@ describe('Tile', function() {
             done();
         };
         t.Publisher.subscribe("tile-loaded", _listener);
-        expect(t.state.state.value).toEqual(0);
+        expect(t.state.current.value).toEqual(0);
         t.initialize();
-        expect(t.state.state.value).toEqual(1);
+        expect(t.state.current.value).toEqual(1);
     });
 
     it("calls event after loading", function() {

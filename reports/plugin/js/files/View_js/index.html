@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Plato - Helper.js</title>
+  <title>Plato - View.js</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
@@ -36,7 +36,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>Helper.js</h1>
+    <h1>View.js</h1>
   </div>
 </div>
 
@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">71.86</p>
+      <p class="stat">68.13</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">71</p>
+      <p class="stat">123</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">18.65</p>
+      <p class="stat">38.39</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.42</p>
+      <p class="stat">1.01</p>
     </div>
   </div>
 </div>
@@ -91,23 +91,23 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&quot;exports&quot;, &quot;jquery&quot;], factory);
+        define([&#039;exports&#039;, &#039;jquery&#039;, &#039;./Rectangle.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports, require(&quot;jquery&quot;));
+        factory(exports, require(&#039;jquery&#039;), require(&#039;./Rectangle.js&#039;));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery);
-        global.Helper = mod.exports;
+        factory(mod.exports, global.jquery, global.Rectangle);
+        global.View = mod.exports;
     }
-})(this, function(exports, _jquery) {
-    &quot;use strict&quot;;
+})(this, function(exports, _jquery, _Rectangle2) {
+    &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
         value: true
     });
-    exports.Helper = undefined;
+    exports.View = undefined;
 
     var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -117,48 +117,100 @@
         };
     }
 
-    var Helper = exports.Helper = {
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError(&quot;Cannot call a class as a function&quot;);
+        }
+    }
 
-        /**
-         * request json-data from given file and calls callback on success
-         * @param  {string} filename - path to file
-         * @param  {Function} callback - function called when data is loaded successfully
-         * @return {Helper} Helper
-         */
-        requestJSON: function requestJSON(filename, callback) {
-            _jquery2.default.ajax({
-                type: &quot;GET&quot;,
-                url: filename,
-                dataType: &quot;json&quot;,
-                success: function success(data, status, request) {
-                    return callback(data);
-                },
-                error: function error(response) {
-                    if (response.status === 200) {
-                        throw new Error(&quot;The JSON submitted seems not valid&quot;);
-                    }
-                    console.error(&quot;Error requesting file: &quot;, response);
-                }
-            });
-            return this;
-        },
-        /**
-         * loads an image and calls callback on success
-         * @param  {Function} cb - callback-function on success
-         * @return {Helper} Helper
-         */
-        loadImage: function loadImage(path, cb) {
-            var img = new Image();
-            img.onload = function() {
-                if (cb &amp;&amp; typeof cb === &quot;function&quot;) {
-                    cb(img);
-                }
-            };
-            img.src = path;
-            return this;
+    var _createClass = function() {
+        function defineProperties(target, props) {
+            for (var i = 0; i &lt; props.length; i++) {
+                var descriptor = props[i];
+                descriptor.enumerable = descriptor.enumerable || false;
+                descriptor.configurable = true;
+                if (&quot;value&quot; in descriptor) descriptor.writable = true;
+                Object.defineProperty(target, descriptor.key, descriptor);
+            }
         }
 
-    };
+        return function(Constructor, protoProps, staticProps) {
+            if (protoProps) defineProperties(Constructor.prototype, protoProps);
+            if (staticProps) defineProperties(Constructor, staticProps);
+            return Constructor;
+        };
+    }();
+
+    function _possibleConstructorReturn(self, call) {
+        if (!self) {
+            throw new ReferenceError(&quot;this hasn&#039;t been initialised - super() hasn&#039;t been called&quot;);
+        }
+
+        return call &amp;&amp; (typeof call === &quot;object&quot; || typeof call === &quot;function&quot;) ? call : self;
+    }
+
+    function _inherits(subClass, superClass) {
+        if (typeof superClass !== &quot;function&quot; &amp;&amp; superClass !== null) {
+            throw new TypeError(&quot;Super expression must either be null or a function, not &quot; + typeof superClass);
+        }
+
+        subClass.prototype = Object.create(superClass &amp;&amp; superClass.prototype, {
+            constructor: {
+                value: subClass,
+                enumerable: false,
+                writable: true,
+                configurable: true
+            }
+        });
+        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    }
+
+    var View = exports.View = function(_Rectangle) {
+        _inherits(View, _Rectangle);
+
+        /**
+         * Constructor
+         * @param  {number} x=0 - x-position of specified view
+         * @param  {number} y=0 - y-position of specified view
+         * @param  {number} width=0 - width of specified view
+         * @param  {number} height=0 - height of specified view
+         * @param  {Rectangle} bounds = new Rectangle() - bounding box of currentView
+         * @return {View} new instance of View
+         */
+
+        function View(_ref) {
+            var _ret;
+
+            var x = _ref.x;
+            var y = _ref.y;
+            var width = _ref.width;
+            var height = _ref.height;
+            var _ref$bounds = _ref.bounds;
+            var bounds = _ref$bounds === undefined ? new _Rectangle2.Rectangle() : _ref$bounds;
+
+            _classCallCheck(this, View);
+
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(View).call(this, x, y, width, height));
+
+            _this.bounds = bounds;
+            return _ret = _this, _possibleConstructorReturn(_this, _ret);
+        }
+
+        /**
+         * representation of a Rectangle as String
+         * @return {String} representation of this Rectangle
+         */
+
+
+        _createClass(View, [{
+            key: &#039;toString&#039;,
+            value: function toString() {
+                return &#039;(&#039; + this.x + &#039;,&#039; + this.y + &#039;,&#039; + this.width + &#039;,&#039; + this.height + &#039;,(&#039; + this.bounds + &#039;))&#039;;
+            }
+        }]);
+
+        return View;
+    }(_Rectangle2.Rectangle);
 });</textarea>
   </div>
 </div>

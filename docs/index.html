@@ -41,6 +41,8 @@
 <dd></dd>
 <dt><a href="#TileMap">TileMap</a></dt>
 <dd></dd>
+<dt><a href="#View">View</a></dt>
+<dd></dd>
 </dl>
 
 <h2 id="members">Members</h2>
@@ -297,6 +299,7 @@
 <li><a href="#Rectangle+contains">.contains(rectOrPoint)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+containsPoint">.containsPoint(point)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+containsRect">.containsRect(rect)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Rectangle+getDistortedRect">.getDistortedRect(factor)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+equals">.equals(rectangle)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+toString">.toString()</a> ⇒ <code>String</code></li>
 </ul>
@@ -367,6 +370,13 @@
 <ul>
 <li>rect <code><a href="#Rectangle">Rectangle</a></code> - the specified rectangle to check against</li>
 </ul>
+<p><a name="Rectangle+getDistortedRect"></a></p>
+<h3 id="rectangle-getdistortedrect-factor-code-rectangle-rectangle-code-">rectangle.getDistortedRect(factor) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>distort rectangle by factor</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - a new instance of Rectangle<br><strong>Params</strong></p>
+<ul>
+<li>factor <code>number</code> - the specified factor of distortion</li>
+</ul>
 <p><a name="Rectangle+equals"></a></p>
 <h3 id="rectangle-equals-rectangle-code-boolean-code-">rectangle.equals(rectangle) ⇒ <code>Boolean</code></h3>
 <p>check if rectangles are equal</p>
@@ -383,7 +393,7 @@
 <ul>
 <li><a href="#State">State</a><ul>
 <li><a href="#new_State_new">new State(states_array)</a></li>
-<li><a href="#State+state">.state</a> ⇒ <code>Object</code></li>
+<li><a href="#State+current">.current</a> ⇒ <code>Object</code></li>
 <li><a href="#State+next">.next()</a> ⇒ <code><a href="#State">State</a></code></li>
 <li><a href="#State+hasNext">.hasNext()</a> ⇒ <code>Boolean</code></li>
 </ul>
@@ -396,8 +406,8 @@
 <ul>
 <li>states_array <code>Array</code> <code> = [{value:</code> - 0, description: &#39;Default&#39;}] - [description]</li>
 </ul>
-<p><a name="State+state"></a></p>
-<h3 id="state-state-code-object-code-">state.state ⇒ <code>Object</code></h3>
+<p><a name="State+current"></a></p>
+<h3 id="state-current-code-object-code-">state.current ⇒ <code>Object</code></h3>
 <p>get current state</p>
 <p><strong>Kind</strong>: instance property of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code>Object</code> - a state from STATES-array<br><a name="State+next"></a></p>
 <h3 id="state-next-code-state-state-code-">state.next() ⇒ <code><a href="#State">State</a></code></h3>
@@ -448,8 +458,13 @@
 <li><a href="#TileMap">TileMap</a><ul>
 <li><a href="#new_TileMap_new">new TileMap(container, tilesData, settings)</a></li>
 <li><em>instance</em><ul>
+<li><a href="#TileMap+left">.left</a> ⇒ <code>number</code></li>
+<li><a href="#TileMap+top">.top</a> ⇒ <code>number</code></li>
+<li><a href="#TileMap+width">.width</a> ⇒ <code>number</code></li>
+<li><a href="#TileMap+height">.height</a> ⇒ <code>number</code></li>
+<li><a href="#TileMap+visibleTiles">.visibleTiles</a> ⇒ <code>array</code></li>
+<li><a href="#TileMap+distortion">.distortion</a> ⇒ <code>number</code></li>
 <li><a href="#TileMap+initialize">.initialize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
-<li><a href="#TileMap+calculateDistortion">.calculateDistortion(latitude)</a> ⇒ <code>float</code></li>
 <li><a href="#TileMap+initializeCanvas">.initializeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+bindEvents">.bindEvents()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+initializeTiles">.initializeTiles()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
@@ -457,6 +472,7 @@
 <li><a href="#TileMap+onTilesLoaded">.onTilesLoaded(tile)</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+drawTile">.drawTile(tile)</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resize">.resize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+resizeView">.resizeView()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+draw">.draw()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 </ul>
 </li>
@@ -476,17 +492,28 @@
 <li>tilesData <code>Object</code> <code> = {}</code> - json object representing data of TileMap</li>
 <li>settings <code>Object</code> <code> = {}</code> - json object representing settings of TileMap</li>
 </ul>
-<p><a name="TileMap+initialize"></a></p>
+<p><a name="TileMap+left"></a></p>
+<h3 id="tilemap-left-code-number-code-">tileMap.left ⇒ <code>number</code></h3>
+<p>Returns left offset of container</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>number</code> - - left offset of container<br><a name="TileMap+top"></a></p>
+<h3 id="tilemap-top-code-number-code-">tileMap.top ⇒ <code>number</code></h3>
+<p>Returns top offset of container</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>number</code> - - top offset of container<br><a name="TileMap+width"></a></p>
+<h3 id="tilemap-width-code-number-code-">tileMap.width ⇒ <code>number</code></h3>
+<p>Returns width of container</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>number</code> - - width of container<br><a name="TileMap+height"></a></p>
+<h3 id="tilemap-height-code-number-code-">tileMap.height ⇒ <code>number</code></h3>
+<p>Returns height of container</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>number</code> - - height of container<br><a name="TileMap+visibleTiles"></a></p>
+<h3 id="tilemap-visibletiles-code-array-code-">tileMap.visibleTiles ⇒ <code>array</code></h3>
+<p>get all visible tiles</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>array</code> - all tiles that are currently visible<br><a name="TileMap+distortion"></a></p>
+<h3 id="tilemap-distortion-code-number-code-">tileMap.distortion ⇒ <code>number</code></h3>
+<p>Returns current distortion</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>number</code> - returns current distortion of latitude<br><a name="TileMap+initialize"></a></p>
 <h3 id="tilemap-initialize-code-tilemap-tilemap-code-">tileMap.initialize() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>initializes the TileMap</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+calculateDistortion"></a></p>
-<h3 id="tilemap-calculatedistortion-latitude-code-float-code-">tileMap.calculateDistortion(latitude) ⇒ <code>float</code></h3>
-<p>calculates current distortion of centered latitude</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>float</code> - - size of distortion, map should be applied to<br><strong>Params</strong></p>
-<ul>
-<li>latitude <code>number</code> - latitude where map is centered currently</li>
-</ul>
-<p><a name="TileMap+initializeCanvas"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+initializeCanvas"></a></p>
 <h3 id="tilemap-initializecanvas-code-tilemap-tilemap-code-">tileMap.initializeCanvas() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>initializes the canvas, adds to DOM</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+bindEvents"></a></p>
@@ -515,13 +542,40 @@
 <p><a name="TileMap+resize"></a></p>
 <h3 id="tilemap-resize-code-tilemap-tilemap-code-">tileMap.resize() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>Handles resizing of TileMap</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+resizeView"></a></p>
+<h3 id="tilemap-resizeview-code-tilemap-tilemap-code-">tileMap.resizeView() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>Handles resizing of view</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+draw"></a></p>
 <h3 id="tilemap-draw-code-tilemap-tilemap-code-">tileMap.draw() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>Handles draw of TileMap</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap.IMG_DATA_NAME"></a></p>
 <h3 id="tilemap-img_data_name-code-string-code-">TileMap.IMG_DATA_NAME : <code>String</code></h3>
 <p>name of imagedata in data.json</p>
-<p><strong>Kind</strong>: static property of <code><a href="#TileMap">TileMap</a></code><br><a name="instance"></a></p>
+<p><strong>Kind</strong>: static property of <code><a href="#TileMap">TileMap</a></code><br><a name="View"></a></p>
+<h2 id="view">View</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#View">View</a><ul>
+<li><a href="#new_View_new">new View(x, y, width, height, bounds)</a></li>
+<li><a href="#View+toString">.toString()</a> ⇒ <code>String</code></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_View_new"></a></p>
+<h3 id="new-view-x-y-width-height-bounds-">new View(x, y, width, height, bounds)</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#View">View</a></code> - new instance of View<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> <code> = 0</code> - x-position of specified view</li>
+<li>y <code>number</code> <code> = 0</code> - y-position of specified view</li>
+<li>width <code>number</code> <code> = 0</code> - width of specified view</li>
+<li>height <code>number</code> <code> = 0</code> - height of specified view</li>
+<li>bounds <code><a href="#Rectangle">Rectangle</a></code> - = new Rectangle() - bounding box of currentView</li>
+</ul>
+<p><a name="View+toString"></a></p>
+<h3 id="view-tostring-code-string-code-">view.toString() ⇒ <code>String</code></h3>
+<p>representation of a Rectangle as String</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>String</code> - representation of this Rectangle<br><a name="instance"></a></p>
 <h2 id="instance-code-publisher-publisher-code-">instance : <code><a href="#Publisher">Publisher</a></code></h2>
 <p>singleton instance</p>
 <p><strong>Kind</strong>: global variable<br><a name="PUBLISHER"></a></p>
