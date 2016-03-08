@@ -35,8 +35,6 @@
          * @return {Helper} Helper
          */
         requestJSON: function requestJSON(filename, callback) {
-            "use strict";
-
             _jquery2.default.ajax({
                 type: "GET",
                 url: filename,

@@ -9,7 +9,6 @@ export var Helper = {
      * @return {Helper} Helper
      */
     requestJSON: function(filename, callback) {
-        "use strict";
         $.ajax({
             type: "GET",
             url: filename,
