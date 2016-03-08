@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './State.js', './Rectangle.js', './Publisher.js'], factory);
+        define(['exports', 'jquery', './State.js', './Rectangle.js', './Publisher.js', './Helper.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./State.js'), require('./Rectangle.js'), require('./Publisher.js'));
+        factory(exports, require('jquery'), require('./State.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./Helper.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.State, global.Rectangle, global.Publisher);
+        factory(mod.exports, global.jquery, global.State, global.Rectangle, global.Publisher, global.Helper);
         global.Tile = mod.exports;
     }
-})(this, function(exports, _jquery, _State, _Rectangle2, _Publisher) {
+})(this, function(exports, _jquery, _State, _Rectangle2, _Publisher, _Helper) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -32,6 +32,39 @@
         }
     }
 
+    function _possibleConstructorReturn(self, call) {
+        if (!self) {
+            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        }
+
+        return call && (typeof call === "object" || typeof call === "function") ? call : self;
+    }
+
+    var _get = function get(object, property, receiver) {
+        if (object === null) object = Function.prototype;
+        var desc = Object.getOwnPropertyDescriptor(object, property);
+
+        if (desc === undefined) {
+            var parent = Object.getPrototypeOf(object);
+
+            if (parent === null) {
+                return undefined;
+            } else {
+                return get(parent, property, receiver);
+            }
+        } else if ("value" in desc) {
+            return desc.value;
+        } else {
+            var getter = desc.get;
+
+            if (getter === undefined) {
+                return undefined;
+            }
+
+            return getter.call(receiver);
+        }
+    };
+
     var _createClass = function() {
         function defineProperties(target, props) {
             for (var i = 0; i < props.length; i++) {
@@ -49,14 +82,6 @@
             return Constructor;
         };
     }();
-
-    function _possibleConstructorReturn(self, call) {
-        if (!self) {
-            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-        }
-
-        return call && (typeof call === "object" || typeof call === "function") ? call : self;
-    }
 
     function _inherits(subClass, superClass) {
         if (typeof superClass !== "function" && superClass !== null) {
@@ -79,24 +104,68 @@
      */
     var PUBLISHER = new _Publisher.Publisher();
 
+    /**
+     * States of a tile
+     * @type {Array}
+     */
+    var STATES = [{
+        value: 0,
+        description: 'Starting'
+    }, {
+        value: 1,
+        description: 'Initialized'
+    }, {
+        value: 2,
+        description: 'Loaded'
+    }, {
+        value: 3,
+        description: 'Drawn'
+    }];
+
+    /**
+     * Name of event fired, when tile is loaded
+     * @type {String}
+     */
+    var EVENT_TILE_LOADED = "tile-loaded";
+
+    /**
+     * Name of event fired, when tile is not found on loading
+     * @type {String}
+     */
+    var EVENT_TILE_FAILED = "tile-failed";
+
     var Tile = exports.Tile = function(_Rectangle) {
         _inherits(Tile, _Rectangle);
 
-        /**
-         * Constructor
-         * @param  {string} path=null - path to image
-         * @param  {number} x=0 - position x of tile
-         * @param  {number} y=0 - position y of tile
-         * @param  {number} w=0 - tile width
-         * @param  {number} h=0 - tile height
-         * @return {Tile} instance of Tile
-         */
+        _createClass(Tile, [{
+            key: 'Publisher',
 
-        function Tile(_ref) {
+
+            /**
+             * Return the Publisher
+             */
+            get: function get() {
+                return PUBLISHER;
+            }
+
+            /**
+             * Constructor
+             * @param  {string} path=null - path to image
+             * @param  {number} x=0 - position x of tile
+             * @param  {number} y=0 - position y of tile
+             * @param  {number} w=0 - tile width
+             * @param  {number} h=0 - tile height
+             * @return {Tile} instance of Tile
+             */
+
+        }]);
+
+        function Tile() {
             var _ret;
 
-            var _ref$path = _ref.path;
-            var path = _ref$path === undefined ? null : _ref$path;
+            var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+            var path = _ref.path;
             var _ref$x = _ref.x;
             var x = _ref$x === undefined ? 0 : _ref$x;
             var _ref$y = _ref.y;
@@ -110,12 +179,11 @@
 
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
-            _this.state = new _State.State(Tile.STATES);
+            _this.state = new _State.State(STATES);
             if (!path || typeof path !== "string" || path.length === 0) {
-                throw new Error('Path {path} needs to be of type string and should not be empty');
+                throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
             }
             _this.path = path;
-            _this.initialize();
             return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
 
@@ -129,50 +197,29 @@
             key: 'initialize',
             value: function initialize() {
                 this.state.next();
-                this.loadImage(function(img) {
+                _Helper.Helper.loadImage(this.path, function(img) {
                     this.img = img;
                     this.state.next();
-                    PUBLISHER.publish("tile-loaded", this);
+                    PUBLISHER.publish(EVENT_TILE_LOADED, this);
                 }.bind(this));
+
                 return this;
             }
 
             /**
-             * image loader, asynchronous
-             * @param {Function} cb - callback after loading image
-             * @return {Tile} instance of Tile
+             * check if tiles are equal
+             * @param  {Tile} tile - the specified tile to check against this
+             * @return {Boolean} is true, if x, y, width and height and path are the same
              */
 
         }, {
-            key: 'loadImage',
-            value: function loadImage(cb) {
-                var img = new Image();
-                img.src = this.path;
-                img.onload = function() {
-                    cb(img);
-                };
-                return this;
+            key: 'equals',
+            value: function equals(tile) {
+                console.log(_get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile), this.path === tile.path);
+                return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
             }
         }]);
 
         return Tile;
     }(_Rectangle2.Rectangle);
-
-    /**
-     * States of a tile
-     * @type {Array}
-     */
-    Tile.STATES = [{
-        value: 0,
-        description: 'Starting'
-    }, {
-        value: 1,
-        description: 'Initialized'
-    }, {
-        value: 2,
-        description: 'Loaded'
-    }, {
-        value: 3,
-        description: 'Drawn'
-    }];
 });

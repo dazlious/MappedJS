@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for spec/State.test.js</title>
+    <title>Code coverage report for spec/Tile.test.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -16,13 +16,13 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../index.html">all files</a> / <a href="index.html">spec/</a> State.test.js
+      <a href="../index.html">all files</a> / <a href="index.html">spec/</a> Tile.test.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>34/34</span>
+        <span class='fraction'>31/31</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>7/7</span>
+        <span class='fraction'>11/11</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>34/34</span>
+        <span class='fraction'>31/31</span>
       </div>
     </div>
   </div>
@@ -97,18 +97,9 @@
 52
 53
 54
-55
-56
-57
-58</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+55</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -118,27 +109,13 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -151,67 +128,81 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*global State*/
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*global Tile,Rectangle,Publisher*/
 &nbsp;
-describe('State', function () {
+describe('Tile', function () {
     "use strict";
 &nbsp;
-    var STATES = [
-        {value: 0, description: 'State 1'},
-        {value: 1, description: 'State 2'},
-        {value: 2, description: 'State 3'}
-    ];
-&nbsp;
-    it("is an instanceof State", function() {
-        expect(new State.State() instanceof State.State).toEqual(true);
+    it("is an instanceof Tile and initializes without Rectangle parameters", function() {
+        expect(new Tile.Tile({path:"http://dummyimage.com/800x200/000/fff"}) instanceof Tile.Tile).toEqual(true);
     });
 &nbsp;
-    it("initializes empty zeros", function() {
-        var state_instance = new State.State();
-        expect(state_instance.state.value).toEqual(0);
-        expect(state_instance.state.description).toEqual('Default');
+    it("can not initialize without correct path", function() {
+        expect(function(){
+            var t = new Tile.Tile();
+        }).toThrowError(TypeError);
+        expect(function(){
+            var t = new Tile.Tile({path:""});
+        }).toThrowError(TypeError);
+        expect(function(){
+            var t = new Tile.Tile({path:123});
+        }).toThrowError(TypeError);
     });
 &nbsp;
-    it("next if one state", function() {
-        var state_instance = new State.State();
-        expect(state_instance.state.value).toEqual(0);
-        expect(state_instance.state.description).toEqual('Default');
-        state_instance.next();
-        expect(state_instance.state.value).toEqual(0);
-        expect(state_instance.state.description).toEqual('Default');
+    it("initializes without Rectangle parameters an Rectangle(0,0,0,0)", function() {
+        var t = new Tile.Tile({path:"http://dummyimage.com/800x200/000/fff"});
+        expect(t.toString()).toEqual(new Rectangle.Rectangle().toString());
     });
 &nbsp;
-    it("next if multiple states", function() {
-        var state_instance = new State.State(STATES);
-        expect(state_instance.state).toEqual(STATES[0]);
-        state_instance.next();
-        expect(state_instance.state).toEqual(STATES[1]);
-        state_instance.next();
-        expect(state_instance.state).toEqual(STATES[2]);
-        state_instance.next();
-        expect(state_instance.state).toEqual(STATES[2]);
+    it("initializes in correct state", function() {
+        var t = new Tile.Tile({path:"http://dummyimage.com/800x200/000/fff"});
+        expect(t.state.state.value).toEqual(0);
+        t.initialize();
+        expect(t.state.state.value).toEqual(1);
     });
 &nbsp;
-    it("hasNext if one states", function() {
-        var state_instance = new State.State();
-        expect(state_instance.hasNext()).toEqual(false);
+    it("calls event after loading", function(done) {
+        var t = new Tile.Tile({path:"http://dummyimage.com/800x200/000/fff"});
+        t.Publisher.subscribe("tile-loaded", function(tile) {
+            expect(t).toBe(tile);
+            done();
+        });
+        expect(t.state.state.value).toEqual(0);
+        t.initialize();
+        expect(t.state.state.value).toEqual(1);
     });
 &nbsp;
-    it("hasNext if multiple states", function() {
-        var state_instance = new State.State(STATES);
-        expect(state_instance.hasNext()).toEqual(true);
-        state_instance.next();
-        expect(state_instance.hasNext()).toEqual(true);
-        state_instance.next();
-        expect(state_instance.hasNext()).toEqual(false);
+    it("calls event after loading", function() {
+        var t1 = new Tile.Tile({path:"http://dummyimage.com/800x200/000/fff"}),
+            t2 = new Tile.Tile({path:"http://dummyimage.com/800x200/000/fff"}),
+            t3 = new Tile.Tile({path:"http://dummyimage.com/800x200/000/ddd"});
+        expect(t1.equals(t1)).toEqual(true);
+        expect(t1.equals(t2)).toEqual(true);
+        expect(t1.equals(t3)).toEqual(false);
     });
-&nbsp;
 &nbsp;
 });
 &nbsp;</pre></td></tr>

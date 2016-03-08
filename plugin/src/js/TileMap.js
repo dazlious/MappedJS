@@ -84,7 +84,7 @@ export class TileMap {
         let currentLevel = this.getCurrentLevelData().tiles;
         for (let tile in currentLevel) {
             let currentTileData = currentLevel[tile];
-            let _tile = new Tile(currentTileData);
+            let _tile = new Tile(currentTileData).initialize();
             this.tiles.push(_tile);
         }
         return this;

@@ -6,6 +6,7 @@ export var Helper = {
      * request json-data from given file and calls callback on success
      * @param  {string} filename - path to file
      * @param  {Function} callback - function called when data is loaded successfully
+     * @return {Helper} Helper
      */
     requestJSON: function(filename, callback) {
         "use strict";
@@ -23,6 +24,22 @@ export var Helper = {
                 console.error("Error requesting file: ", response);
             }
         });
+        return this;
+    },
+    /**
+     * loads an image and calls callback on success
+     * @param  {Function} cb - callback-function on success
+     * @return {Helper} Helper
+     */
+    loadImage: function(path, cb) {
+        let img = new Image();
+        img.onload = function() {
+            if (cb && typeof cb === "function") {
+                cb(img);
+            }
+        };
+        img.src = path;
+        return this;
     }
 
 };

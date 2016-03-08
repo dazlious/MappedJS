@@ -156,7 +156,7 @@
                 var currentLevel = this.getCurrentLevelData().tiles;
                 for (var tile in currentLevel) {
                     var currentTileData = currentLevel[tile];
-                    var _tile = new _Tile.Tile(currentTileData);
+                    var _tile = new _Tile.Tile(currentTileData).initialize();
                     this.tiles.push(_tile);
                 }
                 return this;

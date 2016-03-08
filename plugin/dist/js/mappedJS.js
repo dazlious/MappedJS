@@ -377,7 +377,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var currentLevel = this.getCurrentLevelData().tiles;
 	            for (var tile in currentLevel) {
 	                var currentTileData = currentLevel[tile];
-	                var _tile = new _Tile.Tile(currentTileData);
+	                var _tile = new _Tile.Tile(currentTileData).initialize();
 	                this.tiles.push(_tile);
 	            }
 	            return this;
@@ -474,9 +474,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	exports.Tile = undefined;
+
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -489,6 +491,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Rectangle2 = __webpack_require__(5);
 
 	var _Publisher = __webpack_require__(7);
+
+	var _Helper = __webpack_require__(8);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -503,8 +507,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	var PUBLISHER = new _Publisher.Publisher();
 
+	/**
+	 * States of a tile
+	 * @type {Array}
+	 */
+	var STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Initialized' }, { value: 2, description: 'Loaded' }, { value: 3, description: 'Drawn' }];
+
+	/**
+	 * Name of event fired, when tile is loaded
+	 * @type {String}
+	 */
+	var EVENT_TILE_LOADED = "tile-loaded";
+
+	/**
+	 * Name of event fired, when tile is not found on loading
+	 * @type {String}
+	 */
+	var EVENT_TILE_FAILED = "tile-failed";
+
 	var Tile = exports.Tile = function (_Rectangle) {
-	    _inherits(Tile, _Rectangle);
+	  _inherits(Tile, _Rectangle);
+
+	  _createClass(Tile, [{
+	    key: 'Publisher',
+
+
+	    /**
+	     * Return the Publisher
+	     */
+	    get: function get() {
+	      return PUBLISHER;
+	    }
 
 	    /**
 	     * Constructor
@@ -516,79 +549,70 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {Tile} instance of Tile
 	     */
 
-	    function Tile(_ref) {
-	        var _ret;
+	  }]);
 
-	        var _ref$path = _ref.path;
-	        var path = _ref$path === undefined ? null : _ref$path;
-	        var _ref$x = _ref.x;
-	        var x = _ref$x === undefined ? 0 : _ref$x;
-	        var _ref$y = _ref.y;
-	        var y = _ref$y === undefined ? 0 : _ref$y;
-	        var _ref$w = _ref.w;
-	        var w = _ref$w === undefined ? 0 : _ref$w;
-	        var _ref$h = _ref.h;
-	        var h = _ref$h === undefined ? 0 : _ref$h;
+	  function Tile() {
+	    var _ret;
 
-	        _classCallCheck(this, Tile);
+	    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
+	    var path = _ref.path;
+	    var _ref$x = _ref.x;
+	    var x = _ref$x === undefined ? 0 : _ref$x;
+	    var _ref$y = _ref.y;
+	    var y = _ref$y === undefined ? 0 : _ref$y;
+	    var _ref$w = _ref.w;
+	    var w = _ref$w === undefined ? 0 : _ref$w;
+	    var _ref$h = _ref.h;
+	    var h = _ref$h === undefined ? 0 : _ref$h;
 
-	        _this.state = new _State.State(Tile.STATES);
-	        if (!path || typeof path !== "string" || path.length === 0) {
-	            throw new Error('Path {path} needs to be of type string and should not be empty');
-	        }
-	        _this.path = path;
-	        _this.initialize();
-	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	    _classCallCheck(this, Tile);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
+
+	    _this.state = new _State.State(STATES);
+	    if (!path || typeof path !== "string" || path.length === 0) {
+	      throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
+	    }
+	    _this.path = path;
+	    return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  /**
+	   * initializes tile and starts loading image
+	   * @return {Tile} instance of Tile
+	   */
+
+
+	  _createClass(Tile, [{
+	    key: 'initialize',
+	    value: function initialize() {
+	      this.state.next();
+	      _Helper.Helper.loadImage(this.path, function (img) {
+	        this.img = img;
+	        this.state.next();
+	        PUBLISHER.publish(EVENT_TILE_LOADED, this);
+	      }.bind(this));
+
+	      return this;
 	    }
 
 	    /**
-	     * initializes tile and starts loading image
-	     * @return {Tile} instance of Tile
+	     * check if tiles are equal
+	     * @param  {Tile} tile - the specified tile to check against this
+	     * @return {Boolean} is true, if x, y, width and height and path are the same
 	     */
 
+	  }, {
+	    key: 'equals',
+	    value: function equals(tile) {
+	      console.log(_get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile), this.path === tile.path);
+	      return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
+	    }
+	  }]);
 
-	    _createClass(Tile, [{
-	        key: 'initialize',
-	        value: function initialize() {
-	            this.state.next();
-	            this.loadImage(function (img) {
-	                this.img = img;
-	                this.state.next();
-	                PUBLISHER.publish("tile-loaded", this);
-	            }.bind(this));
-	            return this;
-	        }
-
-	        /**
-	         * image loader, asynchronous
-	         * @param {Function} cb - callback after loading image
-	         * @return {Tile} instance of Tile
-	         */
-
-	    }, {
-	        key: 'loadImage',
-	        value: function loadImage(cb) {
-	            var img = new Image();
-	            img.src = this.path;
-	            img.onload = function () {
-	                cb(img);
-	            };
-	            return this;
-	        }
-	    }]);
-
-	    return Tile;
+	  return Tile;
 	}(_Rectangle2.Rectangle);
-
-	/**
-	 * States of a tile
-	 * @type {Array}
-	 */
-
-
-		Tile.STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Initialized' }, { value: 2, description: 'Loaded' }, { value: 3, description: 'Drawn' }];
 
 /***/ },
 /* 3 */
@@ -1212,6 +1236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * request json-data from given file and calls callback on success
 	     * @param  {string} filename - path to file
 	     * @param  {Function} callback - function called when data is loaded successfully
+	     * @return {Helper} Helper
 	     */
 	    requestJSON: function requestJSON(filename, callback) {
 	        "use strict";
@@ -1230,6 +1255,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	                console.error("Error requesting file: ", response);
 	            }
 	        });
+	        return this;
+	    },
+	    /**
+	     * loads an image and calls callback on success
+	     * @param  {Function} cb - callback-function on success
+	     * @return {Helper} Helper
+	     */
+	    loadImage: function loadImage(path, cb) {
+	        var img = new Image();
+	        img.onload = function () {
+	            if (cb && typeof cb === "function") {
+	                cb(img);
+	            }
+	        };
+	        img.src = path;
+	        return this;
 	    }
 
 		};

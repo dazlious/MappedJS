@@ -2,13 +2,44 @@ import $ from 'jquery';
 import {State} from './State.js';
 import {Rectangle} from './Rectangle.js';
 import {Publisher} from './Publisher.js';
+import {Helper} from './Helper.js';
 
 /**
  * Singleton instance of Publisher
  */
 const PUBLISHER = new Publisher();
 
+/**
+ * States of a tile
+ * @type {Array}
+ */
+const STATES = [
+    {value: 0, description: 'Starting'},
+    {value: 1, description: 'Initialized'},
+    {value: 2, description: 'Loaded'},
+    {value: 3, description: 'Drawn'}
+];
+
+/**
+ * Name of event fired, when tile is loaded
+ * @type {String}
+ */
+const EVENT_TILE_LOADED = "tile-loaded";
+
+/**
+ * Name of event fired, when tile is not found on loading
+ * @type {String}
+ */
+const EVENT_TILE_FAILED = "tile-failed";
+
 export class Tile extends Rectangle {
+
+    /**
+     * Return the Publisher
+     */
+    get Publisher() {
+        return PUBLISHER;
+    }
 
     /**
      * Constructor
@@ -19,14 +50,13 @@ export class Tile extends Rectangle {
      * @param  {number} h=0 - tile height
      * @return {Tile} instance of Tile
      */
-    constructor({path=null, x = 0, y = 0, w = 0, h = 0}) {
+    constructor({path, x = 0, y = 0, w = 0, h = 0} = {}) {
         super(x, y, w, h);
-        this.state = new State(Tile.STATES);
+        this.state = new State(STATES);
         if (!path || typeof path !== "string" || path.length === 0) {
-            throw new Error(`Path {path} needs to be of type string and should not be empty`);
+            throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
         }
         this.path = path;
-        this.initialize();
         return this;
     }
 
@@ -36,36 +66,23 @@ export class Tile extends Rectangle {
      */
     initialize() {
         this.state.next();
-        this.loadImage(function(img) {
+        Helper.loadImage(this.path, function(img) {
             this.img = img;
             this.state.next();
-            PUBLISHER.publish("tile-loaded", this);
+            PUBLISHER.publish(EVENT_TILE_LOADED, this);
         }.bind(this));
+
         return this;
     }
 
     /**
-     * image loader, asynchronous
-     * @param {Function} cb - callback after loading image
-     * @return {Tile} instance of Tile
+     * check if tiles are equal
+     * @param  {Tile} tile - the specified tile to check against this
+     * @return {Boolean} is true, if x, y, width and height and path are the same
      */
-    loadImage(cb) {
-        let img = new Image();
-        img.src = this.path;
-        img.onload = function() {
-            cb(img);
-        };
-        return this;
+    equals(tile) {
+        console.log(super.equals(tile), this.path === tile.path);
+        return (tile instanceof Tile) ? super.equals(tile) && this.path === tile.path : false;
     }
-}
 
-/**
- * States of a tile
- * @type {Array}
- */
-Tile.STATES = [
-    {value: 0, description: 'Starting'},
-    {value: 1, description: 'Initialized'},
-    {value: 2, description: 'Loaded'},
-    {value: 3, description: 'Drawn'}
-];
+}
