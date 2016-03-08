@@ -1,6 +1,6 @@
 /*global Publisher*/
 
-describe('Publisher', function () {
+describe('Publisher', function() {
     "use strict";
 
     var Pub_Instance = null;
@@ -33,8 +33,7 @@ describe('Publisher', function () {
     it("subscribes to a topic", function() {
         Pub_Instance = new Publisher.Publisher();
         expect(Pub_Instance.subscribers.topic).toBeUndefined();
-        Pub_Instance.subscribe("topic", function() {
-        });
+        Pub_Instance.subscribe("topic", function() {});
         expect(Pub_Instance.subscribers.topic).not.toBeUndefined();
         Pub_Instance.destroy();
     });

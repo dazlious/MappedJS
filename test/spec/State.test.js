@@ -1,13 +1,18 @@
 /*global State*/
 
-describe('State', function () {
+describe('State', function() {
     "use strict";
 
-    var STATES = [
-        {value: 0, description: 'State 1'},
-        {value: 1, description: 'State 2'},
-        {value: 2, description: 'State 3'}
-    ];
+    var STATES = [{
+        value: 0,
+        description: 'State 1'
+    }, {
+        value: 1,
+        description: 'State 2'
+    }, {
+        value: 2,
+        description: 'State 3'
+    }];
 
     it("is an instanceof State", function() {
         expect(new State.State() instanceof State.State).toEqual(true);

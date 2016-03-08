@@ -1,6 +1,6 @@
 /*global Point*/
 
-describe('Point', function () {
+describe('Point', function() {
     "use strict";
 
     it("is an instanceof Point", function() {
