@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './State.js', './Publisher.js'], factory);
+        define(['exports', 'jquery', './State.js', './Rectangle.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./State.js'), require('./Publisher.js'));
+        factory(exports, require('jquery'), require('./State.js'), require('./Rectangle.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.State, global.Publisher);
+        factory(mod.exports, global.jquery, global.State, global.Rectangle, global.Publisher);
         global.Tile = mod.exports;
     }
-})(this, function(exports, _jquery, _State, _Publisher) {
+})(this, function(exports, _jquery, _State, _Rectangle2, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -50,12 +50,37 @@
         };
     }();
 
+    function _possibleConstructorReturn(self, call) {
+        if (!self) {
+            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        }
+
+        return call && (typeof call === "object" || typeof call === "function") ? call : self;
+    }
+
+    function _inherits(subClass, superClass) {
+        if (typeof superClass !== "function" && superClass !== null) {
+            throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+        }
+
+        subClass.prototype = Object.create(superClass && superClass.prototype, {
+            constructor: {
+                value: subClass,
+                enumerable: false,
+                writable: true,
+                configurable: true
+            }
+        });
+        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    }
+
     /**
      * Singleton instance of Publisher
      */
     var PUBLISHER = new _Publisher.Publisher();
 
-    var Tile = exports.Tile = function() {
+    var Tile = exports.Tile = function(_Rectangle) {
+        _inherits(Tile, _Rectangle);
 
         /**
          * Constructor
@@ -68,6 +93,8 @@
          */
 
         function Tile(_ref) {
+            var _ret;
+
             var _ref$path = _ref.path;
             var path = _ref$path === undefined ? null : _ref$path;
             var _ref$x = _ref.x;
@@ -81,21 +108,15 @@
 
             _classCallCheck(this, Tile);
 
-            this.state = new _State.State(Tile.STATES);
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
+            _this.state = new _State.State(Tile.STATES);
             if (!path || typeof path !== "string" || path.length === 0) {
                 throw new Error('Path {path} needs to be of type string and should not be empty');
             }
-            this.path = path;
-
-            this.x = x;
-            this.y = y;
-            this.width = w;
-            this.height = h;
-
-            this.initialize();
-
-            return this;
+            _this.path = path;
+            _this.initialize();
+            return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
 
         /**
@@ -108,19 +129,17 @@
             key: 'initialize',
             value: function initialize() {
                 this.state.next();
-
-                var _this = this;
                 this.loadImage(function(img) {
-                    _this.img = img;
-                    _this.state.next();
-                    PUBLISHER.publish("tile-loaded", _this);
-                });
+                    this.img = img;
+                    this.state.next();
+                    PUBLISHER.publish("tile-loaded", this);
+                }.bind(this));
                 return this;
             }
 
             /**
              * image loader, asynchronous
-             * @param  {Function} cb - callback after loading image
+             * @param {Function} cb - callback after loading image
              * @return {Tile} instance of Tile
              */
 
@@ -137,7 +156,7 @@
         }]);
 
         return Tile;
-    }();
+    }(_Rectangle2.Rectangle);
 
     /**
      * States of a tile

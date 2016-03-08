@@ -267,7 +267,7 @@
         }, {
             key: 'toString',
             value: function toString() {
-                return this.constructor.name + '(' + this.x + ',' + this.y + ',' + this.width + ',' + this.height + ')';
+                return '(' + this.x + ',' + this.y + ',' + this.width + ',' + this.height + ')';
             }
         }]);
 

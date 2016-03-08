@@ -1,6 +1,6 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(["exports"], factory);
+        define(['exports'], factory);
     } else if (typeof exports !== "undefined") {
         factory(exports);
     } else {
@@ -11,7 +11,7 @@
         global.State = mod.exports;
     }
 })(this, function(exports) {
-    "use strict";
+    'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
@@ -41,22 +41,34 @@
         };
     }();
 
+    var STATES = new WeakMap();
+
+    var _makePrivate = function _makePrivate(o) {
+        return STATES.set(o, {});
+    };
+    var _getPrivate = function _getPrivate(o) {
+        return STATES.get(o);
+    };
+
     var State = exports.State = function() {
 
         /**
          * Constructor
-         * @param  {Array} states_array=[] - [description]
+         * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
          * @return {State} instance of State
          */
 
         function State() {
-            var states_array = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+            var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{
+                value: 0,
+                description: 'Default'
+            }] : arguments[0];
 
             _classCallCheck(this, State);
 
-            this.STATES = states_array;
+            _makePrivate(this);
+            _getPrivate(this).STATES = states_array;
             this.i = 0;
-            this.state = this.getState();
             return this;
         }
 
@@ -67,23 +79,17 @@
 
 
         _createClass(State, [{
-            key: "getState",
-            value: function getState() {
-                return this.STATES[this.i];
-            }
+            key: 'next',
+
 
             /**
              * get the next element
              * @return {State} instance of State
              */
-
-        }, {
-            key: "next",
             value: function next() {
                 if (this.hasNext()) {
                     this.i++;
                 }
-                this.state = this.getState();
                 return this;
             }
 
@@ -93,9 +99,14 @@
              */
 
         }, {
-            key: "hasNext",
+            key: 'hasNext',
             value: function hasNext() {
-                return this.i < this.STATES.length;
+                return this.i < _getPrivate(this).STATES.length - 1;
+            }
+        }, {
+            key: 'state',
+            get: function get() {
+                return _getPrivate(this).STATES[this.i];
             }
         }]);
 

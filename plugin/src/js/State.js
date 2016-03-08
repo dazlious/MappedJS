@@ -1,15 +1,19 @@
+var STATES = new WeakMap();
+
+var _makePrivate = o => STATES.set(o, {});
+var _getPrivate = o => STATES.get(o);
 
 export class State {
 
     /**
      * Constructor
-     * @param  {Array} states_array=[] - [description]
+     * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
      * @return {State} instance of State
      */
-    constructor(states_array = []) {
-        this.STATES = states_array;
+    constructor(states_array=[{value: 0, description: 'Default'}]) {
+        _makePrivate(this);
+        _getPrivate(this).STATES = states_array;
         this.i = 0;
-        this.state = this.getState();
         return this;
     }
 
@@ -17,8 +21,8 @@ export class State {
      * get current state
      * @return {Object} a state from STATES-array
      */
-    getState() {
-        return this.STATES[this.i];
+    get state() {
+        return _getPrivate(this).STATES[this.i];
     }
 
     /**
@@ -29,7 +33,6 @@ export class State {
         if (this.hasNext()) {
             this.i++;
         }
-        this.state = this.getState();
         return this;
     }
 
@@ -38,7 +41,7 @@ export class State {
      * @return {Boolean} wheter there is a next state or not
      */
     hasNext() {
-        return this.i < this.STATES.length;
+        return this.i < _getPrivate(this).STATES.length-1;
     }
 
 }

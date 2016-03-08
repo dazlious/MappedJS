@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for spec/Publisher.test.js</title>
+    <title>Code coverage report for spec/State.test.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -16,13 +16,13 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../index.html">all files</a> / <a href="index.html">spec/</a> Publisher.test.js
+      <a href="../index.html">all files</a> / <a href="index.html">spec/</a> State.test.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>40/40</span>
+        <span class='fraction'>34/34</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">90.91% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>10/11</span>
+        <span class='fraction'>7/7</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>40/40</span>
+        <span class='fraction'>34/34</span>
       </div>
     </div>
   </div>
@@ -100,29 +100,21 @@
 55
 56
 57
-58
-59
-60
-61
-62
-63
-64</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+58</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -142,17 +134,14 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,73 +152,66 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*global Publisher*/
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*global State*/
 &nbsp;
-describe('Publisher', function () {
+describe('State', function () {
     "use strict";
 &nbsp;
-    var Pub_Instance = null;
+    var STATES = [
+        {value: 0, description: 'State 1'},
+        {value: 1, description: 'State 2'},
+        {value: 2, description: 'State 3'}
+    ];
 &nbsp;
-    it("is a singleton", function() {
-        expect(new Publisher.Publisher()).toBe(new Publisher.Publisher());
+    it("is an instanceof State", function() {
+        expect(new State.State() instanceof State.State).toEqual(true);
     });
 &nbsp;
-    it("is an instance of Publisher", function() {
-        var temp_instance = new Publisher.Publisher();
-        expect(temp_instance instanceof Publisher.Publisher).toEqual(true);
+    it("initializes empty zeros", function() {
+        var state_instance = new State.State();
+        expect(state_instance.state.value).toEqual(0);
+        expect(state_instance.state.description).toEqual('Default');
     });
 &nbsp;
-    it("destroy method is working", function() {
-        var temp_instance = new Publisher.Publisher();
-        expect(temp_instance).toBe(new Publisher.Publisher());
-        temp_instance.destroy();
-        expect(temp_instance).not.toBe(new Publisher.Publisher());
+    it("next if one state", function() {
+        var state_instance = new State.State();
+        expect(state_instance.state.value).toEqual(0);
+        expect(state_instance.state.description).toEqual('Default');
+        state_instance.next();
+        expect(state_instance.state.value).toEqual(0);
+        expect(state_instance.state.description).toEqual('Default');
     });
 &nbsp;
-    it("subscribe with no parameters", function() {
-        Pub_Instance = new Publisher.Publisher();
-        expect(Pub_Instance.subscribers.any).toBeUndefined();
-        Pub_Instance.subscribe();
-        expect(Pub_Instance.subscribers.any).not.toBeUndefined();
-        expect(Pub_Instance.subscribers.any.length).toEqual(1);
-        Pub_Instance.destroy();
+    it("next if multiple states", function() {
+        var state_instance = new State.State(STATES);
+        expect(state_instance.state).toEqual(STATES[0]);
+        state_instance.next();
+        expect(state_instance.state).toEqual(STATES[1]);
+        state_instance.next();
+        expect(state_instance.state).toEqual(STATES[2]);
+        state_instance.next();
+        expect(state_instance.state).toEqual(STATES[2]);
     });
 &nbsp;
-    it("subscribes to a topic", function() {
-        Pub_Instance = new Publisher.Publisher();
-        expect(Pub_Instance.subscribers.topic).toBeUndefined();
-        Pub_Instance.subscribe("topic", <span class="fstat-no" title="function not covered" >function() {</span>
-        });
-        expect(Pub_Instance.subscribers.topic).not.toBeUndefined();
-        Pub_Instance.destroy();
+    it("hasNext if one states", function() {
+        var state_instance = new State.State();
+        expect(state_instance.hasNext()).toEqual(false);
     });
 &nbsp;
-    it("publishes a single argument to a topic", function() {
-        var test_str = "text";
-        Pub_Instance = new Publisher.Publisher();
-        Pub_Instance.subscribe("topic", function(a) {
-            expect(a).toEqual(test_str);
-        });
-        Pub_Instance.publish("topic", test_str);
-        Pub_Instance.destroy();
+    it("hasNext if multiple states", function() {
+        var state_instance = new State.State(STATES);
+        expect(state_instance.hasNext()).toEqual(true);
+        state_instance.next();
+        expect(state_instance.hasNext()).toEqual(true);
+        state_instance.next();
+        expect(state_instance.hasNext()).toEqual(false);
     });
 &nbsp;
-    it("publishes an array of arguments to a topic", function() {
-        var test_str = "text";
-        Pub_Instance = new Publisher.Publisher();
-        Pub_Instance.subscribe("topic", function(a) {
-            expect(a instanceof Array).toEqual(true);
-            expect(a.length).toEqual(3);
-        });
-        Pub_Instance.publish("topic", [test_str, test_str, test_str]);
-        Pub_Instance.destroy();
-    });
 &nbsp;
 });
 &nbsp;</pre></td></tr>
