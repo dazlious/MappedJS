@@ -31,6 +31,15 @@
 <dt><a href="#PUBLISHER">PUBLISHER</a></dt>
 <dd><p>Singleton instance of Publisher</p>
 </dd>
+<dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
+<dd><p>States of a tile</p>
+</dd>
+<dt><a href="#EVENT_TILE_LOADED">EVENT_TILE_LOADED</a> : <code>String</code></dt>
+<dd><p>Name of event fired, when tile is loaded</p>
+</dd>
+<dt><a href="#EVENT_TILE_FAILED">EVENT_TILE_FAILED</a> : <code>String</code></dt>
+<dd><p>Name of event fired, when tile is not found on loading</p>
+</dd>
 <dt><a href="#PUBLISHER">PUBLISHER</a></dt>
 <dd><p>Singleton instance of Publisher</p>
 </dd>
@@ -311,6 +320,11 @@ Eventname for unsubscribing
     * [.topRight](#Rectangle+topRight) ⇒ <code>[Point](#Point)</code>
     * [.bottomLeft](#Rectangle+bottomLeft) ⇒ <code>[Point](#Point)</code>
     * [.bottomRight](#Rectangle+bottomRight) ⇒ <code>[Point](#Point)</code>
+    * [.right](#Rectangle+right) ⇒ <code>number</code>
+    * [.left](#Rectangle+left) ⇒ <code>number</code>
+    * [.top](#Rectangle+top) ⇒ <code>number</code>
+    * [.bottom](#Rectangle+bottom) ⇒ <code>number</code>
+    * [.intersects(rect)](#Rectangle+intersects) ⇒ <code>Boolean</code>
     * [.contains(rectOrPoint)](#Rectangle+contains) ⇒ <code>Boolean</code>
     * [.containsPoint(point)](#Rectangle+containsPoint) ⇒ <code>Boolean</code>
     * [.containsRect(rect)](#Rectangle+containsRect) ⇒ <code>Boolean</code>
@@ -359,6 +373,40 @@ get bottom-right-position of rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>[Point](#Point)</code> - bottom-right point  
+<a name="Rectangle+right"></a>
+### rectangle.right ⇒ <code>number</code>
+Returns right position of Rectangle
+
+**Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>number</code> - right position  
+<a name="Rectangle+left"></a>
+### rectangle.left ⇒ <code>number</code>
+Returns left position of Rectangle
+
+**Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>number</code> - left position  
+<a name="Rectangle+top"></a>
+### rectangle.top ⇒ <code>number</code>
+Returns top position of Rectangle
+
+**Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>number</code> - top position  
+<a name="Rectangle+bottom"></a>
+### rectangle.bottom ⇒ <code>number</code>
+Returns bottom position of Rectangle
+
+**Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>number</code> - bottom position  
+<a name="Rectangle+intersects"></a>
+### rectangle.intersects(rect) ⇒ <code>Boolean</code>
+Checks whether Rectangle intersects with specified Rectangle
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>Boolean</code> - true if containment is entirely  
+**Params**
+
+- rect <code>[Rectangle](#Rectangle)</code> - the specified rectangle to check against
+
 <a name="Rectangle+contains"></a>
 ### rectangle.contains(rectOrPoint) ⇒ <code>Boolean</code>
 Checks whether Rectangle entirely contains the Rectangle or Point
@@ -411,7 +459,7 @@ representation of a Rectangle as String
 
 * [State](#State)
     * [new State(states_array)](#new_State_new)
-    * [.getState()](#State+getState) ⇒ <code>Object</code>
+    * [.state](#State+state) ⇒ <code>Object</code>
     * [.next()](#State+next) ⇒ <code>[State](#State)</code>
     * [.hasNext()](#State+hasNext) ⇒ <code>Boolean</code>
 
@@ -422,13 +470,13 @@ Constructor
 **Returns**: <code>[State](#State)</code> - instance of State  
 **Params**
 
-- states_array <code>Array</code> <code> = [</code> - [description]
+- states_array <code>Array</code> <code> = [{value:</code> - 0, description: 'Default'}] - [description]
 
-<a name="State+getState"></a>
-### state.getState() ⇒ <code>Object</code>
+<a name="State+state"></a>
+### state.state ⇒ <code>Object</code>
 get current state
 
-**Kind**: instance method of <code>[State](#State)</code>  
+**Kind**: instance property of <code>[State](#State)</code>  
 **Returns**: <code>Object</code> - a state from STATES-array  
 <a name="State+next"></a>
 ### state.next() ⇒ <code>[State](#State)</code>
@@ -448,11 +496,9 @@ checks if there is a next element
 
 * [Tile](#Tile)
     * [new Tile(path, x, y, w, h)](#new_Tile_new)
-    * _instance_
-        * [.initialize()](#Tile+initialize) ⇒ <code>[Tile](#Tile)</code>
-        * [.loadImage(cb)](#Tile+loadImage) ⇒ <code>[Tile](#Tile)</code>
-    * _static_
-        * [.STATES](#Tile.STATES) : <code>Array</code>
+    * [.Publisher](#Tile+Publisher)
+    * [.initialize()](#Tile+initialize) ⇒ <code>[Tile](#Tile)</code>
+    * [.equals(tile)](#Tile+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Tile_new"></a>
 ### new Tile(path, x, y, w, h)
@@ -467,27 +513,27 @@ Constructor
 - w <code>number</code> <code> = 0</code> - tile width
 - h <code>number</code> <code> = 0</code> - tile height
 
+<a name="Tile+Publisher"></a>
+### tile.Publisher
+Return the Publisher
+
+**Kind**: instance property of <code>[Tile](#Tile)</code>  
 <a name="Tile+initialize"></a>
 ### tile.initialize() ⇒ <code>[Tile](#Tile)</code>
 initializes tile and starts loading image
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile  
-<a name="Tile+loadImage"></a>
-### tile.loadImage(cb) ⇒ <code>[Tile](#Tile)</code>
-image loader, asynchronous
+<a name="Tile+equals"></a>
+### tile.equals(tile) ⇒ <code>Boolean</code>
+check if tiles are equal
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - instance of Tile  
+**Returns**: <code>Boolean</code> - is true, if x, y, width and height and path are the same  
 **Params**
 
-- cb <code>function</code> - callback after loading image
+- tile <code>[Tile](#Tile)</code> - the specified tile to check against this
 
-<a name="Tile.STATES"></a>
-### Tile.STATES : <code>Array</code>
-States of a tile
-
-**Kind**: static property of <code>[Tile](#Tile)</code>  
 <a name="TileMap"></a>
 ## TileMap
 **Kind**: global class  
@@ -604,6 +650,21 @@ singleton instance
 <a name="PUBLISHER"></a>
 ## PUBLISHER
 Singleton instance of Publisher
+
+**Kind**: global constant  
+<a name="STATES"></a>
+## STATES : <code>Array</code>
+States of a tile
+
+**Kind**: global constant  
+<a name="EVENT_TILE_LOADED"></a>
+## EVENT_TILE_LOADED : <code>String</code>
+Name of event fired, when tile is loaded
+
+**Kind**: global constant  
+<a name="EVENT_TILE_FAILED"></a>
+## EVENT_TILE_FAILED : <code>String</code>
+Name of event fired, when tile is not found on loading
 
 **Kind**: global constant  
 <a name="PUBLISHER"></a>

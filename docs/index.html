@@ -55,6 +55,15 @@
 <dt><a href="#PUBLISHER">PUBLISHER</a></dt>
 <dd><p>Singleton instance of Publisher</p>
 </dd>
+<dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
+<dd><p>States of a tile</p>
+</dd>
+<dt><a href="#EVENT_TILE_LOADED">EVENT_TILE_LOADED</a> : <code>String</code></dt>
+<dd><p>Name of event fired, when tile is loaded</p>
+</dd>
+<dt><a href="#EVENT_TILE_FAILED">EVENT_TILE_FAILED</a> : <code>String</code></dt>
+<dd><p>Name of event fired, when tile is not found on loading</p>
+</dd>
 <dt><a href="#PUBLISHER">PUBLISHER</a></dt>
 <dd><p>Singleton instance of Publisher</p>
 </dd>
@@ -280,6 +289,11 @@
 <li><a href="#Rectangle+topRight">.topRight</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Rectangle+bottomLeft">.bottomLeft</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Rectangle+bottomRight">.bottomRight</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Rectangle+right">.right</a> ⇒ <code>number</code></li>
+<li><a href="#Rectangle+left">.left</a> ⇒ <code>number</code></li>
+<li><a href="#Rectangle+top">.top</a> ⇒ <code>number</code></li>
+<li><a href="#Rectangle+bottom">.bottom</a> ⇒ <code>number</code></li>
+<li><a href="#Rectangle+intersects">.intersects(rect)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+contains">.contains(rectOrPoint)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+containsPoint">.containsPoint(point)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+containsRect">.containsRect(rect)</a> ⇒ <code>Boolean</code></li>
@@ -313,7 +327,26 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - bottom-left point<br><a name="Rectangle+bottomRight"></a></p>
 <h3 id="rectangle-bottomright-code-point-point-code-">rectangle.bottomRight ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>get bottom-right-position of rectangle</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - bottom-right point<br><a name="Rectangle+contains"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - bottom-right point<br><a name="Rectangle+right"></a></p>
+<h3 id="rectangle-right-code-number-code-">rectangle.right ⇒ <code>number</code></h3>
+<p>Returns right position of Rectangle</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>number</code> - right position<br><a name="Rectangle+left"></a></p>
+<h3 id="rectangle-left-code-number-code-">rectangle.left ⇒ <code>number</code></h3>
+<p>Returns left position of Rectangle</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>number</code> - left position<br><a name="Rectangle+top"></a></p>
+<h3 id="rectangle-top-code-number-code-">rectangle.top ⇒ <code>number</code></h3>
+<p>Returns top position of Rectangle</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>number</code> - top position<br><a name="Rectangle+bottom"></a></p>
+<h3 id="rectangle-bottom-code-number-code-">rectangle.bottom ⇒ <code>number</code></h3>
+<p>Returns bottom position of Rectangle</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>number</code> - bottom position<br><a name="Rectangle+intersects"></a></p>
+<h3 id="rectangle-intersects-rect-code-boolean-code-">rectangle.intersects(rect) ⇒ <code>Boolean</code></h3>
+<p>Checks whether Rectangle intersects with specified Rectangle</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - true if containment is entirely<br><strong>Params</strong></p>
+<ul>
+<li>rect <code><a href="#Rectangle">Rectangle</a></code> - the specified rectangle to check against</li>
+</ul>
+<p><a name="Rectangle+contains"></a></p>
 <h3 id="rectangle-contains-rectorpoint-code-boolean-code-">rectangle.contains(rectOrPoint) ⇒ <code>Boolean</code></h3>
 <p>Checks whether Rectangle entirely contains the Rectangle or Point</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - true if containment is entirely<br><strong>Params</strong></p>
@@ -350,7 +383,7 @@
 <ul>
 <li><a href="#State">State</a><ul>
 <li><a href="#new_State_new">new State(states_array)</a></li>
-<li><a href="#State+getState">.getState()</a> ⇒ <code>Object</code></li>
+<li><a href="#State+state">.state</a> ⇒ <code>Object</code></li>
 <li><a href="#State+next">.next()</a> ⇒ <code><a href="#State">State</a></code></li>
 <li><a href="#State+hasNext">.hasNext()</a> ⇒ <code>Boolean</code></li>
 </ul>
@@ -361,12 +394,12 @@
 <p>Constructor</p>
 <p><strong>Returns</strong>: <code><a href="#State">State</a></code> - instance of State<br><strong>Params</strong></p>
 <ul>
-<li>states_array <code>Array</code> <code> = [</code> - [description]</li>
+<li>states_array <code>Array</code> <code> = [{value:</code> - 0, description: &#39;Default&#39;}] - [description]</li>
 </ul>
-<p><a name="State+getState"></a></p>
-<h3 id="state-getstate-code-object-code-">state.getState() ⇒ <code>Object</code></h3>
+<p><a name="State+state"></a></p>
+<h3 id="state-state-code-object-code-">state.state ⇒ <code>Object</code></h3>
 <p>get current state</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code>Object</code> - a state from STATES-array<br><a name="State+next"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code>Object</code> - a state from STATES-array<br><a name="State+next"></a></p>
 <h3 id="state-next-code-state-state-code-">state.next() ⇒ <code><a href="#State">State</a></code></h3>
 <p>get the next element</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code><a href="#State">State</a></code> - instance of State<br><a name="State+hasNext"></a></p>
@@ -378,15 +411,9 @@
 <ul>
 <li><a href="#Tile">Tile</a><ul>
 <li><a href="#new_Tile_new">new Tile(path, x, y, w, h)</a></li>
-<li><em>instance</em><ul>
+<li><a href="#Tile+Publisher">.Publisher</a></li>
 <li><a href="#Tile+initialize">.initialize()</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
-<li><a href="#Tile+loadImage">.loadImage(cb)</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
-</ul>
-</li>
-<li><em>static</em><ul>
-<li><a href="#Tile.STATES">.STATES</a> : <code>Array</code></li>
-</ul>
-</li>
+<li><a href="#Tile+equals">.equals(tile)</a> ⇒ <code>Boolean</code></li>
 </ul>
 </li>
 </ul>
@@ -401,20 +428,20 @@
 <li>w <code>number</code> <code> = 0</code> - tile width</li>
 <li>h <code>number</code> <code> = 0</code> - tile height</li>
 </ul>
-<p><a name="Tile+initialize"></a></p>
+<p><a name="Tile+Publisher"></a></p>
+<h3 id="tile-publisher">tile.Publisher</h3>
+<p>Return the Publisher</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Tile">Tile</a></code><br><a name="Tile+initialize"></a></p>
 <h3 id="tile-initialize-code-tile-tile-code-">tile.initialize() ⇒ <code><a href="#Tile">Tile</a></code></h3>
 <p>initializes tile and starts loading image</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile<br><a name="Tile+loadImage"></a></p>
-<h3 id="tile-loadimage-cb-code-tile-tile-code-">tile.loadImage(cb) ⇒ <code><a href="#Tile">Tile</a></code></h3>
-<p>image loader, asynchronous</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile<br><strong>Params</strong></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile<br><a name="Tile+equals"></a></p>
+<h3 id="tile-equals-tile-code-boolean-code-">tile.equals(tile) ⇒ <code>Boolean</code></h3>
+<p>check if tiles are equal</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code>Boolean</code> - is true, if x, y, width and height and path are the same<br><strong>Params</strong></p>
 <ul>
-<li>cb <code>function</code> - callback after loading image</li>
+<li>tile <code><a href="#Tile">Tile</a></code> - the specified tile to check against this</li>
 </ul>
-<p><a name="Tile.STATES"></a></p>
-<h3 id="tile-states-code-array-code-">Tile.STATES : <code>Array</code></h3>
-<p>States of a tile</p>
-<p><strong>Kind</strong>: static property of <code><a href="#Tile">Tile</a></code><br><a name="TileMap"></a></p>
+<p><a name="TileMap"></a></p>
 <h2 id="tilemap">TileMap</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
@@ -500,6 +527,15 @@
 <p><strong>Kind</strong>: global variable<br><a name="PUBLISHER"></a></p>
 <h2 id="publisher">PUBLISHER</h2>
 <p>Singleton instance of Publisher</p>
+<p><strong>Kind</strong>: global constant<br><a name="STATES"></a></p>
+<h2 id="states-code-array-code-">STATES : <code>Array</code></h2>
+<p>States of a tile</p>
+<p><strong>Kind</strong>: global constant<br><a name="EVENT_TILE_LOADED"></a></p>
+<h2 id="event_tile_loaded-code-string-code-">EVENT_TILE_LOADED : <code>String</code></h2>
+<p>Name of event fired, when tile is loaded</p>
+<p><strong>Kind</strong>: global constant<br><a name="EVENT_TILE_FAILED"></a></p>
+<h2 id="event_tile_failed-code-string-code-">EVENT_TILE_FAILED : <code>String</code></h2>
+<p>Name of event fired, when tile is not found on loading</p>
 <p><strong>Kind</strong>: global constant<br><a name="PUBLISHER"></a></p>
 <h2 id="publisher">PUBLISHER</h2>
 <p>Singleton instance of Publisher</p>

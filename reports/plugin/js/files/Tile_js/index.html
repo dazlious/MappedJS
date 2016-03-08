@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">66.25</p>
+      <p class="stat">64.55</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">159</p>
+      <p class="stat">225</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">35.82</p>
+      <p class="stat">43.85</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.14</p>
+      <p class="stat">1.88</p>
     </div>
   </div>
 </div>
@@ -91,17 +91,17 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&#039;exports&#039;, &#039;jquery&#039;, &#039;./State.js&#039;, &#039;./Publisher.js&#039;], factory);
+        define([&#039;exports&#039;, &#039;jquery&#039;, &#039;./State.js&#039;, &#039;./Rectangle.js&#039;, &#039;./Publisher.js&#039;, &#039;./Helper.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports, require(&#039;jquery&#039;), require(&#039;./State.js&#039;), require(&#039;./Publisher.js&#039;));
+        factory(exports, require(&#039;jquery&#039;), require(&#039;./State.js&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./Publisher.js&#039;), require(&#039;./Helper.js&#039;));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.State, global.Publisher);
+        factory(mod.exports, global.jquery, global.State, global.Rectangle, global.Publisher, global.Helper);
         global.Tile = mod.exports;
     }
-})(this, function(exports, _jquery, _State, _Publisher) {
+})(this, function(exports, _jquery, _State, _Rectangle2, _Publisher, _Helper) {
     &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
@@ -123,6 +123,39 @@
         }
     }
 
+    function _possibleConstructorReturn(self, call) {
+        if (!self) {
+            throw new ReferenceError(&quot;this hasn&#039;t been initialised - super() hasn&#039;t been called&quot;);
+        }
+
+        return call &amp;&amp; (typeof call === &quot;object&quot; || typeof call === &quot;function&quot;) ? call : self;
+    }
+
+    var _get = function get(object, property, receiver) {
+        if (object === null) object = Function.prototype;
+        var desc = Object.getOwnPropertyDescriptor(object, property);
+
+        if (desc === undefined) {
+            var parent = Object.getPrototypeOf(object);
+
+            if (parent === null) {
+                return undefined;
+            } else {
+                return get(parent, property, receiver);
+            }
+        } else if (&quot;value&quot; in desc) {
+            return desc.value;
+        } else {
+            var getter = desc.get;
+
+            if (getter === undefined) {
+                return undefined;
+            }
+
+            return getter.call(receiver);
+        }
+    };
+
     var _createClass = function() {
         function defineProperties(target, props) {
             for (var i = 0; i &lt; props.length; i++) {
@@ -141,100 +174,32 @@
         };
     }();
 
+    function _inherits(subClass, superClass) {
+        if (typeof superClass !== &quot;function&quot; &amp;&amp; superClass !== null) {
+            throw new TypeError(&quot;Super expression must either be null or a function, not &quot; + typeof superClass);
+        }
+
+        subClass.prototype = Object.create(superClass &amp;&amp; superClass.prototype, {
+            constructor: {
+                value: subClass,
+                enumerable: false,
+                writable: true,
+                configurable: true
+            }
+        });
+        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    }
+
     /**
      * Singleton instance of Publisher
      */
     var PUBLISHER = new _Publisher.Publisher();
 
-    var Tile = exports.Tile = function() {
-
-        /**
-         * Constructor
-         * @param  {string} path=null - path to image
-         * @param  {number} x=0 - position x of tile
-         * @param  {number} y=0 - position y of tile
-         * @param  {number} w=0 - tile width
-         * @param  {number} h=0 - tile height
-         * @return {Tile} instance of Tile
-         */
-
-        function Tile(_ref) {
-            var _ref$path = _ref.path;
-            var path = _ref$path === undefined ? null : _ref$path;
-            var _ref$x = _ref.x;
-            var x = _ref$x === undefined ? 0 : _ref$x;
-            var _ref$y = _ref.y;
-            var y = _ref$y === undefined ? 0 : _ref$y;
-            var _ref$w = _ref.w;
-            var w = _ref$w === undefined ? 0 : _ref$w;
-            var _ref$h = _ref.h;
-            var h = _ref$h === undefined ? 0 : _ref$h;
-
-            _classCallCheck(this, Tile);
-
-            this.state = new _State.State(Tile.STATES);
-
-            if (!path || typeof path !== &quot;string&quot; || path.length === 0) {
-                throw new Error(&#039;Path {path} needs to be of type string and should not be empty&#039;);
-            }
-            this.path = path;
-
-            this.x = x;
-            this.y = y;
-            this.width = w;
-            this.height = h;
-
-            this.initialize();
-
-            return this;
-        }
-
-        /**
-         * initializes tile and starts loading image
-         * @return {Tile} instance of Tile
-         */
-
-
-        _createClass(Tile, [{
-            key: &#039;initialize&#039;,
-            value: function initialize() {
-                this.state.next();
-
-                var _this = this;
-                this.loadImage(function(img) {
-                    _this.img = img;
-                    _this.state.next();
-                    PUBLISHER.publish(&quot;tile-loaded&quot;, _this);
-                });
-                return this;
-            }
-
-            /**
-             * image loader, asynchronous
-             * @param  {Function} cb - callback after loading image
-             * @return {Tile} instance of Tile
-             */
-
-        }, {
-            key: &#039;loadImage&#039;,
-            value: function loadImage(cb) {
-                var img = new Image();
-                img.src = this.path;
-                img.onload = function() {
-                    cb(img);
-                };
-                return this;
-            }
-        }]);
-
-        return Tile;
-    }();
-
     /**
      * States of a tile
      * @type {Array}
      */
-    Tile.STATES = [{
+    var STATES = [{
         value: 0,
         description: &#039;Starting&#039;
     }, {
@@ -247,6 +212,107 @@
         value: 3,
         description: &#039;Drawn&#039;
     }];
+
+    /**
+     * Name of event fired, when tile is loaded
+     * @type {String}
+     */
+    var EVENT_TILE_LOADED = &quot;tile-loaded&quot;;
+
+    /**
+     * Name of event fired, when tile is not found on loading
+     * @type {String}
+     */
+    var EVENT_TILE_FAILED = &quot;tile-failed&quot;;
+
+    var Tile = exports.Tile = function(_Rectangle) {
+        _inherits(Tile, _Rectangle);
+
+        _createClass(Tile, [{
+            key: &#039;Publisher&#039;,
+
+
+            /**
+             * Return the Publisher
+             */
+            get: function get() {
+                return PUBLISHER;
+            }
+
+            /**
+             * Constructor
+             * @param  {string} path=null - path to image
+             * @param  {number} x=0 - position x of tile
+             * @param  {number} y=0 - position y of tile
+             * @param  {number} w=0 - tile width
+             * @param  {number} h=0 - tile height
+             * @return {Tile} instance of Tile
+             */
+
+        }]);
+
+        function Tile() {
+            var _ret;
+
+            var _ref = arguments.length &lt;= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+            var path = _ref.path;
+            var _ref$x = _ref.x;
+            var x = _ref$x === undefined ? 0 : _ref$x;
+            var _ref$y = _ref.y;
+            var y = _ref$y === undefined ? 0 : _ref$y;
+            var _ref$w = _ref.w;
+            var w = _ref$w === undefined ? 0 : _ref$w;
+            var _ref$h = _ref.h;
+            var h = _ref$h === undefined ? 0 : _ref$h;
+
+            _classCallCheck(this, Tile);
+
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
+
+            _this.state = new _State.State(STATES);
+            if (!path || typeof path !== &quot;string&quot; || path.length === 0) {
+                throw new TypeError(&#039;Path &#039; + path + &#039; needs to be of type string and should not be empty&#039;);
+            }
+            _this.path = path;
+            return _ret = _this, _possibleConstructorReturn(_this, _ret);
+        }
+
+        /**
+         * initializes tile and starts loading image
+         * @return {Tile} instance of Tile
+         */
+
+
+        _createClass(Tile, [{
+            key: &#039;initialize&#039;,
+            value: function initialize() {
+                this.state.next();
+                _Helper.Helper.loadImage(this.path, function(img) {
+                    this.img = img;
+                    this.state.next();
+                    PUBLISHER.publish(EVENT_TILE_LOADED, this);
+                }.bind(this));
+
+                return this;
+            }
+
+            /**
+             * check if tiles are equal
+             * @param  {Tile} tile - the specified tile to check against this
+             * @return {Boolean} is true, if x, y, width and height and path are the same
+             */
+
+        }, {
+            key: &#039;equals&#039;,
+            value: function equals(tile) {
+                console.log(_get(Object.getPrototypeOf(Tile.prototype), &#039;equals&#039;, this).call(this, tile), this.path === tile.path);
+                return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), &#039;equals&#039;, this).call(this, tile) &amp;&amp; this.path === tile.path : false;
+            }
+        }]);
+
+        return Tile;
+    }(_Rectangle2.Rectangle);
 });</textarea>
   </div>
 </div>
