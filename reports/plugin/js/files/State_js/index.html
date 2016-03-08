@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">70.91</p>
+      <p class="stat">71.64</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">104</p>
+      <p class="stat">115</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">40.02</p>
+      <p class="stat">40.73</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.60</p>
+      <p class="stat">0.69</p>
     </div>
   </div>
 </div>
@@ -91,7 +91,7 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&quot;exports&quot;], factory);
+        define([&#039;exports&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
         factory(exports);
     } else {
@@ -102,7 +102,7 @@
         global.State = mod.exports;
     }
 })(this, function(exports) {
-    &quot;use strict&quot;;
+    &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
         value: true
@@ -132,22 +132,34 @@
         };
     }();
 
+    var STATES = new WeakMap();
+
+    var _makePrivate = function _makePrivate(o) {
+        return STATES.set(o, {});
+    };
+    var _getPrivate = function _getPrivate(o) {
+        return STATES.get(o);
+    };
+
     var State = exports.State = function() {
 
         /**
          * Constructor
-         * @param  {Array} states_array=[] - [description]
+         * @param  {Array} states_array=[{value: 0, description: &#039;Default&#039;}] - [description]
          * @return {State} instance of State
          */
 
         function State() {
-            var states_array = arguments.length &lt;= 0 || arguments[0] === undefined ? [] : arguments[0];
+            var states_array = arguments.length &lt;= 0 || arguments[0] === undefined ? [{
+                value: 0,
+                description: &#039;Default&#039;
+            }] : arguments[0];
 
             _classCallCheck(this, State);
 
-            this.STATES = states_array;
+            _makePrivate(this);
+            _getPrivate(this).STATES = states_array;
             this.i = 0;
-            this.state = this.getState();
             return this;
         }
 
@@ -158,23 +170,17 @@
 
 
         _createClass(State, [{
-            key: &quot;getState&quot;,
-            value: function getState() {
-                return this.STATES[this.i];
-            }
+            key: &#039;next&#039;,
+
 
             /**
              * get the next element
              * @return {State} instance of State
              */
-
-        }, {
-            key: &quot;next&quot;,
             value: function next() {
                 if (this.hasNext()) {
                     this.i++;
                 }
-                this.state = this.getState();
                 return this;
             }
 
@@ -184,9 +190,14 @@
              */
 
         }, {
-            key: &quot;hasNext&quot;,
+            key: &#039;hasNext&#039;,
             value: function hasNext() {
-                return this.i &lt; this.STATES.length;
+                return this.i &lt; _getPrivate(this).STATES.length - 1;
+            }
+        }, {
+            key: &#039;state&#039;,
+            get: function get() {
+                return _getPrivate(this).STATES[this.i];
             }
         }]);
 

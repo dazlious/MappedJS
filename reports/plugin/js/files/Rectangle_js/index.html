@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">69.17</p>
+      <p class="stat">71.36</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">245</p>
+      <p class="stat">276</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">62.74</p>
+      <p class="stat">67.00</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.94</p>
+      <p class="stat">2.03</p>
     </div>
   </div>
 </div>
@@ -122,31 +122,6 @@
 
         return call &amp;&amp; (typeof call === &quot;object&quot; || typeof call === &quot;function&quot;) ? call : self;
     }
-
-    var _get = function get(object, property, receiver) {
-        if (object === null) object = Function.prototype;
-        var desc = Object.getOwnPropertyDescriptor(object, property);
-
-        if (desc === undefined) {
-            var parent = Object.getPrototypeOf(object);
-
-            if (parent === null) {
-                return undefined;
-            } else {
-                return get(parent, property, receiver);
-            }
-        } else if (&quot;value&quot; in desc) {
-            return desc.value;
-        } else {
-            var getter = desc.get;
-
-            if (getter === undefined) {
-                return undefined;
-            }
-
-            return getter.call(receiver);
-        }
-    };
 
     var _createClass = function() {
         function defineProperties(target, props) {
@@ -242,6 +217,50 @@
             }
 
             /**
+             * Returns right position of Rectangle
+             * @return {number} right position
+             */
+
+        }, {
+            key: &#039;right&#039;,
+            get: function get() {
+                return this.x + this.width;
+            }
+
+            /**
+             * Returns left position of Rectangle
+             * @return {number} left position
+             */
+
+        }, {
+            key: &#039;left&#039;,
+            get: function get() {
+                return this.x;
+            }
+
+            /**
+             * Returns top position of Rectangle
+             * @return {number} top position
+             */
+
+        }, {
+            key: &#039;top&#039;,
+            get: function get() {
+                return this.y;
+            }
+
+            /**
+             * Returns bottom position of Rectangle
+             * @return {number} bottom position
+             */
+
+        }, {
+            key: &#039;bottom&#039;,
+            get: function get() {
+                return this.y + this.height;
+            }
+
+            /**
              * Constructor
              * @param  {number} x=0 - x-position of specified rectangle
              * @param  {number} y=0 - y-position of specified rectangle
@@ -271,13 +290,25 @@
         }
 
         /**
-         * Checks whether Rectangle entirely contains the Rectangle or Point
-         * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
+         * Checks whether Rectangle intersects with specified Rectangle
+         * @param  {Rectangle} rect - the specified rectangle to check against
          * @return {Boolean} true if containment is entirely
          */
 
 
         _createClass(Rectangle, [{
+            key: &#039;intersects&#039;,
+            value: function intersects(rect) {
+                return !(rect.left &gt; this.right || rect.right &lt; this.left || rect.top &gt; this.bottom || rect.bottom &lt; this.top);
+            }
+
+            /**
+             * Checks whether Rectangle entirely contains the Rectangle or Point
+             * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
+             * @return {Boolean} true if containment is entirely
+             */
+
+        }, {
             key: &#039;contains&#039;,
             value: function contains(rectOrPoint) {
                 return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
@@ -292,7 +323,7 @@
         }, {
             key: &#039;containsPoint&#039;,
             value: function containsPoint(point) {
-                return point.x &gt;= this.x &amp;&amp; point.y &gt;= this.y &amp;&amp; point.x &lt;= this.width &amp;&amp; point.y &lt;= this.height;
+                return point instanceof _Point2.Point ? point.x &gt;= this.left &amp;&amp; point.y &gt;= this.top &amp;&amp; point.x &lt;= this.right &amp;&amp; point.y &lt;= this.bottom : false;
             }
 
             /**
@@ -304,7 +335,7 @@
         }, {
             key: &#039;containsRect&#039;,
             value: function containsRect(rect) {
-                return rect.x &gt;= this.x &amp;&amp; rect.y &gt;= this.y &amp;&amp; rect.width &lt;= this.width &amp;&amp; rect.height &lt;= this.height;
+                return rect instanceof Rectangle ? rect.left &gt;= this.left &amp;&amp; rect.top &gt;= this.top &amp;&amp; rect.right &lt;= this.right &amp;&amp; rect.bottom &lt;= this.bottom : false;
             }
 
             /**
@@ -316,7 +347,7 @@
         }, {
             key: &#039;equals&#039;,
             value: function equals(rectangle) {
-                return this.x === rectangle.x &amp;&amp; this.y === rectangle.y &amp;&amp; this.width === rectangle.width &amp;&amp; this.height === rectangle.height;
+                return rectangle instanceof Rectangle ? this.x === rectangle.x &amp;&amp; this.y === rectangle.y &amp;&amp; this.width === rectangle.width &amp;&amp; this.height === rectangle.height : false;
             }
 
             /**
@@ -327,7 +358,7 @@
         }, {
             key: &#039;toString&#039;,
             value: function toString() {
-                return &#039;(&#039; + _get(Object.getPrototypeOf(Rectangle.prototype), &#039;toString&#039;, this).call(this) + &#039;,&#039; + this.width + &#039;,&#039; + this.height + &#039;)&#039;;
+                return &#039;(&#039; + this.x + &#039;,&#039; + this.y + &#039;,&#039; + this.width + &#039;,&#039; + this.height + &#039;)&#039;;
             }
         }]);
 
