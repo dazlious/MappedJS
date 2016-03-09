@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './Rectangle.js'], factory);
+        define(['exports', 'jquery', './Rectangle.js', './Point.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./Rectangle.js'));
+        factory(exports, require('jquery'), require('./Rectangle.js'), require('./Point.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.Rectangle);
+        factory(mod.exports, global.jquery, global.Rectangle, global.Point);
         global.View = mod.exports;
     }
-})(this, function(exports, _jquery, _Rectangle2) {
+})(this, function(exports, _jquery, _Rectangle2, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -32,6 +32,14 @@
         }
     }
 
+    function _possibleConstructorReturn(self, call) {
+        if (!self) {
+            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        }
+
+        return call && (typeof call === "object" || typeof call === "function") ? call : self;
+    }
+
     var _createClass = function() {
         function defineProperties(target, props) {
             for (var i = 0; i < props.length; i++) {
@@ -49,14 +57,6 @@
             return Constructor;
         };
     }();
-
-    function _possibleConstructorReturn(self, call) {
-        if (!self) {
-            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-        }
-
-        return call && (typeof call === "object" || typeof call === "function") ? call : self;
-    }
 
     function _inherits(subClass, superClass) {
         if (typeof superClass !== "function" && superClass !== null) {
@@ -77,15 +77,23 @@
     var View = exports.View = function(_Rectangle) {
         _inherits(View, _Rectangle);
 
-        /**
-         * Constructor
-         * @param  {number} x=0 - x-position of specified view
-         * @param  {number} y=0 - y-position of specified view
-         * @param  {number} width=0 - width of specified view
-         * @param  {number} height=0 - height of specified view
-         * @param  {Rectangle} bounds = new Rectangle() - bounding box of currentView
-         * @return {View} new instance of View
-         */
+        _createClass(View, [{
+            key: 'offsetRectangle',
+            get: function get() {
+                return new _Rectangle2.Rectangle(-1 * this.offset.x, -1 * this.offset.y, this.width, this.height);
+            }
+
+            /**
+             * Constructor
+             * @param  {number} x=0 - x-position of specified view
+             * @param  {number} y=0 - y-position of specified view
+             * @param  {number} width=0 - width of specified view
+             * @param  {number} height=0 - height of specified view
+             * @param  {Rectangle} bounds = new Rectangle() - bounding box of currentView
+             * @return {View} new instance of View
+             */
+
+        }]);
 
         function View(_ref) {
             var _ret;
@@ -102,6 +110,8 @@
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(View).call(this, x, y, width, height));
 
             _this.bounds = bounds;
+            console.log(_this.bounds.topLeft, _this.bounds.bottomRight);
+            _this.offset = new _Point.Point(0, 0);
             return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
 
@@ -115,6 +125,22 @@
             key: 'toString',
             value: function toString() {
                 return '(' + this.x + ',' + this.y + ',' + this.width + ',' + this.height + ',(' + this.bounds + '))';
+            }
+        }, {
+            key: 'centerInView',
+            value: function centerInView(lat, lng) {
+                console.log(this.latLngToPoint(lat, lng));
+                this.offset = this.latLngToPoint(lat, lng);
+            }
+        }, {
+            key: 'latLngToPoint',
+            value: function latLngToPoint(lat, lng) {
+                var resolution = {
+                    x: this.width / this.bounds.width,
+                    y: this.height / this.bounds.height
+                };
+                var diff = this.bounds.topLeft.sub(new _Point.Point(lat, lng));
+                return new _Point.Point(diff.x * resolution.x, diff.y * resolution.y);
             }
         }]);
 

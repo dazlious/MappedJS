@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Tile.js', 'jquery', './Rectangle.js', './Publisher.js', './View.js'], factory);
+        define(['exports', './Tile.js', 'jquery', './Rectangle.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Tile.js'), require('jquery'), require('./Rectangle.js'), require('./Publisher.js'), require('./View.js'));
+        factory(exports, require('./Tile.js'), require('jquery'), require('./Rectangle.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Tile, global.jquery, global.Rectangle, global.Publisher, global.View);
+        factory(mod.exports, global.Tile, global.jquery, global.Rectangle, global.Publisher);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _Tile, _jquery, _Rectangle, _Publisher, _View) {
+})(this, function(exports, _Tile, _jquery, _Rectangle, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -166,7 +166,7 @@
         _createClass(TileMap, [{
             key: 'initialize',
             value: function initialize() {
-                this.view = new _View.View({
+                this.view = new View({
                     x: this.$container.offset().left,
                     y: this.$container.offset().top,
                     width: this.$container.width(),

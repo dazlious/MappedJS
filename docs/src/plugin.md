@@ -1,6 +1,8 @@
 ## Classes
 
 <dl>
+<dt><a href="#LatLng">LatLng</a></dt>
+<dd></dd>
 <dt><a href="#MappedJS">MappedJS</a></dt>
 <dd></dd>
 <dt><a href="#Point">Point</a></dt>
@@ -14,8 +16,6 @@
 <dt><a href="#Tile">Tile</a></dt>
 <dd></dd>
 <dt><a href="#TileMap">TileMap</a></dt>
-<dd></dd>
-<dt><a href="#View">View</a></dt>
 <dd></dd>
 </dl>
 
@@ -47,6 +47,30 @@
 </dd>
 </dl>
 
+<a name="LatLng"></a>
+## LatLng
+**Kind**: global class  
+
+* [LatLng](#LatLng)
+    * [new LatLng(lat, lng)](#new_LatLng_new)
+    * [.toString()](#LatLng+toString) ⇒ <code>String</code>
+
+<a name="new_LatLng_new"></a>
+### new LatLng(lat, lng)
+Constructor
+
+**Returns**: <code>[LatLng](#LatLng)</code> - new instance of LatLng  
+**Params**
+
+- lat <code>number</code> <code> = 0</code> - = 0 - representation of latitude
+- lng <code>number</code> <code> = 0</code> - = 0 - representation of longitude
+
+<a name="LatLng+toString"></a>
+### latLng.toString() ⇒ <code>String</code>
+representation of a LatLng as String
+
+**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>String</code> - representation of this LatLng  
 <a name="MappedJS"></a>
 ## MappedJS
 **Kind**: global class  
@@ -693,33 +717,6 @@ Handles draw of TileMap
 name of imagedata in data.json
 
 **Kind**: static property of <code>[TileMap](#TileMap)</code>  
-<a name="View"></a>
-## View
-**Kind**: global class  
-
-* [View](#View)
-    * [new View(x, y, width, height, bounds)](#new_View_new)
-    * [.toString()](#View+toString) ⇒ <code>String</code>
-
-<a name="new_View_new"></a>
-### new View(x, y, width, height, bounds)
-Constructor
-
-**Returns**: <code>[View](#View)</code> - new instance of View  
-**Params**
-
-- x <code>number</code> <code> = 0</code> - x-position of specified view
-- y <code>number</code> <code> = 0</code> - y-position of specified view
-- width <code>number</code> <code> = 0</code> - width of specified view
-- height <code>number</code> <code> = 0</code> - height of specified view
-- bounds <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - bounding box of currentView
-
-<a name="View+toString"></a>
-### view.toString() ⇒ <code>String</code>
-representation of a Rectangle as String
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>String</code> - representation of this Rectangle  
 <a name="instance"></a>
 ## instance : <code>[Publisher](#Publisher)</code>
 singleton instance

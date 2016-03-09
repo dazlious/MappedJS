@@ -2,8 +2,6 @@ import {Tile} from './Tile.js';
 import $ from 'jquery';
 import {Rectangle} from './Rectangle.js';
 import {Publisher} from './Publisher.js';
-import {View} from './View.js';
-
 
 /**
  * Singleton instance of Publisher

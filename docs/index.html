@@ -27,6 +27,8 @@
         </h1>
         <h2 id="classes">Classes</h2>
 <dl>
+<dt><a href="#LatLng">LatLng</a></dt>
+<dd></dd>
 <dt><a href="#MappedJS">MappedJS</a></dt>
 <dd></dd>
 <dt><a href="#Point">Point</a></dt>
@@ -40,8 +42,6 @@
 <dt><a href="#Tile">Tile</a></dt>
 <dd></dd>
 <dt><a href="#TileMap">TileMap</a></dt>
-<dd></dd>
-<dt><a href="#View">View</a></dt>
 <dd></dd>
 </dl>
 
@@ -71,7 +71,28 @@
 </dd>
 </dl>
 
-<p><a name="MappedJS"></a></p>
+<p><a name="LatLng"></a></p>
+<h2 id="latlng">LatLng</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#LatLng">LatLng</a><ul>
+<li><a href="#new_LatLng_new">new LatLng(lat, lng)</a></li>
+<li><a href="#LatLng+toString">.toString()</a> ⇒ <code>String</code></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_LatLng_new"></a></p>
+<h3 id="new-latlng-lat-lng-">new LatLng(lat, lng)</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - new instance of LatLng<br><strong>Params</strong></p>
+<ul>
+<li>lat <code>number</code> <code> = 0</code> - = 0 - representation of latitude</li>
+<li>lng <code>number</code> <code> = 0</code> - = 0 - representation of longitude</li>
+</ul>
+<p><a name="LatLng+toString"></a></p>
+<h3 id="latlng-tostring-code-string-code-">latLng.toString() ⇒ <code>String</code></h3>
+<p>representation of a LatLng as String</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code>String</code> - representation of this LatLng<br><a name="MappedJS"></a></p>
 <h2 id="mappedjs">MappedJS</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
@@ -551,31 +572,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap.IMG_DATA_NAME"></a></p>
 <h3 id="tilemap-img_data_name-code-string-code-">TileMap.IMG_DATA_NAME : <code>String</code></h3>
 <p>name of imagedata in data.json</p>
-<p><strong>Kind</strong>: static property of <code><a href="#TileMap">TileMap</a></code><br><a name="View"></a></p>
-<h2 id="view">View</h2>
-<p><strong>Kind</strong>: global class  </p>
-<ul>
-<li><a href="#View">View</a><ul>
-<li><a href="#new_View_new">new View(x, y, width, height, bounds)</a></li>
-<li><a href="#View+toString">.toString()</a> ⇒ <code>String</code></li>
-</ul>
-</li>
-</ul>
-<p><a name="new_View_new"></a></p>
-<h3 id="new-view-x-y-width-height-bounds-">new View(x, y, width, height, bounds)</h3>
-<p>Constructor</p>
-<p><strong>Returns</strong>: <code><a href="#View">View</a></code> - new instance of View<br><strong>Params</strong></p>
-<ul>
-<li>x <code>number</code> <code> = 0</code> - x-position of specified view</li>
-<li>y <code>number</code> <code> = 0</code> - y-position of specified view</li>
-<li>width <code>number</code> <code> = 0</code> - width of specified view</li>
-<li>height <code>number</code> <code> = 0</code> - height of specified view</li>
-<li>bounds <code><a href="#Rectangle">Rectangle</a></code> - = new Rectangle() - bounding box of currentView</li>
-</ul>
-<p><a name="View+toString"></a></p>
-<h3 id="view-tostring-code-string-code-">view.toString() ⇒ <code>String</code></h3>
-<p>representation of a Rectangle as String</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>String</code> - representation of this Rectangle<br><a name="instance"></a></p>
+<p><strong>Kind</strong>: static property of <code><a href="#TileMap">TileMap</a></code><br><a name="instance"></a></p>
 <h2 id="instance-code-publisher-publisher-code-">instance : <code><a href="#Publisher">Publisher</a></code></h2>
 <p>singleton instance</p>
 <p><strong>Kind</strong>: global variable<br><a name="PUBLISHER"></a></p>
