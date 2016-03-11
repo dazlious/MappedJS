@@ -86,12 +86,12 @@ export class TileMap {
      * @return {TileMap} instance of TileMap
      */
     initialize() {
-        this.view = new View({
+        this.view = new Rectangle({
             x: this.$container.offset().left,
             y: this.$container.offset().top,
             width: this.$container.width(),
-            height: this.$container.height(),
-            bounds: new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height)
+            height: this.$container.height()//,
+            //bounds: new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height)
         });
         this.bindEvents().initializeCanvas();
 
