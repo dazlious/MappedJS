@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">171</p>
+      <p class="stat">178</p>
     </div>
   </div>
   <div class="row historical">
@@ -89,7 +89,8 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">(function(global, factory) {
+    <textarea id="file-source" class="col-md-12">/*jshint -W067*/
+(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
         define([&quot;exports&quot;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
@@ -146,6 +147,7 @@
          */
 
         function Publisher() {
+            /*jshint -W067*/
             _classCallCheck(this, Publisher);
 
             if (!instance) {
@@ -166,7 +168,9 @@
         _createClass(Publisher, [{
             key: &quot;subscribe&quot;,
             value: function subscribe() {
+                /*jshint -W067*/
                 var type = arguments.length &lt;= 0 || arguments[0] === undefined ? &quot;any&quot; : arguments[0];
+                /*jshint -W067*/
                 var fn = arguments.length &lt;= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
                 if (!this.subscribers[type]) {
@@ -186,7 +190,9 @@
         }, {
             key: &quot;unsubscribe&quot;,
             value: function unsubscribe() {
+                /*jshint -W067*/
                 var type = arguments.length &lt;= 0 || arguments[0] === undefined ? &quot;any&quot; : arguments[0];
+                /*jshint -W067*/
                 var fn = arguments.length &lt;= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
                 this.handle(Publisher.UNSUBSCRIBE, type, fn);
@@ -203,7 +209,9 @@
         }, {
             key: &quot;publish&quot;,
             value: function publish() {
+                /*jshint -W067*/
                 var type = arguments.length &lt;= 0 || arguments[0] === undefined ? &quot;any&quot; : arguments[0];
+                /*jshint -W067*/
                 var arg = arguments.length &lt;= 1 || arguments[1] === undefined ? [] : arguments[1];
 
                 this.handle(Publisher.PUBLISH, type, arg);

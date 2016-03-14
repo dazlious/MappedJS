@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">322</p>
+      <p class="stat">327</p>
     </div>
   </div>
   <div class="row historical">
@@ -89,7 +89,8 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">(function(global, factory) {
+    <textarea id="file-source" class="col-md-12">/*jshint -W067*/
+(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
         define([&#039;exports&#039;, &#039;./Tile.js&#039;, &#039;jquery&#039;, &#039;./Rectangle.js&#039;, &#039;./Publisher.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
@@ -144,7 +145,7 @@
     /**
      * Singleton instance of Publisher
      */
-    var PUBLISHER = new _Publisher.Publisher();
+    var PUBLISHER = new /*jshint -W067*/ _Publisher.Publisher();
 
     var TileMap = exports.TileMap = function() {
         _createClass(TileMap, [{
@@ -225,13 +226,18 @@
 
         }]);
 
-        function TileMap(_ref) {
+        function TileMap( /*jshint -W067*/ _ref) {
+            /*jshint -W067*/
             var container = _ref.container;
+            /*jshint -W067*/
             var _ref$tilesData = _ref.tilesData;
+            /*jshint -W067*/
             var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
+            /*jshint -W067*/
             var _ref$settings = _ref.settings;
+            /*jshint -W067*/
             var settings = _ref$settings === undefined ? {} : _ref$settings;
-
+            /*jshint -W067*/
             _classCallCheck(this, TileMap);
 
             if (!container) {
@@ -257,7 +263,7 @@
         _createClass(TileMap, [{
             key: &#039;initialize&#039;,
             value: function initialize() {
-                this.view = new _Rectangle.Rectangle({
+                this.view = new /*jshint -W067*/ _Rectangle.Rectangle({
                     x: this.$container.offset().left,
                     y: this.$container.offset().top,
                     width: this.$container.width(),
@@ -277,7 +283,7 @@
         }, {
             key: &#039;initializeCanvas&#039;,
             value: function initializeCanvas() {
-                this.$canvas = (0, _jquery2.default)(&quot;&lt;canvas class=&#039;mjs-canvas&#039; /&gt;&quot;);
+                this.$canvas = /*jshint -W067*/ (0, _jquery2.default)(&quot;&lt;canvas class=&#039;mjs-canvas&#039; /&gt;&quot;);
                 this.canvas = this.$canvas[0];
                 this.$container.append(this.$canvas);
                 this.canvasContext = this.canvas.getContext(&quot;2d&quot;);
@@ -308,7 +314,7 @@
                 var currentLevel = this.getCurrentLevelData().tiles;
                 for (var tile in currentLevel) {
                     var currentTileData = currentLevel[tile];
-                    var _tile = new _Tile.Tile(currentTileData);
+                    var _tile = new /*jshint -W067*/ _Tile.Tile(currentTileData);
                     this.tiles.push(_tile);
                 }
                 return this;

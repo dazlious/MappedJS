@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">164</p>
+      <p class="stat">166</p>
     </div>
   </div>
   <div class="row historical">
@@ -89,7 +89,8 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">(function(global, factory) {
+    <textarea id="file-source" class="col-md-12">/*jshint -W067*/
+(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
         define([&quot;exports&quot;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
@@ -142,9 +143,11 @@
          */
 
         function Point() {
+            /*jshint -W067*/
             var x = arguments.length &lt;= 0 || arguments[0] === undefined ? 0 : arguments[0];
+            /*jshint -W067*/
             var y = arguments.length &lt;= 1 || arguments[1] === undefined ? 0 : arguments[1];
-
+            /*jshint -W067*/
             _classCallCheck(this, Point);
 
             this.x = x;
@@ -237,7 +240,7 @@
         }, {
             key: &quot;toString&quot;,
             value: function toString() {
-                return &quot;(&quot; + this.x + &quot;,&quot; + this.y + &quot;)&quot;;
+                return ( /*jshint -W067*/ &quot;(&quot; + this.x + &quot;,&quot; + this.y + &quot;)&quot;);
             }
         }]);
 
@@ -249,7 +252,7 @@
      * @param  {Point} point - specified point
      * @return {Point} the point specified
      */
-    Point.createFromPoint = function(point) {
+    Point.createFromPoint = function(point) /*jshint -W067*/ {
         return new Point(point.x, point.y);
     };
 });</textarea>
