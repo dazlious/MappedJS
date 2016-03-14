@@ -63,11 +63,6 @@ describe('Rectangle', function() {
         expect(rect.bottomRight).toEqual(new Point.Point(100, 100));
     });
 
-    it("toString works as expected", function() {
-        var rect = new Rectangle.Rectangle(-50, -50, 100, 100);
-        expect(rect.toString()).toEqual("(-50,-50,100,100)");
-    });
-
     it("equals works fine", function() {
         var rect1 = new Rectangle.Rectangle(0, 0, 100, 100),
             rect2 = new Rectangle.Rectangle(1, 0, 100, 100),

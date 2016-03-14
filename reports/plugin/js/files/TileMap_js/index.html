@@ -44,7 +44,7 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">69.46</p>
+      <p class="stat">68.93</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">48.00</p>
+      <p class="stat">48.73</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.19</p>
+      <p class="stat">2.60</p>
     </div>
   </div>
 </div>
@@ -91,17 +91,17 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&#039;exports&#039;, &#039;./Tile.js&#039;, &#039;jquery&#039;, &#039;./Rectangle.js&#039;, &#039;./Publisher.js&#039;], factory);
+        define([&#039;exports&#039;, &#039;./Tile.js&#039;, &#039;jquery&#039;, &#039;./Point.js&#039;, &#039;./Bounds.js&#039;, &#039;./LatLng.js&#039;, &#039;./Rectangle.js&#039;, &#039;./View.js&#039;, &#039;./Publisher.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports, require(&#039;./Tile.js&#039;), require(&#039;jquery&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./Publisher.js&#039;));
+        factory(exports, require(&#039;./Tile.js&#039;), require(&#039;jquery&#039;), require(&#039;./Point.js&#039;), require(&#039;./Bounds.js&#039;), require(&#039;./LatLng.js&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./View.js&#039;), require(&#039;./Publisher.js&#039;));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Tile, global.jquery, global.Rectangle, global.Publisher);
+        factory(mod.exports, global.Tile, global.jquery, global.Point, global.Bounds, global.LatLng, global.Rectangle, global.View, global.Publisher);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _Tile, _jquery, _Rectangle, _Publisher) {
+})(this, function(exports, _Tile, _jquery, _Point, _Bounds, _LatLng, _Rectangle, _View, _Publisher) {
     &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
@@ -200,8 +200,9 @@
         }, {
             key: &#039;visibleTiles&#039;,
             get: function get() {
-                return this.tiles.filter(function(v, i, a) {
-                    return this.view.intersects(v.getDistortedRect(this.distortion));
+                return this.tiles.filter(function(t, i, a) {
+                    var newTile = t.getDistortedRect(this.distortion).translate(this.view.getMapOffset(this.distortion), this.view.offset.y);
+                    return this.view.viewport.intersects(newTile);
                 }, this);
             }
 
@@ -243,7 +244,7 @@
             this.settings = settings;
 
             this.tiles = [];
-            this.initialize().initializeTiles().draw();
+            this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions).initializeTiles().draw();
 
             return this;
         }
@@ -256,13 +257,12 @@
 
         _createClass(TileMap, [{
             key: &#039;initialize&#039;,
-            value: function initialize() {
-                this.view = new _Rectangle.Rectangle({
-                    x: this.$container.offset().left,
-                    y: this.$container.offset().top,
-                    width: this.$container.width(),
-                    height: this.$container.height() //,
-                        //bounds: new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height)
+            value: function initialize(bounds, center, mapDimensions) {
+                this.view = new _View.View({
+                    viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
+                    mapView: new _Rectangle.Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
+                    bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
+                    center: new _LatLng.LatLng(center.lat, center.lng)
                 });
                 this.bindEvents().initializeCanvas();
 
@@ -349,7 +349,7 @@
             key: &#039;drawTile&#039;,
             value: function drawTile(tile) {
                 if (tile.state.current.value &gt;= 2) {
-                    this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
+                    this.canvasContext.drawImage(tile.img, tile.x * this.distortion + this.view.getMapOffset(this.distortion), tile.y + this.view.offset.y, tile.width * this.distortion, tile.height);
                 } else if (tile.state.current.value === 0) {
                     tile.initialize();
                 }
@@ -379,10 +379,10 @@
         }, {
             key: &#039;resizeView&#039;,
             value: function resizeView() {
-                this.view.x = this.left;
-                this.view.y = this.top;
-                this.view.width = this.width;
-                this.view.height = this.height;
+                this.view.viewport.x = this.left;
+                this.view.viewport.y = this.top;
+                this.view.viewport.width = this.width;
+                this.view.viewport.height = this.height;
                 return this;
             }
 

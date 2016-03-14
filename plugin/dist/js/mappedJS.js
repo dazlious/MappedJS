@@ -263,7 +263,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
+	var _Point = __webpack_require__(6);
+
+	var _Bounds = __webpack_require__(9);
+
+	var _LatLng = __webpack_require__(10);
+
 	var _Rectangle = __webpack_require__(5);
+
+	var _View = __webpack_require__(11);
 
 	var _Publisher = __webpack_require__(7);
 
@@ -330,8 +338,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'visibleTiles',
 	        get: function get() {
-	            return this.tiles.filter(function (v, i, a) {
-	                return this.view.intersects(v.getDistortedRect(this.distortion));
+	            return this.tiles.filter(function (t, i, a) {
+	                var newTile = t.getDistortedRect(this.distortion).translate(this.view.getMapOffset(this.distortion), this.view.offset.y);
+	                return this.view.viewport.intersects(newTile);
 	            }, this);
 	        }
 
@@ -373,7 +382,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.settings = settings;
 
 	        this.tiles = [];
-	        this.initialize().initializeTiles().draw();
+	        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions).initializeTiles().draw();
 
 	        return this;
 	    }
@@ -386,13 +395,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _createClass(TileMap, [{
 	        key: 'initialize',
-	        value: function initialize() {
-	            this.view = new _Rectangle.Rectangle({
-	                x: this.$container.offset().left,
-	                y: this.$container.offset().top,
-	                width: this.$container.width(),
-	                height: this.$container.height() //,
-	                //bounds: new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height)
+	        value: function initialize(bounds, center, mapDimensions) {
+	            this.view = new _View.View({
+	                viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
+	                mapView: new _Rectangle.Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
+	                bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
+	                center: new _LatLng.LatLng(center.lat, center.lng)
 	            });
 	            this.bindEvents().initializeCanvas();
 
@@ -479,7 +487,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'drawTile',
 	        value: function drawTile(tile) {
 	            if (tile.state.current.value >= 2) {
-	                this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
+	                this.canvasContext.drawImage(tile.img, tile.x * this.distortion + this.view.getMapOffset(this.distortion), tile.y + this.view.offset.y, tile.width * this.distortion, tile.height);
 	            } else if (tile.state.current.value === 0) {
 	                tile.initialize();
 	            }
@@ -509,10 +517,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resizeView',
 	        value: function resizeView() {
-	            this.view.x = this.left;
-	            this.view.y = this.top;
-	            this.view.width = this.width;
-	            this.view.height = this.height;
+	            this.view.viewport.x = this.left;
+	            this.view.viewport.y = this.top;
+	            this.view.viewport.width = this.width;
+	            this.view.viewport.height = this.height;
 	            return this;
 	        }
 
@@ -993,6 +1001,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
+	         * moves a rectangle by specified coords
+	         * @param  {number} x - how far to move in x direction
+	         * @param  {number} y - how far to move in y direction
+	         * @return {Rectangle} Returns the altered direction
+	         */
+
+	    }, {
+	        key: 'translate',
+	        value: function translate(x, y) {
+	            this.x += x;
+	            this.y += y;
+	            return this;
+	        }
+
+	        /**
 	         * check if rectangles are equal
 	         * @param  {Rectangle} rectangle - the specified rectangle to check against this
 	         * @return {Boolean} is true, if x, y, width and height are the same
@@ -1002,17 +1025,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'equals',
 	        value: function equals(rectangle) {
 	            return rectangle instanceof Rectangle ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
-	        }
-
-	        /**
-	         * representation of a Rectangle as String
-	         * @return {String} representation of this Rectangle
-	         */
-
-	    }, {
-	        key: 'toString',
-	        value: function toString() {
-	            return '(' + this.x + ',' + this.y + ',' + this.width + ',' + this.height + ')';
 	        }
 	    }]);
 
@@ -1128,17 +1140,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.x += x;
 	      this.y += y;
 	      return this;
-	    }
-
-	    /**
-	     * representation of a Point as String
-	     * @return {String} representation of this Point
-	     */
-
-	  }, {
-	    key: "toString",
-	    value: function toString() {
-	      return "(" + this.x + "," + this.y + ")";
 	    }
 	  }]);
 
@@ -1359,6 +1360,267 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 		};
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Bounds = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _LatLng = __webpack_require__(10);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Bounds = exports.Bounds = function () {
+	    _createClass(Bounds, [{
+	        key: 'width',
+
+
+	        /**
+	         * gets width of boundaries
+	         * @return {number} width of boundaries
+	         */
+	        get: function get() {
+	            return Math.abs(this.so.lng - this.nw.lng);
+	        }
+
+	        /**
+	         * gets height of boundaries
+	         * @return {number} height of boundaries
+	         */
+
+	    }, {
+	        key: 'height',
+	        get: function get() {
+	            return Math.abs(this.so.lat - this.nw.lat);
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {number} northWest = new LatLng() - representation of northWest boundary
+	         * @param  {number} southEast = new LatLng() - representation of southEast boundary
+	         * @return {Bounds} new instance of Bounds
+	         */
+
+	    }]);
+
+	    function Bounds() {
+	        var northWest = arguments.length <= 0 || arguments[0] === undefined ? new _LatLng.LatLng() : arguments[0];
+	        var southEast = arguments.length <= 1 || arguments[1] === undefined ? new _LatLng.LatLng() : arguments[1];
+
+	        _classCallCheck(this, Bounds);
+
+	        if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) {
+	            throw new Error(northWest + ' needs to be top-right corner and ' + southEast + ' bottom-left');
+	        }
+	        this.nw = northWest;
+	        this.so = southEast;
+	        return this;
+	    }
+
+	    return Bounds;
+	}();
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.LatLng = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Point = __webpack_require__(6);
+
+	var _Rectangle = __webpack_require__(5);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var LatLng = exports.LatLng = function () {
+
+	    /**
+	     * Constructor
+	     * @param  {number} lat = 0 - representation of latitude
+	     * @param  {number} lng = 0 - representation of longitude
+	     * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
+	     * @return {LatLng} new instance of LatLng
+	     */
+
+	    function LatLng() {
+	        var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	        var isDistance = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+	        _classCallCheck(this, LatLng);
+
+	        if (!isDistance && (lat > 90 || lat < -90 || lng > 180 || lng < -180)) {
+	            throw new Error('latitude(' + lat + ') is greater/smaller than +/-90 or longitude(' + lng + ') is greater/smaller than +/-180');
+	        }
+	        this.lat = lat;
+	        this.lng = lng;
+	        return this;
+	    }
+
+	    /**
+	     * substract specified coord from this coordinate
+	     * @param  {LatLng} coord - specified coordinate to substract from this coord
+	     * @return {LatLng} the new calculated LatLng
+	     */
+
+
+	    _createClass(LatLng, [{
+	        key: 'sub',
+	        value: function sub(coord) {
+	            return new LatLng(this.lat - coord.lat, this.lng - coord.lng);
+	        }
+
+	        /**
+	         * substract specified coord from this coordinate
+	         * @param  {LatLng} coord - specified coordinate to substract from this coord
+	         * @return {LatLng} the new calculated LatLng
+	         */
+
+	    }, {
+	        key: 'difference',
+	        value: function difference(coord) {
+	            return new LatLng(this.lat - coord.lat, this.lng - coord.lng, true);
+	        }
+
+	        /**
+	         * add specified coord to this coordinate
+	         * @param  {LatLng} coord - specified coordinate to add to this coord
+	         * @return {LatLng} the new calculated LatLng
+	         */
+
+	    }, {
+	        key: 'add',
+	        value: function add(coord) {
+	            return new LatLng(this.lat + coord.lat, this.lng + coord.lng);
+	        }
+
+	        /**
+	         * converts Latlng to a Point
+	         * @return {Point} Returns a Point representing LatLng in Pixels
+	         */
+
+	    }, {
+	        key: 'toPoint',
+	        value: function toPoint(bounds, rect) {
+	            var relativePosition = bounds.nw.difference(this),
+	                factorX = rect.width / bounds.width,
+	                factorY = rect.height / bounds.height;
+	            return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+	        }
+
+	        /**
+	         * checks if specified coord equals this coord
+	         * @param  {LatLng} coord - specified coord to check against
+	         * @return {Boolean} Returns if specified coord equals this coord
+	         */
+
+	    }, {
+	        key: 'equals',
+	        value: function equals(coord) {
+	            return this.lat === coord.lat && this.lng === coord.lng;
+	        }
+	    }]);
+
+	    return LatLng;
+	}();
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.View = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Point = __webpack_require__(6);
+
+	var _LatLng = __webpack_require__(10);
+
+	var _Bounds = __webpack_require__(9);
+
+	var _Rectangle = __webpack_require__(5);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var View = exports.View = function () {
+	    _createClass(View, [{
+	        key: 'getMapOffset',
+
+
+	        /**
+	         * Returns the offset of the map
+	         * @param {number} distortion - the current latitude distortion
+	         * @return {number} calculated offset
+	         */
+	        value: function getMapOffset(distortion) {
+	            return this.offset.x + (this.mapView.width - this.mapView.width * distortion) / 2;
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {Object} settings - the settings Object
+	         * @param  {Rectangle} viewport = new Rectangle() - current representation of viewport
+	         * @param  {Rectangle} mapView = new Rectangle() - current representation of map
+	         * @param  {Bounds} bounds = new Bounds() - current bounds of map
+	         * @param  {LatLng} center = new LatLng() - current center of map
+	         * @return {View} Instance of View
+	         */
+
+	    }, {
+	        key: 'offset',
+
+
+	        /**
+	         * Returns the offset of the center
+	         */
+	        get: function get() {
+	            var center = this.center.toPoint(this.bounds, this.mapView);
+	            var newCenter = this.viewport.center.sub(center);
+	            return newCenter;
+	        }
+	    }]);
+
+	    function View(_ref) {
+	        var _ref$viewport = _ref.viewport;
+	        var viewport = _ref$viewport === undefined ? new _Rectangle.Rectangle() : _ref$viewport;
+	        var _ref$mapView = _ref.mapView;
+	        var mapView = _ref$mapView === undefined ? new _Rectangle.Rectangle() : _ref$mapView;
+	        var _ref$bounds = _ref.bounds;
+	        var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
+	        var _ref$center = _ref.center;
+	        var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
+
+	        _classCallCheck(this, View);
+
+	        this.mapView = mapView;
+	        this.viewport = viewport;
+	        this.bounds = bounds;
+	        this.center = center;
+	        return this;
+	    }
+
+	    return View;
+	}();
 
 /***/ }
 /******/ ])

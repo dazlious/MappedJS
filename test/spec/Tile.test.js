@@ -29,7 +29,10 @@ describe('Tile', function() {
         var t = new Tile.Tile({
             path: "http://dummyimage.com/800x200/000/fff"
         });
-        expect(t.toString()).toEqual(new Rectangle.Rectangle().toString());
+        expect(t.x).toEqual(0);
+        expect(t.y).toEqual(0);
+        expect(t.width).toEqual(0);
+        expect(t.height).toEqual(0);
     });
 
     it("initializes in correct state", function(done) {
