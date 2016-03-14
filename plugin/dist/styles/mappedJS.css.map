@@ -1,0 +1,9 @@
+{
+	"version": 3,
+	"file": "mappedJS.css",
+	"sources": [
+		"../../src/styles/mappedJS.scss"
+	],
+	"mappings": ";AAEA,SAAS,CAAC;CACN,QAAQ,EAAE,MAAO;CAOpB;;;AARD,SAAS,CAEL,CAAC,CAAC;CACE,UAAU,EAAE,UAAW;CAC1B;;;AAJL,SAAS,GAKH,MAAM,CAAC;CACL,OAAO,EAAE,KAAM;CAClB",
+	"names": []
+}
