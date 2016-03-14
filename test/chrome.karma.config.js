@@ -14,6 +14,7 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
+            '../es5-transpiled/Point.js',
             '../es5-transpiled/**.js',
             'spec/**/*.test.js'
         ],
