@@ -524,7 +524,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'draw',
 	        value: function draw() {
-	            console.log(this.tiles.length, this.visibleTiles.length);
 	            for (var tile in this.visibleTiles) {
 	                var currentTile = this.visibleTiles[tile];
 	                this.drawTile(currentTile);

@@ -27,6 +27,8 @@
         </h1>
         <h2 id="classes">Classes</h2>
 <dl>
+<dt><a href="#Bounds">Bounds</a></dt>
+<dd></dd>
 <dt><a href="#LatLng">LatLng</a></dt>
 <dd></dd>
 <dt><a href="#MappedJS">MappedJS</a></dt>
@@ -71,23 +73,89 @@
 </dd>
 </dl>
 
-<p><a name="LatLng"></a></p>
+<p><a name="Bounds"></a></p>
+<h2 id="bounds">Bounds</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Bounds">Bounds</a><ul>
+<li><a href="#new_Bounds_new">new Bounds(northWest, southEast)</a></li>
+<li><a href="#Bounds+width">.width</a> ⇒ <code>number</code></li>
+<li><a href="#Bounds+height">.height</a> ⇒ <code>number</code></li>
+<li><a href="#Bounds+toString">.toString()</a> ⇒ <code>String</code></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_Bounds_new"></a></p>
+<h3 id="new-bounds-northwest-southeast-">new Bounds(northWest, southEast)</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#Bounds">Bounds</a></code> - new instance of Bounds<br><strong>Params</strong></p>
+<ul>
+<li>northWest <code>number</code> - = new LatLng() - representation of northWest boundary</li>
+<li>southEast <code>number</code> - = new LatLng() - representation of southEast boundary</li>
+</ul>
+<p><a name="Bounds+width"></a></p>
+<h3 id="bounds-width-code-number-code-">bounds.width ⇒ <code>number</code></h3>
+<p>gets width of boundaries</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Bounds">Bounds</a></code><br><strong>Returns</strong>: <code>number</code> - width of boundaries<br><a name="Bounds+height"></a></p>
+<h3 id="bounds-height-code-number-code-">bounds.height ⇒ <code>number</code></h3>
+<p>gets height of boundaries</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Bounds">Bounds</a></code><br><strong>Returns</strong>: <code>number</code> - height of boundaries<br><a name="Bounds+toString"></a></p>
+<h3 id="bounds-tostring-code-string-code-">bounds.toString() ⇒ <code>String</code></h3>
+<p>representation of a Bounds as String</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Bounds">Bounds</a></code><br><strong>Returns</strong>: <code>String</code> - representation of this Bounds<br><a name="LatLng"></a></p>
 <h2 id="latlng">LatLng</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
 <li><a href="#LatLng">LatLng</a><ul>
-<li><a href="#new_LatLng_new">new LatLng(lat, lng)</a></li>
+<li><a href="#new_LatLng_new">new LatLng(lat, lng, isDistance)</a></li>
+<li><a href="#LatLng+sub">.sub(coord)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
+<li><a href="#LatLng+difference">.difference(coord)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
+<li><a href="#LatLng+add">.add(coord)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
+<li><a href="#LatLng+toPoint">.toPoint()</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#LatLng+equals">.equals(coord)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#LatLng+toString">.toString()</a> ⇒ <code>String</code></li>
 </ul>
 </li>
 </ul>
 <p><a name="new_LatLng_new"></a></p>
-<h3 id="new-latlng-lat-lng-">new LatLng(lat, lng)</h3>
+<h3 id="new-latlng-lat-lng-isdistance-">new LatLng(lat, lng, isDistance)</h3>
 <p>Constructor</p>
 <p><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - new instance of LatLng<br><strong>Params</strong></p>
 <ul>
 <li>lat <code>number</code> <code> = 0</code> - = 0 - representation of latitude</li>
 <li>lng <code>number</code> <code> = 0</code> - = 0 - representation of longitude</li>
+<li>isDistance <code>Boolean</code> <code> = false</code> - = false - if LatLng should be checked against bounds</li>
+</ul>
+<p><a name="LatLng+sub"></a></p>
+<h3 id="latlng-sub-coord-code-latlng-latlng-code-">latLng.sub(coord) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
+<p>substract specified coord from this coordinate</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - the new calculated LatLng<br><strong>Params</strong></p>
+<ul>
+<li>coord <code><a href="#LatLng">LatLng</a></code> - specified coordinate to substract from this coord</li>
+</ul>
+<p><a name="LatLng+difference"></a></p>
+<h3 id="latlng-difference-coord-code-latlng-latlng-code-">latLng.difference(coord) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
+<p>substract specified coord from this coordinate</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - the new calculated LatLng<br><strong>Params</strong></p>
+<ul>
+<li>coord <code><a href="#LatLng">LatLng</a></code> - specified coordinate to substract from this coord</li>
+</ul>
+<p><a name="LatLng+add"></a></p>
+<h3 id="latlng-add-coord-code-latlng-latlng-code-">latLng.add(coord) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
+<p>add specified coord to this coordinate</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - the new calculated LatLng<br><strong>Params</strong></p>
+<ul>
+<li>coord <code><a href="#LatLng">LatLng</a></code> - specified coordinate to add to this coord</li>
+</ul>
+<p><a name="LatLng+toPoint"></a></p>
+<h3 id="latlng-topoint-code-point-point-code-">latLng.toPoint() ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>converts Latlng to a Point</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - Returns a Point representing LatLng in Pixels<br><a name="LatLng+equals"></a></p>
+<h3 id="latlng-equals-coord-code-boolean-code-">latLng.equals(coord) ⇒ <code>Boolean</code></h3>
+<p>checks if specified coord equals this coord</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code>Boolean</code> - Returns if specified coord equals this coord<br><strong>Params</strong></p>
+<ul>
+<li>coord <code><a href="#LatLng">LatLng</a></code> - specified coord to check against</li>
 </ul>
 <p><a name="LatLng+toString"></a></p>
 <h3 id="latlng-tostring-code-string-code-">latLng.toString() ⇒ <code>String</code></h3>

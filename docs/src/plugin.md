@@ -1,6 +1,8 @@
 ## Classes
 
 <dl>
+<dt><a href="#Bounds">Bounds</a></dt>
+<dd></dd>
 <dt><a href="#LatLng">LatLng</a></dt>
 <dd></dd>
 <dt><a href="#MappedJS">MappedJS</a></dt>
@@ -47,16 +49,59 @@
 </dd>
 </dl>
 
+<a name="Bounds"></a>
+## Bounds
+**Kind**: global class  
+
+* [Bounds](#Bounds)
+    * [new Bounds(northWest, southEast)](#new_Bounds_new)
+    * [.width](#Bounds+width) ⇒ <code>number</code>
+    * [.height](#Bounds+height) ⇒ <code>number</code>
+    * [.toString()](#Bounds+toString) ⇒ <code>String</code>
+
+<a name="new_Bounds_new"></a>
+### new Bounds(northWest, southEast)
+Constructor
+
+**Returns**: <code>[Bounds](#Bounds)</code> - new instance of Bounds  
+**Params**
+
+- northWest <code>number</code> - = new LatLng() - representation of northWest boundary
+- southEast <code>number</code> - = new LatLng() - representation of southEast boundary
+
+<a name="Bounds+width"></a>
+### bounds.width ⇒ <code>number</code>
+gets width of boundaries
+
+**Kind**: instance property of <code>[Bounds](#Bounds)</code>  
+**Returns**: <code>number</code> - width of boundaries  
+<a name="Bounds+height"></a>
+### bounds.height ⇒ <code>number</code>
+gets height of boundaries
+
+**Kind**: instance property of <code>[Bounds](#Bounds)</code>  
+**Returns**: <code>number</code> - height of boundaries  
+<a name="Bounds+toString"></a>
+### bounds.toString() ⇒ <code>String</code>
+representation of a Bounds as String
+
+**Kind**: instance method of <code>[Bounds](#Bounds)</code>  
+**Returns**: <code>String</code> - representation of this Bounds  
 <a name="LatLng"></a>
 ## LatLng
 **Kind**: global class  
 
 * [LatLng](#LatLng)
-    * [new LatLng(lat, lng)](#new_LatLng_new)
+    * [new LatLng(lat, lng, isDistance)](#new_LatLng_new)
+    * [.sub(coord)](#LatLng+sub) ⇒ <code>[LatLng](#LatLng)</code>
+    * [.difference(coord)](#LatLng+difference) ⇒ <code>[LatLng](#LatLng)</code>
+    * [.add(coord)](#LatLng+add) ⇒ <code>[LatLng](#LatLng)</code>
+    * [.toPoint()](#LatLng+toPoint) ⇒ <code>[Point](#Point)</code>
+    * [.equals(coord)](#LatLng+equals) ⇒ <code>Boolean</code>
     * [.toString()](#LatLng+toString) ⇒ <code>String</code>
 
 <a name="new_LatLng_new"></a>
-### new LatLng(lat, lng)
+### new LatLng(lat, lng, isDistance)
 Constructor
 
 **Returns**: <code>[LatLng](#LatLng)</code> - new instance of LatLng  
@@ -64,6 +109,53 @@ Constructor
 
 - lat <code>number</code> <code> = 0</code> - = 0 - representation of latitude
 - lng <code>number</code> <code> = 0</code> - = 0 - representation of longitude
+- isDistance <code>Boolean</code> <code> = false</code> - = false - if LatLng should be checked against bounds
+
+<a name="LatLng+sub"></a>
+### latLng.sub(coord) ⇒ <code>[LatLng](#LatLng)</code>
+substract specified coord from this coordinate
+
+**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>[LatLng](#LatLng)</code> - the new calculated LatLng  
+**Params**
+
+- coord <code>[LatLng](#LatLng)</code> - specified coordinate to substract from this coord
+
+<a name="LatLng+difference"></a>
+### latLng.difference(coord) ⇒ <code>[LatLng](#LatLng)</code>
+substract specified coord from this coordinate
+
+**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>[LatLng](#LatLng)</code> - the new calculated LatLng  
+**Params**
+
+- coord <code>[LatLng](#LatLng)</code> - specified coordinate to substract from this coord
+
+<a name="LatLng+add"></a>
+### latLng.add(coord) ⇒ <code>[LatLng](#LatLng)</code>
+add specified coord to this coordinate
+
+**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>[LatLng](#LatLng)</code> - the new calculated LatLng  
+**Params**
+
+- coord <code>[LatLng](#LatLng)</code> - specified coordinate to add to this coord
+
+<a name="LatLng+toPoint"></a>
+### latLng.toPoint() ⇒ <code>[Point](#Point)</code>
+converts Latlng to a Point
+
+**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>[Point](#Point)</code> - Returns a Point representing LatLng in Pixels  
+<a name="LatLng+equals"></a>
+### latLng.equals(coord) ⇒ <code>Boolean</code>
+checks if specified coord equals this coord
+
+**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>Boolean</code> - Returns if specified coord equals this coord  
+**Params**
+
+- coord <code>[LatLng](#LatLng)</code> - specified coord to check against
 
 <a name="LatLng+toString"></a>
 ### latLng.toString() ⇒ <code>String</code>
