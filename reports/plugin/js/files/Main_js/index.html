@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">238</p>
+      <p class="stat">228</p>
     </div>
   </div>
   <div class="row historical">
@@ -89,8 +89,7 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">/*jshint -W067*/
-(function(global, factory) {
+    <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
         define([&#039;exports&#039;, &#039;./TileMap.js&#039;, &#039;jquery&#039;, &#039;./Helper.js&#039;, &#039;./Publisher.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
@@ -160,26 +159,18 @@
          * @return {MappedJS} instance of MappedJS
          */
 
-        function MappedJS( /*jshint -W067*/ _ref) {
-            /*jshint -W067*/
+        function MappedJS(_ref) {
             var _ref$container = _ref.container;
-            /*jshint -W067*/
             var container = _ref$container === undefined ? &quot;.mjs&quot; : _ref$container;
-            /*jshint -W067*/
             var _ref$mapData = _ref.mapData;
-            /*jshint -W067*/
             var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
-            /*jshint -W067*/
             var _ref$mapSettings = _ref.mapSettings;
-            /*jshint -W067*/
             var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
-            /*jshint -W067*/
             var _ref$events = _ref.events;
-            /*jshint -W067*/
             var events = _ref$events === undefined ? {
                 loaded: &quot;mjs-loaded&quot;
             } : _ref$events;
-            /*jshint -W067*/
+
             _classCallCheck(this, MappedJS);
 
             this.initializeApi();
@@ -206,7 +197,7 @@
         _createClass(MappedJS, [{
             key: &#039;initializeSettings&#039;,
             value: function initializeSettings(container, events, mapSettings) {
-                this.$container = typeof container === &quot;string&quot; ? /*jshint -W067*/ (0, _jquery2.default)(container) : /*jshint -W067*/ (typeof container === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(container)) === &quot;object&quot; &amp;&amp; container instanceof jQuery ? container : /*jshint -W067*/ (0, _jquery2.default)(container);
+                this.$container = typeof container === &quot;string&quot; ? (0, _jquery2.default)(container) : (typeof container === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(container)) === &quot;object&quot; &amp;&amp; container instanceof jQuery ? container : (0, _jquery2.default)(container);
                 if (!(this.$container instanceof jQuery)) {
                     throw new Error(&quot;Container &quot; + container + &quot; not found&quot;);
                 }
@@ -243,13 +234,12 @@
             value: function initializeData(mapData, cb) {
                 var _this = this;
                 if (typeof mapData === &quot;string&quot;) {
-                    /*jshint -W067*/
                     _Helper.Helper.requestJSON(mapData, function(data) {
                         _this.mapData = data;
                         cb();
                     });
                 } else {
-                    this.mapData = /*jshint -W067*/ (typeof mapData === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(mapData)) === &quot;object&quot; ? mapData : null;
+                    this.mapData = (typeof mapData === &#039;undefined&#039; ? &#039;undefined&#039; : _typeof(mapData)) === &quot;object&quot; ? mapData : null;
                     cb();
                 }
                 return this;
@@ -263,7 +253,7 @@
         }, {
             key: &#039;initializeMap&#039;,
             value: function initializeMap() {
-                this.$canvas = new /*jshint -W067*/ _TileMap.TileMap({
+                this.$canvas = new _TileMap.TileMap({
                     container: this.$container,
                     tilesData: this.mapData,
                     settings: this.mapSettings
@@ -280,9 +270,9 @@
             key: &#039;initializeApi&#039;,
             value: function initializeApi() {
                 this.api = {
-                    TileMap: /*jshint -W067*/ _TileMap.TileMap,
-                    Publisher: /*jshint -W067*/ _Publisher.Publisher,
-                    Helper: /*jshint -W067*/ _Helper.Helper
+                    TileMap: _TileMap.TileMap,
+                    Publisher: _Publisher.Publisher,
+                    Helper: _Helper.Helper
                 };
                 return this;
             }
@@ -295,7 +285,6 @@
         }, {
             key: &#039;bindEvents&#039;,
             value: function bindEvents() {
-                /*jshint -W067*/
                 (0, _jquery2.default)(window).on(&quot;resize orientationchange&quot;, this.resizeHandler.bind(this));
                 return this;
             }

@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">294</p>
+      <p class="stat">288</p>
     </div>
   </div>
   <div class="row historical">
@@ -89,8 +89,7 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">/*jshint -W067*/
-(function(global, factory) {
+    <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
         define([&#039;exports&#039;, &#039;./Point.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
@@ -170,7 +169,7 @@
              * @return {Point} center point
              */
             get: function get() {
-                return new /*jshint -W067*/ _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
+                return new _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
             }
 
             /**
@@ -181,7 +180,7 @@
         }, {
             key: &#039;topLeft&#039;,
             get: function get() {
-                return new /*jshint -W067*/ _Point2.Point(this.x, this.y);
+                return new _Point2.Point(this.x, this.y);
             }
 
             /**
@@ -192,7 +191,7 @@
         }, {
             key: &#039;topRight&#039;,
             get: function get() {
-                return new /*jshint -W067*/ _Point2.Point(this.x + this.width, this.y);
+                return new _Point2.Point(this.x + this.width, this.y);
             }
 
             /**
@@ -203,7 +202,7 @@
         }, {
             key: &#039;bottomLeft&#039;,
             get: function get() {
-                return new /*jshint -W067*/ _Point2.Point(this.x, this.y + this.height);
+                return new _Point2.Point(this.x, this.y + this.height);
             }
 
             /**
@@ -214,7 +213,7 @@
         }, {
             key: &#039;bottomRight&#039;,
             get: function get() {
-                return new /*jshint -W067*/ _Point2.Point(this.x + this.width, this.y + this.height);
+                return new _Point2.Point(this.x + this.width, this.y + this.height);
             }
 
             /**
@@ -273,27 +272,21 @@
         }]);
 
         function Rectangle() {
-            /*jshint -W067*/
             var x = arguments.length &lt;= 0 || arguments[0] === undefined ? 0 : arguments[0];
-            /*jshint -W067*/
             var y = arguments.length &lt;= 1 || arguments[1] === undefined ? 0 : arguments[1];
-            /*jshint -W067*/
             var width = arguments.length &lt;= 2 || arguments[2] === undefined ? 0 : arguments[2];
-            /*jshint -W067*/
+
             var _ret;
 
             var height = arguments.length &lt;= 3 || arguments[3] === undefined ? 0 : arguments[3];
-            /*jshint -W067*/
+
             _classCallCheck(this, Rectangle);
 
-            /*jshint -W067*/
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
 
-            /*jshint -W067*/
             _this.width = width;
-            /*jshint -W067*/
             _this.height = height;
-            return ( /*jshint -W067*/ _ret = _this, _possibleConstructorReturn(_this, _ret));
+            return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
 
         /**
@@ -318,7 +311,7 @@
         }, {
             key: &#039;contains&#039;,
             value: function contains(rectOrPoint) {
-                return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof /*jshint -W067*/ _Point2.Point ? this.containsPoint(rectOrPoint) : false;
+                return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
             }
 
             /**
@@ -330,7 +323,7 @@
         }, {
             key: &#039;containsPoint&#039;,
             value: function containsPoint(point) {
-                return point instanceof /*jshint -W067*/ _Point2.Point ? point.x &gt;= this.left &amp;&amp; point.y &gt;= this.top &amp;&amp; point.x &lt;= this.right &amp;&amp; point.y &lt;= this.bottom : false;
+                return point instanceof _Point2.Point ? point.x &gt;= this.left &amp;&amp; point.y &gt;= this.top &amp;&amp; point.x &lt;= this.right &amp;&amp; point.y &lt;= this.bottom : false;
             }
 
             /**
@@ -377,7 +370,7 @@
         }, {
             key: &#039;toString&#039;,
             value: function toString() {
-                return ( /*jshint -W067*/ &#039;(&#039; + this.x + &#039;,&#039; + this.y + &#039;,&#039; + this.width + &#039;,&#039; + this.height + &#039;)&#039;);
+                return &#039;(&#039; + this.x + &#039;,&#039; + this.y + &#039;,&#039; + this.width + &#039;,&#039; + this.height + &#039;)&#039;;
             }
         }]);
 
