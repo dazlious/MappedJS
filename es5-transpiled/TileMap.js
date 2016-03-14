@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Tile.js', 'jquery', './Rectangle.js', './Publisher.js'], factory);
+        define(['exports', './Tile.js', 'jquery', './Point.js', './Bounds.js', './LatLng.js', './Rectangle.js', './View.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Tile.js'), require('jquery'), require('./Rectangle.js'), require('./Publisher.js'));
+        factory(exports, require('./Tile.js'), require('jquery'), require('./Point.js'), require('./Bounds.js'), require('./LatLng.js'), require('./Rectangle.js'), require('./View.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Tile, global.jquery, global.Rectangle, global.Publisher);
+        factory(mod.exports, global.Tile, global.jquery, global.Point, global.Bounds, global.LatLng, global.Rectangle, global.View, global.Publisher);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _Tile, _jquery, _Rectangle, _Publisher) {
+})(this, function(exports, _Tile, _jquery, _Point, _Bounds, _LatLng, _Rectangle, _View, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -109,8 +109,9 @@
         }, {
             key: 'visibleTiles',
             get: function get() {
-                return this.tiles.filter(function(v, i, a) {
-                    return this.view.intersects(v.getDistortedRect(this.distortion));
+                return this.tiles.filter(function(t, i, a) {
+                    var newTile = t.getDistortedRect(this.distortion).translate(this.view.getMapOffset(this.distortion), this.view.offset.y);
+                    return this.view.viewport.intersects(newTile);
                 }, this);
             }
 
@@ -152,7 +153,7 @@
             this.settings = settings;
 
             this.tiles = [];
-            this.initialize().initializeTiles().draw();
+            this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions).initializeTiles().draw();
 
             return this;
         }
@@ -165,13 +166,12 @@
 
         _createClass(TileMap, [{
             key: 'initialize',
-            value: function initialize() {
-                this.view = new _Rectangle.Rectangle({
-                    x: this.$container.offset().left,
-                    y: this.$container.offset().top,
-                    width: this.$container.width(),
-                    height: this.$container.height() //,
-                        //bounds: new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height)
+            value: function initialize(bounds, center, mapDimensions) {
+                this.view = new _View.View({
+                    viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
+                    mapView: new _Rectangle.Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
+                    bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
+                    center: new _LatLng.LatLng(center.lat, center.lng)
                 });
                 this.bindEvents().initializeCanvas();
 
@@ -258,7 +258,7 @@
             key: 'drawTile',
             value: function drawTile(tile) {
                 if (tile.state.current.value >= 2) {
-                    this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
+                    this.canvasContext.drawImage(tile.img, tile.x * this.distortion + this.view.getMapOffset(this.distortion), tile.y + this.view.offset.y, tile.width * this.distortion, tile.height);
                 } else if (tile.state.current.value === 0) {
                     tile.initialize();
                 }
@@ -288,10 +288,10 @@
         }, {
             key: 'resizeView',
             value: function resizeView() {
-                this.view.x = this.left;
-                this.view.y = this.top;
-                this.view.width = this.width;
-                this.view.height = this.height;
+                this.view.viewport.x = this.left;
+                this.view.viewport.y = this.top;
+                this.view.viewport.width = this.width;
+                this.view.viewport.height = this.height;
                 return this;
             }
 

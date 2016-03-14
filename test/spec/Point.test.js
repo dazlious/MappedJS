@@ -29,11 +29,6 @@ describe('Point', function() {
         expect(p3.equals(p4)).toEqual(false);
     });
 
-    it("toString works as expected", function() {
-        var p1 = new Point.Point(1, 12);
-        expect(p1.toString()).toEqual("(1,12)");
-    });
-
     it("substraction works as expected", function() {
         var p1 = new Point.Point(2, 2),
             p2 = new Point.Point(2, 2),

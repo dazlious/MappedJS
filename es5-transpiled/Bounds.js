@@ -89,19 +89,6 @@
             return this;
         }
 
-        /**
-         * representation of a Bounds as String
-         * @return {String} representation of this Bounds
-         */
-
-
-        _createClass(Bounds, [{
-            key: 'toString',
-            value: function toString() {
-                return '(' + this.nw + ',' + this.so + ')';
-            }
-        }]);
-
         return Bounds;
     }();
 });

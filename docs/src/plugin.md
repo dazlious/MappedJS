@@ -19,6 +19,8 @@
 <dd></dd>
 <dt><a href="#TileMap">TileMap</a></dt>
 <dd></dd>
+<dt><a href="#View">View</a></dt>
+<dd></dd>
 </dl>
 
 ## Members
@@ -57,7 +59,6 @@
     * [new Bounds(northWest, southEast)](#new_Bounds_new)
     * [.width](#Bounds+width) ⇒ <code>number</code>
     * [.height](#Bounds+height) ⇒ <code>number</code>
-    * [.toString()](#Bounds+toString) ⇒ <code>String</code>
 
 <a name="new_Bounds_new"></a>
 ### new Bounds(northWest, southEast)
@@ -81,12 +82,6 @@ gets height of boundaries
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
 **Returns**: <code>number</code> - height of boundaries  
-<a name="Bounds+toString"></a>
-### bounds.toString() ⇒ <code>String</code>
-representation of a Bounds as String
-
-**Kind**: instance method of <code>[Bounds](#Bounds)</code>  
-**Returns**: <code>String</code> - representation of this Bounds  
 <a name="LatLng"></a>
 ## LatLng
 **Kind**: global class  
@@ -98,7 +93,6 @@ representation of a Bounds as String
     * [.add(coord)](#LatLng+add) ⇒ <code>[LatLng](#LatLng)</code>
     * [.toPoint()](#LatLng+toPoint) ⇒ <code>[Point](#Point)</code>
     * [.equals(coord)](#LatLng+equals) ⇒ <code>Boolean</code>
-    * [.toString()](#LatLng+toString) ⇒ <code>String</code>
 
 <a name="new_LatLng_new"></a>
 ### new LatLng(lat, lng, isDistance)
@@ -157,12 +151,6 @@ checks if specified coord equals this coord
 
 - coord <code>[LatLng](#LatLng)</code> - specified coord to check against
 
-<a name="LatLng+toString"></a>
-### latLng.toString() ⇒ <code>String</code>
-representation of a LatLng as String
-
-**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
-**Returns**: <code>String</code> - representation of this LatLng  
 <a name="MappedJS"></a>
 ## MappedJS
 **Kind**: global class  
@@ -255,7 +243,6 @@ called when loading and initialization is finished
         * [.difference(point)](#Point+difference) ⇒ <code>[Point](#Point)</code>
         * [.distance(point)](#Point+distance) ⇒ <code>[Point](#Point)</code>
         * [.translate(x, y)](#Point+translate) ⇒ <code>[Point](#Point)</code>
-        * [.toString()](#Point+toString) ⇒ <code>String</code>
     * _static_
         * [.createFromPoint(point)](#Point.createFromPoint) ⇒ <code>[Point](#Point)</code>
 
@@ -330,12 +317,6 @@ moves a point by x and y
 - x <code>number</code> - value to move x
 - y <code>number</code> - value to move y
 
-<a name="Point+toString"></a>
-### point.toString() ⇒ <code>String</code>
-representation of a Point as String
-
-**Kind**: instance method of <code>[Point](#Point)</code>  
-**Returns**: <code>String</code> - representation of this Point  
 <a name="Point.createFromPoint"></a>
 ### Point.createFromPoint(point) ⇒ <code>[Point](#Point)</code>
 Creates a Point from specified point
@@ -447,8 +428,8 @@ Eventname for unsubscribing
     * [.containsPoint(point)](#Rectangle+containsPoint) ⇒ <code>Boolean</code>
     * [.containsRect(rect)](#Rectangle+containsRect) ⇒ <code>Boolean</code>
     * [.getDistortedRect(factor)](#Rectangle+getDistortedRect) ⇒ <code>[Rectangle](#Rectangle)</code>
+    * [.translate(x, y)](#Rectangle+translate) ⇒ <code>[Rectangle](#Rectangle)</code>
     * [.equals(rectangle)](#Rectangle+equals) ⇒ <code>Boolean</code>
-    * [.toString()](#Rectangle+toString) ⇒ <code>String</code>
 
 <a name="new_Rectangle_new"></a>
 ### new Rectangle(x, y, width, height)
@@ -566,6 +547,17 @@ distort rectangle by factor
 
 - factor <code>number</code> - the specified factor of distortion
 
+<a name="Rectangle+translate"></a>
+### rectangle.translate(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
+moves a rectangle by specified coords
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered direction  
+**Params**
+
+- x <code>number</code> - how far to move in x direction
+- y <code>number</code> - how far to move in y direction
+
 <a name="Rectangle+equals"></a>
 ### rectangle.equals(rectangle) ⇒ <code>Boolean</code>
 check if rectangles are equal
@@ -576,12 +568,6 @@ check if rectangles are equal
 
 - rectangle <code>[Rectangle](#Rectangle)</code> - the specified rectangle to check against this
 
-<a name="Rectangle+toString"></a>
-### rectangle.toString() ⇒ <code>String</code>
-representation of a Rectangle as String
-
-**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>String</code> - representation of this Rectangle  
 <a name="State"></a>
 ## State
 **Kind**: global class  
@@ -809,6 +795,43 @@ Handles draw of TileMap
 name of imagedata in data.json
 
 **Kind**: static property of <code>[TileMap](#TileMap)</code>  
+<a name="View"></a>
+## View
+**Kind**: global class  
+
+* [View](#View)
+    * [new View(settings, viewport, mapView, bounds, center)](#new_View_new)
+    * [.offset](#View+offset)
+    * [.getMapOffset(distortion)](#View+getMapOffset) ⇒ <code>number</code>
+
+<a name="new_View_new"></a>
+### new View(settings, viewport, mapView, bounds, center)
+Constructor
+
+**Returns**: <code>[View](#View)</code> - Instance of View  
+**Params**
+
+- settings <code>Object</code> - the settings Object
+- viewport <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - current representation of viewport
+- mapView <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - current representation of map
+- bounds <code>[Bounds](#Bounds)</code> - = new Bounds() - current bounds of map
+- center <code>[LatLng](#LatLng)</code> - = new LatLng() - current center of map
+
+<a name="View+offset"></a>
+### view.offset
+Returns the offset of the center
+
+**Kind**: instance property of <code>[View](#View)</code>  
+<a name="View+getMapOffset"></a>
+### view.getMapOffset(distortion) ⇒ <code>number</code>
+Returns the offset of the map
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>number</code> - calculated offset  
+**Params**
+
+- distortion <code>number</code> - the current latitude distortion
+
 <a name="instance"></a>
 ## instance : <code>[Publisher](#Publisher)</code>
 singleton instance

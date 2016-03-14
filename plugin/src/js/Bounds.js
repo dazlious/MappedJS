@@ -32,13 +32,5 @@ export class Bounds {
         this.so = southEast;
         return this;
     }
-
-    /**
-     * representation of a Bounds as String
-     * @return {String} representation of this Bounds
-     */
-    toString() {
-        return `(${this.nw},${this.so})`;
-    }
-
+    
 }

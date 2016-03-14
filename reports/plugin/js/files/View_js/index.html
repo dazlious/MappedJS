@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">68.07</p>
+      <p class="stat">68.00</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">149</p>
+      <p class="stat">104</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">48.61</p>
+      <p class="stat">41.95</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.47</p>
+      <p class="stat">0.86</p>
     </div>
   </div>
 </div>
@@ -91,17 +91,17 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&#039;exports&#039;, &#039;jquery&#039;, &#039;./Rectangle.js&#039;, &#039;./Point.js&#039;], factory);
+        define([&#039;exports&#039;, &#039;./Point.js&#039;, &#039;./LatLng.js&#039;, &#039;./Bounds.js&#039;, &#039;./Rectangle.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports, require(&#039;jquery&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./Point.js&#039;));
+        factory(exports, require(&#039;./Point.js&#039;), require(&#039;./LatLng.js&#039;), require(&#039;./Bounds.js&#039;), require(&#039;./Rectangle.js&#039;));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.Rectangle, global.Point);
+        factory(mod.exports, global.Point, global.LatLng, global.Bounds, global.Rectangle);
         global.View = mod.exports;
     }
-})(this, function(exports, _jquery, _Rectangle2, _Point) {
+})(this, function(exports, _Point, _LatLng, _Bounds, _Rectangle) {
     &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
@@ -109,26 +109,10 @@
     });
     exports.View = undefined;
 
-    var _jquery2 = _interopRequireDefault(_jquery);
-
-    function _interopRequireDefault(obj) {
-        return obj &amp;&amp; obj.__esModule ? obj : {
-            default: obj
-        };
-    }
-
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
             throw new TypeError(&quot;Cannot call a class as a function&quot;);
         }
-    }
-
-    function _possibleConstructorReturn(self, call) {
-        if (!self) {
-            throw new ReferenceError(&quot;this hasn&#039;t been initialised - super() hasn&#039;t been called&quot;);
-        }
-
-        return call &amp;&amp; (typeof call === &quot;object&quot; || typeof call === &quot;function&quot;) ? call : self;
     }
 
     var _createClass = function() {
@@ -149,94 +133,65 @@
         };
     }();
 
-    function _inherits(subClass, superClass) {
-        if (typeof superClass !== &quot;function&quot; &amp;&amp; superClass !== null) {
-            throw new TypeError(&quot;Super expression must either be null or a function, not &quot; + typeof superClass);
-        }
-
-        subClass.prototype = Object.create(superClass &amp;&amp; superClass.prototype, {
-            constructor: {
-                value: subClass,
-                enumerable: false,
-                writable: true,
-                configurable: true
-            }
-        });
-        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-    }
-
-    var View = exports.View = function(_Rectangle) {
-        _inherits(View, _Rectangle);
-
+    var View = exports.View = function() {
         _createClass(View, [{
-            key: &#039;offsetRectangle&#039;,
-            get: function get() {
-                return new _Rectangle2.Rectangle(-1 * this.offset.x, -1 * this.offset.y, this.width, this.height);
+            key: &#039;getMapOffset&#039;,
+
+
+            /**
+             * Returns the offset of the map
+             * @param {number} distortion - the current latitude distortion
+             * @return {number} calculated offset
+             */
+            value: function getMapOffset(distortion) {
+                return this.offset.x + (this.mapView.width - this.mapView.width * distortion) / 2;
             }
 
             /**
              * Constructor
-             * @param  {number} x=0 - x-position of specified view
-             * @param  {number} y=0 - y-position of specified view
-             * @param  {number} width=0 - width of specified view
-             * @param  {number} height=0 - height of specified view
-             * @param  {Rectangle} bounds = new Rectangle() - bounding box of currentView
-             * @return {View} new instance of View
+             * @param  {Object} settings - the settings Object
+             * @param  {Rectangle} viewport = new Rectangle() - current representation of viewport
+             * @param  {Rectangle} mapView = new Rectangle() - current representation of map
+             * @param  {Bounds} bounds = new Bounds() - current bounds of map
+             * @param  {LatLng} center = new LatLng() - current center of map
+             * @return {View} Instance of View
              */
 
+        }, {
+            key: &#039;offset&#039;,
+
+
+            /**
+             * Returns the offset of the center
+             */
+            get: function get() {
+                var center = this.center.toPoint(this.bounds, this.mapView);
+                var newCenter = this.viewport.center.sub(center);
+                return newCenter;
+            }
         }]);
 
         function View(_ref) {
-            var _ret;
-
-            var x = _ref.x;
-            var y = _ref.y;
-            var width = _ref.width;
-            var height = _ref.height;
+            var _ref$viewport = _ref.viewport;
+            var viewport = _ref$viewport === undefined ? new _Rectangle.Rectangle() : _ref$viewport;
+            var _ref$mapView = _ref.mapView;
+            var mapView = _ref$mapView === undefined ? new _Rectangle.Rectangle() : _ref$mapView;
             var _ref$bounds = _ref.bounds;
-            var bounds = _ref$bounds === undefined ? new _Rectangle2.Rectangle() : _ref$bounds;
+            var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
+            var _ref$center = _ref.center;
+            var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
 
             _classCallCheck(this, View);
 
-            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(View).call(this, x, y, width, height));
-
-            _this.bounds = bounds;
-            console.log(_this.bounds.topLeft, _this.bounds.bottomRight);
-            _this.offset = new _Point.Point(0, 0);
-            return _ret = _this, _possibleConstructorReturn(_this, _ret);
+            this.mapView = mapView;
+            this.viewport = viewport;
+            this.bounds = bounds;
+            this.center = center;
+            return this;
         }
 
-        /**
-         * representation of a Rectangle as String
-         * @return {String} representation of this Rectangle
-         */
-
-
-        _createClass(View, [{
-            key: &#039;toString&#039;,
-            value: function toString() {
-                return &#039;(&#039; + this.x + &#039;,&#039; + this.y + &#039;,&#039; + this.width + &#039;,&#039; + this.height + &#039;,(&#039; + this.bounds + &#039;))&#039;;
-            }
-        }, {
-            key: &#039;centerInView&#039;,
-            value: function centerInView(lat, lng) {
-                console.log(this.latLngToPoint(lat, lng));
-                this.offset = this.latLngToPoint(lat, lng);
-            }
-        }, {
-            key: &#039;latLngToPoint&#039;,
-            value: function latLngToPoint(lat, lng) {
-                var resolution = {
-                    x: this.width / this.bounds.width,
-                    y: this.height / this.bounds.height
-                };
-                var diff = this.bounds.topLeft.sub(new _Point.Point(lat, lng));
-                return new _Point.Point(diff.x * resolution.x, diff.y * resolution.y);
-            }
-        }]);
-
         return View;
-    }(_Rectangle2.Rectangle);
+    }();
 });</textarea>
   </div>
 </div>

@@ -66,12 +66,4 @@ export class LatLng {
         return this.lat === coord.lat && this.lng === coord.lng;
     }
 
-    /**
-     * representation of a LatLng as String
-     * @return {String} representation of this LatLng
-     */
-    toString() {
-        return `(${this.lat},${this.lng})`;
-    }
-
 }

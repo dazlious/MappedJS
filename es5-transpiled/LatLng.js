@@ -129,17 +129,6 @@
             value: function equals(coord) {
                 return this.lat === coord.lat && this.lng === coord.lng;
             }
-
-            /**
-             * representation of a LatLng as String
-             * @return {String} representation of this LatLng
-             */
-
-        }, {
-            key: 'toString',
-            value: function toString() {
-                return '(' + this.lat + ',' + this.lng + ')';
-            }
         }]);
 
         return LatLng;

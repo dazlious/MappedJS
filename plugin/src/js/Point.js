@@ -71,14 +71,6 @@ export class Point {
         return this;
     }
 
-    /**
-     * representation of a Point as String
-     * @return {String} representation of this Point
-     */
-    toString() {
-        return `(${this.x},${this.y})`;
-    }
-
 }
 
 /**

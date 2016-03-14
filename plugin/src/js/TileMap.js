@@ -1,6 +1,10 @@
 import {Tile} from './Tile.js';
 import $ from 'jquery';
+import {Point} from './Point.js';
+import {Bounds} from './Bounds.js';
+import {LatLng} from './LatLng.js';
 import {Rectangle} from './Rectangle.js';
+import {View} from './View.js';
 import {Publisher} from './Publisher.js';
 
 /**
@@ -47,8 +51,9 @@ export class TileMap {
      * @return {array} all tiles that are currently visible
      */
     get visibleTiles() {
-        return this.tiles.filter(function(v, i, a) {
-            return this.view.intersects(v.getDistortedRect(this.distortion));
+        return this.tiles.filter(function(t, i, a) {
+            let newTile = t.getDistortedRect(this.distortion).translate(this.view.getMapOffset(this.distortion), this.view.offset.y);
+            return this.view.viewport.intersects(newTile);
         }, this);
     }
 
@@ -76,7 +81,7 @@ export class TileMap {
         this.settings = settings;
 
         this.tiles = [];
-        this.initialize().initializeTiles().draw();
+        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions).initializeTiles().draw();
 
         return this;
     }
@@ -85,13 +90,12 @@ export class TileMap {
      * initializes the TileMap
      * @return {TileMap} instance of TileMap
      */
-    initialize() {
-        this.view = new Rectangle({
-            x: this.$container.offset().left,
-            y: this.$container.offset().top,
-            width: this.$container.width(),
-            height: this.$container.height()//,
-            //bounds: new Rectangle(this.settings.bounds.top, this.settings.bounds.left, this.settings.bounds.width, this.settings.bounds.height)
+    initialize(bounds, center, mapDimensions) {
+        this.view = new View({
+            viewport: new Rectangle(this.left, this.top, this.width, this.height),
+            mapView: new Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
+            bounds: new Bounds(new LatLng(bounds.northWest[0], bounds.northWest[1]), new LatLng(bounds.southEast[0], bounds.southEast[1])),
+            center: new LatLng(center.lat, center.lng)
         });
         this.bindEvents().initializeCanvas();
 
@@ -160,7 +164,7 @@ export class TileMap {
      */
     drawTile(tile) {
         if (tile.state.current.value >= 2) {
-            this.canvasContext.drawImage(tile.img, tile.x * this.distortion, tile.y, tile.width * this.distortion, tile.height);
+            this.canvasContext.drawImage(tile.img, (tile.x * this.distortion) +  this.view.getMapOffset(this.distortion), tile.y + this.view.offset.y, tile.width * this.distortion, tile.height);
         } else if (tile.state.current.value === 0) {
             tile.initialize();
         }
@@ -184,10 +188,10 @@ export class TileMap {
      * @return {TileMap} instance of TileMap
      */
     resizeView() {
-        this.view.x = this.left;
-        this.view.y = this.top;
-        this.view.width = this.width;
-        this.view.height = this.height;
+        this.view.viewport.x = this.left;
+        this.view.viewport.y = this.top;
+        this.view.viewport.width = this.width;
+        this.view.viewport.height = this.height;
         return this;
     }
 

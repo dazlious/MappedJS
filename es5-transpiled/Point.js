@@ -137,17 +137,6 @@
                 this.y += y;
                 return this;
             }
-
-            /**
-             * representation of a Point as String
-             * @return {String} representation of this Point
-             */
-
-        }, {
-            key: "toString",
-            value: function toString() {
-                return "(" + this.x + "," + this.y + ")";
-            }
         }]);
 
         return Point;

@@ -135,20 +135,24 @@ export class Rectangle extends Point {
     }
 
     /**
+     * moves a rectangle by specified coords
+     * @param  {number} x - how far to move in x direction
+     * @param  {number} y - how far to move in y direction
+     * @return {Rectangle} Returns the altered direction
+     */
+    translate(x, y) {
+        this.x += x;
+        this.y += y;
+        return this;
+    }
+
+    /**
      * check if rectangles are equal
      * @param  {Rectangle} rectangle - the specified rectangle to check against this
      * @return {Boolean} is true, if x, y, width and height are the same
      */
     equals(rectangle) {
         return (rectangle instanceof Rectangle) ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
-    }
-
-    /**
-     * representation of a Rectangle as String
-     * @return {String} representation of this Rectangle
-     */
-    toString() {
-        return `(${this.x},${this.y},${this.width},${this.height})`;
     }
 
 }
