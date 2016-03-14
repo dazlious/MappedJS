@@ -1,4 +1,3 @@
-/*jshint -W067*/
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
         define(['exports', './LatLng.js'], factory);
@@ -77,15 +76,13 @@
         }]);
 
         function Bounds() {
-            /*jshint -W067*/
-            var northWest = arguments.length <= 0 || arguments[0] === undefined ? new /*jshint -W067*/ _LatLng.LatLng() : arguments[0];
-            /*jshint -W067*/
-            var southEast = arguments.length <= 1 || arguments[1] === undefined ? new /*jshint -W067*/ _LatLng.LatLng() : arguments[1];
-            /*jshint -W067*/
+            var northWest = arguments.length <= 0 || arguments[0] === undefined ? new _LatLng.LatLng() : arguments[0];
+            var southEast = arguments.length <= 1 || arguments[1] === undefined ? new _LatLng.LatLng() : arguments[1];
+
             _classCallCheck(this, Bounds);
 
             if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) {
-                throw new Error( /*jshint -W067*/ northWest + ' needs to be top-right corner and ' + southEast + ' bottom-left');
+                throw new Error(northWest + ' needs to be top-right corner and ' + southEast + ' bottom-left');
             }
             this.nw = northWest;
             this.so = southEast;
@@ -101,7 +98,7 @@
         _createClass(Bounds, [{
             key: 'toString',
             value: function toString() {
-                return ( /*jshint -W067*/ '(' + this.nw + ',' + this.so + ')');
+                return '(' + this.nw + ',' + this.so + ')';
             }
         }]);
 

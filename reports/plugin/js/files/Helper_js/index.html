@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">72</p>
+      <p class="stat">71</p>
     </div>
   </div>
   <div class="row historical">
@@ -89,8 +89,7 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">/*jshint -W067*/
-(function(global, factory) {
+    <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
         define([&quot;exports&quot;, &quot;jquery&quot;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
@@ -118,7 +117,7 @@
         };
     }
 
-    var Helper = /*jshint -W067*/ exports.Helper = {
+    var Helper = exports.Helper = {
 
         /**
          * request json-data from given file and calls callback on success
@@ -126,16 +125,15 @@
          * @param  {Function} callback - function called when data is loaded successfully
          * @return {Helper} Helper
          */
-        requestJSON: function /*jshint -W067*/ requestJSON(filename, callback) {
-            /*jshint -W067*/
+        requestJSON: function requestJSON(filename, callback) {
             _jquery2.default.ajax({
                 type: &quot;GET&quot;,
                 url: filename,
                 dataType: &quot;json&quot;,
-                success: function /*jshint -W067*/ success(data, status, request) {
+                success: function success(data, status, request) {
                     return callback(data);
                 },
-                error: function /*jshint -W067*/ error(response) {
+                error: function error(response) {
                     if (response.status === 200) {
                         throw new Error(&quot;The JSON submitted seems not valid&quot;);
                     }
@@ -149,7 +147,7 @@
          * @param  {Function} cb - callback-function on success
          * @return {Helper} Helper
          */
-        loadImage: function /*jshint -W067*/ loadImage(path, cb) {
+        loadImage: function loadImage(path, cb) {
             var img = new Image();
             img.onload = function() {
                 if (cb &amp;&amp; typeof cb === &quot;function&quot;) {

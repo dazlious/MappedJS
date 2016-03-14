@@ -30,6 +30,10 @@
     "node": true,
     "nonstandard": true,
     "phantom": true,
+    "-W067": false,
+    "-W004": false,
+    "-W122": false,
+    "proto": true,
     "globals": {
         "jQuery": true,
         "Handlebars": true,

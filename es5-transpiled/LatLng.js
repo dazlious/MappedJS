@@ -1,4 +1,3 @@
-/*jshint -W067*/
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
         define(['exports', './Point.js', './Rectangle.js'], factory);
@@ -54,17 +53,14 @@
          */
 
         function LatLng() {
-            /*jshint -W067*/
             var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-            /*jshint -W067*/
             var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-            /*jshint -W067*/
             var isDistance = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
-            /*jshint -W067*/
+
             _classCallCheck(this, LatLng);
 
             if (!isDistance && (lat > 90 || lat < -90 || lng > 180 || lng < -180)) {
-                throw new Error( /*jshint -W067*/ 'latitude(' + lat + ') is greater/smaller than +/-90 or longitude(' + lng + ') is greater/smaller than +/-180');
+                throw new Error('latitude(' + lat + ') is greater/smaller than +/-90 or longitude(' + lng + ') is greater/smaller than +/-180');
             }
             this.lat = lat;
             this.lng = lng;
@@ -119,7 +115,7 @@
                 var relativePosition = bounds.nw.difference(this),
                     factorX = rect.width / bounds.width,
                     factorY = rect.height / bounds.height;
-                return new /*jshint -W067*/ _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+                return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
             }
 
             /**
@@ -142,7 +138,7 @@
         }, {
             key: 'toString',
             value: function toString() {
-                return ( /*jshint -W067*/ '(' + this.lat + ',' + this.lng + ')');
+                return '(' + this.lat + ',' + this.lng + ')';
             }
         }]);
 

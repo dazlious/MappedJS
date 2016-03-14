@@ -1,4 +1,3 @@
-/*jshint -W067*/
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
         define(["exports", "jquery"], factory);
@@ -27,7 +26,7 @@
         };
     }
 
-    var Helper = /*jshint -W067*/ exports.Helper = {
+    var Helper = exports.Helper = {
 
         /**
          * request json-data from given file and calls callback on success
@@ -35,16 +34,15 @@
          * @param  {Function} callback - function called when data is loaded successfully
          * @return {Helper} Helper
          */
-        requestJSON: function /*jshint -W067*/ requestJSON(filename, callback) {
-            /*jshint -W067*/
+        requestJSON: function requestJSON(filename, callback) {
             _jquery2.default.ajax({
                 type: "GET",
                 url: filename,
                 dataType: "json",
-                success: function /*jshint -W067*/ success(data, status, request) {
+                success: function success(data, status, request) {
                     return callback(data);
                 },
-                error: function /*jshint -W067*/ error(response) {
+                error: function error(response) {
                     if (response.status === 200) {
                         throw new Error("The JSON submitted seems not valid");
                     }
@@ -58,7 +56,7 @@
          * @param  {Function} cb - callback-function on success
          * @return {Helper} Helper
          */
-        loadImage: function /*jshint -W067*/ loadImage(path, cb) {
+        loadImage: function loadImage(path, cb) {
             var img = new Image();
             img.onload = function() {
                 if (cb && typeof cb === "function") {

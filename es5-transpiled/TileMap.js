@@ -1,4 +1,3 @@
-/*jshint -W067*/
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
         define(['exports', './Tile.js', 'jquery', './Rectangle.js', './Publisher.js'], factory);
@@ -54,7 +53,7 @@
     /**
      * Singleton instance of Publisher
      */
-    var PUBLISHER = new /*jshint -W067*/ _Publisher.Publisher();
+    var PUBLISHER = new _Publisher.Publisher();
 
     var TileMap = exports.TileMap = function() {
         _createClass(TileMap, [{
@@ -135,18 +134,13 @@
 
         }]);
 
-        function TileMap( /*jshint -W067*/ _ref) {
-            /*jshint -W067*/
+        function TileMap(_ref) {
             var container = _ref.container;
-            /*jshint -W067*/
             var _ref$tilesData = _ref.tilesData;
-            /*jshint -W067*/
             var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
-            /*jshint -W067*/
             var _ref$settings = _ref.settings;
-            /*jshint -W067*/
             var settings = _ref$settings === undefined ? {} : _ref$settings;
-            /*jshint -W067*/
+
             _classCallCheck(this, TileMap);
 
             if (!container) {
@@ -172,7 +166,7 @@
         _createClass(TileMap, [{
             key: 'initialize',
             value: function initialize() {
-                this.view = new /*jshint -W067*/ _Rectangle.Rectangle({
+                this.view = new _Rectangle.Rectangle({
                     x: this.$container.offset().left,
                     y: this.$container.offset().top,
                     width: this.$container.width(),
@@ -192,7 +186,7 @@
         }, {
             key: 'initializeCanvas',
             value: function initializeCanvas() {
-                this.$canvas = /*jshint -W067*/ (0, _jquery2.default)("<canvas class='mjs-canvas' />");
+                this.$canvas = (0, _jquery2.default)("<canvas class='mjs-canvas' />");
                 this.canvas = this.$canvas[0];
                 this.$container.append(this.$canvas);
                 this.canvasContext = this.canvas.getContext("2d");
@@ -223,7 +217,7 @@
                 var currentLevel = this.getCurrentLevelData().tiles;
                 for (var tile in currentLevel) {
                     var currentTileData = currentLevel[tile];
-                    var _tile = new /*jshint -W067*/ _Tile.Tile(currentTileData);
+                    var _tile = new _Tile.Tile(currentTileData);
                     this.tiles.push(_tile);
                 }
                 return this;

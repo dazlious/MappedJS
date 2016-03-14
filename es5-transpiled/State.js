@@ -1,4 +1,3 @@
-/*jshint -W067*/
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
         define(['exports'], factory);
@@ -44,10 +43,10 @@
 
     var STATES = new WeakMap();
 
-    var _makePrivate = function _makePrivate(o) /*jshint -W067*/ {
+    var _makePrivate = function _makePrivate(o) {
         return STATES.set(o, {});
     };
-    var _getPrivate = function _getPrivate(o) /*jshint -W067*/ {
+    var _getPrivate = function _getPrivate(o) {
         return STATES.get(o);
     };
 
@@ -60,12 +59,11 @@
          */
 
         function State() {
-            /*jshint -W067*/
             var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{
                 value: 0,
                 description: 'Default'
             }] : arguments[0];
-            /*jshint -W067*/
+
             _classCallCheck(this, State);
 
             _makePrivate(this);
