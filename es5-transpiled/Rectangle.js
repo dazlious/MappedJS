@@ -1,3 +1,4 @@
+/*jshint -W067*/
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
         define(['exports', './Point.js'], factory);
@@ -78,7 +79,7 @@
              * @return {Point} center point
              */
             get: function get() {
-                return new _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
+                return new /*jshint -W067*/ _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
             }
 
             /**
@@ -89,7 +90,7 @@
         }, {
             key: 'topLeft',
             get: function get() {
-                return new _Point2.Point(this.x, this.y);
+                return new /*jshint -W067*/ _Point2.Point(this.x, this.y);
             }
 
             /**
@@ -100,7 +101,7 @@
         }, {
             key: 'topRight',
             get: function get() {
-                return new _Point2.Point(this.x + this.width, this.y);
+                return new /*jshint -W067*/ _Point2.Point(this.x + this.width, this.y);
             }
 
             /**
@@ -111,7 +112,7 @@
         }, {
             key: 'bottomLeft',
             get: function get() {
-                return new _Point2.Point(this.x, this.y + this.height);
+                return new /*jshint -W067*/ _Point2.Point(this.x, this.y + this.height);
             }
 
             /**
@@ -122,7 +123,7 @@
         }, {
             key: 'bottomRight',
             get: function get() {
-                return new _Point2.Point(this.x + this.width, this.y + this.height);
+                return new /*jshint -W067*/ _Point2.Point(this.x + this.width, this.y + this.height);
             }
 
             /**
@@ -181,21 +182,27 @@
         }]);
 
         function Rectangle() {
+            /*jshint -W067*/
             var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+            /*jshint -W067*/
             var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+            /*jshint -W067*/
             var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-
+            /*jshint -W067*/
             var _ret;
 
             var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
-
+            /*jshint -W067*/
             _classCallCheck(this, Rectangle);
 
+            /*jshint -W067*/
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
 
+            /*jshint -W067*/
             _this.width = width;
+            /*jshint -W067*/
             _this.height = height;
-            return _ret = _this, _possibleConstructorReturn(_this, _ret);
+            return ( /*jshint -W067*/ _ret = _this, _possibleConstructorReturn(_this, _ret));
         }
 
         /**
@@ -220,7 +227,7 @@
         }, {
             key: 'contains',
             value: function contains(rectOrPoint) {
-                return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
+                return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof /*jshint -W067*/ _Point2.Point ? this.containsPoint(rectOrPoint) : false;
             }
 
             /**
@@ -232,7 +239,7 @@
         }, {
             key: 'containsPoint',
             value: function containsPoint(point) {
-                return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
+                return point instanceof /*jshint -W067*/ _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
             }
 
             /**
@@ -279,7 +286,7 @@
         }, {
             key: 'toString',
             value: function toString() {
-                return '(' + this.x + ',' + this.y + ',' + this.width + ',' + this.height + ')';
+                return ( /*jshint -W067*/ '(' + this.x + ',' + this.y + ',' + this.width + ',' + this.height + ')');
             }
         }]);
 

@@ -1,3 +1,4 @@
+/*jshint -W067*/
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
         define(['exports', './TileMap.js', 'jquery', './Helper.js', './Publisher.js'], factory);
@@ -68,18 +69,26 @@
          * @return {MappedJS} instance of MappedJS
          */
 
-        function MappedJS(_ref) {
+        function MappedJS( /*jshint -W067*/ _ref) {
+            /*jshint -W067*/
             var _ref$container = _ref.container;
+            /*jshint -W067*/
             var container = _ref$container === undefined ? ".mjs" : _ref$container;
+            /*jshint -W067*/
             var _ref$mapData = _ref.mapData;
+            /*jshint -W067*/
             var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
+            /*jshint -W067*/
             var _ref$mapSettings = _ref.mapSettings;
+            /*jshint -W067*/
             var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
+            /*jshint -W067*/
             var _ref$events = _ref.events;
+            /*jshint -W067*/
             var events = _ref$events === undefined ? {
                 loaded: "mjs-loaded"
             } : _ref$events;
-
+            /*jshint -W067*/
             _classCallCheck(this, MappedJS);
 
             this.initializeApi();
@@ -106,7 +115,7 @@
         _createClass(MappedJS, [{
             key: 'initializeSettings',
             value: function initializeSettings(container, events, mapSettings) {
-                this.$container = typeof container === "string" ? (0, _jquery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jquery2.default)(container);
+                this.$container = typeof container === "string" ? /*jshint -W067*/ (0, _jquery2.default)(container) : /*jshint -W067*/ (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : /*jshint -W067*/ (0, _jquery2.default)(container);
                 if (!(this.$container instanceof jQuery)) {
                     throw new Error("Container " + container + " not found");
                 }
@@ -143,12 +152,13 @@
             value: function initializeData(mapData, cb) {
                 var _this = this;
                 if (typeof mapData === "string") {
+                    /*jshint -W067*/
                     _Helper.Helper.requestJSON(mapData, function(data) {
                         _this.mapData = data;
                         cb();
                     });
                 } else {
-                    this.mapData = (typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null;
+                    this.mapData = /*jshint -W067*/ (typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null;
                     cb();
                 }
                 return this;
@@ -162,7 +172,7 @@
         }, {
             key: 'initializeMap',
             value: function initializeMap() {
-                this.$canvas = new _TileMap.TileMap({
+                this.$canvas = new /*jshint -W067*/ _TileMap.TileMap({
                     container: this.$container,
                     tilesData: this.mapData,
                     settings: this.mapSettings
@@ -179,9 +189,9 @@
             key: 'initializeApi',
             value: function initializeApi() {
                 this.api = {
-                    TileMap: _TileMap.TileMap,
-                    Publisher: _Publisher.Publisher,
-                    Helper: _Helper.Helper
+                    TileMap: /*jshint -W067*/ _TileMap.TileMap,
+                    Publisher: /*jshint -W067*/ _Publisher.Publisher,
+                    Helper: /*jshint -W067*/ _Helper.Helper
                 };
                 return this;
             }
@@ -194,6 +204,7 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
+                /*jshint -W067*/
                 (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
                 return this;
             }

@@ -1,3 +1,4 @@
+/*jshint -W067*/
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
         define(["exports"], factory);
@@ -51,9 +52,11 @@
          */
 
         function Point() {
+            /*jshint -W067*/
             var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+            /*jshint -W067*/
             var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-
+            /*jshint -W067*/
             _classCallCheck(this, Point);
 
             this.x = x;
@@ -146,7 +149,7 @@
         }, {
             key: "toString",
             value: function toString() {
-                return "(" + this.x + "," + this.y + ")";
+                return ( /*jshint -W067*/ "(" + this.x + "," + this.y + ")");
             }
         }]);
 
@@ -158,7 +161,7 @@
      * @param  {Point} point - specified point
      * @return {Point} the point specified
      */
-    Point.createFromPoint = function(point) {
+    Point.createFromPoint = function(point) /*jshint -W067*/ {
         return new Point(point.x, point.y);
     };
 });

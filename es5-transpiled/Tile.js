@@ -1,3 +1,4 @@
+/*jshint -W067*/
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
         define(['exports', 'jquery', './State.js', './Rectangle.js', './Publisher.js', './Helper.js'], factory);
@@ -102,7 +103,7 @@
     /**
      * Singleton instance of Publisher
      */
-    var PUBLISHER = new _Publisher.Publisher();
+    var PUBLISHER = new /*jshint -W067*/ _Publisher.Publisher();
 
     /**
      * States of a tile
@@ -161,30 +162,43 @@
         }]);
 
         function Tile() {
+            /*jshint -W067*/
             var _ret;
 
             var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
+            /*jshint -W067*/
             var path = _ref.path;
+            /*jshint -W067*/
             var _ref$x = _ref.x;
+            /*jshint -W067*/
             var x = _ref$x === undefined ? 0 : _ref$x;
+            /*jshint -W067*/
             var _ref$y = _ref.y;
+            /*jshint -W067*/
             var y = _ref$y === undefined ? 0 : _ref$y;
+            /*jshint -W067*/
             var _ref$w = _ref.w;
+            /*jshint -W067*/
             var w = _ref$w === undefined ? 0 : _ref$w;
+            /*jshint -W067*/
             var _ref$h = _ref.h;
+            /*jshint -W067*/
             var h = _ref$h === undefined ? 0 : _ref$h;
-
+            /*jshint -W067*/
             _classCallCheck(this, Tile);
 
+            /*jshint -W067*/
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
-            _this.state = new _State.State(STATES);
+            /*jshint -W067*/
+            _this.state = new /*jshint -W067*/ _State.State(STATES);
             if (!path || typeof path !== "string" || path.length === 0) {
-                throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
+                throw new TypeError( /*jshint -W067*/ 'Path ' + path + ' needs to be of type string and should not be empty');
             }
+            /*jshint -W067*/
             _this.path = path;
-            return _ret = _this, _possibleConstructorReturn(_this, _ret);
+            return ( /*jshint -W067*/ _ret = _this, _possibleConstructorReturn(_this, _ret));
         }
 
         /**
@@ -197,6 +211,7 @@
             key: 'initialize',
             value: function initialize() {
                 this.state.next();
+                /*jshint -W067*/
                 _Helper.Helper.loadImage(this.path, function(img) {
                     this.img = img;
                     this.state.next();
@@ -215,7 +230,7 @@
         }, {
             key: 'equals',
             value: function equals(tile) {
-                return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
+                return tile instanceof Tile ? /*jshint -W067*/ _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
             }
         }]);
 

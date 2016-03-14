@@ -1,3 +1,4 @@
+/*jshint -W067*/
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
         define(["exports"], factory);
@@ -55,6 +56,7 @@
          */
 
         function Publisher() {
+            /*jshint -W067*/
             _classCallCheck(this, Publisher);
 
             if (!instance) {
@@ -75,7 +77,9 @@
         _createClass(Publisher, [{
             key: "subscribe",
             value: function subscribe() {
+                /*jshint -W067*/
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+                /*jshint -W067*/
                 var fn = arguments.length <= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
                 if (!this.subscribers[type]) {
@@ -95,7 +99,9 @@
         }, {
             key: "unsubscribe",
             value: function unsubscribe() {
+                /*jshint -W067*/
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+                /*jshint -W067*/
                 var fn = arguments.length <= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
                 this.handle(Publisher.UNSUBSCRIBE, type, fn);
@@ -112,7 +118,9 @@
         }, {
             key: "publish",
             value: function publish() {
+                /*jshint -W067*/
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+                /*jshint -W067*/
                 var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
                 this.handle(Publisher.PUBLISH, type, arg);

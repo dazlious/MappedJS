@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">115</p>
+      <p class="stat">116</p>
     </div>
   </div>
   <div class="row historical">
@@ -89,7 +89,8 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">(function(global, factory) {
+    <textarea id="file-source" class="col-md-12">/*jshint -W067*/
+(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
         define([&#039;exports&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
@@ -134,10 +135,10 @@
 
     var STATES = new WeakMap();
 
-    var _makePrivate = function _makePrivate(o) {
+    var _makePrivate = function _makePrivate(o) /*jshint -W067*/ {
         return STATES.set(o, {});
     };
-    var _getPrivate = function _getPrivate(o) {
+    var _getPrivate = function _getPrivate(o) /*jshint -W067*/ {
         return STATES.get(o);
     };
 
@@ -150,11 +151,12 @@
          */
 
         function State() {
+            /*jshint -W067*/
             var states_array = arguments.length &lt;= 0 || arguments[0] === undefined ? [{
                 value: 0,
                 description: &#039;Default&#039;
             }] : arguments[0];
-
+            /*jshint -W067*/
             _classCallCheck(this, State);
 
             _makePrivate(this);

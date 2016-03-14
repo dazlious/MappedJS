@@ -124,6 +124,7 @@ module.exports = function(grunt) {
         },
         babel: {
             options: {
+                auxiliaryCommentBefore: "jshint -W067",
                 presets: ['es2015'],
                 plugins: ["transform-es2015-modules-umd"]
             },
