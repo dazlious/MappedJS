@@ -3,6 +3,8 @@
 <dl>
 <dt><a href="#Bounds">Bounds</a></dt>
 <dd></dd>
+<dt><a href="#Interact">Interact</a></dt>
+<dd></dd>
 <dt><a href="#LatLng">LatLng</a></dt>
 <dd></dd>
 <dt><a href="#MappedJS">MappedJS</a></dt>
@@ -82,6 +84,275 @@ gets height of boundaries
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
 **Returns**: <code>number</code> - height of boundaries  
+<a name="Interact"></a>
+## Interact
+**Kind**: global class  
+
+* [Interact](#Interact)
+    * [new Interact(settings)](#new_Interact_new)
+    * [.isMouse](#Interact+isMouse) ⇒ <code>Boolean</code>
+    * [.isTouch](#Interact+isTouch) ⇒ <code>Boolean</code>
+    * [.isIE](#Interact+isIE) ⇒ <code>Boolean</code>
+    * [.scrollEvent](#Interact+scrollEvent) ⇒ <code>string</code>
+    * [.handleViewport(viewport)](#Interact+handleViewport) ⇒ <code>[Interact](#Interact)</code>
+    * [.init(container)](#Interact+init) ⇒ <code>[Interact](#Interact)</code>
+    * [.bindEvents()](#Interact+bindEvents) ⇒ <code>[Interact](#Interact)</code>
+    * [.bindIEEvents()](#Interact+bindIEEvents) ⇒ <code>[Interact](#Interact)</code>
+    * [.bindTouchEvents()](#Interact+bindTouchEvents) ⇒ <code>[Interact](#Interact)</code>
+    * [.bindMouseEvents()](#Interact+bindMouseEvents) ⇒ <code>[Interact](#Interact)</code>
+    * [.scrollHandler(event)](#Interact+scrollHandler) ⇒ <code>Boolean</code>
+    * [.startHandler(event)](#Interact+startHandler) ⇒ <code>Boolean</code>
+    * [.moveHandler(event)](#Interact+moveHandler) ⇒ <code>Boolean</code>
+    * [.endHandler(event)](#Interact+endHandler) ⇒ <code>Boolean</code>
+    * [.calculateSpeed(distance, time)](#Interact+calculateSpeed) ⇒ <code>number</code>
+    * [.getSwipeDirections(direction)](#Interact+getSwipeDirections) ⇒ <code>Array.&lt;string&gt;</code>
+    * [.setTimeoutForEvent(callback, timeout, args, holdTimeout)](#Interact+setTimeoutForEvent) ⇒ <code>[Interact](#Interact)</code>
+    * [.eventCallback(callback, args)](#Interact+eventCallback) ⇒ <code>[Interact](#Interact)</code>
+    * [.getRelativePosition(e)](#Interact+getRelativePosition) ⇒ <code>[Point](#Point)</code>
+    * [.getAbsolutePosition(e)](#Interact+getAbsolutePosition) ⇒ <code>[Point](#Point)</code>
+    * [.getScrollDirection(event)](#Interact+getScrollDirection) ⇒ <code>Array.&lt;string&gt;</code>
+    * [.getEvent(e)](#Interact+getEvent) ⇒ <code>Object</code>
+
+<a name="new_Interact_new"></a>
+### new Interact(settings)
+Constructor
+
+**Returns**: <code>[Interact](#Interact)</code> - new instance  
+**Params**
+
+- settings <code>Object</code> - = {} - all the settings
+    - .container <code>string</code> | <code>Object</code> - = ".interact-container" - Container, either string, jQuery-object or dom-object
+    - .timeTreshold <code>Object</code> - = {} - settings for the timing tresholds
+        - .tap <code>number</code> - = 200 - timing treshold for tap
+        - .hold <code>number</code> - = 500 - timing treshold for hold
+        - .swipe <code>number</code> - = 300 - timing treshold for swipe
+        - .flick <code>number</code> - = 30 - timing treshold for flick
+    - .distanceTreshold <code>Object</code> - = {} - settings for the distance tresholds
+        - .swipe <code>number</code> - = 200 - distance treshold for swipe
+    - .overwriteViewportSettings <code>Boolean</code> | <code>string</code> - = false - on true prevents pinching, can be a custom string too
+    - .stopPropagation <code>Boolean</code> - = true - on true stops the propagation of events
+    - .preventDefault <code>Boolean</code> - = true - on true prevents the default actions of events
+    - .autoFireHold <code>Boolean</code> - = false - if set to false hold-event is not fired
+    - .pinchBalanceTime <code>number</code> - = 50 - prevents from firing too much pinching events
+    - .callbacks <code>Object</code> - = {} - settings for the callback-functions
+        - .tap <code>function</code> - = null - callback-function for tap
+        - .tapHold <code>function</code> - = null - callback-function for tapHold
+        - .doubletap <code>function</code> - = null - callback-function for doubletap
+        - .hold <code>function</code> - = null - callback-function for hold
+        - .pan <code>function</code> - = null - callback-function for pan
+        - .swipe <code>function</code> - = null - callback-function for swipe
+        - .flick <code>function</code> - = null - callback-function for flick
+        - .zoom <code>function</code> - = null - callback-function for zoom
+        - .wheel <code>function</code> - = null - callback-function for wheel
+        - .pinch <code>function</code> - = null - callback-function for pinch
+    - .events <code>Object</code> - = {} - settings all eventnames
+        - .start <code>Object</code> - = {} - settings all start eventnames
+            - .touch <code>Object</code> - = ("MSPointerDown pointerdown" || "touchstart") - settings start touch eventnames
+            - .mouse <code>Object</code> - = ("MSPointerDown pointerdown" || "mousedown") - settings start mouse eventnames
+        - .move <code>Object</code> - = {} - settings all move eventnames
+            - .touch <code>Object</code> - = ("MSPointerMove pointermove" || "touchmove") - settings move touch eventnames
+            - .mouse <code>Object</code> - = ("MSPointerMove pointermove" || "mousemove") - settings move mouse eventnames
+        - .end <code>Object</code> - = {} - settings all end eventnames
+            - .touch <code>Object</code> - = ("MSPointerUp pointerup" || "touchend") - settings end touch eventnames
+            - .mouse <code>Object</code> - = ("MSPointerUp pointerup" || "mouseup") - settings end mouse eventnames
+        - .leave <code>Object</code> - = {} - settings all leave eventnames
+            - .touch <code>Object</code> - = ("MSPointerLeave pointerleave" || "touchleave") - settings leave touch eventnames
+            - .mouse <code>Object</code> - = ("MSPointerLeave pointerleave" || "mouseleave") - settings leave mouse eventnames
+        - .scroll <code>string</code> - = ("wheel" || "mousewhell" || "DOMMouseScroll") - settings all scroll eventnames
+
+<a name="Interact+isMouse"></a>
+### interact.isMouse ⇒ <code>Boolean</code>
+checks if mouse is possible
+
+**Kind**: instance property of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - if true, mouse is possible  
+<a name="Interact+isTouch"></a>
+### interact.isTouch ⇒ <code>Boolean</code>
+checks if touch is possible
+
+**Kind**: instance property of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - if true, touch is possible  
+<a name="Interact+isIE"></a>
+### interact.isIE ⇒ <code>Boolean</code>
+checks if IE is used
+
+**Kind**: instance property of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - if true, IE is used  
+<a name="Interact+scrollEvent"></a>
+### interact.scrollEvent ⇒ <code>string</code>
+gets cross-browser scroll-event
+
+**Kind**: instance property of <code>[Interact](#Interact)</code>  
+**Returns**: <code>string</code> - name of scroll event  
+<a name="Interact+handleViewport"></a>
+### interact.handleViewport(viewport) ⇒ <code>[Interact](#Interact)</code>
+handles the overwrite of viewport meta
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
+**Params**
+
+- viewport <code>Boolean</code> | <code>string</code> - specified viewport option
+
+<a name="Interact+init"></a>
+### interact.init(container) ⇒ <code>[Interact](#Interact)</code>
+initializes class settings and bindings
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
+**Params**
+
+- container <code>Object</code> | <code>string</code> - Container, either string, jQuery-object or dom-object
+
+<a name="Interact+bindEvents"></a>
+### interact.bindEvents() ⇒ <code>[Interact](#Interact)</code>
+binds all needed events
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
+<a name="Interact+bindIEEvents"></a>
+### interact.bindIEEvents() ⇒ <code>[Interact](#Interact)</code>
+binds all needed events for IE
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
+<a name="Interact+bindTouchEvents"></a>
+### interact.bindTouchEvents() ⇒ <code>[Interact](#Interact)</code>
+binds all needed events for touch devices
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
+<a name="Interact+bindMouseEvents"></a>
+### interact.bindMouseEvents() ⇒ <code>[Interact](#Interact)</code>
+binds all needed events for mouse devices
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
+<a name="Interact+scrollHandler"></a>
+### interact.scrollHandler(event) ⇒ <code>Boolean</code>
+handles cross-browser and -device scroll
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - always returns false  
+**Params**
+
+- event <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+startHandler"></a>
+### interact.startHandler(event) ⇒ <code>Boolean</code>
+handles cross-browser and -device start-event
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - always returns false  
+**Params**
+
+- event <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+moveHandler"></a>
+### interact.moveHandler(event) ⇒ <code>Boolean</code>
+handles cross-browser and -device move-event
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - always returns false  
+**Params**
+
+- event <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+endHandler"></a>
+### interact.endHandler(event) ⇒ <code>Boolean</code>
+handles cross-browser and -device end-event
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - always returns false  
+**Params**
+
+- event <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+calculateSpeed"></a>
+### interact.calculateSpeed(distance, time) ⇒ <code>number</code>
+calculates the speed with specified distance and time
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>number</code> - the calculated speed  
+**Params**
+
+- distance <code>number</code> - the specified distance
+- time <code>number</code> - the specified time elapsed
+
+<a name="Interact+getSwipeDirections"></a>
+### interact.getSwipeDirections(direction) ⇒ <code>Array.&lt;string&gt;</code>
+Returns an array of strings, representing the directions
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Array.&lt;string&gt;</code> - returns an array representing the directions as strings  
+**Params**
+
+- direction <code>[Point](#Point)</code> - the specified direction in pixel
+
+<a name="Interact+setTimeoutForEvent"></a>
+### interact.setTimeoutForEvent(callback, timeout, args, holdTimeout) ⇒ <code>[Interact](#Interact)</code>
+Helper for setting a timeout for events
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
+**Params**
+
+- callback <code>function</code> - function to be called
+- timeout <code>number</code> - time in milliseconds
+- args <code>Array.&lt;Object&gt;</code> - array of arguments
+- holdTimeout <code>Boolean</code> - if true, a different variable will be used
+
+<a name="Interact+eventCallback"></a>
+### interact.eventCallback(callback, args) ⇒ <code>[Interact](#Interact)</code>
+Eventhandler for handling the callbacks
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
+**Params**
+
+- callback <code>function</code> - function to be called
+- args <code>Array.&lt;object&gt;</code> - arguments for the function
+
+<a name="Interact+getRelativePosition"></a>
+### interact.getRelativePosition(e) ⇒ <code>[Point](#Point)</code>
+get the relative position of clientX and clientY
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Point](#Point)</code> - calculated relative position  
+**Params**
+
+- e <code>Object</code> - event object
+
+<a name="Interact+getAbsolutePosition"></a>
+### interact.getAbsolutePosition(e) ⇒ <code>[Point](#Point)</code>
+get the absolute position of clientX and clientY
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Point](#Point)</code> - calculated absolute position  
+**Params**
+
+- e <code>Object</code> - event object
+
+<a name="Interact+getScrollDirection"></a>
+### interact.getScrollDirection(event) ⇒ <code>Array.&lt;string&gt;</code>
+get scroll direction from event
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Array.&lt;string&gt;</code> - an array with scroll directions  
+**Params**
+
+- event <code>Object</code> - event object
+
+<a name="Interact+getEvent"></a>
+### interact.getEvent(e) ⇒ <code>Object</code>
+Get event helper, applies jQuery-event-fix too
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - new fixed and optimized event  
+**Params**
+
+- e <code>Object</code> - event object
+
 <a name="LatLng"></a>
 ## LatLng
 **Kind**: global class  
@@ -232,10 +503,13 @@ called when loading and initialization is finished
     * _instance_
         * [.sub(point)](#Point+sub) ⇒ <code>[Point](#Point)</code>
         * [.add(point)](#Point+add) ⇒ <code>[Point](#Point)</code>
+        * [.mult(x, y)](#Point+mult) ⇒ <code>[Point](#Point)</code>
+        * [.divide(x, y)](#Point+divide) ⇒ <code>[Point](#Point)</code>
         * [.equals(point)](#Point+equals) ⇒ <code>Boolean</code>
         * [.difference(point)](#Point+difference) ⇒ <code>[Point](#Point)</code>
         * [.distance(point)](#Point+distance) ⇒ <code>[Point](#Point)</code>
         * [.translate(x, y)](#Point+translate) ⇒ <code>[Point](#Point)</code>
+        * [.toArray()](#Point+toArray) ⇒ <code>Array</code>
     * _static_
         * [.createFromPoint(point)](#Point.createFromPoint) ⇒ <code>[Point](#Point)</code>
 
@@ -268,6 +542,28 @@ adds 2 points
 **Params**
 
 - point <code>[Point](#Point)</code> - the point to add to this
+
+<a name="Point+mult"></a>
+### point.mult(x, y) ⇒ <code>[Point](#Point)</code>
+multiplicates a point with a given x and y
+
+**Kind**: instance method of <code>[Point](#Point)</code>  
+**Returns**: <code>[Point](#Point)</code> - Returns a new instance  
+**Params**
+
+- x <code>number</code> - factor to multiplicate x with
+- y <code>number</code> - factor to multiplicate y with
+
+<a name="Point+divide"></a>
+### point.divide(x, y) ⇒ <code>[Point](#Point)</code>
+divide a point with a given x and y
+
+**Kind**: instance method of <code>[Point](#Point)</code>  
+**Returns**: <code>[Point](#Point)</code> - Returns a new instance  
+**Params**
+
+- x <code>number</code> - factor to divide x with
+- y <code>number</code> - factor to divide y with
 
 <a name="Point+equals"></a>
 ### point.equals(point) ⇒ <code>Boolean</code>
@@ -310,6 +606,12 @@ moves a point by x and y
 - x <code>number</code> - value to move x
 - y <code>number</code> - value to move y
 
+<a name="Point+toArray"></a>
+### point.toArray() ⇒ <code>Array</code>
+translates a Point to an array
+
+**Kind**: instance method of <code>[Point](#Point)</code>  
+**Returns**: <code>Array</code> - Returns Point as Array(x, y)  
 <a name="Point.createFromPoint"></a>
 ### Point.createFromPoint(point) ⇒ <code>[Point](#Point)</code>
 Creates a Point from specified point
