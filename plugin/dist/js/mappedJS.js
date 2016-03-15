@@ -7,7 +7,7 @@
 		exports["de"] = factory(require("jQuery"));
 	else
 		root["de"] = factory(root["jQuery"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_3__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -65,15 +65,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _TileMap = __webpack_require__(1);
-
-	var _jquery = __webpack_require__(3);
+	var _jquery = __webpack_require__(1);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _Helper = __webpack_require__(8);
+	var _TileMap = __webpack_require__(2);
 
-	var _Publisher = __webpack_require__(7);
+	var _Helper = __webpack_require__(11);
+
+	var _Publisher = __webpack_require__(10);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -246,6 +246,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
+
+/***/ },
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -257,32 +263,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _Tile = __webpack_require__(2);
-
-	var _jquery = __webpack_require__(3);
+	var _jquery = __webpack_require__(1);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _Point = __webpack_require__(6);
+	var _LatLng = __webpack_require__(3);
 
-	var _Bounds = __webpack_require__(9);
-
-	var _LatLng = __webpack_require__(10);
+	var _Bounds = __webpack_require__(6);
 
 	var _Rectangle = __webpack_require__(5);
 
-	var _View = __webpack_require__(11);
-
-	var _Publisher = __webpack_require__(7);
+	var _View = __webpack_require__(7);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * Singleton instance of Publisher
-	 */
-	var PUBLISHER = new _Publisher.Publisher();
 
 	var TileMap = exports.TileMap = function () {
 	    _createClass(TileMap, [{
@@ -330,31 +325,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this.$container.innerHeight();
 	        }
 
-	        /**
-	         * get all visible tiles
-	         * @return {array} all tiles that are currently visible
-	         */
-
-	    }, {
-	        key: 'visibleTiles',
-	        get: function get() {
-	            return this.tiles.filter(function (t, i, a) {
-	                var newTile = t.getDistortedRect(this.distortion).translate(this.view.getMapOffset(this.distortion), this.view.offset.y);
-	                return this.view.viewport.intersects(newTile);
-	            }, this);
-	        }
-
-	        /**
-	         * Returns current distortion
-	         * @return {number} returns current distortion of latitude
-	         */
-
-	    }, {
-	        key: 'distortion',
-	        get: function get() {
-	            return Math.cos(this.settings.center.lat);
-	        }
-
 	        /** Constructor
 	         * @param  {Object} container - jQuery-object holding the container
 	         * @param  {Object} tilesData={} - json object representing data of TileMap
@@ -381,8 +351,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
 	        this.settings = settings;
 
-	        this.tiles = [];
-	        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions).initializeTiles().draw();
+	        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
 
 	        return this;
 	    }
@@ -400,10 +369,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
 	                mapView: new _Rectangle.Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
 	                bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
-	                center: new _LatLng.LatLng(center.lat, center.lng)
+	                center: new _LatLng.LatLng(center.lat, center.lng),
+	                data: this.getCurrentLevelData(),
+	                drawCb: function (img, x, y, w, h) {
+	                    this.canvasContext.drawImage(img, x, y, w, h);
+	                }.bind(this)
 	            });
-	            this.bindEvents().initializeCanvas();
-
+	            this.initializeCanvas();
 	            return this;
 	        }
 
@@ -424,35 +396,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * Handles all events for class
-	         * @return {TileMap} instance of TileMap
-	         */
-
-	    }, {
-	        key: 'bindEvents',
-	        value: function bindEvents() {
-	            PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
-	            return this;
-	        }
-
-	        /**
-	         * initializes tiles
-	         * @return {TileMap} instance of TileMap
-	         */
-
-	    }, {
-	        key: 'initializeTiles',
-	        value: function initializeTiles() {
-	            var currentLevel = this.getCurrentLevelData().tiles;
-	            for (var tile in currentLevel) {
-	                var currentTileData = currentLevel[tile];
-	                var _tile = new _Tile.Tile(currentTileData);
-	                this.tiles.push(_tile);
-	            }
-	            return this;
-	        }
-
-	        /**
 	         * gets data of current zoom level
 	         * @return {Object} data for current level as json
 	         */
@@ -461,37 +404,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'getCurrentLevelData',
 	        value: function getCurrentLevelData() {
 	            return this.imgData["level-" + this.settings.level];
-	        }
-
-	        /**
-	         * handles on load of a tile
-	         * @param  {Tile} tile a tile of the TileMap
-	         * @return {TileMap} instance of TileMap
-	         */
-
-	    }, {
-	        key: 'onTilesLoaded',
-	        value: function onTilesLoaded(tile) {
-	            this.drawTile(tile);
-	            tile.state.next();
-	            return this;
-	        }
-
-	        /**
-	         * draws tiles on canvas
-	         * @param  {Tile} tile a tile of the TileMap
-	         * @return {TileMap} instance of TileMap
-	         */
-
-	    }, {
-	        key: 'drawTile',
-	        value: function drawTile(tile) {
-	            if (tile.state.current.value >= 2) {
-	                this.canvasContext.drawImage(tile.img, tile.x * this.distortion + this.view.getMapOffset(this.distortion), tile.y + this.view.offset.y, tile.width * this.distortion, tile.height);
-	            } else if (tile.state.current.value === 0) {
-	                tile.initialize();
-	            }
-	            return this;
 	        }
 
 	        /**
@@ -504,7 +416,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function resize() {
 	            this.canvasContext.canvas.width = this.width;
 	            this.canvasContext.canvas.height = this.height;
-	            this.draw();
 	            this.resizeView();
 	            return this;
 	        }
@@ -517,25 +428,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resizeView',
 	        value: function resizeView() {
-	            this.view.viewport.x = this.left;
-	            this.view.viewport.y = this.top;
-	            this.view.viewport.width = this.width;
-	            this.view.viewport.height = this.height;
-	            return this;
-	        }
-
-	        /**
-	         * Handles draw of TileMap
-	         * @return {TileMap} instance of TileMap
-	         */
-
-	    }, {
-	        key: 'draw',
-	        value: function draw() {
-	            for (var tile in this.visibleTiles) {
-	                var currentTile = this.visibleTiles[tile];
-	                this.drawTile(currentTile);
-	            }
+	            this.view.drawVisibleTiles();
+	            this.view.viewport.transform(this.left, this.top, this.width, this.height);
 	            return this;
 	        }
 	    }]);
@@ -552,239 +446,241 @@ return /******/ (function(modules) { // webpackBootstrap
 		TileMap.IMG_DATA_NAME = "img_data";
 
 /***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.Tile = undefined;
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _jquery = __webpack_require__(3);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	var _State = __webpack_require__(4);
-
-	var _Rectangle2 = __webpack_require__(5);
-
-	var _Publisher = __webpack_require__(7);
-
-	var _Helper = __webpack_require__(8);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	 * Singleton instance of Publisher
-	 */
-	var PUBLISHER = new _Publisher.Publisher();
-
-	/**
-	 * States of a tile
-	 * @type {Array}
-	 */
-	var STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Initialized' }, { value: 2, description: 'Loaded' }, { value: 3, description: 'Drawn' }];
-
-	/**
-	 * Name of event fired, when tile is loaded
-	 * @type {String}
-	 */
-	var EVENT_TILE_LOADED = "tile-loaded";
-
-	/**
-	 * Name of event fired, when tile is not found on loading
-	 * @type {String}
-	 */
-	var EVENT_TILE_FAILED = "tile-failed";
-
-	var Tile = exports.Tile = function (_Rectangle) {
-	  _inherits(Tile, _Rectangle);
-
-	  _createClass(Tile, [{
-	    key: 'Publisher',
-
-
-	    /**
-	     * Return the Publisher
-	     */
-	    get: function get() {
-	      return PUBLISHER;
-	    }
-
-	    /**
-	     * Constructor
-	     * @param  {string} path=null - path to image
-	     * @param  {number} x=0 - position x of tile
-	     * @param  {number} y=0 - position y of tile
-	     * @param  {number} w=0 - tile width
-	     * @param  {number} h=0 - tile height
-	     * @return {Tile} instance of Tile
-	     */
-
-	  }]);
-
-	  function Tile() {
-	    var _ret;
-
-	    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	    var path = _ref.path;
-	    var _ref$x = _ref.x;
-	    var x = _ref$x === undefined ? 0 : _ref$x;
-	    var _ref$y = _ref.y;
-	    var y = _ref$y === undefined ? 0 : _ref$y;
-	    var _ref$w = _ref.w;
-	    var w = _ref$w === undefined ? 0 : _ref$w;
-	    var _ref$h = _ref.h;
-	    var h = _ref$h === undefined ? 0 : _ref$h;
-
-	    _classCallCheck(this, Tile);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
-
-	    _this.state = new _State.State(STATES);
-	    if (!path || typeof path !== "string" || path.length === 0) {
-	      throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
-	    }
-	    _this.path = path;
-	    return _ret = _this, _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  /**
-	   * initializes tile and starts loading image
-	   * @return {Tile} instance of Tile
-	   */
-
-
-	  _createClass(Tile, [{
-	    key: 'initialize',
-	    value: function initialize() {
-	      this.state.next();
-	      _Helper.Helper.loadImage(this.path, function (img) {
-	        this.img = img;
-	        this.state.next();
-	        PUBLISHER.publish(EVENT_TILE_LOADED, this);
-	      }.bind(this));
-
-	      return this;
-	    }
-
-	    /**
-	     * check if tiles are equal
-	     * @param  {Tile} tile - the specified tile to check against this
-	     * @return {Boolean} is true, if x, y, width and height and path are the same
-	     */
-
-	  }, {
-	    key: 'equals',
-	    value: function equals(tile) {
-	      return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
-	    }
-	  }]);
-
-	  return Tile;
-	}(_Rectangle2.Rectangle);
-
-/***/ },
 /* 3 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.LatLng = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Point = __webpack_require__(4);
+
+	var _Rectangle = __webpack_require__(5);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var LatLng = exports.LatLng = function () {
+
+	    /**
+	     * Constructor
+	     * @param  {number} lat = 0 - representation of latitude
+	     * @param  {number} lng = 0 - representation of longitude
+	     * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
+	     * @return {LatLng} new instance of LatLng
+	     */
+
+	    function LatLng() {
+	        var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	        var isDistance = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+	        _classCallCheck(this, LatLng);
+
+	        if (!isDistance && (lat > 90 || lat < -90 || lng > 180 || lng < -180)) {
+	            throw new Error('latitude(' + lat + ') is greater/smaller than +/-90 or longitude(' + lng + ') is greater/smaller than +/-180');
+	        }
+	        this.lat = lat;
+	        this.lng = lng;
+	        return this;
+	    }
+
+	    /**
+	     * substract specified coord from this coordinate
+	     * @param  {LatLng} coord - specified coordinate to substract from this coord
+	     * @return {LatLng} the new calculated LatLng
+	     */
+
+
+	    _createClass(LatLng, [{
+	        key: 'sub',
+	        value: function sub(coord) {
+	            return new LatLng(this.lat - coord.lat, this.lng - coord.lng);
+	        }
+
+	        /**
+	         * substract specified coord from this coordinate
+	         * @param  {LatLng} coord - specified coordinate to substract from this coord
+	         * @return {LatLng} the new calculated LatLng
+	         */
+
+	    }, {
+	        key: 'difference',
+	        value: function difference(coord) {
+	            return new LatLng(this.lat - coord.lat, this.lng - coord.lng, true);
+	        }
+
+	        /**
+	         * add specified coord to this coordinate
+	         * @param  {LatLng} coord - specified coordinate to add to this coord
+	         * @return {LatLng} the new calculated LatLng
+	         */
+
+	    }, {
+	        key: 'add',
+	        value: function add(coord) {
+	            return new LatLng(this.lat + coord.lat, this.lng + coord.lng);
+	        }
+
+	        /**
+	         * converts Latlng to a Point
+	         * @return {Point} Returns a Point representing LatLng in Pixels
+	         */
+
+	    }, {
+	        key: 'toPoint',
+	        value: function toPoint(bounds, rect) {
+	            var relativePosition = bounds.nw.difference(this),
+	                factorX = rect.width / bounds.width,
+	                factorY = rect.height / bounds.height;
+	            return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+	        }
+
+	        /**
+	         * checks if specified coord equals this coord
+	         * @param  {LatLng} coord - specified coord to check against
+	         * @return {Boolean} Returns if specified coord equals this coord
+	         */
+
+	    }, {
+	        key: 'equals',
+	        value: function equals(coord) {
+	            return this.lat === coord.lat && this.lng === coord.lng;
+	        }
+	    }]);
+
+	    return LatLng;
+	}();
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var STATES = new WeakMap();
+	var Point = exports.Point = function () {
 
-	var _makePrivate = function _makePrivate(o) {
-	    return STATES.set(o, {});
-	};
-	var _getPrivate = function _getPrivate(o) {
-	    return STATES.get(o);
-	};
+	  /**
+	   * Constructor
+	   * @param  {number} x = 0 - representation of x coordinate
+	   * @param  {number} y = 0 - representation of y coordinate
+	   * @return {Point} new instance of point
+	   */
 
-	var State = exports.State = function () {
+	  function Point() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-	    /**
-	     * Constructor
-	     * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
-	     * @return {State} instance of State
-	     */
+	    _classCallCheck(this, Point);
 
-	    function State() {
-	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{ value: 0, description: 'Default' }] : arguments[0];
+	    this.x = x;
+	    this.y = y;
+	    return this;
+	  }
 
-	        _classCallCheck(this, State);
+	  /**
+	   * substracts 2 points
+	   * @param  {Point} point - the point to substract from this
+	   * @return {Point} difference between this point and parameter point
+	   */
 
-	        _makePrivate(this);
-	        _getPrivate(this).STATES = states_array;
-	        this.i = 0;
-	        return this;
+
+	  _createClass(Point, [{
+	    key: "sub",
+	    value: function sub(point) {
+	      return new Point(this.x - point.x, this.y - point.y);
 	    }
 
 	    /**
-	     * get current state
-	     * @return {Object} a state from STATES-array
+	     * adds 2 points
+	     * @param  {Point} point - the point to add to this
+	     * @return {Point} addition of this point and parameter point
 	     */
 
+	  }, {
+	    key: "add",
+	    value: function add(point) {
+	      return new Point(this.x + point.x, this.y + point.y);
+	    }
 
-	    _createClass(State, [{
-	        key: 'next',
+	    /**
+	     * check if points are equal
+	     * @param  {Point} point - the point to check against this
+	     * @return {Boolean} is true, if x and y are the same
+	     */
 
+	  }, {
+	    key: "equals",
+	    value: function equals(point) {
+	      return this.x === point.x && this.y === point.y;
+	    }
 
-	        /**
-	         * get the next element
-	         * @return {State} instance of State
-	         */
-	        value: function next() {
-	            if (this.hasNext()) {
-	                this.i++;
-	            }
-	            return this;
-	        }
+	    /**
+	     * Returns the difference from this Point to a specified Point
+	     * @param  {Point} point - the specified point to be measured against this Point
+	     * @return {Point} the difference between this Point and specified point
+	     */
 
-	        /**
-	         * checks if there is a next element
-	         * @return {Boolean} wheter there is a next state or not
-	         */
+	  }, {
+	    key: "difference",
+	    value: function difference(point) {
+	      return new Point(this.x - point.x, this.y - point.y);
+	    }
 
-	    }, {
-	        key: 'hasNext',
-	        value: function hasNext() {
-	            return this.i < _getPrivate(this).STATES.length - 1;
-	        }
-	    }, {
-	        key: 'current',
-	        get: function get() {
-	            return _getPrivate(this).STATES[this.i];
-	        }
-	    }]);
+	    /**
+	     * Returns the distance from this Point to a specified Point
+	     * @param  {Point} point - the specified point to be measured against this Point
+	     * @return {Point} the distance between this Point and specified point
+	     */
 
-	    return State;
+	  }, {
+	    key: "distance",
+	    value: function distance(point) {
+	      var difference = this.difference(point);
+	      return Math.sqrt(Math.pow(difference.x, 2) + Math.pow(difference.y, 2));
+	    }
+
+	    /**
+	     * moves a point by x and y
+	     * @param  {number} x - value to move x
+	     * @param  {number} y - value to move y
+	     * @return {Point} instance of Point
+	     */
+
+	  }, {
+	    key: "translate",
+	    value: function translate(x, y) {
+	      this.x += x;
+	      this.y += y;
+	      return this;
+	    }
+	  }]);
+
+	  return Point;
 	}();
+
+	/**
+	 * Creates a Point from specified point
+	 * @param  {Point} point - specified point
+	 * @return {Point} the point specified
+	 */
+
+
+	Point.createFromPoint = function (point) {
+	  return new Point(point.x, point.y);
+		};
 
 /***/ },
 /* 5 */
@@ -799,7 +695,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _Point2 = __webpack_require__(6);
+	var _Point2 = __webpack_require__(4);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1004,7 +900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * moves a rectangle by specified coords
 	         * @param  {number} x - how far to move in x direction
 	         * @param  {number} y - how far to move in y direction
-	         * @return {Rectangle} Returns the altered direction
+	         * @return {Rectangle} Returns the altered rectangle
 	         */
 
 	    }, {
@@ -1012,6 +908,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function translate(x, y) {
 	            this.x += x;
 	            this.y += y;
+	            return this;
+	        }
+
+	        /**
+	         * transforms a rectangle by specified coords
+	         * @param  {number} x - how far to transform in x direction
+	         * @param  {number} y - how far to transform in y direction
+	         * @param  {number} width - changes the width
+	         * @param  {number} height - changes the width
+	         * @return {Rectangle} Returns the altered rectangle
+	         */
+
+	    }, {
+	        key: 'transform',
+	        value: function transform(x, y, width, height) {
+	            this.translate(x, y);
+	            this.width += width;
+	            this.height += height;
 	            return this;
 	        }
 
@@ -1033,132 +947,505 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 6 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Bounds = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _LatLng = __webpack_require__(3);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Bounds = exports.Bounds = function () {
+	    _createClass(Bounds, [{
+	        key: 'width',
+
+
+	        /**
+	         * gets width of boundaries
+	         * @return {number} width of boundaries
+	         */
+	        get: function get() {
+	            return Math.abs(this.so.lng - this.nw.lng);
+	        }
+
+	        /**
+	         * gets height of boundaries
+	         * @return {number} height of boundaries
+	         */
+
+	    }, {
+	        key: 'height',
+	        get: function get() {
+	            return Math.abs(this.so.lat - this.nw.lat);
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {number} northWest = new LatLng() - representation of northWest boundary
+	         * @param  {number} southEast = new LatLng() - representation of southEast boundary
+	         * @return {Bounds} new instance of Bounds
+	         */
+
+	    }]);
+
+	    function Bounds() {
+	        var northWest = arguments.length <= 0 || arguments[0] === undefined ? new _LatLng.LatLng() : arguments[0];
+	        var southEast = arguments.length <= 1 || arguments[1] === undefined ? new _LatLng.LatLng() : arguments[1];
+
+	        _classCallCheck(this, Bounds);
+
+	        if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) {
+	            throw new Error(northWest + ' needs to be top-right corner and ' + southEast + ' bottom-left');
+	        }
+	        this.nw = northWest;
+	        this.so = southEast;
+	        return this;
+	    }
+
+	    return Bounds;
+	}();
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.View = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _LatLng = __webpack_require__(3);
+
+	var _Bounds = __webpack_require__(6);
+
+	var _Rectangle = __webpack_require__(5);
+
+	var _Tile = __webpack_require__(8);
+
+	var _Publisher = __webpack_require__(10);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * Singleton instance of Publisher
+	 */
+	var PUBLISHER = new _Publisher.Publisher();
+
+	var View = exports.View = function () {
+	    _createClass(View, [{
+	        key: 'distortion',
+
+
+	        /**
+	         * Returns current distortion
+	         * @return {number} returns current distortion of latitude
+	         */
+	        get: function get() {
+	            return Math.cos(this.center.lat);
+	        }
+
+	        /**
+	         * Returns the offset of the center
+	         */
+
+	    }, {
+	        key: 'offset',
+	        get: function get() {
+	            var center = this.center.toPoint(this.bounds, this.mapView);
+	            return this.viewport.center.sub(center);
+	        }
+
+	        /**
+	         * Returns the offset of the map
+	         * @param {number} distortion - the current latitude distortion
+	         * @return {number} calculated offset
+	         */
+
+	    }, {
+	        key: 'mapOffset',
+	        get: function get() {
+	            return this.offset.x + (this.mapView.width - this.mapView.width * this.distortion) / 2;
+	        }
+
+	        /**
+	         * get all visible tiles
+	         * @return {array} all tiles that are currently visible
+	         */
+
+	    }, {
+	        key: 'visibleTiles',
+	        get: function get() {
+	            return this.tiles.filter(function (t, i, a) {
+	                var newTile = t.getDistortedRect(this.distortion).translate(this.mapOffset, this.offset.y);
+	                return this.viewport.intersects(newTile);
+	            }, this);
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {Object} settings - the settings Object
+	         * @param  {Rectangle} viewport = new Rectangle() - current representation of viewport
+	         * @param  {Rectangle} mapView = new Rectangle() - current representation of map
+	         * @param  {Bounds} bounds = new Bounds() - current bounds of map
+	         * @param  {LatLng} center = new LatLng() - current center of map
+	         * @param  {Object} data = {} - data of current map
+	         * @return {View} Instance of View
+	         */
+
+	    }]);
+
+	    function View(_ref) {
+	        var _ref$viewport = _ref.viewport;
+	        var viewport = _ref$viewport === undefined ? new _Rectangle.Rectangle() : _ref$viewport;
+	        var _ref$mapView = _ref.mapView;
+	        var mapView = _ref$mapView === undefined ? new _Rectangle.Rectangle() : _ref$mapView;
+	        var _ref$bounds = _ref.bounds;
+	        var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
+	        var _ref$center = _ref.center;
+	        var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
+	        var _ref$data = _ref.data;
+	        var data = _ref$data === undefined ? {} : _ref$data;
+	        var drawCb = _ref.drawCb;
+
+	        _classCallCheck(this, View);
+
+	        this.mapView = mapView;
+	        this.viewport = viewport;
+	        this.bounds = bounds;
+	        this.center = center;
+	        this.tiles = [];
+	        this.data = data;
+	        this.draw = drawCb;
+	        this.bindEvents().initializeTiles();
+
+	        return this;
+	    }
+
+	    /**
+	     * handles on load of a tile
+	     * @param  {Tile} tile a tile of the TileMap
+	     * @return {TileMap} instance of TileMap
+	     */
+
+
+	    _createClass(View, [{
+	        key: 'onTilesLoaded',
+	        value: function onTilesLoaded(tile) {
+	            this.drawTile(tile);
+	            tile.state.next();
+	            return this;
+	        }
+
+	        /**
+	         * Handles draw of TileMap
+	         * @return {TileMap} instance of TileMap
+	         */
+
+	    }, {
+	        key: 'drawVisibleTiles',
+	        value: function drawVisibleTiles() {
+	            for (var tile in this.visibleTiles) {
+	                this.drawTile(this.visibleTiles[tile]);
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * draws tiles on canvas
+	         * @param  {Tile} tile a tile of the TileMap
+	         * @return {TileMap} instance of TileMap
+	         */
+
+	    }, {
+	        key: 'drawTile',
+	        value: function drawTile(tile) {
+	            if (tile.state.current.value >= 2) {
+	                if (this.draw && typeof this.draw === "function") {
+	                    this.draw(tile.img, tile.x * this.distortion + this.mapOffset, tile.y + this.offset.y, tile.width * this.distortion, tile.height);
+	                } else {
+	                    console.error("Draw method is not defined or not a function");
+	                }
+	            } else if (tile.state.current.value === 0) {
+	                tile.initialize();
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * Handles all events for class
+	         * @return {TileMap} instance of TileMap
+	         */
+
+	    }, {
+	        key: 'bindEvents',
+	        value: function bindEvents() {
+	            PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
+	            return this;
+	        }
+
+	        /**
+	         * initializes tiles
+	         * @return {TileMap} instance of TileMap
+	         */
+
+	    }, {
+	        key: 'initializeTiles',
+	        value: function initializeTiles() {
+	            var currentLevel = this.data.tiles;
+	            for (var tile in currentLevel) {
+	                var currentTileData = currentLevel[tile];
+	                var _tile = new _Tile.Tile(currentTileData);
+	                this.tiles.push(_tile);
+	            }
+	            return this;
+	        }
+	    }]);
+
+	    return View;
+	}();
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
+	});
+	exports.Tile = undefined;
+
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _jquery = __webpack_require__(1);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _State = __webpack_require__(9);
+
+	var _Rectangle2 = __webpack_require__(5);
+
+	var _Publisher = __webpack_require__(10);
+
+	var _Helper = __webpack_require__(11);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * Singleton instance of Publisher
+	 */
+	var PUBLISHER = new _Publisher.Publisher();
+
+	/**
+	 * States of a tile
+	 * @type {Array}
+	 */
+	var STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Initialized' }, { value: 2, description: 'Loaded' }, { value: 3, description: 'Drawn' }];
+
+	/**
+	 * Name of event fired, when tile is loaded
+	 * @type {String}
+	 */
+	var EVENT_TILE_LOADED = "tile-loaded";
+
+	/**
+	 * Name of event fired, when tile is not found on loading
+	 * @type {String}
+	 */
+	var EVENT_TILE_FAILED = "tile-failed";
+
+	var Tile = exports.Tile = function (_Rectangle) {
+	  _inherits(Tile, _Rectangle);
+
+	  _createClass(Tile, [{
+	    key: 'Publisher',
+
+
+	    /**
+	     * Return the Publisher
+	     */
+	    get: function get() {
+	      return PUBLISHER;
+	    }
+
+	    /**
+	     * Constructor
+	     * @param  {string} path=null - path to image
+	     * @param  {number} x=0 - position x of tile
+	     * @param  {number} y=0 - position y of tile
+	     * @param  {number} w=0 - tile width
+	     * @param  {number} h=0 - tile height
+	     * @return {Tile} instance of Tile
+	     */
+
+	  }]);
+
+	  function Tile() {
+	    var _ret;
+
+	    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	    var path = _ref.path;
+	    var _ref$x = _ref.x;
+	    var x = _ref$x === undefined ? 0 : _ref$x;
+	    var _ref$y = _ref.y;
+	    var y = _ref$y === undefined ? 0 : _ref$y;
+	    var _ref$w = _ref.w;
+	    var w = _ref$w === undefined ? 0 : _ref$w;
+	    var _ref$h = _ref.h;
+	    var h = _ref$h === undefined ? 0 : _ref$h;
+
+	    _classCallCheck(this, Tile);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
+
+	    _this.state = new _State.State(STATES);
+	    if (!path || typeof path !== "string" || path.length === 0) {
+	      throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
+	    }
+	    _this.path = path;
+	    return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  /**
+	   * initializes tile and starts loading image
+	   * @return {Tile} instance of Tile
+	   */
+
+
+	  _createClass(Tile, [{
+	    key: 'initialize',
+	    value: function initialize() {
+	      this.state.next();
+	      _Helper.Helper.loadImage(this.path, function (img) {
+	        this.img = img;
+	        this.state.next();
+	        PUBLISHER.publish(EVENT_TILE_LOADED, this);
+	      }.bind(this));
+
+	      return this;
+	    }
+
+	    /**
+	     * check if tiles are equal
+	     * @param  {Tile} tile - the specified tile to check against this
+	     * @return {Boolean} is true, if x, y, width and height and path are the same
+	     */
+
+	  }, {
+	    key: 'equals',
+	    value: function equals(tile) {
+	      return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
+	    }
+	  }]);
+
+	  return Tile;
+	}(_Rectangle2.Rectangle);
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Point = exports.Point = function () {
+	var STATES = new WeakMap();
 
-	  /**
-	   * Constructor
-	   * @param  {number} x = 0 - representation of x coordinate
-	   * @param  {number} y = 0 - representation of y coordinate
-	   * @return {Point} new instance of point
-	   */
+	var _makePrivate = function _makePrivate(o) {
+	    return STATES.set(o, {});
+	};
+	var _getPrivate = function _getPrivate(o) {
+	    return STATES.get(o);
+	};
 
-	  function Point() {
-	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	var State = exports.State = function () {
 
-	    _classCallCheck(this, Point);
+	    /**
+	     * Constructor
+	     * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
+	     * @return {State} instance of State
+	     */
 
-	    this.x = x;
-	    this.y = y;
-	    return this;
-	  }
+	    function State() {
+	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{ value: 0, description: 'Default' }] : arguments[0];
 
-	  /**
-	   * substracts 2 points
-	   * @param  {Point} point - the point to substract from this
-	   * @return {Point} difference between this point and parameter point
-	   */
+	        _classCallCheck(this, State);
 
-
-	  _createClass(Point, [{
-	    key: "sub",
-	    value: function sub(point) {
-	      return new Point(this.x - point.x, this.y - point.y);
+	        _makePrivate(this);
+	        _getPrivate(this).STATES = states_array;
+	        this.i = 0;
+	        return this;
 	    }
 
 	    /**
-	     * adds 2 points
-	     * @param  {Point} point - the point to add to this
-	     * @return {Point} addition of this point and parameter point
+	     * get current state
+	     * @return {Object} a state from STATES-array
 	     */
 
-	  }, {
-	    key: "add",
-	    value: function add(point) {
-	      return new Point(this.x + point.x, this.y + point.y);
-	    }
 
-	    /**
-	     * check if points are equal
-	     * @param  {Point} point - the point to check against this
-	     * @return {Boolean} is true, if x and y are the same
-	     */
+	    _createClass(State, [{
+	        key: 'next',
 
-	  }, {
-	    key: "equals",
-	    value: function equals(point) {
-	      return this.x === point.x && this.y === point.y;
-	    }
 
-	    /**
-	     * Returns the difference from this Point to a specified Point
-	     * @param  {Point} point - the specified point to be measured against this Point
-	     * @return {Point} the difference between this Point and specified point
-	     */
+	        /**
+	         * get the next element
+	         * @return {State} instance of State
+	         */
+	        value: function next() {
+	            if (this.hasNext()) {
+	                this.i++;
+	            }
+	            return this;
+	        }
 
-	  }, {
-	    key: "difference",
-	    value: function difference(point) {
-	      return new Point(this.x - point.x, this.y - point.y);
-	    }
+	        /**
+	         * checks if there is a next element
+	         * @return {Boolean} wheter there is a next state or not
+	         */
 
-	    /**
-	     * Returns the distance from this Point to a specified Point
-	     * @param  {Point} point - the specified point to be measured against this Point
-	     * @return {Point} the distance between this Point and specified point
-	     */
+	    }, {
+	        key: 'hasNext',
+	        value: function hasNext() {
+	            return this.i < _getPrivate(this).STATES.length - 1;
+	        }
+	    }, {
+	        key: 'current',
+	        get: function get() {
+	            return _getPrivate(this).STATES[this.i];
+	        }
+	    }]);
 
-	  }, {
-	    key: "distance",
-	    value: function distance(point) {
-	      var difference = this.difference(point);
-	      return Math.sqrt(Math.pow(difference.x, 2) + Math.pow(difference.y, 2));
-	    }
-
-	    /**
-	     * moves a point by x and y
-	     * @param  {number} x - value to move x
-	     * @param  {number} y - value to move y
-	     * @return {Point} instance of Point
-	     */
-
-	  }, {
-	    key: "translate",
-	    value: function translate(x, y) {
-	      this.x += x;
-	      this.y += y;
-	      return this;
-	    }
-	  }]);
-
-	  return Point;
+	    return State;
 	}();
 
-	/**
-	 * Creates a Point from specified point
-	 * @param  {Point} point - specified point
-	 * @return {Point} the point specified
-	 */
-
-
-	Point.createFromPoint = function (point) {
-	  return new Point(point.x, point.y);
-		};
-
 /***/ },
-/* 7 */
+/* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1302,7 +1589,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		Publisher.UNSUBSCRIBE = "unsubscribe";
 
 /***/ },
-/* 8 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1312,7 +1599,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.Helper = undefined;
 
-	var _jquery = __webpack_require__(3);
+	var _jquery = __webpack_require__(1);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -1360,267 +1647,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 		};
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Bounds = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _LatLng = __webpack_require__(10);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Bounds = exports.Bounds = function () {
-	    _createClass(Bounds, [{
-	        key: 'width',
-
-
-	        /**
-	         * gets width of boundaries
-	         * @return {number} width of boundaries
-	         */
-	        get: function get() {
-	            return Math.abs(this.so.lng - this.nw.lng);
-	        }
-
-	        /**
-	         * gets height of boundaries
-	         * @return {number} height of boundaries
-	         */
-
-	    }, {
-	        key: 'height',
-	        get: function get() {
-	            return Math.abs(this.so.lat - this.nw.lat);
-	        }
-
-	        /**
-	         * Constructor
-	         * @param  {number} northWest = new LatLng() - representation of northWest boundary
-	         * @param  {number} southEast = new LatLng() - representation of southEast boundary
-	         * @return {Bounds} new instance of Bounds
-	         */
-
-	    }]);
-
-	    function Bounds() {
-	        var northWest = arguments.length <= 0 || arguments[0] === undefined ? new _LatLng.LatLng() : arguments[0];
-	        var southEast = arguments.length <= 1 || arguments[1] === undefined ? new _LatLng.LatLng() : arguments[1];
-
-	        _classCallCheck(this, Bounds);
-
-	        if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) {
-	            throw new Error(northWest + ' needs to be top-right corner and ' + southEast + ' bottom-left');
-	        }
-	        this.nw = northWest;
-	        this.so = southEast;
-	        return this;
-	    }
-
-	    return Bounds;
-	}();
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.LatLng = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _Point = __webpack_require__(6);
-
-	var _Rectangle = __webpack_require__(5);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var LatLng = exports.LatLng = function () {
-
-	    /**
-	     * Constructor
-	     * @param  {number} lat = 0 - representation of latitude
-	     * @param  {number} lng = 0 - representation of longitude
-	     * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
-	     * @return {LatLng} new instance of LatLng
-	     */
-
-	    function LatLng() {
-	        var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	        var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-	        var isDistance = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
-
-	        _classCallCheck(this, LatLng);
-
-	        if (!isDistance && (lat > 90 || lat < -90 || lng > 180 || lng < -180)) {
-	            throw new Error('latitude(' + lat + ') is greater/smaller than +/-90 or longitude(' + lng + ') is greater/smaller than +/-180');
-	        }
-	        this.lat = lat;
-	        this.lng = lng;
-	        return this;
-	    }
-
-	    /**
-	     * substract specified coord from this coordinate
-	     * @param  {LatLng} coord - specified coordinate to substract from this coord
-	     * @return {LatLng} the new calculated LatLng
-	     */
-
-
-	    _createClass(LatLng, [{
-	        key: 'sub',
-	        value: function sub(coord) {
-	            return new LatLng(this.lat - coord.lat, this.lng - coord.lng);
-	        }
-
-	        /**
-	         * substract specified coord from this coordinate
-	         * @param  {LatLng} coord - specified coordinate to substract from this coord
-	         * @return {LatLng} the new calculated LatLng
-	         */
-
-	    }, {
-	        key: 'difference',
-	        value: function difference(coord) {
-	            return new LatLng(this.lat - coord.lat, this.lng - coord.lng, true);
-	        }
-
-	        /**
-	         * add specified coord to this coordinate
-	         * @param  {LatLng} coord - specified coordinate to add to this coord
-	         * @return {LatLng} the new calculated LatLng
-	         */
-
-	    }, {
-	        key: 'add',
-	        value: function add(coord) {
-	            return new LatLng(this.lat + coord.lat, this.lng + coord.lng);
-	        }
-
-	        /**
-	         * converts Latlng to a Point
-	         * @return {Point} Returns a Point representing LatLng in Pixels
-	         */
-
-	    }, {
-	        key: 'toPoint',
-	        value: function toPoint(bounds, rect) {
-	            var relativePosition = bounds.nw.difference(this),
-	                factorX = rect.width / bounds.width,
-	                factorY = rect.height / bounds.height;
-	            return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
-	        }
-
-	        /**
-	         * checks if specified coord equals this coord
-	         * @param  {LatLng} coord - specified coord to check against
-	         * @return {Boolean} Returns if specified coord equals this coord
-	         */
-
-	    }, {
-	        key: 'equals',
-	        value: function equals(coord) {
-	            return this.lat === coord.lat && this.lng === coord.lng;
-	        }
-	    }]);
-
-	    return LatLng;
-	}();
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.View = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _Point = __webpack_require__(6);
-
-	var _LatLng = __webpack_require__(10);
-
-	var _Bounds = __webpack_require__(9);
-
-	var _Rectangle = __webpack_require__(5);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var View = exports.View = function () {
-	    _createClass(View, [{
-	        key: 'getMapOffset',
-
-
-	        /**
-	         * Returns the offset of the map
-	         * @param {number} distortion - the current latitude distortion
-	         * @return {number} calculated offset
-	         */
-	        value: function getMapOffset(distortion) {
-	            return this.offset.x + (this.mapView.width - this.mapView.width * distortion) / 2;
-	        }
-
-	        /**
-	         * Constructor
-	         * @param  {Object} settings - the settings Object
-	         * @param  {Rectangle} viewport = new Rectangle() - current representation of viewport
-	         * @param  {Rectangle} mapView = new Rectangle() - current representation of map
-	         * @param  {Bounds} bounds = new Bounds() - current bounds of map
-	         * @param  {LatLng} center = new LatLng() - current center of map
-	         * @return {View} Instance of View
-	         */
-
-	    }, {
-	        key: 'offset',
-
-
-	        /**
-	         * Returns the offset of the center
-	         */
-	        get: function get() {
-	            var center = this.center.toPoint(this.bounds, this.mapView);
-	            var newCenter = this.viewport.center.sub(center);
-	            return newCenter;
-	        }
-	    }]);
-
-	    function View(_ref) {
-	        var _ref$viewport = _ref.viewport;
-	        var viewport = _ref$viewport === undefined ? new _Rectangle.Rectangle() : _ref$viewport;
-	        var _ref$mapView = _ref.mapView;
-	        var mapView = _ref$mapView === undefined ? new _Rectangle.Rectangle() : _ref$mapView;
-	        var _ref$bounds = _ref.bounds;
-	        var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
-	        var _ref$center = _ref.center;
-	        var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
-
-	        _classCallCheck(this, View);
-
-	        this.mapView = mapView;
-	        this.viewport = viewport;
-	        this.bounds = bounds;
-	        this.center = center;
-	        return this;
-	    }
-
-	    return View;
-	}();
 
 /***/ }
 /******/ ])

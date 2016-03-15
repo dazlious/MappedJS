@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './TileMap.js', 'jquery', './Helper.js', './Publisher.js'], factory);
+        define(['exports', 'jquery', './TileMap.js', './Helper.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./TileMap.js'), require('jquery'), require('./Helper.js'), require('./Publisher.js'));
+        factory(exports, require('jquery'), require('./TileMap.js'), require('./Helper.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.TileMap, global.jquery, global.Helper, global.Publisher);
+        factory(mod.exports, global.jquery, global.TileMap, global.Helper, global.Publisher);
         global.Main = mod.exports;
     }
-})(this, function(exports, _TileMap, _jquery, _Helper, _Publisher) {
+})(this, function(exports, _jquery, _TileMap, _Helper, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {

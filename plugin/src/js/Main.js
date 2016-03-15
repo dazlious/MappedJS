@@ -1,5 +1,5 @@
-import {TileMap} from './TileMap.js';
 import $ from 'jquery';
+import {TileMap} from './TileMap.js';
 import {Helper} from './Helper.js';
 import {Publisher} from './Publisher.js';
 

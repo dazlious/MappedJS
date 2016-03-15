@@ -429,6 +429,7 @@ Eventname for unsubscribing
     * [.containsRect(rect)](#Rectangle+containsRect) ⇒ <code>Boolean</code>
     * [.getDistortedRect(factor)](#Rectangle+getDistortedRect) ⇒ <code>[Rectangle](#Rectangle)</code>
     * [.translate(x, y)](#Rectangle+translate) ⇒ <code>[Rectangle](#Rectangle)</code>
+    * [.transform(x, y, width, height)](#Rectangle+transform) ⇒ <code>[Rectangle](#Rectangle)</code>
     * [.equals(rectangle)](#Rectangle+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Rectangle_new"></a>
@@ -552,11 +553,24 @@ distort rectangle by factor
 moves a rectangle by specified coords
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered direction  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
 **Params**
 
 - x <code>number</code> - how far to move in x direction
 - y <code>number</code> - how far to move in y direction
+
+<a name="Rectangle+transform"></a>
+### rectangle.transform(x, y, width, height) ⇒ <code>[Rectangle](#Rectangle)</code>
+transforms a rectangle by specified coords
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
+**Params**
+
+- x <code>number</code> - how far to transform in x direction
+- y <code>number</code> - how far to transform in y direction
+- width <code>number</code> - changes the width
+- height <code>number</code> - changes the width
 
 <a name="Rectangle+equals"></a>
 ### rectangle.equals(rectangle) ⇒ <code>Boolean</code>
@@ -660,18 +674,11 @@ check if tiles are equal
         * [.top](#TileMap+top) ⇒ <code>number</code>
         * [.width](#TileMap+width) ⇒ <code>number</code>
         * [.height](#TileMap+height) ⇒ <code>number</code>
-        * [.visibleTiles](#TileMap+visibleTiles) ⇒ <code>array</code>
-        * [.distortion](#TileMap+distortion) ⇒ <code>number</code>
         * [.initialize()](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
         * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.bindEvents()](#TileMap+bindEvents) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.initializeTiles()](#TileMap+initializeTiles) ⇒ <code>[TileMap](#TileMap)</code>
         * [.getCurrentLevelData()](#TileMap+getCurrentLevelData) ⇒ <code>Object</code>
-        * [.onTilesLoaded(tile)](#TileMap+onTilesLoaded) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.drawTile(tile)](#TileMap+drawTile) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resize()](#TileMap+resize) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.draw()](#TileMap+draw) ⇒ <code>[TileMap](#TileMap)</code>
     * _static_
         * [.IMG_DATA_NAME](#TileMap.IMG_DATA_NAME) : <code>String</code>
 
@@ -710,18 +717,6 @@ Returns height of container
 
 **Kind**: instance property of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>number</code> - - height of container  
-<a name="TileMap+visibleTiles"></a>
-### tileMap.visibleTiles ⇒ <code>array</code>
-get all visible tiles
-
-**Kind**: instance property of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>array</code> - all tiles that are currently visible  
-<a name="TileMap+distortion"></a>
-### tileMap.distortion ⇒ <code>number</code>
-Returns current distortion
-
-**Kind**: instance property of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>number</code> - returns current distortion of latitude  
 <a name="TileMap+initialize"></a>
 ### tileMap.initialize() ⇒ <code>[TileMap](#TileMap)</code>
 initializes the TileMap
@@ -734,44 +729,12 @@ initializes the canvas, adds to DOM
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
-<a name="TileMap+bindEvents"></a>
-### tileMap.bindEvents() ⇒ <code>[TileMap](#TileMap)</code>
-Handles all events for class
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
-<a name="TileMap+initializeTiles"></a>
-### tileMap.initializeTiles() ⇒ <code>[TileMap](#TileMap)</code>
-initializes tiles
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
 <a name="TileMap+getCurrentLevelData"></a>
 ### tileMap.getCurrentLevelData() ⇒ <code>Object</code>
 gets data of current zoom level
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>Object</code> - data for current level as json  
-<a name="TileMap+onTilesLoaded"></a>
-### tileMap.onTilesLoaded(tile) ⇒ <code>[TileMap](#TileMap)</code>
-handles on load of a tile
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
-**Params**
-
-- tile <code>[Tile](#Tile)</code> - a tile of the TileMap
-
-<a name="TileMap+drawTile"></a>
-### tileMap.drawTile(tile) ⇒ <code>[TileMap](#TileMap)</code>
-draws tiles on canvas
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
-**Params**
-
-- tile <code>[Tile](#Tile)</code> - a tile of the TileMap
-
 <a name="TileMap+resize"></a>
 ### tileMap.resize() ⇒ <code>[TileMap](#TileMap)</code>
 Handles resizing of TileMap
@@ -781,12 +744,6 @@ Handles resizing of TileMap
 <a name="TileMap+resizeView"></a>
 ### tileMap.resizeView() ⇒ <code>[TileMap](#TileMap)</code>
 Handles resizing of view
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
-<a name="TileMap+draw"></a>
-### tileMap.draw() ⇒ <code>[TileMap](#TileMap)</code>
-Handles draw of TileMap
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
@@ -800,12 +757,19 @@ name of imagedata in data.json
 **Kind**: global class  
 
 * [View](#View)
-    * [new View(settings, viewport, mapView, bounds, center)](#new_View_new)
+    * [new View(settings, viewport, mapView, bounds, center, data)](#new_View_new)
+    * [.distortion](#View+distortion) ⇒ <code>number</code>
     * [.offset](#View+offset)
-    * [.getMapOffset(distortion)](#View+getMapOffset) ⇒ <code>number</code>
+    * [.mapOffset](#View+mapOffset) ⇒ <code>number</code>
+    * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
+    * [.onTilesLoaded(tile)](#View+onTilesLoaded) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.drawVisibleTiles()](#View+drawVisibleTiles) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.drawTile(tile)](#View+drawTile) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.bindEvents()](#View+bindEvents) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.initializeTiles()](#View+initializeTiles) ⇒ <code>[TileMap](#TileMap)</code>
 
 <a name="new_View_new"></a>
-### new View(settings, viewport, mapView, bounds, center)
+### new View(settings, viewport, mapView, bounds, center, data)
 Constructor
 
 **Returns**: <code>[View](#View)</code> - Instance of View  
@@ -816,22 +780,73 @@ Constructor
 - mapView <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - current representation of map
 - bounds <code>[Bounds](#Bounds)</code> - = new Bounds() - current bounds of map
 - center <code>[LatLng](#LatLng)</code> - = new LatLng() - current center of map
+- data <code>Object</code> - = {} - data of current map
 
+<a name="View+distortion"></a>
+### view.distortion ⇒ <code>number</code>
+Returns current distortion
+
+**Kind**: instance property of <code>[View](#View)</code>  
+**Returns**: <code>number</code> - returns current distortion of latitude  
 <a name="View+offset"></a>
 ### view.offset
 Returns the offset of the center
 
 **Kind**: instance property of <code>[View](#View)</code>  
-<a name="View+getMapOffset"></a>
-### view.getMapOffset(distortion) ⇒ <code>number</code>
+<a name="View+mapOffset"></a>
+### view.mapOffset ⇒ <code>number</code>
 Returns the offset of the map
 
-**Kind**: instance method of <code>[View](#View)</code>  
+**Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>number</code> - calculated offset  
 **Params**
 
 - distortion <code>number</code> - the current latitude distortion
 
+<a name="View+visibleTiles"></a>
+### view.visibleTiles ⇒ <code>array</code>
+get all visible tiles
+
+**Kind**: instance property of <code>[View](#View)</code>  
+**Returns**: <code>array</code> - all tiles that are currently visible  
+<a name="View+onTilesLoaded"></a>
+### view.onTilesLoaded(tile) ⇒ <code>[TileMap](#TileMap)</code>
+handles on load of a tile
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Params**
+
+- tile <code>[Tile](#Tile)</code> - a tile of the TileMap
+
+<a name="View+drawVisibleTiles"></a>
+### view.drawVisibleTiles() ⇒ <code>[TileMap](#TileMap)</code>
+Handles draw of TileMap
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+<a name="View+drawTile"></a>
+### view.drawTile(tile) ⇒ <code>[TileMap](#TileMap)</code>
+draws tiles on canvas
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Params**
+
+- tile <code>[Tile](#Tile)</code> - a tile of the TileMap
+
+<a name="View+bindEvents"></a>
+### view.bindEvents() ⇒ <code>[TileMap](#TileMap)</code>
+Handles all events for class
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+<a name="View+initializeTiles"></a>
+### view.initializeTiles() ⇒ <code>[TileMap](#TileMap)</code>
+initializes tiles
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
 <a name="instance"></a>
 ## instance : <code>[Publisher](#Publisher)</code>
 singleton instance

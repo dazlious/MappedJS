@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">68.00</p>
+      <p class="stat">67.63</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">104</p>
+      <p class="stat">222</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">41.95</p>
+      <p class="stat">49.88</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.86</p>
+      <p class="stat">1.76</p>
     </div>
   </div>
 </div>
@@ -91,17 +91,17 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&#039;exports&#039;, &#039;./Point.js&#039;, &#039;./LatLng.js&#039;, &#039;./Bounds.js&#039;, &#039;./Rectangle.js&#039;], factory);
+        define([&#039;exports&#039;, &#039;./LatLng.js&#039;, &#039;./Bounds.js&#039;, &#039;./Rectangle.js&#039;, &#039;./Tile.js&#039;, &#039;./Publisher.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports, require(&#039;./Point.js&#039;), require(&#039;./LatLng.js&#039;), require(&#039;./Bounds.js&#039;), require(&#039;./Rectangle.js&#039;));
+        factory(exports, require(&#039;./LatLng.js&#039;), require(&#039;./Bounds.js&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./Tile.js&#039;), require(&#039;./Publisher.js&#039;));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Point, global.LatLng, global.Bounds, global.Rectangle);
+        factory(mod.exports, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
         global.View = mod.exports;
     }
-})(this, function(exports, _Point, _LatLng, _Bounds, _Rectangle) {
+})(this, function(exports, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher) {
     &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
@@ -133,18 +133,59 @@
         };
     }();
 
+    /**
+     * Singleton instance of Publisher
+     */
+    var PUBLISHER = new _Publisher.Publisher();
+
     var View = exports.View = function() {
         _createClass(View, [{
-            key: &#039;getMapOffset&#039;,
+            key: &#039;distortion&#039;,
 
+
+            /**
+             * Returns current distortion
+             * @return {number} returns current distortion of latitude
+             */
+            get: function get() {
+                return Math.cos(this.center.lat);
+            }
+
+            /**
+             * Returns the offset of the center
+             */
+
+        }, {
+            key: &#039;offset&#039;,
+            get: function get() {
+                var center = this.center.toPoint(this.bounds, this.mapView);
+                return this.viewport.center.sub(center);
+            }
 
             /**
              * Returns the offset of the map
              * @param {number} distortion - the current latitude distortion
              * @return {number} calculated offset
              */
-            value: function getMapOffset(distortion) {
-                return this.offset.x + (this.mapView.width - this.mapView.width * distortion) / 2;
+
+        }, {
+            key: &#039;mapOffset&#039;,
+            get: function get() {
+                return this.offset.x + (this.mapView.width - this.mapView.width * this.distortion) / 2;
+            }
+
+            /**
+             * get all visible tiles
+             * @return {array} all tiles that are currently visible
+             */
+
+        }, {
+            key: &#039;visibleTiles&#039;,
+            get: function get() {
+                return this.tiles.filter(function(t, i, a) {
+                    var newTile = t.getDistortedRect(this.distortion).translate(this.mapOffset, this.offset.y);
+                    return this.viewport.intersects(newTile);
+                }, this);
             }
 
             /**
@@ -154,21 +195,10 @@
              * @param  {Rectangle} mapView = new Rectangle() - current representation of map
              * @param  {Bounds} bounds = new Bounds() - current bounds of map
              * @param  {LatLng} center = new LatLng() - current center of map
+             * @param  {Object} data = {} - data of current map
              * @return {View} Instance of View
              */
 
-        }, {
-            key: &#039;offset&#039;,
-
-
-            /**
-             * Returns the offset of the center
-             */
-            get: function get() {
-                var center = this.center.toPoint(this.bounds, this.mapView);
-                var newCenter = this.viewport.center.sub(center);
-                return newCenter;
-            }
         }]);
 
         function View(_ref) {
@@ -180,6 +210,9 @@
             var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
             var _ref$center = _ref.center;
             var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
+            var _ref$data = _ref.data;
+            var data = _ref$data === undefined ? {} : _ref$data;
+            var drawCb = _ref.drawCb;
 
             _classCallCheck(this, View);
 
@@ -187,8 +220,93 @@
             this.viewport = viewport;
             this.bounds = bounds;
             this.center = center;
+            this.tiles = [];
+            this.data = data;
+            this.draw = drawCb;
+            this.bindEvents().initializeTiles();
+
             return this;
         }
+
+        /**
+         * handles on load of a tile
+         * @param  {Tile} tile a tile of the TileMap
+         * @return {TileMap} instance of TileMap
+         */
+
+
+        _createClass(View, [{
+            key: &#039;onTilesLoaded&#039;,
+            value: function onTilesLoaded(tile) {
+                this.drawTile(tile);
+                tile.state.next();
+                return this;
+            }
+
+            /**
+             * Handles draw of TileMap
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
+            key: &#039;drawVisibleTiles&#039;,
+            value: function drawVisibleTiles() {
+                for (var tile in this.visibleTiles) {
+                    this.drawTile(this.visibleTiles[tile]);
+                }
+                return this;
+            }
+
+            /**
+             * draws tiles on canvas
+             * @param  {Tile} tile a tile of the TileMap
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
+            key: &#039;drawTile&#039;,
+            value: function drawTile(tile) {
+                if (tile.state.current.value &gt;= 2) {
+                    if (this.draw &amp;&amp; typeof this.draw === &quot;function&quot;) {
+                        this.draw(tile.img, tile.x * this.distortion + this.mapOffset, tile.y + this.offset.y, tile.width * this.distortion, tile.height);
+                    } else {
+                        console.error(&quot;Draw method is not defined or not a function&quot;);
+                    }
+                } else if (tile.state.current.value === 0) {
+                    tile.initialize();
+                }
+                return this;
+            }
+
+            /**
+             * Handles all events for class
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
+            key: &#039;bindEvents&#039;,
+            value: function bindEvents() {
+                PUBLISHER.subscribe(&quot;tile-loaded&quot;, this.onTilesLoaded.bind(this));
+                return this;
+            }
+
+            /**
+             * initializes tiles
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
+            key: &#039;initializeTiles&#039;,
+            value: function initializeTiles() {
+                var currentLevel = this.data.tiles;
+                for (var tile in currentLevel) {
+                    var currentTileData = currentLevel[tile];
+                    var _tile = new _Tile.Tile(currentTileData);
+                    this.tiles.push(_tile);
+                }
+                return this;
+            }
+        }]);
 
         return View;
     }();
