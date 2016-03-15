@@ -75,6 +75,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Publisher = __webpack_require__(10);
 
+	var _Interact = __webpack_require__(12);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -102,8 +104,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var events = _ref$events === undefined ? { loaded: "mjs-loaded" } : _ref$events;
 
 	        _classCallCheck(this, MappedJS);
-
-	        this.initializeApi();
 
 	        this.initializeSettings(container, events, mapSettings);
 
@@ -189,22 +189,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * initializes the public Api
-	         * @return {MappedJS} instance of MappedJS
-	         */
-
-	    }, {
-	        key: 'initializeApi',
-	        value: function initializeApi() {
-	            this.api = {
-	                TileMap: _TileMap.TileMap,
-	                Publisher: _Publisher.Publisher,
-	                Helper: _Helper.Helper
-	            };
-	            return this;
-	        }
-
-	        /**
 	         * binds all events to handlers
 	         * @return {MappedJS} instance of MappedJS
 	         */
@@ -212,6 +196,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
+	            this.interact = new _Interact.Interact({});
 	            (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
 	            return this;
 	        }
@@ -428,8 +413,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resizeView',
 	        value: function resizeView() {
+	            this.view.viewport.change(this.left, this.top, this.width, this.height);
 	            this.view.drawVisibleTiles();
-	            this.view.viewport.transform(this.left, this.top, this.width, this.height);
 	            return this;
 	        }
 	    }]);
@@ -915,8 +900,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * transforms a rectangle by specified coords
 	         * @param  {number} x - how far to transform in x direction
 	         * @param  {number} y - how far to transform in y direction
-	         * @param  {number} width - changes the width
-	         * @param  {number} height - changes the width
+	         * @param  {number} width - adds to the width
+	         * @param  {number} height - adds to the width
 	         * @return {Rectangle} Returns the altered rectangle
 	         */
 
@@ -926,6 +911,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.translate(x, y);
 	            this.width += width;
 	            this.height += height;
+	            return this;
+	        }
+
+	        /**
+	         * moves a rectangle by specified coords
+	         * @param  {number} x - how far to move in x direction
+	         * @param  {number} y - how far to move in y direction
+	         * @return {Rectangle} Returns the altered rectangle
+	         */
+
+	    }, {
+	        key: 'move',
+	        value: function move(x, y) {
+	            this.x = x;
+	            this.y = y;
+	            return this;
+	        }
+
+	        /**
+	         * changes a rectangle by specified coords
+	         * @param  {number} x - how far to change in x direction
+	         * @param  {number} y - how far to change in y direction
+	         * @param  {number} width - changes the width
+	         * @param  {number} height - changes the width
+	         * @return {Rectangle} Returns the altered rectangle
+	         */
+
+	    }, {
+	        key: 'change',
+	        value: function change(x, y, width, height) {
+	            this.move(x, y);
+	            this.width = width;
+	            this.height = height;
 	            return this;
 	        }
 
@@ -1647,6 +1665,97 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 		};
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Interact = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _jquery = __webpack_require__(1);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _Publisher = __webpack_require__(10);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Interact = exports.Interact = function () {
+	    _createClass(Interact, [{
+	        key: 'isIETouch',
+	        get: function get() {
+	            return navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+	        }
+	    }, {
+	        key: 'isTouch',
+	        get: function get() {
+	            return 'ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+	        }
+	    }, {
+	        key: 'isMouse',
+	        get: function get() {
+	            return 'onmousedown' in window;
+	        }
+	    }, {
+	        key: 'scrollEventName',
+	        get: function get() {
+	            return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
+	        }
+	    }]);
+
+	    function Interact() {
+	        var settings = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	        _classCallCheck(this, Interact);
+
+	        this.settings = {
+	            container: ".gesturizer",
+	            timing: {
+	                tap: 200,
+	                hold: 500,
+	                swipe: 300,
+	                flick: 25,
+	                pinch: 50
+	            },
+	            cb: {
+	                tap: false,
+	                tapHold: false,
+	                doubletap: false,
+	                hold: false,
+	                pan: false,
+	                swipe: false,
+	                flick: false,
+	                zoom: false,
+	                wheel: false,
+	                pinch: false
+	            }
+	        };
+	        _jquery2.default.extend(true, this.settings, settings || {});
+	        return this;
+	    }
+
+	    _createClass(Interact, [{
+	        key: 'getEvent',
+	        value: function getEvent(e) {
+	            _jquery2.default.event.fix(e);
+	            if (e.originalEvent.touches && e.originalEvent.touches.length === 0) {
+	                return e.originalEvent.changedTouches || e.originalEvent;
+	            }
+	            return e.originalEvent.touches || e.originalEvent.changedTouches || e.originalEvent;
+	        }
+	    }]);
+
+	    return Interact;
+	}();
 
 /***/ }
 /******/ ])

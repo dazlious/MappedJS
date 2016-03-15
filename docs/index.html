@@ -163,7 +163,6 @@
 <li><a href="#MappedJS+initializeSettings">.initializeSettings(container, events)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+initializeData">.initializeData(mapData, cb)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+initializeMap">.initializeMap()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+initializeApi">.initializeApi()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+bindEvents">.bindEvents()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+resizeHandler">.resizeHandler()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+loadingFinished">.loadingFinished()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
@@ -200,9 +199,6 @@
 <p><a name="MappedJS+initializeMap"></a></p>
 <h3 id="mappedjs-initializemap-code-mappedjs-mappedjs-code-">mappedJS.initializeMap() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
 <p>initializes Map module</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MappedJS+initializeApi"></a></p>
-<h3 id="mappedjs-initializeapi-code-mappedjs-mappedjs-code-">mappedJS.initializeApi() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>initializes the public Api</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS<br><a name="MappedJS+bindEvents"></a></p>
 <h3 id="mappedjs-bindevents-code-mappedjs-mappedjs-code-">mappedJS.bindEvents() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
 <p>binds all events to handlers</p>
@@ -381,6 +377,8 @@
 <li><a href="#Rectangle+getDistortedRect">.getDistortedRect(factor)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+translate">.translate(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+transform">.transform(x, y, width, height)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+<li><a href="#Rectangle+move">.move(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+<li><a href="#Rectangle+change">.change(x, y, width, height)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+equals">.equals(rectangle)</a> ⇒ <code>Boolean</code></li>
 </ul>
 </li>
@@ -472,6 +470,24 @@
 <ul>
 <li>x <code>number</code> - how far to transform in x direction</li>
 <li>y <code>number</code> - how far to transform in y direction</li>
+<li>width <code>number</code> - adds to the width</li>
+<li>height <code>number</code> - adds to the width</li>
+</ul>
+<p><a name="Rectangle+move"></a></p>
+<h3 id="rectangle-move-x-y-code-rectangle-rectangle-code-">rectangle.move(x, y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>moves a rectangle by specified coords</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> - how far to move in x direction</li>
+<li>y <code>number</code> - how far to move in y direction</li>
+</ul>
+<p><a name="Rectangle+change"></a></p>
+<h3 id="rectangle-change-x-y-width-height-code-rectangle-rectangle-code-">rectangle.change(x, y, width, height) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>changes a rectangle by specified coords</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> - how far to change in x direction</li>
+<li>y <code>number</code> - how far to change in y direction</li>
 <li>width <code>number</code> - changes the width</li>
 <li>height <code>number</code> - changes the width</li>
 </ul>
