@@ -177,6 +177,23 @@ module.exports = function(grunt) {
             full: {
                 configFile: 'test/full.karma.config.js'
             }
+        },
+        jsinspect: {
+            plugin: {
+                options: {
+                    threshold: 30,
+                    diff: true,
+                    identifiers: false,
+                    failOnMatch: true,
+                    suppress: 100,
+                    outputPath: "reports/inspect.json",
+                    reporter: 'json'
+                },
+                src: [
+                    'es5-transpiled/**/*.js',
+                    '!**/node_modules/**'
+                ]
+            }
         }
     });
 
@@ -193,6 +210,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-jsinspect');
 
     // Register grunt tasks
     grunt.registerTask('default', []);

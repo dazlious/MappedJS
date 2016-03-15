@@ -23,6 +23,7 @@
     "grunt-css-statistics": "0.9.7",
     "grunt-jsbeautifier": "0.2.10",
     "grunt-jsdoc-to-markdown": "1.2.0",
+    "grunt-jsinspect": "^1.1.0",
     "grunt-karma": "0.12.1",
     "grunt-md": "0.0.4",
     "grunt-plato": "1.2.1",

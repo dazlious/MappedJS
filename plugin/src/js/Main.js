@@ -95,7 +95,27 @@ export class MappedJS {
      */
     bindEvents() {
         this.interact = new Interact({
-            
+            container: this.$container,
+            callbacks: {
+                tap: function(data) {
+                    console.log("tap", data);
+                },
+                doubletap: function(data) {
+                    console.log("doubletap", data);
+                },
+                pan: function(data) {
+                    console.log("pan", data);
+                },
+                zoom: function(data) {
+                    console.log("zoom", data);
+                },
+                pinch: function(data) {
+                    console.log("pinch", data);
+                },
+                flick: function(data) {
+                    console.log("flick", data);
+                }
+            }
         });
         $(window).on("resize orientationchange", this.resizeHandler.bind(this));
         return this;
