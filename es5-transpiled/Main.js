@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './TileMap.js', './Helper.js', './Publisher.js'], factory);
+        define(['exports', 'jquery', './TileMap.js', './Helper.js', './Publisher.js', './Interact.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./TileMap.js'), require('./Helper.js'), require('./Publisher.js'));
+        factory(exports, require('jquery'), require('./TileMap.js'), require('./Helper.js'), require('./Publisher.js'), require('./Interact.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.TileMap, global.Helper, global.Publisher);
+        factory(mod.exports, global.jquery, global.TileMap, global.Helper, global.Publisher, global.Interact);
         global.Main = mod.exports;
     }
-})(this, function(exports, _jquery, _TileMap, _Helper, _Publisher) {
+})(this, function(exports, _jquery, _TileMap, _Helper, _Publisher, _Interact) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -81,8 +81,6 @@
             } : _ref$events;
 
             _classCallCheck(this, MappedJS);
-
-            this.initializeApi();
 
             this.initializeSettings(container, events, mapSettings);
 
@@ -171,22 +169,6 @@
             }
 
             /**
-             * initializes the public Api
-             * @return {MappedJS} instance of MappedJS
-             */
-
-        }, {
-            key: 'initializeApi',
-            value: function initializeApi() {
-                this.api = {
-                    TileMap: _TileMap.TileMap,
-                    Publisher: _Publisher.Publisher,
-                    Helper: _Helper.Helper
-                };
-                return this;
-            }
-
-            /**
              * binds all events to handlers
              * @return {MappedJS} instance of MappedJS
              */
@@ -194,6 +176,7 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
+                this.interact = new _Interact.Interact({});
                 (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
                 return this;
             }

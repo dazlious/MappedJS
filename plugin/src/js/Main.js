@@ -2,6 +2,7 @@ import $ from 'jquery';
 import {TileMap} from './TileMap.js';
 import {Helper} from './Helper.js';
 import {Publisher} from './Publisher.js';
+import {Interact} from './Interact.js';
 
 export class MappedJS {
 
@@ -15,8 +16,6 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS
      */
     constructor({container=".mjs", mapData={}, mapSettings={}, events={loaded:"mjs-loaded"}}) {
-        this.initializeApi();
-
         this.initializeSettings(container, events, mapSettings);
 
         this.initializeData(mapData, function() {
@@ -91,23 +90,13 @@ export class MappedJS {
     }
 
     /**
-     * initializes the public Api
-     * @return {MappedJS} instance of MappedJS
-     */
-    initializeApi() {
-        this.api = {
-            TileMap: TileMap,
-            Publisher: Publisher,
-            Helper: Helper
-        };
-        return this;
-    }
-
-    /**
      * binds all events to handlers
      * @return {MappedJS} instance of MappedJS
      */
     bindEvents() {
+        this.interact = new Interact({
+            
+        });
         $(window).on("resize orientationchange", this.resizeHandler.bind(this));
         return this;
     }

@@ -124,4 +124,18 @@ describe('Rectangle', function() {
         expect(rect1.transform(200, 600, 200, 700)).toEqual(new Rectangle.Rectangle(100, 500, 100, 500));
     });
 
+    it("move works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 0, 0);
+        expect(rect1.move(0, 0)).toEqual(new Rectangle.Rectangle(0, 0, 0, 0));
+        expect(rect1.move(-100, -100)).toEqual(new Rectangle.Rectangle(-100, -100, 0, 0));
+        expect(rect1.move(200, 600)).toEqual(new Rectangle.Rectangle(200, 600, 0, 0));
+    });
+
+    it("transform works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 0, 0);
+        expect(rect1.change(0, 0, 100, 100)).toEqual(new Rectangle.Rectangle(0, 0, 100, 100));
+        expect(rect1.change(-100, -100, -200, -300)).toEqual(new Rectangle.Rectangle(-100, -100, -200, -300));
+        expect(rect1.change(200, 600, 200, 700)).toEqual(new Rectangle.Rectangle(200, 600, 200, 700));
+    });
+
 });

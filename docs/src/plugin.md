@@ -160,7 +160,6 @@ checks if specified coord equals this coord
     * [.initializeSettings(container, events)](#MappedJS+initializeSettings) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.initializeData(mapData, cb)](#MappedJS+initializeData) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.initializeMap()](#MappedJS+initializeMap) ⇒ <code>[MappedJS](#MappedJS)</code>
-    * [.initializeApi()](#MappedJS+initializeApi) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.bindEvents()](#MappedJS+bindEvents) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.resizeHandler()](#MappedJS+resizeHandler) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.loadingFinished()](#MappedJS+loadingFinished) ⇒ <code>[MappedJS](#MappedJS)</code>
@@ -203,12 +202,6 @@ initializes the data, asynchronous
 <a name="MappedJS+initializeMap"></a>
 ### mappedJS.initializeMap() ⇒ <code>[MappedJS](#MappedJS)</code>
 initializes Map module
-
-**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
-<a name="MappedJS+initializeApi"></a>
-### mappedJS.initializeApi() ⇒ <code>[MappedJS](#MappedJS)</code>
-initializes the public Api
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
@@ -430,6 +423,8 @@ Eventname for unsubscribing
     * [.getDistortedRect(factor)](#Rectangle+getDistortedRect) ⇒ <code>[Rectangle](#Rectangle)</code>
     * [.translate(x, y)](#Rectangle+translate) ⇒ <code>[Rectangle](#Rectangle)</code>
     * [.transform(x, y, width, height)](#Rectangle+transform) ⇒ <code>[Rectangle](#Rectangle)</code>
+    * [.move(x, y)](#Rectangle+move) ⇒ <code>[Rectangle](#Rectangle)</code>
+    * [.change(x, y, width, height)](#Rectangle+change) ⇒ <code>[Rectangle](#Rectangle)</code>
     * [.equals(rectangle)](#Rectangle+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Rectangle_new"></a>
@@ -569,6 +564,30 @@ transforms a rectangle by specified coords
 
 - x <code>number</code> - how far to transform in x direction
 - y <code>number</code> - how far to transform in y direction
+- width <code>number</code> - adds to the width
+- height <code>number</code> - adds to the width
+
+<a name="Rectangle+move"></a>
+### rectangle.move(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
+moves a rectangle by specified coords
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
+**Params**
+
+- x <code>number</code> - how far to move in x direction
+- y <code>number</code> - how far to move in y direction
+
+<a name="Rectangle+change"></a>
+### rectangle.change(x, y, width, height) ⇒ <code>[Rectangle](#Rectangle)</code>
+changes a rectangle by specified coords
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
+**Params**
+
+- x <code>number</code> - how far to change in x direction
+- y <code>number</code> - how far to change in y direction
 - width <code>number</code> - changes the width
 - height <code>number</code> - changes the width
 

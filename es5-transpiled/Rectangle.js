@@ -278,8 +278,8 @@
              * transforms a rectangle by specified coords
              * @param  {number} x - how far to transform in x direction
              * @param  {number} y - how far to transform in y direction
-             * @param  {number} width - changes the width
-             * @param  {number} height - changes the width
+             * @param  {number} width - adds to the width
+             * @param  {number} height - adds to the width
              * @return {Rectangle} Returns the altered rectangle
              */
 
@@ -289,6 +289,39 @@
                 this.translate(x, y);
                 this.width += width;
                 this.height += height;
+                return this;
+            }
+
+            /**
+             * moves a rectangle by specified coords
+             * @param  {number} x - how far to move in x direction
+             * @param  {number} y - how far to move in y direction
+             * @return {Rectangle} Returns the altered rectangle
+             */
+
+        }, {
+            key: 'move',
+            value: function move(x, y) {
+                this.x = x;
+                this.y = y;
+                return this;
+            }
+
+            /**
+             * changes a rectangle by specified coords
+             * @param  {number} x - how far to change in x direction
+             * @param  {number} y - how far to change in y direction
+             * @param  {number} width - changes the width
+             * @param  {number} height - changes the width
+             * @return {Rectangle} Returns the altered rectangle
+             */
+
+        }, {
+            key: 'change',
+            value: function change(x, y, width, height) {
+                this.move(x, y);
+                this.width = width;
+                this.height = height;
                 return this;
             }
 

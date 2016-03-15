@@ -199,8 +199,8 @@
         }, {
             key: 'resizeView',
             value: function resizeView() {
+                this.view.viewport.change(this.left, this.top, this.width, this.height);
                 this.view.drawVisibleTiles();
-                this.view.viewport.transform(this.left, this.top, this.width, this.height);
                 return this;
             }
         }]);

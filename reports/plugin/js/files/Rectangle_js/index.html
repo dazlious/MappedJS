@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">71.27</p>
+      <p class="stat">71.19</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">310</p>
+      <p class="stat">343</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">75.07</p>
+      <p class="stat">77.26</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.15</p>
+      <p class="stat">2.29</p>
     </div>
   </div>
 </div>
@@ -369,8 +369,8 @@
              * transforms a rectangle by specified coords
              * @param  {number} x - how far to transform in x direction
              * @param  {number} y - how far to transform in y direction
-             * @param  {number} width - changes the width
-             * @param  {number} height - changes the width
+             * @param  {number} width - adds to the width
+             * @param  {number} height - adds to the width
              * @return {Rectangle} Returns the altered rectangle
              */
 
@@ -380,6 +380,39 @@
                 this.translate(x, y);
                 this.width += width;
                 this.height += height;
+                return this;
+            }
+
+            /**
+             * moves a rectangle by specified coords
+             * @param  {number} x - how far to move in x direction
+             * @param  {number} y - how far to move in y direction
+             * @return {Rectangle} Returns the altered rectangle
+             */
+
+        }, {
+            key: &#039;move&#039;,
+            value: function move(x, y) {
+                this.x = x;
+                this.y = y;
+                return this;
+            }
+
+            /**
+             * changes a rectangle by specified coords
+             * @param  {number} x - how far to change in x direction
+             * @param  {number} y - how far to change in y direction
+             * @param  {number} width - changes the width
+             * @param  {number} height - changes the width
+             * @return {Rectangle} Returns the altered rectangle
+             */
+
+        }, {
+            key: &#039;change&#039;,
+            value: function change(x, y, width, height) {
+                this.move(x, y);
+                this.width = width;
+                this.height = height;
                 return this;
             }
 
