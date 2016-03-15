@@ -110,4 +110,18 @@ describe('Rectangle', function() {
         expect(rect3.contains(p3)).toBe(false);
     });
 
+    it("translate works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 0, 0);
+        expect(rect1.translate(0, 0)).toEqual(new Rectangle.Rectangle(0, 0, 0, 0));
+        expect(rect1.translate(-100, -100)).toEqual(new Rectangle.Rectangle(-100, -100, 0, 0));
+        expect(rect1.translate(200, 600)).toEqual(new Rectangle.Rectangle(100, 500, 0, 0));
+    });
+
+    it("transform works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 0, 0);
+        expect(rect1.transform(0, 0, 100, 100)).toEqual(new Rectangle.Rectangle(0, 0, 100, 100));
+        expect(rect1.transform(-100, -100, -200, -300)).toEqual(new Rectangle.Rectangle(-100, -100, -100, -200));
+        expect(rect1.transform(200, 600, 200, 700)).toEqual(new Rectangle.Rectangle(100, 500, 100, 500));
+    });
+
 });
