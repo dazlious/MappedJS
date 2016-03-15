@@ -624,8 +624,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * multiplicates a point with a given x and y
-	         * @param  {[type]} x - factor to multiplicate x with
-	         * @param  {[type]} y - factor to multiplicate y with
+	         * @param  {number} x - factor to multiplicate x with
+	         * @param  {number} y - factor to multiplicate y with
 	         * @return {Point} Returns a new instance
 	         */
 
@@ -637,8 +637,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * divide a point with a given x and y
-	         * @param  {[type]} x - factor to divide x with
-	         * @param  {[type]} y - factor to divide y with
+	         * @param  {number} x - factor to divide x with
+	         * @param  {number} y - factor to divide y with
 	         * @return {Point} Returns a new instance
 	         */
 

@@ -176,7 +176,29 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
-                this.interact = new _Interact.Interact({});
+                this.interact = new _Interact.Interact({
+                    container: this.$container,
+                    callbacks: {
+                        tap: function tap(data) {
+                            console.log("tap", data);
+                        },
+                        doubletap: function doubletap(data) {
+                            console.log("doubletap", data);
+                        },
+                        pan: function pan(data) {
+                            console.log("pan", data);
+                        },
+                        zoom: function zoom(data) {
+                            console.log("zoom", data);
+                        },
+                        pinch: function pinch(data) {
+                            console.log("pinch", data);
+                        },
+                        flick: function flick(data) {
+                            console.log("flick", data);
+                        }
+                    }
+                });
                 (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
                 return this;
             }

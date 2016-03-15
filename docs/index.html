@@ -29,6 +29,8 @@
 <dl>
 <dt><a href="#Bounds">Bounds</a></dt>
 <dd></dd>
+<dt><a href="#Interact">Interact</a></dt>
+<dd></dd>
 <dt><a href="#LatLng">LatLng</a></dt>
 <dd></dd>
 <dt><a href="#MappedJS">MappedJS</a></dt>
@@ -100,7 +102,228 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#Bounds">Bounds</a></code><br><strong>Returns</strong>: <code>number</code> - width of boundaries<br><a name="Bounds+height"></a></p>
 <h3 id="bounds-height-code-number-code-">bounds.height ⇒ <code>number</code></h3>
 <p>gets height of boundaries</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Bounds">Bounds</a></code><br><strong>Returns</strong>: <code>number</code> - height of boundaries<br><a name="LatLng"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Bounds">Bounds</a></code><br><strong>Returns</strong>: <code>number</code> - height of boundaries<br><a name="Interact"></a></p>
+<h2 id="interact">Interact</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#Interact">Interact</a><ul>
+<li><a href="#new_Interact_new">new Interact(settings)</a></li>
+<li><a href="#Interact+isMouse">.isMouse</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Interact+isTouch">.isTouch</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Interact+isIE">.isIE</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Interact+scrollEvent">.scrollEvent</a> ⇒ <code>string</code></li>
+<li><a href="#Interact+handleViewport">.handleViewport(viewport)</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
+<li><a href="#Interact+init">.init(container)</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
+<li><a href="#Interact+bindEvents">.bindEvents()</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
+<li><a href="#Interact+bindIEEvents">.bindIEEvents()</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
+<li><a href="#Interact+bindTouchEvents">.bindTouchEvents()</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
+<li><a href="#Interact+bindMouseEvents">.bindMouseEvents()</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
+<li><a href="#Interact+scrollHandler">.scrollHandler(event)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Interact+startHandler">.startHandler(event)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Interact+moveHandler">.moveHandler(event)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Interact+endHandler">.endHandler(event)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Interact+calculateSpeed">.calculateSpeed(distance, time)</a> ⇒ <code>number</code></li>
+<li><a href="#Interact+getSwipeDirections">.getSwipeDirections(direction)</a> ⇒ <code>Array.&lt;string&gt;</code></li>
+<li><a href="#Interact+setTimeoutForEvent">.setTimeoutForEvent(callback, timeout, args, holdTimeout)</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
+<li><a href="#Interact+eventCallback">.eventCallback(callback, args)</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
+<li><a href="#Interact+getRelativePosition">.getRelativePosition(e)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Interact+getAbsolutePosition">.getAbsolutePosition(e)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Interact+getScrollDirection">.getScrollDirection(event)</a> ⇒ <code>Array.&lt;string&gt;</code></li>
+<li><a href="#Interact+getEvent">.getEvent(e)</a> ⇒ <code>Object</code></li>
+</ul>
+</li>
+</ul>
+<p><a name="new_Interact_new"></a></p>
+<h3 id="new-interact-settings-">new Interact(settings)</h3>
+<p>Constructor</p>
+<p><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - new instance<br><strong>Params</strong></p>
+<ul>
+<li>settings <code>Object</code> - = {} - all the settings<ul>
+<li>.container <code>string</code> | <code>Object</code> - = &quot;.interact-container&quot; - Container, either string, jQuery-object or dom-object</li>
+<li>.timeTreshold <code>Object</code> - = {} - settings for the timing tresholds<ul>
+<li>.tap <code>number</code> - = 200 - timing treshold for tap</li>
+<li>.hold <code>number</code> - = 500 - timing treshold for hold</li>
+<li>.swipe <code>number</code> - = 300 - timing treshold for swipe</li>
+<li>.flick <code>number</code> - = 30 - timing treshold for flick</li>
+</ul>
+</li>
+<li>.distanceTreshold <code>Object</code> - = {} - settings for the distance tresholds<ul>
+<li>.swipe <code>number</code> - = 200 - distance treshold for swipe</li>
+</ul>
+</li>
+<li>.overwriteViewportSettings <code>Boolean</code> | <code>string</code> - = false - on true prevents pinching, can be a custom string too</li>
+<li>.stopPropagation <code>Boolean</code> - = true - on true stops the propagation of events</li>
+<li>.preventDefault <code>Boolean</code> - = true - on true prevents the default actions of events</li>
+<li>.autoFireHold <code>Boolean</code> - = false - if set to false hold-event is not fired</li>
+<li>.pinchBalanceTime <code>number</code> - = 50 - prevents from firing too much pinching events</li>
+<li>.callbacks <code>Object</code> - = {} - settings for the callback-functions<ul>
+<li>.tap <code>function</code> - = null - callback-function for tap</li>
+<li>.tapHold <code>function</code> - = null - callback-function for tapHold</li>
+<li>.doubletap <code>function</code> - = null - callback-function for doubletap</li>
+<li>.hold <code>function</code> - = null - callback-function for hold</li>
+<li>.pan <code>function</code> - = null - callback-function for pan</li>
+<li>.swipe <code>function</code> - = null - callback-function for swipe</li>
+<li>.flick <code>function</code> - = null - callback-function for flick</li>
+<li>.zoom <code>function</code> - = null - callback-function for zoom</li>
+<li>.wheel <code>function</code> - = null - callback-function for wheel</li>
+<li>.pinch <code>function</code> - = null - callback-function for pinch</li>
+</ul>
+</li>
+<li>.events <code>Object</code> - = {} - settings all eventnames<ul>
+<li>.start <code>Object</code> - = {} - settings all start eventnames<ul>
+<li>.touch <code>Object</code> - = (&quot;MSPointerDown pointerdown&quot; || &quot;touchstart&quot;) - settings start touch eventnames</li>
+<li>.mouse <code>Object</code> - = (&quot;MSPointerDown pointerdown&quot; || &quot;mousedown&quot;) - settings start mouse eventnames</li>
+</ul>
+</li>
+<li>.move <code>Object</code> - = {} - settings all move eventnames<ul>
+<li>.touch <code>Object</code> - = (&quot;MSPointerMove pointermove&quot; || &quot;touchmove&quot;) - settings move touch eventnames</li>
+<li>.mouse <code>Object</code> - = (&quot;MSPointerMove pointermove&quot; || &quot;mousemove&quot;) - settings move mouse eventnames</li>
+</ul>
+</li>
+<li>.end <code>Object</code> - = {} - settings all end eventnames<ul>
+<li>.touch <code>Object</code> - = (&quot;MSPointerUp pointerup&quot; || &quot;touchend&quot;) - settings end touch eventnames</li>
+<li>.mouse <code>Object</code> - = (&quot;MSPointerUp pointerup&quot; || &quot;mouseup&quot;) - settings end mouse eventnames</li>
+</ul>
+</li>
+<li>.leave <code>Object</code> - = {} - settings all leave eventnames<ul>
+<li>.touch <code>Object</code> - = (&quot;MSPointerLeave pointerleave&quot; || &quot;touchleave&quot;) - settings leave touch eventnames</li>
+<li>.mouse <code>Object</code> - = (&quot;MSPointerLeave pointerleave&quot; || &quot;mouseleave&quot;) - settings leave mouse eventnames</li>
+</ul>
+</li>
+<li>.scroll <code>string</code> - = (&quot;wheel&quot; || &quot;mousewhell&quot; || &quot;DOMMouseScroll&quot;) - settings all scroll eventnames</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="Interact+isMouse"></a></p>
+<h3 id="interact-ismouse-code-boolean-code-">interact.isMouse ⇒ <code>Boolean</code></h3>
+<p>checks if mouse is possible</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - if true, mouse is possible<br><a name="Interact+isTouch"></a></p>
+<h3 id="interact-istouch-code-boolean-code-">interact.isTouch ⇒ <code>Boolean</code></h3>
+<p>checks if touch is possible</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - if true, touch is possible<br><a name="Interact+isIE"></a></p>
+<h3 id="interact-isie-code-boolean-code-">interact.isIE ⇒ <code>Boolean</code></h3>
+<p>checks if IE is used</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - if true, IE is used<br><a name="Interact+scrollEvent"></a></p>
+<h3 id="interact-scrollevent-code-string-code-">interact.scrollEvent ⇒ <code>string</code></h3>
+<p>gets cross-browser scroll-event</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>string</code> - name of scroll event<br><a name="Interact+handleViewport"></a></p>
+<h3 id="interact-handleviewport-viewport-code-interact-interact-code-">interact.handleViewport(viewport) ⇒ <code><a href="#Interact">Interact</a></code></h3>
+<p>handles the overwrite of viewport meta</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - Returns this instance<br><strong>Params</strong></p>
+<ul>
+<li>viewport <code>Boolean</code> | <code>string</code> - specified viewport option</li>
+</ul>
+<p><a name="Interact+init"></a></p>
+<h3 id="interact-init-container-code-interact-interact-code-">interact.init(container) ⇒ <code><a href="#Interact">Interact</a></code></h3>
+<p>initializes class settings and bindings</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - Returns this instance<br><strong>Params</strong></p>
+<ul>
+<li>container <code>Object</code> | <code>string</code> - Container, either string, jQuery-object or dom-object</li>
+</ul>
+<p><a name="Interact+bindEvents"></a></p>
+<h3 id="interact-bindevents-code-interact-interact-code-">interact.bindEvents() ⇒ <code><a href="#Interact">Interact</a></code></h3>
+<p>binds all needed events</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - Returns this instance<br><a name="Interact+bindIEEvents"></a></p>
+<h3 id="interact-bindieevents-code-interact-interact-code-">interact.bindIEEvents() ⇒ <code><a href="#Interact">Interact</a></code></h3>
+<p>binds all needed events for IE</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - Returns this instance<br><a name="Interact+bindTouchEvents"></a></p>
+<h3 id="interact-bindtouchevents-code-interact-interact-code-">interact.bindTouchEvents() ⇒ <code><a href="#Interact">Interact</a></code></h3>
+<p>binds all needed events for touch devices</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - Returns this instance<br><a name="Interact+bindMouseEvents"></a></p>
+<h3 id="interact-bindmouseevents-code-interact-interact-code-">interact.bindMouseEvents() ⇒ <code><a href="#Interact">Interact</a></code></h3>
+<p>binds all needed events for mouse devices</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - Returns this instance<br><a name="Interact+scrollHandler"></a></p>
+<h3 id="interact-scrollhandler-event-code-boolean-code-">interact.scrollHandler(event) ⇒ <code>Boolean</code></h3>
+<p>handles cross-browser and -device scroll</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - always returns false<br><strong>Params</strong></p>
+<ul>
+<li>event <code>Object</code> - jQuery-Event-Object</li>
+</ul>
+<p><a name="Interact+startHandler"></a></p>
+<h3 id="interact-starthandler-event-code-boolean-code-">interact.startHandler(event) ⇒ <code>Boolean</code></h3>
+<p>handles cross-browser and -device start-event</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - always returns false<br><strong>Params</strong></p>
+<ul>
+<li>event <code>Object</code> - jQuery-Event-Object</li>
+</ul>
+<p><a name="Interact+moveHandler"></a></p>
+<h3 id="interact-movehandler-event-code-boolean-code-">interact.moveHandler(event) ⇒ <code>Boolean</code></h3>
+<p>handles cross-browser and -device move-event</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - always returns false<br><strong>Params</strong></p>
+<ul>
+<li>event <code>Object</code> - jQuery-Event-Object</li>
+</ul>
+<p><a name="Interact+endHandler"></a></p>
+<h3 id="interact-endhandler-event-code-boolean-code-">interact.endHandler(event) ⇒ <code>Boolean</code></h3>
+<p>handles cross-browser and -device end-event</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - always returns false<br><strong>Params</strong></p>
+<ul>
+<li>event <code>Object</code> - jQuery-Event-Object</li>
+</ul>
+<p><a name="Interact+calculateSpeed"></a></p>
+<h3 id="interact-calculatespeed-distance-time-code-number-code-">interact.calculateSpeed(distance, time) ⇒ <code>number</code></h3>
+<p>calculates the speed with specified distance and time</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>number</code> - the calculated speed<br><strong>Params</strong></p>
+<ul>
+<li>distance <code>number</code> - the specified distance</li>
+<li>time <code>number</code> - the specified time elapsed</li>
+</ul>
+<p><a name="Interact+getSwipeDirections"></a></p>
+<h3 id="interact-getswipedirections-direction-code-array-lt-string-gt-code-">interact.getSwipeDirections(direction) ⇒ <code>Array.&lt;string&gt;</code></h3>
+<p>Returns an array of strings, representing the directions</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Array.&lt;string&gt;</code> - returns an array representing the directions as strings<br><strong>Params</strong></p>
+<ul>
+<li>direction <code><a href="#Point">Point</a></code> - the specified direction in pixel</li>
+</ul>
+<p><a name="Interact+setTimeoutForEvent"></a></p>
+<h3 id="interact-settimeoutforevent-callback-timeout-args-holdtimeout-code-interact-interact-code-">interact.setTimeoutForEvent(callback, timeout, args, holdTimeout) ⇒ <code><a href="#Interact">Interact</a></code></h3>
+<p>Helper for setting a timeout for events</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - Returns this instance<br><strong>Params</strong></p>
+<ul>
+<li>callback <code>function</code> - function to be called</li>
+<li>timeout <code>number</code> - time in milliseconds</li>
+<li>args <code>Array.&lt;Object&gt;</code> - array of arguments</li>
+<li>holdTimeout <code>Boolean</code> - if true, a different variable will be used</li>
+</ul>
+<p><a name="Interact+eventCallback"></a></p>
+<h3 id="interact-eventcallback-callback-args-code-interact-interact-code-">interact.eventCallback(callback, args) ⇒ <code><a href="#Interact">Interact</a></code></h3>
+<p>Eventhandler for handling the callbacks</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - Returns this instance<br><strong>Params</strong></p>
+<ul>
+<li>callback <code>function</code> - function to be called</li>
+<li>args <code>Array.&lt;object&gt;</code> - arguments for the function</li>
+</ul>
+<p><a name="Interact+getRelativePosition"></a></p>
+<h3 id="interact-getrelativeposition-e-code-point-point-code-">interact.getRelativePosition(e) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>get the relative position of clientX and clientY</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - calculated relative position<br><strong>Params</strong></p>
+<ul>
+<li>e <code>Object</code> - event object</li>
+</ul>
+<p><a name="Interact+getAbsolutePosition"></a></p>
+<h3 id="interact-getabsoluteposition-e-code-point-point-code-">interact.getAbsolutePosition(e) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>get the absolute position of clientX and clientY</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - calculated absolute position<br><strong>Params</strong></p>
+<ul>
+<li>e <code>Object</code> - event object</li>
+</ul>
+<p><a name="Interact+getScrollDirection"></a></p>
+<h3 id="interact-getscrolldirection-event-code-array-lt-string-gt-code-">interact.getScrollDirection(event) ⇒ <code>Array.&lt;string&gt;</code></h3>
+<p>get scroll direction from event</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Array.&lt;string&gt;</code> - an array with scroll directions<br><strong>Params</strong></p>
+<ul>
+<li>event <code>Object</code> - event object</li>
+</ul>
+<p><a name="Interact+getEvent"></a></p>
+<h3 id="interact-getevent-e-code-object-code-">interact.getEvent(e) ⇒ <code>Object</code></h3>
+<p>Get event helper, applies jQuery-event-fix too</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - new fixed and optimized event<br><strong>Params</strong></p>
+<ul>
+<li>e <code>Object</code> - event object</li>
+</ul>
+<p><a name="LatLng"></a></p>
 <h2 id="latlng">LatLng</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
@@ -217,10 +440,13 @@
 <li><em>instance</em><ul>
 <li><a href="#Point+sub">.sub(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+add">.add(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+mult">.mult(x, y)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+divide">.divide(x, y)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+equals">.equals(point)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Point+difference">.difference(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+distance">.distance(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+translate">.translate(x, y)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+toArray">.toArray()</a> ⇒ <code>Array</code></li>
 </ul>
 </li>
 <li><em>static</em><ul>
@@ -252,6 +478,22 @@
 <ul>
 <li>point <code><a href="#Point">Point</a></code> - the point to add to this</li>
 </ul>
+<p><a name="Point+mult"></a></p>
+<h3 id="point-mult-x-y-code-point-point-code-">point.mult(x, y) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>multiplicates a point with a given x and y</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - Returns a new instance<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> - factor to multiplicate x with</li>
+<li>y <code>number</code> - factor to multiplicate y with</li>
+</ul>
+<p><a name="Point+divide"></a></p>
+<h3 id="point-divide-x-y-code-point-point-code-">point.divide(x, y) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>divide a point with a given x and y</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - Returns a new instance<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> - factor to divide x with</li>
+<li>y <code>number</code> - factor to divide y with</li>
+</ul>
 <p><a name="Point+equals"></a></p>
 <h3 id="point-equals-point-code-boolean-code-">point.equals(point) ⇒ <code>Boolean</code></h3>
 <p>check if points are equal</p>
@@ -281,7 +523,10 @@
 <li>x <code>number</code> - value to move x</li>
 <li>y <code>number</code> - value to move y</li>
 </ul>
-<p><a name="Point.createFromPoint"></a></p>
+<p><a name="Point+toArray"></a></p>
+<h3 id="point-toarray-code-array-code-">point.toArray() ⇒ <code>Array</code></h3>
+<p>translates a Point to an array</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code>Array</code> - Returns Point as Array(x, y)<br><a name="Point.createFromPoint"></a></p>
 <h3 id="point-createfrompoint-point-code-point-point-code-">Point.createFromPoint(point) ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>Creates a Point from specified point</p>
 <p><strong>Kind</strong>: static method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - the point specified<br><strong>Params</strong></p>

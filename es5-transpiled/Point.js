@@ -87,6 +87,32 @@
             }
 
             /**
+             * multiplicates a point with a given x and y
+             * @param  {number} x - factor to multiplicate x with
+             * @param  {number} y - factor to multiplicate y with
+             * @return {Point} Returns a new instance
+             */
+
+        }, {
+            key: "mult",
+            value: function mult(x, y) {
+                return new Point(this.x * x, this.y * y);
+            }
+
+            /**
+             * divide a point with a given x and y
+             * @param  {number} x - factor to divide x with
+             * @param  {number} y - factor to divide y with
+             * @return {Point} Returns a new instance
+             */
+
+        }, {
+            key: "divide",
+            value: function divide(x, y) {
+                return new Point(this.x / x, this.y / y);
+            }
+
+            /**
              * check if points are equal
              * @param  {Point} point - the point to check against this
              * @return {Boolean} is true, if x and y are the same
@@ -120,7 +146,12 @@
             key: "distance",
             value: function distance(point) {
                 var difference = this.difference(point);
-                return Math.sqrt(Math.pow(difference.x, 2) + Math.pow(difference.y, 2));
+                return difference.length();
+            }
+        }, {
+            key: "length",
+            value: function length() {
+                return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
             }
 
             /**
@@ -136,6 +167,17 @@
                 this.x += x;
                 this.y += y;
                 return this;
+            }
+
+            /**
+             * translates a Point to an array
+             * @return {Array} Returns Point as Array(x, y)
+             */
+
+        }, {
+            key: "toArray",
+            value: function toArray() {
+                return [this.x, this.y];
             }
         }]);
 
