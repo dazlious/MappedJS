@@ -66,7 +66,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">9.90</p>
+      <p class="stat">9.89</p>
     </div>
   </div>
 </div>
@@ -628,7 +628,7 @@
                             pointerPos2 = this.getRelativePosition(pointerPos[1]);
 
                         currentDist = pointerPos1.distance(pointerPos2);
-                        currentPos = pointerPos1.sub(pointerPos2).divide(2, 2);
+                        currentPos = pointerPos1.substract(pointerPos2).divide(2, 2);
                     }
                 } // touch is used
                 else {
@@ -640,7 +640,7 @@
                         var pos1 = this.getRelativePosition(e[0]),
                             pos2 = this.getRelativePosition(e[1]);
                         currentDist = pos1.distance(pos2);
-                        currentPos = pos1.sub(pos2).divide(2, 2);
+                        currentPos = pos1.substract(pos2).divide(2, 2);
                     }
                 }
 
@@ -792,9 +792,9 @@
 
                     if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
 
-                        var direction = this.settings.callbacks.swipe ? this.end.sub(this.start) : this.end.sub(this.oldMove);
+                        var direction = this.settings.callbacks.swipe ? this.end.substract(this.start) : this.end.substract(this.oldMove);
 
-                        var vLDirection = direction.length(),
+                        var vLDirection = direction.length,
                             directionNormalized = direction.divide(vLDirection, vLDirection),
                             distance = this.end.distance(this.start),
                             speed = this.calculateSpeed(distance, timeDiff);
@@ -940,7 +940,7 @@
                 var clientBounds = this.container.getBoundingClientRect(),
                     pos = new _Point.Point(e.clientX, e.clientY),
                     bounds = new _Point.Point(clientBounds.left, clientBounds.top);
-                return pos.sub(bounds).divide(clientBounds.width, clientBounds.height);
+                return pos.substract(bounds).divide(clientBounds.width, clientBounds.height);
             }
 
             /**

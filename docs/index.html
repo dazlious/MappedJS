@@ -438,14 +438,16 @@
 <li><a href="#Point">Point</a><ul>
 <li><a href="#new_Point_new">new Point(x, y)</a></li>
 <li><em>instance</em><ul>
-<li><a href="#Point+sub">.sub(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+length">.length</a> ⇒ <code>number</code></li>
+<li><a href="#Point+clone">.clone</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+substract">.substract(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+add">.add(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
-<li><a href="#Point+mult">.mult(x, y)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+multiply">.multiply(x, y)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+divide">.divide(x, y)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+equals">.equals(point)</a> ⇒ <code>Boolean</code></li>
-<li><a href="#Point+difference">.difference(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+distance">.distance(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+translate">.translate(x, y)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+position">.position(x, y)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+toArray">.toArray()</a> ⇒ <code>Array</code></li>
 </ul>
 </li>
@@ -464,8 +466,14 @@
 <li>x <code>number</code> <code> = 0</code> - = 0 - representation of x coordinate</li>
 <li>y <code>number</code> <code> = 0</code> - = 0 - representation of y coordinate</li>
 </ul>
-<p><a name="Point+sub"></a></p>
-<h3 id="point-sub-point-code-point-point-code-">point.sub(point) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p><a name="Point+length"></a></p>
+<h3 id="point-length-code-number-code-">point.length ⇒ <code>number</code></h3>
+<p>length of a point</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code>number</code> - length of a point<br><a name="Point+clone"></a></p>
+<h3 id="point-clone-code-point-point-code-">point.clone ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>gets a clone of this point</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - new instance equals this point<br><a name="Point+substract"></a></p>
+<h3 id="point-substract-point-code-point-point-code-">point.substract(point) ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>substracts 2 points</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - difference between this point and parameter point<br><strong>Params</strong></p>
 <ul>
@@ -478,8 +486,8 @@
 <ul>
 <li>point <code><a href="#Point">Point</a></code> - the point to add to this</li>
 </ul>
-<p><a name="Point+mult"></a></p>
-<h3 id="point-mult-x-y-code-point-point-code-">point.mult(x, y) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p><a name="Point+multiply"></a></p>
+<h3 id="point-multiply-x-y-code-point-point-code-">point.multiply(x, y) ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>multiplicates a point with a given x and y</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - Returns a new instance<br><strong>Params</strong></p>
 <ul>
@@ -501,13 +509,6 @@
 <ul>
 <li>point <code><a href="#Point">Point</a></code> - the point to check against this</li>
 </ul>
-<p><a name="Point+difference"></a></p>
-<h3 id="point-difference-point-code-point-point-code-">point.difference(point) ⇒ <code><a href="#Point">Point</a></code></h3>
-<p>Returns the difference from this Point to a specified Point</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - the difference between this Point and specified point<br><strong>Params</strong></p>
-<ul>
-<li>point <code><a href="#Point">Point</a></code> - the specified point to be measured against this Point</li>
-</ul>
 <p><a name="Point+distance"></a></p>
 <h3 id="point-distance-point-code-point-point-code-">point.distance(point) ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>Returns the distance from this Point to a specified Point</p>
@@ -517,11 +518,19 @@
 </ul>
 <p><a name="Point+translate"></a></p>
 <h3 id="point-translate-x-y-code-point-point-code-">point.translate(x, y) ⇒ <code><a href="#Point">Point</a></code></h3>
-<p>moves a point by x and y</p>
+<p>translates a point by x and y</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - instance of Point<br><strong>Params</strong></p>
 <ul>
 <li>x <code>number</code> - value to move x</li>
 <li>y <code>number</code> - value to move y</li>
+</ul>
+<p><a name="Point+position"></a></p>
+<h3 id="point-position-x-y-code-point-point-code-">point.position(x, y) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>positions a point by x and y</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - instance of Point<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> - value to position x</li>
+<li>y <code>number</code> - value to position y</li>
 </ul>
 <p><a name="Point+toArray"></a></p>
 <h3 id="point-toarray-code-array-code-">point.toArray() ⇒ <code>Array</code></h3>
@@ -620,10 +629,13 @@
 <li><a href="#Rectangle+containsPoint">.containsPoint(point)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+containsRect">.containsRect(rect)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+getDistortedRect">.getDistortedRect(factor)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+<li><a href="#Rectangle+scaleX">.scaleX(x)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+<li><a href="#Rectangle+scaleY">.scaleY(y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+<li><a href="#Rectangle+scale">.scale(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+translate">.translate(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+transform">.transform(x, y, width, height)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
-<li><a href="#Rectangle+move">.move(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
-<li><a href="#Rectangle+change">.change(x, y, width, height)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+<li><a href="#Rectangle+position">.position(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+<li><a href="#Rectangle+size">.size(x, y, width, height)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+equals">.equals(rectangle)</a> ⇒ <code>Boolean</code></li>
 </ul>
 </li>
@@ -700,41 +712,63 @@
 <ul>
 <li>factor <code>number</code> - the specified factor of distortion</li>
 </ul>
+<p><a name="Rectangle+scaleX"></a></p>
+<h3 id="rectangle-scalex-x-code-rectangle-rectangle-code-">rectangle.scaleX(x) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>scale x and width of rectangle</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - scaled Rectangle<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> - factor to be applied to scale</li>
+</ul>
+<p><a name="Rectangle+scaleY"></a></p>
+<h3 id="rectangle-scaley-y-code-rectangle-rectangle-code-">rectangle.scaleY(y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>scale y and height of rectangle</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - new scaled Rectangle<br><strong>Params</strong></p>
+<ul>
+<li>y <code>number</code> - factor to be applied to scale</li>
+</ul>
+<p><a name="Rectangle+scale"></a></p>
+<h3 id="rectangle-scale-x-y-code-rectangle-rectangle-code-">rectangle.scale(x, y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>scale x and y for width and height of rectangle</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - new scaled Rectangle<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> - factor to be applied to scale</li>
+<li>y <code>number</code> - = x - factor to be applied to scale</li>
+</ul>
 <p><a name="Rectangle+translate"></a></p>
 <h3 id="rectangle-translate-x-y-code-rectangle-rectangle-code-">rectangle.translate(x, y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>moves a rectangle by specified coords</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - how far to move in x direction</li>
-<li>y <code>number</code> - how far to move in y direction</li>
+<li>x <code>number</code> - specified x to be added to x position</li>
+<li>y <code>number</code> - specified y to be added to y position</li>
 </ul>
 <p><a name="Rectangle+transform"></a></p>
 <h3 id="rectangle-transform-x-y-width-height-code-rectangle-rectangle-code-">rectangle.transform(x, y, width, height) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>transforms a rectangle by specified coords</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - how far to transform in x direction</li>
-<li>y <code>number</code> - how far to transform in y direction</li>
-<li>width <code>number</code> - adds to the width</li>
-<li>height <code>number</code> - adds to the width</li>
+<li>x <code>number</code> - specified x to be added to x position</li>
+<li>y <code>number</code> - specified y to be added to y position</li>
+<li>width <code>number</code> - specified width to be added to this width</li>
+<li>height <code>number</code> - specified height to be added to this height</li>
 </ul>
-<p><a name="Rectangle+move"></a></p>
-<h3 id="rectangle-move-x-y-code-rectangle-rectangle-code-">rectangle.move(x, y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
-<p>moves a rectangle by specified coords</p>
+<p><a name="Rectangle+position"></a></p>
+<h3 id="rectangle-position-x-y-code-rectangle-rectangle-code-">rectangle.position(x, y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>changes the position a rectangle by specified coords</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - how far to move in x direction</li>
-<li>y <code>number</code> - how far to move in y direction</li>
+<li>x <code>number</code> - the new x position</li>
+<li>y <code>number</code> - he new y position</li>
 </ul>
-<p><a name="Rectangle+change"></a></p>
-<h3 id="rectangle-change-x-y-width-height-code-rectangle-rectangle-code-">rectangle.change(x, y, width, height) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
-<p>changes a rectangle by specified coords</p>
+<p><a name="Rectangle+size"></a></p>
+<h3 id="rectangle-size-x-y-width-height-code-rectangle-rectangle-code-">rectangle.size(x, y, width, height) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>changes the size of a rectangle by specified params</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - how far to change in x direction</li>
-<li>y <code>number</code> - how far to change in y direction</li>
-<li>width <code>number</code> - changes the width</li>
-<li>height <code>number</code> - changes the width</li>
+<li>x <code>number</code> - the new x position</li>
+<li>y <code>number</code> - the new y position</li>
+<li>width <code>number</code> - the new width</li>
+<li>height <code>number</code> - the new width</li>
 </ul>
 <p><a name="Rectangle+equals"></a></p>
 <h3 id="rectangle-equals-rectangle-code-boolean-code-">rectangle.equals(rectangle) ⇒ <code>Boolean</code></h3>
