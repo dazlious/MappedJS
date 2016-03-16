@@ -41,15 +41,6 @@
         };
     }();
 
-    var STATES = new WeakMap();
-
-    var _makePrivate = function _makePrivate(o) {
-        return STATES.set(o, {});
-    };
-    var _getPrivate = function _getPrivate(o) {
-        return STATES.get(o);
-    };
-
     var StateHandler = exports.StateHandler = function() {
         _createClass(StateHandler, [{
             key: 'current',
@@ -57,10 +48,21 @@
 
             /**
              * get current state
-             * @return {Object} a state from STATES-array
+             * @return {Object} current state from STATES-array
              */
             get: function get() {
-                return _getPrivate(this).STATES[this.i];
+                return this.states[this.i];
+            }
+
+            /**
+             * get number of states
+             * @return {number} number of states
+             */
+
+        }, {
+            key: 'length',
+            get: function get() {
+                return this.states.length;
             }
 
             /**
@@ -79,8 +81,7 @@
 
             _classCallCheck(this, StateHandler);
 
-            _makePrivate(this);
-            _getPrivate(this).STATES = states_array;
+            this.states = states_array;
             this.i = 0;
             return this;
         }
@@ -101,6 +102,35 @@
             }
 
             /**
+             * get the previous element
+             * @return {StateHandler} instance of StateHandler
+             */
+
+        }, {
+            key: 'previous',
+            value: function previous() {
+                if (this.hasPrevious()) {
+                    this.i--;
+                }
+                return this;
+            }
+
+            /**
+             * change the state to specified state
+             * @param {number} state -
+             * @return {StateHandler} instance of StateHandler
+             */
+
+        }, {
+            key: 'changeTo',
+            value: function changeTo(state) {
+                if (state >= 0 && state < this.length) {
+                    this.i = state;
+                }
+                return this;
+            }
+
+            /**
              * checks if there is a next element
              * @return {Boolean} wheter there is a next state or not
              */
@@ -108,7 +138,18 @@
         }, {
             key: 'hasNext',
             value: function hasNext() {
-                return this.i < _getPrivate(this).STATES.length - 1;
+                return this.i < this.length - 1;
+            }
+
+            /**
+             * checks if there is a previous element
+             * @return {Boolean} wheter there is a previous state or not
+             */
+
+        }, {
+            key: 'hasPrevious',
+            value: function hasPrevious() {
+                return this.i > 0;
             }
         }]);
 

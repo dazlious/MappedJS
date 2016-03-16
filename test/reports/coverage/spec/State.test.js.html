@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>34/34</span>
+        <span class='fraction'>57/57</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>7/7</span>
+        <span class='fraction'>12/12</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>34/34</span>
+        <span class='fraction'>57/57</span>
       </div>
     </div>
   </div>
@@ -105,7 +105,40 @@
 60
 61
 62
-63</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -127,6 +160,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,6 +188,35 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -187,6 +253,10 @@ describe('StateHandler', function() {
         expect(new StateHandler.StateHandler() instanceof StateHandler.StateHandler).toEqual(true);
     });
 &nbsp;
+    it("length is working", function() {
+        expect(new StateHandler.StateHandler().length).toEqual(1);
+    });
+&nbsp;
     it("initializes empty zeros", function() {
         var state_instance = new StateHandler.StateHandler();
         expect(state_instance.current.value).toEqual(0);
@@ -218,6 +288,35 @@ describe('StateHandler', function() {
         expect(state_instance.hasNext()).toEqual(false);
     });
 &nbsp;
+    it("hasPrevious is false if initial state is assigned", function() {
+        var state_instance = new StateHandler.StateHandler();
+        expect(state_instance.hasPrevious()).toEqual(false);
+    });
+&nbsp;
+    it("changeTo returns same state, if it is out of range", function() {
+        var state_instance = new StateHandler.StateHandler(STATES);
+        expect(state_instance.changeTo(-1).current).toEqual(STATES[0]);
+        expect(state_instance.changeTo(STATES.length).current).toEqual(STATES[0]);
+        expect(state_instance.changeTo(2).current).toEqual(STATES[2]);
+    });
+&nbsp;
+    it("changeTo works", function() {
+        var state_instance = new StateHandler.StateHandler(STATES);
+        expect(state_instance.changeTo(2).current).toEqual(STATES[2]);
+        expect(state_instance.changeTo(0).current).toEqual(STATES[0]);
+    });
+&nbsp;
+    it("previous if multiple states", function() {
+        var state_instance = new StateHandler.StateHandler(STATES);
+        expect(state_instance.changeTo(2).current).toEqual(STATES[2]);
+        state_instance.previous();
+        expect(state_instance.current).toEqual(STATES[1]);
+        state_instance.previous();
+        expect(state_instance.current).toEqual(STATES[0]);
+        state_instance.previous();
+        expect(state_instance.current).toEqual(STATES[0]);
+    });
+&nbsp;
     it("hasNext if multiple states", function() {
         var state_instance = new StateHandler.StateHandler(STATES);
         expect(state_instance.hasNext()).toEqual(true);
@@ -235,7 +334,7 @@ describe('StateHandler', function() {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Mar 16 2016 12:11:33 GMT+0100 (CET)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Mar 16 2016 12:42:49 GMT+0100 (CET)
 </div>
 </div>
 <script src="../prettify.js"></script>

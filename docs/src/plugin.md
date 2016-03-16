@@ -15,7 +15,7 @@
 <dd></dd>
 <dt><a href="#Rectangle">Rectangle</a></dt>
 <dd></dd>
-<dt><a href="#State">State</a></dt>
+<dt><a href="#StateHandler">StateHandler</a></dt>
 <dd></dd>
 <dt><a href="#Tile">Tile</a></dt>
 <dd></dd>
@@ -968,43 +968,75 @@ check if rectangles are equal
 
 - rectangle <code>[Rectangle](#Rectangle)</code> - the specified rectangle to check against this
 
-<a name="State"></a>
-## State
+<a name="StateHandler"></a>
+## StateHandler
 **Kind**: global class  
 
-* [State](#State)
-    * [new State(states_array)](#new_State_new)
-    * [.current](#State+current) ⇒ <code>Object</code>
-    * [.next()](#State+next) ⇒ <code>[State](#State)</code>
-    * [.hasNext()](#State+hasNext) ⇒ <code>Boolean</code>
+* [StateHandler](#StateHandler)
+    * [new StateHandler(states_array)](#new_StateHandler_new)
+    * [.current](#StateHandler+current) ⇒ <code>Object</code>
+    * [.length](#StateHandler+length) ⇒ <code>number</code>
+    * [.next()](#StateHandler+next) ⇒ <code>[StateHandler](#StateHandler)</code>
+    * [.previous()](#StateHandler+previous) ⇒ <code>[StateHandler](#StateHandler)</code>
+    * [.changeTo(state)](#StateHandler+changeTo) ⇒ <code>[StateHandler](#StateHandler)</code>
+    * [.hasNext()](#StateHandler+hasNext) ⇒ <code>Boolean</code>
+    * [.hasPrevious()](#StateHandler+hasPrevious) ⇒ <code>Boolean</code>
 
-<a name="new_State_new"></a>
-### new State(states_array)
+<a name="new_StateHandler_new"></a>
+### new StateHandler(states_array)
 Constructor
 
-**Returns**: <code>[State](#State)</code> - instance of State  
+**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
 **Params**
 
 - states_array <code>Array</code> <code> = [{value:</code> - 0, description: 'Default'}] - [description]
 
-<a name="State+current"></a>
-### state.current ⇒ <code>Object</code>
+<a name="StateHandler+current"></a>
+### stateHandler.current ⇒ <code>Object</code>
 get current state
 
-**Kind**: instance property of <code>[State](#State)</code>  
-**Returns**: <code>Object</code> - a state from STATES-array  
-<a name="State+next"></a>
-### state.next() ⇒ <code>[State](#State)</code>
+**Kind**: instance property of <code>[StateHandler](#StateHandler)</code>  
+**Returns**: <code>Object</code> - current state from STATES-array  
+<a name="StateHandler+length"></a>
+### stateHandler.length ⇒ <code>number</code>
+get number of states
+
+**Kind**: instance property of <code>[StateHandler](#StateHandler)</code>  
+**Returns**: <code>number</code> - number of states  
+<a name="StateHandler+next"></a>
+### stateHandler.next() ⇒ <code>[StateHandler](#StateHandler)</code>
 get the next element
 
-**Kind**: instance method of <code>[State](#State)</code>  
-**Returns**: <code>[State](#State)</code> - instance of State  
-<a name="State+hasNext"></a>
-### state.hasNext() ⇒ <code>Boolean</code>
+**Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
+**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
+<a name="StateHandler+previous"></a>
+### stateHandler.previous() ⇒ <code>[StateHandler](#StateHandler)</code>
+get the previous element
+
+**Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
+**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
+<a name="StateHandler+changeTo"></a>
+### stateHandler.changeTo(state) ⇒ <code>[StateHandler](#StateHandler)</code>
+change the state to specified state
+
+**Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
+**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
+**Params**
+
+- state <code>number</code> - -
+
+<a name="StateHandler+hasNext"></a>
+### stateHandler.hasNext() ⇒ <code>Boolean</code>
 checks if there is a next element
 
-**Kind**: instance method of <code>[State](#State)</code>  
+**Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
 **Returns**: <code>Boolean</code> - wheter there is a next state or not  
+<a name="StateHandler+hasPrevious"></a>
+### stateHandler.hasPrevious() ⇒ <code>Boolean</code>
+checks if there is a previous element
+
+**Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
+**Returns**: <code>Boolean</code> - wheter there is a previous state or not  
 <a name="Tile"></a>
 ## Tile
 **Kind**: global class  
