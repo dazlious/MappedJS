@@ -49,12 +49,12 @@
 
     var View = exports.View = function() {
         _createClass(View, [{
-            key: 'distortion',
+            key: 'equalizationFactor',
 
 
             /**
-             * Returns current distortion
-             * @return {number} returns current distortion of latitude
+             * Returns current equalizationFactor
+             * @return {number} returns current equalizationFactor of latitude
              */
             get: function get() {
                 return Math.cos(this.center.lat);
@@ -67,20 +67,18 @@
         }, {
             key: 'offset',
             get: function get() {
-                var center = this.center.toPoint(this.bounds, this.mapView);
-                return this.viewport.center.substract(center);
+                return this.viewport.center.substract(this.centerPoint);
             }
 
             /**
              * Returns the offset of the map
-             * @param {number} distortion - the current latitude distortion
              * @return {number} calculated offset
              */
 
         }, {
             key: 'mapOffset',
             get: function get() {
-                return this.offset.x + (this.mapView.width - this.mapView.width * this.distortion) / 2;
+                return this.offset.x + (this.mapView.width - this.mapView.width * this.equalizationFactor) / 2;
             }
 
             /**
@@ -92,7 +90,7 @@
             key: 'visibleTiles',
             get: function get() {
                 return this.tiles.filter(function(t, i, a) {
-                    var newTile = t.getDistortedRect(this.distortion).translate(this.mapOffset, this.offset.y);
+                    var newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapOffset, this.offset.y);
                     return this.viewport.intersects(newTile);
                 }, this);
             }
@@ -129,6 +127,7 @@
             this.viewport = viewport;
             this.bounds = bounds;
             this.center = center;
+            this.centerPoint = center.toPoint(this.bounds, this.mapView);
             this.tiles = [];
             this.data = data;
             this.draw = drawCb;
@@ -177,9 +176,9 @@
             value: function drawTile(tile) {
                 if (tile.state.current.value >= 2) {
                     if (this.draw && typeof this.draw === "function") {
-                        var x = tile.x * this.distortion + this.mapOffset | 0,
+                        var x = tile.x * this.equalizationFactor + this.mapOffset | 0,
                             y = tile.y + this.offset.y | 0,
-                            w = tile.width * this.distortion + 0.5 | 0,
+                            w = tile.width * this.equalizationFactor + 0.5 | 0,
                             h = tile.height + 0.5 | 0;
                         this.draw(tile.img, x, y, w, h);
                     } else {

@@ -23,8 +23,7 @@ export class View {
      * Returns the offset of the center
      */
     get offset() {
-        let center = this.center.toPoint(this.bounds, this.mapView);
-        return this.viewport.center.substract(center);
+        return this.viewport.center.substract(this.centerPoint);
     }
 
     /**
@@ -61,6 +60,7 @@ export class View {
         this.viewport = viewport;
         this.bounds = bounds;
         this.center = center;
+        this.centerPoint = center.toPoint(this.bounds, this.mapView);
         this.tiles = [];
         this.data = data;
         this.draw = drawCb;

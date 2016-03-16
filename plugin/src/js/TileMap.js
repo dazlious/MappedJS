@@ -102,6 +102,25 @@ export class TileMap {
     }
 
     /**
+     * clears canvas
+     * @return {TileMap} instance of TileMap
+     */
+    clearCanvas() {
+        this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        return this;
+    }
+
+    /**
+     * complete clear and draw of all visible tiles
+     * @return {TileMap} instance of TileMap
+     */
+    redraw() {
+        this.clearCanvas();
+        this.view.drawVisibleTiles();
+        return this;
+    }
+
+    /**
      * Handles resizing of TileMap
      * @return {TileMap} instance of TileMap
      */

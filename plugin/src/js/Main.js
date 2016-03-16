@@ -81,7 +81,7 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS
      */
     initializeMap() {
-        this.$canvas = new TileMap({
+        this.tileMap = new TileMap({
             container: this.$container,
             tilesData: this.mapData,
             settings: this.mapSettings
@@ -99,25 +99,21 @@ export class MappedJS {
             callbacks: {
                 tap: function(data) {
                     console.log("tap", data);
-                },
-                doubletap: function(data) {
-                    console.log("doubletap", data);
-                },
+                }.bind(this),
                 pan: function(data) {
-                    console.log("pan", data);
-                },
+                    let change = data.positions.last.substract(data.positions.current),
+                        absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+                    this.tileMap.view.centerPoint.add(absolutePosition);
+                    this.tileMap.redraw();
+                }.bind(this),
                 zoom: function(data) {
                     console.log("zoom", data);
-                },
-                pinch: function(data) {
-                    console.log("pinch", data);
-                },
-                flick: function(data) {
-                    console.log("flick", data);
-                }
+                }.bind(this)
             }
         });
+
         $(window).on("resize orientationchange", this.resizeHandler.bind(this));
+        
         return this;
     }
 
@@ -126,7 +122,7 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS
      */
     resizeHandler() {
-        this.$canvas.resize();
+        this.tileMap.resize();
         return this;
     }
 

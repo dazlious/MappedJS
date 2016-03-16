@@ -1095,6 +1095,8 @@ check if tiles are equal
         * [.initialize()](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
         * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.getCurrentLevelData()](#TileMap+getCurrentLevelData) ⇒ <code>Object</code>
+        * [.clearCanvas()](#TileMap+clearCanvas) ⇒ <code>[TileMap](#TileMap)</code>
+        * [.redraw()](#TileMap+redraw) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resize()](#TileMap+resize) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
     * _static_
@@ -1153,6 +1155,18 @@ gets data of current zoom level
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>Object</code> - data for current level as json  
+<a name="TileMap+clearCanvas"></a>
+### tileMap.clearCanvas() ⇒ <code>[TileMap](#TileMap)</code>
+clears canvas
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+<a name="TileMap+redraw"></a>
+### tileMap.redraw() ⇒ <code>[TileMap](#TileMap)</code>
+complete clear and draw of all visible tiles
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
 <a name="TileMap+resize"></a>
 ### tileMap.resize() ⇒ <code>[TileMap](#TileMap)</code>
 Handles resizing of TileMap
@@ -1176,7 +1190,7 @@ name of imagedata in data.json
 
 * [View](#View)
     * [new View(settings, viewport, mapView, bounds, center, data)](#new_View_new)
-    * [.distortion](#View+distortion) ⇒ <code>number</code>
+    * [.equalizationFactor](#View+equalizationFactor) ⇒ <code>number</code>
     * [.offset](#View+offset)
     * [.mapOffset](#View+mapOffset) ⇒ <code>number</code>
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
@@ -1200,12 +1214,12 @@ Constructor
 - center <code>[LatLng](#LatLng)</code> - = new LatLng() - current center of map
 - data <code>Object</code> - = {} - data of current map
 
-<a name="View+distortion"></a>
-### view.distortion ⇒ <code>number</code>
-Returns current distortion
+<a name="View+equalizationFactor"></a>
+### view.equalizationFactor ⇒ <code>number</code>
+Returns current equalizationFactor
 
 **Kind**: instance property of <code>[View](#View)</code>  
-**Returns**: <code>number</code> - returns current distortion of latitude  
+**Returns**: <code>number</code> - returns current equalizationFactor of latitude  
 <a name="View+offset"></a>
 ### view.offset
 Returns the offset of the center
@@ -1217,10 +1231,6 @@ Returns the offset of the map
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>number</code> - calculated offset  
-**Params**
-
-- distortion <code>number</code> - the current latitude distortion
-
 <a name="View+visibleTiles"></a>
 ### view.visibleTiles ⇒ <code>array</code>
 get all visible tiles

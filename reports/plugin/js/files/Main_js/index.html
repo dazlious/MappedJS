@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">69.98</p>
+      <p class="stat">68.45</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">233</p>
+      <p class="stat">229</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">40.88</p>
+      <p class="stat">39.96</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.89</p>
+      <p class="stat">1.98</p>
     </div>
   </div>
 </div>
@@ -251,7 +251,7 @@
         }, {
             key: &#039;initializeMap&#039;,
             value: function initializeMap() {
-                this.$canvas = new _TileMap.TileMap({
+                this.tileMap = new _TileMap.TileMap({
                     container: this.$container,
                     tilesData: this.mapData,
                     settings: this.mapSettings
@@ -270,27 +270,23 @@
                 this.interact = new _Interact.Interact({
                     container: this.$container,
                     callbacks: {
-                        tap: function tap(data) {
+                        tap: function(data) {
                             console.log(&quot;tap&quot;, data);
-                        },
-                        doubletap: function doubletap(data) {
-                            console.log(&quot;doubletap&quot;, data);
-                        },
-                        pan: function pan(data) {
-                            console.log(&quot;pan&quot;, data);
-                        },
-                        zoom: function zoom(data) {
+                        }.bind(this),
+                        pan: function(data) {
+                            var change = data.positions.last.substract(data.positions.current),
+                                absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+                            this.tileMap.view.centerPoint.add(absolutePosition);
+                            this.tileMap.redraw();
+                        }.bind(this),
+                        zoom: function(data) {
                             console.log(&quot;zoom&quot;, data);
-                        },
-                        pinch: function pinch(data) {
-                            console.log(&quot;pinch&quot;, data);
-                        },
-                        flick: function flick(data) {
-                            console.log(&quot;flick&quot;, data);
-                        }
+                        }.bind(this)
                     }
                 });
+
                 (0, _jquery2.default)(window).on(&quot;resize orientationchange&quot;, this.resizeHandler.bind(this));
+
                 return this;
             }
 
@@ -302,7 +298,7 @@
         }, {
             key: &#039;resizeHandler&#039;,
             value: function resizeHandler() {
-                this.$canvas.resize();
+                this.tileMap.resize();
                 return this;
             }
 

@@ -160,7 +160,7 @@
         }, {
             key: 'initializeMap',
             value: function initializeMap() {
-                this.$canvas = new _TileMap.TileMap({
+                this.tileMap = new _TileMap.TileMap({
                     container: this.$container,
                     tilesData: this.mapData,
                     settings: this.mapSettings
@@ -179,27 +179,23 @@
                 this.interact = new _Interact.Interact({
                     container: this.$container,
                     callbacks: {
-                        tap: function tap(data) {
+                        tap: function(data) {
                             console.log("tap", data);
-                        },
-                        doubletap: function doubletap(data) {
-                            console.log("doubletap", data);
-                        },
-                        pan: function pan(data) {
-                            console.log("pan", data);
-                        },
-                        zoom: function zoom(data) {
+                        }.bind(this),
+                        pan: function(data) {
+                            var change = data.positions.last.substract(data.positions.current),
+                                absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+                            this.tileMap.view.centerPoint.add(absolutePosition);
+                            this.tileMap.redraw();
+                        }.bind(this),
+                        zoom: function(data) {
                             console.log("zoom", data);
-                        },
-                        pinch: function pinch(data) {
-                            console.log("pinch", data);
-                        },
-                        flick: function flick(data) {
-                            console.log("flick", data);
-                        }
+                        }.bind(this)
                     }
                 });
+
                 (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
+
                 return this;
             }
 
@@ -211,7 +207,7 @@
         }, {
             key: 'resizeHandler',
             value: function resizeHandler() {
-                this.$canvas.resize();
+                this.tileMap.resize();
                 return this;
             }
 
