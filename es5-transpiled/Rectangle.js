@@ -195,12 +195,23 @@
             }
 
             /**
+             * clones a rectangle
+             * @return {Rectangle} duplicated rectangle
+             */
+
+        }, {
+            key: 'clone',
+            get: function get() {
+                return Rectangle.createFromRectangle(this);
+            }
+
+            /**
              * Constructor
              * @param  {number} x=0 - x-position of specified rectangle
              * @param  {number} y=0 - y-position of specified rectangle
              * @param  {number} width=0 - width of specified rectangle
              * @param  {number} height=0 - height of specified rectangle
-             * @return {Rectangle} new instance of Rectangle
+             * @return {Rectangle} instance of Rectangle
              */
 
         }]);
@@ -246,6 +257,20 @@
             key: 'contains',
             value: function contains(rectOrPoint) {
                 return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
+            }
+
+            /**
+             * Sets the Center of this Rectangle to specified point
+             * @param  {Point} point - specified point to set center of rectangle to
+             * @return {Rectangle} instance of Rectangle
+             */
+
+        }, {
+            key: 'setCenter',
+            value: function setCenter(point) {
+                var difference = point.substract(this.center);
+                this.translate(difference.x, difference.y);
+                return this;
             }
 
             /**
@@ -410,4 +435,13 @@
 
         return Rectangle;
     }(_Point2.Point);
+
+    /**
+     * Creates a Rectangle from specified Rectangle
+     * @param  {Rectangle} rect - specified Rectangle
+     * @return {Rectangle} the point specified
+     */
+    Rectangle.createFromRectangle = function(rect) {
+        return new Rectangle(rect.x, rect.y, rect.width, rect.height);
+    };
 });

@@ -227,7 +227,10 @@
         }, {
             key: 'resizeView',
             value: function resizeView() {
+                var oldViewport = this.view.viewport.clone;
                 this.view.viewport.size(this.left, this.top, this.width, this.height);
+                var difference = this.view.viewport.center.substract(oldViewport.center);
+                this.view.mapView.translate(difference.x, difference.y);
                 this.view.drawVisibleTiles();
                 return this;
             }

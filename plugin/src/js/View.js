@@ -1,4 +1,5 @@
 import {LatLng} from './LatLng.js';
+import {Point} from './Point.js';
 import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
@@ -19,19 +20,8 @@ export class View {
         return (Math.cos(this.center.lat));
     }
 
-    /**
-     * Returns the offset of the center
-     */
-    get offset() {
-        return this.viewport.center.substract(this.centerPoint);
-    }
-
-    /**
-     * Returns the offset of the map
-     * @return {number} calculated offset
-     */
-    get mapOffset() {
-        return this.offset.x + ((this.mapView.width - (this.mapView.width * this.equalizationFactor)) / 2);
+    get viewportOffset() {
+        return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
     }
 
     /**
@@ -40,7 +30,7 @@ export class View {
      */
     get visibleTiles() {
         return this.tiles.filter(function(t, i, a) {
-            let newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapOffset, this.offset.y);
+            let newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapView.x * this.equalizationFactor + this.viewportOffset, this.mapView.y);
             return this.viewport.intersects(newTile);
         }, this);
     }
@@ -60,7 +50,8 @@ export class View {
         this.viewport = viewport;
         this.bounds = bounds;
         this.center = center;
-        this.centerPoint = center.toPoint(this.bounds, this.mapView);
+        var t = this.viewport.center.substract(center.toPoint(this.bounds, this.mapView));
+        this.mapView.position(t.x, t.y);
         this.tiles = [];
         this.data = data;
         this.draw = drawCb;
@@ -77,6 +68,11 @@ export class View {
     onTilesLoaded(tile) {
         this.drawTile(tile);
         tile.state.next();
+        return this;
+    }
+
+    moveView(pos) {
+        this.mapView.setCenter(this.mapView.center.substract(pos));
         return this;
     }
 
@@ -99,8 +95,8 @@ export class View {
     drawTile(tile) {
         if (tile.state.current.value >= 2) {
             if (this.draw && typeof this.draw === "function") {
-                let x = ((tile.x * this.equalizationFactor) + this.mapOffset) | 0,
-                    y = (tile.y + this.offset.y) | 0,
+                let x = ((tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset) | 0,
+                    y = (tile.y + this.mapView.y) | 0,
                     w = ((tile.width * this.equalizationFactor) + 0.5) | 0,
                     h = (tile.height + 0.5) | 0;
                 this.draw(tile.img, x, y, w, h);

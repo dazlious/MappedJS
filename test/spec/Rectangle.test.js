@@ -138,4 +138,18 @@ describe('Rectangle', function() {
         expect(rect1.size(200, 600, 200, 700)).toEqual(new Rectangle.Rectangle(200, 600, 200, 700));
     });
 
+    it("setCenter works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 200, 200),
+            rect2 = new Rectangle.Rectangle(-100, -100, 200, 200),
+            newCenter1 = new Point.Point(110, 110),
+            newCenter2 = new Point.Point(-10, -10);
+
+        rect1.setCenter(newCenter1);
+        rect2.setCenter(newCenter2);
+        
+        expect(rect1.center).toEqual(new Point.Point(110, 110));
+        expect(rect2.center).toEqual(new Point.Point(-10, -10));
+
+    });
+
 });

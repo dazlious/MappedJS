@@ -629,6 +629,7 @@
 <ul>
 <li><a href="#Rectangle">Rectangle</a><ul>
 <li><a href="#new_Rectangle_new">new Rectangle(x, y, width, height)</a></li>
+<li><em>instance</em><ul>
 <li><a href="#Rectangle+center">.center</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Rectangle+topLeft">.topLeft</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Rectangle+topRight">.topRight</a> ⇒ <code><a href="#Point">Point</a></code></li>
@@ -638,8 +639,10 @@
 <li><a href="#Rectangle+left">.left</a> ⇒ <code>number</code></li>
 <li><a href="#Rectangle+top">.top</a> ⇒ <code>number</code></li>
 <li><a href="#Rectangle+bottom">.bottom</a> ⇒ <code>number</code></li>
+<li><a href="#Rectangle+clone">.clone</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+intersects">.intersects(rect)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+contains">.contains(rectOrPoint)</a> ⇒ <code>Boolean</code></li>
+<li><a href="#Rectangle+setCenter">.setCenter(point)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+containsPoint">.containsPoint(point)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+containsRect">.containsRect(rect)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+getDistortedRect">.getDistortedRect(factor)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
@@ -653,11 +656,17 @@
 <li><a href="#Rectangle+equals">.equals(rectangle)</a> ⇒ <code>Boolean</code></li>
 </ul>
 </li>
+<li><em>static</em><ul>
+<li><a href="#Rectangle.createFromRectangle">.createFromRectangle(rect)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <p><a name="new_Rectangle_new"></a></p>
 <h3 id="new-rectangle-x-y-width-height-">new Rectangle(x, y, width, height)</h3>
 <p>Constructor</p>
-<p><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - new instance of Rectangle<br><strong>Params</strong></p>
+<p><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - instance of Rectangle<br><strong>Params</strong></p>
 <ul>
 <li>x <code>number</code> <code> = 0</code> - x-position of specified rectangle</li>
 <li>y <code>number</code> <code> = 0</code> - y-position of specified rectangle</li>
@@ -691,7 +700,10 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>number</code> - top position<br><a name="Rectangle+bottom"></a></p>
 <h3 id="rectangle-bottom-code-number-code-">rectangle.bottom ⇒ <code>number</code></h3>
 <p>Returns bottom position of Rectangle</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>number</code> - bottom position<br><a name="Rectangle+intersects"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>number</code> - bottom position<br><a name="Rectangle+clone"></a></p>
+<h3 id="rectangle-clone-code-rectangle-rectangle-code-">rectangle.clone ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>clones a rectangle</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - duplicated rectangle<br><a name="Rectangle+intersects"></a></p>
 <h3 id="rectangle-intersects-rect-code-boolean-code-">rectangle.intersects(rect) ⇒ <code>Boolean</code></h3>
 <p>Checks whether Rectangle intersects with specified Rectangle</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - true if containment is entirely<br><strong>Params</strong></p>
@@ -704,6 +716,13 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - true if containment is entirely<br><strong>Params</strong></p>
 <ul>
 <li>rectOrPoint <code><a href="#Rectangle">Rectangle</a></code> | <code><a href="#Point">Point</a></code> - the specified point or rectangle to check against</li>
+</ul>
+<p><a name="Rectangle+setCenter"></a></p>
+<h3 id="rectangle-setcenter-point-code-rectangle-rectangle-code-">rectangle.setCenter(point) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>Sets the Center of this Rectangle to specified point</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - instance of Rectangle<br><strong>Params</strong></p>
+<ul>
+<li>point <code><a href="#Point">Point</a></code> - specified point to set center of rectangle to</li>
 </ul>
 <p><a name="Rectangle+containsPoint"></a></p>
 <h3 id="rectangle-containspoint-point-code-boolean-code-">rectangle.containsPoint(point) ⇒ <code>Boolean</code></h3>
@@ -790,6 +809,13 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - is true, if x, y, width and height are the same<br><strong>Params</strong></p>
 <ul>
 <li>rectangle <code><a href="#Rectangle">Rectangle</a></code> - the specified rectangle to check against this</li>
+</ul>
+<p><a name="Rectangle.createFromRectangle"></a></p>
+<h3 id="rectangle-createfromrectangle-rect-code-rectangle-rectangle-code-">Rectangle.createFromRectangle(rect) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>Creates a Rectangle from specified Rectangle</p>
+<p><strong>Kind</strong>: static method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - the point specified<br><strong>Params</strong></p>
+<ul>
+<li>rect <code><a href="#Rectangle">Rectangle</a></code> - specified Rectangle</li>
 </ul>
 <p><a name="StateHandler"></a></p>
 <h2 id="statehandler">StateHandler</h2>
@@ -954,8 +980,6 @@
 <li><a href="#View">View</a><ul>
 <li><a href="#new_View_new">new View(settings, viewport, mapView, bounds, center, data)</a></li>
 <li><a href="#View+equalizationFactor">.equalizationFactor</a> ⇒ <code>number</code></li>
-<li><a href="#View+offset">.offset</a></li>
-<li><a href="#View+mapOffset">.mapOffset</a> ⇒ <code>number</code></li>
 <li><a href="#View+visibleTiles">.visibleTiles</a> ⇒ <code>array</code></li>
 <li><a href="#View+onTilesLoaded">.onTilesLoaded(tile)</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#View+drawVisibleTiles">.drawVisibleTiles()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
@@ -980,13 +1004,7 @@
 <p><a name="View+equalizationFactor"></a></p>
 <h3 id="view-equalizationfactor-code-number-code-">view.equalizationFactor ⇒ <code>number</code></h3>
 <p>Returns current equalizationFactor</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - returns current equalizationFactor of latitude<br><a name="View+offset"></a></p>
-<h3 id="view-offset">view.offset</h3>
-<p>Returns the offset of the center</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><a name="View+mapOffset"></a></p>
-<h3 id="view-mapoffset-code-number-code-">view.mapOffset ⇒ <code>number</code></h3>
-<p>Returns the offset of the map</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - calculated offset<br><a name="View+visibleTiles"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - returns current equalizationFactor of latitude<br><a name="View+visibleTiles"></a></p>
 <h3 id="view-visibletiles-code-array-code-">view.visibleTiles ⇒ <code>array</code></h3>
 <p>get all visible tiles</p>
 <p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>array</code> - all tiles that are currently visible<br><a name="View+onTilesLoaded"></a></p>

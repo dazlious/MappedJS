@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js'], factory);
+        define(['exports', './LatLng.js', './Point.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'));
+        factory(exports, require('./LatLng.js'), require('./Point.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
+        factory(mod.exports, global.LatLng, global.Point, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
         global.View = mod.exports;
     }
-})(this, function(exports, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher) {
+})(this, function(exports, _LatLng, _Point, _Bounds, _Rectangle, _Tile, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -59,26 +59,10 @@
             get: function get() {
                 return Math.cos(this.center.lat);
             }
-
-            /**
-             * Returns the offset of the center
-             */
-
         }, {
-            key: 'offset',
+            key: 'viewportOffset',
             get: function get() {
-                return this.viewport.center.substract(this.centerPoint);
-            }
-
-            /**
-             * Returns the offset of the map
-             * @return {number} calculated offset
-             */
-
-        }, {
-            key: 'mapOffset',
-            get: function get() {
-                return this.offset.x + (this.mapView.width - this.mapView.width * this.equalizationFactor) / 2;
+                return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
             }
 
             /**
@@ -90,7 +74,7 @@
             key: 'visibleTiles',
             get: function get() {
                 return this.tiles.filter(function(t, i, a) {
-                    var newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapOffset, this.offset.y);
+                    var newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapView.x * this.equalizationFactor + this.viewportOffset, this.mapView.y);
                     return this.viewport.intersects(newTile);
                 }, this);
             }
@@ -127,7 +111,8 @@
             this.viewport = viewport;
             this.bounds = bounds;
             this.center = center;
-            this.centerPoint = center.toPoint(this.bounds, this.mapView);
+            var t = this.viewport.center.substract(center.toPoint(this.bounds, this.mapView));
+            this.mapView.position(t.x, t.y);
             this.tiles = [];
             this.data = data;
             this.draw = drawCb;
@@ -148,6 +133,12 @@
             value: function onTilesLoaded(tile) {
                 this.drawTile(tile);
                 tile.state.next();
+                return this;
+            }
+        }, {
+            key: 'moveView',
+            value: function moveView(pos) {
+                this.mapView.setCenter(this.mapView.center.substract(pos));
                 return this;
             }
 
@@ -176,8 +167,8 @@
             value: function drawTile(tile) {
                 if (tile.state.current.value >= 2) {
                     if (this.draw && typeof this.draw === "function") {
-                        var x = tile.x * this.equalizationFactor + this.mapOffset | 0,
-                            y = tile.y + this.offset.y | 0,
+                        var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset | 0,
+                            y = tile.y + this.mapView.y | 0,
                             w = tile.width * this.equalizationFactor + 0.5 | 0,
                             h = tile.height + 0.5 | 0;
                         this.draw(tile.img, x, y, w, h);

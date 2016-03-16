@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">66.96</p>
+      <p class="stat">66.61</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">225</p>
+      <p class="stat">216</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">51.75</p>
+      <p class="stat">52.81</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.84</p>
+      <p class="stat">1.95</p>
     </div>
   </div>
 </div>
@@ -91,17 +91,17 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&#039;exports&#039;, &#039;./LatLng.js&#039;, &#039;./Bounds.js&#039;, &#039;./Rectangle.js&#039;, &#039;./Tile.js&#039;, &#039;./Publisher.js&#039;], factory);
+        define([&#039;exports&#039;, &#039;./LatLng.js&#039;, &#039;./Point.js&#039;, &#039;./Bounds.js&#039;, &#039;./Rectangle.js&#039;, &#039;./Tile.js&#039;, &#039;./Publisher.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports, require(&#039;./LatLng.js&#039;), require(&#039;./Bounds.js&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./Tile.js&#039;), require(&#039;./Publisher.js&#039;));
+        factory(exports, require(&#039;./LatLng.js&#039;), require(&#039;./Point.js&#039;), require(&#039;./Bounds.js&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./Tile.js&#039;), require(&#039;./Publisher.js&#039;));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
+        factory(mod.exports, global.LatLng, global.Point, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
         global.View = mod.exports;
     }
-})(this, function(exports, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher) {
+})(this, function(exports, _LatLng, _Point, _Bounds, _Rectangle, _Tile, _Publisher) {
     &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
@@ -150,26 +150,10 @@
             get: function get() {
                 return Math.cos(this.center.lat);
             }
-
-            /**
-             * Returns the offset of the center
-             */
-
         }, {
-            key: &#039;offset&#039;,
+            key: &#039;viewportOffset&#039;,
             get: function get() {
-                return this.viewport.center.substract(this.centerPoint);
-            }
-
-            /**
-             * Returns the offset of the map
-             * @return {number} calculated offset
-             */
-
-        }, {
-            key: &#039;mapOffset&#039;,
-            get: function get() {
-                return this.offset.x + (this.mapView.width - this.mapView.width * this.equalizationFactor) / 2;
+                return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
             }
 
             /**
@@ -181,7 +165,7 @@
             key: &#039;visibleTiles&#039;,
             get: function get() {
                 return this.tiles.filter(function(t, i, a) {
-                    var newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapOffset, this.offset.y);
+                    var newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapView.x * this.equalizationFactor + this.viewportOffset, this.mapView.y);
                     return this.viewport.intersects(newTile);
                 }, this);
             }
@@ -218,7 +202,8 @@
             this.viewport = viewport;
             this.bounds = bounds;
             this.center = center;
-            this.centerPoint = center.toPoint(this.bounds, this.mapView);
+            var t = this.viewport.center.substract(center.toPoint(this.bounds, this.mapView));
+            this.mapView.position(t.x, t.y);
             this.tiles = [];
             this.data = data;
             this.draw = drawCb;
@@ -239,6 +224,12 @@
             value: function onTilesLoaded(tile) {
                 this.drawTile(tile);
                 tile.state.next();
+                return this;
+            }
+        }, {
+            key: &#039;moveView&#039;,
+            value: function moveView(pos) {
+                this.mapView.setCenter(this.mapView.center.substract(pos));
                 return this;
             }
 
@@ -267,8 +258,8 @@
             value: function drawTile(tile) {
                 if (tile.state.current.value &gt;= 2) {
                     if (this.draw &amp;&amp; typeof this.draw === &quot;function&quot;) {
-                        var x = tile.x * this.equalizationFactor + this.mapOffset | 0,
-                            y = tile.y + this.offset.y | 0,
+                        var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset | 0,
+                            y = tile.y + this.mapView.y | 0,
                             w = tile.width * this.equalizationFactor + 0.5 | 0,
                             h = tile.height + 0.5 | 0;
                         this.draw(tile.img, x, y, w, h);

@@ -185,7 +185,7 @@
                         pan: function(data) {
                             var change = data.positions.last.substract(data.positions.current),
                                 absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
-                            this.tileMap.view.centerPoint.add(absolutePosition);
+                            this.tileMap.view.moveView(absolutePosition);
                             this.tileMap.redraw();
                         }.bind(this),
                         zoom: function(data) {

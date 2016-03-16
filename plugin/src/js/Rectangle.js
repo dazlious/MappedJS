@@ -75,12 +75,20 @@ export class Rectangle extends Point {
     }
 
     /**
+     * clones a rectangle
+     * @return {Rectangle} duplicated rectangle
+     */
+    get clone() {
+        return Rectangle.createFromRectangle(this);
+    }
+
+    /**
      * Constructor
      * @param  {number} x=0 - x-position of specified rectangle
      * @param  {number} y=0 - y-position of specified rectangle
      * @param  {number} width=0 - width of specified rectangle
      * @param  {number} height=0 - height of specified rectangle
-     * @return {Rectangle} new instance of Rectangle
+     * @return {Rectangle} instance of Rectangle
      */
     constructor(x=0, y=0, width=0, height=0) {
         super(x, y);
@@ -105,6 +113,17 @@ export class Rectangle extends Point {
      */
     contains(rectOrPoint) {
         return (rectOrPoint instanceof Rectangle) ? this.containsRect(rectOrPoint) : (rectOrPoint instanceof Point) ? this.containsPoint(rectOrPoint) : false;
+    }
+
+    /**
+     * Sets the Center of this Rectangle to specified point
+     * @param  {Point} point - specified point to set center of rectangle to
+     * @return {Rectangle} instance of Rectangle
+     */
+    setCenter(point) {
+        let difference = point.substract(this.center);
+        this.translate(difference.x, difference.y);
+        return this;
     }
 
     /**
@@ -232,3 +251,10 @@ export class Rectangle extends Point {
     }
 
 }
+
+/**
+ * Creates a Rectangle from specified Rectangle
+ * @param  {Rectangle} rect - specified Rectangle
+ * @return {Rectangle} the point specified
+ */
+Rectangle.createFromRectangle = (rect) => new Rectangle(rect.x, rect.y, rect.width, rect.height);
