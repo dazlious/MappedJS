@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {State} from './State.js';
+import {StateHandler} from './StateHandler.js';
 import {Rectangle} from './Rectangle.js';
 import {Publisher} from './Publisher.js';
 import {Helper} from './Helper.js';
@@ -52,7 +52,7 @@ export class Tile extends Rectangle {
      */
     constructor({path, x = 0, y = 0, w = 0, h = 0} = {}) {
         super(x, y, w, h);
-        this.state = new State(STATES);
+        this.state = new StateHandler(STATES);
         if (!path || typeof path !== "string" || path.length === 0) {
             throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
         }

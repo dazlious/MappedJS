@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './State.js', './Rectangle.js', './Publisher.js', './Helper.js'], factory);
+        define(['exports', 'jquery', './StateHandler.js', './Rectangle.js', './Publisher.js', './Helper.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./State.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./Helper.js'));
+        factory(exports, require('jquery'), require('./StateHandler.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./Helper.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.State, global.Rectangle, global.Publisher, global.Helper);
+        factory(mod.exports, global.jquery, global.StateHandler, global.Rectangle, global.Publisher, global.Helper);
         global.Tile = mod.exports;
     }
-})(this, function(exports, _jquery, _State, _Rectangle2, _Publisher, _Helper) {
+})(this, function(exports, _jquery, _StateHandler, _Rectangle2, _Publisher, _Helper) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -179,7 +179,7 @@
 
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
-            _this.state = new _State.State(STATES);
+            _this.state = new _StateHandler.StateHandler(STATES);
             if (!path || typeof path !== "string" || path.length === 0) {
                 throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
             }

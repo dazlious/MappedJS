@@ -3,19 +3,7 @@ var STATES = new WeakMap();
 var _makePrivate = o => STATES.set(o, {});
 var _getPrivate = o => STATES.get(o);
 
-export class State {
-
-    /**
-     * Constructor
-     * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
-     * @return {State} instance of State
-     */
-    constructor(states_array=[{value: 0, description: 'Default'}]) {
-        _makePrivate(this);
-        _getPrivate(this).STATES = states_array;
-        this.i = 0;
-        return this;
-    }
+export class StateHandler {
 
     /**
      * get current state
@@ -26,8 +14,20 @@ export class State {
     }
 
     /**
+     * Constructor
+     * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
+     * @return {StateHandler} instance of StateHandler
+     */
+    constructor(states_array=[{value: 0, description: 'Default'}]) {
+        _makePrivate(this);
+        _getPrivate(this).STATES = states_array;
+        this.i = 0;
+        return this;
+    }
+
+    /**
      * get the next element
-     * @return {State} instance of State
+     * @return {StateHandler} instance of StateHandler
      */
     next() {
         if (this.hasNext()) {

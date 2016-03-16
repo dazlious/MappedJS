@@ -1427,7 +1427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _State = __webpack_require__(9);
+	var _StateHandler = __webpack_require__(9);
 
 	var _Rectangle2 = __webpack_require__(6);
 
@@ -1511,7 +1511,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
-	    _this.state = new _State.State(STATES);
+	    _this.state = new _StateHandler.StateHandler(STATES);
 	    if (!path || typeof path !== "string" || path.length === 0) {
 	      throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
 	    }
@@ -1577,18 +1577,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return STATES.get(o);
 	};
 
-	var State = exports.State = function () {
+	var StateHandler = exports.StateHandler = function () {
+	    _createClass(StateHandler, [{
+	        key: 'current',
 
-	    /**
-	     * Constructor
-	     * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
-	     * @return {State} instance of State
-	     */
 
-	    function State() {
+	        /**
+	         * get current state
+	         * @return {Object} a state from STATES-array
+	         */
+	        get: function get() {
+	            return _getPrivate(this).STATES[this.i];
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }]);
+
+	    function StateHandler() {
 	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{ value: 0, description: 'Default' }] : arguments[0];
 
-	        _classCallCheck(this, State);
+	        _classCallCheck(this, StateHandler);
 
 	        _makePrivate(this);
 	        _getPrivate(this).STATES = states_array;
@@ -1597,19 +1610,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * get current state
-	     * @return {Object} a state from STATES-array
+	     * get the next element
+	     * @return {StateHandler} instance of StateHandler
 	     */
 
 
-	    _createClass(State, [{
+	    _createClass(StateHandler, [{
 	        key: 'next',
-
-
-	        /**
-	         * get the next element
-	         * @return {State} instance of State
-	         */
 	        value: function next() {
 	            if (this.hasNext()) {
 	                this.i++;
@@ -1627,14 +1634,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function hasNext() {
 	            return this.i < _getPrivate(this).STATES.length - 1;
 	        }
-	    }, {
-	        key: 'current',
-	        get: function get() {
-	            return _getPrivate(this).STATES[this.i];
-	        }
 	    }]);
 
-	    return State;
+	    return StateHandler;
 	}();
 
 /***/ },
