@@ -73,6 +73,10 @@ export class View {
 
     moveView(pos) {
         this.mapView.setCenter(this.mapView.center.substract(pos));
+        let equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
+        if (!equalizedMap.containsRect(this.viewport)) {
+            this.mapView.setCenter(this.mapView.center.add(pos));
+        }
         return this;
     }
 

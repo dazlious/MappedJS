@@ -139,6 +139,10 @@
             key: 'moveView',
             value: function moveView(pos) {
                 this.mapView.setCenter(this.mapView.center.substract(pos));
+                var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
+                if (!equalizedMap.containsRect(this.viewport)) {
+                    this.mapView.setCenter(this.mapView.center.add(pos));
+                }
                 return this;
             }
 
