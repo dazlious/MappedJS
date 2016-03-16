@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Plato - Tile.js</title>
+  <title>Plato - StateHandler.js</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
@@ -36,7 +36,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>Tile.js</h1>
+    <h1>StateHandler.js</h1>
   </div>
 </div>
 
@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">64.69</p>
+      <p class="stat">71.50</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">224</p>
+      <p class="stat">158</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">42.87</p>
+      <p class="stat">48.69</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.81</p>
+      <p class="stat">0.79</p>
     </div>
   </div>
 </div>
@@ -91,70 +91,28 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&#039;exports&#039;, &#039;jquery&#039;, &#039;./StateHandler.js&#039;, &#039;./Rectangle.js&#039;, &#039;./Publisher.js&#039;, &#039;./Helper.js&#039;], factory);
+        define([&#039;exports&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports, require(&#039;jquery&#039;), require(&#039;./StateHandler.js&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./Publisher.js&#039;), require(&#039;./Helper.js&#039;));
+        factory(exports);
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.StateHandler, global.Rectangle, global.Publisher, global.Helper);
-        global.Tile = mod.exports;
+        factory(mod.exports);
+        global.StateHandler = mod.exports;
     }
-})(this, function(exports, _jquery, _StateHandler, _Rectangle2, _Publisher, _Helper) {
+})(this, function(exports) {
     &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
         value: true
     });
-    exports.Tile = undefined;
-
-    var _jquery2 = _interopRequireDefault(_jquery);
-
-    function _interopRequireDefault(obj) {
-        return obj &amp;&amp; obj.__esModule ? obj : {
-            default: obj
-        };
-    }
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
             throw new TypeError(&quot;Cannot call a class as a function&quot;);
         }
     }
-
-    function _possibleConstructorReturn(self, call) {
-        if (!self) {
-            throw new ReferenceError(&quot;this hasn&#039;t been initialised - super() hasn&#039;t been called&quot;);
-        }
-
-        return call &amp;&amp; (typeof call === &quot;object&quot; || typeof call === &quot;function&quot;) ? call : self;
-    }
-
-    var _get = function get(object, property, receiver) {
-        if (object === null) object = Function.prototype;
-        var desc = Object.getOwnPropertyDescriptor(object, property);
-
-        if (desc === undefined) {
-            var parent = Object.getPrototypeOf(object);
-
-            if (parent === null) {
-                return undefined;
-            } else {
-                return get(parent, property, receiver);
-            }
-        } else if (&quot;value&quot; in desc) {
-            return desc.value;
-        } else {
-            var getter = desc.get;
-
-            if (getter === undefined) {
-                return undefined;
-            }
-
-            return getter.call(receiver);
-        }
-    };
 
     var _createClass = function() {
         function defineProperties(target, props) {
@@ -174,144 +132,120 @@
         };
     }();
 
-    function _inherits(subClass, superClass) {
-        if (typeof superClass !== &quot;function&quot; &amp;&amp; superClass !== null) {
-            throw new TypeError(&quot;Super expression must either be null or a function, not &quot; + typeof superClass);
-        }
-
-        subClass.prototype = Object.create(superClass &amp;&amp; superClass.prototype, {
-            constructor: {
-                value: subClass,
-                enumerable: false,
-                writable: true,
-                configurable: true
-            }
-        });
-        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-    }
-
-    /**
-     * Singleton instance of Publisher
-     */
-    var PUBLISHER = new _Publisher.Publisher();
-
-    /**
-     * States of a tile
-     * @type {Array}
-     */
-    var STATES = [{
-        value: 0,
-        description: &#039;Starting&#039;
-    }, {
-        value: 1,
-        description: &#039;Initialized&#039;
-    }, {
-        value: 2,
-        description: &#039;Loaded&#039;
-    }, {
-        value: 3,
-        description: &#039;Drawn&#039;
-    }];
-
-    /**
-     * Name of event fired, when tile is loaded
-     * @type {String}
-     */
-    var EVENT_TILE_LOADED = &quot;tile-loaded&quot;;
-
-    /**
-     * Name of event fired, when tile is not found on loading
-     * @type {String}
-     */
-    var EVENT_TILE_FAILED = &quot;tile-failed&quot;;
-
-    var Tile = exports.Tile = function(_Rectangle) {
-        _inherits(Tile, _Rectangle);
-
-        _createClass(Tile, [{
-            key: &#039;Publisher&#039;,
+    var StateHandler = exports.StateHandler = function() {
+        _createClass(StateHandler, [{
+            key: &#039;current&#039;,
 
 
             /**
-             * Return the Publisher
+             * get current state
+             * @return {Object} current state from STATES-array
              */
             get: function get() {
-                return PUBLISHER;
+                return this.states[this.i];
+            }
+
+            /**
+             * get number of states
+             * @return {number} number of states
+             */
+
+        }, {
+            key: &#039;length&#039;,
+            get: function get() {
+                return this.states.length;
             }
 
             /**
              * Constructor
-             * @param  {string} path=null - path to image
-             * @param  {number} x=0 - position x of tile
-             * @param  {number} y=0 - position y of tile
-             * @param  {number} w=0 - tile width
-             * @param  {number} h=0 - tile height
-             * @return {Tile} instance of Tile
+             * @param  {Array} states_array=[{value: 0, description: &#039;Default&#039;}] - [description]
+             * @return {StateHandler} instance of StateHandler
              */
 
         }]);
 
-        function Tile() {
-            var _ret;
+        function StateHandler() {
+            var states_array = arguments.length &lt;= 0 || arguments[0] === undefined ? [{
+                value: 0,
+                description: &#039;Default&#039;
+            }] : arguments[0];
 
-            var _ref = arguments.length &lt;= 0 || arguments[0] === undefined ? {} : arguments[0];
+            _classCallCheck(this, StateHandler);
 
-            var path = _ref.path;
-            var _ref$x = _ref.x;
-            var x = _ref$x === undefined ? 0 : _ref$x;
-            var _ref$y = _ref.y;
-            var y = _ref$y === undefined ? 0 : _ref$y;
-            var _ref$w = _ref.w;
-            var w = _ref$w === undefined ? 0 : _ref$w;
-            var _ref$h = _ref.h;
-            var h = _ref$h === undefined ? 0 : _ref$h;
-
-            _classCallCheck(this, Tile);
-
-            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
-
-            _this.state = new _StateHandler.StateHandler(STATES);
-            if (!path || typeof path !== &quot;string&quot; || path.length === 0) {
-                throw new TypeError(&#039;Path &#039; + path + &#039; needs to be of type string and should not be empty&#039;);
-            }
-            _this.path = path;
-            return _ret = _this, _possibleConstructorReturn(_this, _ret);
+            this.states = states_array;
+            this.i = 0;
+            return this;
         }
 
         /**
-         * initializes tile and starts loading image
-         * @return {Tile} instance of Tile
+         * get the next element
+         * @return {StateHandler} instance of StateHandler
          */
 
 
-        _createClass(Tile, [{
-            key: &#039;initialize&#039;,
-            value: function initialize() {
-                this.state.next();
-                _Helper.Helper.loadImage(this.path, function(img) {
-                    this.img = img;
-                    this.state.next();
-                    PUBLISHER.publish(EVENT_TILE_LOADED, this);
-                }.bind(this));
-
+        _createClass(StateHandler, [{
+            key: &#039;next&#039;,
+            value: function next() {
+                if (this.hasNext()) {
+                    this.i++;
+                }
                 return this;
             }
 
             /**
-             * check if tiles are equal
-             * @param  {Tile} tile - the specified tile to check against this
-             * @return {Boolean} is true, if x, y, width and height and path are the same
+             * get the previous element
+             * @return {StateHandler} instance of StateHandler
              */
 
         }, {
-            key: &#039;equals&#039;,
-            value: function equals(tile) {
-                return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), &#039;equals&#039;, this).call(this, tile) &amp;&amp; this.path === tile.path : false;
+            key: &#039;previous&#039;,
+            value: function previous() {
+                if (this.hasPrevious()) {
+                    this.i--;
+                }
+                return this;
+            }
+
+            /**
+             * change the state to specified state
+             * @param {number} state -
+             * @return {StateHandler} instance of StateHandler
+             */
+
+        }, {
+            key: &#039;changeTo&#039;,
+            value: function changeTo(state) {
+                if (state &gt;= 0 &amp;&amp; state &lt; this.length) {
+                    this.i = state;
+                }
+                return this;
+            }
+
+            /**
+             * checks if there is a next element
+             * @return {Boolean} wheter there is a next state or not
+             */
+
+        }, {
+            key: &#039;hasNext&#039;,
+            value: function hasNext() {
+                return this.i &lt; this.length - 1;
+            }
+
+            /**
+             * checks if there is a previous element
+             * @return {Boolean} wheter there is a previous state or not
+             */
+
+        }, {
+            key: &#039;hasPrevious&#039;,
+            value: function hasPrevious() {
+                return this.i &gt; 0;
             }
         }]);
 
-        return Tile;
-    }(_Rectangle2.Rectangle);
+        return StateHandler;
+    }();
 });</textarea>
   </div>
 </div>

@@ -1427,7 +1427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _State = __webpack_require__(9);
+	var _StateHandler = __webpack_require__(9);
 
 	var _Rectangle2 = __webpack_require__(6);
 
@@ -1511,7 +1511,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
-	    _this.state = new _State.State(STATES);
+	    _this.state = new _StateHandler.StateHandler(STATES);
 	    if (!path || typeof path !== "string" || path.length === 0) {
 	      throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
 	    }
@@ -1568,51 +1568,88 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var STATES = new WeakMap();
+	var StateHandler = exports.StateHandler = function () {
+	    _createClass(StateHandler, [{
+	        key: 'current',
 
-	var _makePrivate = function _makePrivate(o) {
-	    return STATES.set(o, {});
-	};
-	var _getPrivate = function _getPrivate(o) {
-	    return STATES.get(o);
-	};
 
-	var State = exports.State = function () {
+	        /**
+	         * get current state
+	         * @return {Object} current state from STATES-array
+	         */
+	        get: function get() {
+	            return this.states[this.i];
+	        }
 
-	    /**
-	     * Constructor
-	     * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
-	     * @return {State} instance of State
-	     */
+	        /**
+	         * get number of states
+	         * @return {number} number of states
+	         */
 
-	    function State() {
+	    }, {
+	        key: 'length',
+	        get: function get() {
+	            return this.states.length;
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }]);
+
+	    function StateHandler() {
 	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{ value: 0, description: 'Default' }] : arguments[0];
 
-	        _classCallCheck(this, State);
+	        _classCallCheck(this, StateHandler);
 
-	        _makePrivate(this);
-	        _getPrivate(this).STATES = states_array;
+	        this.states = states_array;
 	        this.i = 0;
 	        return this;
 	    }
 
 	    /**
-	     * get current state
-	     * @return {Object} a state from STATES-array
+	     * get the next element
+	     * @return {StateHandler} instance of StateHandler
 	     */
 
 
-	    _createClass(State, [{
+	    _createClass(StateHandler, [{
 	        key: 'next',
-
-
-	        /**
-	         * get the next element
-	         * @return {State} instance of State
-	         */
 	        value: function next() {
 	            if (this.hasNext()) {
 	                this.i++;
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * get the previous element
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }, {
+	        key: 'previous',
+	        value: function previous() {
+	            if (this.hasPrevious()) {
+	                this.i--;
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * change the state to specified state
+	         * @param {number} state -
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }, {
+	        key: 'changeTo',
+	        value: function changeTo(state) {
+	            if (state >= 0 && state < this.length) {
+	                this.i = state;
 	            }
 	            return this;
 	        }
@@ -1625,16 +1662,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'hasNext',
 	        value: function hasNext() {
-	            return this.i < _getPrivate(this).STATES.length - 1;
+	            return this.i < this.length - 1;
 	        }
+
+	        /**
+	         * checks if there is a previous element
+	         * @return {Boolean} wheter there is a previous state or not
+	         */
+
 	    }, {
-	        key: 'current',
-	        get: function get() {
-	            return _getPrivate(this).STATES[this.i];
+	        key: 'hasPrevious',
+	        value: function hasPrevious() {
+	            return this.i > 0;
 	        }
 	    }]);
 
-	    return State;
+	    return StateHandler;
 	}();
 
 /***/ },

@@ -41,7 +41,7 @@
 <dd></dd>
 <dt><a href="#Rectangle">Rectangle</a></dt>
 <dd></dd>
-<dt><a href="#State">State</a></dt>
+<dt><a href="#StateHandler">StateHandler</a></dt>
 <dd></dd>
 <dt><a href="#Tile">Tile</a></dt>
 <dd></dd>
@@ -791,35 +791,55 @@
 <ul>
 <li>rectangle <code><a href="#Rectangle">Rectangle</a></code> - the specified rectangle to check against this</li>
 </ul>
-<p><a name="State"></a></p>
-<h2 id="state">State</h2>
+<p><a name="StateHandler"></a></p>
+<h2 id="statehandler">StateHandler</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
-<li><a href="#State">State</a><ul>
-<li><a href="#new_State_new">new State(states_array)</a></li>
-<li><a href="#State+current">.current</a> ⇒ <code>Object</code></li>
-<li><a href="#State+next">.next()</a> ⇒ <code><a href="#State">State</a></code></li>
-<li><a href="#State+hasNext">.hasNext()</a> ⇒ <code>Boolean</code></li>
+<li><a href="#StateHandler">StateHandler</a><ul>
+<li><a href="#new_StateHandler_new">new StateHandler(states_array)</a></li>
+<li><a href="#StateHandler+current">.current</a> ⇒ <code>Object</code></li>
+<li><a href="#StateHandler+length">.length</a> ⇒ <code>number</code></li>
+<li><a href="#StateHandler+next">.next()</a> ⇒ <code><a href="#StateHandler">StateHandler</a></code></li>
+<li><a href="#StateHandler+previous">.previous()</a> ⇒ <code><a href="#StateHandler">StateHandler</a></code></li>
+<li><a href="#StateHandler+changeTo">.changeTo(state)</a> ⇒ <code><a href="#StateHandler">StateHandler</a></code></li>
+<li><a href="#StateHandler+hasNext">.hasNext()</a> ⇒ <code>Boolean</code></li>
+<li><a href="#StateHandler+hasPrevious">.hasPrevious()</a> ⇒ <code>Boolean</code></li>
 </ul>
 </li>
 </ul>
-<p><a name="new_State_new"></a></p>
-<h3 id="new-state-states_array-">new State(states_array)</h3>
+<p><a name="new_StateHandler_new"></a></p>
+<h3 id="new-statehandler-states_array-">new StateHandler(states_array)</h3>
 <p>Constructor</p>
-<p><strong>Returns</strong>: <code><a href="#State">State</a></code> - instance of State<br><strong>Params</strong></p>
+<p><strong>Returns</strong>: <code><a href="#StateHandler">StateHandler</a></code> - instance of StateHandler<br><strong>Params</strong></p>
 <ul>
 <li>states_array <code>Array</code> <code> = [{value:</code> - 0, description: &#39;Default&#39;}] - [description]</li>
 </ul>
-<p><a name="State+current"></a></p>
-<h3 id="state-current-code-object-code-">state.current ⇒ <code>Object</code></h3>
+<p><a name="StateHandler+current"></a></p>
+<h3 id="statehandler-current-code-object-code-">stateHandler.current ⇒ <code>Object</code></h3>
 <p>get current state</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code>Object</code> - a state from STATES-array<br><a name="State+next"></a></p>
-<h3 id="state-next-code-state-state-code-">state.next() ⇒ <code><a href="#State">State</a></code></h3>
+<p><strong>Kind</strong>: instance property of <code><a href="#StateHandler">StateHandler</a></code><br><strong>Returns</strong>: <code>Object</code> - current state from STATES-array<br><a name="StateHandler+length"></a></p>
+<h3 id="statehandler-length-code-number-code-">stateHandler.length ⇒ <code>number</code></h3>
+<p>get number of states</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#StateHandler">StateHandler</a></code><br><strong>Returns</strong>: <code>number</code> - number of states<br><a name="StateHandler+next"></a></p>
+<h3 id="statehandler-next-code-statehandler-statehandler-code-">stateHandler.next() ⇒ <code><a href="#StateHandler">StateHandler</a></code></h3>
 <p>get the next element</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code><a href="#State">State</a></code> - instance of State<br><a name="State+hasNext"></a></p>
-<h3 id="state-hasnext-code-boolean-code-">state.hasNext() ⇒ <code>Boolean</code></h3>
+<p><strong>Kind</strong>: instance method of <code><a href="#StateHandler">StateHandler</a></code><br><strong>Returns</strong>: <code><a href="#StateHandler">StateHandler</a></code> - instance of StateHandler<br><a name="StateHandler+previous"></a></p>
+<h3 id="statehandler-previous-code-statehandler-statehandler-code-">stateHandler.previous() ⇒ <code><a href="#StateHandler">StateHandler</a></code></h3>
+<p>get the previous element</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#StateHandler">StateHandler</a></code><br><strong>Returns</strong>: <code><a href="#StateHandler">StateHandler</a></code> - instance of StateHandler<br><a name="StateHandler+changeTo"></a></p>
+<h3 id="statehandler-changeto-state-code-statehandler-statehandler-code-">stateHandler.changeTo(state) ⇒ <code><a href="#StateHandler">StateHandler</a></code></h3>
+<p>change the state to specified state</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#StateHandler">StateHandler</a></code><br><strong>Returns</strong>: <code><a href="#StateHandler">StateHandler</a></code> - instance of StateHandler<br><strong>Params</strong></p>
+<ul>
+<li>state <code>number</code> - -</li>
+</ul>
+<p><a name="StateHandler+hasNext"></a></p>
+<h3 id="statehandler-hasnext-code-boolean-code-">stateHandler.hasNext() ⇒ <code>Boolean</code></h3>
 <p>checks if there is a next element</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#State">State</a></code><br><strong>Returns</strong>: <code>Boolean</code> - wheter there is a next state or not<br><a name="Tile"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#StateHandler">StateHandler</a></code><br><strong>Returns</strong>: <code>Boolean</code> - wheter there is a next state or not<br><a name="StateHandler+hasPrevious"></a></p>
+<h3 id="statehandler-hasprevious-code-boolean-code-">stateHandler.hasPrevious() ⇒ <code>Boolean</code></h3>
+<p>checks if there is a previous element</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#StateHandler">StateHandler</a></code><br><strong>Returns</strong>: <code>Boolean</code> - wheter there is a previous state or not<br><a name="Tile"></a></p>
 <h2 id="tile">Tile</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
