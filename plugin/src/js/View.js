@@ -72,10 +72,28 @@ export class View {
     }
 
     moveView(pos) {
-        this.mapView.setCenter(this.mapView.center.substract(pos));
+        let old = this.mapView.clone;
+        let p = this.mapView.center.substract(pos);
+        this.mapView.setCenter(p);
         let equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
         if (!equalizedMap.containsRect(this.viewport)) {
-            this.mapView.setCenter(this.mapView.center.add(pos));
+
+            if (equalizedMap.x > 0) {
+                this.mapView.x = old.x;
+            }
+
+            if (equalizedMap.y > 0) {
+                this.mapView.y = old.y;
+            }
+
+            if (equalizedMap.width + equalizedMap.x < this.viewport.width) {
+                this.mapView.x = old.x;
+            }
+
+            if (equalizedMap.height + equalizedMap.y < this.viewport.height) {
+                this.mapView.y = old.y;
+            }
+
         }
         return this;
     }

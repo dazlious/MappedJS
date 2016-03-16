@@ -138,10 +138,27 @@
         }, {
             key: 'moveView',
             value: function moveView(pos) {
-                this.mapView.setCenter(this.mapView.center.substract(pos));
+                var old = this.mapView.clone;
+                var p = this.mapView.center.substract(pos);
+                this.mapView.setCenter(p);
                 var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
                 if (!equalizedMap.containsRect(this.viewport)) {
-                    this.mapView.setCenter(this.mapView.center.add(pos));
+
+                    if (equalizedMap.x > 0) {
+                        this.mapView.x = old.x;
+                    }
+
+                    if (equalizedMap.y > 0) {
+                        this.mapView.y = old.y;
+                    }
+
+                    if (equalizedMap.width + equalizedMap.x < this.viewport.width) {
+                        this.mapView.x = old.x;
+                    }
+
+                    if (equalizedMap.height + equalizedMap.y < this.viewport.height) {
+                        this.mapView.y = old.y;
+                    }
                 }
                 return this;
             }
