@@ -12,10 +12,10 @@ const PUBLISHER = new Publisher();
 export class View {
 
     /**
-     * Returns current distortion
-     * @return {number} returns current distortion of latitude
+     * Returns current equalizationFactor
+     * @return {number} returns current equalizationFactor of latitude
      */
-    get distortion() {
+    get equalizationFactor() {
         return (Math.cos(this.center.lat));
     }
 
@@ -29,11 +29,10 @@ export class View {
 
     /**
      * Returns the offset of the map
-     * @param {number} distortion - the current latitude distortion
      * @return {number} calculated offset
      */
     get mapOffset() {
-        return this.offset.x + ((this.mapView.width - (this.mapView.width * this.distortion)) / 2);
+        return this.offset.x + ((this.mapView.width - (this.mapView.width * this.equalizationFactor)) / 2);
     }
 
     /**
@@ -42,7 +41,7 @@ export class View {
      */
     get visibleTiles() {
         return this.tiles.filter(function(t, i, a) {
-            let newTile = t.getDistortedRect(this.distortion).translate(this.mapOffset, this.offset.y);
+            let newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapOffset, this.offset.y);
             return this.viewport.intersects(newTile);
         }, this);
     }
@@ -100,9 +99,9 @@ export class View {
     drawTile(tile) {
         if (tile.state.current.value >= 2) {
             if (this.draw && typeof this.draw === "function") {
-                let x = ((tile.x * this.distortion) + this.mapOffset) | 0,
+                let x = ((tile.x * this.equalizationFactor) + this.mapOffset) | 0,
                     y = (tile.y + this.offset.y) | 0,
-                    w = ((tile.width * this.distortion) + 0.5) | 0,
+                    w = ((tile.width * this.equalizationFactor) + 0.5) | 0,
                     h = (tile.height + 0.5) | 0;
                 this.draw(tile.img, x, y, w, h);
             } else {
