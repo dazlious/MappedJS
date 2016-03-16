@@ -740,34 +740,39 @@ Eventname for unsubscribing
 
 * [Rectangle](#Rectangle)
     * [new Rectangle(x, y, width, height)](#new_Rectangle_new)
-    * [.center](#Rectangle+center) ⇒ <code>[Point](#Point)</code>
-    * [.topLeft](#Rectangle+topLeft) ⇒ <code>[Point](#Point)</code>
-    * [.topRight](#Rectangle+topRight) ⇒ <code>[Point](#Point)</code>
-    * [.bottomLeft](#Rectangle+bottomLeft) ⇒ <code>[Point](#Point)</code>
-    * [.bottomRight](#Rectangle+bottomRight) ⇒ <code>[Point](#Point)</code>
-    * [.right](#Rectangle+right) ⇒ <code>number</code>
-    * [.left](#Rectangle+left) ⇒ <code>number</code>
-    * [.top](#Rectangle+top) ⇒ <code>number</code>
-    * [.bottom](#Rectangle+bottom) ⇒ <code>number</code>
-    * [.intersects(rect)](#Rectangle+intersects) ⇒ <code>Boolean</code>
-    * [.contains(rectOrPoint)](#Rectangle+contains) ⇒ <code>Boolean</code>
-    * [.containsPoint(point)](#Rectangle+containsPoint) ⇒ <code>Boolean</code>
-    * [.containsRect(rect)](#Rectangle+containsRect) ⇒ <code>Boolean</code>
-    * [.getDistortedRect(factor)](#Rectangle+getDistortedRect) ⇒ <code>[Rectangle](#Rectangle)</code>
-    * [.scaleX(x)](#Rectangle+scaleX) ⇒ <code>[Rectangle](#Rectangle)</code>
-    * [.scaleY(y)](#Rectangle+scaleY) ⇒ <code>[Rectangle](#Rectangle)</code>
-    * [.scale(x, y)](#Rectangle+scale) ⇒ <code>[Rectangle](#Rectangle)</code>
-    * [.translate(x, y)](#Rectangle+translate) ⇒ <code>[Rectangle](#Rectangle)</code>
-    * [.transform(x, y, width, height)](#Rectangle+transform) ⇒ <code>[Rectangle](#Rectangle)</code>
-    * [.position(x, y)](#Rectangle+position) ⇒ <code>[Rectangle](#Rectangle)</code>
-    * [.size(x, y, width, height)](#Rectangle+size) ⇒ <code>[Rectangle](#Rectangle)</code>
-    * [.equals(rectangle)](#Rectangle+equals) ⇒ <code>Boolean</code>
+    * _instance_
+        * [.center](#Rectangle+center) ⇒ <code>[Point](#Point)</code>
+        * [.topLeft](#Rectangle+topLeft) ⇒ <code>[Point](#Point)</code>
+        * [.topRight](#Rectangle+topRight) ⇒ <code>[Point](#Point)</code>
+        * [.bottomLeft](#Rectangle+bottomLeft) ⇒ <code>[Point](#Point)</code>
+        * [.bottomRight](#Rectangle+bottomRight) ⇒ <code>[Point](#Point)</code>
+        * [.right](#Rectangle+right) ⇒ <code>number</code>
+        * [.left](#Rectangle+left) ⇒ <code>number</code>
+        * [.top](#Rectangle+top) ⇒ <code>number</code>
+        * [.bottom](#Rectangle+bottom) ⇒ <code>number</code>
+        * [.clone](#Rectangle+clone) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.intersects(rect)](#Rectangle+intersects) ⇒ <code>Boolean</code>
+        * [.contains(rectOrPoint)](#Rectangle+contains) ⇒ <code>Boolean</code>
+        * [.setCenter(point)](#Rectangle+setCenter) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.containsPoint(point)](#Rectangle+containsPoint) ⇒ <code>Boolean</code>
+        * [.containsRect(rect)](#Rectangle+containsRect) ⇒ <code>Boolean</code>
+        * [.getDistortedRect(factor)](#Rectangle+getDistortedRect) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.scaleX(x)](#Rectangle+scaleX) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.scaleY(y)](#Rectangle+scaleY) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.scale(x, y)](#Rectangle+scale) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.translate(x, y)](#Rectangle+translate) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.transform(x, y, width, height)](#Rectangle+transform) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.position(x, y)](#Rectangle+position) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.size(x, y, width, height)](#Rectangle+size) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.equals(rectangle)](#Rectangle+equals) ⇒ <code>Boolean</code>
+    * _static_
+        * [.createFromRectangle(rect)](#Rectangle.createFromRectangle) ⇒ <code>[Rectangle](#Rectangle)</code>
 
 <a name="new_Rectangle_new"></a>
 ### new Rectangle(x, y, width, height)
 Constructor
 
-**Returns**: <code>[Rectangle](#Rectangle)</code> - new instance of Rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
 **Params**
 
 - x <code>number</code> <code> = 0</code> - x-position of specified rectangle
@@ -829,6 +834,12 @@ Returns bottom position of Rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>number</code> - bottom position  
+<a name="Rectangle+clone"></a>
+### rectangle.clone ⇒ <code>[Rectangle](#Rectangle)</code>
+clones a rectangle
+
+**Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - duplicated rectangle  
 <a name="Rectangle+intersects"></a>
 ### rectangle.intersects(rect) ⇒ <code>Boolean</code>
 Checks whether Rectangle intersects with specified Rectangle
@@ -848,6 +859,16 @@ Checks whether Rectangle entirely contains the Rectangle or Point
 **Params**
 
 - rectOrPoint <code>[Rectangle](#Rectangle)</code> | <code>[Point](#Point)</code> - the specified point or rectangle to check against
+
+<a name="Rectangle+setCenter"></a>
+### rectangle.setCenter(point) ⇒ <code>[Rectangle](#Rectangle)</code>
+Sets the Center of this Rectangle to specified point
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
+**Params**
+
+- point <code>[Point](#Point)</code> - specified point to set center of rectangle to
 
 <a name="Rectangle+containsPoint"></a>
 ### rectangle.containsPoint(point) ⇒ <code>Boolean</code>
@@ -967,6 +988,16 @@ check if rectangles are equal
 **Params**
 
 - rectangle <code>[Rectangle](#Rectangle)</code> - the specified rectangle to check against this
+
+<a name="Rectangle.createFromRectangle"></a>
+### Rectangle.createFromRectangle(rect) ⇒ <code>[Rectangle](#Rectangle)</code>
+Creates a Rectangle from specified Rectangle
+
+**Kind**: static method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - the point specified  
+**Params**
+
+- rect <code>[Rectangle](#Rectangle)</code> - specified Rectangle
 
 <a name="StateHandler"></a>
 ## StateHandler
@@ -1191,8 +1222,6 @@ name of imagedata in data.json
 * [View](#View)
     * [new View(settings, viewport, mapView, bounds, center, data)](#new_View_new)
     * [.equalizationFactor](#View+equalizationFactor) ⇒ <code>number</code>
-    * [.offset](#View+offset)
-    * [.mapOffset](#View+mapOffset) ⇒ <code>number</code>
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
     * [.onTilesLoaded(tile)](#View+onTilesLoaded) ⇒ <code>[TileMap](#TileMap)</code>
     * [.drawVisibleTiles()](#View+drawVisibleTiles) ⇒ <code>[TileMap](#TileMap)</code>
@@ -1220,17 +1249,6 @@ Returns current equalizationFactor
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>number</code> - returns current equalizationFactor of latitude  
-<a name="View+offset"></a>
-### view.offset
-Returns the offset of the center
-
-**Kind**: instance property of <code>[View](#View)</code>  
-<a name="View+mapOffset"></a>
-### view.mapOffset ⇒ <code>number</code>
-Returns the offset of the map
-
-**Kind**: instance property of <code>[View](#View)</code>  
-**Returns**: <code>number</code> - calculated offset  
 <a name="View+visibleTiles"></a>
 ### view.visibleTiles ⇒ <code>array</code>
 get all visible tiles

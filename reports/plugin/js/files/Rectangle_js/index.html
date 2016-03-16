@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">70.14</p>
+      <p class="stat">70.51</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">413</p>
+      <p class="stat">447</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">81.52</p>
+      <p class="stat">81.92</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.80</p>
+      <p class="stat">2.99</p>
     </div>
   </div>
 </div>
@@ -286,12 +286,23 @@
             }
 
             /**
+             * clones a rectangle
+             * @return {Rectangle} duplicated rectangle
+             */
+
+        }, {
+            key: &#039;clone&#039;,
+            get: function get() {
+                return Rectangle.createFromRectangle(this);
+            }
+
+            /**
              * Constructor
              * @param  {number} x=0 - x-position of specified rectangle
              * @param  {number} y=0 - y-position of specified rectangle
              * @param  {number} width=0 - width of specified rectangle
              * @param  {number} height=0 - height of specified rectangle
-             * @return {Rectangle} new instance of Rectangle
+             * @return {Rectangle} instance of Rectangle
              */
 
         }]);
@@ -337,6 +348,20 @@
             key: &#039;contains&#039;,
             value: function contains(rectOrPoint) {
                 return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
+            }
+
+            /**
+             * Sets the Center of this Rectangle to specified point
+             * @param  {Point} point - specified point to set center of rectangle to
+             * @return {Rectangle} instance of Rectangle
+             */
+
+        }, {
+            key: &#039;setCenter&#039;,
+            value: function setCenter(point) {
+                var difference = point.substract(this.center);
+                this.translate(difference.x, difference.y);
+                return this;
             }
 
             /**
@@ -501,6 +526,15 @@
 
         return Rectangle;
     }(_Point2.Point);
+
+    /**
+     * Creates a Rectangle from specified Rectangle
+     * @param  {Rectangle} rect - specified Rectangle
+     * @return {Rectangle} the point specified
+     */
+    Rectangle.createFromRectangle = function(rect) {
+        return new Rectangle(rect.x, rect.y, rect.width, rect.height);
+    };
 });</textarea>
   </div>
 </div>
