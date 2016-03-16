@@ -537,7 +537,7 @@
                             pointerPos2 = this.getRelativePosition(pointerPos[1]);
 
                         currentDist = pointerPos1.distance(pointerPos2);
-                        currentPos = pointerPos1.sub(pointerPos2).divide(2, 2);
+                        currentPos = pointerPos1.substract(pointerPos2).divide(2, 2);
                     }
                 } // touch is used
                 else {
@@ -549,7 +549,7 @@
                         var pos1 = this.getRelativePosition(e[0]),
                             pos2 = this.getRelativePosition(e[1]);
                         currentDist = pos1.distance(pos2);
-                        currentPos = pos1.sub(pos2).divide(2, 2);
+                        currentPos = pos1.substract(pos2).divide(2, 2);
                     }
                 }
 
@@ -701,9 +701,9 @@
 
                     if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
 
-                        var direction = this.settings.callbacks.swipe ? this.end.sub(this.start) : this.end.sub(this.oldMove);
+                        var direction = this.settings.callbacks.swipe ? this.end.substract(this.start) : this.end.substract(this.oldMove);
 
-                        var vLDirection = direction.length(),
+                        var vLDirection = direction.length,
                             directionNormalized = direction.divide(vLDirection, vLDirection),
                             distance = this.end.distance(this.start),
                             speed = this.calculateSpeed(distance, timeDiff);
@@ -849,7 +849,7 @@
                 var clientBounds = this.container.getBoundingClientRect(),
                     pos = new _Point.Point(e.clientX, e.clientY),
                     bounds = new _Point.Point(clientBounds.left, clientBounds.top);
-                return pos.sub(bounds).divide(clientBounds.width, clientBounds.height);
+                return pos.substract(bounds).divide(clientBounds.width, clientBounds.height);
             }
 
             /**

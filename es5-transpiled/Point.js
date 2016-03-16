@@ -42,13 +42,37 @@
     }();
 
     var Point = exports.Point = function() {
+        _createClass(Point, [{
+            key: "length",
 
-        /**
-         * Constructor
-         * @param  {number} x = 0 - representation of x coordinate
-         * @param  {number} y = 0 - representation of y coordinate
-         * @return {Point} new instance of point
-         */
+
+            /**
+             * length of a point
+             * @return {number} length of a point
+             */
+            get: function get() {
+                return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+            }
+
+            /**
+             * gets a clone of this point
+             * @return {Point} new instance equals this point
+             */
+
+        }, {
+            key: "clone",
+            get: function get() {
+                return Point.createFromPoint(this);
+            }
+
+            /**
+             * Constructor
+             * @param  {number} x = 0 - representation of x coordinate
+             * @param  {number} y = 0 - representation of y coordinate
+             * @return {Point} new instance of point
+             */
+
+        }]);
 
         function Point() {
             var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -69,9 +93,11 @@
 
 
         _createClass(Point, [{
-            key: "sub",
-            value: function sub(point) {
-                return new Point(this.x - point.x, this.y - point.y);
+            key: "substract",
+            value: function substract(point) {
+                this.x -= point.x;
+                this.y -= point.y;
+                return this;
             }
 
             /**
@@ -83,7 +109,9 @@
         }, {
             key: "add",
             value: function add(point) {
-                return new Point(this.x + point.x, this.y + point.y);
+                this.x += point.x;
+                this.y += point.y;
+                return this;
             }
 
             /**
@@ -94,9 +122,13 @@
              */
 
         }, {
-            key: "mult",
-            value: function mult(x, y) {
-                return new Point(this.x * x, this.y * y);
+            key: "multiply",
+            value: function multiply(x) {
+                var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+                this.x *= x;
+                this.y *= y;
+                return this;
             }
 
             /**
@@ -108,8 +140,12 @@
 
         }, {
             key: "divide",
-            value: function divide(x, y) {
-                return new Point(this.x / x, this.y / y);
+            value: function divide(x) {
+                var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+                this.x /= x;
+                this.y /= y;
+                return this;
             }
 
             /**
@@ -125,18 +161,6 @@
             }
 
             /**
-             * Returns the difference from this Point to a specified Point
-             * @param  {Point} point - the specified point to be measured against this Point
-             * @return {Point} the difference between this Point and specified point
-             */
-
-        }, {
-            key: "difference",
-            value: function difference(point) {
-                return new Point(this.x - point.x, this.y - point.y);
-            }
-
-            /**
              * Returns the distance from this Point to a specified Point
              * @param  {Point} point - the specified point to be measured against this Point
              * @return {Point} the distance between this Point and specified point
@@ -145,17 +169,11 @@
         }, {
             key: "distance",
             value: function distance(point) {
-                var difference = this.difference(point);
-                return difference.length();
-            }
-        }, {
-            key: "length",
-            value: function length() {
-                return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+                return this.clone.substract(point).length;
             }
 
             /**
-             * moves a point by x and y
+             * translates a point by x and y
              * @param  {number} x - value to move x
              * @param  {number} y - value to move y
              * @return {Point} instance of Point
@@ -166,6 +184,21 @@
             value: function translate(x, y) {
                 this.x += x;
                 this.y += y;
+                return this;
+            }
+
+            /**
+             * positions a point by x and y
+             * @param  {number} x - value to position x
+             * @param  {number} y - value to position y
+             * @return {Point} instance of Point
+             */
+
+        }, {
+            key: "position",
+            value: function position(x, y) {
+                this.x = x;
+                this.y = y;
                 return this;
             }
 

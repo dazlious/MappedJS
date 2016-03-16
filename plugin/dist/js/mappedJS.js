@@ -435,7 +435,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resizeView',
 	        value: function resizeView() {
-	            this.view.viewport.change(this.left, this.top, this.width, this.height);
+	            this.view.viewport.size(this.left, this.top, this.width, this.height);
 	            this.view.drawVisibleTiles();
 	            return this;
 	        }
@@ -570,7 +570,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -578,6 +578,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Point = exports.Point = function () {
+	  _createClass(Point, [{
+	    key: "length",
+
+
+	    /**
+	     * length of a point
+	     * @return {number} length of a point
+	     */
+	    get: function get() {
+	      return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+	    }
+
+	    /**
+	     * gets a clone of this point
+	     * @return {Point} new instance equals this point
+	     */
+
+	  }, {
+	    key: "clone",
+	    get: function get() {
+	      return Point.createFromPoint(this);
+	    }
 
 	    /**
 	     * Constructor
@@ -586,138 +608,149 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {Point} new instance of point
 	     */
 
-	    function Point() {
-	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	  }]);
 
-	        _classCallCheck(this, Point);
+	  function Point() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-	        this.x = x;
-	        this.y = y;
-	        return this;
+	    _classCallCheck(this, Point);
+
+	    this.x = x;
+	    this.y = y;
+	    return this;
+	  }
+
+	  /**
+	   * substracts 2 points
+	   * @param  {Point} point - the point to substract from this
+	   * @return {Point} difference between this point and parameter point
+	   */
+
+
+	  _createClass(Point, [{
+	    key: "substract",
+	    value: function substract(point) {
+	      this.x -= point.x;
+	      this.y -= point.y;
+	      return this;
 	    }
 
 	    /**
-	     * substracts 2 points
-	     * @param  {Point} point - the point to substract from this
-	     * @return {Point} difference between this point and parameter point
+	     * adds 2 points
+	     * @param  {Point} point - the point to add to this
+	     * @return {Point} addition of this point and parameter point
 	     */
 
+	  }, {
+	    key: "add",
+	    value: function add(point) {
+	      this.x += point.x;
+	      this.y += point.y;
+	      return this;
+	    }
 
-	    _createClass(Point, [{
-	        key: "sub",
-	        value: function sub(point) {
-	            return new Point(this.x - point.x, this.y - point.y);
-	        }
+	    /**
+	     * multiplicates a point with a given x and y
+	     * @param  {number} x - factor to multiplicate x with
+	     * @param  {number} y - factor to multiplicate y with
+	     * @return {Point} Returns a new instance
+	     */
 
-	        /**
-	         * adds 2 points
-	         * @param  {Point} point - the point to add to this
-	         * @return {Point} addition of this point and parameter point
-	         */
+	  }, {
+	    key: "multiply",
+	    value: function multiply(x) {
+	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	    }, {
-	        key: "add",
-	        value: function add(point) {
-	            return new Point(this.x + point.x, this.y + point.y);
-	        }
+	      this.x *= x;
+	      this.y *= y;
+	      return this;
+	    }
 
-	        /**
-	         * multiplicates a point with a given x and y
-	         * @param  {number} x - factor to multiplicate x with
-	         * @param  {number} y - factor to multiplicate y with
-	         * @return {Point} Returns a new instance
-	         */
+	    /**
+	     * divide a point with a given x and y
+	     * @param  {number} x - factor to divide x with
+	     * @param  {number} y - factor to divide y with
+	     * @return {Point} Returns a new instance
+	     */
 
-	    }, {
-	        key: "mult",
-	        value: function mult(x, y) {
-	            return new Point(this.x * x, this.y * y);
-	        }
+	  }, {
+	    key: "divide",
+	    value: function divide(x) {
+	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	        /**
-	         * divide a point with a given x and y
-	         * @param  {number} x - factor to divide x with
-	         * @param  {number} y - factor to divide y with
-	         * @return {Point} Returns a new instance
-	         */
+	      this.x /= x;
+	      this.y /= y;
+	      return this;
+	    }
 
-	    }, {
-	        key: "divide",
-	        value: function divide(x, y) {
-	            return new Point(this.x / x, this.y / y);
-	        }
+	    /**
+	     * check if points are equal
+	     * @param  {Point} point - the point to check against this
+	     * @return {Boolean} is true, if x and y are the same
+	     */
 
-	        /**
-	         * check if points are equal
-	         * @param  {Point} point - the point to check against this
-	         * @return {Boolean} is true, if x and y are the same
-	         */
+	  }, {
+	    key: "equals",
+	    value: function equals(point) {
+	      return this.x === point.x && this.y === point.y;
+	    }
 
-	    }, {
-	        key: "equals",
-	        value: function equals(point) {
-	            return this.x === point.x && this.y === point.y;
-	        }
+	    /**
+	     * Returns the distance from this Point to a specified Point
+	     * @param  {Point} point - the specified point to be measured against this Point
+	     * @return {Point} the distance between this Point and specified point
+	     */
 
-	        /**
-	         * Returns the difference from this Point to a specified Point
-	         * @param  {Point} point - the specified point to be measured against this Point
-	         * @return {Point} the difference between this Point and specified point
-	         */
+	  }, {
+	    key: "distance",
+	    value: function distance(point) {
+	      return this.clone.substract(point).length;
+	    }
 
-	    }, {
-	        key: "difference",
-	        value: function difference(point) {
-	            return new Point(this.x - point.x, this.y - point.y);
-	        }
+	    /**
+	     * translates a point by x and y
+	     * @param  {number} x - value to move x
+	     * @param  {number} y - value to move y
+	     * @return {Point} instance of Point
+	     */
 
-	        /**
-	         * Returns the distance from this Point to a specified Point
-	         * @param  {Point} point - the specified point to be measured against this Point
-	         * @return {Point} the distance between this Point and specified point
-	         */
+	  }, {
+	    key: "translate",
+	    value: function translate(x, y) {
+	      this.x += x;
+	      this.y += y;
+	      return this;
+	    }
 
-	    }, {
-	        key: "distance",
-	        value: function distance(point) {
-	            var difference = this.difference(point);
-	            return difference.length();
-	        }
-	    }, {
-	        key: "length",
-	        value: function length() {
-	            return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-	        }
+	    /**
+	     * positions a point by x and y
+	     * @param  {number} x - value to position x
+	     * @param  {number} y - value to position y
+	     * @return {Point} instance of Point
+	     */
 
-	        /**
-	         * moves a point by x and y
-	         * @param  {number} x - value to move x
-	         * @param  {number} y - value to move y
-	         * @return {Point} instance of Point
-	         */
+	  }, {
+	    key: "position",
+	    value: function position(x, y) {
+	      this.x = x;
+	      this.y = y;
+	      return this;
+	    }
 
-	    }, {
-	        key: "translate",
-	        value: function translate(x, y) {
-	            this.x += x;
-	            this.y += y;
-	            return this;
-	        }
+	    /**
+	     * translates a Point to an array
+	     * @return {Array} Returns Point as Array(x, y)
+	     */
 
-	        /**
-	         * translates a Point to an array
-	         * @return {Array} Returns Point as Array(x, y)
-	         */
+	  }, {
+	    key: "toArray",
+	    value: function toArray() {
+	      return [this.x, this.y];
+	    }
+	  }]);
 
-	    }, {
-	        key: "toArray",
-	        value: function toArray() {
-	            return [this.x, this.y];
-	        }
-	    }]);
-
-	    return Point;
+	  return Point;
 	}();
 
 	/**
@@ -728,7 +761,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	Point.createFromPoint = function (point) {
-	    return new Point(point.x, point.y);
+	  return new Point(point.x, point.y);
 		};
 
 /***/ },
@@ -741,6 +774,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	exports.Rectangle = undefined;
+
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -942,30 +977,76 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'getDistortedRect',
 	        value: function getDistortedRect(factor) {
-	            return new Rectangle(this.x * factor, this.y, this.width * factor, this.height);
+	            return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
+	        }
+
+	        /**
+	         * scale x and width of rectangle
+	         * @param  {number} x - factor to be applied to scale
+	         * @return {Rectangle} scaled Rectangle
+	         */
+
+	    }, {
+	        key: 'scaleX',
+	        value: function scaleX(x) {
+	            this.x *= x;
+	            this.width *= x;
+	            return this;
+	        }
+
+	        /**
+	         * scale y and height of rectangle
+	         * @param  {number} y - factor to be applied to scale
+	         * @return {Rectangle} new scaled Rectangle
+	         */
+
+	    }, {
+	        key: 'scaleY',
+	        value: function scaleY(y) {
+	            this.y *= y;
+	            this.height *= y;
+	            return this;
+	        }
+
+	        /**
+	         * scale x and y for width and height of rectangle
+	         * @param  {number} x - factor to be applied to scale
+	         * @param  {number} y = x - factor to be applied to scale
+	         * @return {Rectangle} new scaled Rectangle
+	         */
+
+	    }, {
+	        key: 'scale',
+	        value: function scale(x) {
+	            var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	            this.x *= x;
+	            this.y *= y;
+	            this.width *= x;
+	            this.height *= y;
+	            return this;
 	        }
 
 	        /**
 	         * moves a rectangle by specified coords
-	         * @param  {number} x - how far to move in x direction
-	         * @param  {number} y - how far to move in y direction
+	         * @param  {number} x - specified x to be added to x position
+	         * @param  {number} y - specified y to be added to y position
 	         * @return {Rectangle} Returns the altered rectangle
 	         */
 
 	    }, {
 	        key: 'translate',
 	        value: function translate(x, y) {
-	            this.x += x;
-	            this.y += y;
+	            _get(Object.getPrototypeOf(Rectangle.prototype), 'translate', this).call(this, x, y);
 	            return this;
 	        }
 
 	        /**
 	         * transforms a rectangle by specified coords
-	         * @param  {number} x - how far to transform in x direction
-	         * @param  {number} y - how far to transform in y direction
-	         * @param  {number} width - adds to the width
-	         * @param  {number} height - adds to the width
+	         * @param  {number} x - specified x to be added to x position
+	         * @param  {number} y - specified y to be added to y position
+	         * @param  {number} width - specified width to be added to this width
+	         * @param  {number} height - specified height to be added to this height
 	         * @return {Rectangle} Returns the altered rectangle
 	         */
 
@@ -979,33 +1060,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * moves a rectangle by specified coords
-	         * @param  {number} x - how far to move in x direction
-	         * @param  {number} y - how far to move in y direction
+	         * changes the position a rectangle by specified coords
+	         * @param  {number} x - the new x position
+	         * @param  {number} y - he new y position
 	         * @return {Rectangle} Returns the altered rectangle
 	         */
 
 	    }, {
-	        key: 'move',
-	        value: function move(x, y) {
-	            this.x = x;
-	            this.y = y;
+	        key: 'position',
+	        value: function position(x, y) {
+	            _get(Object.getPrototypeOf(Rectangle.prototype), 'position', this).call(this, x, y);
 	            return this;
 	        }
 
 	        /**
-	         * changes a rectangle by specified coords
-	         * @param  {number} x - how far to change in x direction
-	         * @param  {number} y - how far to change in y direction
-	         * @param  {number} width - changes the width
-	         * @param  {number} height - changes the width
+	         * changes the size of a rectangle by specified params
+	         * @param  {number} x - the new x position
+	         * @param  {number} y - the new y position
+	         * @param  {number} width - the new width
+	         * @param  {number} height - the new width
 	         * @return {Rectangle} Returns the altered rectangle
 	         */
 
 	    }, {
-	        key: 'change',
-	        value: function change(x, y, width, height) {
-	            this.move(x, y);
+	        key: 'size',
+	        value: function size(x, y, width, height) {
+	            this.position(x, y);
 	            this.width = width;
 	            this.height = height;
 	            return this;
@@ -1145,7 +1225,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'offset',
 	        get: function get() {
 	            var center = this.center.toPoint(this.bounds, this.mapView);
-	            return this.viewport.center.sub(center);
+	            return this.viewport.center.substract(center);
 	        }
 
 	        /**
@@ -2236,7 +2316,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        pointerPos2 = this.getRelativePosition(pointerPos[1]);
 
 	                    currentDist = pointerPos1.distance(pointerPos2);
-	                    currentPos = pointerPos1.sub(pointerPos2).divide(2, 2);
+	                    currentPos = pointerPos1.substract(pointerPos2).divide(2, 2);
 	                }
 	            } // touch is used
 	            else {
@@ -2248,7 +2328,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        var pos1 = this.getRelativePosition(e[0]),
 	                            pos2 = this.getRelativePosition(e[1]);
 	                        currentDist = pos1.distance(pos2);
-	                        currentPos = pos1.sub(pos2).divide(2, 2);
+	                        currentPos = pos1.substract(pos2).divide(2, 2);
 	                    }
 	                }
 
@@ -2400,9 +2480,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
 
-	                        var direction = this.settings.callbacks.swipe ? this.end.sub(this.start) : this.end.sub(this.oldMove);
+	                        var direction = this.settings.callbacks.swipe ? this.end.substract(this.start) : this.end.substract(this.oldMove);
 
-	                        var vLDirection = direction.length(),
+	                        var vLDirection = direction.length,
 	                            directionNormalized = direction.divide(vLDirection, vLDirection),
 	                            distance = this.end.distance(this.start),
 	                            speed = this.calculateSpeed(distance, timeDiff);
@@ -2549,7 +2629,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var clientBounds = this.container.getBoundingClientRect(),
 	                pos = new _Point.Point(e.clientX, e.clientY),
 	                bounds = new _Point.Point(clientBounds.left, clientBounds.top);
-	            return pos.sub(bounds).divide(clientBounds.width, clientBounds.height);
+	            return pos.substract(bounds).divide(clientBounds.width, clientBounds.height);
 	        }
 
 	        /**

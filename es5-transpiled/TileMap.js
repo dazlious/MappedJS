@@ -199,7 +199,7 @@
         }, {
             key: 'resizeView',
             value: function resizeView() {
-                this.view.viewport.change(this.left, this.top, this.width, this.height);
+                this.view.viewport.size(this.left, this.top, this.width, this.height);
                 this.view.drawVisibleTiles();
                 return this;
             }

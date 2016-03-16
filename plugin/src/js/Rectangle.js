@@ -131,27 +131,62 @@ export class Rectangle extends Point {
      * @return {Rectangle} a new instance of Rectangle
      */
     getDistortedRect(factor) {
-        return new Rectangle(this.x * factor, this.y, this.width * factor, this.height);
+        return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
+    }
+
+    /**
+     * scale x and width of rectangle
+     * @param  {number} x - factor to be applied to scale
+     * @return {Rectangle} scaled Rectangle
+     */
+    scaleX(x) {
+        this.x *= x;
+        this.width *= x;
+        return this;
+    }
+
+    /**
+     * scale y and height of rectangle
+     * @param  {number} y - factor to be applied to scale
+     * @return {Rectangle} new scaled Rectangle
+     */
+    scaleY(y) {
+        this.y *= y;
+        this.height *= y;
+        return this;
+    }
+
+    /**
+     * scale x and y for width and height of rectangle
+     * @param  {number} x - factor to be applied to scale
+     * @param  {number} y = x - factor to be applied to scale
+     * @return {Rectangle} new scaled Rectangle
+     */
+    scale(x, y = x) {
+        this.x *= x;
+        this.y *= y;
+        this.width *= x;
+        this.height *= y;
+        return this;
     }
 
     /**
      * moves a rectangle by specified coords
-     * @param  {number} x - how far to move in x direction
-     * @param  {number} y - how far to move in y direction
+     * @param  {number} x - specified x to be added to x position
+     * @param  {number} y - specified y to be added to y position
      * @return {Rectangle} Returns the altered rectangle
      */
     translate(x, y) {
-        this.x += x;
-        this.y += y;
+        super.translate(x, y);
         return this;
     }
 
     /**
      * transforms a rectangle by specified coords
-     * @param  {number} x - how far to transform in x direction
-     * @param  {number} y - how far to transform in y direction
-     * @param  {number} width - adds to the width
-     * @param  {number} height - adds to the width
+     * @param  {number} x - specified x to be added to x position
+     * @param  {number} y - specified y to be added to y position
+     * @param  {number} width - specified width to be added to this width
+     * @param  {number} height - specified height to be added to this height
      * @return {Rectangle} Returns the altered rectangle
      */
     transform(x, y, width, height) {
@@ -162,27 +197,26 @@ export class Rectangle extends Point {
     }
 
     /**
-     * moves a rectangle by specified coords
-     * @param  {number} x - how far to move in x direction
-     * @param  {number} y - how far to move in y direction
+     * changes the position a rectangle by specified coords
+     * @param  {number} x - the new x position
+     * @param  {number} y - he new y position
      * @return {Rectangle} Returns the altered rectangle
      */
-    move(x, y) {
-        this.x = x;
-        this.y = y;
+    position(x, y) {
+        super.position(x, y);
         return this;
     }
 
     /**
-     * changes a rectangle by specified coords
-     * @param  {number} x - how far to change in x direction
-     * @param  {number} y - how far to change in y direction
-     * @param  {number} width - changes the width
-     * @param  {number} height - changes the width
+     * changes the size of a rectangle by specified params
+     * @param  {number} x - the new x position
+     * @param  {number} y - the new y position
+     * @param  {number} width - the new width
+     * @param  {number} height - the new width
      * @return {Rectangle} Returns the altered rectangle
      */
-    change(x, y, width, height) {
-        this.move(x, y);
+    size(x, y, width, height) {
+        this.position(x, y);
         this.width = width;
         this.height = height;
         return this;

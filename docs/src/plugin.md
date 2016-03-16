@@ -501,14 +501,16 @@ called when loading and initialization is finished
 * [Point](#Point)
     * [new Point(x, y)](#new_Point_new)
     * _instance_
-        * [.sub(point)](#Point+sub) ⇒ <code>[Point](#Point)</code>
+        * [.length](#Point+length) ⇒ <code>number</code>
+        * [.clone](#Point+clone) ⇒ <code>[Point](#Point)</code>
+        * [.substract(point)](#Point+substract) ⇒ <code>[Point](#Point)</code>
         * [.add(point)](#Point+add) ⇒ <code>[Point](#Point)</code>
-        * [.mult(x, y)](#Point+mult) ⇒ <code>[Point](#Point)</code>
+        * [.multiply(x, y)](#Point+multiply) ⇒ <code>[Point](#Point)</code>
         * [.divide(x, y)](#Point+divide) ⇒ <code>[Point](#Point)</code>
         * [.equals(point)](#Point+equals) ⇒ <code>Boolean</code>
-        * [.difference(point)](#Point+difference) ⇒ <code>[Point](#Point)</code>
         * [.distance(point)](#Point+distance) ⇒ <code>[Point](#Point)</code>
         * [.translate(x, y)](#Point+translate) ⇒ <code>[Point](#Point)</code>
+        * [.position(x, y)](#Point+position) ⇒ <code>[Point](#Point)</code>
         * [.toArray()](#Point+toArray) ⇒ <code>Array</code>
     * _static_
         * [.createFromPoint(point)](#Point.createFromPoint) ⇒ <code>[Point](#Point)</code>
@@ -523,8 +525,20 @@ Constructor
 - x <code>number</code> <code> = 0</code> - = 0 - representation of x coordinate
 - y <code>number</code> <code> = 0</code> - = 0 - representation of y coordinate
 
-<a name="Point+sub"></a>
-### point.sub(point) ⇒ <code>[Point](#Point)</code>
+<a name="Point+length"></a>
+### point.length ⇒ <code>number</code>
+length of a point
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+**Returns**: <code>number</code> - length of a point  
+<a name="Point+clone"></a>
+### point.clone ⇒ <code>[Point](#Point)</code>
+gets a clone of this point
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+**Returns**: <code>[Point](#Point)</code> - new instance equals this point  
+<a name="Point+substract"></a>
+### point.substract(point) ⇒ <code>[Point](#Point)</code>
 substracts 2 points
 
 **Kind**: instance method of <code>[Point](#Point)</code>  
@@ -543,8 +557,8 @@ adds 2 points
 
 - point <code>[Point](#Point)</code> - the point to add to this
 
-<a name="Point+mult"></a>
-### point.mult(x, y) ⇒ <code>[Point](#Point)</code>
+<a name="Point+multiply"></a>
+### point.multiply(x, y) ⇒ <code>[Point](#Point)</code>
 multiplicates a point with a given x and y
 
 **Kind**: instance method of <code>[Point](#Point)</code>  
@@ -575,16 +589,6 @@ check if points are equal
 
 - point <code>[Point](#Point)</code> - the point to check against this
 
-<a name="Point+difference"></a>
-### point.difference(point) ⇒ <code>[Point](#Point)</code>
-Returns the difference from this Point to a specified Point
-
-**Kind**: instance method of <code>[Point](#Point)</code>  
-**Returns**: <code>[Point](#Point)</code> - the difference between this Point and specified point  
-**Params**
-
-- point <code>[Point](#Point)</code> - the specified point to be measured against this Point
-
 <a name="Point+distance"></a>
 ### point.distance(point) ⇒ <code>[Point](#Point)</code>
 Returns the distance from this Point to a specified Point
@@ -597,7 +601,7 @@ Returns the distance from this Point to a specified Point
 
 <a name="Point+translate"></a>
 ### point.translate(x, y) ⇒ <code>[Point](#Point)</code>
-moves a point by x and y
+translates a point by x and y
 
 **Kind**: instance method of <code>[Point](#Point)</code>  
 **Returns**: <code>[Point](#Point)</code> - instance of Point  
@@ -605,6 +609,17 @@ moves a point by x and y
 
 - x <code>number</code> - value to move x
 - y <code>number</code> - value to move y
+
+<a name="Point+position"></a>
+### point.position(x, y) ⇒ <code>[Point](#Point)</code>
+positions a point by x and y
+
+**Kind**: instance method of <code>[Point](#Point)</code>  
+**Returns**: <code>[Point](#Point)</code> - instance of Point  
+**Params**
+
+- x <code>number</code> - value to position x
+- y <code>number</code> - value to position y
 
 <a name="Point+toArray"></a>
 ### point.toArray() ⇒ <code>Array</code>
@@ -723,10 +738,13 @@ Eventname for unsubscribing
     * [.containsPoint(point)](#Rectangle+containsPoint) ⇒ <code>Boolean</code>
     * [.containsRect(rect)](#Rectangle+containsRect) ⇒ <code>Boolean</code>
     * [.getDistortedRect(factor)](#Rectangle+getDistortedRect) ⇒ <code>[Rectangle](#Rectangle)</code>
+    * [.scaleX(x)](#Rectangle+scaleX) ⇒ <code>[Rectangle](#Rectangle)</code>
+    * [.scaleY(y)](#Rectangle+scaleY) ⇒ <code>[Rectangle](#Rectangle)</code>
+    * [.scale(x, y)](#Rectangle+scale) ⇒ <code>[Rectangle](#Rectangle)</code>
     * [.translate(x, y)](#Rectangle+translate) ⇒ <code>[Rectangle](#Rectangle)</code>
     * [.transform(x, y, width, height)](#Rectangle+transform) ⇒ <code>[Rectangle](#Rectangle)</code>
-    * [.move(x, y)](#Rectangle+move) ⇒ <code>[Rectangle](#Rectangle)</code>
-    * [.change(x, y, width, height)](#Rectangle+change) ⇒ <code>[Rectangle](#Rectangle)</code>
+    * [.position(x, y)](#Rectangle+position) ⇒ <code>[Rectangle](#Rectangle)</code>
+    * [.size(x, y, width, height)](#Rectangle+size) ⇒ <code>[Rectangle](#Rectangle)</code>
     * [.equals(rectangle)](#Rectangle+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Rectangle_new"></a>
@@ -845,6 +863,37 @@ distort rectangle by factor
 
 - factor <code>number</code> - the specified factor of distortion
 
+<a name="Rectangle+scaleX"></a>
+### rectangle.scaleX(x) ⇒ <code>[Rectangle](#Rectangle)</code>
+scale x and width of rectangle
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - scaled Rectangle  
+**Params**
+
+- x <code>number</code> - factor to be applied to scale
+
+<a name="Rectangle+scaleY"></a>
+### rectangle.scaleY(y) ⇒ <code>[Rectangle](#Rectangle)</code>
+scale y and height of rectangle
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - new scaled Rectangle  
+**Params**
+
+- y <code>number</code> - factor to be applied to scale
+
+<a name="Rectangle+scale"></a>
+### rectangle.scale(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
+scale x and y for width and height of rectangle
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - new scaled Rectangle  
+**Params**
+
+- x <code>number</code> - factor to be applied to scale
+- y <code>number</code> - = x - factor to be applied to scale
+
 <a name="Rectangle+translate"></a>
 ### rectangle.translate(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
 moves a rectangle by specified coords
@@ -853,8 +902,8 @@ moves a rectangle by specified coords
 **Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
 **Params**
 
-- x <code>number</code> - how far to move in x direction
-- y <code>number</code> - how far to move in y direction
+- x <code>number</code> - specified x to be added to x position
+- y <code>number</code> - specified y to be added to y position
 
 <a name="Rectangle+transform"></a>
 ### rectangle.transform(x, y, width, height) ⇒ <code>[Rectangle](#Rectangle)</code>
@@ -864,34 +913,34 @@ transforms a rectangle by specified coords
 **Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
 **Params**
 
-- x <code>number</code> - how far to transform in x direction
-- y <code>number</code> - how far to transform in y direction
-- width <code>number</code> - adds to the width
-- height <code>number</code> - adds to the width
+- x <code>number</code> - specified x to be added to x position
+- y <code>number</code> - specified y to be added to y position
+- width <code>number</code> - specified width to be added to this width
+- height <code>number</code> - specified height to be added to this height
 
-<a name="Rectangle+move"></a>
-### rectangle.move(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
-moves a rectangle by specified coords
-
-**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
-**Params**
-
-- x <code>number</code> - how far to move in x direction
-- y <code>number</code> - how far to move in y direction
-
-<a name="Rectangle+change"></a>
-### rectangle.change(x, y, width, height) ⇒ <code>[Rectangle](#Rectangle)</code>
-changes a rectangle by specified coords
+<a name="Rectangle+position"></a>
+### rectangle.position(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
+changes the position a rectangle by specified coords
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
 **Params**
 
-- x <code>number</code> - how far to change in x direction
-- y <code>number</code> - how far to change in y direction
-- width <code>number</code> - changes the width
-- height <code>number</code> - changes the width
+- x <code>number</code> - the new x position
+- y <code>number</code> - he new y position
+
+<a name="Rectangle+size"></a>
+### rectangle.size(x, y, width, height) ⇒ <code>[Rectangle](#Rectangle)</code>
+changes the size of a rectangle by specified params
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
+**Params**
+
+- x <code>number</code> - the new x position
+- y <code>number</code> - the new y position
+- width <code>number</code> - the new width
+- height <code>number</code> - the new width
 
 <a name="Rectangle+equals"></a>
 ### rectangle.equals(rectangle) ⇒ <code>Boolean</code>

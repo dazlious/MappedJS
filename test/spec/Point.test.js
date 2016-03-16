@@ -29,12 +29,26 @@ describe('Point', function() {
         expect(p3.equals(p4)).toEqual(false);
     });
 
+    it("length works as expected", function() {
+        var p1 = new Point.Point(3, 3),
+            p2 = new Point.Point(2, 2);
+        expect(p1.length).toEqual(Math.sqrt(18));
+        expect(p2.length).toEqual(Math.sqrt(8));
+    });
+
+
     it("substraction works as expected", function() {
         var p1 = new Point.Point(2, 2),
             p2 = new Point.Point(2, 2),
             p3 = new Point.Point();
-        expect(p1.sub(p2)).toEqual(p3);
-        expect(p3.sub(p2)).toEqual(new Point.Point(-2, -2));
+        expect(p1.substract(p2)).toEqual(p3);
+        expect(p3.substract(p2)).toEqual(new Point.Point(-2, -2));
+    });
+
+    it("clone works as expected", function() {
+        var p1 = new Point.Point(2, 2);
+        expect(p1.clone).toEqual(p1);
+        expect(p1.clone).not.toBe(p1);
     });
 
     it("addition works as expected", function() {
@@ -45,23 +59,32 @@ describe('Point', function() {
         expect(p3.add(p2)).toEqual(p2);
     });
 
+    it("multiplication works as expected", function() {
+        var p1 = new Point.Point(2, 2);
+        expect(p1.multiply(2)).toEqual(new Point.Point(4, 4));
+        expect(p1.multiply(2, 3)).toEqual(new Point.Point(8, 12));
+        expect(p1.multiply(0)).toEqual(new Point.Point(0, 0));
+    });
+
+    it("division works as expected", function() {
+        var p1 = new Point.Point(10, 30);
+        expect(p1.divide(2)).toEqual(new Point.Point(5, 15));
+        expect(p1.divide(1, 5)).toEqual(new Point.Point(5, 3));
+    });
+
     it("translate works as expected", function() {
         var p1 = new Point.Point(2, 2);
         expect(p1.translate(-2, -2)).toEqual(new Point.Point());
         expect(p1.translate(2, 2)).toEqual(new Point.Point(2, 2));
     });
 
-    it("difference works as expected", function() {
-        var p1 = new Point.Point(2, 2),
-            p2 = new Point.Point(2, 2),
-            p3 = new Point.Point(4, 2),
-            p4 = new Point.Point(4, 3);
-
-        expect(p1.difference(p2)).toEqual(new Point.Point());
-        expect(p4.difference(p2)).toEqual(new Point.Point(2, 1));
+    it("position works as expected", function() {
+        var p1 = new Point.Point(2, 2);
+        expect(p1.position(-2, -2)).toEqual(new Point.Point(-2, -2));
+        expect(p1.position(1, 1)).toEqual(new Point.Point(1, 1));
     });
 
-    it("difference works as expected", function() {
+    it("distance works as expected", function() {
         var p1 = new Point.Point(2, 2),
             p2 = new Point.Point(2, 2),
             p3 = new Point.Point(4, 2),

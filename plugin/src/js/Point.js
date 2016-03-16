@@ -2,6 +2,22 @@
 export class Point {
 
     /**
+     * length of a point
+     * @return {number} length of a point
+     */
+    get length() {
+        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    }
+
+    /**
+     * gets a clone of this point
+     * @return {Point} new instance equals this point
+     */
+    get clone() {
+        return Point.createFromPoint(this);
+    }
+
+    /**
      * Constructor
      * @param  {number} x = 0 - representation of x coordinate
      * @param  {number} y = 0 - representation of y coordinate
@@ -18,8 +34,10 @@ export class Point {
      * @param  {Point} point - the point to substract from this
      * @return {Point} difference between this point and parameter point
      */
-    sub(point) {
-        return new Point(this.x - point.x, this.y - point.y);
+    substract(point) {
+        this.x -= point.x;
+        this.y -= point.y;
+        return this;
     }
 
     /**
@@ -28,7 +46,9 @@ export class Point {
      * @return {Point} addition of this point and parameter point
      */
     add(point) {
-        return new Point(this.x + point.x, this.y + point.y);
+        this.x += point.x;
+        this.y += point.y;
+        return this;
     }
 
     /**
@@ -37,8 +57,10 @@ export class Point {
      * @param  {number} y - factor to multiplicate y with
      * @return {Point} Returns a new instance
      */
-    mult(x, y) {
-        return new Point(this.x * x, this.y * y);
+    multiply(x, y = x) {
+        this.x *= x;
+        this.y *= y;
+        return this;
     }
 
     /**
@@ -47,8 +69,10 @@ export class Point {
      * @param  {number} y - factor to divide y with
      * @return {Point} Returns a new instance
      */
-    divide(x, y) {
-        return new Point(this.x / x, this.y / y);
+    divide(x, y = x) {
+        this.x /= x;
+        this.y /= y;
+        return this;
     }
 
     /**
@@ -61,30 +85,16 @@ export class Point {
     }
 
     /**
-     * Returns the difference from this Point to a specified Point
-     * @param  {Point} point - the specified point to be measured against this Point
-     * @return {Point} the difference between this Point and specified point
-     */
-    difference(point) {
-        return new Point(this.x - point.x, this.y - point.y);
-    }
-
-    /**
      * Returns the distance from this Point to a specified Point
      * @param  {Point} point - the specified point to be measured against this Point
      * @return {Point} the distance between this Point and specified point
      */
     distance(point) {
-        let difference = this.difference(point);
-        return difference.length();
-    }
-
-    length() {
-        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+        return this.clone.substract(point).length;
     }
 
     /**
-     * moves a point by x and y
+     * translates a point by x and y
      * @param  {number} x - value to move x
      * @param  {number} y - value to move y
      * @return {Point} instance of Point
@@ -92,6 +102,18 @@ export class Point {
     translate(x, y) {
         this.x += x;
         this.y += y;
+        return this;
+    }
+
+    /**
+     * positions a point by x and y
+     * @param  {number} x - value to position x
+     * @param  {number} y - value to position y
+     * @return {Point} instance of Point
+     */
+    position(x, y) {
+        this.x = x;
+        this.y = y;
         return this;
     }
 

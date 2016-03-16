@@ -68,7 +68,7 @@
             key: 'offset',
             get: function get() {
                 var center = this.center.toPoint(this.bounds, this.mapView);
-                return this.viewport.center.sub(center);
+                return this.viewport.center.substract(center);
             }
 
             /**

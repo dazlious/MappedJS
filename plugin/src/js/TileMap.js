@@ -114,7 +114,7 @@ export class TileMap {
      * @return {TileMap} instance of TileMap
      */
     resizeView() {
-        this.view.viewport.change(this.left, this.top, this.width, this.height);
+        this.view.viewport.size(this.left, this.top, this.width, this.height);
         this.view.drawVisibleTiles();
         return this;
     }

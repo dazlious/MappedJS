@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">73.06</p>
+      <p class="stat">71.62</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">195</p>
+      <p class="stat">228</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">61.78</p>
+      <p class="stat">64.97</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.11</p>
+      <p class="stat">1.22</p>
     </div>
   </div>
 </div>
@@ -133,13 +133,37 @@
     }();
 
     var Point = exports.Point = function() {
+        _createClass(Point, [{
+            key: &quot;length&quot;,
 
-        /**
-         * Constructor
-         * @param  {number} x = 0 - representation of x coordinate
-         * @param  {number} y = 0 - representation of y coordinate
-         * @return {Point} new instance of point
-         */
+
+            /**
+             * length of a point
+             * @return {number} length of a point
+             */
+            get: function get() {
+                return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+            }
+
+            /**
+             * gets a clone of this point
+             * @return {Point} new instance equals this point
+             */
+
+        }, {
+            key: &quot;clone&quot;,
+            get: function get() {
+                return Point.createFromPoint(this);
+            }
+
+            /**
+             * Constructor
+             * @param  {number} x = 0 - representation of x coordinate
+             * @param  {number} y = 0 - representation of y coordinate
+             * @return {Point} new instance of point
+             */
+
+        }]);
 
         function Point() {
             var x = arguments.length &lt;= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -160,9 +184,11 @@
 
 
         _createClass(Point, [{
-            key: &quot;sub&quot;,
-            value: function sub(point) {
-                return new Point(this.x - point.x, this.y - point.y);
+            key: &quot;substract&quot;,
+            value: function substract(point) {
+                this.x -= point.x;
+                this.y -= point.y;
+                return this;
             }
 
             /**
@@ -174,7 +200,9 @@
         }, {
             key: &quot;add&quot;,
             value: function add(point) {
-                return new Point(this.x + point.x, this.y + point.y);
+                this.x += point.x;
+                this.y += point.y;
+                return this;
             }
 
             /**
@@ -185,9 +213,13 @@
              */
 
         }, {
-            key: &quot;mult&quot;,
-            value: function mult(x, y) {
-                return new Point(this.x * x, this.y * y);
+            key: &quot;multiply&quot;,
+            value: function multiply(x) {
+                var y = arguments.length &lt;= 1 || arguments[1] === undefined ? x : arguments[1];
+
+                this.x *= x;
+                this.y *= y;
+                return this;
             }
 
             /**
@@ -199,8 +231,12 @@
 
         }, {
             key: &quot;divide&quot;,
-            value: function divide(x, y) {
-                return new Point(this.x / x, this.y / y);
+            value: function divide(x) {
+                var y = arguments.length &lt;= 1 || arguments[1] === undefined ? x : arguments[1];
+
+                this.x /= x;
+                this.y /= y;
+                return this;
             }
 
             /**
@@ -216,18 +252,6 @@
             }
 
             /**
-             * Returns the difference from this Point to a specified Point
-             * @param  {Point} point - the specified point to be measured against this Point
-             * @return {Point} the difference between this Point and specified point
-             */
-
-        }, {
-            key: &quot;difference&quot;,
-            value: function difference(point) {
-                return new Point(this.x - point.x, this.y - point.y);
-            }
-
-            /**
              * Returns the distance from this Point to a specified Point
              * @param  {Point} point - the specified point to be measured against this Point
              * @return {Point} the distance between this Point and specified point
@@ -236,17 +260,11 @@
         }, {
             key: &quot;distance&quot;,
             value: function distance(point) {
-                var difference = this.difference(point);
-                return difference.length();
-            }
-        }, {
-            key: &quot;length&quot;,
-            value: function length() {
-                return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+                return this.clone.substract(point).length;
             }
 
             /**
-             * moves a point by x and y
+             * translates a point by x and y
              * @param  {number} x - value to move x
              * @param  {number} y - value to move y
              * @return {Point} instance of Point
@@ -257,6 +275,21 @@
             value: function translate(x, y) {
                 this.x += x;
                 this.y += y;
+                return this;
+            }
+
+            /**
+             * positions a point by x and y
+             * @param  {number} x - value to position x
+             * @param  {number} y - value to position y
+             * @return {Point} instance of Point
+             */
+
+        }, {
+            key: &quot;position&quot;,
+            value: function position(x, y) {
+                this.x = x;
+                this.y = y;
                 return this;
             }
 
