@@ -889,6 +889,8 @@
 <li><a href="#TileMap+initialize">.initialize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+initializeCanvas">.initializeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+getCurrentLevelData">.getCurrentLevelData()</a> ⇒ <code>Object</code></li>
+<li><a href="#TileMap+clearCanvas">.clearCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+redraw">.redraw()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resize">.resize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resizeView">.resizeView()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 </ul>
@@ -930,7 +932,13 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+getCurrentLevelData"></a></p>
 <h3 id="tilemap-getcurrentleveldata-code-object-code-">tileMap.getCurrentLevelData() ⇒ <code>Object</code></h3>
 <p>gets data of current zoom level</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>Object</code> - data for current level as json<br><a name="TileMap+resize"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>Object</code> - data for current level as json<br><a name="TileMap+clearCanvas"></a></p>
+<h3 id="tilemap-clearcanvas-code-tilemap-tilemap-code-">tileMap.clearCanvas() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>clears canvas</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+redraw"></a></p>
+<h3 id="tilemap-redraw-code-tilemap-tilemap-code-">tileMap.redraw() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>complete clear and draw of all visible tiles</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+resize"></a></p>
 <h3 id="tilemap-resize-code-tilemap-tilemap-code-">tileMap.resize() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>Handles resizing of TileMap</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+resizeView"></a></p>
@@ -945,7 +953,7 @@
 <ul>
 <li><a href="#View">View</a><ul>
 <li><a href="#new_View_new">new View(settings, viewport, mapView, bounds, center, data)</a></li>
-<li><a href="#View+distortion">.distortion</a> ⇒ <code>number</code></li>
+<li><a href="#View+equalizationFactor">.equalizationFactor</a> ⇒ <code>number</code></li>
 <li><a href="#View+offset">.offset</a></li>
 <li><a href="#View+mapOffset">.mapOffset</a> ⇒ <code>number</code></li>
 <li><a href="#View+visibleTiles">.visibleTiles</a> ⇒ <code>array</code></li>
@@ -969,20 +977,16 @@
 <li>center <code><a href="#LatLng">LatLng</a></code> - = new LatLng() - current center of map</li>
 <li>data <code>Object</code> - = {} - data of current map</li>
 </ul>
-<p><a name="View+distortion"></a></p>
-<h3 id="view-distortion-code-number-code-">view.distortion ⇒ <code>number</code></h3>
-<p>Returns current distortion</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - returns current distortion of latitude<br><a name="View+offset"></a></p>
+<p><a name="View+equalizationFactor"></a></p>
+<h3 id="view-equalizationfactor-code-number-code-">view.equalizationFactor ⇒ <code>number</code></h3>
+<p>Returns current equalizationFactor</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - returns current equalizationFactor of latitude<br><a name="View+offset"></a></p>
 <h3 id="view-offset">view.offset</h3>
 <p>Returns the offset of the center</p>
 <p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><a name="View+mapOffset"></a></p>
 <h3 id="view-mapoffset-code-number-code-">view.mapOffset ⇒ <code>number</code></h3>
 <p>Returns the offset of the map</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - calculated offset<br><strong>Params</strong></p>
-<ul>
-<li>distortion <code>number</code> - the current latitude distortion</li>
-</ul>
-<p><a name="View+visibleTiles"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - calculated offset<br><a name="View+visibleTiles"></a></p>
 <h3 id="view-visibletiles-code-array-code-">view.visibleTiles ⇒ <code>array</code></h3>
 <p>get all visible tiles</p>
 <p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>array</code> - all tiles that are currently visible<br><a name="View+onTilesLoaded"></a></p>

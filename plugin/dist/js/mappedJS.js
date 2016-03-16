@@ -180,7 +180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'initializeMap',
 	        value: function initializeMap() {
-	            this.$canvas = new _TileMap.TileMap({
+	            this.tileMap = new _TileMap.TileMap({
 	                container: this.$container,
 	                tilesData: this.mapData,
 	                settings: this.mapSettings
@@ -199,27 +199,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.interact = new _Interact.Interact({
 	                container: this.$container,
 	                callbacks: {
-	                    tap: function tap(data) {
+	                    tap: function (data) {
 	                        console.log("tap", data);
-	                    },
-	                    doubletap: function doubletap(data) {
-	                        console.log("doubletap", data);
-	                    },
-	                    pan: function pan(data) {
-	                        console.log("pan", data);
-	                    },
-	                    zoom: function zoom(data) {
+	                    }.bind(this),
+	                    pan: function (data) {
+	                        var change = data.positions.last.substract(data.positions.current),
+	                            absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+	                        this.tileMap.view.centerPoint.add(absolutePosition);
+	                        this.tileMap.redraw();
+	                    }.bind(this),
+	                    zoom: function (data) {
 	                        console.log("zoom", data);
-	                    },
-	                    pinch: function pinch(data) {
-	                        console.log("pinch", data);
-	                    },
-	                    flick: function flick(data) {
-	                        console.log("flick", data);
-	                    }
+	                    }.bind(this)
 	                }
 	            });
+
 	            (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
+
 	            return this;
 	        }
 
@@ -231,7 +227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resizeHandler',
 	        value: function resizeHandler() {
-	            this.$canvas.resize();
+	            this.tileMap.resize();
 	            return this;
 	        }
 
@@ -414,6 +410,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'getCurrentLevelData',
 	        value: function getCurrentLevelData() {
 	            return this.imgData["level-" + this.settings.level];
+	        }
+
+	        /**
+	         * clears canvas
+	         * @return {TileMap} instance of TileMap
+	         */
+
+	    }, {
+	        key: 'clearCanvas',
+	        value: function clearCanvas() {
+	            this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	            return this;
+	        }
+
+	        /**
+	         * complete clear and draw of all visible tiles
+	         * @return {TileMap} instance of TileMap
+	         */
+
+	    }, {
+	        key: 'redraw',
+	        value: function redraw() {
+	            this.clearCanvas();
+	            this.view.drawVisibleTiles();
+	            return this;
 	        }
 
 	        /**
@@ -1233,12 +1254,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var View = exports.View = function () {
 	    _createClass(View, [{
-	        key: 'distortion',
+	        key: 'equalizationFactor',
 
 
 	        /**
-	         * Returns current distortion
-	         * @return {number} returns current distortion of latitude
+	         * Returns current equalizationFactor
+	         * @return {number} returns current equalizationFactor of latitude
 	         */
 	        get: function get() {
 	            return Math.cos(this.center.lat);
@@ -1251,20 +1272,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'offset',
 	        get: function get() {
-	            var center = this.center.toPoint(this.bounds, this.mapView);
-	            return this.viewport.center.substract(center);
+	            return this.viewport.center.substract(this.centerPoint);
 	        }
 
 	        /**
 	         * Returns the offset of the map
-	         * @param {number} distortion - the current latitude distortion
 	         * @return {number} calculated offset
 	         */
 
 	    }, {
 	        key: 'mapOffset',
 	        get: function get() {
-	            return this.offset.x + (this.mapView.width - this.mapView.width * this.distortion) / 2;
+	            return this.offset.x + (this.mapView.width - this.mapView.width * this.equalizationFactor) / 2;
 	        }
 
 	        /**
@@ -1276,7 +1295,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'visibleTiles',
 	        get: function get() {
 	            return this.tiles.filter(function (t, i, a) {
-	                var newTile = t.getDistortedRect(this.distortion).translate(this.mapOffset, this.offset.y);
+	                var newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapOffset, this.offset.y);
 	                return this.viewport.intersects(newTile);
 	            }, this);
 	        }
@@ -1313,6 +1332,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.viewport = viewport;
 	        this.bounds = bounds;
 	        this.center = center;
+	        this.centerPoint = center.toPoint(this.bounds, this.mapView);
 	        this.tiles = [];
 	        this.data = data;
 	        this.draw = drawCb;
@@ -1361,9 +1381,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function drawTile(tile) {
 	            if (tile.state.current.value >= 2) {
 	                if (this.draw && typeof this.draw === "function") {
-	                    var x = tile.x * this.distortion + this.mapOffset | 0,
+	                    var x = tile.x * this.equalizationFactor + this.mapOffset | 0,
 	                        y = tile.y + this.offset.y | 0,
-	                        w = tile.width * this.distortion + 0.5 | 0,
+	                        w = tile.width * this.equalizationFactor + 0.5 | 0,
 	                        h = tile.height + 0.5 | 0;
 	                    this.draw(tile.img, x, y, w, h);
 	                } else {
