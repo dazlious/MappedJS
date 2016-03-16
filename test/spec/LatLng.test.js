@@ -13,16 +13,37 @@ describe('LatLng', function() {
         expect(latlng.lng).toEqual(0);
     });
 
+    it("initializes with larger numbers", function() {
+        var c1 = new LatLng.LatLng(100, -180),
+            c2 = new LatLng.LatLng(-90, 360),
+            c3 = new LatLng.LatLng(-233, -182);
+        expect(c1).toEqual(new LatLng.LatLng(10, 0));
+        expect(c2).toEqual(new LatLng.LatLng(0, 180));
+        expect(c3).toEqual(new LatLng.LatLng(-53, -2));
+
+    });
+
     it("substraction works", function() {
         var coord1 = new LatLng.LatLng(30, 30),
             coord2 = new LatLng.LatLng(30, -30),
             coord3 = new LatLng.LatLng(-30, 30),
             coord4 = new LatLng.LatLng(-30, -30);
-        expect(coord1.sub(coord2)).toEqual(new LatLng.LatLng(0, 60));
-        expect(coord2.sub(coord1)).toEqual(new LatLng.LatLng(0, -60));
-        expect(coord2.sub(coord1)).not.toEqual(coord1.sub(coord2));
-        expect(coord3.sub(coord4)).toEqual(new LatLng.LatLng(0, 60));
-        expect(coord2.sub(coord4)).toEqual(new LatLng.LatLng(60, 0));
+        expect(coord1.substract(coord2)).toEqual(new LatLng.LatLng(0, 60));
+        expect(coord2.substract(coord1)).toEqual(new LatLng.LatLng(30, -90));
+        expect(coord3.substract(coord4)).toEqual(new LatLng.LatLng(0, 60));
+    });
+
+    it("length works as expected", function() {
+        var c1 = new LatLng.LatLng(3, -3),
+            c2 = new LatLng.LatLng(-8, 9);
+        expect(c1.length).toEqual(Math.sqrt(18));
+        expect(c2.length).toEqual(Math.sqrt(145));
+    });
+
+    it("clone works as expected", function() {
+        var c1 = new LatLng.LatLng(2, 2);
+        expect(c1.clone).toEqual(c1);
+        expect(c1.clone).not.toBe(c1);
     });
 
     it("addition works", function() {
@@ -31,8 +52,6 @@ describe('LatLng', function() {
             coord3 = new LatLng.LatLng(-30, 30),
             coord4 = new LatLng.LatLng(-30, -30);
         expect(coord1.add(coord2)).toEqual(new LatLng.LatLng(60, 0));
-        expect(coord2.add(coord1)).toEqual(new LatLng.LatLng(60, 0));
-        expect(coord2.add(coord1)).toEqual(coord1.add(coord2));
         expect(coord3.add(coord4)).toEqual(new LatLng.LatLng(-60, 0));
         expect(coord2.add(coord4)).toEqual(new LatLng.LatLng(0, -60));
     });

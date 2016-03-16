@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>37/37</span>
+        <span class='fraction'>46/46</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>7/7</span>
+        <span class='fraction'>10/10</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>37/37</span>
+        <span class='fraction'>46/46</span>
       </div>
     </div>
   </div>
@@ -122,7 +122,26 @@
 77
 78
 79
-80</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,12 +160,10 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -156,6 +173,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -216,16 +254,37 @@ describe('LatLng', function() {
         expect(latlng.lng).toEqual(0);
     });
 &nbsp;
+    it("initializes with larger numbers", function() {
+        var c1 = new LatLng.LatLng(100, -180),
+            c2 = new LatLng.LatLng(-90, 360),
+            c3 = new LatLng.LatLng(-233, -182);
+        expect(c1).toEqual(new LatLng.LatLng(10, 0));
+        expect(c2).toEqual(new LatLng.LatLng(0, 180));
+        expect(c3).toEqual(new LatLng.LatLng(-53, -2));
+&nbsp;
+    });
+&nbsp;
     it("substraction works", function() {
         var coord1 = new LatLng.LatLng(30, 30),
             coord2 = new LatLng.LatLng(30, -30),
             coord3 = new LatLng.LatLng(-30, 30),
             coord4 = new LatLng.LatLng(-30, -30);
-        expect(coord1.sub(coord2)).toEqual(new LatLng.LatLng(0, 60));
-        expect(coord2.sub(coord1)).toEqual(new LatLng.LatLng(0, -60));
-        expect(coord2.sub(coord1)).not.toEqual(coord1.sub(coord2));
-        expect(coord3.sub(coord4)).toEqual(new LatLng.LatLng(0, 60));
-        expect(coord2.sub(coord4)).toEqual(new LatLng.LatLng(60, 0));
+        expect(coord1.substract(coord2)).toEqual(new LatLng.LatLng(0, 60));
+        expect(coord2.substract(coord1)).toEqual(new LatLng.LatLng(30, -90));
+        expect(coord3.substract(coord4)).toEqual(new LatLng.LatLng(0, 60));
+    });
+&nbsp;
+    it("length works as expected", function() {
+        var c1 = new LatLng.LatLng(3, -3),
+            c2 = new LatLng.LatLng(-8, 9);
+        expect(c1.length).toEqual(Math.sqrt(18));
+        expect(c2.length).toEqual(Math.sqrt(145));
+    });
+&nbsp;
+    it("clone works as expected", function() {
+        var c1 = new LatLng.LatLng(2, 2);
+        expect(c1.clone).toEqual(c1);
+        expect(c1.clone).not.toBe(c1);
     });
 &nbsp;
     it("addition works", function() {
@@ -234,8 +293,6 @@ describe('LatLng', function() {
             coord3 = new LatLng.LatLng(-30, 30),
             coord4 = new LatLng.LatLng(-30, -30);
         expect(coord1.add(coord2)).toEqual(new LatLng.LatLng(60, 0));
-        expect(coord2.add(coord1)).toEqual(new LatLng.LatLng(60, 0));
-        expect(coord2.add(coord1)).toEqual(coord1.add(coord2));
         expect(coord3.add(coord4)).toEqual(new LatLng.LatLng(-60, 0));
         expect(coord2.add(coord4)).toEqual(new LatLng.LatLng(0, -60));
     });
@@ -286,7 +343,7 @@ describe('LatLng', function() {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Mar 16 2016 11:18:30 GMT+0100 (CET)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Mar 16 2016 12:04:10 GMT+0100 (CET)
 </div>
 </div>
 <script src="../prettify.js"></script>

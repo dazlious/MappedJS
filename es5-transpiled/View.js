@@ -177,7 +177,11 @@
             value: function drawTile(tile) {
                 if (tile.state.current.value >= 2) {
                     if (this.draw && typeof this.draw === "function") {
-                        this.draw(tile.img, tile.x * this.distortion + this.mapOffset, tile.y + this.offset.y, tile.width * this.distortion, tile.height);
+                        var x = tile.x * this.distortion + this.mapOffset | 0,
+                            y = tile.y + this.offset.y | 0,
+                            w = tile.width * this.distortion + 0.5 | 0,
+                            h = tile.height + 0.5 | 0;
+                        this.draw(tile.img, x, y, w, h);
                     } else {
                         console.error("Draw method is not defined or not a function");
                     }

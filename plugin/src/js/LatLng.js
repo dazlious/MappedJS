@@ -1,7 +1,22 @@
 import {Point} from './Point.js';
-import {Rectangle} from './Rectangle.js';
 
 export class LatLng {
+
+    /**
+     * length of a latlng
+     * @return {number} length of a latlng
+     */
+    get length() {
+        return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
+    }
+
+    /**
+     * gets a clone of this latlng
+     * @return {LatLng} new instance equals this latlng
+     */
+    get clone() {
+        return LatLng.createFromLatLng(this);
+    }
 
     /**
      * Constructor
@@ -11,11 +26,10 @@ export class LatLng {
      * @return {LatLng} new instance of LatLng
      */
     constructor(lat = 0, lng = 0, isDistance = false) {
-        if (!isDistance && (lat > 90 || lat < -90 || lng > 180 || lng < -180)) {
-            throw new Error(`latitude(${lat}) is greater/smaller than +/-90 or longitude(${lng}) is greater/smaller than +/-180`);
-        }
-        this.lat = lat;
-        this.lng = lng;
+        this.lat = lat % 90;
+        this.lat = (this.lat === -0) ? 0 : this.lat;
+        this.lng = lng % 180;
+        this.lng = (this.lng === -0) ? 0 : this.lng;
         return this;
     }
 
@@ -24,17 +38,10 @@ export class LatLng {
      * @param  {LatLng} coord - specified coordinate to substract from this coord
      * @return {LatLng} the new calculated LatLng
      */
-    sub(coord) {
-        return new LatLng(this.lat - coord.lat, this.lng - coord.lng);
-    }
-
-    /**
-     * substract specified coord from this coordinate
-     * @param  {LatLng} coord - specified coordinate to substract from this coord
-     * @return {LatLng} the new calculated LatLng
-     */
-    difference(coord) {
-        return new LatLng(this.lat - coord.lat, this.lng - coord.lng, true);
+    substract(coord) {
+        this.lat -= coord.lat;
+        this.lng -= coord.lng;
+        return this;
     }
 
     /**
@@ -43,7 +50,9 @@ export class LatLng {
      * @return {LatLng} the new calculated LatLng
      */
     add(coord) {
-        return new LatLng(this.lat + coord.lat, this.lng + coord.lng);
+        this.lat += coord.lat;
+        this.lng += coord.lng;
+        return this;
     }
 
     /**
@@ -51,7 +60,7 @@ export class LatLng {
      * @return {Point} Returns a Point representing LatLng in Pixels
      */
     toPoint(bounds, rect) {
-        let relativePosition = bounds.nw.difference(this),
+        let relativePosition = bounds.nw.clone.substract(this),
             factorX = rect.width / bounds.width,
             factorY = rect.height / bounds.height;
         return new Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
@@ -67,3 +76,10 @@ export class LatLng {
     }
 
 }
+
+/**
+ * Creates a LatLng from specified LatLng
+ * @param  {LatLng} LatLng - specified LatLng
+ * @return {LatLng} the LatLng specified
+ */
+LatLng.createFromLatLng = (latlng) => new LatLng(latlng.lat, latlng.lng);

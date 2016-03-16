@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Point.js', './Rectangle.js'], factory);
+        define(['exports', './Point.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Point.js'), require('./Rectangle.js'));
+        factory(exports, require('./Point.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Point, global.Rectangle);
+        factory(mod.exports, global.Point);
         global.LatLng = mod.exports;
     }
-})(this, function(exports, _Point, _Rectangle) {
+})(this, function(exports, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -43,14 +43,38 @@
     }();
 
     var LatLng = exports.LatLng = function() {
+        _createClass(LatLng, [{
+            key: 'length',
 
-        /**
-         * Constructor
-         * @param  {number} lat = 0 - representation of latitude
-         * @param  {number} lng = 0 - representation of longitude
-         * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
-         * @return {LatLng} new instance of LatLng
-         */
+
+            /**
+             * length of a latlng
+             * @return {number} length of a latlng
+             */
+            get: function get() {
+                return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
+            }
+
+            /**
+             * gets a clone of this latlng
+             * @return {LatLng} new instance equals this latlng
+             */
+
+        }, {
+            key: 'clone',
+            get: function get() {
+                return LatLng.createFromLatLng(this);
+            }
+
+            /**
+             * Constructor
+             * @param  {number} lat = 0 - representation of latitude
+             * @param  {number} lng = 0 - representation of longitude
+             * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
+             * @return {LatLng} new instance of LatLng
+             */
+
+        }]);
 
         function LatLng() {
             var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -59,11 +83,10 @@
 
             _classCallCheck(this, LatLng);
 
-            if (!isDistance && (lat > 90 || lat < -90 || lng > 180 || lng < -180)) {
-                throw new Error('latitude(' + lat + ') is greater/smaller than +/-90 or longitude(' + lng + ') is greater/smaller than +/-180');
-            }
-            this.lat = lat;
-            this.lng = lng;
+            this.lat = lat % 90;
+            this.lat = this.lat === -0 ? 0 : this.lat;
+            this.lng = lng % 180;
+            this.lng = this.lng === -0 ? 0 : this.lng;
             return this;
         }
 
@@ -75,21 +98,11 @@
 
 
         _createClass(LatLng, [{
-            key: 'sub',
-            value: function sub(coord) {
-                return new LatLng(this.lat - coord.lat, this.lng - coord.lng);
-            }
-
-            /**
-             * substract specified coord from this coordinate
-             * @param  {LatLng} coord - specified coordinate to substract from this coord
-             * @return {LatLng} the new calculated LatLng
-             */
-
-        }, {
-            key: 'difference',
-            value: function difference(coord) {
-                return new LatLng(this.lat - coord.lat, this.lng - coord.lng, true);
+            key: 'substract',
+            value: function substract(coord) {
+                this.lat -= coord.lat;
+                this.lng -= coord.lng;
+                return this;
             }
 
             /**
@@ -101,7 +114,9 @@
         }, {
             key: 'add',
             value: function add(coord) {
-                return new LatLng(this.lat + coord.lat, this.lng + coord.lng);
+                this.lat += coord.lat;
+                this.lng += coord.lng;
+                return this;
             }
 
             /**
@@ -112,7 +127,7 @@
         }, {
             key: 'toPoint',
             value: function toPoint(bounds, rect) {
-                var relativePosition = bounds.nw.difference(this),
+                var relativePosition = bounds.nw.clone.substract(this),
                     factorX = rect.width / bounds.width,
                     factorY = rect.height / bounds.height;
                 return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
@@ -133,4 +148,13 @@
 
         return LatLng;
     }();
+
+    /**
+     * Creates a LatLng from specified LatLng
+     * @param  {LatLng} LatLng - specified LatLng
+     * @return {LatLng} the LatLng specified
+     */
+    LatLng.createFromLatLng = function(latlng) {
+        return new LatLng(latlng.lat, latlng.lng);
+    };
 });
