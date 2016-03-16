@@ -43,6 +43,8 @@
         "requirejs": true,
         "define": true,
         "module": true,
-        "exports": true
+        "exports": true,
+        "MSPointerEvent": true,
+        "PointerEvent": true
     }
 }
