@@ -359,11 +359,15 @@ Get event helper, applies jQuery-event-fix too
 
 * [LatLng](#LatLng)
     * [new LatLng(lat, lng, isDistance)](#new_LatLng_new)
-    * [.sub(coord)](#LatLng+sub) ⇒ <code>[LatLng](#LatLng)</code>
-    * [.difference(coord)](#LatLng+difference) ⇒ <code>[LatLng](#LatLng)</code>
-    * [.add(coord)](#LatLng+add) ⇒ <code>[LatLng](#LatLng)</code>
-    * [.toPoint()](#LatLng+toPoint) ⇒ <code>[Point](#Point)</code>
-    * [.equals(coord)](#LatLng+equals) ⇒ <code>Boolean</code>
+    * _instance_
+        * [.length](#LatLng+length) ⇒ <code>number</code>
+        * [.clone](#LatLng+clone) ⇒ <code>[LatLng](#LatLng)</code>
+        * [.substract(coord)](#LatLng+substract) ⇒ <code>[LatLng](#LatLng)</code>
+        * [.add(coord)](#LatLng+add) ⇒ <code>[LatLng](#LatLng)</code>
+        * [.toPoint()](#LatLng+toPoint) ⇒ <code>[Point](#Point)</code>
+        * [.equals(coord)](#LatLng+equals) ⇒ <code>Boolean</code>
+    * _static_
+        * [.createFromLatLng(LatLng)](#LatLng.createFromLatLng) ⇒ <code>[LatLng](#LatLng)</code>
 
 <a name="new_LatLng_new"></a>
 ### new LatLng(lat, lng, isDistance)
@@ -376,18 +380,20 @@ Constructor
 - lng <code>number</code> <code> = 0</code> - = 0 - representation of longitude
 - isDistance <code>Boolean</code> <code> = false</code> - = false - if LatLng should be checked against bounds
 
-<a name="LatLng+sub"></a>
-### latLng.sub(coord) ⇒ <code>[LatLng](#LatLng)</code>
-substract specified coord from this coordinate
+<a name="LatLng+length"></a>
+### latLng.length ⇒ <code>number</code>
+length of a latlng
 
-**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
-**Returns**: <code>[LatLng](#LatLng)</code> - the new calculated LatLng  
-**Params**
+**Kind**: instance property of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>number</code> - length of a latlng  
+<a name="LatLng+clone"></a>
+### latLng.clone ⇒ <code>[LatLng](#LatLng)</code>
+gets a clone of this latlng
 
-- coord <code>[LatLng](#LatLng)</code> - specified coordinate to substract from this coord
-
-<a name="LatLng+difference"></a>
-### latLng.difference(coord) ⇒ <code>[LatLng](#LatLng)</code>
+**Kind**: instance property of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>[LatLng](#LatLng)</code> - new instance equals this latlng  
+<a name="LatLng+substract"></a>
+### latLng.substract(coord) ⇒ <code>[LatLng](#LatLng)</code>
 substract specified coord from this coordinate
 
 **Kind**: instance method of <code>[LatLng](#LatLng)</code>  
@@ -421,6 +427,16 @@ checks if specified coord equals this coord
 **Params**
 
 - coord <code>[LatLng](#LatLng)</code> - specified coord to check against
+
+<a name="LatLng.createFromLatLng"></a>
+### LatLng.createFromLatLng(LatLng) ⇒ <code>[LatLng](#LatLng)</code>
+Creates a LatLng from specified LatLng
+
+**Kind**: static method of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>[LatLng](#LatLng)</code> - the LatLng specified  
+**Params**
+
+- LatLng <code>[LatLng](#LatLng)</code> - specified LatLng
 
 <a name="MappedJS"></a>
 ## MappedJS

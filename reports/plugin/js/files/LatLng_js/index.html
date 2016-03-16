@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">69.28</p>
+      <p class="stat">69.86</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">136</p>
+      <p class="stat">160</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">52.15</p>
+      <p class="stat">58.37</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.09</p>
+      <p class="stat">1.16</p>
     </div>
   </div>
 </div>
@@ -91,17 +91,17 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&#039;exports&#039;, &#039;./Point.js&#039;, &#039;./Rectangle.js&#039;], factory);
+        define([&#039;exports&#039;, &#039;./Point.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports, require(&#039;./Point.js&#039;), require(&#039;./Rectangle.js&#039;));
+        factory(exports, require(&#039;./Point.js&#039;));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Point, global.Rectangle);
+        factory(mod.exports, global.Point);
         global.LatLng = mod.exports;
     }
-})(this, function(exports, _Point, _Rectangle) {
+})(this, function(exports, _Point) {
     &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
@@ -134,14 +134,38 @@
     }();
 
     var LatLng = exports.LatLng = function() {
+        _createClass(LatLng, [{
+            key: &#039;length&#039;,
 
-        /**
-         * Constructor
-         * @param  {number} lat = 0 - representation of latitude
-         * @param  {number} lng = 0 - representation of longitude
-         * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
-         * @return {LatLng} new instance of LatLng
-         */
+
+            /**
+             * length of a latlng
+             * @return {number} length of a latlng
+             */
+            get: function get() {
+                return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
+            }
+
+            /**
+             * gets a clone of this latlng
+             * @return {LatLng} new instance equals this latlng
+             */
+
+        }, {
+            key: &#039;clone&#039;,
+            get: function get() {
+                return LatLng.createFromLatLng(this);
+            }
+
+            /**
+             * Constructor
+             * @param  {number} lat = 0 - representation of latitude
+             * @param  {number} lng = 0 - representation of longitude
+             * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
+             * @return {LatLng} new instance of LatLng
+             */
+
+        }]);
 
         function LatLng() {
             var lat = arguments.length &lt;= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -150,11 +174,10 @@
 
             _classCallCheck(this, LatLng);
 
-            if (!isDistance &amp;&amp; (lat &gt; 90 || lat &lt; -90 || lng &gt; 180 || lng &lt; -180)) {
-                throw new Error(&#039;latitude(&#039; + lat + &#039;) is greater/smaller than +/-90 or longitude(&#039; + lng + &#039;) is greater/smaller than +/-180&#039;);
-            }
-            this.lat = lat;
-            this.lng = lng;
+            this.lat = lat % 90;
+            this.lat = this.lat === -0 ? 0 : this.lat;
+            this.lng = lng % 180;
+            this.lng = this.lng === -0 ? 0 : this.lng;
             return this;
         }
 
@@ -166,21 +189,11 @@
 
 
         _createClass(LatLng, [{
-            key: &#039;sub&#039;,
-            value: function sub(coord) {
-                return new LatLng(this.lat - coord.lat, this.lng - coord.lng);
-            }
-
-            /**
-             * substract specified coord from this coordinate
-             * @param  {LatLng} coord - specified coordinate to substract from this coord
-             * @return {LatLng} the new calculated LatLng
-             */
-
-        }, {
-            key: &#039;difference&#039;,
-            value: function difference(coord) {
-                return new LatLng(this.lat - coord.lat, this.lng - coord.lng, true);
+            key: &#039;substract&#039;,
+            value: function substract(coord) {
+                this.lat -= coord.lat;
+                this.lng -= coord.lng;
+                return this;
             }
 
             /**
@@ -192,7 +205,9 @@
         }, {
             key: &#039;add&#039;,
             value: function add(coord) {
-                return new LatLng(this.lat + coord.lat, this.lng + coord.lng);
+                this.lat += coord.lat;
+                this.lng += coord.lng;
+                return this;
             }
 
             /**
@@ -203,7 +218,7 @@
         }, {
             key: &#039;toPoint&#039;,
             value: function toPoint(bounds, rect) {
-                var relativePosition = bounds.nw.difference(this),
+                var relativePosition = bounds.nw.clone.substract(this),
                     factorX = rect.width / bounds.width,
                     factorY = rect.height / bounds.height;
                 return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
@@ -224,6 +239,15 @@
 
         return LatLng;
     }();
+
+    /**
+     * Creates a LatLng from specified LatLng
+     * @param  {LatLng} LatLng - specified LatLng
+     * @return {LatLng} the LatLng specified
+     */
+    LatLng.createFromLatLng = function(latlng) {
+        return new LatLng(latlng.lat, latlng.lng);
+    };
 });</textarea>
   </div>
 </div>

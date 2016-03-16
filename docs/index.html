@@ -329,11 +329,19 @@
 <ul>
 <li><a href="#LatLng">LatLng</a><ul>
 <li><a href="#new_LatLng_new">new LatLng(lat, lng, isDistance)</a></li>
-<li><a href="#LatLng+sub">.sub(coord)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
-<li><a href="#LatLng+difference">.difference(coord)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
+<li><em>instance</em><ul>
+<li><a href="#LatLng+length">.length</a> ⇒ <code>number</code></li>
+<li><a href="#LatLng+clone">.clone</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
+<li><a href="#LatLng+substract">.substract(coord)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
 <li><a href="#LatLng+add">.add(coord)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
 <li><a href="#LatLng+toPoint">.toPoint()</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#LatLng+equals">.equals(coord)</a> ⇒ <code>Boolean</code></li>
+</ul>
+</li>
+<li><em>static</em><ul>
+<li><a href="#LatLng.createFromLatLng">.createFromLatLng(LatLng)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -346,15 +354,14 @@
 <li>lng <code>number</code> <code> = 0</code> - = 0 - representation of longitude</li>
 <li>isDistance <code>Boolean</code> <code> = false</code> - = false - if LatLng should be checked against bounds</li>
 </ul>
-<p><a name="LatLng+sub"></a></p>
-<h3 id="latlng-sub-coord-code-latlng-latlng-code-">latLng.sub(coord) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
-<p>substract specified coord from this coordinate</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - the new calculated LatLng<br><strong>Params</strong></p>
-<ul>
-<li>coord <code><a href="#LatLng">LatLng</a></code> - specified coordinate to substract from this coord</li>
-</ul>
-<p><a name="LatLng+difference"></a></p>
-<h3 id="latlng-difference-coord-code-latlng-latlng-code-">latLng.difference(coord) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
+<p><a name="LatLng+length"></a></p>
+<h3 id="latlng-length-code-number-code-">latLng.length ⇒ <code>number</code></h3>
+<p>length of a latlng</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code>number</code> - length of a latlng<br><a name="LatLng+clone"></a></p>
+<h3 id="latlng-clone-code-latlng-latlng-code-">latLng.clone ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
+<p>gets a clone of this latlng</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - new instance equals this latlng<br><a name="LatLng+substract"></a></p>
+<h3 id="latlng-substract-coord-code-latlng-latlng-code-">latLng.substract(coord) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
 <p>substract specified coord from this coordinate</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - the new calculated LatLng<br><strong>Params</strong></p>
 <ul>
@@ -376,6 +383,13 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code>Boolean</code> - Returns if specified coord equals this coord<br><strong>Params</strong></p>
 <ul>
 <li>coord <code><a href="#LatLng">LatLng</a></code> - specified coord to check against</li>
+</ul>
+<p><a name="LatLng.createFromLatLng"></a></p>
+<h3 id="latlng-createfromlatlng-latlng-code-latlng-latlng-code-">LatLng.createFromLatLng(LatLng) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
+<p>Creates a LatLng from specified LatLng</p>
+<p><strong>Kind</strong>: static method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - the LatLng specified<br><strong>Params</strong></p>
+<ul>
+<li>LatLng <code><a href="#LatLng">LatLng</a></code> - specified LatLng</li>
 </ul>
 <p><a name="MappedJS"></a></p>
 <h2 id="mappedjs">MappedJS</h2>
