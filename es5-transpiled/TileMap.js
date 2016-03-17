@@ -143,9 +143,6 @@
                     center: new _LatLng.LatLng(center.lat, center.lng),
                     data: this.getCurrentLevelData(),
                     drawCb: function(img, x, y, w, h) {
-                        if (x % 1 !== 0 || y % 1 !== 0 || w % 1 !== 0 || h % 1 !== 0) {
-                            console.log(x, y, w, h);
-                        }
                         this.canvasContext.drawImage(img, x, y, w, h);
                     }.bind(this)
                 });

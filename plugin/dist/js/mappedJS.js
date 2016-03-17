@@ -375,9 +375,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                center: new _LatLng.LatLng(center.lat, center.lng),
 	                data: this.getCurrentLevelData(),
 	                drawCb: function (img, x, y, w, h) {
-	                    if (x % 1 !== 0 || y % 1 !== 0 || w % 1 !== 0 || h % 1 !== 0) {
-	                        console.log(x, y, w, h);
-	                    }
 	                    this.canvasContext.drawImage(img, x, y, w, h);
 	                }.bind(this)
 	            });
@@ -1286,6 +1283,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Publisher = __webpack_require__(10);
 
+	var _Helper = __webpack_require__(11);
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
@@ -1303,8 +1302,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {number} returns current equalizationFactor of latitude
 	         */
 	        get: function get() {
-	            return Math.cos(this.center.lat);
+	            return Math.cos(_Helper.Helper.toRadians(this.center.lat));
 	        }
+
+	        /**
+	         * Returns the current equalized viewport
+	         */
+
 	    }, {
 	        key: 'viewportOffset',
 	        get: function get() {
@@ -1363,7 +1367,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.data = data;
 	        this.draw = drawCb;
 	        this.bindEvents().initializeTiles();
-
 	        return this;
 	    }
 
@@ -1434,10 +1437,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function drawTile(tile) {
 	            if (tile.state.current.value >= 2) {
 	                if (this.draw && typeof this.draw === "function") {
-	                    var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset | 0,
-	                        y = tile.y + this.mapView.y | 0,
-	                        w = tile.width * this.equalizationFactor + 0.5 | 0,
-	                        h = tile.height + 0.5 | 0;
+	                    var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
+	                        y = tile.y + this.mapView.y,
+	                        w = tile.width * this.equalizationFactor,
+	                        h = tile.height;
 	                    this.draw(tile.img, x, y, w, h);
 	                } else {
 	                    console.error("Draw method is not defined or not a function");
@@ -1953,6 +1956,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        img.src = path;
 	        return this;
+	    },
+	    toRadians: function toRadians(degrees) {
+	        return degrees * Math.PI / 180;
 	    }
 
 		};

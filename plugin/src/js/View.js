@@ -4,6 +4,8 @@ import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
 import {Publisher} from './Publisher.js';
+import {Helper} from './Helper.js';
+
 
 /**
  * Singleton instance of Publisher
@@ -17,9 +19,12 @@ export class View {
      * @return {number} returns current equalizationFactor of latitude
      */
     get equalizationFactor() {
-        return (Math.cos(this.center.lat));
+        return (Math.cos(Helper.toRadians(this.center.lat)));
     }
 
+    /**
+     * Returns the current equalized viewport
+     */
     get viewportOffset() {
         return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
     }
@@ -56,7 +61,6 @@ export class View {
         this.data = data;
         this.draw = drawCb;
         this.bindEvents().initializeTiles();
-
         return this;
     }
 
@@ -117,10 +121,10 @@ export class View {
     drawTile(tile) {
         if (tile.state.current.value >= 2) {
             if (this.draw && typeof this.draw === "function") {
-                let x = ((tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset) | 0,
-                    y = (tile.y + this.mapView.y) | 0,
-                    w = ((tile.width * this.equalizationFactor) + 0.5) | 0,
-                    h = (tile.height + 0.5) | 0;
+                let x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
+                    y = tile.y + this.mapView.y,
+                    w = tile.width * this.equalizationFactor,
+                    h = tile.height;
                 this.draw(tile.img, x, y, w, h);
             } else {
                 console.error("Draw method is not defined or not a function");

@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './LatLng.js', './Point.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js'], factory);
+        define(['exports', './LatLng.js', './Point.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './Helper.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./LatLng.js'), require('./Point.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'));
+        factory(exports, require('./LatLng.js'), require('./Point.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./Helper.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.LatLng, global.Point, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
+        factory(mod.exports, global.LatLng, global.Point, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.Helper);
         global.View = mod.exports;
     }
-})(this, function(exports, _LatLng, _Point, _Bounds, _Rectangle, _Tile, _Publisher) {
+})(this, function(exports, _LatLng, _Point, _Bounds, _Rectangle, _Tile, _Publisher, _Helper) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -57,8 +57,13 @@
              * @return {number} returns current equalizationFactor of latitude
              */
             get: function get() {
-                return Math.cos(this.center.lat);
+                return Math.cos(_Helper.Helper.toRadians(this.center.lat));
             }
+
+            /**
+             * Returns the current equalized viewport
+             */
+
         }, {
             key: 'viewportOffset',
             get: function get() {
@@ -117,7 +122,6 @@
             this.data = data;
             this.draw = drawCb;
             this.bindEvents().initializeTiles();
-
             return this;
         }
 
@@ -188,10 +192,10 @@
             value: function drawTile(tile) {
                 if (tile.state.current.value >= 2) {
                     if (this.draw && typeof this.draw === "function") {
-                        var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset | 0,
-                            y = tile.y + this.mapView.y | 0,
-                            w = tile.width * this.equalizationFactor + 0.5 | 0,
-                            h = tile.height + 0.5 | 0;
+                        var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
+                            y = tile.y + this.mapView.y,
+                            w = tile.width * this.equalizationFactor,
+                            h = tile.height;
                         this.draw(tile.img, x, y, w, h);
                     } else {
                         console.error("Draw method is not defined or not a function");

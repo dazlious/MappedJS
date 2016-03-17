@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">65.21</p>
+      <p class="stat">65.27</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">237</p>
+      <p class="stat">241</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">59.66</p>
+      <p class="stat">56.96</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.25</p>
+      <p class="stat">2.26</p>
     </div>
   </div>
 </div>
@@ -91,17 +91,17 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&#039;exports&#039;, &#039;./LatLng.js&#039;, &#039;./Point.js&#039;, &#039;./Bounds.js&#039;, &#039;./Rectangle.js&#039;, &#039;./Tile.js&#039;, &#039;./Publisher.js&#039;], factory);
+        define([&#039;exports&#039;, &#039;./LatLng.js&#039;, &#039;./Point.js&#039;, &#039;./Bounds.js&#039;, &#039;./Rectangle.js&#039;, &#039;./Tile.js&#039;, &#039;./Publisher.js&#039;, &#039;./Helper.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports, require(&#039;./LatLng.js&#039;), require(&#039;./Point.js&#039;), require(&#039;./Bounds.js&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./Tile.js&#039;), require(&#039;./Publisher.js&#039;));
+        factory(exports, require(&#039;./LatLng.js&#039;), require(&#039;./Point.js&#039;), require(&#039;./Bounds.js&#039;), require(&#039;./Rectangle.js&#039;), require(&#039;./Tile.js&#039;), require(&#039;./Publisher.js&#039;), require(&#039;./Helper.js&#039;));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.LatLng, global.Point, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
+        factory(mod.exports, global.LatLng, global.Point, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.Helper);
         global.View = mod.exports;
     }
-})(this, function(exports, _LatLng, _Point, _Bounds, _Rectangle, _Tile, _Publisher) {
+})(this, function(exports, _LatLng, _Point, _Bounds, _Rectangle, _Tile, _Publisher, _Helper) {
     &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
@@ -148,8 +148,13 @@
              * @return {number} returns current equalizationFactor of latitude
              */
             get: function get() {
-                return Math.cos(this.center.lat);
+                return Math.cos(_Helper.Helper.toRadians(this.center.lat));
             }
+
+            /**
+             * Returns the current equalized viewport
+             */
+
         }, {
             key: &#039;viewportOffset&#039;,
             get: function get() {
@@ -208,7 +213,6 @@
             this.data = data;
             this.draw = drawCb;
             this.bindEvents().initializeTiles();
-
             return this;
         }
 
@@ -279,10 +283,10 @@
             value: function drawTile(tile) {
                 if (tile.state.current.value &gt;= 2) {
                     if (this.draw &amp;&amp; typeof this.draw === &quot;function&quot;) {
-                        var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset | 0,
-                            y = tile.y + this.mapView.y | 0,
-                            w = tile.width * this.equalizationFactor + 0.5 | 0,
-                            h = tile.height + 0.5 | 0;
+                        var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
+                            y = tile.y + this.mapView.y,
+                            w = tile.width * this.equalizationFactor,
+                            h = tile.height;
                         this.draw(tile.img, x, y, w, h);
                     } else {
                         console.error(&quot;Draw method is not defined or not a function&quot;);

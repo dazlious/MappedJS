@@ -65,6 +65,9 @@
             };
             img.src = path;
             return this;
+        },
+        toRadians: function toRadians(degrees) {
+            return degrees * Math.PI / 180;
         }
 
     };

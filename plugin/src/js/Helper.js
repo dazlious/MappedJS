@@ -39,6 +39,8 @@ export var Helper = {
         };
         img.src = path;
         return this;
-    }
+    },
+    toRadians: degrees => degrees * Math.PI / 180
+
 
 };
