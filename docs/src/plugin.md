@@ -1222,6 +1222,7 @@ name of imagedata in data.json
 * [View](#View)
     * [new View(settings, viewport, mapView, bounds, center, data)](#new_View_new)
     * [.equalizationFactor](#View+equalizationFactor) ⇒ <code>number</code>
+    * [.viewportOffset](#View+viewportOffset)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
     * [.onTilesLoaded(tile)](#View+onTilesLoaded) ⇒ <code>[TileMap](#TileMap)</code>
     * [.drawVisibleTiles()](#View+drawVisibleTiles) ⇒ <code>[TileMap](#TileMap)</code>
@@ -1249,6 +1250,11 @@ Returns current equalizationFactor
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>number</code> - returns current equalizationFactor of latitude  
+<a name="View+viewportOffset"></a>
+### view.viewportOffset
+Returns the current equalized viewport
+
+**Kind**: instance property of <code>[View](#View)</code>  
 <a name="View+visibleTiles"></a>
 ### view.visibleTiles ⇒ <code>array</code>
 get all visible tiles

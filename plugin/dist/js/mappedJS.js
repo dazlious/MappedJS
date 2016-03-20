@@ -375,9 +375,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                center: new _LatLng.LatLng(center.lat, center.lng),
 	                data: this.getCurrentLevelData(),
 	                drawCb: function (img, x, y, w, h) {
-	                    if (x % 1 !== 0 || y % 1 !== 0 || w % 1 !== 0 || h % 1 !== 0) {
-	                        console.log(x, y, w, h);
-	                    }
 	                    this.canvasContext.drawImage(img, x, y, w, h);
 	                }.bind(this)
 	            });
@@ -397,6 +394,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.canvas = this.$canvas[0];
 	            this.$container.append(this.$canvas);
 	            this.canvasContext = this.canvas.getContext("2d");
+	            this.canvasContext.mozImageSmoothingEnabled = false;
+	            this.canvasContext.msImageSmoothingEnabled = false;
+	            this.canvasContext.imageSmoothingEnabled = false;
 	            this.resize();
 	            return this;
 	        }
@@ -616,21 +616,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 4 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.Point = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _LatLng = __webpack_require__(3);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Point = exports.Point = function () {
 	  _createClass(Point, [{
-	    key: "length",
+	    key: 'length',
 
 
 	    /**
@@ -647,7 +650,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "clone",
+	    key: 'clone',
 	    get: function get() {
 	      return Point.createFromPoint(this);
 	    }
@@ -680,7 +683,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  _createClass(Point, [{
-	    key: "substract",
+	    key: 'substract',
 	    value: function substract(point) {
 	      this.x -= point.x;
 	      this.y -= point.y;
@@ -694,7 +697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "add",
+	    key: 'add',
 	    value: function add(point) {
 	      this.x += point.x;
 	      this.y += point.y;
@@ -709,7 +712,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "multiply",
+	    key: 'multiply',
 	    value: function multiply(x) {
 	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
@@ -726,7 +729,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "divide",
+	    key: 'divide',
 	    value: function divide(x) {
 	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
@@ -742,7 +745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "equals",
+	    key: 'equals',
 	    value: function equals(point) {
 	      return this.x === point.x && this.y === point.y;
 	    }
@@ -754,7 +757,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "distance",
+	    key: 'distance',
 	    value: function distance(point) {
 	      return this.clone.substract(point).length;
 	    }
@@ -767,7 +770,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "translate",
+	    key: 'translate',
 	    value: function translate(x, y) {
 	      this.x += x;
 	      this.y += y;
@@ -782,7 +785,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "position",
+	    key: 'position',
 	    value: function position(x, y) {
 	      this.x = x;
 	      this.y = y;
@@ -795,7 +798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "toArray",
+	    key: 'toArray',
 	    value: function toArray() {
 	      return [this.x, this.y];
 	    }
@@ -1286,6 +1289,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Publisher = __webpack_require__(10);
 
+	var _Helper = __webpack_require__(11);
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
@@ -1303,8 +1308,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {number} returns current equalizationFactor of latitude
 	         */
 	        get: function get() {
-	            return Math.cos(this.center.lat);
+	            return Math.cos(_Helper.Helper.toRadians(this.center.lat));
 	        }
+
+	        /**
+	         * Returns the current equalized viewport
+	         */
+
 	    }, {
 	        key: 'viewportOffset',
 	        get: function get() {
@@ -1363,7 +1373,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.data = data;
 	        this.draw = drawCb;
 	        this.bindEvents().initializeTiles();
-
 	        return this;
 	    }
 
@@ -1434,10 +1443,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function drawTile(tile) {
 	            if (tile.state.current.value >= 2) {
 	                if (this.draw && typeof this.draw === "function") {
-	                    var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset | 0,
-	                        y = tile.y + this.mapView.y | 0,
-	                        w = tile.width * this.equalizationFactor + 0.5 | 0,
-	                        h = tile.height + 0.5 | 0;
+	                    var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
+	                        y = tile.y + this.mapView.y,
+	                        w = tile.width * this.equalizationFactor,
+	                        h = tile.height;
 	                    this.draw(tile.img, x, y, w, h);
 	                } else {
 	                    console.error("Draw method is not defined or not a function");
@@ -1953,6 +1962,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        img.src = path;
 	        return this;
+	    },
+	    toRadians: function toRadians(degrees) {
+	        return degrees * Math.PI / 180;
 	    }
 
 		};

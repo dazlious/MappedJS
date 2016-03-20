@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">71.62</p>
+      <p class="stat">71.45</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">228</p>
+      <p class="stat">229</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">64.97</p>
+      <p class="stat">63.41</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.22</p>
+      <p class="stat">1.26</p>
     </div>
   </div>
 </div>
@@ -91,22 +91,23 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function(global, factory) {
     if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-        define([&quot;exports&quot;], factory);
+        define([&#039;exports&#039;, &#039;./LatLng.js&#039;], factory);
     } else if (typeof exports !== &quot;undefined&quot;) {
-        factory(exports);
+        factory(exports, require(&#039;./LatLng.js&#039;));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports);
+        factory(mod.exports, global.LatLng);
         global.Point = mod.exports;
     }
-})(this, function(exports) {
-    &quot;use strict&quot;;
+})(this, function(exports, _LatLng) {
+    &#039;use strict&#039;;
 
     Object.defineProperty(exports, &quot;__esModule&quot;, {
         value: true
     });
+    exports.Point = undefined;
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -134,7 +135,7 @@
 
     var Point = exports.Point = function() {
         _createClass(Point, [{
-            key: &quot;length&quot;,
+            key: &#039;length&#039;,
 
 
             /**
@@ -151,7 +152,7 @@
              */
 
         }, {
-            key: &quot;clone&quot;,
+            key: &#039;clone&#039;,
             get: function get() {
                 return Point.createFromPoint(this);
             }
@@ -184,7 +185,7 @@
 
 
         _createClass(Point, [{
-            key: &quot;substract&quot;,
+            key: &#039;substract&#039;,
             value: function substract(point) {
                 this.x -= point.x;
                 this.y -= point.y;
@@ -198,7 +199,7 @@
              */
 
         }, {
-            key: &quot;add&quot;,
+            key: &#039;add&#039;,
             value: function add(point) {
                 this.x += point.x;
                 this.y += point.y;
@@ -213,7 +214,7 @@
              */
 
         }, {
-            key: &quot;multiply&quot;,
+            key: &#039;multiply&#039;,
             value: function multiply(x) {
                 var y = arguments.length &lt;= 1 || arguments[1] === undefined ? x : arguments[1];
 
@@ -230,7 +231,7 @@
              */
 
         }, {
-            key: &quot;divide&quot;,
+            key: &#039;divide&#039;,
             value: function divide(x) {
                 var y = arguments.length &lt;= 1 || arguments[1] === undefined ? x : arguments[1];
 
@@ -246,7 +247,7 @@
              */
 
         }, {
-            key: &quot;equals&quot;,
+            key: &#039;equals&#039;,
             value: function equals(point) {
                 return this.x === point.x &amp;&amp; this.y === point.y;
             }
@@ -258,7 +259,7 @@
              */
 
         }, {
-            key: &quot;distance&quot;,
+            key: &#039;distance&#039;,
             value: function distance(point) {
                 return this.clone.substract(point).length;
             }
@@ -271,7 +272,7 @@
              */
 
         }, {
-            key: &quot;translate&quot;,
+            key: &#039;translate&#039;,
             value: function translate(x, y) {
                 this.x += x;
                 this.y += y;
@@ -286,7 +287,7 @@
              */
 
         }, {
-            key: &quot;position&quot;,
+            key: &#039;position&#039;,
             value: function position(x, y) {
                 this.x = x;
                 this.y = y;
@@ -299,7 +300,7 @@
              */
 
         }, {
-            key: &quot;toArray&quot;,
+            key: &#039;toArray&#039;,
             value: function toArray() {
                 return [this.x, this.y];
             }
