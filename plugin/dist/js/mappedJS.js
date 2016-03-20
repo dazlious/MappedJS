@@ -394,6 +394,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.canvas = this.$canvas[0];
 	            this.$container.append(this.$canvas);
 	            this.canvasContext = this.canvas.getContext("2d");
+	            this.canvasContext.mozImageSmoothingEnabled = false;
+	            this.canvasContext.msImageSmoothingEnabled = false;
+	            this.canvasContext.imageSmoothingEnabled = false;
 	            this.resize();
 	            return this;
 	        }
@@ -613,21 +616,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 4 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.Point = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _LatLng = __webpack_require__(3);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Point = exports.Point = function () {
 	  _createClass(Point, [{
-	    key: "length",
+	    key: 'length',
 
 
 	    /**
@@ -644,7 +650,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "clone",
+	    key: 'clone',
 	    get: function get() {
 	      return Point.createFromPoint(this);
 	    }
@@ -677,7 +683,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  _createClass(Point, [{
-	    key: "substract",
+	    key: 'substract',
 	    value: function substract(point) {
 	      this.x -= point.x;
 	      this.y -= point.y;
@@ -691,7 +697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "add",
+	    key: 'add',
 	    value: function add(point) {
 	      this.x += point.x;
 	      this.y += point.y;
@@ -706,7 +712,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "multiply",
+	    key: 'multiply',
 	    value: function multiply(x) {
 	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
@@ -723,7 +729,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "divide",
+	    key: 'divide',
 	    value: function divide(x) {
 	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
@@ -739,7 +745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "equals",
+	    key: 'equals',
 	    value: function equals(point) {
 	      return this.x === point.x && this.y === point.y;
 	    }
@@ -751,7 +757,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "distance",
+	    key: 'distance',
 	    value: function distance(point) {
 	      return this.clone.substract(point).length;
 	    }
@@ -764,7 +770,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "translate",
+	    key: 'translate',
 	    value: function translate(x, y) {
 	      this.x += x;
 	      this.y += y;
@@ -779,7 +785,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "position",
+	    key: 'position',
 	    value: function position(x, y) {
 	      this.x = x;
 	      this.y = y;
@@ -792,7 +798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }, {
-	    key: "toArray",
+	    key: 'toArray',
 	    value: function toArray() {
 	      return [this.x, this.y];
 	    }
