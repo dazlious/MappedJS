@@ -395,6 +395,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.$container.append(this.$canvas);
 	            this.canvasContext = this.canvas.getContext("2d");
 	            this.canvasContext.mozImageSmoothingEnabled = false;
+	            this.canvasContext.oImageSmoothingEnabled = false;
+	            this.canvasContext.webkitImageSmoothingEnabled = false;
 	            this.canvasContext.msImageSmoothingEnabled = false;
 	            this.canvasContext.imageSmoothingEnabled = false;
 	            this.resize();
