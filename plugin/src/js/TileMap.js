@@ -86,13 +86,14 @@ export class TileMap {
         this.canvas = this.$canvas[0];
         this.$container.append(this.$canvas);
         this.canvasContext = this.canvas.getContext("2d");
-        this.canvasContext.mozImageSmoothingEnabled = false;
-        this.canvasContext.oImageSmoothingEnabled = false;
-        this.canvasContext.webkitImageSmoothingEnabled = false;
-        this.canvasContext.msImageSmoothingEnabled = false;
-        this.canvasContext.imageSmoothingEnabled = false;
         this.resize();
         return this;
+    }
+
+    disableSubpixelRendering() {
+        this.canvasContext.mozImageSmoothingEnabled = false;
+        this.canvasContext.msImageSmoothingEnabled = false;
+        this.canvasContext.imageSmoothingEnabled = false;
     }
 
     /**
@@ -129,6 +130,7 @@ export class TileMap {
     resize() {
         this.canvasContext.canvas.width = this.width;
         this.canvasContext.canvas.height = this.height;
+        this.disableSubpixelRendering();
         this.resizeView();
         return this;
     }
