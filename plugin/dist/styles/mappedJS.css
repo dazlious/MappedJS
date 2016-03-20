@@ -10,6 +10,12 @@
 }
 
 /* line 8, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
-.mappedJS > canvas {
+.mappedJS canvas,
+.mappedJS img {
+	image-rendering: optimizeSpeed;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: optimize-contrast;
+	-ms-interpolation-mode: nearest-neighbor;
 	display: block;
 }

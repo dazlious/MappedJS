@@ -394,13 +394,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.canvas = this.$canvas[0];
 	            this.$container.append(this.$canvas);
 	            this.canvasContext = this.canvas.getContext("2d");
-	            this.canvasContext.mozImageSmoothingEnabled = false;
-	            this.canvasContext.oImageSmoothingEnabled = false;
-	            this.canvasContext.webkitImageSmoothingEnabled = false;
-	            this.canvasContext.msImageSmoothingEnabled = false;
-	            this.canvasContext.imageSmoothingEnabled = false;
 	            this.resize();
 	            return this;
+	        }
+	    }, {
+	        key: 'disableSubpixelRendering',
+	        value: function disableSubpixelRendering() {
+	            this.canvasContext.mozImageSmoothingEnabled = false;
+	            this.canvasContext.msImageSmoothingEnabled = false;
+	            this.canvasContext.imageSmoothingEnabled = false;
 	        }
 
 	        /**
@@ -449,6 +451,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function resize() {
 	            this.canvasContext.canvas.width = this.width;
 	            this.canvasContext.canvas.height = this.height;
+	            this.disableSubpixelRendering();
 	            this.resizeView();
 	            return this;
 	        }
