@@ -368,17 +368,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(TileMap, [{
 	        key: 'initialize',
 	        value: function initialize(bounds, center, mapDimensions) {
+	            this.initializeCanvas();
 	            this.view = new _View.View({
 	                viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
 	                mapView: new _Rectangle.Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
 	                bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
 	                center: new _LatLng.LatLng(center.lat, center.lng),
 	                data: this.getCurrentLevelData(),
-	                drawCb: function (img, x, y, w, h) {
-	                    this.canvasContext.drawImage(img, x, y, w, h);
-	                }.bind(this)
+	                context: this.canvasContext
 	            });
-	            this.initializeCanvas();
+	            this.resize();
 	            return this;
 	        }
 
@@ -394,7 +393,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.canvas = this.$canvas[0];
 	            this.$container.append(this.$canvas);
 	            this.canvasContext = this.canvas.getContext("2d");
-	            this.resize();
 	            return this;
 	        }
 	    }, {
@@ -577,19 +575,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.lng += coord.lng;
 	            return this;
 	        }
-
-	        /**
-	         * converts Latlng to a Point
-	         * @return {Point} Returns a Point representing LatLng in Pixels
-	         */
-
 	    }, {
-	        key: 'toPoint',
-	        value: function toPoint(bounds, rect) {
-	            var relativePosition = bounds.nw.clone.substract(this),
-	                factorX = rect.width / bounds.width,
-	                factorY = rect.height / bounds.height;
-	            return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+	        key: 'divide',
+	        value: function divide(factorLat) {
+	            var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+
+	            this.lat /= factorLat;
+	            this.lng /= factorLng;
+	            return this;
+	        }
+	    }, {
+	        key: 'multiply',
+	        value: function multiply(factorLat) {
+	            var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+
+	            this.lat *= factorLat;
+	            this.lng *= factorLng;
+	            return this;
 	        }
 
 	        /**
@@ -862,6 +864,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'height',
 	        get: function get() {
 	            return Math.abs(this.so.lat - this.nw.lat);
+	        }
+	    }, {
+	        key: 'range',
+	        get: function get() {
+	            return this.nw.clone.substract(this.so);
 	        }
 
 	        /**
@@ -1364,7 +1371,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? {} : _ref$data;
-	        var drawCb = _ref.drawCb;
+	        var _ref$context = _ref.context;
+	        var context = _ref$context === undefined ? null : _ref$context;
 
 	        _classCallCheck(this, View);
 
@@ -1372,23 +1380,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.viewport = viewport;
 	        this.bounds = bounds;
 	        this.center = center;
-	        var t = this.viewport.center.substract(center.toPoint(this.bounds, this.mapView));
-	        this.mapView.position(t.x, t.y);
+	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
+	        this.mapView.position(newCenter.x, newCenter.y);
 	        this.tiles = [];
 	        this.data = data;
-	        this.draw = drawCb;
+	        this.context = context;
 	        this.bindEvents().initializeTiles();
 	        return this;
 	    }
 
-	    /**
-	     * handles on load of a tile
-	     * @param  {Tile} tile a tile of the TileMap
-	     * @return {TileMap} instance of TileMap
-	     */
-
-
 	    _createClass(View, [{
+	        key: 'convertPointToLatLng',
+	        value: function convertPointToLatLng(point) {
+	            var factorX = this.mapView.width / this.bounds.range.lng,
+	                factorY = this.mapView.height / this.bounds.range.lat;
+	            return new _LatLng.LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
+	        }
+	    }, {
+	        key: 'convertLatLngToPoint',
+	        value: function convertLatLngToPoint(latlng) {
+	            var relativePosition = this.bounds.nw.clone.substract(latlng),
+	                factorX = this.mapView.width / this.bounds.width,
+	                factorY = this.mapView.height / this.bounds.height;
+	            return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+	        }
+
+	        /**
+	         * handles on load of a tile
+	         * @param  {Tile} tile a tile of the TileMap
+	         * @return {TileMap} instance of TileMap
+	         */
+
+	    }, {
 	        key: 'onTilesLoaded',
 	        value: function onTilesLoaded(tile) {
 	            this.drawTile(tile);
@@ -1398,28 +1421,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'moveView',
 	        value: function moveView(pos) {
-	            var old = this.mapView.clone;
-	            var p = this.mapView.center.substract(pos);
+	            var old = this.mapView.clone,
+	                p = this.mapView.center.substract(pos);
+
 	            this.mapView.setCenter(p);
+
 	            var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
+
 	            if (!equalizedMap.containsRect(this.viewport)) {
 
 	                if (equalizedMap.x > 0) {
+	                    this.mapView.x = old.x;
+	                }
+	                if (equalizedMap.width + equalizedMap.x < this.viewport.width) {
 	                    this.mapView.x = old.x;
 	                }
 
 	                if (equalizedMap.y > 0) {
 	                    this.mapView.y = old.y;
 	                }
-
-	                if (equalizedMap.width + equalizedMap.x < this.viewport.width) {
-	                    this.mapView.x = old.x;
-	                }
-
 	                if (equalizedMap.height + equalizedMap.y < this.viewport.height) {
 	                    this.mapView.y = old.y;
 	                }
 	            }
+	            var newCenter = this.mapView.topLeft.multiply(-1, -1).add(this.viewport.center);
+	            this.center = this.convertPointToLatLng(newCenter);
 	            return this;
 	        }
 
@@ -1447,19 +1473,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'drawTile',
 	        value: function drawTile(tile) {
 	            if (tile.state.current.value >= 2) {
-	                if (this.draw && typeof this.draw === "function") {
-	                    var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
-	                        y = tile.y + this.mapView.y,
-	                        w = tile.width * this.equalizationFactor,
-	                        h = tile.height;
-	                    this.draw(tile.img, x, y, w, h);
-	                } else {
-	                    console.error("Draw method is not defined or not a function");
-	                }
+	                var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
+	                    y = tile.y + this.mapView.y,
+	                    w = tile.width * this.equalizationFactor,
+	                    h = tile.height;
+	                this.draw(tile.img, x, y, w, h);
 	            } else if (tile.state.current.value === 0) {
 	                tile.initialize();
 	            }
 	            return this;
+	        }
+	    }, {
+	        key: 'draw',
+	        value: function draw(img, x, y, w, h) {
+	            this.context.drawImage(img, x, y, w, h);
 	        }
 
 	        /**
@@ -1502,7 +1529,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	exports.Tile = undefined;
 
@@ -1554,91 +1581,94 @@ return /******/ (function(modules) { // webpackBootstrap
 	var EVENT_TILE_FAILED = "tile-failed";
 
 	var Tile = exports.Tile = function (_Rectangle) {
-	  _inherits(Tile, _Rectangle);
+	    _inherits(Tile, _Rectangle);
 
-	  _createClass(Tile, [{
-	    key: 'Publisher',
+	    _createClass(Tile, [{
+	        key: 'Publisher',
 
 
-	    /**
-	     * Return the Publisher
-	     */
-	    get: function get() {
-	      return PUBLISHER;
+	        /**
+	         * Return the Publisher
+	         */
+	        get: function get() {
+	            return PUBLISHER;
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {string} path=null - path to image
+	         * @param  {number} x=0 - position x of tile
+	         * @param  {number} y=0 - position y of tile
+	         * @param  {number} w=0 - tile width
+	         * @param  {number} h=0 - tile height
+	         * @return {Tile} instance of Tile
+	         */
+
+	    }]);
+
+	    function Tile() {
+	        var _ret;
+
+	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	        var path = _ref.path;
+	        var _ref$x = _ref.x;
+	        var x = _ref$x === undefined ? 0 : _ref$x;
+	        var _ref$y = _ref.y;
+	        var y = _ref$y === undefined ? 0 : _ref$y;
+	        var _ref$w = _ref.w;
+	        var w = _ref$w === undefined ? 0 : _ref$w;
+	        var _ref$h = _ref.h;
+	        var h = _ref$h === undefined ? 0 : _ref$h;
+
+	        _classCallCheck(this, Tile);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
+
+	        _this.state = new _StateHandler.StateHandler(STATES);
+	        if (!path || typeof path !== "string" || path.length === 0) {
+	            throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
+	        }
+	        _this.path = path;
+	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    /**
-	     * Constructor
-	     * @param  {string} path=null - path to image
-	     * @param  {number} x=0 - position x of tile
-	     * @param  {number} y=0 - position y of tile
-	     * @param  {number} w=0 - tile width
-	     * @param  {number} h=0 - tile height
+	     * initializes tile and starts loading image
 	     * @return {Tile} instance of Tile
 	     */
 
-	  }]);
 
-	  function Tile() {
-	    var _ret;
+	    _createClass(Tile, [{
+	        key: 'initialize',
+	        value: function initialize() {
+	            this.state.next();
+	            _Helper.Helper.loadImage(this.path, function (img) {
+	                this.img = img;
+	                this.state.next();
+	                PUBLISHER.publish(EVENT_TILE_LOADED, this);
+	            }.bind(this));
 
-	    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	            return this;
+	        }
+	    }, {
+	        key: 'draw',
+	        value: function draw() {}
 
-	    var path = _ref.path;
-	    var _ref$x = _ref.x;
-	    var x = _ref$x === undefined ? 0 : _ref$x;
-	    var _ref$y = _ref.y;
-	    var y = _ref$y === undefined ? 0 : _ref$y;
-	    var _ref$w = _ref.w;
-	    var w = _ref$w === undefined ? 0 : _ref$w;
-	    var _ref$h = _ref.h;
-	    var h = _ref$h === undefined ? 0 : _ref$h;
+	        /**
+	         * check if tiles are equal
+	         * @param  {Tile} tile - the specified tile to check against this
+	         * @return {Boolean} is true, if x, y, width and height and path are the same
+	         */
 
-	    _classCallCheck(this, Tile);
+	    }, {
+	        key: 'equals',
+	        value: function equals(tile) {
+	            return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
+	        }
+	    }]);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
-
-	    _this.state = new _StateHandler.StateHandler(STATES);
-	    if (!path || typeof path !== "string" || path.length === 0) {
-	      throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
-	    }
-	    _this.path = path;
-	    return _ret = _this, _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  /**
-	   * initializes tile and starts loading image
-	   * @return {Tile} instance of Tile
-	   */
-
-
-	  _createClass(Tile, [{
-	    key: 'initialize',
-	    value: function initialize() {
-	      this.state.next();
-	      _Helper.Helper.loadImage(this.path, function (img) {
-	        this.img = img;
-	        this.state.next();
-	        PUBLISHER.publish(EVENT_TILE_LOADED, this);
-	      }.bind(this));
-
-	      return this;
-	    }
-
-	    /**
-	     * check if tiles are equal
-	     * @param  {Tile} tile - the specified tile to check against this
-	     * @return {Boolean} is true, if x, y, width and height and path are the same
-	     */
-
-	  }, {
-	    key: 'equals',
-	    value: function equals(tile) {
-	      return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
-	    }
-	  }]);
-
-	  return Tile;
+	    return Tile;
 	}(_Rectangle2.Rectangle);
 
 /***/ },

@@ -1,4 +1,4 @@
-/*global Point*/
+/*global Point,Bounds,LatLng,Rectangle*/
 
 describe('Point', function() {
     "use strict";
@@ -94,6 +94,5 @@ describe('Point', function() {
         expect(p1.distance(p3)).toEqual(2);
         expect(p4.distance(p2)).toEqual(2.23606797749979);
     });
-
 
 });

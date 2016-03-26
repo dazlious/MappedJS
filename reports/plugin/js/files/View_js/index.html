@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">65.27</p>
+      <p class="stat">65.83</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">241</p>
+      <p class="stat">261</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">56.96</p>
+      <p class="stat">62.58</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.26</p>
+      <p class="stat">2.76</p>
     </div>
   </div>
 </div>
@@ -199,7 +199,8 @@
             var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
             var _ref$data = _ref.data;
             var data = _ref$data === undefined ? {} : _ref$data;
-            var drawCb = _ref.drawCb;
+            var _ref$context = _ref.context;
+            var context = _ref$context === undefined ? null : _ref$context;
 
             _classCallCheck(this, View);
 
@@ -207,23 +208,38 @@
             this.viewport = viewport;
             this.bounds = bounds;
             this.center = center;
-            var t = this.viewport.center.substract(center.toPoint(this.bounds, this.mapView));
-            this.mapView.position(t.x, t.y);
+            var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
+            this.mapView.position(newCenter.x, newCenter.y);
             this.tiles = [];
             this.data = data;
-            this.draw = drawCb;
+            this.context = context;
             this.bindEvents().initializeTiles();
             return this;
         }
 
-        /**
-         * handles on load of a tile
-         * @param  {Tile} tile a tile of the TileMap
-         * @return {TileMap} instance of TileMap
-         */
-
-
         _createClass(View, [{
+            key: &#039;convertPointToLatLng&#039;,
+            value: function convertPointToLatLng(point) {
+                var factorX = this.mapView.width / this.bounds.range.lng,
+                    factorY = this.mapView.height / this.bounds.range.lat;
+                return new _LatLng.LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
+            }
+        }, {
+            key: &#039;convertLatLngToPoint&#039;,
+            value: function convertLatLngToPoint(latlng) {
+                var relativePosition = this.bounds.nw.clone.substract(latlng),
+                    factorX = this.mapView.width / this.bounds.width,
+                    factorY = this.mapView.height / this.bounds.height;
+                return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+            }
+
+            /**
+             * handles on load of a tile
+             * @param  {Tile} tile a tile of the TileMap
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
             key: &#039;onTilesLoaded&#039;,
             value: function onTilesLoaded(tile) {
                 this.drawTile(tile);
@@ -233,28 +249,31 @@
         }, {
             key: &#039;moveView&#039;,
             value: function moveView(pos) {
-                var old = this.mapView.clone;
-                var p = this.mapView.center.substract(pos);
+                var old = this.mapView.clone,
+                    p = this.mapView.center.substract(pos);
+
                 this.mapView.setCenter(p);
+
                 var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
+
                 if (!equalizedMap.containsRect(this.viewport)) {
 
                     if (equalizedMap.x &gt; 0) {
+                        this.mapView.x = old.x;
+                    }
+                    if (equalizedMap.width + equalizedMap.x &lt; this.viewport.width) {
                         this.mapView.x = old.x;
                     }
 
                     if (equalizedMap.y &gt; 0) {
                         this.mapView.y = old.y;
                     }
-
-                    if (equalizedMap.width + equalizedMap.x &lt; this.viewport.width) {
-                        this.mapView.x = old.x;
-                    }
-
                     if (equalizedMap.height + equalizedMap.y &lt; this.viewport.height) {
                         this.mapView.y = old.y;
                     }
                 }
+                var newCenter = this.mapView.topLeft.multiply(-1, -1).add(this.viewport.center);
+                this.center = this.convertPointToLatLng(newCenter);
                 return this;
             }
 
@@ -282,19 +301,20 @@
             key: &#039;drawTile&#039;,
             value: function drawTile(tile) {
                 if (tile.state.current.value &gt;= 2) {
-                    if (this.draw &amp;&amp; typeof this.draw === &quot;function&quot;) {
-                        var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
-                            y = tile.y + this.mapView.y,
-                            w = tile.width * this.equalizationFactor,
-                            h = tile.height;
-                        this.draw(tile.img, x, y, w, h);
-                    } else {
-                        console.error(&quot;Draw method is not defined or not a function&quot;);
-                    }
+                    var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
+                        y = tile.y + this.mapView.y,
+                        w = tile.width * this.equalizationFactor,
+                        h = tile.height;
+                    this.draw(tile.img, x, y, w, h);
                 } else if (tile.state.current.value === 0) {
                     tile.initialize();
                 }
                 return this;
+            }
+        }, {
+            key: &#039;draw&#039;,
+            value: function draw(img, x, y, w, h) {
+                this.context.drawImage(img, x, y, w, h);
             }
 
             /**
