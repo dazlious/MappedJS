@@ -50,18 +50,31 @@ export class View {
      * @param  {Object} data = {} - data of current map
      * @return {View} Instance of View
      */
-    constructor({viewport = new Rectangle(), mapView = new Rectangle(),bounds = new Bounds(), center = new LatLng(), data = {}, drawCb}) {
+    constructor({viewport = new Rectangle(), mapView = new Rectangle(),bounds = new Bounds(), center = new LatLng(), data = {}, context = null}) {
         this.mapView = mapView;
         this.viewport = viewport;
         this.bounds = bounds;
         this.center = center;
-        var t = this.viewport.center.substract(center.toPoint(this.bounds, this.mapView));
-        this.mapView.position(t.x, t.y);
+        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
+        this.mapView.position(newCenter.x, newCenter.y);
         this.tiles = [];
         this.data = data;
-        this.draw = drawCb;
+        this.context = context;
         this.bindEvents().initializeTiles();
         return this;
+    }
+
+    convertPointToLatLng(point) {
+        let factorX = this.mapView.width / this.bounds.range.lng,
+            factorY = this.mapView.height / this.bounds.range.lat;
+        return new LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
+    }
+
+    convertLatLngToPoint(latlng) {
+        let relativePosition = this.bounds.nw.clone.substract(latlng),
+            factorX = this.mapView.width / this.bounds.width,
+            factorY = this.mapView.height / this.bounds.height;
+        return new Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
     }
 
     /**
@@ -76,29 +89,32 @@ export class View {
     }
 
     moveView(pos) {
-        let old = this.mapView.clone;
-        let p = this.mapView.center.substract(pos);
+        let old = this.mapView.clone,
+            p = this.mapView.center.substract(pos);
+
         this.mapView.setCenter(p);
+
         let equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
+
         if (!equalizedMap.containsRect(this.viewport)) {
 
             if (equalizedMap.x > 0) {
+                this.mapView.x = old.x;
+            }
+            if (equalizedMap.width + equalizedMap.x < this.viewport.width) {
                 this.mapView.x = old.x;
             }
 
             if (equalizedMap.y > 0) {
                 this.mapView.y = old.y;
             }
-
-            if (equalizedMap.width + equalizedMap.x < this.viewport.width) {
-                this.mapView.x = old.x;
-            }
-
             if (equalizedMap.height + equalizedMap.y < this.viewport.height) {
                 this.mapView.y = old.y;
             }
 
         }
+        var newCenter = this.mapView.topLeft.multiply(-1, -1).add(this.viewport.center);
+        this.center = this.convertPointToLatLng(newCenter);
         return this;
     }
 
@@ -120,19 +136,19 @@ export class View {
      */
     drawTile(tile) {
         if (tile.state.current.value >= 2) {
-            if (this.draw && typeof this.draw === "function") {
-                let x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
-                    y = tile.y + this.mapView.y,
-                    w = tile.width * this.equalizationFactor,
-                    h = tile.height;
-                this.draw(tile.img, x, y, w, h);
-            } else {
-                console.error("Draw method is not defined or not a function");
-            }
+            let x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
+                y = tile.y + this.mapView.y,
+                w = tile.width * this.equalizationFactor,
+                h = tile.height;
+            this.draw(tile.img, x, y, w, h);
         } else if (tile.state.current.value === 0) {
             tile.initialize();
         }
         return this;
+    }
+
+    draw(img, x, y, w, h) {
+        this.context.drawImage(img, x, y, w, h);
     }
 
     /**

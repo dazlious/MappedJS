@@ -65,6 +65,11 @@
             get: function get() {
                 return Math.abs(this.so.lat - this.nw.lat);
             }
+        }, {
+            key: 'range',
+            get: function get() {
+                return this.nw.clone.substract(this.so);
+            }
 
             /**
              * Constructor

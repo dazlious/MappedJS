@@ -364,7 +364,6 @@ Get event helper, applies jQuery-event-fix too
         * [.clone](#LatLng+clone) ⇒ <code>[LatLng](#LatLng)</code>
         * [.substract(coord)](#LatLng+substract) ⇒ <code>[LatLng](#LatLng)</code>
         * [.add(coord)](#LatLng+add) ⇒ <code>[LatLng](#LatLng)</code>
-        * [.toPoint()](#LatLng+toPoint) ⇒ <code>[Point](#Point)</code>
         * [.equals(coord)](#LatLng+equals) ⇒ <code>Boolean</code>
     * _static_
         * [.createFromLatLng(LatLng)](#LatLng.createFromLatLng) ⇒ <code>[LatLng](#LatLng)</code>
@@ -412,12 +411,6 @@ add specified coord to this coordinate
 
 - coord <code>[LatLng](#LatLng)</code> - specified coordinate to add to this coord
 
-<a name="LatLng+toPoint"></a>
-### latLng.toPoint() ⇒ <code>[Point](#Point)</code>
-converts Latlng to a Point
-
-**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
-**Returns**: <code>[Point](#Point)</code> - Returns a Point representing LatLng in Pixels  
 <a name="LatLng+equals"></a>
 ### latLng.equals(coord) ⇒ <code>Boolean</code>
 checks if specified coord equals this coord

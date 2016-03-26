@@ -55,15 +55,16 @@ export class LatLng {
         return this;
     }
 
-    /**
-     * converts Latlng to a Point
-     * @return {Point} Returns a Point representing LatLng in Pixels
-     */
-    toPoint(bounds, rect) {
-        let relativePosition = bounds.nw.clone.substract(this),
-            factorX = rect.width / bounds.width,
-            factorY = rect.height / bounds.height;
-        return new Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+    divide(factorLat, factorLng = factorLat) {
+        this.lat /= factorLat;
+        this.lng /= factorLng;
+        return this;
+    }
+
+    multiply(factorLat, factorLng = factorLat) {
+        this.lat *= factorLat;
+        this.lng *= factorLng;
+        return this;
     }
 
     /**

@@ -63,17 +63,16 @@ export class TileMap {
      * @return {TileMap} instance of TileMap
      */
     initialize(bounds, center, mapDimensions) {
+        this.initializeCanvas();
         this.view = new View({
             viewport: new Rectangle(this.left, this.top, this.width, this.height),
             mapView: new Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
             bounds: new Bounds(new LatLng(bounds.northWest[0], bounds.northWest[1]), new LatLng(bounds.southEast[0], bounds.southEast[1])),
             center: new LatLng(center.lat, center.lng),
             data: this.getCurrentLevelData(),
-            drawCb: function(img, x, y, w, h) {
-                this.canvasContext.drawImage(img, x, y, w, h);
-            }.bind(this)
+            context: this.canvasContext
         });
-        this.initializeCanvas();
+        this.resize();
         return this;
     }
 
@@ -86,7 +85,6 @@ export class TileMap {
         this.canvas = this.$canvas[0];
         this.$container.append(this.$canvas);
         this.canvasContext = this.canvas.getContext("2d");
-        this.resize();
         return this;
     }
 

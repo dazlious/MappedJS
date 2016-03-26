@@ -18,6 +18,10 @@ export class Bounds {
         return Math.abs(this.so.lat - this.nw.lat);
     }
 
+    get range() {
+        return this.nw.clone.substract(this.so);
+    }
+
     /**
      * Constructor
      * @param  {number} northWest = new LatLng() - representation of northWest boundary
@@ -32,5 +36,5 @@ export class Bounds {
         this.so = southEast;
         return this;
     }
-    
+
 }

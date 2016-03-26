@@ -71,28 +71,4 @@ describe('LatLng', function() {
 
     });
 
-
-    it("converts correctly", function() {
-        var nw = new LatLng.LatLng(80, -170),
-            so = new LatLng.LatLng(-80, 170);
-        var bounds = new Bounds.Bounds(nw, so);
-
-        var rect = new Rectangle.Rectangle(0, 0, 3400, 1600);
-
-        var coord1 = new LatLng.LatLng(80, -170),
-            coord2 = new LatLng.LatLng(79, -169),
-            coord3 = new LatLng.LatLng(0, 0),
-            coord4 = new LatLng.LatLng(-50, 50);
-
-        var p1 = coord1.toPoint(bounds, rect),
-            p2 = coord2.toPoint(bounds, rect),
-            p3 = coord3.toPoint(bounds, rect),
-            p4 = coord4.toPoint(bounds, rect);
-
-        expect(p1).toEqual(new Point.Point(0, 0));
-        expect(p2).toEqual(new Point.Point(10, 10));
-        expect(p3).toEqual(new Point.Point(1700, 800));
-        expect(p4).toEqual(new Point.Point(2200, 1300));
-    });
-
 });

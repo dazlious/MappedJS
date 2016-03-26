@@ -75,6 +75,10 @@ export class Tile extends Rectangle {
         return this;
     }
 
+    draw() {
+        
+    }
+
     /**
      * check if tiles are equal
      * @param  {Tile} tile - the specified tile to check against this

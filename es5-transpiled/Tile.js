@@ -205,6 +205,9 @@
 
                 return this;
             }
+        }, {
+            key: 'draw',
+            value: function draw() {}
 
             /**
              * check if tiles are equal

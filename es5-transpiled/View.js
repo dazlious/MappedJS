@@ -108,7 +108,8 @@
             var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
             var _ref$data = _ref.data;
             var data = _ref$data === undefined ? {} : _ref$data;
-            var drawCb = _ref.drawCb;
+            var _ref$context = _ref.context;
+            var context = _ref$context === undefined ? null : _ref$context;
 
             _classCallCheck(this, View);
 
@@ -116,23 +117,38 @@
             this.viewport = viewport;
             this.bounds = bounds;
             this.center = center;
-            var t = this.viewport.center.substract(center.toPoint(this.bounds, this.mapView));
-            this.mapView.position(t.x, t.y);
+            var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
+            this.mapView.position(newCenter.x, newCenter.y);
             this.tiles = [];
             this.data = data;
-            this.draw = drawCb;
+            this.context = context;
             this.bindEvents().initializeTiles();
             return this;
         }
 
-        /**
-         * handles on load of a tile
-         * @param  {Tile} tile a tile of the TileMap
-         * @return {TileMap} instance of TileMap
-         */
-
-
         _createClass(View, [{
+            key: 'convertPointToLatLng',
+            value: function convertPointToLatLng(point) {
+                var factorX = this.mapView.width / this.bounds.range.lng,
+                    factorY = this.mapView.height / this.bounds.range.lat;
+                return new _LatLng.LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
+            }
+        }, {
+            key: 'convertLatLngToPoint',
+            value: function convertLatLngToPoint(latlng) {
+                var relativePosition = this.bounds.nw.clone.substract(latlng),
+                    factorX = this.mapView.width / this.bounds.width,
+                    factorY = this.mapView.height / this.bounds.height;
+                return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+            }
+
+            /**
+             * handles on load of a tile
+             * @param  {Tile} tile a tile of the TileMap
+             * @return {TileMap} instance of TileMap
+             */
+
+        }, {
             key: 'onTilesLoaded',
             value: function onTilesLoaded(tile) {
                 this.drawTile(tile);
@@ -142,28 +158,31 @@
         }, {
             key: 'moveView',
             value: function moveView(pos) {
-                var old = this.mapView.clone;
-                var p = this.mapView.center.substract(pos);
+                var old = this.mapView.clone,
+                    p = this.mapView.center.substract(pos);
+
                 this.mapView.setCenter(p);
+
                 var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
+
                 if (!equalizedMap.containsRect(this.viewport)) {
 
                     if (equalizedMap.x > 0) {
+                        this.mapView.x = old.x;
+                    }
+                    if (equalizedMap.width + equalizedMap.x < this.viewport.width) {
                         this.mapView.x = old.x;
                     }
 
                     if (equalizedMap.y > 0) {
                         this.mapView.y = old.y;
                     }
-
-                    if (equalizedMap.width + equalizedMap.x < this.viewport.width) {
-                        this.mapView.x = old.x;
-                    }
-
                     if (equalizedMap.height + equalizedMap.y < this.viewport.height) {
                         this.mapView.y = old.y;
                     }
                 }
+                var newCenter = this.mapView.topLeft.multiply(-1, -1).add(this.viewport.center);
+                this.center = this.convertPointToLatLng(newCenter);
                 return this;
             }
 
@@ -191,19 +210,20 @@
             key: 'drawTile',
             value: function drawTile(tile) {
                 if (tile.state.current.value >= 2) {
-                    if (this.draw && typeof this.draw === "function") {
-                        var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
-                            y = tile.y + this.mapView.y,
-                            w = tile.width * this.equalizationFactor,
-                            h = tile.height;
-                        this.draw(tile.img, x, y, w, h);
-                    } else {
-                        console.error("Draw method is not defined or not a function");
-                    }
+                    var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
+                        y = tile.y + this.mapView.y,
+                        w = tile.width * this.equalizationFactor,
+                        h = tile.height;
+                    this.draw(tile.img, x, y, w, h);
                 } else if (tile.state.current.value === 0) {
                     tile.initialize();
                 }
                 return this;
+            }
+        }, {
+            key: 'draw',
+            value: function draw(img, x, y, w, h) {
+                this.context.drawImage(img, x, y, w, h);
             }
 
             /**

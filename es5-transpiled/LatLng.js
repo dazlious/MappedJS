@@ -118,19 +118,23 @@
                 this.lng += coord.lng;
                 return this;
             }
-
-            /**
-             * converts Latlng to a Point
-             * @return {Point} Returns a Point representing LatLng in Pixels
-             */
-
         }, {
-            key: 'toPoint',
-            value: function toPoint(bounds, rect) {
-                var relativePosition = bounds.nw.clone.substract(this),
-                    factorX = rect.width / bounds.width,
-                    factorY = rect.height / bounds.height;
-                return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+            key: 'divide',
+            value: function divide(factorLat) {
+                var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+
+                this.lat /= factorLat;
+                this.lng /= factorLng;
+                return this;
+            }
+        }, {
+            key: 'multiply',
+            value: function multiply(factorLat) {
+                var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+
+                this.lat *= factorLat;
+                this.lng *= factorLng;
+                return this;
             }
 
             /**
