@@ -204,7 +204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }.bind(this),
 	                    pan: function (data) {
 	                        var change = data.positions.last.substract(data.positions.current),
-	                            absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+	                            absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height).multiply(-1, -1);
 	                        this.tileMap.view.moveView(absolutePosition);
 	                        this.tileMap.redraw();
 	                    }.bind(this),
@@ -904,7 +904,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	exports.Rectangle = undefined;
 
@@ -921,348 +921,353 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var Rectangle = exports.Rectangle = function (_Point) {
-	  _inherits(Rectangle, _Point);
+	    _inherits(Rectangle, _Point);
 
-	  _createClass(Rectangle, [{
-	    key: 'center',
+	    _createClass(Rectangle, [{
+	        key: 'center',
 
 
-	    /**
-	     * get center-position of rectangle
-	     * @return {Point} center point
-	     */
-	    get: function get() {
-	      return new _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
+	        /**
+	         * get center-position of rectangle
+	         * @return {Point} center point
+	         */
+	        get: function get() {
+	            return new _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
+	        }
+
+	        /**
+	         * get top-left-position of rectangle
+	         * @return {Point} top-left point
+	         */
+
+	    }, {
+	        key: 'topLeft',
+	        get: function get() {
+	            return new _Point2.Point(this.x, this.y);
+	        }
+
+	        /**
+	         * get top-right-position of rectangle
+	         * @return {Point} top-right point
+	         */
+
+	    }, {
+	        key: 'topRight',
+	        get: function get() {
+	            return new _Point2.Point(this.x + this.width, this.y);
+	        }
+
+	        /**
+	         * get bottom-left-position of rectangle
+	         * @return {Point} bottom-left point
+	         */
+
+	    }, {
+	        key: 'bottomLeft',
+	        get: function get() {
+	            return new _Point2.Point(this.x, this.y + this.height);
+	        }
+
+	        /**
+	         * get bottom-right-position of rectangle
+	         * @return {Point} bottom-right point
+	         */
+
+	    }, {
+	        key: 'bottomRight',
+	        get: function get() {
+	            return new _Point2.Point(this.x + this.width, this.y + this.height);
+	        }
+
+	        /**
+	         * Returns right position of Rectangle
+	         * @return {number} right position
+	         */
+
+	    }, {
+	        key: 'right',
+	        get: function get() {
+	            return this.x + this.width;
+	        }
+
+	        /**
+	         * Returns left position of Rectangle
+	         * @return {number} left position
+	         */
+
+	    }, {
+	        key: 'left',
+	        get: function get() {
+	            return this.x;
+	        }
+
+	        /**
+	         * Returns top position of Rectangle
+	         * @return {number} top position
+	         */
+
+	    }, {
+	        key: 'top',
+	        get: function get() {
+	            return this.y;
+	        }
+
+	        /**
+	         * Returns bottom position of Rectangle
+	         * @return {number} bottom position
+	         */
+
+	    }, {
+	        key: 'bottom',
+	        get: function get() {
+	            return this.y + this.height;
+	        }
+
+	        /**
+	         * clones a rectangle
+	         * @return {Rectangle} duplicated rectangle
+	         */
+
+	    }, {
+	        key: 'clone',
+	        get: function get() {
+	            return Rectangle.createFromRectangle(this);
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {number} x=0 - x-position of specified rectangle
+	         * @param  {number} y=0 - y-position of specified rectangle
+	         * @param  {number} width=0 - width of specified rectangle
+	         * @param  {number} height=0 - height of specified rectangle
+	         * @return {Rectangle} instance of Rectangle
+	         */
+
+	    }]);
+
+	    function Rectangle() {
+	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	        var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+
+	        var _ret;
+
+	        var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
+	        _classCallCheck(this, Rectangle);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
+
+	        _this.width = width;
+	        _this.height = height;
+	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    /**
-	     * get top-left-position of rectangle
-	     * @return {Point} top-left point
-	     */
-
-	  }, {
-	    key: 'topLeft',
-	    get: function get() {
-	      return new _Point2.Point(this.x, this.y);
-	    }
-
-	    /**
-	     * get top-right-position of rectangle
-	     * @return {Point} top-right point
-	     */
-
-	  }, {
-	    key: 'topRight',
-	    get: function get() {
-	      return new _Point2.Point(this.x + this.width, this.y);
-	    }
-
-	    /**
-	     * get bottom-left-position of rectangle
-	     * @return {Point} bottom-left point
-	     */
-
-	  }, {
-	    key: 'bottomLeft',
-	    get: function get() {
-	      return new _Point2.Point(this.x, this.y + this.height);
-	    }
-
-	    /**
-	     * get bottom-right-position of rectangle
-	     * @return {Point} bottom-right point
-	     */
-
-	  }, {
-	    key: 'bottomRight',
-	    get: function get() {
-	      return new _Point2.Point(this.x + this.width, this.y + this.height);
-	    }
-
-	    /**
-	     * Returns right position of Rectangle
-	     * @return {number} right position
-	     */
-
-	  }, {
-	    key: 'right',
-	    get: function get() {
-	      return this.x + this.width;
-	    }
-
-	    /**
-	     * Returns left position of Rectangle
-	     * @return {number} left position
-	     */
-
-	  }, {
-	    key: 'left',
-	    get: function get() {
-	      return this.x;
-	    }
-
-	    /**
-	     * Returns top position of Rectangle
-	     * @return {number} top position
-	     */
-
-	  }, {
-	    key: 'top',
-	    get: function get() {
-	      return this.y;
-	    }
-
-	    /**
-	     * Returns bottom position of Rectangle
-	     * @return {number} bottom position
-	     */
-
-	  }, {
-	    key: 'bottom',
-	    get: function get() {
-	      return this.y + this.height;
-	    }
-
-	    /**
-	     * clones a rectangle
-	     * @return {Rectangle} duplicated rectangle
-	     */
-
-	  }, {
-	    key: 'clone',
-	    get: function get() {
-	      return Rectangle.createFromRectangle(this);
-	    }
-
-	    /**
-	     * Constructor
-	     * @param  {number} x=0 - x-position of specified rectangle
-	     * @param  {number} y=0 - y-position of specified rectangle
-	     * @param  {number} width=0 - width of specified rectangle
-	     * @param  {number} height=0 - height of specified rectangle
-	     * @return {Rectangle} instance of Rectangle
-	     */
-
-	  }]);
-
-	  function Rectangle() {
-	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-	    var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-
-	    var _ret;
-
-	    var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
-
-	    _classCallCheck(this, Rectangle);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
-
-	    _this.width = width;
-	    _this.height = height;
-	    return _ret = _this, _possibleConstructorReturn(_this, _ret);
-	  }
-
-	  /**
-	   * Checks whether Rectangle intersects with specified Rectangle
-	   * @param  {Rectangle} rect - the specified rectangle to check against
-	   * @return {Boolean} true if containment is entirely
-	   */
-
-
-	  _createClass(Rectangle, [{
-	    key: 'intersects',
-	    value: function intersects(rect) {
-	      return !(rect.left > this.right || rect.right < this.left || rect.top > this.bottom || rect.bottom < this.top);
-	    }
-
-	    /**
-	     * Checks whether Rectangle entirely contains the Rectangle or Point
-	     * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
-	     * @return {Boolean} true if containment is entirely
-	     */
-
-	  }, {
-	    key: 'contains',
-	    value: function contains(rectOrPoint) {
-	      return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
-	    }
-
-	    /**
-	     * Sets the Center of this Rectangle to specified point
-	     * @param  {Point} point - specified point to set center of rectangle to
-	     * @return {Rectangle} instance of Rectangle
-	     */
-
-	  }, {
-	    key: 'setCenter',
-	    value: function setCenter(point) {
-	      var difference = point.substract(this.center);
-	      this.translate(difference.x, difference.y);
-	      return this;
-	    }
-
-	    /**
-	     * Checks whether Rectangle entirely contains the Point
-	     * @param  {Point} point - the specified point to check against
-	     * @return {Boolean} true if containment is entirely
-	     */
-
-	  }, {
-	    key: 'containsPoint',
-	    value: function containsPoint(point) {
-	      return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
-	    }
-
-	    /**
-	     * Checks whether Rectangle entirely contains the Rectangle
+	     * Checks whether Rectangle intersects with specified Rectangle
 	     * @param  {Rectangle} rect - the specified rectangle to check against
 	     * @return {Boolean} true if containment is entirely
 	     */
 
-	  }, {
-	    key: 'containsRect',
-	    value: function containsRect(rect) {
-	      return rect instanceof Rectangle ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
-	    }
 
-	    /**
-	     * distort rectangle by factor
-	     * @param  {number} factor - the specified factor of distortion
-	     * @return {Rectangle} a new instance of Rectangle
-	     */
+	    _createClass(Rectangle, [{
+	        key: 'intersects',
+	        value: function intersects(rect) {
+	            return !(rect.left > this.right || rect.right < this.left || rect.top > this.bottom || rect.bottom < this.top);
+	        }
 
-	  }, {
-	    key: 'getDistortedRect',
-	    value: function getDistortedRect(factor) {
-	      return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
-	    }
+	        /**
+	         * Checks whether Rectangle entirely contains the Rectangle or Point
+	         * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
+	         * @return {Boolean} true if containment is entirely
+	         */
 
-	    /**
-	     * scale x and width of rectangle
-	     * @param  {number} x - factor to be applied to scale
-	     * @return {Rectangle} scaled Rectangle
-	     */
+	    }, {
+	        key: 'contains',
+	        value: function contains(rectOrPoint) {
+	            return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
+	        }
 
-	  }, {
-	    key: 'scaleX',
-	    value: function scaleX(x) {
-	      this.x *= x;
-	      this.width *= x;
-	      return this;
-	    }
+	        /**
+	         * Sets the Center of this Rectangle to specified point
+	         * @param  {Point} point - specified point to set center of rectangle to
+	         * @return {Rectangle} instance of Rectangle
+	         */
 
-	    /**
-	     * scale y and height of rectangle
-	     * @param  {number} y - factor to be applied to scale
-	     * @return {Rectangle} new scaled Rectangle
-	     */
+	    }, {
+	        key: 'setCenter',
+	        value: function setCenter(point) {
+	            var difference = point.substract(this.center);
+	            this.translate(difference.x, difference.y);
+	            return this;
+	        }
 
-	  }, {
-	    key: 'scaleY',
-	    value: function scaleY(y) {
-	      this.y *= y;
-	      this.height *= y;
-	      return this;
-	    }
+	        /**
+	         * Checks whether Rectangle entirely contains the Point
+	         * @param  {Point} point - the specified point to check against
+	         * @return {Boolean} true if containment is entirely
+	         */
 
-	    /**
-	     * scale x and y for width and height of rectangle
-	     * @param  {number} x - factor to be applied to scale
-	     * @param  {number} y = x - factor to be applied to scale
-	     * @return {Rectangle} new scaled Rectangle
-	     */
+	    }, {
+	        key: 'containsPoint',
+	        value: function containsPoint(point) {
+	            return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
+	        }
 
-	  }, {
-	    key: 'scale',
-	    value: function scale(x) {
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	        /**
+	         * Checks whether Rectangle entirely contains the Rectangle
+	         * @param  {Rectangle} rect - the specified rectangle to check against
+	         * @return {Boolean} true if containment is entirely
+	         */
 
-	      this.x *= x;
-	      this.y *= y;
-	      this.width *= x;
-	      this.height *= y;
-	      return this;
-	    }
+	    }, {
+	        key: 'containsRect',
+	        value: function containsRect(rect) {
+	            return rect instanceof Rectangle ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
+	        }
 
-	    /**
-	     * moves a rectangle by specified coords
-	     * @param  {number} x - specified x to be added to x position
-	     * @param  {number} y - specified y to be added to y position
-	     * @return {Rectangle} Returns the altered rectangle
-	     */
+	        /**
+	         * distort rectangle by factor
+	         * @param  {number} factor - the specified factor of distortion
+	         * @return {Rectangle} a new instance of Rectangle
+	         */
 
-	  }, {
-	    key: 'translate',
-	    value: function translate(x, y) {
-	      _get(Object.getPrototypeOf(Rectangle.prototype), 'translate', this).call(this, x, y);
-	      return this;
-	    }
+	    }, {
+	        key: 'getDistortedRect',
+	        value: function getDistortedRect(factor) {
+	            return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
+	        }
+	    }, {
+	        key: 'getNormalRect',
+	        value: function getNormalRect(factor) {
+	            return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1 / factor);
+	        }
 
-	    /**
-	     * transforms a rectangle by specified coords
-	     * @param  {number} x - specified x to be added to x position
-	     * @param  {number} y - specified y to be added to y position
-	     * @param  {number} width - specified width to be added to this width
-	     * @param  {number} height - specified height to be added to this height
-	     * @return {Rectangle} Returns the altered rectangle
-	     */
+	        /**
+	         * scale x and width of rectangle
+	         * @param  {number} x - factor to be applied to scale
+	         * @return {Rectangle} scaled Rectangle
+	         */
 
-	  }, {
-	    key: 'transform',
-	    value: function transform(x, y, width, height) {
-	      this.translate(x, y);
-	      this.width += width;
-	      this.height += height;
-	      return this;
-	    }
+	    }, {
+	        key: 'scaleX',
+	        value: function scaleX(x) {
+	            this.x *= x;
+	            this.width *= x;
+	            return this;
+	        }
 
-	    /**
-	     * changes the position a rectangle by specified coords
-	     * @param  {number} x - the new x position
-	     * @param  {number} y - he new y position
-	     * @return {Rectangle} Returns the altered rectangle
-	     */
+	        /**
+	         * scale y and height of rectangle
+	         * @param  {number} y - factor to be applied to scale
+	         * @return {Rectangle} new scaled Rectangle
+	         */
 
-	  }, {
-	    key: 'position',
-	    value: function position(x, y) {
-	      _get(Object.getPrototypeOf(Rectangle.prototype), 'position', this).call(this, x, y);
-	      return this;
-	    }
+	    }, {
+	        key: 'scaleY',
+	        value: function scaleY(y) {
+	            this.y *= y;
+	            this.height *= y;
+	            return this;
+	        }
 
-	    /**
-	     * changes the size of a rectangle by specified params
-	     * @param  {number} x - the new x position
-	     * @param  {number} y - the new y position
-	     * @param  {number} width - the new width
-	     * @param  {number} height - the new width
-	     * @return {Rectangle} Returns the altered rectangle
-	     */
+	        /**
+	         * scale x and y for width and height of rectangle
+	         * @param  {number} x - factor to be applied to scale
+	         * @param  {number} y = x - factor to be applied to scale
+	         * @return {Rectangle} new scaled Rectangle
+	         */
 
-	  }, {
-	    key: 'size',
-	    value: function size(x, y, width, height) {
-	      this.position(x, y);
-	      this.width = width;
-	      this.height = height;
-	      return this;
-	    }
+	    }, {
+	        key: 'scale',
+	        value: function scale(x) {
+	            var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	    /**
-	     * check if rectangles are equal
-	     * @param  {Rectangle} rectangle - the specified rectangle to check against this
-	     * @return {Boolean} is true, if x, y, width and height are the same
-	     */
+	            this.x *= x;
+	            this.y *= y;
+	            this.width *= x;
+	            this.height *= y;
+	            return this;
+	        }
 
-	  }, {
-	    key: 'equals',
-	    value: function equals(rectangle) {
-	      return rectangle instanceof Rectangle ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
-	    }
-	  }]);
+	        /**
+	         * moves a rectangle by specified coords
+	         * @param  {number} x - specified x to be added to x position
+	         * @param  {number} y - specified y to be added to y position
+	         * @return {Rectangle} Returns the altered rectangle
+	         */
 
-	  return Rectangle;
+	    }, {
+	        key: 'translate',
+	        value: function translate(x, y) {
+	            _get(Object.getPrototypeOf(Rectangle.prototype), 'translate', this).call(this, x, y);
+	            return this;
+	        }
+
+	        /**
+	         * transforms a rectangle by specified coords
+	         * @param  {number} x - specified x to be added to x position
+	         * @param  {number} y - specified y to be added to y position
+	         * @param  {number} width - specified width to be added to this width
+	         * @param  {number} height - specified height to be added to this height
+	         * @return {Rectangle} Returns the altered rectangle
+	         */
+
+	    }, {
+	        key: 'transform',
+	        value: function transform(x, y, width, height) {
+	            this.translate(x, y);
+	            this.width += width;
+	            this.height += height;
+	            return this;
+	        }
+
+	        /**
+	         * changes the position a rectangle by specified coords
+	         * @param  {number} x - the new x position
+	         * @param  {number} y - he new y position
+	         * @return {Rectangle} Returns the altered rectangle
+	         */
+
+	    }, {
+	        key: 'position',
+	        value: function position(x, y) {
+	            _get(Object.getPrototypeOf(Rectangle.prototype), 'position', this).call(this, x, y);
+	            return this;
+	        }
+
+	        /**
+	         * changes the size of a rectangle by specified params
+	         * @param  {number} x - the new x position
+	         * @param  {number} y - the new y position
+	         * @param  {number} width - the new width
+	         * @param  {number} height - the new width
+	         * @return {Rectangle} Returns the altered rectangle
+	         */
+
+	    }, {
+	        key: 'size',
+	        value: function size(x, y, width, height) {
+	            this.position(x, y);
+	            this.width = width;
+	            this.height = height;
+	            return this;
+	        }
+
+	        /**
+	         * check if rectangles are equal
+	         * @param  {Rectangle} rectangle - the specified rectangle to check against this
+	         * @return {Boolean} is true, if x, y, width and height are the same
+	         */
+
+	    }, {
+	        key: 'equals',
+	        value: function equals(rectangle) {
+	            return rectangle instanceof Rectangle ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
+	        }
+	    }]);
+
+	    return Rectangle;
 	}(_Point2.Point);
 
 	/**
@@ -1273,7 +1278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	Rectangle.createFromRectangle = function (rect) {
-	  return new Rectangle(rect.x, rect.y, rect.width, rect.height);
+	    return new Rectangle(rect.x, rect.y, rect.width, rect.height);
 		};
 
 /***/ },
@@ -1421,31 +1426,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'moveView',
 	        value: function moveView(pos) {
-	            var old = this.mapView.clone,
-	                p = this.mapView.center.substract(pos);
-
-	            this.mapView.setCenter(p);
-
-	            var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
-
+	            var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset + pos.x, pos.y);
 	            if (!equalizedMap.containsRect(this.viewport)) {
-
-	                if (equalizedMap.x > 0) {
-	                    this.mapView.x = old.x;
+	                if (equalizedMap.left - this.viewport.left > 0) {
+	                    pos.x -= equalizedMap.left - this.viewport.left;
 	                }
-	                if (equalizedMap.width + equalizedMap.x < this.viewport.width) {
-	                    this.mapView.x = old.x;
+	                if (equalizedMap.right - this.viewport.right < 0) {
+	                    pos.x -= equalizedMap.right - this.viewport.right;
 	                }
-
-	                if (equalizedMap.y > 0) {
-	                    this.mapView.y = old.y;
+	                if (equalizedMap.top - this.viewport.top > 0) {
+	                    pos.y -= equalizedMap.top - this.viewport.top;
 	                }
-	                if (equalizedMap.height + equalizedMap.y < this.viewport.height) {
-	                    this.mapView.y = old.y;
+	                if (equalizedMap.bottom - this.viewport.bottom < 0) {
+	                    pos.y -= equalizedMap.bottom - this.viewport.bottom;
 	                }
 	            }
+	            this.mapView.translate(pos.x, pos.y);
+
 	            var newCenter = this.mapView.topLeft.multiply(-1, -1).add(this.viewport.center);
 	            this.center = this.convertPointToLatLng(newCenter);
+
 	            return this;
 	        }
 
@@ -1529,7 +1529,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	exports.Tile = undefined;
 
@@ -1581,94 +1581,91 @@ return /******/ (function(modules) { // webpackBootstrap
 	var EVENT_TILE_FAILED = "tile-failed";
 
 	var Tile = exports.Tile = function (_Rectangle) {
-	    _inherits(Tile, _Rectangle);
+	  _inherits(Tile, _Rectangle);
 
-	    _createClass(Tile, [{
-	        key: 'Publisher',
+	  _createClass(Tile, [{
+	    key: 'Publisher',
 
 
-	        /**
-	         * Return the Publisher
-	         */
-	        get: function get() {
-	            return PUBLISHER;
-	        }
-
-	        /**
-	         * Constructor
-	         * @param  {string} path=null - path to image
-	         * @param  {number} x=0 - position x of tile
-	         * @param  {number} y=0 - position y of tile
-	         * @param  {number} w=0 - tile width
-	         * @param  {number} h=0 - tile height
-	         * @return {Tile} instance of Tile
-	         */
-
-	    }]);
-
-	    function Tile() {
-	        var _ret;
-
-	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	        var path = _ref.path;
-	        var _ref$x = _ref.x;
-	        var x = _ref$x === undefined ? 0 : _ref$x;
-	        var _ref$y = _ref.y;
-	        var y = _ref$y === undefined ? 0 : _ref$y;
-	        var _ref$w = _ref.w;
-	        var w = _ref$w === undefined ? 0 : _ref$w;
-	        var _ref$h = _ref.h;
-	        var h = _ref$h === undefined ? 0 : _ref$h;
-
-	        _classCallCheck(this, Tile);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
-
-	        _this.state = new _StateHandler.StateHandler(STATES);
-	        if (!path || typeof path !== "string" || path.length === 0) {
-	            throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
-	        }
-	        _this.path = path;
-	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	    /**
+	     * Return the Publisher
+	     */
+	    get: function get() {
+	      return PUBLISHER;
 	    }
 
 	    /**
-	     * initializes tile and starts loading image
+	     * Constructor
+	     * @param  {string} path=null - path to image
+	     * @param  {number} x=0 - position x of tile
+	     * @param  {number} y=0 - position y of tile
+	     * @param  {number} w=0 - tile width
+	     * @param  {number} h=0 - tile height
 	     * @return {Tile} instance of Tile
 	     */
 
+	  }]);
 
-	    _createClass(Tile, [{
-	        key: 'initialize',
-	        value: function initialize() {
-	            this.state.next();
-	            _Helper.Helper.loadImage(this.path, function (img) {
-	                this.img = img;
-	                this.state.next();
-	                PUBLISHER.publish(EVENT_TILE_LOADED, this);
-	            }.bind(this));
+	  function Tile() {
+	    var _ret;
 
-	            return this;
-	        }
-	    }, {
-	        key: 'draw',
-	        value: function draw() {}
+	    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-	        /**
-	         * check if tiles are equal
-	         * @param  {Tile} tile - the specified tile to check against this
-	         * @return {Boolean} is true, if x, y, width and height and path are the same
-	         */
+	    var path = _ref.path;
+	    var _ref$x = _ref.x;
+	    var x = _ref$x === undefined ? 0 : _ref$x;
+	    var _ref$y = _ref.y;
+	    var y = _ref$y === undefined ? 0 : _ref$y;
+	    var _ref$w = _ref.w;
+	    var w = _ref$w === undefined ? 0 : _ref$w;
+	    var _ref$h = _ref.h;
+	    var h = _ref$h === undefined ? 0 : _ref$h;
 
-	    }, {
-	        key: 'equals',
-	        value: function equals(tile) {
-	            return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
-	        }
-	    }]);
+	    _classCallCheck(this, Tile);
 
-	    return Tile;
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
+
+	    _this.state = new _StateHandler.StateHandler(STATES);
+	    if (!path || typeof path !== "string" || path.length === 0) {
+	      throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
+	    }
+	    _this.path = path;
+	    return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  /**
+	   * initializes tile and starts loading image
+	   * @return {Tile} instance of Tile
+	   */
+
+
+	  _createClass(Tile, [{
+	    key: 'initialize',
+	    value: function initialize() {
+	      this.state.next();
+	      _Helper.Helper.loadImage(this.path, function (img) {
+	        this.img = img;
+	        this.state.next();
+	        PUBLISHER.publish(EVENT_TILE_LOADED, this);
+	      }.bind(this));
+
+	      return this;
+	    }
+
+	    /**
+	     * check if tiles are equal
+	     * @param  {Tile} tile - the specified tile to check against this
+	     * @return {Boolean} is true, if x, y, width and height and path are the same
+	     */
+
+	  }, {
+	    key: 'equals',
+	    value: function equals(tile) {
+	      return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
+	    }
+	  }]);
+
+	  return Tile;
 	}(_Rectangle2.Rectangle);
 
 /***/ },

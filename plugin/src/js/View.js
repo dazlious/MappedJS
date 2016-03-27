@@ -89,32 +89,26 @@ export class View {
     }
 
     moveView(pos) {
-        let old = this.mapView.clone,
-            p = this.mapView.center.substract(pos);
-
-        this.mapView.setCenter(p);
-
-        let equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
-
+        let equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset + pos.x, pos.y);
         if (!equalizedMap.containsRect(this.viewport)) {
-
-            if (equalizedMap.x > 0) {
-                this.mapView.x = old.x;
+            if (equalizedMap.left - this.viewport.left > 0) {
+                pos.x -= (equalizedMap.left - this.viewport.left);
             }
-            if (equalizedMap.width + equalizedMap.x < this.viewport.width) {
-                this.mapView.x = old.x;
+            if (equalizedMap.right - this.viewport.right < 0) {
+                pos.x -= (equalizedMap.right - this.viewport.right);
             }
-
-            if (equalizedMap.y > 0) {
-                this.mapView.y = old.y;
+            if (equalizedMap.top - this.viewport.top > 0) {
+                pos.y -= (equalizedMap.top - this.viewport.top);
             }
-            if (equalizedMap.height + equalizedMap.y < this.viewport.height) {
-                this.mapView.y = old.y;
+            if (equalizedMap.bottom - this.viewport.bottom < 0) {
+                pos.y -= (equalizedMap.bottom - this.viewport.bottom);
             }
-
         }
-        var newCenter = this.mapView.topLeft.multiply(-1, -1).add(this.viewport.center);
+        this.mapView.translate(pos.x, pos.y);
+
+        let newCenter = this.mapView.topLeft.multiply(-1, -1).add(this.viewport.center);
         this.center = this.convertPointToLatLng(newCenter);
+
         return this;
     }
 

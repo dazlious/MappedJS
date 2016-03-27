@@ -153,6 +153,10 @@ export class Rectangle extends Point {
         return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
     }
 
+    getNormalRect(factor) {
+        return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1/factor);
+    }
+
     /**
      * scale x and width of rectangle
      * @param  {number} x - factor to be applied to scale

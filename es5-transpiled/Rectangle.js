@@ -308,6 +308,11 @@
             value: function getDistortedRect(factor) {
                 return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
             }
+        }, {
+            key: 'getNormalRect',
+            value: function getNormalRect(factor) {
+                return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1 / factor);
+            }
 
             /**
              * scale x and width of rectangle
