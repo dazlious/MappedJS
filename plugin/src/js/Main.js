@@ -106,6 +106,9 @@ export class MappedJS {
                     this.tileMap.view.moveView(absolutePosition);
                     this.tileMap.redraw();
                 }.bind(this),
+                flick: function(data) {
+                    console.log(data.speed, data.direction);
+                }.bind(this),
                 zoom: function(data) {
                     console.log("zoom", data);
                 }.bind(this)

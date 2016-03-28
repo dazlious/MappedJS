@@ -106,8 +106,8 @@ export class View {
         }
         this.mapView.translate(pos.x, pos.y);
 
-        let newCenter = this.mapView.topLeft.multiply(-1, -1).add(this.viewport.center);
-        this.center = this.convertPointToLatLng(newCenter);
+        var newCenter = this.mapView.topLeft.substract(this.viewport.center).multiply(-1);
+        this.center = this.convertPointToLatLng(newCenter).multiply(-1);
 
         return this;
     }
