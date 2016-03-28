@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageOps
 import math
 import time
 import argparse
@@ -59,6 +59,8 @@ def build_level(input_path, output, path, size, minsize):
 
     slice_img(img, slices)
 
+    create_thumb(img, data_in_current_level)
+
     result_rows = len(slices)
     result_cols = len(slices[0])
     result_number = result_cols * result_rows
@@ -66,6 +68,14 @@ def build_level(input_path, output, path, size, minsize):
     print("Sliced image into %dx%d and created %d tiles" % (result_cols, result_rows, result_number))
 
     level += 1
+
+
+def create_thumb(img, data):
+    outfile = "map_thumb.jpg"
+    thumb_img = img
+    thumb_img.thumbnail((128, 128), Image.ANTIALIAS)
+    thumb_img.save(settings.output + outfile)
+    data["thumb"] = outfile
 
 
 def create_output_path(filename):
