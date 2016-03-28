@@ -59,7 +59,7 @@ def build_level(input_path, output, path, size, minsize):
 
     slice_img(img, slices)
 
-    create_thumb(img, data_in_current_level)
+    create_thumb(img, data_in_current_level, path)
 
     result_rows = len(slices)
     result_cols = len(slices[0])
@@ -70,12 +70,12 @@ def build_level(input_path, output, path, size, minsize):
     level += 1
 
 
-def create_thumb(img, data):
+def create_thumb(img, data, path):
     outfile = "map_thumb.jpg"
     thumb_img = img
     thumb_img.thumbnail((128, 128), Image.ANTIALIAS)
     thumb_img.save(settings.output + outfile)
-    data["thumb"] = outfile
+    data["thumb"] = path + outfile
 
 
 def create_output_path(filename):
