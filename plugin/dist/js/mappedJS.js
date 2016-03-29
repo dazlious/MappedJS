@@ -469,7 +469,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.view.viewport.size(this.left, this.top, this.width, this.height);
 	            var difference = this.view.viewport.center.substract(oldViewport.center);
 	            this.view.mapView.translate(difference.x, difference.y);
-	            this.view.drawVisibleTiles();
 	            return this;
 	        }
 	    }]);
@@ -1393,11 +1392,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.tiles = [];
 	        this.data = data;
 	        this.context = context;
-	        this.bindEvents().initializeTiles();
+	        this.bindEvents().initializeTiles().loadThumb();
 	        return this;
 	    }
 
 	    _createClass(View, [{
+	        key: 'loadThumb',
+	        value: function loadThumb() {
+	            _Helper.Helper.loadImage(this.data.thumb, function (img) {
+	                this.thumbScale = img.width / this.mapView.width;
+	                //img.width = this.mapView.width;
+	                //img.height = this.mapView.height;
+	                this.thumb = img;
+	                this.drawVisibleTiles();
+	            }.bind(this));
+	            return this;
+	        }
+	    }, {
 	        key: 'convertPointToLatLng',
 	        value: function convertPointToLatLng(point) {
 	            var factorX = this.mapView.width / this.bounds.range.lng,
@@ -1420,10 +1431,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 
 	    }, {
-	        key: 'onTilesLoaded',
-	        value: function onTilesLoaded(tile) {
+	        key: 'tileHandling',
+	        value: function tileHandling(tile) {
 	            this.drawTile(tile);
-	            tile.state.next();
 	            return this;
 	        }
 	    }, {
@@ -1475,12 +1485,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'drawTile',
 	        value: function drawTile(tile) {
+	            var distortedTile = tile.clone.translate(this.mapView.x, this.mapView.y).scaleX(this.equalizationFactor).translate(this.viewportOffset, 0);
 	            if (tile.state.current.value >= 2) {
-	                var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
-	                    y = tile.y + this.mapView.y,
-	                    w = tile.width * this.equalizationFactor,
-	                    h = tile.height;
-	                this.draw(tile.img, x, y, w, h);
+	                this.draw(tile.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+	                tile.state.next();
+	            } else if (tile.state.current.value === 1) {
+	                var thumbTile = tile.clone.scale(this.thumbScale);
+	                this.drawPartial(this.thumb, thumbTile.x, thumbTile.y, thumbTile.width, thumbTile.height, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+	                console.log("TADA");
 	            } else if (tile.state.current.value === 0) {
 	                tile.initialize();
 	            }
@@ -1489,6 +1501,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'draw',
 	        value: function draw(img, x, y, w, h) {
+	            this.context.drawImage(img, x, y, w, h);
+	        }
+	    }, {
+	        key: 'drawPartial',
+	        value: function drawPartial(img, ox, oy, ow, oh, x, y, w, h) {
+	            this.context.drawImage(img, ox, oy, ow, oh, x, y, w, h);
+	        }
+	    }, {
+	        key: 'drawThumb',
+	        value: function drawThumb(img, x, y, w, h) {
 	            this.context.drawImage(img, x, y, w, h);
 	        }
 
@@ -1500,7 +1522,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
-	            PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
+	            PUBLISHER.subscribe("tile-loaded", this.tileHandling.bind(this));
+	            PUBLISHER.subscribe("tile-initialized", this.tileHandling.bind(this));
 	            return this;
 	        }
 
@@ -1578,6 +1601,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var EVENT_TILE_LOADED = "tile-loaded";
 
 	/**
+	 * Name of event fired, when tile is initialized
+	 * @type {String}
+	 */
+	var EVENT_TILE_INITIALIZED = "tile-initialized";
+
+	/**
 	 * Name of event fired, when tile is not found on loading
 	 * @type {String}
 	 */
@@ -1646,6 +1675,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'initialize',
 	    value: function initialize() {
 	      this.state.next();
+	      PUBLISHER.publish(EVENT_TILE_INITIALIZED, this);
 	      _Helper.Helper.loadImage(this.path, function (img) {
 	        this.img = img;
 	        this.state.next();

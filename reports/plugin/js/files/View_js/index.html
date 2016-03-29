@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">65.66</p>
+      <p class="stat">66.43</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">256</p>
+      <p class="stat">280</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">65.43</p>
+      <p class="stat">68.28</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.81</p>
+      <p class="stat">3.33</p>
     </div>
   </div>
 </div>
@@ -213,11 +213,23 @@
             this.tiles = [];
             this.data = data;
             this.context = context;
-            this.bindEvents().initializeTiles();
+            this.bindEvents().initializeTiles().loadThumb();
             return this;
         }
 
         _createClass(View, [{
+            key: &#039;loadThumb&#039;,
+            value: function loadThumb() {
+                _Helper.Helper.loadImage(this.data.thumb, function(img) {
+                    this.thumbScale = img.width / this.mapView.width;
+                    //img.width = this.mapView.width;
+                    //img.height = this.mapView.height;
+                    this.thumb = img;
+                    this.drawVisibleTiles();
+                }.bind(this));
+                return this;
+            }
+        }, {
             key: &#039;convertPointToLatLng&#039;,
             value: function convertPointToLatLng(point) {
                 var factorX = this.mapView.width / this.bounds.range.lng,
@@ -240,10 +252,9 @@
              */
 
         }, {
-            key: &#039;onTilesLoaded&#039;,
-            value: function onTilesLoaded(tile) {
+            key: &#039;tileHandling&#039;,
+            value: function tileHandling(tile) {
                 this.drawTile(tile);
-                tile.state.next();
                 return this;
             }
         }, {
@@ -295,12 +306,14 @@
         }, {
             key: &#039;drawTile&#039;,
             value: function drawTile(tile) {
+                var distortedTile = tile.clone.translate(this.mapView.x, this.mapView.y).scaleX(this.equalizationFactor).translate(this.viewportOffset, 0);
                 if (tile.state.current.value &gt;= 2) {
-                    var x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
-                        y = tile.y + this.mapView.y,
-                        w = tile.width * this.equalizationFactor,
-                        h = tile.height;
-                    this.draw(tile.img, x, y, w, h);
+                    this.draw(tile.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+                    tile.state.next();
+                } else if (tile.state.current.value === 1) {
+                    var thumbTile = tile.clone.scale(this.thumbScale);
+                    this.drawPartial(this.thumb, thumbTile.x, thumbTile.y, thumbTile.width, thumbTile.height, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+                    console.log(&quot;TADA&quot;);
                 } else if (tile.state.current.value === 0) {
                     tile.initialize();
                 }
@@ -309,6 +322,16 @@
         }, {
             key: &#039;draw&#039;,
             value: function draw(img, x, y, w, h) {
+                this.context.drawImage(img, x, y, w, h);
+            }
+        }, {
+            key: &#039;drawPartial&#039;,
+            value: function drawPartial(img, ox, oy, ow, oh, x, y, w, h) {
+                this.context.drawImage(img, ox, oy, ow, oh, x, y, w, h);
+            }
+        }, {
+            key: &#039;drawThumb&#039;,
+            value: function drawThumb(img, x, y, w, h) {
                 this.context.drawImage(img, x, y, w, h);
             }
 
@@ -320,7 +343,8 @@
         }, {
             key: &#039;bindEvents&#039;,
             value: function bindEvents() {
-                PUBLISHER.subscribe(&quot;tile-loaded&quot;, this.onTilesLoaded.bind(this));
+                PUBLISHER.subscribe(&quot;tile-loaded&quot;, this.tileHandling.bind(this));
+                PUBLISHER.subscribe(&quot;tile-initialized&quot;, this.tileHandling.bind(this));
                 return this;
             }
 
