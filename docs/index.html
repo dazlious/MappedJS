@@ -69,6 +69,9 @@
 <dt><a href="#EVENT_TILE_LOADED">EVENT_TILE_LOADED</a> : <code>String</code></dt>
 <dd><p>Name of event fired, when tile is loaded</p>
 </dd>
+<dt><a href="#EVENT_TILE_INITIALIZED">EVENT_TILE_INITIALIZED</a> : <code>String</code></dt>
+<dd><p>Name of event fired, when tile is initialized</p>
+</dd>
 <dt><a href="#EVENT_TILE_FAILED">EVENT_TILE_FAILED</a> : <code>String</code></dt>
 <dd><p>Name of event fired, when tile is not found on loading</p>
 </dd>
@@ -978,7 +981,7 @@
 <li><a href="#View+equalizationFactor">.equalizationFactor</a> ⇒ <code>number</code></li>
 <li><a href="#View+viewportOffset">.viewportOffset</a></li>
 <li><a href="#View+visibleTiles">.visibleTiles</a> ⇒ <code>array</code></li>
-<li><a href="#View+onTilesLoaded">.onTilesLoaded(tile)</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#View+tileHandling">.tileHandling(tile)</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#View+drawVisibleTiles">.drawVisibleTiles()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#View+drawTile">.drawTile(tile)</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#View+bindEvents">.bindEvents()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
@@ -1007,8 +1010,8 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><a name="View+visibleTiles"></a></p>
 <h3 id="view-visibletiles-code-array-code-">view.visibleTiles ⇒ <code>array</code></h3>
 <p>get all visible tiles</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>array</code> - all tiles that are currently visible<br><a name="View+onTilesLoaded"></a></p>
-<h3 id="view-ontilesloaded-tile-code-tilemap-tilemap-code-">view.onTilesLoaded(tile) ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>array</code> - all tiles that are currently visible<br><a name="View+tileHandling"></a></p>
+<h3 id="view-tilehandling-tile-code-tilemap-tilemap-code-">view.tileHandling(tile) ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>handles on load of a tile</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><strong>Params</strong></p>
 <ul>
@@ -1042,6 +1045,9 @@
 <p><strong>Kind</strong>: global constant<br><a name="EVENT_TILE_LOADED"></a></p>
 <h2 id="event_tile_loaded-code-string-code-">EVENT_TILE_LOADED : <code>String</code></h2>
 <p>Name of event fired, when tile is loaded</p>
+<p><strong>Kind</strong>: global constant<br><a name="EVENT_TILE_INITIALIZED"></a></p>
+<h2 id="event_tile_initialized-code-string-code-">EVENT_TILE_INITIALIZED : <code>String</code></h2>
+<p>Name of event fired, when tile is initialized</p>
 <p><strong>Kind</strong>: global constant<br><a name="EVENT_TILE_FAILED"></a></p>
 <h2 id="event_tile_failed-code-string-code-">EVENT_TILE_FAILED : <code>String</code></h2>
 <p>Name of event fired, when tile is not found on loading</p>

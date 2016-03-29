@@ -27,6 +27,13 @@ const STATES = [
 const EVENT_TILE_LOADED = "tile-loaded";
 
 /**
+ * Name of event fired, when tile is initialized
+ * @type {String}
+ */
+const EVENT_TILE_INITIALIZED = "tile-initialized";
+
+
+/**
  * Name of event fired, when tile is not found on loading
  * @type {String}
  */
@@ -66,6 +73,7 @@ export class Tile extends Rectangle {
      */
     initialize() {
         this.state.next();
+        PUBLISHER.publish(EVENT_TILE_INITIALIZED, this);
         Helper.loadImage(this.path, function(img) {
             this.img = img;
             this.state.next();
@@ -74,7 +82,7 @@ export class Tile extends Rectangle {
 
         return this;
     }
-    
+
     /**
      * check if tiles are equal
      * @param  {Tile} tile - the specified tile to check against this

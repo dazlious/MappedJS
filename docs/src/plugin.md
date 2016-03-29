@@ -45,6 +45,9 @@
 <dt><a href="#EVENT_TILE_LOADED">EVENT_TILE_LOADED</a> : <code>String</code></dt>
 <dd><p>Name of event fired, when tile is loaded</p>
 </dd>
+<dt><a href="#EVENT_TILE_INITIALIZED">EVENT_TILE_INITIALIZED</a> : <code>String</code></dt>
+<dd><p>Name of event fired, when tile is initialized</p>
+</dd>
 <dt><a href="#EVENT_TILE_FAILED">EVENT_TILE_FAILED</a> : <code>String</code></dt>
 <dd><p>Name of event fired, when tile is not found on loading</p>
 </dd>
@@ -1217,7 +1220,7 @@ name of imagedata in data.json
     * [.equalizationFactor](#View+equalizationFactor) ⇒ <code>number</code>
     * [.viewportOffset](#View+viewportOffset)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
-    * [.onTilesLoaded(tile)](#View+onTilesLoaded) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.tileHandling(tile)](#View+tileHandling) ⇒ <code>[TileMap](#TileMap)</code>
     * [.drawVisibleTiles()](#View+drawVisibleTiles) ⇒ <code>[TileMap](#TileMap)</code>
     * [.drawTile(tile)](#View+drawTile) ⇒ <code>[TileMap](#TileMap)</code>
     * [.bindEvents()](#View+bindEvents) ⇒ <code>[TileMap](#TileMap)</code>
@@ -1254,8 +1257,8 @@ get all visible tiles
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>array</code> - all tiles that are currently visible  
-<a name="View+onTilesLoaded"></a>
-### view.onTilesLoaded(tile) ⇒ <code>[TileMap](#TileMap)</code>
+<a name="View+tileHandling"></a>
+### view.tileHandling(tile) ⇒ <code>[TileMap](#TileMap)</code>
 handles on load of a tile
 
 **Kind**: instance method of <code>[View](#View)</code>  
@@ -1310,6 +1313,11 @@ States of a tile
 <a name="EVENT_TILE_LOADED"></a>
 ## EVENT_TILE_LOADED : <code>String</code>
 Name of event fired, when tile is loaded
+
+**Kind**: global constant  
+<a name="EVENT_TILE_INITIALIZED"></a>
+## EVENT_TILE_INITIALIZED : <code>String</code>
+Name of event fired, when tile is initialized
 
 **Kind**: global constant  
 <a name="EVENT_TILE_FAILED"></a>

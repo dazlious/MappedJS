@@ -60,7 +60,18 @@ export class View {
         this.tiles = [];
         this.data = data;
         this.context = context;
-        this.bindEvents().initializeTiles();
+        this.bindEvents().initializeTiles().loadThumb();
+        return this;
+    }
+
+    loadThumb() {
+        Helper.loadImage(this.data.thumb, function(img) {
+            this.thumbScale = img.width / this.mapView.width;
+            //img.width = this.mapView.width;
+            //img.height = this.mapView.height;
+            this.thumb = img;
+            this.drawVisibleTiles();
+        }.bind(this));
         return this;
     }
 
@@ -82,9 +93,8 @@ export class View {
      * @param  {Tile} tile a tile of the TileMap
      * @return {TileMap} instance of TileMap
      */
-    onTilesLoaded(tile) {
+    tileHandling(tile) {
         this.drawTile(tile);
-        tile.state.next();
         return this;
     }
 
@@ -129,12 +139,14 @@ export class View {
      * @return {TileMap} instance of TileMap
      */
     drawTile(tile) {
+        let distortedTile = tile.clone.translate(this.mapView.x, this.mapView.y).scaleX(this.equalizationFactor).translate(this.viewportOffset, 0);
         if (tile.state.current.value >= 2) {
-            let x = (tile.x + this.mapView.x) * this.equalizationFactor + this.viewportOffset,
-                y = tile.y + this.mapView.y,
-                w = tile.width * this.equalizationFactor,
-                h = tile.height;
-            this.draw(tile.img, x, y, w, h);
+            this.draw(tile.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+            tile.state.next();
+        } else if (tile.state.current.value === 1) {
+            let thumbTile = tile.clone.scale(this.thumbScale);
+            this.drawPartial(this.thumb, thumbTile.x, thumbTile.y, thumbTile.width, thumbTile.height, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+            console.log("TADA");
         } else if (tile.state.current.value === 0) {
             tile.initialize();
         }
@@ -145,12 +157,21 @@ export class View {
         this.context.drawImage(img, x, y, w, h);
     }
 
+    drawPartial(img, ox, oy, ow, oh, x, y, w, h) {
+        this.context.drawImage(img, ox, oy, ow, oh, x, y, w, h);
+    }
+
+    drawThumb(img, x, y, w, h) {
+        this.context.drawImage(img, x, y, w, h);
+    }
+
     /**
      * Handles all events for class
      * @return {TileMap} instance of TileMap
      */
     bindEvents() {
-        PUBLISHER.subscribe("tile-loaded", this.onTilesLoaded.bind(this));
+        PUBLISHER.subscribe("tile-loaded", this.tileHandling.bind(this));
+        PUBLISHER.subscribe("tile-initialized", this.tileHandling.bind(this));
         return this;
     }
 
