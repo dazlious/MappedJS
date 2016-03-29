@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">66.43</p>
+      <p class="stat">66.40</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">280</p>
+      <p class="stat">282</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">68.28</p>
+      <p class="stat">62.68</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">3.33</p>
+      <p class="stat">2.78</p>
     </div>
   </div>
 </div>
@@ -217,18 +217,29 @@
             return this;
         }
 
+        /**
+         * loads thumbnail of view
+         * @return {View} instance of View for chaining
+         */
+
+
         _createClass(View, [{
             key: &#039;loadThumb&#039;,
             value: function loadThumb() {
                 _Helper.Helper.loadImage(this.data.thumb, function(img) {
                     this.thumbScale = img.width / this.mapView.width;
-                    //img.width = this.mapView.width;
-                    //img.height = this.mapView.height;
                     this.thumb = img;
                     this.drawVisibleTiles();
                 }.bind(this));
                 return this;
             }
+
+            /**
+             * converts a Point to LatLng in view
+             * @param  {Point} point - specified point to be converted
+             * @return {LatLng} presentation of point in lat-lng system
+             */
+
         }, {
             key: &#039;convertPointToLatLng&#039;,
             value: function convertPointToLatLng(point) {
@@ -236,6 +247,13 @@
                     factorY = this.mapView.height / this.bounds.range.lat;
                 return new _LatLng.LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
             }
+
+            /**
+             * converts a LatLng to Point in view
+             * @param  {LatLng} latlng - specified latlng to be converted
+             * @return {Point} presentation of point in pixel system
+             */
+
         }, {
             key: &#039;convertLatLngToPoint&#039;,
             value: function convertLatLngToPoint(latlng) {
@@ -247,8 +265,8 @@
 
             /**
              * handles on load of a tile
-             * @param  {Tile} tile a tile of the TileMap
-             * @return {TileMap} instance of TileMap
+             * @param  {Tile} tile a tile of the View
+             * @return {View} instance of View
              */
 
         }, {
@@ -257,6 +275,13 @@
                 this.drawTile(tile);
                 return this;
             }
+
+            /**
+             * moves the view&#039;s current position by pos
+             * @param  {Point} pos - specified additional offset
+             * @return {View} instance of View for chaining
+             */
+
         }, {
             key: &#039;moveView&#039;,
             value: function moveView(pos) {
@@ -284,60 +309,36 @@
             }
 
             /**
-             * Handles draw of TileMap
-             * @return {TileMap} instance of TileMap
+             * Handles draw of View
+             * @return {View} instance of View
              */
 
         }, {
             key: &#039;drawVisibleTiles&#039;,
             value: function drawVisibleTiles() {
-                for (var tile in this.visibleTiles) {
-                    this.drawTile(this.visibleTiles[tile]);
+                var currentlyVisibleTiles = this.visibleTiles;
+                for (var i in currentlyVisibleTiles) {
+                    this.drawTile(currentlyVisibleTiles[i]);
                 }
                 return this;
             }
 
             /**
              * draws tiles on canvas
-             * @param  {Tile} tile a tile of the TileMap
-             * @return {TileMap} instance of TileMap
+             * @param  {Tile} tile a tile of the View
+             * @return {View} instance of View
              */
 
         }, {
             key: &#039;drawTile&#039;,
             value: function drawTile(tile) {
-                var distortedTile = tile.clone.translate(this.mapView.x, this.mapView.y).scaleX(this.equalizationFactor).translate(this.viewportOffset, 0);
-                if (tile.state.current.value &gt;= 2) {
-                    this.draw(tile.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
-                    tile.state.next();
-                } else if (tile.state.current.value === 1) {
-                    var thumbTile = tile.clone.scale(this.thumbScale);
-                    this.drawPartial(this.thumb, thumbTile.x, thumbTile.y, thumbTile.width, thumbTile.height, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
-                    console.log(&quot;TADA&quot;);
-                } else if (tile.state.current.value === 0) {
-                    tile.initialize();
-                }
+                tile.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
                 return this;
-            }
-        }, {
-            key: &#039;draw&#039;,
-            value: function draw(img, x, y, w, h) {
-                this.context.drawImage(img, x, y, w, h);
-            }
-        }, {
-            key: &#039;drawPartial&#039;,
-            value: function drawPartial(img, ox, oy, ow, oh, x, y, w, h) {
-                this.context.drawImage(img, ox, oy, ow, oh, x, y, w, h);
-            }
-        }, {
-            key: &#039;drawThumb&#039;,
-            value: function drawThumb(img, x, y, w, h) {
-                this.context.drawImage(img, x, y, w, h);
             }
 
             /**
              * Handles all events for class
-             * @return {TileMap} instance of TileMap
+             * @return {View} instance of View
              */
 
         }, {
@@ -350,7 +351,7 @@
 
             /**
              * initializes tiles
-             * @return {TileMap} instance of TileMap
+             * @return {View} instance of View
              */
 
         }, {
@@ -359,6 +360,7 @@
                 var currentLevel = this.data.tiles;
                 for (var tile in currentLevel) {
                     var currentTileData = currentLevel[tile];
+                    currentTileData[&quot;context&quot;] = this.context;
                     var _tile = new _Tile.Tile(currentTileData);
                     this.tiles.push(_tile);
                 }

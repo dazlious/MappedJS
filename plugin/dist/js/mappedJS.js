@@ -200,7 +200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                container: this.$container,
 	                callbacks: {
 	                    tap: function (data) {
-	                        console.log("tap", data);
+	                        //console.log("tap", data);
 	                    }.bind(this),
 	                    pan: function (data) {
 	                        var change = data.positions.last.substract(data.positions.current),
@@ -209,10 +209,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        this.tileMap.redraw();
 	                    }.bind(this),
 	                    flick: function (data) {
-	                        console.log(data.speed, data.direction);
+	                        //console.log(data.speed, data.direction);
 	                    }.bind(this),
 	                    zoom: function (data) {
-	                        console.log("zoom", data);
+	                        //console.log("zoom", data);
 	                    }.bind(this)
 	                }
 	            });
@@ -380,7 +380,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                data: this.getCurrentLevelData(),
 	                context: this.canvasContext
 	            });
-	            this.resize();
+	            this.resizeCanvas();
 	            return this;
 	        }
 
@@ -398,12 +398,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.canvasContext = this.canvas.getContext("2d");
 	            return this;
 	        }
+
+	        /**
+	         * disables rendering of subpixel in canvas
+	         * @return {TileMap} instance of TileMap for chaining
+	         */
+
 	    }, {
 	        key: 'disableSubpixelRendering',
 	        value: function disableSubpixelRendering() {
 	            this.canvasContext.mozImageSmoothingEnabled = false;
 	            this.canvasContext.msImageSmoothingEnabled = false;
 	            this.canvasContext.imageSmoothingEnabled = false;
+	            return this;
 	        }
 
 	        /**
@@ -419,7 +426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * clears canvas
-	         * @return {TileMap} instance of TileMap
+	         * @return {TileMap} instance of TileMap for chaining
 	         */
 
 	    }, {
@@ -431,7 +438,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * complete clear and draw of all visible tiles
-	         * @return {TileMap} instance of TileMap
+	         * @return {TileMap} instance of TileMap for chaining
 	         */
 
 	    }, {
@@ -444,22 +451,35 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * Handles resizing of TileMap
-	         * @return {TileMap} instance of TileMap
+	         * @return {TileMap} instance of TileMap for chaining
 	         */
 
 	    }, {
 	        key: 'resize',
 	        value: function resize() {
+	            this.resizeCanvas();
+	            this.resizeView();
+	            this.view.drawVisibleTiles();
+	            return this;
+	        }
+
+	        /**
+	         * resizes the canvas sizes
+	         * @return {TileMap} instance of TileMap for chaining
+	         */
+
+	    }, {
+	        key: 'resizeCanvas',
+	        value: function resizeCanvas() {
 	            this.canvasContext.canvas.width = this.width;
 	            this.canvasContext.canvas.height = this.height;
 	            this.disableSubpixelRendering();
-	            this.resizeView();
 	            return this;
 	        }
 
 	        /**
 	         * Handles resizing of view
-	         * @return {TileMap} instance of TileMap
+	         * @return {TileMap} instance of TileMap for chaining
 	         */
 
 	    }, {
@@ -491,7 +511,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	exports.LatLng = undefined;
 
@@ -502,114 +522,130 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var LatLng = exports.LatLng = function () {
-	    _createClass(LatLng, [{
-	        key: 'length',
+	  _createClass(LatLng, [{
+	    key: 'length',
 
 
-	        /**
-	         * length of a latlng
-	         * @return {number} length of a latlng
-	         */
-	        get: function get() {
-	            return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
-	        }
-
-	        /**
-	         * gets a clone of this latlng
-	         * @return {LatLng} new instance equals this latlng
-	         */
-
-	    }, {
-	        key: 'clone',
-	        get: function get() {
-	            return LatLng.createFromLatLng(this);
-	        }
-
-	        /**
-	         * Constructor
-	         * @param  {number} lat = 0 - representation of latitude
-	         * @param  {number} lng = 0 - representation of longitude
-	         * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
-	         * @return {LatLng} new instance of LatLng
-	         */
-
-	    }]);
-
-	    function LatLng() {
-	        var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	        var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-	        var isDistance = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
-
-	        _classCallCheck(this, LatLng);
-
-	        this.lat = lat % 90;
-	        this.lat = this.lat === -0 ? 0 : this.lat;
-	        this.lng = lng % 180;
-	        this.lng = this.lng === -0 ? 0 : this.lng;
-	        return this;
+	    /**
+	     * length of a latlng
+	     * @return {number} length of a latlng
+	     */
+	    get: function get() {
+	      return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
 	    }
 
 	    /**
-	     * substract specified coord from this coordinate
-	     * @param  {LatLng} coord - specified coordinate to substract from this coord
+	     * gets a clone of this latlng
+	     * @return {LatLng} new instance equals this latlng
+	     */
+
+	  }, {
+	    key: 'clone',
+	    get: function get() {
+	      return LatLng.createFromLatLng(this);
+	    }
+
+	    /**
+	     * Constructor
+	     * @param  {number} lat = 0 - representation of latitude
+	     * @param  {number} lng = 0 - representation of longitude
+	     * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
+	     * @return {LatLng} new instance of LatLng
+	     */
+
+	  }]);
+
+	  function LatLng() {
+	    var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	    var isDistance = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+	    _classCallCheck(this, LatLng);
+
+	    this.lat = lat % 90;
+	    this.lat = this.lat === -0 ? 0 : this.lat;
+	    this.lng = lng % 180;
+	    this.lng = this.lng === -0 ? 0 : this.lng;
+	    return this;
+	  }
+
+	  /**
+	   * substract specified coord from this coordinate
+	   * @param  {LatLng} coord - specified coordinate to substract from this coord
+	   * @return {LatLng} the new calculated LatLng
+	   */
+
+
+	  _createClass(LatLng, [{
+	    key: 'substract',
+	    value: function substract(coord) {
+	      this.lat -= coord.lat;
+	      this.lng -= coord.lng;
+	      return this;
+	    }
+
+	    /**
+	     * add specified coord to this coordinate
+	     * @param  {LatLng} coord - specified coordinate to add to this coord
 	     * @return {LatLng} the new calculated LatLng
 	     */
 
+	  }, {
+	    key: 'add',
+	    value: function add(coord) {
+	      this.lat += coord.lat;
+	      this.lng += coord.lng;
+	      return this;
+	    }
 
-	    _createClass(LatLng, [{
-	        key: 'substract',
-	        value: function substract(coord) {
-	            this.lat -= coord.lat;
-	            this.lng -= coord.lng;
-	            return this;
-	        }
+	    /**
+	    * divides a latlng with a given factor
+	    * @param  {number} factorLat - factor to divide lat with
+	    * @param  {number} factorLng = factorLat - factor to divide lng with
+	     * @return {LatLng} Returns instance for chaining
+	     */
 
-	        /**
-	         * add specified coord to this coordinate
-	         * @param  {LatLng} coord - specified coordinate to add to this coord
-	         * @return {LatLng} the new calculated LatLng
-	         */
+	  }, {
+	    key: 'divide',
+	    value: function divide(factorLat) {
+	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
-	    }, {
-	        key: 'add',
-	        value: function add(coord) {
-	            this.lat += coord.lat;
-	            this.lng += coord.lng;
-	            return this;
-	        }
-	    }, {
-	        key: 'divide',
-	        value: function divide(factorLat) {
-	            var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+	      this.lat /= factorLat;
+	      this.lng /= factorLng;
+	      return this;
+	    }
 
-	            this.lat /= factorLat;
-	            this.lng /= factorLng;
-	            return this;
-	        }
-	    }, {
-	        key: 'multiply',
-	        value: function multiply(factorLat) {
-	            var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+	    /**
+	     * multiplicates a latlng with a given factor
+	     * @param  {number} factorLat - factor to multiplicate lat with
+	     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
+	     * @return {LatLng} Returns instance for chaining
+	     */
 
-	            this.lat *= factorLat;
-	            this.lng *= factorLng;
-	            return this;
-	        }
+	  }, {
+	    key: 'multiply',
+	    value: function multiply(factorLat) {
+	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
-	        /**
-	         * checks if specified coord equals this coord
-	         * @param  {LatLng} coord - specified coord to check against
-	         * @return {Boolean} Returns if specified coord equals this coord
-	         */
+	      this.lat *= factorLat;
+	      this.lng *= factorLng;
+	      return this;
+	    }
 
-	    }, {
-	        key: 'equals',
-	        value: function equals(coord) {
-	            return this.lat === coord.lat && this.lng === coord.lng;
-	        }
-	    }]);
+	    /**
+	     * checks if specified coord equals this coord
+	     * @param  {LatLng} coord - specified coord to check against
+	     * @return {Boolean} Returns if specified coord equals this coord
+	     */
 
-	    return LatLng;
+	  }, {
+	    key: 'equals',
+	    value: function equals(coord) {
+	      return this.lat === coord.lat && this.lng === coord.lng;
+	    }
+	  }]);
+
+	  return LatLng;
 	}();
 
 	/**
@@ -620,7 +656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	LatLng.createFromLatLng = function (latlng) {
-	    return new LatLng(latlng.lat, latlng.lng);
+	  return new LatLng(latlng.lat, latlng.lng);
 		};
 
 /***/ },
@@ -867,6 +903,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	            return Math.abs(this.so.lat - this.nw.lat);
 	        }
+
+	        /**
+	         * gets size
+	         * @return {Point} calculated Size of boundaries
+	         */
+
 	    }, {
 	        key: 'range',
 	        get: function get() {
@@ -1396,18 +1438,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
+	    /**
+	     * loads thumbnail of view
+	     * @return {View} instance of View for chaining
+	     */
+
+
 	    _createClass(View, [{
 	        key: 'loadThumb',
 	        value: function loadThumb() {
 	            _Helper.Helper.loadImage(this.data.thumb, function (img) {
 	                this.thumbScale = img.width / this.mapView.width;
-	                //img.width = this.mapView.width;
-	                //img.height = this.mapView.height;
 	                this.thumb = img;
 	                this.drawVisibleTiles();
 	            }.bind(this));
 	            return this;
 	        }
+
+	        /**
+	         * converts a Point to LatLng in view
+	         * @param  {Point} point - specified point to be converted
+	         * @return {LatLng} presentation of point in lat-lng system
+	         */
+
 	    }, {
 	        key: 'convertPointToLatLng',
 	        value: function convertPointToLatLng(point) {
@@ -1415,6 +1468,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                factorY = this.mapView.height / this.bounds.range.lat;
 	            return new _LatLng.LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
 	        }
+
+	        /**
+	         * converts a LatLng to Point in view
+	         * @param  {LatLng} latlng - specified latlng to be converted
+	         * @return {Point} presentation of point in pixel system
+	         */
+
 	    }, {
 	        key: 'convertLatLngToPoint',
 	        value: function convertLatLngToPoint(latlng) {
@@ -1426,8 +1486,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * handles on load of a tile
-	         * @param  {Tile} tile a tile of the TileMap
-	         * @return {TileMap} instance of TileMap
+	         * @param  {Tile} tile a tile of the View
+	         * @return {View} instance of View
 	         */
 
 	    }, {
@@ -1436,6 +1496,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.drawTile(tile);
 	            return this;
 	        }
+
+	        /**
+	         * moves the view's current position by pos
+	         * @param  {Point} pos - specified additional offset
+	         * @return {View} instance of View for chaining
+	         */
+
 	    }, {
 	        key: 'moveView',
 	        value: function moveView(pos) {
@@ -1463,60 +1530,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * Handles draw of TileMap
-	         * @return {TileMap} instance of TileMap
+	         * Handles draw of View
+	         * @return {View} instance of View
 	         */
 
 	    }, {
 	        key: 'drawVisibleTiles',
 	        value: function drawVisibleTiles() {
-	            for (var tile in this.visibleTiles) {
-	                this.drawTile(this.visibleTiles[tile]);
+	            var currentlyVisibleTiles = this.visibleTiles;
+	            for (var i in currentlyVisibleTiles) {
+	                this.drawTile(currentlyVisibleTiles[i]);
 	            }
 	            return this;
 	        }
 
 	        /**
 	         * draws tiles on canvas
-	         * @param  {Tile} tile a tile of the TileMap
-	         * @return {TileMap} instance of TileMap
+	         * @param  {Tile} tile a tile of the View
+	         * @return {View} instance of View
 	         */
 
 	    }, {
 	        key: 'drawTile',
 	        value: function drawTile(tile) {
-	            var distortedTile = tile.clone.translate(this.mapView.x, this.mapView.y).scaleX(this.equalizationFactor).translate(this.viewportOffset, 0);
-	            if (tile.state.current.value >= 2) {
-	                this.draw(tile.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
-	                tile.state.next();
-	            } else if (tile.state.current.value === 1) {
-	                var thumbTile = tile.clone.scale(this.thumbScale);
-	                this.drawPartial(this.thumb, thumbTile.x, thumbTile.y, thumbTile.width, thumbTile.height, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
-	                console.log("TADA");
-	            } else if (tile.state.current.value === 0) {
-	                tile.initialize();
-	            }
+	            tile.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
 	            return this;
-	        }
-	    }, {
-	        key: 'draw',
-	        value: function draw(img, x, y, w, h) {
-	            this.context.drawImage(img, x, y, w, h);
-	        }
-	    }, {
-	        key: 'drawPartial',
-	        value: function drawPartial(img, ox, oy, ow, oh, x, y, w, h) {
-	            this.context.drawImage(img, ox, oy, ow, oh, x, y, w, h);
-	        }
-	    }, {
-	        key: 'drawThumb',
-	        value: function drawThumb(img, x, y, w, h) {
-	            this.context.drawImage(img, x, y, w, h);
 	        }
 
 	        /**
 	         * Handles all events for class
-	         * @return {TileMap} instance of TileMap
+	         * @return {View} instance of View
 	         */
 
 	    }, {
@@ -1529,7 +1572,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * initializes tiles
-	         * @return {TileMap} instance of TileMap
+	         * @return {View} instance of View
 	         */
 
 	    }, {
@@ -1538,6 +1581,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var currentLevel = this.data.tiles;
 	            for (var tile in currentLevel) {
 	                var currentTileData = currentLevel[tile];
+	                currentTileData["context"] = this.context;
 	                var _tile = new _Tile.Tile(currentTileData);
 	                this.tiles.push(_tile);
 	            }
@@ -1555,7 +1599,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	exports.Tile = undefined;
 
@@ -1613,92 +1657,146 @@ return /******/ (function(modules) { // webpackBootstrap
 	var EVENT_TILE_FAILED = "tile-failed";
 
 	var Tile = exports.Tile = function (_Rectangle) {
-	  _inherits(Tile, _Rectangle);
+	    _inherits(Tile, _Rectangle);
 
-	  _createClass(Tile, [{
-	    key: 'Publisher',
+	    _createClass(Tile, [{
+	        key: 'Publisher',
 
 
-	    /**
-	     * Return the Publisher
-	     */
-	    get: function get() {
-	      return PUBLISHER;
+	        /**
+	         * Return the Publisher
+	         */
+	        get: function get() {
+	            return PUBLISHER;
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {string} path=null - path to image
+	         * @param  {number} x=0 - position x of tile
+	         * @param  {number} y=0 - position y of tile
+	         * @param  {number} w=0 - tile width
+	         * @param  {number} h=0 - tile height
+	         * @return {Tile} instance of Tile
+	         */
+
+	    }]);
+
+	    function Tile() {
+	        var _ret;
+
+	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	        var path = _ref.path;
+	        var _ref$x = _ref.x;
+	        var x = _ref$x === undefined ? 0 : _ref$x;
+	        var _ref$y = _ref.y;
+	        var y = _ref$y === undefined ? 0 : _ref$y;
+	        var _ref$w = _ref.w;
+	        var w = _ref$w === undefined ? 0 : _ref$w;
+	        var _ref$h = _ref.h;
+	        var h = _ref$h === undefined ? 0 : _ref$h;
+	        var _ref$context = _ref.context;
+	        var context = _ref$context === undefined ? null : _ref$context;
+
+	        _classCallCheck(this, Tile);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
+
+	        _this.state = new _StateHandler.StateHandler(STATES);
+	        if (!path || typeof path !== "string" || path.length === 0) {
+	            throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
+	        }
+	        _this.context = context;
+	        _this.path = path;
+	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    /**
-	     * Constructor
-	     * @param  {string} path=null - path to image
-	     * @param  {number} x=0 - position x of tile
-	     * @param  {number} y=0 - position y of tile
-	     * @param  {number} w=0 - tile width
-	     * @param  {number} h=0 - tile height
-	     * @return {Tile} instance of Tile
+	     * initializes tile and starts loading image
+	     * @return {Tile} instance of Tile for chaining
 	     */
 
-	  }]);
 
-	  function Tile() {
-	    var _ret;
+	    _createClass(Tile, [{
+	        key: 'initialize',
+	        value: function initialize() {
+	            this.state.next();
+	            PUBLISHER.publish(EVENT_TILE_INITIALIZED, this);
+	            _Helper.Helper.loadImage(this.path, function (img) {
+	                this.img = img;
+	                this.state.next();
+	                PUBLISHER.publish(EVENT_TILE_LOADED, this);
+	            }.bind(this));
 
-	    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	            return this;
+	        }
 
-	    var path = _ref.path;
-	    var _ref$x = _ref.x;
-	    var x = _ref$x === undefined ? 0 : _ref$x;
-	    var _ref$y = _ref.y;
-	    var y = _ref$y === undefined ? 0 : _ref$y;
-	    var _ref$w = _ref.w;
-	    var w = _ref$w === undefined ? 0 : _ref$w;
-	    var _ref$h = _ref.h;
-	    var h = _ref$h === undefined ? 0 : _ref$h;
+	        /**
+	         * handles draw of a tile in each state
+	         * @param  {number} x - x-position of tile
+	         * @param  {number} y - y-position of tile
+	         * @param  {number} scaleX - scale x of tile
+	         * @param  {number} offsetX - offset x for centering
+	         * @param  {object} thumb - img-data of thumbnail
+	         * @param  {number} thumbScale - thumbnail scale, relative to full image
+	         * @return {Tile} instance of Tile for chaining
+	         */
 
-	    _classCallCheck(this, Tile);
+	    }, {
+	        key: 'handleDraw',
+	        value: function handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) {
+	            var distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
+	            if (this.state.current.value >= 2) {
+	                this.draw(this.img, distortedTile);
+	                this.state.next();
+	            } else if (this.state.current.value === 1 && thumb && thumbScale) {
+	                var thumbTile = this.clone.scale(thumbScale);
+	                this.draw(thumb, thumbTile, distortedTile);
+	            } else if (this.state.current.value === 0) {
+	                this.initialize();
+	            }
+	            return this;
+	        }
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
+	        /**
+	         * draws image data of tile on context
+	         * @param  {object} img - img-data to draw
+	         * @param  {Rectangle} source - specified source sizes
+	         * @param  {Rectangle} destination = null - specified destination sizes
+	         * @return {Tile} instance of Tile for chaining
+	         */
 
-	    _this.state = new _StateHandler.StateHandler(STATES);
-	    if (!path || typeof path !== "string" || path.length === 0) {
-	      throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
-	    }
-	    _this.path = path;
-	    return _ret = _this, _possibleConstructorReturn(_this, _ret);
-	  }
+	    }, {
+	        key: 'draw',
+	        value: function draw(img, source) {
+	            var destination = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
 
-	  /**
-	   * initializes tile and starts loading image
-	   * @return {Tile} instance of Tile
-	   */
+	            if (!this.context) {
+	                console.error("context not specified", this);
+	                return false;
+	            }
+	            if (!destination) {
+	                this.context.drawImage(img, source.x, source.y, source.width, source.height);
+	            } else {
+	                this.context.drawImage(img, source.x, source.y, source.width, source.height, destination.x, destination.y, destination.width, destination.height);
+	            }
+	        }
 
+	        /**
+	         * check if tiles are equal
+	         * @param  {Tile} tile - the specified tile to check against this
+	         * @return {Boolean} is true, if x, y, width and height and path are the same
+	         */
 
-	  _createClass(Tile, [{
-	    key: 'initialize',
-	    value: function initialize() {
-	      this.state.next();
-	      PUBLISHER.publish(EVENT_TILE_INITIALIZED, this);
-	      _Helper.Helper.loadImage(this.path, function (img) {
-	        this.img = img;
-	        this.state.next();
-	        PUBLISHER.publish(EVENT_TILE_LOADED, this);
-	      }.bind(this));
+	    }, {
+	        key: 'equals',
+	        value: function equals(tile) {
+	            return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
+	        }
+	    }]);
 
-	      return this;
-	    }
-
-	    /**
-	     * check if tiles are equal
-	     * @param  {Tile} tile - the specified tile to check against this
-	     * @return {Boolean} is true, if x, y, width and height and path are the same
-	     */
-
-	  }, {
-	    key: 'equals',
-	    value: function equals(tile) {
-	      return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
-	    }
-	  }]);
-
-	  return Tile;
+	    return Tile;
 	}(_Rectangle2.Rectangle);
 
 /***/ },
@@ -2015,7 +2113,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    /**
 	     * loads an image and calls callback on success
-	     * @param  {Function} cb - callback-function on success
+	     * @param {Function} cb - callback-function on success
 	     * @return {Helper} Helper
 	     */
 	    loadImage: function loadImage(path, cb) {
@@ -2028,6 +2126,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        img.src = path;
 	        return this;
 	    },
+	    /**
+	     * convert degree to radian
+	     * @param {number} degrees - specified degrees
+	     * @return {number} converted radian
+	     */
 	    toRadians: function toRadians(degrees) {
 	        return degrees * Math.PI / 180;
 	    }

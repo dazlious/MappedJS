@@ -64,6 +64,7 @@
     * [new Bounds(northWest, southEast)](#new_Bounds_new)
     * [.width](#Bounds+width) ⇒ <code>number</code>
     * [.height](#Bounds+height) ⇒ <code>number</code>
+    * [.range](#Bounds+range) ⇒ <code>[Point](#Point)</code>
 
 <a name="new_Bounds_new"></a>
 ### new Bounds(northWest, southEast)
@@ -87,6 +88,12 @@ gets height of boundaries
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
 **Returns**: <code>number</code> - height of boundaries  
+<a name="Bounds+range"></a>
+### bounds.range ⇒ <code>[Point](#Point)</code>
+gets size
+
+**Kind**: instance property of <code>[Bounds](#Bounds)</code>  
+**Returns**: <code>[Point](#Point)</code> - calculated Size of boundaries  
 <a name="Interact"></a>
 ## Interact
 **Kind**: global class  
@@ -367,6 +374,8 @@ Get event helper, applies jQuery-event-fix too
         * [.clone](#LatLng+clone) ⇒ <code>[LatLng](#LatLng)</code>
         * [.substract(coord)](#LatLng+substract) ⇒ <code>[LatLng](#LatLng)</code>
         * [.add(coord)](#LatLng+add) ⇒ <code>[LatLng](#LatLng)</code>
+        * [.divide(factorLat, factorLng)](#LatLng+divide) ⇒ <code>[LatLng](#LatLng)</code>
+        * [.multiply(factorLat, factorLng)](#LatLng+multiply) ⇒ <code>[LatLng](#LatLng)</code>
         * [.equals(coord)](#LatLng+equals) ⇒ <code>Boolean</code>
     * _static_
         * [.createFromLatLng(LatLng)](#LatLng.createFromLatLng) ⇒ <code>[LatLng](#LatLng)</code>
@@ -413,6 +422,28 @@ add specified coord to this coordinate
 **Params**
 
 - coord <code>[LatLng](#LatLng)</code> - specified coordinate to add to this coord
+
+<a name="LatLng+divide"></a>
+### latLng.divide(factorLat, factorLng) ⇒ <code>[LatLng](#LatLng)</code>
+divides a latlng with a given factor
+
+**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>[LatLng](#LatLng)</code> - Returns instance for chaining  
+**Params**
+
+- factorLat <code>number</code> - factor to divide lat with
+- factorLng <code>number</code> - = factorLat - factor to divide lng with
+
+<a name="LatLng+multiply"></a>
+### latLng.multiply(factorLat, factorLng) ⇒ <code>[LatLng](#LatLng)</code>
+multiplicates a latlng with a given factor
+
+**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>[LatLng](#LatLng)</code> - Returns instance for chaining  
+**Params**
+
+- factorLat <code>number</code> - factor to multiplicate lat with
+- factorLng <code>number</code> - = factorLat - factor to multiplicate lng with
 
 <a name="LatLng+equals"></a>
 ### latLng.equals(coord) ⇒ <code>Boolean</code>
@@ -1072,6 +1103,8 @@ checks if there is a previous element
     * [new Tile(path, x, y, w, h)](#new_Tile_new)
     * [.Publisher](#Tile+Publisher)
     * [.initialize()](#Tile+initialize) ⇒ <code>[Tile](#Tile)</code>
+    * [.handleDraw(x, y, scaleX, offsetX, thumb, thumbScale)](#Tile+handleDraw) ⇒ <code>[Tile](#Tile)</code>
+    * [.draw(img, source, destination)](#Tile+draw) ⇒ <code>[Tile](#Tile)</code>
     * [.equals(tile)](#Tile+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Tile_new"></a>
@@ -1097,7 +1130,34 @@ Return the Publisher
 initializes tile and starts loading image
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - instance of Tile  
+**Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
+<a name="Tile+handleDraw"></a>
+### tile.handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) ⇒ <code>[Tile](#Tile)</code>
+handles draw of a tile in each state
+
+**Kind**: instance method of <code>[Tile](#Tile)</code>  
+**Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
+**Params**
+
+- x <code>number</code> - x-position of tile
+- y <code>number</code> - y-position of tile
+- scaleX <code>number</code> - scale x of tile
+- offsetX <code>number</code> - offset x for centering
+- thumb <code>object</code> - img-data of thumbnail
+- thumbScale <code>number</code> - thumbnail scale, relative to full image
+
+<a name="Tile+draw"></a>
+### tile.draw(img, source, destination) ⇒ <code>[Tile](#Tile)</code>
+draws image data of tile on context
+
+**Kind**: instance method of <code>[Tile](#Tile)</code>  
+**Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
+**Params**
+
+- img <code>object</code> - img-data to draw
+- source <code>[Rectangle](#Rectangle)</code> - specified source sizes
+- destination <code>[Rectangle](#Rectangle)</code> <code> = </code> - = null - specified destination sizes
+
 <a name="Tile+equals"></a>
 ### tile.equals(tile) ⇒ <code>Boolean</code>
 check if tiles are equal
@@ -1121,10 +1181,12 @@ check if tiles are equal
         * [.height](#TileMap+height) ⇒ <code>number</code>
         * [.initialize()](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
         * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
+        * [.disableSubpixelRendering()](#TileMap+disableSubpixelRendering) ⇒ <code>[TileMap](#TileMap)</code>
         * [.getCurrentLevelData()](#TileMap+getCurrentLevelData) ⇒ <code>Object</code>
         * [.clearCanvas()](#TileMap+clearCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.redraw()](#TileMap+redraw) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resize()](#TileMap+resize) ⇒ <code>[TileMap](#TileMap)</code>
+        * [.resizeCanvas()](#TileMap+resizeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
     * _static_
         * [.IMG_DATA_NAME](#TileMap.IMG_DATA_NAME) : <code>String</code>
@@ -1176,6 +1238,12 @@ initializes the canvas, adds to DOM
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+<a name="TileMap+disableSubpixelRendering"></a>
+### tileMap.disableSubpixelRendering() ⇒ <code>[TileMap](#TileMap)</code>
+disables rendering of subpixel in canvas
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+getCurrentLevelData"></a>
 ### tileMap.getCurrentLevelData() ⇒ <code>Object</code>
 gets data of current zoom level
@@ -1187,25 +1255,31 @@ gets data of current zoom level
 clears canvas
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+redraw"></a>
 ### tileMap.redraw() ⇒ <code>[TileMap](#TileMap)</code>
 complete clear and draw of all visible tiles
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+resize"></a>
 ### tileMap.resize() ⇒ <code>[TileMap](#TileMap)</code>
 Handles resizing of TileMap
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
+<a name="TileMap+resizeCanvas"></a>
+### tileMap.resizeCanvas() ⇒ <code>[TileMap](#TileMap)</code>
+resizes the canvas sizes
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+resizeView"></a>
 ### tileMap.resizeView() ⇒ <code>[TileMap](#TileMap)</code>
 Handles resizing of view
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap.IMG_DATA_NAME"></a>
 ### TileMap.IMG_DATA_NAME : <code>String</code>
 name of imagedata in data.json
@@ -1220,11 +1294,15 @@ name of imagedata in data.json
     * [.equalizationFactor](#View+equalizationFactor) ⇒ <code>number</code>
     * [.viewportOffset](#View+viewportOffset)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
-    * [.tileHandling(tile)](#View+tileHandling) ⇒ <code>[TileMap](#TileMap)</code>
-    * [.drawVisibleTiles()](#View+drawVisibleTiles) ⇒ <code>[TileMap](#TileMap)</code>
-    * [.drawTile(tile)](#View+drawTile) ⇒ <code>[TileMap](#TileMap)</code>
-    * [.bindEvents()](#View+bindEvents) ⇒ <code>[TileMap](#TileMap)</code>
-    * [.initializeTiles()](#View+initializeTiles) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.loadThumb()](#View+loadThumb) ⇒ <code>[View](#View)</code>
+    * [.convertPointToLatLng(point)](#View+convertPointToLatLng) ⇒ <code>[LatLng](#LatLng)</code>
+    * [.convertLatLngToPoint(latlng)](#View+convertLatLngToPoint) ⇒ <code>[Point](#Point)</code>
+    * [.tileHandling(tile)](#View+tileHandling) ⇒ <code>[View](#View)</code>
+    * [.moveView(pos)](#View+moveView) ⇒ <code>[View](#View)</code>
+    * [.drawVisibleTiles()](#View+drawVisibleTiles) ⇒ <code>[View](#View)</code>
+    * [.drawTile(tile)](#View+drawTile) ⇒ <code>[View](#View)</code>
+    * [.bindEvents()](#View+bindEvents) ⇒ <code>[View](#View)</code>
+    * [.initializeTiles()](#View+initializeTiles) ⇒ <code>[View](#View)</code>
 
 <a name="new_View_new"></a>
 ### new View(settings, viewport, mapView, bounds, center, data)
@@ -1257,44 +1335,80 @@ get all visible tiles
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>array</code> - all tiles that are currently visible  
+<a name="View+loadThumb"></a>
+### view.loadThumb() ⇒ <code>[View](#View)</code>
+loads thumbnail of view
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+<a name="View+convertPointToLatLng"></a>
+### view.convertPointToLatLng(point) ⇒ <code>[LatLng](#LatLng)</code>
+converts a Point to LatLng in view
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[LatLng](#LatLng)</code> - presentation of point in lat-lng system  
+**Params**
+
+- point <code>[Point](#Point)</code> - specified point to be converted
+
+<a name="View+convertLatLngToPoint"></a>
+### view.convertLatLngToPoint(latlng) ⇒ <code>[Point](#Point)</code>
+converts a LatLng to Point in view
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[Point](#Point)</code> - presentation of point in pixel system  
+**Params**
+
+- latlng <code>[LatLng](#LatLng)</code> - specified latlng to be converted
+
 <a name="View+tileHandling"></a>
-### view.tileHandling(tile) ⇒ <code>[TileMap](#TileMap)</code>
+### view.tileHandling(tile) ⇒ <code>[View](#View)</code>
 handles on load of a tile
 
 **Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[View](#View)</code> - instance of View  
 **Params**
 
-- tile <code>[Tile](#Tile)</code> - a tile of the TileMap
+- tile <code>[Tile](#Tile)</code> - a tile of the View
 
-<a name="View+drawVisibleTiles"></a>
-### view.drawVisibleTiles() ⇒ <code>[TileMap](#TileMap)</code>
-Handles draw of TileMap
+<a name="View+moveView"></a>
+### view.moveView(pos) ⇒ <code>[View](#View)</code>
+moves the view's current position by pos
 
 **Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+**Params**
+
+- pos <code>[Point](#Point)</code> - specified additional offset
+
+<a name="View+drawVisibleTiles"></a>
+### view.drawVisibleTiles() ⇒ <code>[View](#View)</code>
+Handles draw of View
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View  
 <a name="View+drawTile"></a>
-### view.drawTile(tile) ⇒ <code>[TileMap](#TileMap)</code>
+### view.drawTile(tile) ⇒ <code>[View](#View)</code>
 draws tiles on canvas
 
 **Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[View](#View)</code> - instance of View  
 **Params**
 
-- tile <code>[Tile](#Tile)</code> - a tile of the TileMap
+- tile <code>[Tile](#Tile)</code> - a tile of the View
 
 <a name="View+bindEvents"></a>
-### view.bindEvents() ⇒ <code>[TileMap](#TileMap)</code>
+### view.bindEvents() ⇒ <code>[View](#View)</code>
 Handles all events for class
 
 **Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[View](#View)</code> - instance of View  
 <a name="View+initializeTiles"></a>
-### view.initializeTiles() ⇒ <code>[TileMap](#TileMap)</code>
+### view.initializeTiles() ⇒ <code>[View](#View)</code>
 initializes tiles
 
 **Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[View](#View)</code> - instance of View  
 <a name="instance"></a>
 ## instance : <code>[Publisher](#Publisher)</code>
 singleton instance
