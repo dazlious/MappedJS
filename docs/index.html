@@ -849,6 +849,7 @@
 <li><a href="#StateHandler+next">.next()</a> ⇒ <code><a href="#StateHandler">StateHandler</a></code></li>
 <li><a href="#StateHandler+previous">.previous()</a> ⇒ <code><a href="#StateHandler">StateHandler</a></code></li>
 <li><a href="#StateHandler+changeTo">.changeTo(state)</a> ⇒ <code><a href="#StateHandler">StateHandler</a></code></li>
+<li><a href="#StateHandler+changeToValue">.changeToValue(state)</a> ⇒ <code><a href="#StateHandler">StateHandler</a></code></li>
 <li><a href="#StateHandler+hasNext">.hasNext()</a> ⇒ <code>Boolean</code></li>
 <li><a href="#StateHandler+hasPrevious">.hasPrevious()</a> ⇒ <code>Boolean</code></li>
 </ul>
@@ -878,7 +879,14 @@
 <p>change the state to specified state</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#StateHandler">StateHandler</a></code><br><strong>Returns</strong>: <code><a href="#StateHandler">StateHandler</a></code> - instance of StateHandler<br><strong>Params</strong></p>
 <ul>
-<li>state <code>number</code> - -</li>
+<li>state <code>number</code> - index of state in array</li>
+</ul>
+<p><a name="StateHandler+changeToValue"></a></p>
+<h3 id="statehandler-changetovalue-state-code-statehandler-statehandler-code-">stateHandler.changeToValue(state) ⇒ <code><a href="#StateHandler">StateHandler</a></code></h3>
+<p>change the state to specified value of specified property</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#StateHandler">StateHandler</a></code><br><strong>Returns</strong>: <code><a href="#StateHandler">StateHandler</a></code> - instance of StateHandler<br><strong>Params</strong></p>
+<ul>
+<li>state <code>number</code> - index of state in array</li>
 </ul>
 <p><a name="StateHandler+hasNext"></a></p>
 <h3 id="statehandler-hasnext-code-boolean-code-">stateHandler.hasNext() ⇒ <code>Boolean</code></h3>
