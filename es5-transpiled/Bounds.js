@@ -65,6 +65,12 @@
             get: function get() {
                 return Math.abs(this.so.lat - this.nw.lat);
             }
+
+            /**
+             * gets size
+             * @return {Point} calculated Size of boundaries
+             */
+
         }, {
             key: 'range',
             get: function get() {

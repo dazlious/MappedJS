@@ -180,6 +180,8 @@
             var w = _ref$w === undefined ? 0 : _ref$w;
             var _ref$h = _ref.h;
             var h = _ref$h === undefined ? 0 : _ref$h;
+            var _ref$context = _ref.context;
+            var context = _ref$context === undefined ? null : _ref$context;
 
             _classCallCheck(this, Tile);
 
@@ -189,13 +191,14 @@
             if (!path || typeof path !== "string" || path.length === 0) {
                 throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
             }
+            _this.context = context;
             _this.path = path;
             return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
 
         /**
          * initializes tile and starts loading image
-         * @return {Tile} instance of Tile
+         * @return {Tile} instance of Tile for chaining
          */
 
 
@@ -211,6 +214,57 @@
                 }.bind(this));
 
                 return this;
+            }
+
+            /**
+             * handles draw of a tile in each state
+             * @param  {number} x - x-position of tile
+             * @param  {number} y - y-position of tile
+             * @param  {number} scaleX - scale x of tile
+             * @param  {number} offsetX - offset x for centering
+             * @param  {object} thumb - img-data of thumbnail
+             * @param  {number} thumbScale - thumbnail scale, relative to full image
+             * @return {Tile} instance of Tile for chaining
+             */
+
+        }, {
+            key: 'handleDraw',
+            value: function handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) {
+                var distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
+                if (this.state.current.value >= 2) {
+                    this.draw(this.img, distortedTile);
+                    this.state.next();
+                } else if (this.state.current.value === 1 && thumb && thumbScale) {
+                    var thumbTile = this.clone.scale(thumbScale);
+                    this.draw(thumb, thumbTile, distortedTile);
+                } else if (this.state.current.value === 0) {
+                    this.initialize();
+                }
+                return this;
+            }
+
+            /**
+             * draws image data of tile on context
+             * @param  {object} img - img-data to draw
+             * @param  {Rectangle} source - specified source sizes
+             * @param  {Rectangle} destination = null - specified destination sizes
+             * @return {Tile} instance of Tile for chaining
+             */
+
+        }, {
+            key: 'draw',
+            value: function draw(img, source) {
+                var destination = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
+                if (!this.context) {
+                    console.error("context not specified", this);
+                    return false;
+                }
+                if (!destination) {
+                    this.context.drawImage(img, source.x, source.y, source.width, source.height);
+                } else {
+                    this.context.drawImage(img, source.x, source.y, source.width, source.height, destination.x, destination.y, destination.width, destination.height);
+                }
             }
 
             /**

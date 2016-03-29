@@ -118,6 +118,14 @@
                 this.lng += coord.lng;
                 return this;
             }
+
+            /**
+             * divides a latlng with a given factor
+             * @param  {number} factorLat - factor to divide lat with
+             * @param  {number} factorLng = factorLat - factor to divide lng with
+             * @return {LatLng} Returns instance for chaining
+             */
+
         }, {
             key: 'divide',
             value: function divide(factorLat) {
@@ -127,6 +135,14 @@
                 this.lng /= factorLng;
                 return this;
             }
+
+            /**
+             * multiplicates a latlng with a given factor
+             * @param  {number} factorLat - factor to multiplicate lat with
+             * @param  {number} factorLng = factorLat - factor to multiplicate lng with
+             * @return {LatLng} Returns instance for chaining
+             */
+
         }, {
             key: 'multiply',
             value: function multiply(factorLat) {

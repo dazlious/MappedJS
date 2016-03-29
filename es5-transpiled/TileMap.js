@@ -145,7 +145,7 @@
                     data: this.getCurrentLevelData(),
                     context: this.canvasContext
                 });
-                this.resize();
+                this.resizeCanvas();
                 return this;
             }
 
@@ -163,12 +163,19 @@
                 this.canvasContext = this.canvas.getContext("2d");
                 return this;
             }
+
+            /**
+             * disables rendering of subpixel in canvas
+             * @return {TileMap} instance of TileMap for chaining
+             */
+
         }, {
             key: 'disableSubpixelRendering',
             value: function disableSubpixelRendering() {
                 this.canvasContext.mozImageSmoothingEnabled = false;
                 this.canvasContext.msImageSmoothingEnabled = false;
                 this.canvasContext.imageSmoothingEnabled = false;
+                return this;
             }
 
             /**
@@ -184,7 +191,7 @@
 
             /**
              * clears canvas
-             * @return {TileMap} instance of TileMap
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {
@@ -196,7 +203,7 @@
 
             /**
              * complete clear and draw of all visible tiles
-             * @return {TileMap} instance of TileMap
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {
@@ -209,22 +216,35 @@
 
             /**
              * Handles resizing of TileMap
-             * @return {TileMap} instance of TileMap
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {
             key: 'resize',
             value: function resize() {
+                this.resizeCanvas();
+                this.resizeView();
+                this.view.drawVisibleTiles();
+                return this;
+            }
+
+            /**
+             * resizes the canvas sizes
+             * @return {TileMap} instance of TileMap for chaining
+             */
+
+        }, {
+            key: 'resizeCanvas',
+            value: function resizeCanvas() {
                 this.canvasContext.canvas.width = this.width;
                 this.canvasContext.canvas.height = this.height;
                 this.disableSubpixelRendering();
-                this.resizeView();
                 return this;
             }
 
             /**
              * Handles resizing of view
-             * @return {TileMap} instance of TileMap
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {

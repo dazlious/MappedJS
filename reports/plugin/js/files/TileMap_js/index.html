@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">69.02</p>
+      <p class="stat">69.06</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">249</p>
+      <p class="stat">269</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">42.11</p>
+      <p class="stat">42.62</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.95</p>
+      <p class="stat">2.02</p>
     </div>
   </div>
 </div>
@@ -236,7 +236,7 @@
                     data: this.getCurrentLevelData(),
                     context: this.canvasContext
                 });
-                this.resize();
+                this.resizeCanvas();
                 return this;
             }
 
@@ -254,12 +254,19 @@
                 this.canvasContext = this.canvas.getContext(&quot;2d&quot;);
                 return this;
             }
+
+            /**
+             * disables rendering of subpixel in canvas
+             * @return {TileMap} instance of TileMap for chaining
+             */
+
         }, {
             key: &#039;disableSubpixelRendering&#039;,
             value: function disableSubpixelRendering() {
                 this.canvasContext.mozImageSmoothingEnabled = false;
                 this.canvasContext.msImageSmoothingEnabled = false;
                 this.canvasContext.imageSmoothingEnabled = false;
+                return this;
             }
 
             /**
@@ -275,7 +282,7 @@
 
             /**
              * clears canvas
-             * @return {TileMap} instance of TileMap
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {
@@ -287,7 +294,7 @@
 
             /**
              * complete clear and draw of all visible tiles
-             * @return {TileMap} instance of TileMap
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {
@@ -300,22 +307,35 @@
 
             /**
              * Handles resizing of TileMap
-             * @return {TileMap} instance of TileMap
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {
             key: &#039;resize&#039;,
             value: function resize() {
+                this.resizeCanvas();
+                this.resizeView();
+                this.view.drawVisibleTiles();
+                return this;
+            }
+
+            /**
+             * resizes the canvas sizes
+             * @return {TileMap} instance of TileMap for chaining
+             */
+
+        }, {
+            key: &#039;resizeCanvas&#039;,
+            value: function resizeCanvas() {
                 this.canvasContext.canvas.width = this.width;
                 this.canvasContext.canvas.height = this.height;
                 this.disableSubpixelRendering();
-                this.resizeView();
                 return this;
             }
 
             /**
              * Handles resizing of view
-             * @return {TileMap} instance of TileMap
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {

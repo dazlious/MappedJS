@@ -55,12 +55,24 @@ export class LatLng {
         return this;
     }
 
+    /**
+    * divides a latlng with a given factor
+    * @param  {number} factorLat - factor to divide lat with
+    * @param  {number} factorLng = factorLat - factor to divide lng with
+     * @return {LatLng} Returns instance for chaining
+     */
     divide(factorLat, factorLng = factorLat) {
         this.lat /= factorLat;
         this.lng /= factorLng;
         return this;
     }
 
+    /**
+     * multiplicates a latlng with a given factor
+     * @param  {number} factorLat - factor to multiplicate lat with
+     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
+     * @return {LatLng} Returns instance for chaining
+     */
     multiply(factorLat, factorLng = factorLat) {
         this.lat *= factorLat;
         this.lng *= factorLng;

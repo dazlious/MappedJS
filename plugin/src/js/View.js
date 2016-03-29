@@ -64,23 +64,35 @@ export class View {
         return this;
     }
 
+    /**
+     * loads thumbnail of view
+     * @return {View} instance of View for chaining
+     */
     loadThumb() {
         Helper.loadImage(this.data.thumb, function(img) {
             this.thumbScale = img.width / this.mapView.width;
-            //img.width = this.mapView.width;
-            //img.height = this.mapView.height;
             this.thumb = img;
             this.drawVisibleTiles();
         }.bind(this));
         return this;
     }
 
+    /**
+     * converts a Point to LatLng in view
+     * @param  {Point} point - specified point to be converted
+     * @return {LatLng} presentation of point in lat-lng system
+     */
     convertPointToLatLng(point) {
         let factorX = this.mapView.width / this.bounds.range.lng,
             factorY = this.mapView.height / this.bounds.range.lat;
         return new LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
     }
 
+    /**
+     * converts a LatLng to Point in view
+     * @param  {LatLng} latlng - specified latlng to be converted
+     * @return {Point} presentation of point in pixel system
+     */
     convertLatLngToPoint(latlng) {
         let relativePosition = this.bounds.nw.clone.substract(latlng),
             factorX = this.mapView.width / this.bounds.width,
@@ -90,14 +102,19 @@ export class View {
 
     /**
      * handles on load of a tile
-     * @param  {Tile} tile a tile of the TileMap
-     * @return {TileMap} instance of TileMap
+     * @param  {Tile} tile a tile of the View
+     * @return {View} instance of View
      */
     tileHandling(tile) {
         this.drawTile(tile);
         return this;
     }
 
+    /**
+     * moves the view's current position by pos
+     * @param  {Point} pos - specified additional offset
+     * @return {View} instance of View for chaining
+     */
     moveView(pos) {
         let equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset + pos.x, pos.y);
         if (!equalizedMap.containsRect(this.viewport)) {
@@ -123,51 +140,30 @@ export class View {
     }
 
     /**
-     * Handles draw of TileMap
-     * @return {TileMap} instance of TileMap
+     * Handles draw of View
+     * @return {View} instance of View
      */
     drawVisibleTiles() {
-        for (var tile in this.visibleTiles) {
-            this.drawTile(this.visibleTiles[tile]);
+        let currentlyVisibleTiles = this.visibleTiles;
+        for (let i in currentlyVisibleTiles) {
+            this.drawTile(currentlyVisibleTiles[i]);
         }
         return this;
     }
 
     /**
      * draws tiles on canvas
-     * @param  {Tile} tile a tile of the TileMap
-     * @return {TileMap} instance of TileMap
+     * @param  {Tile} tile a tile of the View
+     * @return {View} instance of View
      */
     drawTile(tile) {
-        let distortedTile = tile.clone.translate(this.mapView.x, this.mapView.y).scaleX(this.equalizationFactor).translate(this.viewportOffset, 0);
-        if (tile.state.current.value >= 2) {
-            this.draw(tile.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
-            tile.state.next();
-        } else if (tile.state.current.value === 1) {
-            let thumbTile = tile.clone.scale(this.thumbScale);
-            this.drawPartial(this.thumb, thumbTile.x, thumbTile.y, thumbTile.width, thumbTile.height, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
-            console.log("TADA");
-        } else if (tile.state.current.value === 0) {
-            tile.initialize();
-        }
+        tile.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
         return this;
-    }
-
-    draw(img, x, y, w, h) {
-        this.context.drawImage(img, x, y, w, h);
-    }
-
-    drawPartial(img, ox, oy, ow, oh, x, y, w, h) {
-        this.context.drawImage(img, ox, oy, ow, oh, x, y, w, h);
-    }
-
-    drawThumb(img, x, y, w, h) {
-        this.context.drawImage(img, x, y, w, h);
     }
 
     /**
      * Handles all events for class
-     * @return {TileMap} instance of TileMap
+     * @return {View} instance of View
      */
     bindEvents() {
         PUBLISHER.subscribe("tile-loaded", this.tileHandling.bind(this));
@@ -177,12 +173,13 @@ export class View {
 
     /**
      * initializes tiles
-     * @return {TileMap} instance of TileMap
+     * @return {View} instance of View
      */
     initializeTiles() {
         let currentLevel = this.data.tiles;
         for (let tile in currentLevel) {
             let currentTileData = currentLevel[tile];
+            currentTileData["context"] = this.context;
             let _tile = new Tile(currentTileData);
             this.tiles.push(_tile);
         }

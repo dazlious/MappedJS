@@ -126,18 +126,29 @@
             return this;
         }
 
+        /**
+         * loads thumbnail of view
+         * @return {View} instance of View for chaining
+         */
+
+
         _createClass(View, [{
             key: 'loadThumb',
             value: function loadThumb() {
                 _Helper.Helper.loadImage(this.data.thumb, function(img) {
                     this.thumbScale = img.width / this.mapView.width;
-                    //img.width = this.mapView.width;
-                    //img.height = this.mapView.height;
                     this.thumb = img;
                     this.drawVisibleTiles();
                 }.bind(this));
                 return this;
             }
+
+            /**
+             * converts a Point to LatLng in view
+             * @param  {Point} point - specified point to be converted
+             * @return {LatLng} presentation of point in lat-lng system
+             */
+
         }, {
             key: 'convertPointToLatLng',
             value: function convertPointToLatLng(point) {
@@ -145,6 +156,13 @@
                     factorY = this.mapView.height / this.bounds.range.lat;
                 return new _LatLng.LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
             }
+
+            /**
+             * converts a LatLng to Point in view
+             * @param  {LatLng} latlng - specified latlng to be converted
+             * @return {Point} presentation of point in pixel system
+             */
+
         }, {
             key: 'convertLatLngToPoint',
             value: function convertLatLngToPoint(latlng) {
@@ -156,8 +174,8 @@
 
             /**
              * handles on load of a tile
-             * @param  {Tile} tile a tile of the TileMap
-             * @return {TileMap} instance of TileMap
+             * @param  {Tile} tile a tile of the View
+             * @return {View} instance of View
              */
 
         }, {
@@ -166,6 +184,13 @@
                 this.drawTile(tile);
                 return this;
             }
+
+            /**
+             * moves the view's current position by pos
+             * @param  {Point} pos - specified additional offset
+             * @return {View} instance of View for chaining
+             */
+
         }, {
             key: 'moveView',
             value: function moveView(pos) {
@@ -193,60 +218,36 @@
             }
 
             /**
-             * Handles draw of TileMap
-             * @return {TileMap} instance of TileMap
+             * Handles draw of View
+             * @return {View} instance of View
              */
 
         }, {
             key: 'drawVisibleTiles',
             value: function drawVisibleTiles() {
-                for (var tile in this.visibleTiles) {
-                    this.drawTile(this.visibleTiles[tile]);
+                var currentlyVisibleTiles = this.visibleTiles;
+                for (var i in currentlyVisibleTiles) {
+                    this.drawTile(currentlyVisibleTiles[i]);
                 }
                 return this;
             }
 
             /**
              * draws tiles on canvas
-             * @param  {Tile} tile a tile of the TileMap
-             * @return {TileMap} instance of TileMap
+             * @param  {Tile} tile a tile of the View
+             * @return {View} instance of View
              */
 
         }, {
             key: 'drawTile',
             value: function drawTile(tile) {
-                var distortedTile = tile.clone.translate(this.mapView.x, this.mapView.y).scaleX(this.equalizationFactor).translate(this.viewportOffset, 0);
-                if (tile.state.current.value >= 2) {
-                    this.draw(tile.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
-                    tile.state.next();
-                } else if (tile.state.current.value === 1) {
-                    var thumbTile = tile.clone.scale(this.thumbScale);
-                    this.drawPartial(this.thumb, thumbTile.x, thumbTile.y, thumbTile.width, thumbTile.height, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
-                    console.log("TADA");
-                } else if (tile.state.current.value === 0) {
-                    tile.initialize();
-                }
+                tile.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
                 return this;
-            }
-        }, {
-            key: 'draw',
-            value: function draw(img, x, y, w, h) {
-                this.context.drawImage(img, x, y, w, h);
-            }
-        }, {
-            key: 'drawPartial',
-            value: function drawPartial(img, ox, oy, ow, oh, x, y, w, h) {
-                this.context.drawImage(img, ox, oy, ow, oh, x, y, w, h);
-            }
-        }, {
-            key: 'drawThumb',
-            value: function drawThumb(img, x, y, w, h) {
-                this.context.drawImage(img, x, y, w, h);
             }
 
             /**
              * Handles all events for class
-             * @return {TileMap} instance of TileMap
+             * @return {View} instance of View
              */
 
         }, {
@@ -259,7 +260,7 @@
 
             /**
              * initializes tiles
-             * @return {TileMap} instance of TileMap
+             * @return {View} instance of View
              */
 
         }, {
@@ -268,6 +269,7 @@
                 var currentLevel = this.data.tiles;
                 for (var tile in currentLevel) {
                     var currentTileData = currentLevel[tile];
+                    currentTileData["context"] = this.context;
                     var _tile = new _Tile.Tile(currentTileData);
                     this.tiles.push(_tile);
                 }

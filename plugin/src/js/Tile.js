@@ -57,19 +57,20 @@ export class Tile extends Rectangle {
      * @param  {number} h=0 - tile height
      * @return {Tile} instance of Tile
      */
-    constructor({path, x = 0, y = 0, w = 0, h = 0} = {}) {
+    constructor({path, x = 0, y = 0, w = 0, h = 0, context = null} = {}) {
         super(x, y, w, h);
         this.state = new StateHandler(STATES);
         if (!path || typeof path !== "string" || path.length === 0) {
             throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
         }
+        this.context = context;
         this.path = path;
         return this;
     }
 
     /**
      * initializes tile and starts loading image
-     * @return {Tile} instance of Tile
+     * @return {Tile} instance of Tile for chaining
      */
     initialize() {
         this.state.next();
@@ -81,6 +82,49 @@ export class Tile extends Rectangle {
         }.bind(this));
 
         return this;
+    }
+
+    /**
+     * handles draw of a tile in each state
+     * @param  {number} x - x-position of tile
+     * @param  {number} y - y-position of tile
+     * @param  {number} scaleX - scale x of tile
+     * @param  {number} offsetX - offset x for centering
+     * @param  {object} thumb - img-data of thumbnail
+     * @param  {number} thumbScale - thumbnail scale, relative to full image
+     * @return {Tile} instance of Tile for chaining
+     */
+    handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) {
+        let distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
+        if (this.state.current.value >= 2) {
+            this.draw(this.img, distortedTile);
+            this.state.next();
+        } else if (this.state.current.value === 1 && thumb && thumbScale) {
+            let thumbTile = this.clone.scale(thumbScale);
+            this.draw(thumb, thumbTile, distortedTile);
+        } else if (this.state.current.value === 0) {
+            this.initialize();
+        }
+        return this;
+    }
+
+    /**
+     * draws image data of tile on context
+     * @param  {object} img - img-data to draw
+     * @param  {Rectangle} source - specified source sizes
+     * @param  {Rectangle} destination = null - specified destination sizes
+     * @return {Tile} instance of Tile for chaining
+     */
+    draw(img, source, destination = null) {
+        if (!this.context) {
+            console.error("context not specified", this);
+            return false;
+        }
+        if (!destination) {
+            this.context.drawImage(img, source.x, source.y, source.width, source.height);
+        } else {
+            this.context.drawImage(img, source.x, source.y, source.width, source.height, destination.x, destination.y, destination.width, destination.height);
+        }
     }
 
     /**

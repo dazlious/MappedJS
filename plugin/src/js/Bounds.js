@@ -18,6 +18,10 @@ export class Bounds {
         return Math.abs(this.so.lat - this.nw.lat);
     }
 
+    /**
+     * gets size
+     * @return {Point} calculated Size of boundaries
+     */
     get range() {
         return this.nw.clone.substract(this.so);
     }

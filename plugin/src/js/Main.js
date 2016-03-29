@@ -98,7 +98,7 @@ export class MappedJS {
             container: this.$container,
             callbacks: {
                 tap: function(data) {
-                    console.log("tap", data);
+                    //console.log("tap", data);
                 }.bind(this),
                 pan: function(data) {
                     let change = data.positions.last.substract(data.positions.current),
@@ -107,10 +107,10 @@ export class MappedJS {
                     this.tileMap.redraw();
                 }.bind(this),
                 flick: function(data) {
-                    console.log(data.speed, data.direction);
+                    //console.log(data.speed, data.direction);
                 }.bind(this),
                 zoom: function(data) {
-                    console.log("zoom", data);
+                    //console.log("zoom", data);
                 }.bind(this)
             }
         });

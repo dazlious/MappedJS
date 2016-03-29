@@ -53,7 +53,7 @@
         },
         /**
          * loads an image and calls callback on success
-         * @param  {Function} cb - callback-function on success
+         * @param {Function} cb - callback-function on success
          * @return {Helper} Helper
          */
         loadImage: function loadImage(path, cb) {
@@ -66,6 +66,11 @@
             img.src = path;
             return this;
         },
+        /**
+         * convert degree to radian
+         * @param {number} degrees - specified degrees
+         * @return {number} converted radian
+         */
         toRadians: function toRadians(degrees) {
             return degrees * Math.PI / 180;
         }

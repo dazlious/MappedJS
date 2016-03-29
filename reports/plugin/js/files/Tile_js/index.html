@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">64.53</p>
+      <p class="stat">63.35</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">231</p>
+      <p class="stat">285</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">42.83</p>
+      <p class="stat">49.04</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.84</p>
+      <p class="stat">2.45</p>
     </div>
   </div>
 </div>
@@ -271,6 +271,8 @@
             var w = _ref$w === undefined ? 0 : _ref$w;
             var _ref$h = _ref.h;
             var h = _ref$h === undefined ? 0 : _ref$h;
+            var _ref$context = _ref.context;
+            var context = _ref$context === undefined ? null : _ref$context;
 
             _classCallCheck(this, Tile);
 
@@ -280,13 +282,14 @@
             if (!path || typeof path !== &quot;string&quot; || path.length === 0) {
                 throw new TypeError(&#039;Path &#039; + path + &#039; needs to be of type string and should not be empty&#039;);
             }
+            _this.context = context;
             _this.path = path;
             return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
 
         /**
          * initializes tile and starts loading image
-         * @return {Tile} instance of Tile
+         * @return {Tile} instance of Tile for chaining
          */
 
 
@@ -302,6 +305,57 @@
                 }.bind(this));
 
                 return this;
+            }
+
+            /**
+             * handles draw of a tile in each state
+             * @param  {number} x - x-position of tile
+             * @param  {number} y - y-position of tile
+             * @param  {number} scaleX - scale x of tile
+             * @param  {number} offsetX - offset x for centering
+             * @param  {object} thumb - img-data of thumbnail
+             * @param  {number} thumbScale - thumbnail scale, relative to full image
+             * @return {Tile} instance of Tile for chaining
+             */
+
+        }, {
+            key: &#039;handleDraw&#039;,
+            value: function handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) {
+                var distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
+                if (this.state.current.value &gt;= 2) {
+                    this.draw(this.img, distortedTile);
+                    this.state.next();
+                } else if (this.state.current.value === 1 &amp;&amp; thumb &amp;&amp; thumbScale) {
+                    var thumbTile = this.clone.scale(thumbScale);
+                    this.draw(thumb, thumbTile, distortedTile);
+                } else if (this.state.current.value === 0) {
+                    this.initialize();
+                }
+                return this;
+            }
+
+            /**
+             * draws image data of tile on context
+             * @param  {object} img - img-data to draw
+             * @param  {Rectangle} source - specified source sizes
+             * @param  {Rectangle} destination = null - specified destination sizes
+             * @return {Tile} instance of Tile for chaining
+             */
+
+        }, {
+            key: &#039;draw&#039;,
+            value: function draw(img, source) {
+                var destination = arguments.length &lt;= 2 || arguments[2] === undefined ? null : arguments[2];
+
+                if (!this.context) {
+                    console.error(&quot;context not specified&quot;, this);
+                    return false;
+                }
+                if (!destination) {
+                    this.context.drawImage(img, source.x, source.y, source.width, source.height);
+                } else {
+                    this.context.drawImage(img, source.x, source.y, source.width, source.height, destination.x, destination.y, destination.width, destination.height);
+                }
             }
 
             /**
