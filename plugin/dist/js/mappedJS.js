@@ -198,9 +198,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function bindEvents() {
 	            this.interact = new _Interact.Interact({
 	                container: this.$container,
+	                autoFireHold: 300,
 	                callbacks: {
 	                    tap: function (data) {
-	                        //console.log("tap", data);
+	                        console.log("tap", data);
 	                    }.bind(this),
 	                    pan: function (data) {
 	                        var change = data.positions.last.substract(data.positions.current),
@@ -209,10 +210,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        this.tileMap.redraw();
 	                    }.bind(this),
 	                    flick: function (data) {
-	                        //console.log(data.speed, data.direction);
+	                        console.log(data.speed, data.direction);
 	                    }.bind(this),
 	                    zoom: function (data) {
-	                        //console.log("zoom", data);
+	                        console.log("zoom", data);
+	                    }.bind(this),
+	                    hold: function (data) {
+	                        console.log("hold", data);
+	                    }.bind(this),
+	                    tapHold: function (data) {
+	                        console.log("tapHold", data);
+	                    }.bind(this),
+	                    wheel: function (data) {
+	                        console.log("wheel", data);
+	                    }.bind(this),
+	                    doubletap: function (data) {
+	                        console.log("doubletap", data);
 	                    }.bind(this)
 	                }
 	            });
@@ -1852,6 +1865,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.states = states_array;
 	        this.i = 0;
+	        this.lastState = this.current;
 	        return this;
 	    }
 
@@ -1864,6 +1878,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(StateHandler, [{
 	        key: 'next',
 	        value: function next() {
+	            this.lastState = this.current;
 	            if (this.hasNext()) {
 	                this.i++;
 	            }
@@ -1878,6 +1893,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'previous',
 	        value: function previous() {
+	            this.lastState = this.current;
 	            if (this.hasPrevious()) {
 	                this.i--;
 	            }
@@ -1886,7 +1902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * change the state to specified state
-	         * @param {number} state -
+	         * @param {number} state - index of state in array
 	         * @return {StateHandler} instance of StateHandler
 	         */
 
@@ -1895,6 +1911,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function changeTo(state) {
 	            if (state >= 0 && state < this.length) {
 	                this.i = state;
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * change the state to specified value of specified property
+	         * @param {number} state - index of state in array
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }, {
+	        key: 'changeToValue',
+	        value: function changeToValue(prop, value) {
+	            for (var i = 0; i < this.length; i++) {
+	                if (this.states[i] && value === this.states[i][prop]) {
+	                    this.i = i;
+	                }
 	            }
 	            return this;
 	        }

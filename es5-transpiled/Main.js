@@ -178,9 +178,10 @@
             value: function bindEvents() {
                 this.interact = new _Interact.Interact({
                     container: this.$container,
+                    autoFireHold: 300,
                     callbacks: {
                         tap: function(data) {
-                            //console.log("tap", data);
+                            console.log("tap", data);
                         }.bind(this),
                         pan: function(data) {
                             var change = data.positions.last.substract(data.positions.current),
@@ -189,10 +190,22 @@
                             this.tileMap.redraw();
                         }.bind(this),
                         flick: function(data) {
-                            //console.log(data.speed, data.direction);
+                            console.log(data.speed, data.direction);
                         }.bind(this),
                         zoom: function(data) {
-                            //console.log("zoom", data);
+                            console.log("zoom", data);
+                        }.bind(this),
+                        hold: function(data) {
+                            console.log("hold", data);
+                        }.bind(this),
+                        tapHold: function(data) {
+                            console.log("tapHold", data);
+                        }.bind(this),
+                        wheel: function(data) {
+                            console.log("wheel", data);
+                        }.bind(this),
+                        doubletap: function(data) {
+                            console.log("doubletap", data);
                         }.bind(this)
                     }
                 });

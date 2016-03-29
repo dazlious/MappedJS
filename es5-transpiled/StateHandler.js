@@ -83,6 +83,7 @@
 
             this.states = states_array;
             this.i = 0;
+            this.lastState = this.current;
             return this;
         }
 
@@ -95,6 +96,7 @@
         _createClass(StateHandler, [{
             key: 'next',
             value: function next() {
+                this.lastState = this.current;
                 if (this.hasNext()) {
                     this.i++;
                 }
@@ -109,6 +111,7 @@
         }, {
             key: 'previous',
             value: function previous() {
+                this.lastState = this.current;
                 if (this.hasPrevious()) {
                     this.i--;
                 }
@@ -117,7 +120,7 @@
 
             /**
              * change the state to specified state
-             * @param {number} state -
+             * @param {number} state - index of state in array
              * @return {StateHandler} instance of StateHandler
              */
 
@@ -126,6 +129,23 @@
             value: function changeTo(state) {
                 if (state >= 0 && state < this.length) {
                     this.i = state;
+                }
+                return this;
+            }
+
+            /**
+             * change the state to specified value of specified property
+             * @param {number} state - index of state in array
+             * @return {StateHandler} instance of StateHandler
+             */
+
+        }, {
+            key: 'changeToValue',
+            value: function changeToValue(prop, value) {
+                for (var i = 0; i < this.length; i++) {
+                    if (this.states[i] && value === this.states[i][prop]) {
+                        this.i = i;
+                    }
                 }
                 return this;
             }
