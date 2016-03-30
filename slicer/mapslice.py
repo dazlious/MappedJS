@@ -73,7 +73,7 @@ def build_level(input_path, output, path, size, minsize):
 def create_thumb(img, data, path):
     outfile = "map_thumb.jpg"
     thumb_img = img
-    thumb_img.thumbnail((128, 128), Image.ANTIALIAS)
+    thumb_img.thumbnail((settings.thumbSize, settings.thumbSize), Image.ANTIALIAS)
     thumb_img.save(settings.output + outfile)
     data["thumb"] = path + outfile
 
@@ -187,6 +187,7 @@ def init_settings():
     parser.add_argument('-o', '--output', help='path to destination', required=True, type=str)
     parser.add_argument('-s', '--size', help='size of a tile', default=512, type=int)
     parser.add_argument('-m', '--minsize', help='minimum size of a tile', default=128, type=int)
+    parser.add_argument('-t', '--thumbSize', help='size of thumbnail', default=256, type=int)
     parser.add_argument('-p', '--path', help='additional path information for relative paths', default="", type=str)
     parser.add_argument('-c', '--clearfolder', help='empties output folder', default=False, type=bool)
 
