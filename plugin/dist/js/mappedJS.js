@@ -575,10 +575,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _classCallCheck(this, LatLng);
 
-	    this.lat = lat % 90;
-	    this.lat = this.lat === -0 ? 0 : this.lat;
-	    this.lng = lng % 180;
-	    this.lng = this.lng === -0 ? 0 : this.lng;
+	    this.lat = lat;
+	    this.lng = lng;
 	    return this;
 	  }
 

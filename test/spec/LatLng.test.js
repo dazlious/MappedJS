@@ -13,16 +13,6 @@ describe('LatLng', function() {
         expect(latlng.lng).toEqual(0);
     });
 
-    it("initializes with larger numbers", function() {
-        var c1 = new LatLng.LatLng(100, -180),
-            c2 = new LatLng.LatLng(-90, 360),
-            c3 = new LatLng.LatLng(-233, -182);
-        expect(c1).toEqual(new LatLng.LatLng(10, 0));
-        expect(c2).toEqual(new LatLng.LatLng(0, 180));
-        expect(c3).toEqual(new LatLng.LatLng(-53, -2));
-
-    });
-
     it("substraction works", function() {
         var coord1 = new LatLng.LatLng(30, 30),
             coord2 = new LatLng.LatLng(30, -30),
