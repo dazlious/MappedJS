@@ -1,0 +1,18 @@
+{
+    "img_data": {
+        "level-0": {
+            "tiles": [{
+                "y": 0,
+                "path": "img/map.svg",
+                "h": 4096,
+                "w": 8192,
+                "x": 0
+            }],
+            "dimensions": {
+                "width": 8192,
+                "height": 4096
+            },
+            "thumb": "img/map_thumb.jpg"
+        }
+    }
+}
