@@ -18,6 +18,10 @@ export class Point {
         return Point.createFromPoint(this);
     }
 
+    get abs() {
+        return new Point(Math.abs(this.x), Math.abs(this.y));
+    }
+
     /**
      * Constructor
      * @param  {number} x = 0 - representation of x coordinate

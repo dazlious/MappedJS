@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Publisher = __webpack_require__(10);
 
-	var _Interact = __webpack_require__(12);
+	var _Interact = __webpack_require__(13);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -263,6 +263,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return MappedJS;
 	}();
 
+	window.requestAnimFrame = function () {
+	    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
+	        window.setTimeout(callback, 1000 / 60);
+	    };
+		}();
+
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
@@ -368,6 +374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.$container = container;
 	        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
+	        this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
 	        this.settings = settings;
 
 	        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
@@ -391,6 +398,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
 	                center: new _LatLng.LatLng(center.lat, center.lng),
 	                data: this.getCurrentLevelData(),
+	                markerData: this.markerData,
 	                context: this.canvasContext
 	            });
 	            this.resizeCanvas();
@@ -458,7 +466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'redraw',
 	        value: function redraw() {
 	            this.clearCanvas();
-	            this.view.drawVisibleTiles();
+	            this.view.draw();
 	            return this;
 	        }
 
@@ -472,7 +480,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function resize() {
 	            this.resizeCanvas();
 	            this.resizeView();
-	            this.view.drawVisibleTiles();
+	            this.view.draw();
 	            return this;
 	        }
 
@@ -510,12 +518,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 	/**
-	 * name of imagedata in data.json
+	 * name of image data in data.json
 	 * @type {String}
 	 */
 
 
-		TileMap.IMG_DATA_NAME = "img_data";
+	TileMap.IMG_DATA_NAME = "img_data";
+
+	/**
+	 * name of marker data in data.json
+	 * @type {String}
+	 */
+		TileMap.MARKER_DATA_NAME = "marker";
 
 /***/ },
 /* 3 */
@@ -677,7 +691,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	exports.Point = undefined;
 
@@ -688,179 +702,184 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Point = exports.Point = function () {
-	  _createClass(Point, [{
-	    key: 'length',
+	    _createClass(Point, [{
+	        key: 'length',
 
 
-	    /**
-	     * length of a point
-	     * @return {number} length of a point
-	     */
-	    get: function get() {
-	      return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+	        /**
+	         * length of a point
+	         * @return {number} length of a point
+	         */
+	        get: function get() {
+	            return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+	        }
+
+	        /**
+	         * gets a clone of this point
+	         * @return {Point} new instance equals this point
+	         */
+
+	    }, {
+	        key: 'clone',
+	        get: function get() {
+	            return Point.createFromPoint(this);
+	        }
+	    }, {
+	        key: 'abs',
+	        get: function get() {
+	            return new Point(Math.abs(this.x), Math.abs(this.y));
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {number} x = 0 - representation of x coordinate
+	         * @param  {number} y = 0 - representation of y coordinate
+	         * @return {Point} new instance of point
+	         */
+
+	    }]);
+
+	    function Point() {
+	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	        _classCallCheck(this, Point);
+
+	        this.x = x;
+	        this.y = y;
+	        return this;
 	    }
 
 	    /**
-	     * gets a clone of this point
-	     * @return {Point} new instance equals this point
+	     * substracts 2 points
+	     * @param  {Point} point - the point to substract from this
+	     * @return {Point} difference between this point and parameter point
 	     */
 
-	  }, {
-	    key: 'clone',
-	    get: function get() {
-	      return Point.createFromPoint(this);
-	    }
 
-	    /**
-	     * Constructor
-	     * @param  {number} x = 0 - representation of x coordinate
-	     * @param  {number} y = 0 - representation of y coordinate
-	     * @return {Point} new instance of point
-	     */
+	    _createClass(Point, [{
+	        key: 'substract',
+	        value: function substract(point) {
+	            this.x -= point.x;
+	            this.y -= point.y;
+	            return this;
+	        }
 
-	  }]);
+	        /**
+	         * adds 2 points
+	         * @param  {Point} point - the point to add to this
+	         * @return {Point} addition of this point and parameter point
+	         */
 
-	  function Point() {
-	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	    }, {
+	        key: 'add',
+	        value: function add(point) {
+	            this.x += point.x;
+	            this.y += point.y;
+	            return this;
+	        }
 
-	    _classCallCheck(this, Point);
+	        /**
+	         * multiplicates a point with a given x and y
+	         * @param  {number} x - factor to multiplicate x with
+	         * @param  {number} y - factor to multiplicate y with
+	         * @return {Point} Returns a new instance
+	         */
 
-	    this.x = x;
-	    this.y = y;
-	    return this;
-	  }
+	    }, {
+	        key: 'multiply',
+	        value: function multiply(x) {
+	            var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	  /**
-	   * substracts 2 points
-	   * @param  {Point} point - the point to substract from this
-	   * @return {Point} difference between this point and parameter point
-	   */
+	            this.x *= x;
+	            this.y *= y;
+	            return this;
+	        }
 
+	        /**
+	         * divide a point with a given x and y
+	         * @param  {number} x - factor to divide x with
+	         * @param  {number} y - factor to divide y with
+	         * @return {Point} Returns a new instance
+	         */
 
-	  _createClass(Point, [{
-	    key: 'substract',
-	    value: function substract(point) {
-	      this.x -= point.x;
-	      this.y -= point.y;
-	      return this;
-	    }
+	    }, {
+	        key: 'divide',
+	        value: function divide(x) {
+	            var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	    /**
-	     * adds 2 points
-	     * @param  {Point} point - the point to add to this
-	     * @return {Point} addition of this point and parameter point
-	     */
+	            this.x /= x;
+	            this.y /= y;
+	            return this;
+	        }
 
-	  }, {
-	    key: 'add',
-	    value: function add(point) {
-	      this.x += point.x;
-	      this.y += point.y;
-	      return this;
-	    }
+	        /**
+	         * check if points are equal
+	         * @param  {Point} point - the point to check against this
+	         * @return {Boolean} is true, if x and y are the same
+	         */
 
-	    /**
-	     * multiplicates a point with a given x and y
-	     * @param  {number} x - factor to multiplicate x with
-	     * @param  {number} y - factor to multiplicate y with
-	     * @return {Point} Returns a new instance
-	     */
+	    }, {
+	        key: 'equals',
+	        value: function equals(point) {
+	            return this.x === point.x && this.y === point.y;
+	        }
 
-	  }, {
-	    key: 'multiply',
-	    value: function multiply(x) {
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	        /**
+	         * Returns the distance from this Point to a specified Point
+	         * @param  {Point} point - the specified point to be measured against this Point
+	         * @return {Point} the distance between this Point and specified point
+	         */
 
-	      this.x *= x;
-	      this.y *= y;
-	      return this;
-	    }
+	    }, {
+	        key: 'distance',
+	        value: function distance(point) {
+	            return this.clone.substract(point).length;
+	        }
 
-	    /**
-	     * divide a point with a given x and y
-	     * @param  {number} x - factor to divide x with
-	     * @param  {number} y - factor to divide y with
-	     * @return {Point} Returns a new instance
-	     */
+	        /**
+	         * translates a point by x and y
+	         * @param  {number} x - value to move x
+	         * @param  {number} y - value to move y
+	         * @return {Point} instance of Point
+	         */
 
-	  }, {
-	    key: 'divide',
-	    value: function divide(x) {
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	    }, {
+	        key: 'translate',
+	        value: function translate(x, y) {
+	            this.x += x;
+	            this.y += y;
+	            return this;
+	        }
 
-	      this.x /= x;
-	      this.y /= y;
-	      return this;
-	    }
+	        /**
+	         * positions a point by x and y
+	         * @param  {number} x - value to position x
+	         * @param  {number} y - value to position y
+	         * @return {Point} instance of Point
+	         */
 
-	    /**
-	     * check if points are equal
-	     * @param  {Point} point - the point to check against this
-	     * @return {Boolean} is true, if x and y are the same
-	     */
+	    }, {
+	        key: 'position',
+	        value: function position(x, y) {
+	            this.x = x;
+	            this.y = y;
+	            return this;
+	        }
 
-	  }, {
-	    key: 'equals',
-	    value: function equals(point) {
-	      return this.x === point.x && this.y === point.y;
-	    }
+	        /**
+	         * translates a Point to an array
+	         * @return {Array} Returns Point as Array(x, y)
+	         */
 
-	    /**
-	     * Returns the distance from this Point to a specified Point
-	     * @param  {Point} point - the specified point to be measured against this Point
-	     * @return {Point} the distance between this Point and specified point
-	     */
+	    }, {
+	        key: 'toArray',
+	        value: function toArray() {
+	            return [this.x, this.y];
+	        }
+	    }]);
 
-	  }, {
-	    key: 'distance',
-	    value: function distance(point) {
-	      return this.clone.substract(point).length;
-	    }
-
-	    /**
-	     * translates a point by x and y
-	     * @param  {number} x - value to move x
-	     * @param  {number} y - value to move y
-	     * @return {Point} instance of Point
-	     */
-
-	  }, {
-	    key: 'translate',
-	    value: function translate(x, y) {
-	      this.x += x;
-	      this.y += y;
-	      return this;
-	    }
-
-	    /**
-	     * positions a point by x and y
-	     * @param  {number} x - value to position x
-	     * @param  {number} y - value to position y
-	     * @return {Point} instance of Point
-	     */
-
-	  }, {
-	    key: 'position',
-	    value: function position(x, y) {
-	      this.x = x;
-	      this.y = y;
-	      return this;
-	    }
-
-	    /**
-	     * translates a Point to an array
-	     * @return {Array} Returns Point as Array(x, y)
-	     */
-
-	  }, {
-	    key: 'toArray',
-	    value: function toArray() {
-	      return [this.x, this.y];
-	    }
-	  }]);
-
-	  return Point;
+	    return Point;
 	}();
 
 	/**
@@ -871,7 +890,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	Point.createFromPoint = function (point) {
-	  return new Point(point.x, point.y);
+	    return new Point(point.x, point.y);
 		};
 
 /***/ },
@@ -1363,6 +1382,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(11);
 
+	var _Marker = __webpack_require__(12);
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
@@ -1431,6 +1452,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? {} : _ref$data;
+	        var _ref$markerData = _ref.markerData;
+	        var markerData = _ref$markerData === undefined ? [] : _ref$markerData;
 	        var _ref$context = _ref.context;
 	        var context = _ref$context === undefined ? null : _ref$context;
 
@@ -1440,12 +1463,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.viewport = viewport;
 	        this.bounds = bounds;
 	        this.center = center;
+
+	        this.CONVERSION_RATIO = new _Point.Point(this.mapView.width / this.bounds.width, this.mapView.height / this.bounds.height);
+
 	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
 	        this.mapView.position(newCenter.x, newCenter.y);
+
 	        this.tiles = [];
+	        this.markers = [];
 	        this.data = data;
 	        this.context = context;
-	        this.bindEvents().initializeTiles().loadThumb();
+
+	        this.bindEvents().initializeTiles().loadThumb().initializeMarkers(markerData);
+
 	        return this;
 	    }
 
@@ -1461,7 +1491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _Helper.Helper.loadImage(this.data.thumb, function (img) {
 	                this.thumbScale = img.width / this.mapView.width;
 	                this.thumb = img;
-	                this.drawVisibleTiles();
+	                this.draw();
 	            }.bind(this));
 	            return this;
 	        }
@@ -1475,9 +1505,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'convertPointToLatLng',
 	        value: function convertPointToLatLng(point) {
-	            var factorX = this.mapView.width / this.bounds.range.lng,
-	                factorY = this.mapView.height / this.bounds.range.lat;
-	            return new _LatLng.LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
+	            point.divide(this.CONVERSION_RATIO.x, this.CONVERSION_RATIO.y);
+	            return new _LatLng.LatLng(point.y, point.x).substract(this.bounds.nw);
 	        }
 
 	        /**
@@ -1489,22 +1518,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'convertLatLngToPoint',
 	        value: function convertLatLngToPoint(latlng) {
-	            var relativePosition = this.bounds.nw.clone.substract(latlng),
-	                factorX = this.mapView.width / this.bounds.width,
-	                factorY = this.mapView.height / this.bounds.height;
-	            return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+	            var relativePosition = this.bounds.nw.clone.substract(latlng);
+	            relativePosition.multiply(this.CONVERSION_RATIO.y, this.CONVERSION_RATIO.x);
+	            return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
 	        }
-
-	        /**
-	         * handles on load of a tile
-	         * @param  {Tile} tile a tile of the View
-	         * @return {View} instance of View
-	         */
-
 	    }, {
-	        key: 'tileHandling',
-	        value: function tileHandling(tile) {
-	            this.drawTile(tile);
+	        key: 'drawHandler',
+	        value: function drawHandler(o) {
+	            o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
+	            this.drawMarkers();
 	            return this;
 	        }
 
@@ -1541,34 +1563,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * Handles draw of View
-	         * @return {View} instance of View
-	         */
-
-	    }, {
-	        key: 'drawVisibleTiles',
-	        value: function drawVisibleTiles() {
-	            var currentlyVisibleTiles = this.visibleTiles;
-	            for (var i in currentlyVisibleTiles) {
-	                this.drawTile(currentlyVisibleTiles[i]);
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * draws tiles on canvas
-	         * @param  {Tile} tile a tile of the View
-	         * @return {View} instance of View
-	         */
-
-	    }, {
-	        key: 'drawTile',
-	        value: function drawTile(tile) {
-	            tile.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
-	            return this;
-	        }
-
-	        /**
 	         * Handles all events for class
 	         * @return {View} instance of View
 	         */
@@ -1576,8 +1570,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
-	            PUBLISHER.subscribe("tile-loaded", this.tileHandling.bind(this));
-	            PUBLISHER.subscribe("tile-initialized", this.tileHandling.bind(this));
+	            PUBLISHER.subscribe("tile-loaded", this.drawHandler.bind(this));
+	            PUBLISHER.subscribe("tile-initialized", this.drawHandler.bind(this));
+	            return this;
+	        }
+
+	        /**
+	         * Handles draw of visible elements
+	         * @return {View} instance of View
+	         */
+
+	    }, {
+	        key: 'draw',
+	        value: function draw() {
+	            var currentlyVisibleTiles = this.visibleTiles;
+	            for (var i in currentlyVisibleTiles) {
+	                this.drawHandler(currentlyVisibleTiles[i]);
+	            }
+	            this.drawMarkers();
+	            return this;
+	        }
+	    }, {
+	        key: 'drawMarkers',
+	        value: function drawMarkers() {
+	            for (var i in this.markers) {
+	                var m = this.markers[i];
+	                m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
+	            }
 	            return this;
 	        }
 
@@ -1593,8 +1612,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            for (var tile in currentLevel) {
 	                var currentTileData = currentLevel[tile];
 	                currentTileData["context"] = this.context;
-	                var _tile = new _Tile.Tile(currentTileData);
-	                this.tiles.push(_tile);
+	                var currentTile = new _Tile.Tile(currentTileData);
+	                this.tiles.push(currentTile);
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'initializeMarkers',
+	        value: function initializeMarkers(markerData) {
+	            if (markerData) {
+	                for (var i in markerData) {
+	                    var currentData = markerData[i],
+	                        offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
+	                        markerPixelPos = this.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
+	                        m = new _Marker.Marker(markerPixelPos, currentData.img, offset);
+	                    this.markers.push(m);
+	                }
 	            }
 	            return this;
 	        }
@@ -1718,6 +1751,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!path || typeof path !== "string" || path.length === 0) {
 	            throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
 	        }
+	        _this.markers = [];
 	        _this.context = context;
 	        _this.path = path;
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
@@ -1759,8 +1793,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) {
 	            var distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
 	            if (this.state.current.value >= 2) {
-	                this.draw(this.img, distortedTile);
 	                this.state.next();
+	                this.draw(this.img, distortedTile);
 	            } else if (this.state.current.value === 1 && thumb && thumbScale) {
 	                var thumbTile = this.clone.scale(thumbScale);
 	                this.draw(thumb, thumbTile, distortedTile);
@@ -1768,6 +1802,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.initialize();
 	            }
 	            return this;
+	        }
+	    }, {
+	        key: 'addMarker',
+	        value: function addMarker(marker) {
+	            this.markers.push(marker);
 	        }
 
 	        /**
@@ -2170,6 +2209,83 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Marker = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Rectangle = __webpack_require__(6);
+
+	var _LatLng = __webpack_require__(3);
+
+	var _StateHandler = __webpack_require__(9);
+
+	var _Point = __webpack_require__(4);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * States of a marker
+	 * @type {Array}
+	 */
+	var STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Loaded' }];
+
+	/**
+	 * Name of event fired, when marker is loaded
+	 * @type {String}
+	 */
+	var EVENT_MARKER_LOADED = "marker-loaded";
+
+	var Marker = exports.Marker = function () {
+	    function Marker() {
+	        var position = arguments.length <= 0 || arguments[0] === undefined ? new _Point.Point() : arguments[0];
+	        var imgPath = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	        var offset = arguments.length <= 2 || arguments[2] === undefined ? new _Point.Point() : arguments[2];
+
+	        _classCallCheck(this, Marker);
+
+	        if (!imgPath) {
+	            console.error("Can not initialize Marker", imgPath);
+	        }
+
+	        this.position = position;
+	        this.offset = offset;
+
+	        this.stateHandler = new _StateHandler.StateHandler(STATES);
+
+	        this.img = new Image();
+	        this.img.src = imgPath;
+	        this.img.onload = this.onImageLoad.bind(this);
+	    }
+
+	    _createClass(Marker, [{
+	        key: 'onImageLoad',
+	        value: function onImageLoad() {
+	            this.offset.add(new _Point.Point(-(this.img.width / 2), -this.img.height));
+	            this.position.add(this.offset);
+	            this.icon = new _Rectangle.Rectangle(this.position.x, this.position.y, this.img.width, this.img.height);
+	            this.stateHandler.next();
+	        }
+	    }, {
+	        key: 'draw',
+	        value: function draw(x, y, scaleX, offsetX, context) {
+	            if (this.stateHandler.current.value === 1) {
+	                context.drawImage(this.img, (this.icon.x + x) * scaleX + offsetX - this.img.width / 4 * scaleX, this.icon.y + y, this.icon.width, this.icon.height);
+	            }
+	        }
+	    }]);
+
+	    return Marker;
+	}();
+
+/***/ },
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

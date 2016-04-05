@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './LatLng.js', './Point.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './Helper.js'], factory);
+        define(['exports', './LatLng.js', './Point.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './Helper.js', './Marker.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./LatLng.js'), require('./Point.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./Helper.js'));
+        factory(exports, require('./LatLng.js'), require('./Point.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./Helper.js'), require('./Marker.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.LatLng, global.Point, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.Helper);
+        factory(mod.exports, global.LatLng, global.Point, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.Helper, global.Marker);
         global.View = mod.exports;
     }
-})(this, function(exports, _LatLng, _Point, _Bounds, _Rectangle, _Tile, _Publisher, _Helper) {
+})(this, function(exports, _LatLng, _Point, _Bounds, _Rectangle, _Tile, _Publisher, _Helper, _Marker) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -108,6 +108,8 @@
             var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
             var _ref$data = _ref.data;
             var data = _ref$data === undefined ? {} : _ref$data;
+            var _ref$markerData = _ref.markerData;
+            var markerData = _ref$markerData === undefined ? [] : _ref$markerData;
             var _ref$context = _ref.context;
             var context = _ref$context === undefined ? null : _ref$context;
 
@@ -117,12 +119,19 @@
             this.viewport = viewport;
             this.bounds = bounds;
             this.center = center;
+
+            this.CONVERSION_RATIO = new _Point.Point(this.mapView.width / this.bounds.width, this.mapView.height / this.bounds.height);
+
             var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
             this.mapView.position(newCenter.x, newCenter.y);
+
             this.tiles = [];
+            this.markers = [];
             this.data = data;
             this.context = context;
-            this.bindEvents().initializeTiles().loadThumb();
+
+            this.bindEvents().initializeTiles().loadThumb().initializeMarkers(markerData);
+
             return this;
         }
 
@@ -138,7 +147,7 @@
                 _Helper.Helper.loadImage(this.data.thumb, function(img) {
                     this.thumbScale = img.width / this.mapView.width;
                     this.thumb = img;
-                    this.drawVisibleTiles();
+                    this.draw();
                 }.bind(this));
                 return this;
             }
@@ -152,9 +161,8 @@
         }, {
             key: 'convertPointToLatLng',
             value: function convertPointToLatLng(point) {
-                var factorX = this.mapView.width / this.bounds.range.lng,
-                    factorY = this.mapView.height / this.bounds.range.lat;
-                return new _LatLng.LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
+                point.divide(this.CONVERSION_RATIO.x, this.CONVERSION_RATIO.y);
+                return new _LatLng.LatLng(point.y, point.x).substract(this.bounds.nw);
             }
 
             /**
@@ -166,22 +174,15 @@
         }, {
             key: 'convertLatLngToPoint',
             value: function convertLatLngToPoint(latlng) {
-                var relativePosition = this.bounds.nw.clone.substract(latlng),
-                    factorX = this.mapView.width / this.bounds.width,
-                    factorY = this.mapView.height / this.bounds.height;
-                return new _Point.Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+                var relativePosition = this.bounds.nw.clone.substract(latlng);
+                relativePosition.multiply(this.CONVERSION_RATIO.y, this.CONVERSION_RATIO.x);
+                return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
             }
-
-            /**
-             * handles on load of a tile
-             * @param  {Tile} tile a tile of the View
-             * @return {View} instance of View
-             */
-
         }, {
-            key: 'tileHandling',
-            value: function tileHandling(tile) {
-                this.drawTile(tile);
+            key: 'drawHandler',
+            value: function drawHandler(o) {
+                o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
+                this.drawMarkers();
                 return this;
             }
 
@@ -218,34 +219,6 @@
             }
 
             /**
-             * Handles draw of View
-             * @return {View} instance of View
-             */
-
-        }, {
-            key: 'drawVisibleTiles',
-            value: function drawVisibleTiles() {
-                var currentlyVisibleTiles = this.visibleTiles;
-                for (var i in currentlyVisibleTiles) {
-                    this.drawTile(currentlyVisibleTiles[i]);
-                }
-                return this;
-            }
-
-            /**
-             * draws tiles on canvas
-             * @param  {Tile} tile a tile of the View
-             * @return {View} instance of View
-             */
-
-        }, {
-            key: 'drawTile',
-            value: function drawTile(tile) {
-                tile.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
-                return this;
-            }
-
-            /**
              * Handles all events for class
              * @return {View} instance of View
              */
@@ -253,8 +226,33 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
-                PUBLISHER.subscribe("tile-loaded", this.tileHandling.bind(this));
-                PUBLISHER.subscribe("tile-initialized", this.tileHandling.bind(this));
+                PUBLISHER.subscribe("tile-loaded", this.drawHandler.bind(this));
+                PUBLISHER.subscribe("tile-initialized", this.drawHandler.bind(this));
+                return this;
+            }
+
+            /**
+             * Handles draw of visible elements
+             * @return {View} instance of View
+             */
+
+        }, {
+            key: 'draw',
+            value: function draw() {
+                var currentlyVisibleTiles = this.visibleTiles;
+                for (var i in currentlyVisibleTiles) {
+                    this.drawHandler(currentlyVisibleTiles[i]);
+                }
+                this.drawMarkers();
+                return this;
+            }
+        }, {
+            key: 'drawMarkers',
+            value: function drawMarkers() {
+                for (var i in this.markers) {
+                    var m = this.markers[i];
+                    m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
+                }
                 return this;
             }
 
@@ -270,8 +268,22 @@
                 for (var tile in currentLevel) {
                     var currentTileData = currentLevel[tile];
                     currentTileData["context"] = this.context;
-                    var _tile = new _Tile.Tile(currentTileData);
-                    this.tiles.push(_tile);
+                    var currentTile = new _Tile.Tile(currentTileData);
+                    this.tiles.push(currentTile);
+                }
+                return this;
+            }
+        }, {
+            key: 'initializeMarkers',
+            value: function initializeMarkers(markerData) {
+                if (markerData) {
+                    for (var i in markerData) {
+                        var currentData = markerData[i],
+                            offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
+                            markerPixelPos = this.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
+                            m = new _Marker.Marker(markerPixelPos, currentData.img, offset);
+                        this.markers.push(m);
+                    }
                 }
                 return this;
             }

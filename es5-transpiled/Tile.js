@@ -191,6 +191,7 @@
             if (!path || typeof path !== "string" || path.length === 0) {
                 throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
             }
+            _this.markers = [];
             _this.context = context;
             _this.path = path;
             return _ret = _this, _possibleConstructorReturn(_this, _ret);
@@ -232,8 +233,8 @@
             value: function handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) {
                 var distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
                 if (this.state.current.value >= 2) {
-                    this.draw(this.img, distortedTile);
                     this.state.next();
+                    this.draw(this.img, distortedTile);
                 } else if (this.state.current.value === 1 && thumb && thumbScale) {
                     var thumbTile = this.clone.scale(thumbScale);
                     this.draw(thumb, thumbTile, distortedTile);
@@ -241,6 +242,11 @@
                     this.initialize();
                 }
                 return this;
+            }
+        }, {
+            key: 'addMarker',
+            value: function addMarker(marker) {
+                this.markers.push(marker);
             }
 
             /**

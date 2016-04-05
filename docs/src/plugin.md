@@ -36,6 +36,12 @@
 ## Constants
 
 <dl>
+<dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
+<dd><p>States of a marker</p>
+</dd>
+<dt><a href="#EVENT_MARKER_LOADED">EVENT_MARKER_LOADED</a> : <code>String</code></dt>
+<dd><p>Name of event fired, when marker is loaded</p>
+</dd>
 <dt><a href="#PUBLISHER">PUBLISHER</a></dt>
 <dd><p>Singleton instance of Publisher</p>
 </dd>
@@ -1201,6 +1207,7 @@ check if tiles are equal
         * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
     * _static_
         * [.IMG_DATA_NAME](#TileMap.IMG_DATA_NAME) : <code>String</code>
+        * [.MARKER_DATA_NAME](#TileMap.MARKER_DATA_NAME) : <code>String</code>
 
 <a name="new_TileMap_new"></a>
 ### new TileMap(container, tilesData, settings)
@@ -1293,7 +1300,12 @@ Handles resizing of view
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap.IMG_DATA_NAME"></a>
 ### TileMap.IMG_DATA_NAME : <code>String</code>
-name of imagedata in data.json
+name of image data in data.json
+
+**Kind**: static property of <code>[TileMap](#TileMap)</code>  
+<a name="TileMap.MARKER_DATA_NAME"></a>
+### TileMap.MARKER_DATA_NAME : <code>String</code>
+name of marker data in data.json
 
 **Kind**: static property of <code>[TileMap](#TileMap)</code>  
 <a name="View"></a>
@@ -1308,11 +1320,9 @@ name of imagedata in data.json
     * [.loadThumb()](#View+loadThumb) ⇒ <code>[View](#View)</code>
     * [.convertPointToLatLng(point)](#View+convertPointToLatLng) ⇒ <code>[LatLng](#LatLng)</code>
     * [.convertLatLngToPoint(latlng)](#View+convertLatLngToPoint) ⇒ <code>[Point](#Point)</code>
-    * [.tileHandling(tile)](#View+tileHandling) ⇒ <code>[View](#View)</code>
     * [.moveView(pos)](#View+moveView) ⇒ <code>[View](#View)</code>
-    * [.drawVisibleTiles()](#View+drawVisibleTiles) ⇒ <code>[View](#View)</code>
-    * [.drawTile(tile)](#View+drawTile) ⇒ <code>[View](#View)</code>
     * [.bindEvents()](#View+bindEvents) ⇒ <code>[View](#View)</code>
+    * [.draw()](#View+draw) ⇒ <code>[View](#View)</code>
     * [.initializeTiles()](#View+initializeTiles) ⇒ <code>[View](#View)</code>
 
 <a name="new_View_new"></a>
@@ -1372,16 +1382,6 @@ converts a LatLng to Point in view
 
 - latlng <code>[LatLng](#LatLng)</code> - specified latlng to be converted
 
-<a name="View+tileHandling"></a>
-### view.tileHandling(tile) ⇒ <code>[View](#View)</code>
-handles on load of a tile
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View  
-**Params**
-
-- tile <code>[Tile](#Tile)</code> - a tile of the View
-
 <a name="View+moveView"></a>
 ### view.moveView(pos) ⇒ <code>[View](#View)</code>
 moves the view's current position by pos
@@ -1392,25 +1392,15 @@ moves the view's current position by pos
 
 - pos <code>[Point](#Point)</code> - specified additional offset
 
-<a name="View+drawVisibleTiles"></a>
-### view.drawVisibleTiles() ⇒ <code>[View](#View)</code>
-Handles draw of View
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View  
-<a name="View+drawTile"></a>
-### view.drawTile(tile) ⇒ <code>[View](#View)</code>
-draws tiles on canvas
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View  
-**Params**
-
-- tile <code>[Tile](#Tile)</code> - a tile of the View
-
 <a name="View+bindEvents"></a>
 ### view.bindEvents() ⇒ <code>[View](#View)</code>
 Handles all events for class
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View  
+<a name="View+draw"></a>
+### view.draw() ⇒ <code>[View](#View)</code>
+Handles draw of visible elements
 
 **Kind**: instance method of <code>[View](#View)</code>  
 **Returns**: <code>[View](#View)</code> - instance of View  
@@ -1425,6 +1415,16 @@ initializes tiles
 singleton instance
 
 **Kind**: global variable  
+<a name="STATES"></a>
+## STATES : <code>Array</code>
+States of a marker
+
+**Kind**: global constant  
+<a name="EVENT_MARKER_LOADED"></a>
+## EVENT_MARKER_LOADED : <code>String</code>
+Name of event fired, when marker is loaded
+
+**Kind**: global constant  
 <a name="PUBLISHER"></a>
 ## PUBLISHER
 Singleton instance of Publisher

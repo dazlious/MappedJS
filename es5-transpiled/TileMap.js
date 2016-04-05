@@ -120,6 +120,7 @@
 
             this.$container = container;
             this.imgData = tilesData[TileMap.IMG_DATA_NAME];
+            this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
             this.settings = settings;
 
             this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
@@ -143,6 +144,7 @@
                     bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
                     center: new _LatLng.LatLng(center.lat, center.lng),
                     data: this.getCurrentLevelData(),
+                    markerData: this.markerData,
                     context: this.canvasContext
                 });
                 this.resizeCanvas();
@@ -210,7 +212,7 @@
             key: 'redraw',
             value: function redraw() {
                 this.clearCanvas();
-                this.view.drawVisibleTiles();
+                this.view.draw();
                 return this;
             }
 
@@ -224,7 +226,7 @@
             value: function resize() {
                 this.resizeCanvas();
                 this.resizeView();
-                this.view.drawVisibleTiles();
+                this.view.draw();
                 return this;
             }
 
@@ -262,8 +264,14 @@
     }();
 
     /**
-     * name of imagedata in data.json
+     * name of image data in data.json
      * @type {String}
      */
     TileMap.IMG_DATA_NAME = "img_data";
+
+    /**
+     * name of marker data in data.json
+     * @type {String}
+     */
+    TileMap.MARKER_DATA_NAME = "marker";
 });

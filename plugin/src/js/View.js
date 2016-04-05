@@ -5,7 +5,7 @@ import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
 import {Publisher} from './Publisher.js';
 import {Helper} from './Helper.js';
-
+import {Marker} from './Marker.js';
 
 /**
  * Singleton instance of Publisher
@@ -50,17 +50,32 @@ export class View {
      * @param  {Object} data = {} - data of current map
      * @return {View} Instance of View
      */
-    constructor({viewport = new Rectangle(), mapView = new Rectangle(),bounds = new Bounds(), center = new LatLng(), data = {}, context = null}) {
+    constructor({
+        viewport = new Rectangle(),
+        mapView = new Rectangle(),
+        bounds = new Bounds(),
+        center = new LatLng(),
+        data = {},
+        markerData = [],
+        context = null
+    }) {
         this.mapView = mapView;
         this.viewport = viewport;
         this.bounds = bounds;
         this.center = center;
+
+        this.CONVERSION_RATIO = new Point(this.mapView.width / this.bounds.width, this.mapView.height / this.bounds.height);
+
         var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
         this.mapView.position(newCenter.x, newCenter.y);
+
         this.tiles = [];
+        this.markers = [];
         this.data = data;
         this.context = context;
-        this.bindEvents().initializeTiles().loadThumb();
+
+        this.bindEvents().initializeTiles().loadThumb().initializeMarkers(markerData);
+
         return this;
     }
 
@@ -72,7 +87,7 @@ export class View {
         Helper.loadImage(this.data.thumb, function(img) {
             this.thumbScale = img.width / this.mapView.width;
             this.thumb = img;
-            this.drawVisibleTiles();
+            this.draw();
         }.bind(this));
         return this;
     }
@@ -83,9 +98,8 @@ export class View {
      * @return {LatLng} presentation of point in lat-lng system
      */
     convertPointToLatLng(point) {
-        let factorX = this.mapView.width / this.bounds.range.lng,
-            factorY = this.mapView.height / this.bounds.range.lat;
-        return new LatLng(point.y / factorY, point.x / factorX).substract(this.bounds.nw);
+        point.divide(this.CONVERSION_RATIO.x, this.CONVERSION_RATIO.y);
+        return new LatLng(point.y, point.x).substract(this.bounds.nw);
     }
 
     /**
@@ -94,19 +108,14 @@ export class View {
      * @return {Point} presentation of point in pixel system
      */
     convertLatLngToPoint(latlng) {
-        let relativePosition = this.bounds.nw.clone.substract(latlng),
-            factorX = this.mapView.width / this.bounds.width,
-            factorY = this.mapView.height / this.bounds.height;
-        return new Point(Math.abs(relativePosition.lng * factorX), Math.abs(relativePosition.lat * factorY));
+        let relativePosition = this.bounds.nw.clone.substract(latlng);
+        relativePosition.multiply(this.CONVERSION_RATIO.y, this.CONVERSION_RATIO.x);
+        return new Point(relativePosition.lng, relativePosition.lat).abs;
     }
 
-    /**
-     * handles on load of a tile
-     * @param  {Tile} tile a tile of the View
-     * @return {View} instance of View
-     */
-    tileHandling(tile) {
-        this.drawTile(tile);
+    drawHandler(o) {
+        o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
+        this.drawMarkers();
         return this;
     }
 
@@ -140,34 +149,33 @@ export class View {
     }
 
     /**
-     * Handles draw of View
-     * @return {View} instance of View
-     */
-    drawVisibleTiles() {
-        let currentlyVisibleTiles = this.visibleTiles;
-        for (let i in currentlyVisibleTiles) {
-            this.drawTile(currentlyVisibleTiles[i]);
-        }
-        return this;
-    }
-
-    /**
-     * draws tiles on canvas
-     * @param  {Tile} tile a tile of the View
-     * @return {View} instance of View
-     */
-    drawTile(tile) {
-        tile.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
-        return this;
-    }
-
-    /**
      * Handles all events for class
      * @return {View} instance of View
      */
     bindEvents() {
-        PUBLISHER.subscribe("tile-loaded", this.tileHandling.bind(this));
-        PUBLISHER.subscribe("tile-initialized", this.tileHandling.bind(this));
+        PUBLISHER.subscribe("tile-loaded", this.drawHandler.bind(this));
+        PUBLISHER.subscribe("tile-initialized", this.drawHandler.bind(this));
+        return this;
+    }
+
+    /**
+     * Handles draw of visible elements
+     * @return {View} instance of View
+     */
+    draw() {
+        let currentlyVisibleTiles = this.visibleTiles;
+        for (let i in currentlyVisibleTiles) {
+            this.drawHandler(currentlyVisibleTiles[i]);
+        }
+        this.drawMarkers();
+        return this;
+    }
+
+    drawMarkers() {
+        for (let i in this.markers) {
+            let m = this.markers[i];
+            m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
+        }
         return this;
     }
 
@@ -180,8 +188,21 @@ export class View {
         for (let tile in currentLevel) {
             let currentTileData = currentLevel[tile];
             currentTileData["context"] = this.context;
-            let _tile = new Tile(currentTileData);
-            this.tiles.push(_tile);
+            let currentTile = new Tile(currentTileData);
+            this.tiles.push(currentTile);
+        }
+        return this;
+    }
+
+    initializeMarkers(markerData) {
+        if (markerData) {
+            for (let i in markerData) {
+                let currentData = markerData[i],
+                    offset = (currentData.offset) ? new Point(currentData.offset[0], currentData.offset[1]) : new Point(0, 0),
+                    markerPixelPos = this.convertLatLngToPoint(new LatLng(currentData.position[0], currentData.position[1])),
+                    m = new Marker(markerPixelPos, currentData.img, offset);
+                this.markers.push(m);
+            }
         }
         return this;
     }

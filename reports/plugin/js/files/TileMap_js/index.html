@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">69.06</p>
+      <p class="stat">68.75</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">269</p>
+      <p class="stat">277</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">42.62</p>
+      <p class="stat">42.73</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.02</p>
+      <p class="stat">2.07</p>
     </div>
   </div>
 </div>
@@ -211,6 +211,7 @@
 
             this.$container = container;
             this.imgData = tilesData[TileMap.IMG_DATA_NAME];
+            this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
             this.settings = settings;
 
             this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
@@ -234,6 +235,7 @@
                     bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
                     center: new _LatLng.LatLng(center.lat, center.lng),
                     data: this.getCurrentLevelData(),
+                    markerData: this.markerData,
                     context: this.canvasContext
                 });
                 this.resizeCanvas();
@@ -301,7 +303,7 @@
             key: &#039;redraw&#039;,
             value: function redraw() {
                 this.clearCanvas();
-                this.view.drawVisibleTiles();
+                this.view.draw();
                 return this;
             }
 
@@ -315,7 +317,7 @@
             value: function resize() {
                 this.resizeCanvas();
                 this.resizeView();
-                this.view.drawVisibleTiles();
+                this.view.draw();
                 return this;
             }
 
@@ -353,10 +355,16 @@
     }();
 
     /**
-     * name of imagedata in data.json
+     * name of image data in data.json
      * @type {String}
      */
     TileMap.IMG_DATA_NAME = &quot;img_data&quot;;
+
+    /**
+     * name of marker data in data.json
+     * @type {String}
+     */
+    TileMap.MARKER_DATA_NAME = &quot;marker&quot;;
 });</textarea>
   </div>
 </div>

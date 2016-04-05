@@ -63,6 +63,7 @@ export class Tile extends Rectangle {
         if (!path || typeof path !== "string" || path.length === 0) {
             throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
         }
+        this.markers = [];
         this.context = context;
         this.path = path;
         return this;
@@ -97,8 +98,8 @@ export class Tile extends Rectangle {
     handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) {
         let distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
         if (this.state.current.value >= 2) {
-            this.draw(this.img, distortedTile);
             this.state.next();
+            this.draw(this.img, distortedTile);
         } else if (this.state.current.value === 1 && thumb && thumbScale) {
             let thumbTile = this.clone.scale(thumbScale);
             this.draw(thumb, thumbTile, distortedTile);
@@ -106,6 +107,10 @@ export class Tile extends Rectangle {
             this.initialize();
         }
         return this;
+    }
+
+    addMarker(marker) {
+        this.markers.push(marker);
     }
 
     /**
@@ -125,6 +130,7 @@ export class Tile extends Rectangle {
         } else {
             this.context.drawImage(img, source.x, source.y, source.width, source.height, destination.x, destination.y, destination.width, destination.height);
         }
+
     }
 
     /**

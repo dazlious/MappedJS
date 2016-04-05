@@ -51,6 +51,7 @@ export class TileMap {
 
         this.$container = container;
         this.imgData = tilesData[TileMap.IMG_DATA_NAME];
+        this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
         this.settings = settings;
 
         this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
@@ -70,6 +71,7 @@ export class TileMap {
             bounds: new Bounds(new LatLng(bounds.northWest[0], bounds.northWest[1]), new LatLng(bounds.southEast[0], bounds.southEast[1])),
             center: new LatLng(center.lat, center.lng),
             data: this.getCurrentLevelData(),
+            markerData: this.markerData,
             context: this.canvasContext
         });
         this.resizeCanvas();
@@ -122,7 +124,7 @@ export class TileMap {
      */
     redraw() {
         this.clearCanvas();
-        this.view.drawVisibleTiles();
+        this.view.draw();
         return this;
     }
 
@@ -133,7 +135,7 @@ export class TileMap {
     resize() {
         this.resizeCanvas();
         this.resizeView();
-        this.view.drawVisibleTiles();
+        this.view.draw();
         return this;
     }
 
@@ -163,7 +165,13 @@ export class TileMap {
 }
 
 /**
- * name of imagedata in data.json
+ * name of image data in data.json
  * @type {String}
  */
 TileMap.IMG_DATA_NAME = "img_data";
+
+/**
+ * name of marker data in data.json
+ * @type {String}
+ */
+TileMap.MARKER_DATA_NAME = "marker";

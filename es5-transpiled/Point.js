@@ -65,6 +65,11 @@
             get: function get() {
                 return Point.createFromPoint(this);
             }
+        }, {
+            key: 'abs',
+            get: function get() {
+                return new Point(Math.abs(this.x), Math.abs(this.y));
+            }
 
             /**
              * Constructor
