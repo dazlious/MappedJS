@@ -787,6 +787,8 @@ Eventname for unsubscribing
         * [.intersects(rect)](#Rectangle+intersects) ⇒ <code>Boolean</code>
         * [.contains(rectOrPoint)](#Rectangle+contains) ⇒ <code>Boolean</code>
         * [.setCenter(point)](#Rectangle+setCenter) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.setCenterX(x)](#Rectangle+setCenterX) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.setCenterY(y)](#Rectangle+setCenterY) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.containsPoint(point)](#Rectangle+containsPoint) ⇒ <code>Boolean</code>
         * [.containsRect(rect)](#Rectangle+containsRect) ⇒ <code>Boolean</code>
         * [.getDistortedRect(factor)](#Rectangle+getDistortedRect) ⇒ <code>[Rectangle](#Rectangle)</code>
@@ -895,13 +897,33 @@ Checks whether Rectangle entirely contains the Rectangle or Point
 
 <a name="Rectangle+setCenter"></a>
 ### rectangle.setCenter(point) ⇒ <code>[Rectangle](#Rectangle)</code>
-Sets the Center of this Rectangle to specified point
+Sets the center of this Rectangle to specified point
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
 **Params**
 
 - point <code>[Point](#Point)</code> - specified point to set center of rectangle to
+
+<a name="Rectangle+setCenterX"></a>
+### rectangle.setCenterX(x) ⇒ <code>[Rectangle](#Rectangle)</code>
+Sets the x-center of this Rectangle to specified x
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
+**Params**
+
+- x <code>number</code> - specified x coordinate to set x center of rectangle to
+
+<a name="Rectangle+setCenterY"></a>
+### rectangle.setCenterY(y) ⇒ <code>[Rectangle](#Rectangle)</code>
+Sets the y-center of this Rectangle to specified y
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
+**Params**
+
+- y <code>number</code> - specified y coordinate to set y center of rectangle to
 
 <a name="Rectangle+containsPoint"></a>
 ### rectangle.containsPoint(point) ⇒ <code>Boolean</code>
