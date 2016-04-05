@@ -1163,7 +1163,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * Sets the Center of this Rectangle to specified point
+	         * Sets the center of this Rectangle to specified point
 	         * @param  {Point} point - specified point to set center of rectangle to
 	         * @return {Rectangle} instance of Rectangle
 	         */
@@ -1173,6 +1173,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function setCenter(point) {
 	            var difference = point.substract(this.center);
 	            this.translate(difference.x, difference.y);
+	            return this;
+	        }
+
+	        /**
+	         * Sets the x-center of this Rectangle to specified x
+	         * @param  {number} x - specified x coordinate to set x center of rectangle to
+	         * @return {Rectangle} instance of Rectangle
+	         */
+
+	    }, {
+	        key: 'setCenterX',
+	        value: function setCenterX(x) {
+	            var difference = x - this.center.x;
+	            this.translate(difference, 0);
+	            return this;
+	        }
+
+	        /**
+	         * Sets the y-center of this Rectangle to specified y
+	         * @param  {number} y - specified y coordinate to set y center of rectangle to
+	         * @return {Rectangle} instance of Rectangle
+	         */
+
+	    }, {
+	        key: 'setCenterY',
+	        value: function setCenterY(y) {
+	            var difference = y - this.center.y;
+	            this.translate(0, difference);
 	            return this;
 	        }
 
@@ -1541,19 +1569,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function moveView(pos) {
 	            var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset + pos.x, pos.y);
 	            if (!equalizedMap.containsRect(this.viewport)) {
-	                if (equalizedMap.left - this.viewport.left > 0) {
-	                    pos.x -= equalizedMap.left - this.viewport.left;
+	                if (equalizedMap.width >= this.viewport.width) {
+	                    if (equalizedMap.left - this.viewport.left > 0) {
+	                        pos.x -= equalizedMap.left - this.viewport.left;
+	                    }
+	                    if (equalizedMap.right - this.viewport.right < 0) {
+	                        pos.x -= equalizedMap.right - this.viewport.right;
+	                    }
+	                } else {
+	                    this.mapView.setCenterX(this.viewport.center.x);
+	                    pos.x = 0;
 	                }
-	                if (equalizedMap.right - this.viewport.right < 0) {
-	                    pos.x -= equalizedMap.right - this.viewport.right;
-	                }
-	                if (equalizedMap.top - this.viewport.top > 0) {
-	                    pos.y -= equalizedMap.top - this.viewport.top;
-	                }
-	                if (equalizedMap.bottom - this.viewport.bottom < 0) {
-	                    pos.y -= equalizedMap.bottom - this.viewport.bottom;
+
+	                if (equalizedMap.height >= this.viewport.height) {
+	                    if (equalizedMap.top - this.viewport.top > 0) {
+	                        pos.y -= equalizedMap.top - this.viewport.top;
+	                    }
+	                    if (equalizedMap.bottom - this.viewport.bottom < 0) {
+	                        pos.y -= equalizedMap.bottom - this.viewport.bottom;
+	                    }
+	                } else {
+	                    this.mapView.setCenterY(this.viewport.center.y);
+	                    pos.y = 0;
 	                }
 	            }
+
 	            this.mapView.translate(pos.x, pos.y);
 
 	            var newCenter = this.mapView.topLeft.substract(this.viewport.center).multiply(-1);

@@ -116,7 +116,7 @@ export class Rectangle extends Point {
     }
 
     /**
-     * Sets the Center of this Rectangle to specified point
+     * Sets the center of this Rectangle to specified point
      * @param  {Point} point - specified point to set center of rectangle to
      * @return {Rectangle} instance of Rectangle
      */
@@ -125,6 +125,29 @@ export class Rectangle extends Point {
         this.translate(difference.x, difference.y);
         return this;
     }
+
+    /**
+     * Sets the x-center of this Rectangle to specified x
+     * @param  {number} x - specified x coordinate to set x center of rectangle to
+     * @return {Rectangle} instance of Rectangle
+     */
+    setCenterX(x) {
+        let difference = x - this.center.x;
+        this.translate(difference, 0);
+        return this;
+    }
+
+    /**
+     * Sets the y-center of this Rectangle to specified y
+     * @param  {number} y - specified y coordinate to set y center of rectangle to
+     * @return {Rectangle} instance of Rectangle
+     */
+    setCenterY(y) {
+        let difference = y - this.center.y;
+        this.translate(0, difference);
+        return this;
+    }
+
 
     /**
      * Checks whether Rectangle entirely contains the Point

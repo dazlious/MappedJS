@@ -197,19 +197,31 @@
             value: function moveView(pos) {
                 var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset + pos.x, pos.y);
                 if (!equalizedMap.containsRect(this.viewport)) {
-                    if (equalizedMap.left - this.viewport.left > 0) {
-                        pos.x -= equalizedMap.left - this.viewport.left;
+                    if (equalizedMap.width >= this.viewport.width) {
+                        if (equalizedMap.left - this.viewport.left > 0) {
+                            pos.x -= equalizedMap.left - this.viewport.left;
+                        }
+                        if (equalizedMap.right - this.viewport.right < 0) {
+                            pos.x -= equalizedMap.right - this.viewport.right;
+                        }
+                    } else {
+                        this.mapView.setCenterX(this.viewport.center.x);
+                        pos.x = 0;
                     }
-                    if (equalizedMap.right - this.viewport.right < 0) {
-                        pos.x -= equalizedMap.right - this.viewport.right;
-                    }
-                    if (equalizedMap.top - this.viewport.top > 0) {
-                        pos.y -= equalizedMap.top - this.viewport.top;
-                    }
-                    if (equalizedMap.bottom - this.viewport.bottom < 0) {
-                        pos.y -= equalizedMap.bottom - this.viewport.bottom;
+
+                    if (equalizedMap.height >= this.viewport.height) {
+                        if (equalizedMap.top - this.viewport.top > 0) {
+                            pos.y -= equalizedMap.top - this.viewport.top;
+                        }
+                        if (equalizedMap.bottom - this.viewport.bottom < 0) {
+                            pos.y -= equalizedMap.bottom - this.viewport.bottom;
+                        }
+                    } else {
+                        this.mapView.setCenterY(this.viewport.center.y);
+                        pos.y = 0;
                     }
                 }
+
                 this.mapView.translate(pos.x, pos.y);
 
                 var newCenter = this.mapView.topLeft.substract(this.viewport.center).multiply(-1);
