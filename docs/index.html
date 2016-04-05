@@ -60,6 +60,12 @@
 
 <h2 id="constants">Constants</h2>
 <dl>
+<dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
+<dd><p>States of a marker</p>
+</dd>
+<dt><a href="#EVENT_MARKER_LOADED">EVENT_MARKER_LOADED</a> : <code>String</code></dt>
+<dd><p>Name of event fired, when marker is loaded</p>
+</dd>
 <dt><a href="#PUBLISHER">PUBLISHER</a></dt>
 <dd><p>Singleton instance of Publisher</p>
 </dd>
@@ -977,6 +983,7 @@
 </li>
 <li><em>static</em><ul>
 <li><a href="#TileMap.IMG_DATA_NAME">.IMG_DATA_NAME</a> : <code>String</code></li>
+<li><a href="#TileMap.MARKER_DATA_NAME">.MARKER_DATA_NAME</a> : <code>String</code></li>
 </ul>
 </li>
 </ul>
@@ -1032,7 +1039,10 @@
 <p>Handles resizing of view</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap.IMG_DATA_NAME"></a></p>
 <h3 id="tilemap-img_data_name-code-string-code-">TileMap.IMG_DATA_NAME : <code>String</code></h3>
-<p>name of imagedata in data.json</p>
+<p>name of image data in data.json</p>
+<p><strong>Kind</strong>: static property of <code><a href="#TileMap">TileMap</a></code><br><a name="TileMap.MARKER_DATA_NAME"></a></p>
+<h3 id="tilemap-marker_data_name-code-string-code-">TileMap.MARKER_DATA_NAME : <code>String</code></h3>
+<p>name of marker data in data.json</p>
 <p><strong>Kind</strong>: static property of <code><a href="#TileMap">TileMap</a></code><br><a name="View"></a></p>
 <h2 id="view">View</h2>
 <p><strong>Kind</strong>: global class  </p>
@@ -1045,11 +1055,9 @@
 <li><a href="#View+loadThumb">.loadThumb()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+convertPointToLatLng">.convertPointToLatLng(point)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
 <li><a href="#View+convertLatLngToPoint">.convertLatLngToPoint(latlng)</a> ⇒ <code><a href="#Point">Point</a></code></li>
-<li><a href="#View+tileHandling">.tileHandling(tile)</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+moveView">.moveView(pos)</a> ⇒ <code><a href="#View">View</a></code></li>
-<li><a href="#View+drawVisibleTiles">.drawVisibleTiles()</a> ⇒ <code><a href="#View">View</a></code></li>
-<li><a href="#View+drawTile">.drawTile(tile)</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+bindEvents">.bindEvents()</a> ⇒ <code><a href="#View">View</a></code></li>
+<li><a href="#View+draw">.draw()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+initializeTiles">.initializeTiles()</a> ⇒ <code><a href="#View">View</a></code></li>
 </ul>
 </li>
@@ -1092,13 +1100,6 @@
 <ul>
 <li>latlng <code><a href="#LatLng">LatLng</a></code> - specified latlng to be converted</li>
 </ul>
-<p><a name="View+tileHandling"></a></p>
-<h3 id="view-tilehandling-tile-code-view-view-code-">view.tileHandling(tile) ⇒ <code><a href="#View">View</a></code></h3>
-<p>handles on load of a tile</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View<br><strong>Params</strong></p>
-<ul>
-<li>tile <code><a href="#Tile">Tile</a></code> - a tile of the View</li>
-</ul>
 <p><a name="View+moveView"></a></p>
 <h3 id="view-moveview-pos-code-view-view-code-">view.moveView(pos) ⇒ <code><a href="#View">View</a></code></h3>
 <p>moves the view&#39;s current position by pos</p>
@@ -1106,26 +1107,25 @@
 <ul>
 <li>pos <code><a href="#Point">Point</a></code> - specified additional offset</li>
 </ul>
-<p><a name="View+drawVisibleTiles"></a></p>
-<h3 id="view-drawvisibletiles-code-view-view-code-">view.drawVisibleTiles() ⇒ <code><a href="#View">View</a></code></h3>
-<p>Handles draw of View</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View<br><a name="View+drawTile"></a></p>
-<h3 id="view-drawtile-tile-code-view-view-code-">view.drawTile(tile) ⇒ <code><a href="#View">View</a></code></h3>
-<p>draws tiles on canvas</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View<br><strong>Params</strong></p>
-<ul>
-<li>tile <code><a href="#Tile">Tile</a></code> - a tile of the View</li>
-</ul>
 <p><a name="View+bindEvents"></a></p>
 <h3 id="view-bindevents-code-view-view-code-">view.bindEvents() ⇒ <code><a href="#View">View</a></code></h3>
 <p>Handles all events for class</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View<br><a name="View+draw"></a></p>
+<h3 id="view-draw-code-view-view-code-">view.draw() ⇒ <code><a href="#View">View</a></code></h3>
+<p>Handles draw of visible elements</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View<br><a name="View+initializeTiles"></a></p>
 <h3 id="view-initializetiles-code-view-view-code-">view.initializeTiles() ⇒ <code><a href="#View">View</a></code></h3>
 <p>initializes tiles</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View<br><a name="instance"></a></p>
 <h2 id="instance-code-publisher-publisher-code-">instance : <code><a href="#Publisher">Publisher</a></code></h2>
 <p>singleton instance</p>
-<p><strong>Kind</strong>: global variable<br><a name="PUBLISHER"></a></p>
+<p><strong>Kind</strong>: global variable<br><a name="STATES"></a></p>
+<h2 id="states-code-array-code-">STATES : <code>Array</code></h2>
+<p>States of a marker</p>
+<p><strong>Kind</strong>: global constant<br><a name="EVENT_MARKER_LOADED"></a></p>
+<h2 id="event_marker_loaded-code-string-code-">EVENT_MARKER_LOADED : <code>String</code></h2>
+<p>Name of event fired, when marker is loaded</p>
+<p><strong>Kind</strong>: global constant<br><a name="PUBLISHER"></a></p>
 <h2 id="publisher">PUBLISHER</h2>
 <p>Singleton instance of Publisher</p>
 <p><strong>Kind</strong>: global constant<br><a name="STATES"></a></p>
