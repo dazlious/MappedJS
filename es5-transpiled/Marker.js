@@ -86,7 +86,6 @@
             key: 'onImageLoad',
             value: function onImageLoad() {
                 this.offset.add(new _Point.Point(-(this.img.width / 2), -this.img.height));
-                this.position.add(this.offset);
                 this.icon = new _Rectangle.Rectangle(this.position.x, this.position.y, this.img.width, this.img.height);
                 this.stateHandler.next();
             }
@@ -94,7 +93,9 @@
             key: 'draw',
             value: function draw(x, y, scaleX, offsetX, context) {
                 if (this.stateHandler.current.value === 1) {
-                    context.drawImage(this.img, this.icon.x * scaleX + x * scaleX + offsetX, this.icon.y + y, this.icon.width, this.icon.height);
+                    var p = new _Point.Point((this.icon.x + x) * scaleX + offsetX, this.icon.y + y);
+                    p.add(this.offset);
+                    context.drawImage(this.img, p.x, p.y, this.icon.width, this.icon.height);
                 }
             }
         }]);
