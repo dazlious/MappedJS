@@ -94,7 +94,7 @@
             key: 'draw',
             value: function draw(x, y, scaleX, offsetX, context) {
                 if (this.stateHandler.current.value === 1) {
-                    context.drawImage(this.img, (this.icon.x + x) * scaleX + offsetX - this.img.width / 4 * scaleX, this.icon.y + y, this.icon.width, this.icon.height);
+                    context.drawImage(this.img, this.icon.x * scaleX + x * scaleX + offsetX, this.icon.y + y, this.icon.width, this.icon.height);
                 }
             }
         }]);

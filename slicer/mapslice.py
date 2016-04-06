@@ -1,10 +1,13 @@
+# USAGE:
+# python mapslice.py -i image/src/germany.png -o image/dist/ger/ -p img/ -t 512 -s 512 -m 256
+
+
 from PIL import Image, ImageOps
 import math
 import time
 import argparse
 import json
 import os
-
 
 settings = None
 
@@ -71,7 +74,7 @@ def build_level(input_path, output, path, size, minsize):
 
 
 def create_thumb(img, data, path):
-    outfile = "map_thumb.jpg"
+    outfile = "map_thumb." + settings.extension
     thumb_img = img
     thumb_img.thumbnail((settings.thumbSize, settings.thumbSize), Image.ANTIALIAS)
     thumb_img.save(settings.output + outfile)
@@ -93,7 +96,7 @@ def build_data_json(output, slices, path, current_data, level):
         for x in range(len(slices[y])):
             current_slice = slices[y][x]
             data = {
-                "path": path + "map_"+str(y)+"_"+str(x)+".jpg",
+                "path": path + "map_"+str(y)+"_"+str(x)+"." + settings.extension,
                 "x": current_slice[0],
                 "y": current_slice[1],
                 "w": current_slice[2] - current_slice[0],
@@ -168,7 +171,7 @@ def calculate_slices_normal(width, height, size, x_remainder, y_remainder, small
 
 def crop_save(image, box, x, y):
     cropped_img = image.crop(box)
-    cropped_img.save(settings.output + "map_"+str(y)+"_"+str(x)+".jpg")
+    cropped_img.save(settings.output + "map_"+str(y)+"_"+str(x)+"."+settings.extension)
 
 
 def open_image(file_name) :
@@ -190,6 +193,7 @@ def init_settings():
     parser.add_argument('-t', '--thumbSize', help='size of thumbnail', default=256, type=int)
     parser.add_argument('-p', '--path', help='additional path information for relative paths', default="", type=str)
     parser.add_argument('-c', '--clearfolder', help='empties output folder', default=False, type=bool)
+    parser.add_argument('-e', '--extension', help='file type', default="jpg", type=str)
 
 
     args = parser.parse_args()
