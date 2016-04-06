@@ -798,6 +798,16 @@
             "position": [51.477678, 0],
             "img": "img/icon-downunder.png",
             "offset": [0, 32]
+        },
+        {
+            "position": [24.554513,-81.7994127],
+            "img": "img/icon-downunder.png",
+            "offset": [0, 32]
+        },
+        {
+            "position": [41.337169,140.9907163],
+            "img": "img/icon-downunder.png",
+            "offset": [0, 32]
         }
     ]
 }
