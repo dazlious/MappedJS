@@ -125,6 +125,7 @@ export class View {
      * @return {View} instance of View for chaining
      */
     moveView(pos) {
+        pos.divide(this.equalizationFactor, 1);
         let equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset + pos.x, pos.y);
         if (!equalizedMap.containsRect(this.viewport)) {
             if (equalizedMap.width >= this.viewport.width) {

@@ -1567,6 +1567,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'moveView',
 	        value: function moveView(pos) {
+	            pos.divide(this.equalizationFactor, 1);
 	            var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset + pos.x, pos.y);
 	            if (!equalizedMap.containsRect(this.viewport)) {
 	                if (equalizedMap.width >= this.viewport.width) {
