@@ -1,7 +1,9 @@
 /*global PointerEvent,MSPointerEvent*/
 
 import $ from 'jquery';
-import {Point} from './Point.js';
+import {
+    Point
+} from './Point.js';
 
 export class Interact {
 
@@ -303,7 +305,7 @@ export class Interact {
         if (e instanceof MouseEvent) {
             return $.extend(true, data, this.handleSingletouch(e));
         }
-        
+
         // if is pointerEvent
         if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
             this.pointerIDs[e.pointerId] = e;
@@ -775,8 +777,7 @@ export class Interact {
         // down
         if (event.deltaY > 0 || (!event.deltaY && event.wheelDeltaY < 0) || ((axis === 2) && (event.detail > 0)) || (Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail))) < 0)) {
             direction.push("down");
-        }
-        // up
+        } // up
         else if (event.deltaY < 0 || (!event.deltaY && event.wheelDeltaY > 0) || (axis === 2 && event.detail < 0) || (Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail))) > 0)) {
             direction.push("up");
         }
@@ -784,9 +785,7 @@ export class Interact {
         // right
         if (event.deltaX > 0 || (!event.deltaX && event.wheelDeltaX > 0) || (axis === 1 && event.detail > 0)) {
             direction.push("right");
-        }
-
-        // left
+        } // left
         else if (event.deltaX < 0 || (!event.deltaX && event.wheelDeltaX < 0) || (axis === 1 && event.detail < 0)) {
             direction.push("left");
         }
