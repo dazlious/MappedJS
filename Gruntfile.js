@@ -16,16 +16,6 @@ module.exports = function(grunt) {
                 dest: 'docs/src/plugin.md'
             }
         },
-        plato: {
-            options: {
-                jshint: grunt.file.readJSON('.jshintrc')
-            },
-            plugin: {
-                files: {
-                    'reports/plugin/js': "es5-transpiled/**.js"
-                }
-            }
-        },
         cssstats: {
             options: {
                 jsonOutput: true,
@@ -182,7 +172,6 @@ module.exports = function(grunt) {
 
     // Load npm tasks
     grunt.loadNpmTasks('grunt-jsdoc-to-markdown');
-    grunt.loadNpmTasks('grunt-plato');
     grunt.loadNpmTasks('grunt-css-statistics');
     grunt.loadNpmTasks('grunt-md');
     grunt.loadNpmTasks('grunt-postcss');
@@ -199,7 +188,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("transpile", ["babel:plugin", "jsbeautifier"]);
     grunt.registerTask('docs', ["jsdoc2md:plugin", "md:plugin"]);
-    grunt.registerTask('report', ["plato:plugin", "postcss", "cssstats:plugin"]);
+    grunt.registerTask('report', ["postcss", "cssstats:plugin"]);
 
     grunt.registerTask('deployDocs', ["transpile", "docs", "report"]);
     grunt.registerTask('gh-pages', ["shell:deployDocs"]);
