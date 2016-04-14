@@ -152,6 +152,7 @@ export class Interact {
             difference: null,
             last: {
                 position: null,
+                distance: null,
                 action: null
             },
             position: {
@@ -330,34 +331,34 @@ export class Interact {
 
         // mouse is used
         if (e instanceof MouseEvent) {
-            return $.extend(true, data, this.handleSingletouch(e));
+            return $.extend(true, data, this.handleSingletouchStart(e));
         }
 
         // if is pointerEvent
         if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
             this.data.pointerArray[e.pointerId] = e;
             if (Object.keys(this.data.pointerArray).length <= 1) {
-                return $.extend(true, data, this.handleSingletouch(e));
+                return $.extend(true, data, this.handleSingletouchStart(e));
             } else {
                 let pointerPos = [];
                 for (let pointer in this.data.pointerArray) {
                     pointerPos.push(this.data.pointerArray[pointer]);
                 }
-                return this.handleMultitouch(pointerPos);
+                return this.handleMultitouchStart(pointerPos);
             }
         } // touch is used
         else {
             // singletouch startet
             if (e.length <= 1) {
-                return $.extend(true, data, this.handleSingletouch(e[0]));
+                return $.extend(true, data, this.handleSingletouchStart(e[0]));
             } // multitouch started
             else if (e.length === 2) {
-                return this.handleMultitouch(e);
+                return this.handleMultitouchStart(e);
             }
         }
     }
 
-    handleMultitouch(positionsArray) {
+    handleMultitouchStart(positionsArray) {
         let pos1 = this.getRelativePosition(positionsArray[0]),
             pos2 = this.getRelativePosition(positionsArray[1]);
         return {
@@ -369,7 +370,7 @@ export class Interact {
         };
     }
 
-    handleSingletouch(position) {
+    handleSingletouchStart(position) {
         return {
             position: {
                 start: this.getRelativePosition(position)
@@ -426,6 +427,32 @@ export class Interact {
         return false;
     }
 
+
+    calculateMove(e) {
+        let data = {
+            moved: true,
+            last: {
+                action: "moved"
+            },
+            position: {
+                move: new Point()
+            },
+            time: {
+                last: e.timeStamp
+            }
+        };
+
+        return data;
+    }
+
+    handleMultitouchMove(positionsArray) {
+
+    }
+
+    handleSingletouchMove(position) {
+
+    }
+
     /**
      * handles cross-browser and -device move-event
      * @param  {Object} event - jQuery-Event-Object
@@ -433,6 +460,7 @@ export class Interact {
      */
     moveHandler(event) {
 
+        // TODO: implement move-callback
         // if touchstart event was not fired
         if (!this.data.down || this.data.pinched) {
             return false;
@@ -442,9 +470,9 @@ export class Interact {
             currentPos,
             currentDist,
             lastPos = (this.data.position.move) ? this.data.position.move : this.data.position.start,
-            lastTime = (this.data.time.last) ? this.data.time.last : this.data.time.start,
-            currentTime = event.timeStamp;
+            lastTime = (this.data.time.last) ? this.data.time.last : this.data.time.start;
 
+        // if positions have not changed
         if (this.isIE && (this.getRelativePosition(e).equals(lastPos) || this.getRelativePosition(e).equals(this.data.position.start))) {
             return false;
         } else if (!this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(lastPos)) {
@@ -458,10 +486,7 @@ export class Interact {
             this.data.timeout.hold = clearTimeout(this.data.timeout.hold);
         }
 
-        this.data.moved = true;
-        this.data.last.action = "move";
-
-        this.data.time.last = event.timeStamp;
+        this.data = $.extend(true, this.data, this.calculateMove(e));
 
         if (e instanceof MouseEvent) {
             currentPos = this.getRelativePosition(e);
@@ -501,7 +526,7 @@ export class Interact {
             }
         }
 
-        let timeDiff = (currentTime - lastTime);
+        let timeDiff = (this.data.time.last - lastTime);
 
         if (this.data.multitouch) {
             this.data.difference = currentDist - this.data.distance;
@@ -549,7 +574,7 @@ export class Interact {
                 },
                 timeElapsed: {
                     sinceLast: timeDiff,
-                    sinceStart: currentTime - this.data.time.start
+                    sinceStart: this.timeToLastMove
                 },
                 distanceToLastPoint: currentDist,
                 speed: this.speed

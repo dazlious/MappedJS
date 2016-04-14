@@ -2525,6 +2525,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            difference: null,
 	            last: {
 	                position: null,
+	                distance: null,
 	                action: null
 	            },
 	            position: {
@@ -2718,35 +2719,35 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            // mouse is used
 	            if (e instanceof MouseEvent) {
-	                return _jquery2.default.extend(true, data, this.handleSingletouch(e));
+	                return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
 	            }
 
 	            // if is pointerEvent
 	            if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
 	                this.data.pointerArray[e.pointerId] = e;
 	                if (Object.keys(this.data.pointerArray).length <= 1) {
-	                    return _jquery2.default.extend(true, data, this.handleSingletouch(e));
+	                    return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
 	                } else {
 	                    var pointerPos = [];
 	                    for (var pointer in this.data.pointerArray) {
 	                        pointerPos.push(this.data.pointerArray[pointer]);
 	                    }
-	                    return this.handleMultitouch(pointerPos);
+	                    return this.handleMultitouchStart(pointerPos);
 	                }
 	            } // touch is used
 	            else {
 	                    // singletouch startet
 	                    if (e.length <= 1) {
-	                        return _jquery2.default.extend(true, data, this.handleSingletouch(e[0]));
+	                        return _jquery2.default.extend(true, data, this.handleSingletouchStart(e[0]));
 	                    } // multitouch started
 	                    else if (e.length === 2) {
-	                            return this.handleMultitouch(e);
+	                            return this.handleMultitouchStart(e);
 	                        }
 	                }
 	        }
 	    }, {
-	        key: 'handleMultitouch',
-	        value: function handleMultitouch(positionsArray) {
+	        key: 'handleMultitouchStart',
+	        value: function handleMultitouchStart(positionsArray) {
 	            var pos1 = this.getRelativePosition(positionsArray[0]),
 	                pos2 = this.getRelativePosition(positionsArray[1]);
 	            return {
@@ -2758,8 +2759,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 	        }
 	    }, {
-	        key: 'handleSingletouch',
-	        value: function handleSingletouch(position) {
+	        key: 'handleSingletouchStart',
+	        value: function handleSingletouchStart(position) {
 	            return {
 	                position: {
 	                    start: this.getRelativePosition(position)
@@ -2818,6 +2819,30 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            return false;
 	        }
+	    }, {
+	        key: 'calculateMove',
+	        value: function calculateMove(e) {
+	            var data = {
+	                moved: true,
+	                last: {
+	                    action: "moved"
+	                },
+	                position: {
+	                    move: new _Point.Point()
+	                },
+	                time: {
+	                    last: e.timeStamp
+	                }
+	            };
+
+	            return data;
+	        }
+	    }, {
+	        key: 'handleMultitouchMove',
+	        value: function handleMultitouchMove(positionsArray) {}
+	    }, {
+	        key: 'handleSingletouchMove',
+	        value: function handleSingletouchMove(position) {}
 
 	        /**
 	         * handles cross-browser and -device move-event
@@ -2829,6 +2854,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'moveHandler',
 	        value: function moveHandler(event) {
 
+	            // TODO: implement move-callback
 	            // if touchstart event was not fired
 	            if (!this.data.down || this.data.pinched) {
 	                return false;
@@ -2838,9 +2864,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                currentPos = void 0,
 	                currentDist = void 0,
 	                lastPos = this.data.position.move ? this.data.position.move : this.data.position.start,
-	                lastTime = this.data.time.last ? this.data.time.last : this.data.time.start,
-	                currentTime = event.timeStamp;
+	                lastTime = this.data.time.last ? this.data.time.last : this.data.time.start;
 
+	            // if positions have not changed
 	            if (this.isIE && (this.getRelativePosition(e).equals(lastPos) || this.getRelativePosition(e).equals(this.data.position.start))) {
 	                return false;
 	            } else if (!this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(lastPos)) {
@@ -2854,10 +2880,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.data.timeout.hold = clearTimeout(this.data.timeout.hold);
 	            }
 
-	            this.data.moved = true;
-	            this.data.last.action = "move";
-
-	            this.data.time.last = event.timeStamp;
+	            this.data = _jquery2.default.extend(true, this.data, this.calculateMove(e));
 
 	            if (e instanceof MouseEvent) {
 	                currentPos = this.getRelativePosition(e);
@@ -2897,7 +2920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 
-	            var timeDiff = currentTime - lastTime;
+	            var timeDiff = this.data.time.last - lastTime;
 
 	            if (this.data.multitouch) {
 	                this.data.difference = currentDist - this.data.distance;
@@ -2945,7 +2968,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    },
 	                    timeElapsed: {
 	                        sinceLast: timeDiff,
-	                        sinceStart: currentTime - this.data.time.start
+	                        sinceStart: this.timeToLastMove
 	                    },
 	                    distanceToLastPoint: currentDist,
 	                    speed: this.speed
