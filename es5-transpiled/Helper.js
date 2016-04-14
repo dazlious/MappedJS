@@ -39,7 +39,7 @@
                 type: "GET",
                 url: filename,
                 dataType: "json",
-                success: function success(data, status, request) {
+                success: function success(data) {
                     return callback(data);
                 },
                 error: function error(response) {

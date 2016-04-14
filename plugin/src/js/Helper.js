@@ -13,7 +13,7 @@ export var Helper = {
             type: "GET",
             url: filename,
             dataType: "json",
-            success: function(data, status, request) {
+            success: function(data) {
                 return callback(data);
             },
             error: function(response) {
@@ -31,7 +31,7 @@ export var Helper = {
      * @return {Helper} Helper
      */
     loadImage: function(path, cb) {
-        let img = new Image();
+        const img = new Image();
         img.onload = function() {
             if (cb && typeof cb === "function") {
                 cb(img);

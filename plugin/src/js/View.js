@@ -34,8 +34,8 @@ export class View {
      * @return {array} all tiles that are currently visible
      */
     get visibleTiles() {
-        return this.tiles.filter(function(t, i, a) {
-            let newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapView.x * this.equalizationFactor + this.viewportOffset, this.mapView.y);
+        return this.tiles.filter(function(t) {
+            const newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapView.x * this.equalizationFactor + this.viewportOffset, this.mapView.y);
             return this.viewport.intersects(newTile);
         }, this);
     }
@@ -66,7 +66,7 @@ export class View {
 
         this.CONVERSION_RATIO = new Point(this.mapView.width / this.bounds.width, this.mapView.height / this.bounds.height);
 
-        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
+        const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
         this.mapView.position(newCenter.x, newCenter.y);
 
         this.tiles = [];
@@ -108,7 +108,7 @@ export class View {
      * @return {Point} presentation of point in pixel system
      */
     convertLatLngToPoint(latlng) {
-        let relativePosition = this.bounds.nw.clone.substract(latlng);
+        const relativePosition = this.bounds.nw.clone.substract(latlng);
         relativePosition.multiply(this.CONVERSION_RATIO.y, this.CONVERSION_RATIO.x);
         return new Point(relativePosition.lng, relativePosition.lat).abs;
     }
@@ -126,7 +126,7 @@ export class View {
      */
     moveView(pos) {
         pos.divide(this.equalizationFactor, 1);
-        let equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset + pos.x, pos.y);
+        const equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset + pos.x, pos.y);
         if (!equalizedMap.containsRect(this.viewport)) {
             if (equalizedMap.width >= this.viewport.width) {
                 if (equalizedMap.left - this.viewport.left > 0) {
@@ -156,7 +156,7 @@ export class View {
 
         this.mapView.translate(pos.x, pos.y);
 
-        var newCenter = this.mapView.topLeft.substract(this.viewport.center).multiply(-1);
+        const newCenter = this.mapView.topLeft.substract(this.viewport.center).multiply(-1);
         this.center = this.convertPointToLatLng(newCenter).multiply(-1);
 
         return this;
@@ -177,18 +177,22 @@ export class View {
      * @return {View} instance of View
      */
     draw() {
-        let currentlyVisibleTiles = this.visibleTiles;
-        for (let i in currentlyVisibleTiles) {
-            this.drawHandler(currentlyVisibleTiles[i]);
+        const currentlyVisibleTiles = this.visibleTiles;
+        for (const i in currentlyVisibleTiles) {
+            if (currentlyVisibleTiles[i]) {
+                this.drawHandler(currentlyVisibleTiles[i]);
+            }
         }
         this.drawMarkers();
         return this;
     }
 
     drawMarkers() {
-        for (let i in this.markers) {
-            let m = this.markers[i];
-            m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
+        for (const i in this.markers) {
+            if (this.markers[i]) {
+                const m = this.markers[i];
+                m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
+            }
         }
         return this;
     }
@@ -198,24 +202,28 @@ export class View {
      * @return {View} instance of View
      */
     initializeTiles() {
-        let currentLevel = this.data.tiles;
-        for (let tile in currentLevel) {
-            let currentTileData = currentLevel[tile];
-            currentTileData["context"] = this.context;
-            let currentTile = new Tile(currentTileData);
-            this.tiles.push(currentTile);
+        const currentLevel = this.data.tiles;
+        for (const tile in currentLevel) {
+            if (currentLevel[tile]) {
+                const currentTileData = currentLevel[tile];
+                currentTileData["context"] = this.context;
+                const currentTile = new Tile(currentTileData);
+                this.tiles.push(currentTile);
+            }
         }
         return this;
     }
 
     initializeMarkers(markerData) {
         if (markerData) {
-            for (let i in markerData) {
-                let currentData = markerData[i],
-                    offset = (currentData.offset) ? new Point(currentData.offset[0], currentData.offset[1]) : new Point(0, 0),
-                    markerPixelPos = this.convertLatLngToPoint(new LatLng(currentData.position[0], currentData.position[1])),
-                    m = new Marker(markerPixelPos, currentData.img, offset);
-                this.markers.push(m);
+            for (const i in markerData) {
+                if (markerData[i]) {
+                    const currentData = markerData[i],
+                        offset = (currentData.offset) ? new Point(currentData.offset[0], currentData.offset[1]) : new Point(0, 0),
+                        markerPixelPos = this.convertLatLngToPoint(new LatLng(currentData.position[0], currentData.position[1])),
+                        m = new Marker(markerPixelPos, currentData.img, offset);
+                    this.markers.push(m);
+                }
             }
         }
         return this;

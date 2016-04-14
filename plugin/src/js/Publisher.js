@@ -63,7 +63,7 @@ export class Publisher {
      * @return {Publisher} instance of Publisher
      */
     handle(action, type, data) {
-        let subs = (this.subscribers[type]) ? this.subscribers[type]: [];
+        const subs = (this.subscribers[type]) ? this.subscribers[type]: [];
         for (let i = 0; i < subs.length; i++) {
             if (action === Publisher.PUBLISH) {
                 subs[i](data);

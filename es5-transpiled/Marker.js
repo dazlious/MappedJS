@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Rectangle.js', './LatLng.js', './StateHandler.js', './Point.js', 'jquery'], factory);
+        define(['exports', './Rectangle.js', './LatLng.js', './StateHandler.js', './Point.js', './Helper.js', 'jquery'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Rectangle.js'), require('./LatLng.js'), require('./StateHandler.js'), require('./Point.js'), require('jquery'));
+        factory(exports, require('./Rectangle.js'), require('./LatLng.js'), require('./StateHandler.js'), require('./Point.js'), require('./Helper.js'), require('jquery'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Rectangle, global.LatLng, global.StateHandler, global.Point, global.jquery);
+        factory(mod.exports, global.Rectangle, global.LatLng, global.StateHandler, global.Point, global.Helper, global.jquery);
         global.Marker = mod.exports;
     }
-})(this, function(exports, _Rectangle, _LatLng, _StateHandler, _Point, _jquery) {
+})(this, function(exports, _Rectangle, _LatLng, _StateHandler, _Point, _Helper, _jquery) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -82,17 +82,19 @@
 
             this.position = position;
             this.offset = offset;
+            this.path = imgPath;
 
             this.stateHandler = new _StateHandler.StateHandler(STATES);
 
-            this.img = new Image();
-            this.img.src = imgPath;
-            this.img.onload = this.onImageLoad.bind(this);
+            _Helper.Helper.loadImage(this.path, function(img) {
+                this.onImageLoad(img);
+            }.bind(this));
         }
 
         _createClass(Marker, [{
             key: 'onImageLoad',
-            value: function onImageLoad() {
+            value: function onImageLoad(img) {
+                this.img = img;
                 this.offset.add(new _Point.Point(-(this.img.width / 2), -this.img.height));
                 this.icon = new _Rectangle.Rectangle(this.position.x, this.position.y, this.img.width, this.img.height);
                 this.stateHandler.next();

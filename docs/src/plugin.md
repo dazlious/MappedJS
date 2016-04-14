@@ -63,6 +63,7 @@
 </dl>
 
 <a name="Bounds"></a>
+
 ## Bounds
 **Kind**: global class  
 
@@ -73,6 +74,7 @@
     * [.range](#Bounds+range) ⇒ <code>[Point](#Point)</code>
 
 <a name="new_Bounds_new"></a>
+
 ### new Bounds(northWest, southEast)
 Constructor
 
@@ -83,24 +85,28 @@ Constructor
 - southEast <code>number</code> - = new LatLng() - representation of southEast boundary
 
 <a name="Bounds+width"></a>
+
 ### bounds.width ⇒ <code>number</code>
 gets width of boundaries
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
 **Returns**: <code>number</code> - width of boundaries  
 <a name="Bounds+height"></a>
+
 ### bounds.height ⇒ <code>number</code>
 gets height of boundaries
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
 **Returns**: <code>number</code> - height of boundaries  
 <a name="Bounds+range"></a>
+
 ### bounds.range ⇒ <code>[Point](#Point)</code>
 gets size
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
 **Returns**: <code>[Point](#Point)</code> - calculated Size of boundaries  
 <a name="Interact"></a>
+
 ## Interact
 **Kind**: global class  
 
@@ -130,6 +136,7 @@ gets size
     * [.getEvent(e)](#Interact+getEvent) ⇒ <code>Object</code>
 
 <a name="new_Interact_new"></a>
+
 ### new Interact(settings)
 Constructor
 
@@ -177,30 +184,35 @@ Constructor
         - .scroll <code>string</code> - = ("wheel" || "mousewhell" || "DOMMouseScroll") - settings all scroll eventnames
 
 <a name="Interact+isMouse"></a>
+
 ### interact.isMouse ⇒ <code>Boolean</code>
 checks if mouse is possible
 
 **Kind**: instance property of <code>[Interact](#Interact)</code>  
 **Returns**: <code>Boolean</code> - if true, mouse is possible  
 <a name="Interact+isTouch"></a>
+
 ### interact.isTouch ⇒ <code>Boolean</code>
 checks if touch is possible
 
 **Kind**: instance property of <code>[Interact](#Interact)</code>  
 **Returns**: <code>Boolean</code> - if true, touch is possible  
 <a name="Interact+isIE"></a>
+
 ### interact.isIE ⇒ <code>Boolean</code>
 checks if IE is used
 
 **Kind**: instance property of <code>[Interact](#Interact)</code>  
 **Returns**: <code>Boolean</code> - if true, IE is used  
 <a name="Interact+scrollEvent"></a>
+
 ### interact.scrollEvent ⇒ <code>string</code>
 gets cross-browser scroll-event
 
 **Kind**: instance property of <code>[Interact](#Interact)</code>  
 **Returns**: <code>string</code> - name of scroll event  
 <a name="Interact+handleViewport"></a>
+
 ### interact.handleViewport(viewport) ⇒ <code>[Interact](#Interact)</code>
 handles the overwrite of viewport meta
 
@@ -211,6 +223,7 @@ handles the overwrite of viewport meta
 - viewport <code>Boolean</code> | <code>string</code> - specified viewport option
 
 <a name="Interact+init"></a>
+
 ### interact.init(container) ⇒ <code>[Interact](#Interact)</code>
 initializes class settings and bindings
 
@@ -221,30 +234,35 @@ initializes class settings and bindings
 - container <code>Object</code> | <code>string</code> - Container, either string, jQuery-object or dom-object
 
 <a name="Interact+bindEvents"></a>
+
 ### interact.bindEvents() ⇒ <code>[Interact](#Interact)</code>
 binds all needed events
 
 **Kind**: instance method of <code>[Interact](#Interact)</code>  
 **Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
 <a name="Interact+bindIEEvents"></a>
+
 ### interact.bindIEEvents() ⇒ <code>[Interact](#Interact)</code>
 binds all needed events for IE
 
 **Kind**: instance method of <code>[Interact](#Interact)</code>  
 **Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
 <a name="Interact+bindTouchEvents"></a>
+
 ### interact.bindTouchEvents() ⇒ <code>[Interact](#Interact)</code>
 binds all needed events for touch devices
 
 **Kind**: instance method of <code>[Interact](#Interact)</code>  
 **Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
 <a name="Interact+bindMouseEvents"></a>
+
 ### interact.bindMouseEvents() ⇒ <code>[Interact](#Interact)</code>
 binds all needed events for mouse devices
 
 **Kind**: instance method of <code>[Interact](#Interact)</code>  
 **Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
 <a name="Interact+scrollHandler"></a>
+
 ### interact.scrollHandler(event) ⇒ <code>Boolean</code>
 handles cross-browser and -device scroll
 
@@ -255,6 +273,7 @@ handles cross-browser and -device scroll
 - event <code>Object</code> - jQuery-Event-Object
 
 <a name="Interact+startHandler"></a>
+
 ### interact.startHandler(event) ⇒ <code>Boolean</code>
 handles cross-browser and -device start-event
 
@@ -265,6 +284,7 @@ handles cross-browser and -device start-event
 - event <code>Object</code> - jQuery-Event-Object
 
 <a name="Interact+moveHandler"></a>
+
 ### interact.moveHandler(event) ⇒ <code>Boolean</code>
 handles cross-browser and -device move-event
 
@@ -275,6 +295,7 @@ handles cross-browser and -device move-event
 - event <code>Object</code> - jQuery-Event-Object
 
 <a name="Interact+endHandler"></a>
+
 ### interact.endHandler(event) ⇒ <code>Boolean</code>
 handles cross-browser and -device end-event
 
@@ -285,6 +306,7 @@ handles cross-browser and -device end-event
 - event <code>Object</code> - jQuery-Event-Object
 
 <a name="Interact+calculateSpeed"></a>
+
 ### interact.calculateSpeed(distance, time) ⇒ <code>number</code>
 calculates the speed with specified distance and time
 
@@ -296,6 +318,7 @@ calculates the speed with specified distance and time
 - time <code>number</code> - the specified time elapsed
 
 <a name="Interact+getSwipeDirections"></a>
+
 ### interact.getSwipeDirections(direction) ⇒ <code>Array.&lt;string&gt;</code>
 Returns an array of strings, representing the directions
 
@@ -306,6 +329,7 @@ Returns an array of strings, representing the directions
 - direction <code>[Point](#Point)</code> - the specified direction in pixel
 
 <a name="Interact+setTimeoutForEvent"></a>
+
 ### interact.setTimeoutForEvent(callback, timeout, args, holdTimeout) ⇒ <code>[Interact](#Interact)</code>
 Helper for setting a timeout for events
 
@@ -319,6 +343,7 @@ Helper for setting a timeout for events
 - holdTimeout <code>Boolean</code> - if true, a different variable will be used
 
 <a name="Interact+eventCallback"></a>
+
 ### interact.eventCallback(callback, args) ⇒ <code>[Interact](#Interact)</code>
 Eventhandler for handling the callbacks
 
@@ -330,6 +355,7 @@ Eventhandler for handling the callbacks
 - args <code>Array.&lt;object&gt;</code> - arguments for the function
 
 <a name="Interact+getRelativePosition"></a>
+
 ### interact.getRelativePosition(e) ⇒ <code>[Point](#Point)</code>
 get the relative position of clientX and clientY
 
@@ -340,6 +366,7 @@ get the relative position of clientX and clientY
 - e <code>Object</code> - event object
 
 <a name="Interact+getAbsolutePosition"></a>
+
 ### interact.getAbsolutePosition(e) ⇒ <code>[Point](#Point)</code>
 get the absolute position of clientX and clientY
 
@@ -350,6 +377,7 @@ get the absolute position of clientX and clientY
 - e <code>Object</code> - event object
 
 <a name="Interact+getScrollDirection"></a>
+
 ### interact.getScrollDirection(event) ⇒ <code>Array.&lt;string&gt;</code>
 get scroll direction from event
 
@@ -360,6 +388,7 @@ get scroll direction from event
 - event <code>Object</code> - event object
 
 <a name="Interact+getEvent"></a>
+
 ### interact.getEvent(e) ⇒ <code>Object</code>
 Get event helper, applies jQuery-event-fix too
 
@@ -370,6 +399,7 @@ Get event helper, applies jQuery-event-fix too
 - e <code>Object</code> - event object
 
 <a name="LatLng"></a>
+
 ## LatLng
 **Kind**: global class  
 
@@ -387,6 +417,7 @@ Get event helper, applies jQuery-event-fix too
         * [.createFromLatLng(LatLng)](#LatLng.createFromLatLng) ⇒ <code>[LatLng](#LatLng)</code>
 
 <a name="new_LatLng_new"></a>
+
 ### new LatLng(lat, lng, isDistance)
 Constructor
 
@@ -395,21 +426,24 @@ Constructor
 
 - lat <code>number</code> <code> = 0</code> - = 0 - representation of latitude
 - lng <code>number</code> <code> = 0</code> - = 0 - representation of longitude
-- isDistance <code>Boolean</code> <code> = false</code> - = false - if LatLng should be checked against bounds
+- isDistance <code>Boolean</code> - = false - if LatLng should be checked against bounds
 
 <a name="LatLng+length"></a>
+
 ### latLng.length ⇒ <code>number</code>
 length of a latlng
 
 **Kind**: instance property of <code>[LatLng](#LatLng)</code>  
 **Returns**: <code>number</code> - length of a latlng  
 <a name="LatLng+clone"></a>
+
 ### latLng.clone ⇒ <code>[LatLng](#LatLng)</code>
 gets a clone of this latlng
 
 **Kind**: instance property of <code>[LatLng](#LatLng)</code>  
 **Returns**: <code>[LatLng](#LatLng)</code> - new instance equals this latlng  
 <a name="LatLng+substract"></a>
+
 ### latLng.substract(coord) ⇒ <code>[LatLng](#LatLng)</code>
 substract specified coord from this coordinate
 
@@ -420,6 +454,7 @@ substract specified coord from this coordinate
 - coord <code>[LatLng](#LatLng)</code> - specified coordinate to substract from this coord
 
 <a name="LatLng+add"></a>
+
 ### latLng.add(coord) ⇒ <code>[LatLng](#LatLng)</code>
 add specified coord to this coordinate
 
@@ -430,6 +465,7 @@ add specified coord to this coordinate
 - coord <code>[LatLng](#LatLng)</code> - specified coordinate to add to this coord
 
 <a name="LatLng+divide"></a>
+
 ### latLng.divide(factorLat, factorLng) ⇒ <code>[LatLng](#LatLng)</code>
 divides a latlng with a given factor
 
@@ -441,6 +477,7 @@ divides a latlng with a given factor
 - factorLng <code>number</code> - = factorLat - factor to divide lng with
 
 <a name="LatLng+multiply"></a>
+
 ### latLng.multiply(factorLat, factorLng) ⇒ <code>[LatLng](#LatLng)</code>
 multiplicates a latlng with a given factor
 
@@ -452,6 +489,7 @@ multiplicates a latlng with a given factor
 - factorLng <code>number</code> - = factorLat - factor to multiplicate lng with
 
 <a name="LatLng+equals"></a>
+
 ### latLng.equals(coord) ⇒ <code>Boolean</code>
 checks if specified coord equals this coord
 
@@ -462,6 +500,7 @@ checks if specified coord equals this coord
 - coord <code>[LatLng](#LatLng)</code> - specified coord to check against
 
 <a name="LatLng.createFromLatLng"></a>
+
 ### LatLng.createFromLatLng(LatLng) ⇒ <code>[LatLng](#LatLng)</code>
 Creates a LatLng from specified LatLng
 
@@ -472,6 +511,7 @@ Creates a LatLng from specified LatLng
 - LatLng <code>[LatLng](#LatLng)</code> - specified LatLng
 
 <a name="MappedJS"></a>
+
 ## MappedJS
 **Kind**: global class  
 
@@ -485,6 +525,7 @@ Creates a LatLng from specified LatLng
     * [.loadingFinished()](#MappedJS+loadingFinished) ⇒ <code>[MappedJS](#MappedJS)</code>
 
 <a name="new_MappedJS_new"></a>
+
 ### new MappedJS(container, mapData, mapSettings, events, jasmine)
 Constructor
 
@@ -498,6 +539,7 @@ Constructor
 - jasmine <code>Boolean</code> <code> = false</code> - Option for jasmine tests
 
 <a name="MappedJS+initializeSettings"></a>
+
 ### mappedJS.initializeSettings(container, events) ⇒ <code>[MappedJS](#MappedJS)</code>
 initializes the settings and handles errors
 
@@ -509,6 +551,7 @@ initializes the settings and handles errors
 - events <code>object</code> - List of events
 
 <a name="MappedJS+initializeData"></a>
+
 ### mappedJS.initializeData(mapData, cb) ⇒ <code>[MappedJS](#MappedJS)</code>
 initializes the data, asynchronous
 
@@ -520,30 +563,35 @@ initializes the data, asynchronous
 - cb <code>function</code> - called, when data is received
 
 <a name="MappedJS+initializeMap"></a>
+
 ### mappedJS.initializeMap() ⇒ <code>[MappedJS](#MappedJS)</code>
 initializes Map module
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
 <a name="MappedJS+bindEvents"></a>
+
 ### mappedJS.bindEvents() ⇒ <code>[MappedJS](#MappedJS)</code>
 binds all events to handlers
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
 <a name="MappedJS+resizeHandler"></a>
+
 ### mappedJS.resizeHandler() ⇒ <code>[MappedJS](#MappedJS)</code>
 handles resizing of window
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
 <a name="MappedJS+loadingFinished"></a>
+
 ### mappedJS.loadingFinished() ⇒ <code>[MappedJS](#MappedJS)</code>
 called when loading and initialization is finished
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
 <a name="Point"></a>
+
 ## Point
 **Kind**: global class  
 
@@ -565,6 +613,7 @@ called when loading and initialization is finished
         * [.createFromPoint(point)](#Point.createFromPoint) ⇒ <code>[Point](#Point)</code>
 
 <a name="new_Point_new"></a>
+
 ### new Point(x, y)
 Constructor
 
@@ -575,18 +624,21 @@ Constructor
 - y <code>number</code> <code> = 0</code> - = 0 - representation of y coordinate
 
 <a name="Point+length"></a>
+
 ### point.length ⇒ <code>number</code>
 length of a point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Returns**: <code>number</code> - length of a point  
 <a name="Point+clone"></a>
+
 ### point.clone ⇒ <code>[Point](#Point)</code>
 gets a clone of this point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Returns**: <code>[Point](#Point)</code> - new instance equals this point  
 <a name="Point+substract"></a>
+
 ### point.substract(point) ⇒ <code>[Point](#Point)</code>
 substracts 2 points
 
@@ -597,6 +649,7 @@ substracts 2 points
 - point <code>[Point](#Point)</code> - the point to substract from this
 
 <a name="Point+add"></a>
+
 ### point.add(point) ⇒ <code>[Point](#Point)</code>
 adds 2 points
 
@@ -607,6 +660,7 @@ adds 2 points
 - point <code>[Point](#Point)</code> - the point to add to this
 
 <a name="Point+multiply"></a>
+
 ### point.multiply(x, y) ⇒ <code>[Point](#Point)</code>
 multiplicates a point with a given x and y
 
@@ -618,6 +672,7 @@ multiplicates a point with a given x and y
 - y <code>number</code> - factor to multiplicate y with
 
 <a name="Point+divide"></a>
+
 ### point.divide(x, y) ⇒ <code>[Point](#Point)</code>
 divide a point with a given x and y
 
@@ -629,6 +684,7 @@ divide a point with a given x and y
 - y <code>number</code> - factor to divide y with
 
 <a name="Point+equals"></a>
+
 ### point.equals(point) ⇒ <code>Boolean</code>
 check if points are equal
 
@@ -639,6 +695,7 @@ check if points are equal
 - point <code>[Point](#Point)</code> - the point to check against this
 
 <a name="Point+distance"></a>
+
 ### point.distance(point) ⇒ <code>[Point](#Point)</code>
 Returns the distance from this Point to a specified Point
 
@@ -649,6 +706,7 @@ Returns the distance from this Point to a specified Point
 - point <code>[Point](#Point)</code> - the specified point to be measured against this Point
 
 <a name="Point+translate"></a>
+
 ### point.translate(x, y) ⇒ <code>[Point](#Point)</code>
 translates a point by x and y
 
@@ -660,6 +718,7 @@ translates a point by x and y
 - y <code>number</code> - value to move y
 
 <a name="Point+position"></a>
+
 ### point.position(x, y) ⇒ <code>[Point](#Point)</code>
 positions a point by x and y
 
@@ -671,12 +730,14 @@ positions a point by x and y
 - y <code>number</code> - value to position y
 
 <a name="Point+toArray"></a>
+
 ### point.toArray() ⇒ <code>Array</code>
 translates a Point to an array
 
 **Kind**: instance method of <code>[Point](#Point)</code>  
 **Returns**: <code>Array</code> - Returns Point as Array(x, y)  
 <a name="Point.createFromPoint"></a>
+
 ### Point.createFromPoint(point) ⇒ <code>[Point](#Point)</code>
 Creates a Point from specified point
 
@@ -687,6 +748,7 @@ Creates a Point from specified point
 - point <code>[Point](#Point)</code> - specified point
 
 <a name="Publisher"></a>
+
 ## Publisher
 **Kind**: global class  
 
@@ -703,11 +765,13 @@ Creates a Point from specified point
         * [.UNSUBSCRIBE](#Publisher.UNSUBSCRIBE) : <code>String</code>
 
 <a name="new_Publisher_new"></a>
+
 ### new Publisher()
 Constructor
 
 **Returns**: <code>[Publisher](#Publisher)</code> - instance of Publisher  
 <a name="Publisher+subscribe"></a>
+
 ### publisher.subscribe(type, fn) ⇒ <code>[Publisher](#Publisher)</code>
 subscribe to a topic
 
@@ -719,6 +783,7 @@ subscribe to a topic
 - fn <code>function</code> <code> = function(){}</code> - a function to callback
 
 <a name="Publisher+unsubscribe"></a>
+
 ### publisher.unsubscribe(type, fn) ⇒ <code>[Publisher](#Publisher)</code>
 unsubscribe from a topic
 
@@ -730,6 +795,7 @@ unsubscribe from a topic
 - fn <code>function</code> <code> = function(){}</code> - a function to callback
 
 <a name="Publisher+publish"></a>
+
 ### publisher.publish(type, arg) ⇒ <code>[Publisher](#Publisher)</code>
 publish to a topic
 
@@ -741,6 +807,7 @@ publish to a topic
 - arg <code>function</code> <code> = [</code> - list of parameters
 
 <a name="Publisher+handle"></a>
+
 ### publisher.handle(action, type, a) ⇒ <code>[Publisher](#Publisher)</code>
 handle subscribe to a topic
 
@@ -753,21 +820,25 @@ handle subscribe to a topic
 - a <code>Object</code> - function to callback or arguments
 
 <a name="Publisher+destroy"></a>
+
 ### publisher.destroy()
 destroys singleton instance
 
 **Kind**: instance method of <code>[Publisher](#Publisher)</code>  
 <a name="Publisher.PUBLISH"></a>
+
 ### Publisher.PUBLISH : <code>String</code>
 Eventname for publishing
 
 **Kind**: static property of <code>[Publisher](#Publisher)</code>  
 <a name="Publisher.UNSUBSCRIBE"></a>
+
 ### Publisher.UNSUBSCRIBE : <code>String</code>
 Eventname for unsubscribing
 
 **Kind**: static property of <code>[Publisher](#Publisher)</code>  
 <a name="Rectangle"></a>
+
 ## Rectangle
 **Kind**: global class  
 
@@ -804,6 +875,7 @@ Eventname for unsubscribing
         * [.createFromRectangle(rect)](#Rectangle.createFromRectangle) ⇒ <code>[Rectangle](#Rectangle)</code>
 
 <a name="new_Rectangle_new"></a>
+
 ### new Rectangle(x, y, width, height)
 Constructor
 
@@ -816,66 +888,77 @@ Constructor
 - height <code>number</code> <code> = 0</code> - height of specified rectangle
 
 <a name="Rectangle+center"></a>
+
 ### rectangle.center ⇒ <code>[Point](#Point)</code>
 get center-position of rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>[Point](#Point)</code> - center point  
 <a name="Rectangle+topLeft"></a>
+
 ### rectangle.topLeft ⇒ <code>[Point](#Point)</code>
 get top-left-position of rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>[Point](#Point)</code> - top-left point  
 <a name="Rectangle+topRight"></a>
+
 ### rectangle.topRight ⇒ <code>[Point](#Point)</code>
 get top-right-position of rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>[Point](#Point)</code> - top-right point  
 <a name="Rectangle+bottomLeft"></a>
+
 ### rectangle.bottomLeft ⇒ <code>[Point](#Point)</code>
 get bottom-left-position of rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>[Point](#Point)</code> - bottom-left point  
 <a name="Rectangle+bottomRight"></a>
+
 ### rectangle.bottomRight ⇒ <code>[Point](#Point)</code>
 get bottom-right-position of rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>[Point](#Point)</code> - bottom-right point  
 <a name="Rectangle+right"></a>
+
 ### rectangle.right ⇒ <code>number</code>
 Returns right position of Rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>number</code> - right position  
 <a name="Rectangle+left"></a>
+
 ### rectangle.left ⇒ <code>number</code>
 Returns left position of Rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>number</code> - left position  
 <a name="Rectangle+top"></a>
+
 ### rectangle.top ⇒ <code>number</code>
 Returns top position of Rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>number</code> - top position  
 <a name="Rectangle+bottom"></a>
+
 ### rectangle.bottom ⇒ <code>number</code>
 Returns bottom position of Rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>number</code> - bottom position  
 <a name="Rectangle+clone"></a>
+
 ### rectangle.clone ⇒ <code>[Rectangle](#Rectangle)</code>
 clones a rectangle
 
 **Kind**: instance property of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>[Rectangle](#Rectangle)</code> - duplicated rectangle  
 <a name="Rectangle+intersects"></a>
+
 ### rectangle.intersects(rect) ⇒ <code>Boolean</code>
 Checks whether Rectangle intersects with specified Rectangle
 
@@ -886,6 +969,7 @@ Checks whether Rectangle intersects with specified Rectangle
 - rect <code>[Rectangle](#Rectangle)</code> - the specified rectangle to check against
 
 <a name="Rectangle+contains"></a>
+
 ### rectangle.contains(rectOrPoint) ⇒ <code>Boolean</code>
 Checks whether Rectangle entirely contains the Rectangle or Point
 
@@ -896,6 +980,7 @@ Checks whether Rectangle entirely contains the Rectangle or Point
 - rectOrPoint <code>[Rectangle](#Rectangle)</code> | <code>[Point](#Point)</code> - the specified point or rectangle to check against
 
 <a name="Rectangle+setCenter"></a>
+
 ### rectangle.setCenter(point) ⇒ <code>[Rectangle](#Rectangle)</code>
 Sets the center of this Rectangle to specified point
 
@@ -906,6 +991,7 @@ Sets the center of this Rectangle to specified point
 - point <code>[Point](#Point)</code> - specified point to set center of rectangle to
 
 <a name="Rectangle+setCenterX"></a>
+
 ### rectangle.setCenterX(x) ⇒ <code>[Rectangle](#Rectangle)</code>
 Sets the x-center of this Rectangle to specified x
 
@@ -916,6 +1002,7 @@ Sets the x-center of this Rectangle to specified x
 - x <code>number</code> - specified x coordinate to set x center of rectangle to
 
 <a name="Rectangle+setCenterY"></a>
+
 ### rectangle.setCenterY(y) ⇒ <code>[Rectangle](#Rectangle)</code>
 Sets the y-center of this Rectangle to specified y
 
@@ -926,6 +1013,7 @@ Sets the y-center of this Rectangle to specified y
 - y <code>number</code> - specified y coordinate to set y center of rectangle to
 
 <a name="Rectangle+containsPoint"></a>
+
 ### rectangle.containsPoint(point) ⇒ <code>Boolean</code>
 Checks whether Rectangle entirely contains the Point
 
@@ -936,6 +1024,7 @@ Checks whether Rectangle entirely contains the Point
 - point <code>[Point](#Point)</code> - the specified point to check against
 
 <a name="Rectangle+containsRect"></a>
+
 ### rectangle.containsRect(rect) ⇒ <code>Boolean</code>
 Checks whether Rectangle entirely contains the Rectangle
 
@@ -946,6 +1035,7 @@ Checks whether Rectangle entirely contains the Rectangle
 - rect <code>[Rectangle](#Rectangle)</code> - the specified rectangle to check against
 
 <a name="Rectangle+getDistortedRect"></a>
+
 ### rectangle.getDistortedRect(factor) ⇒ <code>[Rectangle](#Rectangle)</code>
 distort rectangle by factor
 
@@ -956,6 +1046,7 @@ distort rectangle by factor
 - factor <code>number</code> - the specified factor of distortion
 
 <a name="Rectangle+scaleX"></a>
+
 ### rectangle.scaleX(x) ⇒ <code>[Rectangle](#Rectangle)</code>
 scale x and width of rectangle
 
@@ -966,6 +1057,7 @@ scale x and width of rectangle
 - x <code>number</code> - factor to be applied to scale
 
 <a name="Rectangle+scaleY"></a>
+
 ### rectangle.scaleY(y) ⇒ <code>[Rectangle](#Rectangle)</code>
 scale y and height of rectangle
 
@@ -976,6 +1068,7 @@ scale y and height of rectangle
 - y <code>number</code> - factor to be applied to scale
 
 <a name="Rectangle+scale"></a>
+
 ### rectangle.scale(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
 scale x and y for width and height of rectangle
 
@@ -987,6 +1080,7 @@ scale x and y for width and height of rectangle
 - y <code>number</code> - = x - factor to be applied to scale
 
 <a name="Rectangle+translate"></a>
+
 ### rectangle.translate(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
 moves a rectangle by specified coords
 
@@ -998,6 +1092,7 @@ moves a rectangle by specified coords
 - y <code>number</code> - specified y to be added to y position
 
 <a name="Rectangle+transform"></a>
+
 ### rectangle.transform(x, y, width, height) ⇒ <code>[Rectangle](#Rectangle)</code>
 transforms a rectangle by specified coords
 
@@ -1011,6 +1106,7 @@ transforms a rectangle by specified coords
 - height <code>number</code> - specified height to be added to this height
 
 <a name="Rectangle+position"></a>
+
 ### rectangle.position(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
 changes the position a rectangle by specified coords
 
@@ -1022,6 +1118,7 @@ changes the position a rectangle by specified coords
 - y <code>number</code> - he new y position
 
 <a name="Rectangle+size"></a>
+
 ### rectangle.size(x, y, width, height) ⇒ <code>[Rectangle](#Rectangle)</code>
 changes the size of a rectangle by specified params
 
@@ -1035,6 +1132,7 @@ changes the size of a rectangle by specified params
 - height <code>number</code> - the new width
 
 <a name="Rectangle+equals"></a>
+
 ### rectangle.equals(rectangle) ⇒ <code>Boolean</code>
 check if rectangles are equal
 
@@ -1045,6 +1143,7 @@ check if rectangles are equal
 - rectangle <code>[Rectangle](#Rectangle)</code> - the specified rectangle to check against this
 
 <a name="Rectangle.createFromRectangle"></a>
+
 ### Rectangle.createFromRectangle(rect) ⇒ <code>[Rectangle](#Rectangle)</code>
 Creates a Rectangle from specified Rectangle
 
@@ -1055,6 +1154,7 @@ Creates a Rectangle from specified Rectangle
 - rect <code>[Rectangle](#Rectangle)</code> - specified Rectangle
 
 <a name="StateHandler"></a>
+
 ## StateHandler
 **Kind**: global class  
 
@@ -1070,6 +1170,7 @@ Creates a Rectangle from specified Rectangle
     * [.hasPrevious()](#StateHandler+hasPrevious) ⇒ <code>Boolean</code>
 
 <a name="new_StateHandler_new"></a>
+
 ### new StateHandler(states_array)
 Constructor
 
@@ -1079,30 +1180,35 @@ Constructor
 - states_array <code>Array</code> <code> = [{value:</code> - 0, description: 'Default'}] - [description]
 
 <a name="StateHandler+current"></a>
+
 ### stateHandler.current ⇒ <code>Object</code>
 get current state
 
 **Kind**: instance property of <code>[StateHandler](#StateHandler)</code>  
 **Returns**: <code>Object</code> - current state from STATES-array  
 <a name="StateHandler+length"></a>
+
 ### stateHandler.length ⇒ <code>number</code>
 get number of states
 
 **Kind**: instance property of <code>[StateHandler](#StateHandler)</code>  
 **Returns**: <code>number</code> - number of states  
 <a name="StateHandler+next"></a>
+
 ### stateHandler.next() ⇒ <code>[StateHandler](#StateHandler)</code>
 get the next element
 
 **Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
 **Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
 <a name="StateHandler+previous"></a>
+
 ### stateHandler.previous() ⇒ <code>[StateHandler](#StateHandler)</code>
 get the previous element
 
 **Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
 **Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
 <a name="StateHandler+changeTo"></a>
+
 ### stateHandler.changeTo(state) ⇒ <code>[StateHandler](#StateHandler)</code>
 change the state to specified state
 
@@ -1113,6 +1219,7 @@ change the state to specified state
 - state <code>number</code> - index of state in array
 
 <a name="StateHandler+changeToValue"></a>
+
 ### stateHandler.changeToValue(state) ⇒ <code>[StateHandler](#StateHandler)</code>
 change the state to specified value of specified property
 
@@ -1123,18 +1230,21 @@ change the state to specified value of specified property
 - state <code>number</code> - index of state in array
 
 <a name="StateHandler+hasNext"></a>
+
 ### stateHandler.hasNext() ⇒ <code>Boolean</code>
 checks if there is a next element
 
 **Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
 **Returns**: <code>Boolean</code> - wheter there is a next state or not  
 <a name="StateHandler+hasPrevious"></a>
+
 ### stateHandler.hasPrevious() ⇒ <code>Boolean</code>
 checks if there is a previous element
 
 **Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
 **Returns**: <code>Boolean</code> - wheter there is a previous state or not  
 <a name="Tile"></a>
+
 ## Tile
 **Kind**: global class  
 
@@ -1147,6 +1257,7 @@ checks if there is a previous element
     * [.equals(tile)](#Tile+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Tile_new"></a>
+
 ### new Tile(path, x, y, w, h)
 Constructor
 
@@ -1160,17 +1271,20 @@ Constructor
 - h <code>number</code> <code> = 0</code> - tile height
 
 <a name="Tile+Publisher"></a>
+
 ### tile.Publisher
 Return the Publisher
 
 **Kind**: instance property of <code>[Tile](#Tile)</code>  
 <a name="Tile+initialize"></a>
+
 ### tile.initialize() ⇒ <code>[Tile](#Tile)</code>
 initializes tile and starts loading image
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
 <a name="Tile+handleDraw"></a>
+
 ### tile.handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) ⇒ <code>[Tile](#Tile)</code>
 handles draw of a tile in each state
 
@@ -1186,6 +1300,7 @@ handles draw of a tile in each state
 - thumbScale <code>number</code> - thumbnail scale, relative to full image
 
 <a name="Tile+draw"></a>
+
 ### tile.draw(img, source, destination) ⇒ <code>[Tile](#Tile)</code>
 draws image data of tile on context
 
@@ -1198,6 +1313,7 @@ draws image data of tile on context
 - destination <code>[Rectangle](#Rectangle)</code> <code> = </code> - = null - specified destination sizes
 
 <a name="Tile+equals"></a>
+
 ### tile.equals(tile) ⇒ <code>Boolean</code>
 check if tiles are equal
 
@@ -1208,6 +1324,7 @@ check if tiles are equal
 - tile <code>[Tile](#Tile)</code> - the specified tile to check against this
 
 <a name="TileMap"></a>
+
 ## TileMap
 **Kind**: global class  
 
@@ -1232,6 +1349,7 @@ check if tiles are equal
         * [.MARKER_DATA_NAME](#TileMap.MARKER_DATA_NAME) : <code>String</code>
 
 <a name="new_TileMap_new"></a>
+
 ### new TileMap(container, tilesData, settings)
 Constructor
 
@@ -1243,94 +1361,110 @@ Constructor
 - settings <code>Object</code> <code> = {}</code> - json object representing settings of TileMap
 
 <a name="TileMap+left"></a>
+
 ### tileMap.left ⇒ <code>number</code>
 Returns left offset of container
 
 **Kind**: instance property of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>number</code> - - left offset of container  
 <a name="TileMap+top"></a>
+
 ### tileMap.top ⇒ <code>number</code>
 Returns top offset of container
 
 **Kind**: instance property of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>number</code> - - top offset of container  
 <a name="TileMap+width"></a>
+
 ### tileMap.width ⇒ <code>number</code>
 Returns width of container
 
 **Kind**: instance property of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>number</code> - - width of container  
 <a name="TileMap+height"></a>
+
 ### tileMap.height ⇒ <code>number</code>
 Returns height of container
 
 **Kind**: instance property of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>number</code> - - height of container  
 <a name="TileMap+initialize"></a>
+
 ### tileMap.initialize() ⇒ <code>[TileMap](#TileMap)</code>
 initializes the TileMap
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
 <a name="TileMap+initializeCanvas"></a>
+
 ### tileMap.initializeCanvas() ⇒ <code>[TileMap](#TileMap)</code>
 initializes the canvas, adds to DOM
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
 <a name="TileMap+disableSubpixelRendering"></a>
+
 ### tileMap.disableSubpixelRendering() ⇒ <code>[TileMap](#TileMap)</code>
 disables rendering of subpixel in canvas
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+getCurrentLevelData"></a>
+
 ### tileMap.getCurrentLevelData() ⇒ <code>Object</code>
 gets data of current zoom level
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>Object</code> - data for current level as json  
 <a name="TileMap+clearCanvas"></a>
+
 ### tileMap.clearCanvas() ⇒ <code>[TileMap](#TileMap)</code>
 clears canvas
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+redraw"></a>
+
 ### tileMap.redraw() ⇒ <code>[TileMap](#TileMap)</code>
 complete clear and draw of all visible tiles
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+resize"></a>
+
 ### tileMap.resize() ⇒ <code>[TileMap](#TileMap)</code>
 Handles resizing of TileMap
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+resizeCanvas"></a>
+
 ### tileMap.resizeCanvas() ⇒ <code>[TileMap](#TileMap)</code>
 resizes the canvas sizes
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+resizeView"></a>
+
 ### tileMap.resizeView() ⇒ <code>[TileMap](#TileMap)</code>
 Handles resizing of view
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap.IMG_DATA_NAME"></a>
+
 ### TileMap.IMG_DATA_NAME : <code>String</code>
 name of image data in data.json
 
 **Kind**: static property of <code>[TileMap](#TileMap)</code>  
 <a name="TileMap.MARKER_DATA_NAME"></a>
+
 ### TileMap.MARKER_DATA_NAME : <code>String</code>
 name of marker data in data.json
 
 **Kind**: static property of <code>[TileMap](#TileMap)</code>  
 <a name="View"></a>
+
 ## View
 **Kind**: global class  
 
@@ -1348,6 +1482,7 @@ name of marker data in data.json
     * [.initializeTiles()](#View+initializeTiles) ⇒ <code>[View](#View)</code>
 
 <a name="new_View_new"></a>
+
 ### new View(settings, viewport, mapView, bounds, center, data)
 Constructor
 
@@ -1362,29 +1497,34 @@ Constructor
 - data <code>Object</code> - = {} - data of current map
 
 <a name="View+equalizationFactor"></a>
+
 ### view.equalizationFactor ⇒ <code>number</code>
 Returns current equalizationFactor
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>number</code> - returns current equalizationFactor of latitude  
 <a name="View+viewportOffset"></a>
+
 ### view.viewportOffset
 Returns the current equalized viewport
 
 **Kind**: instance property of <code>[View](#View)</code>  
 <a name="View+visibleTiles"></a>
+
 ### view.visibleTiles ⇒ <code>array</code>
 get all visible tiles
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>array</code> - all tiles that are currently visible  
 <a name="View+loadThumb"></a>
+
 ### view.loadThumb() ⇒ <code>[View](#View)</code>
 loads thumbnail of view
 
 **Kind**: instance method of <code>[View](#View)</code>  
 **Returns**: <code>[View](#View)</code> - instance of View for chaining  
 <a name="View+convertPointToLatLng"></a>
+
 ### view.convertPointToLatLng(point) ⇒ <code>[LatLng](#LatLng)</code>
 converts a Point to LatLng in view
 
@@ -1395,6 +1535,7 @@ converts a Point to LatLng in view
 - point <code>[Point](#Point)</code> - specified point to be converted
 
 <a name="View+convertLatLngToPoint"></a>
+
 ### view.convertLatLngToPoint(latlng) ⇒ <code>[Point](#Point)</code>
 converts a LatLng to Point in view
 
@@ -1405,6 +1546,7 @@ converts a LatLng to Point in view
 - latlng <code>[LatLng](#LatLng)</code> - specified latlng to be converted
 
 <a name="View+moveView"></a>
+
 ### view.moveView(pos) ⇒ <code>[View](#View)</code>
 moves the view's current position by pos
 
@@ -1415,64 +1557,76 @@ moves the view's current position by pos
 - pos <code>[Point](#Point)</code> - specified additional offset
 
 <a name="View+bindEvents"></a>
+
 ### view.bindEvents() ⇒ <code>[View](#View)</code>
 Handles all events for class
 
 **Kind**: instance method of <code>[View](#View)</code>  
 **Returns**: <code>[View](#View)</code> - instance of View  
 <a name="View+draw"></a>
+
 ### view.draw() ⇒ <code>[View](#View)</code>
 Handles draw of visible elements
 
 **Kind**: instance method of <code>[View](#View)</code>  
 **Returns**: <code>[View](#View)</code> - instance of View  
 <a name="View+initializeTiles"></a>
+
 ### view.initializeTiles() ⇒ <code>[View](#View)</code>
 initializes tiles
 
 **Kind**: instance method of <code>[View](#View)</code>  
 **Returns**: <code>[View](#View)</code> - instance of View  
 <a name="instance"></a>
+
 ## instance : <code>[Publisher](#Publisher)</code>
 singleton instance
 
 **Kind**: global variable  
 <a name="STATES"></a>
+
 ## STATES : <code>Array</code>
 States of a marker
 
 **Kind**: global constant  
 <a name="EVENT_MARKER_LOADED"></a>
+
 ## EVENT_MARKER_LOADED : <code>String</code>
 Name of event fired, when marker is loaded
 
 **Kind**: global constant  
 <a name="PUBLISHER"></a>
+
 ## PUBLISHER
 Singleton instance of Publisher
 
 **Kind**: global constant  
 <a name="STATES"></a>
+
 ## STATES : <code>Array</code>
 States of a tile
 
 **Kind**: global constant  
 <a name="EVENT_TILE_LOADED"></a>
+
 ## EVENT_TILE_LOADED : <code>String</code>
 Name of event fired, when tile is loaded
 
 **Kind**: global constant  
 <a name="EVENT_TILE_INITIALIZED"></a>
+
 ## EVENT_TILE_INITIALIZED : <code>String</code>
 Name of event fired, when tile is initialized
 
 **Kind**: global constant  
 <a name="EVENT_TILE_FAILED"></a>
+
 ## EVENT_TILE_FAILED : <code>String</code>
 Name of event fired, when tile is not found on loading
 
 **Kind**: global constant  
 <a name="PUBLISHER"></a>
+
 ## PUBLISHER
 Singleton instance of Publisher
 

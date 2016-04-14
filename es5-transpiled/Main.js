@@ -184,8 +184,8 @@
                             console.log("tap", data);
                         }.bind(this),
                         pan: function(data) {
-                            var change = data.last.position.substract(data.position.move),
-                                absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height).multiply(-1, -1);
+                            var change = data.last.position.substract(data.position.move);
+                            var absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height).multiply(-1, -1);
                             this.tileMap.view.moveView(absolutePosition);
                             this.tileMap.redraw();
                         }.bind(this),

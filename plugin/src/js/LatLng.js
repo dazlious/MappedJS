@@ -25,7 +25,7 @@ export class LatLng {
      * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
      * @return {LatLng} new instance of LatLng
      */
-    constructor(lat = 0, lng = 0, isDistance = false) {
+    constructor(lat = 0, lng = 0) {
         this.lat = lat;
         this.lng = lng;
         return this;

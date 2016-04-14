@@ -63,7 +63,7 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS
      */
     initializeData(mapData, cb) {
-        let _this = this;
+        const _this = this;
         if (typeof mapData === "string") {
             Helper.requestJSON(mapData, function(data) {
                 _this.mapData = data;
@@ -102,8 +102,8 @@ export class MappedJS {
                     console.log("tap", data);
                 }.bind(this),
                 pan: function(data) {
-                    let change = data.last.position.substract(data.position.move),
-                        absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height).multiply(-1, -1);
+                    const change = data.last.position.substract(data.position.move);
+                    const absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height).multiply(-1, -1);
                     this.tileMap.view.moveView(absolutePosition);
                     this.tileMap.redraw();
                 }.bind(this),

@@ -155,9 +155,9 @@ export class TileMap {
      * @return {TileMap} instance of TileMap for chaining
      */
     resizeView() {
-        let oldViewport = this.view.viewport.clone;
+        const oldViewport = this.view.viewport.clone;
         this.view.viewport.size(this.left, this.top, this.width, this.height);
-        let difference = this.view.viewport.center.substract(oldViewport.center);
+        const difference = this.view.viewport.center.substract(oldViewport.center);
         this.view.mapView.translate(difference.x, difference.y);
         return this;
     }

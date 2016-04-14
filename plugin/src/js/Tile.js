@@ -96,12 +96,12 @@ export class Tile extends Rectangle {
      * @return {Tile} instance of Tile for chaining
      */
     handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) {
-        let distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
+        const distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
         if (this.state.current.value >= 2) {
             this.state.next();
             this.draw(this.img, distortedTile);
         } else if (this.state.current.value === 1 && thumb && thumbScale) {
-            let thumbTile = this.clone.scale(thumbScale);
+            const thumbTile = this.clone.scale(thumbScale);
             this.draw(thumb, thumbTile, distortedTile);
         } else if (this.state.current.value === 0) {
             this.initialize();

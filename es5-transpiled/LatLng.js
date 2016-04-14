@@ -79,7 +79,6 @@
         function LatLng() {
             var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
             var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-            var isDistance = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
             _classCallCheck(this, LatLng);
 

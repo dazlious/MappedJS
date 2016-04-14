@@ -204,8 +204,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        console.log("tap", data);
 	                    }.bind(this),
 	                    pan: function (data) {
-	                        var change = data.last.position.substract(data.position.move),
-	                            absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height).multiply(-1, -1);
+	                        var change = data.last.position.substract(data.position.move);
+	                        var absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height).multiply(-1, -1);
 	                        this.tileMap.view.moveView(absolutePosition);
 	                        this.tileMap.redraw();
 	                    }.bind(this),
@@ -588,7 +588,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function LatLng() {
 	    var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-	    var isDistance = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
 	    _classCallCheck(this, LatLng);
 
@@ -1453,7 +1452,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'visibleTiles',
 	        get: function get() {
-	            return this.tiles.filter(function (t, i, a) {
+	            return this.tiles.filter(function (t) {
 	                var newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapView.x * this.equalizationFactor + this.viewportOffset, this.mapView.y);
 	                return this.viewport.intersects(newTile);
 	            }, this);
@@ -1629,7 +1628,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function draw() {
 	            var currentlyVisibleTiles = this.visibleTiles;
 	            for (var i in currentlyVisibleTiles) {
-	                this.drawHandler(currentlyVisibleTiles[i]);
+	                if (currentlyVisibleTiles[i]) {
+	                    this.drawHandler(currentlyVisibleTiles[i]);
+	                }
 	            }
 	            this.drawMarkers();
 	            return this;
@@ -1638,8 +1639,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'drawMarkers',
 	        value: function drawMarkers() {
 	            for (var i in this.markers) {
-	                var m = this.markers[i];
-	                m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
+	                if (this.markers[i]) {
+	                    var m = this.markers[i];
+	                    m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
+	                }
 	            }
 	            return this;
 	        }
@@ -1654,10 +1657,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function initializeTiles() {
 	            var currentLevel = this.data.tiles;
 	            for (var tile in currentLevel) {
-	                var currentTileData = currentLevel[tile];
-	                currentTileData["context"] = this.context;
-	                var currentTile = new _Tile.Tile(currentTileData);
-	                this.tiles.push(currentTile);
+	                if (currentLevel[tile]) {
+	                    var currentTileData = currentLevel[tile];
+	                    currentTileData["context"] = this.context;
+	                    var currentTile = new _Tile.Tile(currentTileData);
+	                    this.tiles.push(currentTile);
+	                }
 	            }
 	            return this;
 	        }
@@ -1666,11 +1671,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function initializeMarkers(markerData) {
 	            if (markerData) {
 	                for (var i in markerData) {
-	                    var currentData = markerData[i],
-	                        offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
-	                        markerPixelPos = this.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
-	                        m = new _Marker.Marker(markerPixelPos, currentData.img, offset);
-	                    this.markers.push(m);
+	                    if (markerData[i]) {
+	                        var currentData = markerData[i],
+	                            offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
+	                            markerPixelPos = this.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
+	                            m = new _Marker.Marker(markerPixelPos, currentData.img, offset);
+	                        this.markers.push(m);
+	                    }
 	                }
 	            }
 	            return this;
@@ -2213,7 +2220,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            type: "GET",
 	            url: filename,
 	            dataType: "json",
-	            success: function success(data, status, request) {
+	            success: function success(data) {
 	                return callback(data);
 	            },
 	            error: function error(response) {
@@ -2272,6 +2279,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(4);
 
+	var _Helper = __webpack_require__(11);
+
 	var _jquery = __webpack_require__(1);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
@@ -2306,17 +2315,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.position = position;
 	        this.offset = offset;
+	        this.path = imgPath;
 
 	        this.stateHandler = new _StateHandler.StateHandler(STATES);
 
-	        this.img = new Image();
-	        this.img.src = imgPath;
-	        this.img.onload = this.onImageLoad.bind(this);
+	        _Helper.Helper.loadImage(this.path, function (img) {
+	            this.onImageLoad(img);
+	        }.bind(this));
 	    }
 
 	    _createClass(Marker, [{
 	        key: 'onImageLoad',
-	        value: function onImageLoad() {
+	        value: function onImageLoad(img) {
+	            this.img = img;
 	            this.offset.add(new _Point.Point(-(this.img.width / 2), -this.img.height));
 	            this.icon = new _Rectangle.Rectangle(this.position.x, this.position.y, this.img.width, this.img.height);
 	            this.stateHandler.next();
@@ -2730,10 +2741,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (Object.keys(this.data.pointerArray).length <= 1) {
 	                    return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
 	                } else {
-	                    var pointerPos = [];
-	                    for (var pointer in this.data.pointerArray) {
-	                        pointerPos.push(this.data.pointerArray[pointer]);
-	                    }
+	                    var pointerPos = this.getPointerArray();
 	                    return _jquery2.default.extend(true, data, this.handleMultitouchStart(pointerPos));
 	                }
 	            } // touch is used
@@ -2748,10 +2756,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	        }
 	    }, {
+	        key: 'getPointerArray',
+	        value: function getPointerArray() {
+	            var pointerPos = [];
+	            for (var pointer in this.data.pointerArray) {
+	                if (this.data.pointerArray[pointer]) {
+	                    pointerPos.push(this.data.pointerArray[pointer]);
+	                }
+	            }
+	            return pointerPos;
+	        }
+	    }, {
 	        key: 'handleMultitouchStart',
 	        value: function handleMultitouchStart(positionsArray) {
-	            var pos1 = this.getRelativePosition(positionsArray[0]),
-	                pos2 = this.getRelativePosition(positionsArray[1]);
+	            var pos1 = this.getRelativePosition(positionsArray[0]);
+	            var pos2 = this.getRelativePosition(positionsArray[1]);
 	            return {
 	                multitouch: true,
 	                distance: pos1.distance(pos2),
@@ -2834,10 +2853,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (Object.keys(this.data.pointerArray).length <= 1) {
 	                    return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
 	                } else {
-	                    var pointerPos = [];
-	                    for (var pointer in this.data.pointerArray) {
-	                        pointerPos.push(this.data.pointerArray[pointer]);
-	                    }
+	                    var pointerPos = this.getPointerArray();
 	                    return _jquery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
 	                }
 	            } // touch is used
@@ -2853,8 +2869,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handleMultitouchMove',
 	        value: function handleMultitouchMove(positionsArray) {
-	            var pointerPos1 = this.getRelativePosition(positionsArray[0]),
-	                pointerPos2 = this.getRelativePosition(positionsArray[1]);
+	            var pointerPos1 = this.getRelativePosition(positionsArray[0]);
+	            var pointerPos2 = this.getRelativePosition(positionsArray[1]);
 	            return {
 	                position: {
 	                    move: pointerPos1.substract(pointerPos2).divide(2, 2)
@@ -2899,9 +2915,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.data.time.last = this.data.time.last ? this.data.time.last : this.data.time.start;
 
 	            // if positions have not changed
-	            if (this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start))) {
-	                return false;
-	            } else if (!this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position)) {
+	            if (this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position)) {
 	                return false;
 	            }
 
@@ -2997,8 +3011,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            speed = this.calculateSpeed(distance, this.time);
 
 	                        if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
-	                            var originalStart = this.getAbsolutePosition(this.data.position.start),
-	                                originalEnd = this.getAbsolutePosition(this.data.position.end);
+	                            var originalStart = this.getAbsolutePosition(this.data.position.start);
+	                            var originalEnd = this.getAbsolutePosition(this.data.position.end);
 	                            if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
 	                                var directions = this.getSwipeDirections(directionNormalized);
 	                                this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
@@ -3006,13 +3020,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        }
 
 	                        if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
+	                            this.dataClone.speed = speed;
 	                            this.eventCallback(this.settings.callbacks.flick, this.dataClone);
 	                        }
 	                    }
 
-	                    switch (this.data.last.action) {
-	                        default:
-	                            this.data.last.action = null;
+	                    if (this.data.last.action) {
+	                        this.data.last.action = null;
 	                    }
 	                }
 
@@ -3146,8 +3160,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'getScrollDirection',
 	        value: function getScrollDirection(event) {
-	            var axis = parseInt(event.axis, 10),
-	                direction = [];
+	            var axis = parseInt(event.axis, 10);
+	            var direction = [];
 
 	            // down
 	            if (event.deltaY > 0 || !event.deltaY && event.wheelDeltaY < 0 || axis === 2 && event.detail > 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) < 0) {

@@ -121,7 +121,7 @@ export class Rectangle extends Point {
      * @return {Rectangle} instance of Rectangle
      */
     setCenter(point) {
-        let difference = point.substract(this.center);
+        const difference = point.substract(this.center);
         this.translate(difference.x, difference.y);
         return this;
     }
@@ -132,7 +132,7 @@ export class Rectangle extends Point {
      * @return {Rectangle} instance of Rectangle
      */
     setCenterX(x) {
-        let difference = x - this.center.x;
+        const difference = x - this.center.x;
         this.translate(difference, 0);
         return this;
     }
@@ -143,7 +143,7 @@ export class Rectangle extends Point {
      * @return {Rectangle} instance of Rectangle
      */
     setCenterY(y) {
-        let difference = y - this.center.y;
+        const difference = y - this.center.y;
         this.translate(0, difference);
         return this;
     }

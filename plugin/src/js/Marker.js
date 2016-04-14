@@ -2,6 +2,7 @@ import {Rectangle} from './Rectangle.js';
 import {LatLng} from './LatLng.js';
 import {StateHandler} from './StateHandler.js';
 import {Point} from './Point.js';
+import {Helper} from './Helper.js';
 import $ from 'jquery';
 
 /**
@@ -28,15 +29,17 @@ export class Marker {
 
         this.position = position;
         this.offset = offset;
+        this.path = imgPath;
 
         this.stateHandler = new StateHandler(STATES);
 
-        this.img = new Image();
-        this.img.src = imgPath;
-        this.img.onload = this.onImageLoad.bind(this);
+        Helper.loadImage(this.path, function(img) {
+            this.onImageLoad(img);
+        }.bind(this));
     }
 
-    onImageLoad() {
+    onImageLoad(img) {
+        this.img = img;
         this.offset.add(new Point(-(this.img.width/2), -this.img.height));
         this.icon = new Rectangle(this.position.x, this.position.y, this.img.width, this.img.height);
         this.stateHandler.next();
@@ -44,7 +47,7 @@ export class Marker {
 
     draw(x, y, scaleX, offsetX, context) {
         if (this.stateHandler.current.value === 1) {
-            let p = new Point((this.icon.x + x) * scaleX + offsetX, this.icon.y + y);
+            const p = new Point((this.icon.x + x) * scaleX + offsetX, this.icon.y + y);
             p.add(this.offset);
             context.drawImage(this.img, p.x, p.y, this.icon.width, this.icon.height);
 

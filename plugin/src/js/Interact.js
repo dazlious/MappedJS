@@ -191,7 +191,7 @@ export class Interact {
         if (typeof viewport !== "string") {
             viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
         }
-        let metaViewInHead = $("meta[name=viewport]").length,
+        const metaViewInHead = $("meta[name=viewport]").length,
             $viewportMeta = (metaViewInHead !== 0) ? $("meta[name=viewport]") : $("head").append($("<meta name='viewport' />"));
         $viewportMeta.attr("content", viewport);
         return this;
@@ -294,7 +294,7 @@ export class Interact {
     scrollHandler(event) {
         event = event || window.event;
 
-        let e = this.preHandle(event) || event.originalEvent,
+        const e = this.preHandle(event) || event.originalEvent,
             directions = this.getScrollDirection(e),
             position = this.getRelativePosition(e);
 
@@ -317,7 +317,7 @@ export class Interact {
     }
 
     calculateStart(e) {
-        let data = {
+        const data = {
             multitouch: false,
             distance: 0,
             down: true,
@@ -337,10 +337,7 @@ export class Interact {
             if (Object.keys(this.data.pointerArray).length <= 1) {
                 return $.extend(true, data, this.handleSingletouchStart(e));
             } else {
-                let pointerPos = [];
-                for (let pointer in this.data.pointerArray) {
-                    pointerPos.push(this.data.pointerArray[pointer]);
-                }
+                const pointerPos = this.getPointerArray();
                 return $.extend(true, data, this.handleMultitouchStart(pointerPos));
             }
         } // touch is used
@@ -355,9 +352,19 @@ export class Interact {
         }
     }
 
+    getPointerArray() {
+        const pointerPos = [];
+        for (const pointer in this.data.pointerArray) {
+            if (this.data.pointerArray[pointer]) {
+                pointerPos.push(this.data.pointerArray[pointer]);
+            }
+        }
+        return pointerPos;
+    }
+
     handleMultitouchStart(positionsArray) {
-        let pos1 = this.getRelativePosition(positionsArray[0]),
-            pos2 = this.getRelativePosition(positionsArray[1]);
+        const pos1 = this.getRelativePosition(positionsArray[0]);
+        const pos2 = this.getRelativePosition(positionsArray[1]);
         return {
             multitouch: true,
             distance: pos1.distance(pos2),
@@ -386,7 +393,7 @@ export class Interact {
             return false;
         }
 
-        let e = this.preHandle(event);
+        const e = this.preHandle(event);
 
         this.data.time.start = event.timeStamp;
 
@@ -418,7 +425,7 @@ export class Interact {
 
 
     calculateMove(e) {
-        let data = {
+        const data = {
             moved: true,
             last: {
                 action: "moved"
@@ -436,10 +443,7 @@ export class Interact {
             if (Object.keys(this.data.pointerArray).length <= 1) {
                 return $.extend(true, data, this.handleSingletouchMove(e));
             } else {
-                let pointerPos = [];
-                for (let pointer in this.data.pointerArray) {
-                    pointerPos.push(this.data.pointerArray[pointer]);
-                }
+                const pointerPos = this.getPointerArray();
                 return $.extend(true, data, this.handleMultitouchMove(pointerPos));
             }
         } // touch is used
@@ -454,8 +458,8 @@ export class Interact {
     }
 
     handleMultitouchMove(positionsArray) {
-        let pointerPos1 = this.getRelativePosition(positionsArray[0]),
-            pointerPos2 = this.getRelativePosition(positionsArray[1]);
+        const pointerPos1 = this.getRelativePosition(positionsArray[0]);
+        const pointerPos2 = this.getRelativePosition(positionsArray[1]);
         return {
             position: {
                 move: pointerPos1.substract(pointerPos2).divide(2, 2)
@@ -466,7 +470,7 @@ export class Interact {
     }
 
     handleSingletouchMove(position) {
-        let pos = this.getRelativePosition(position);
+        const pos = this.getRelativePosition(position);
         return {
             position: {
                 move: pos
@@ -488,7 +492,7 @@ export class Interact {
             return false;
         }
 
-        let e = this.preHandle(event);
+        const e = this.preHandle(event);
 
         this.data.time.last = event.timeStamp;
 
@@ -496,9 +500,7 @@ export class Interact {
         this.data.time.last = (this.data.time.last) ? this.data.time.last : this.data.time.start;
 
         // if positions have not changed
-        if (this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start))) {
-            return false;
-        } else if (!this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position)) {
+        if (this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || (!this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position))) {
             return false;
         }
 
@@ -535,7 +537,7 @@ export class Interact {
      */
     endHandler(event) {
 
-        let e = this.preHandle(event);
+        const e = this.preHandle(event);
 
         this.data.time.end = event.timeStamp;
 
@@ -583,29 +585,30 @@ export class Interact {
 
             if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
 
-                let direction = (this.settings.callbacks.swipe) ? this.data.position.end.substract(this.data.position.start) : this.data.position.end.substract(this.data.last.position);
+                const direction = (this.settings.callbacks.swipe) ? this.data.position.end.substract(this.data.position.start) : this.data.position.end.substract(this.data.last.position);
 
-                let vLDirection = direction.length,
-                    directionNormalized = direction.divide(vLDirection, vLDirection),
-                    distance = this.data.position.end.distance(this.data.position.start),
-                    speed = this.calculateSpeed(distance, this.time);
+                const vLDirection = direction.length,
+                      directionNormalized = direction.divide(vLDirection, vLDirection),
+                      distance = this.data.position.end.distance(this.data.position.start),
+                      speed = this.calculateSpeed(distance, this.time);
 
                 if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
-                    let originalStart = this.getAbsolutePosition(this.data.position.start),
-                        originalEnd = this.getAbsolutePosition(this.data.position.end);
+                    const originalStart = this.getAbsolutePosition(this.data.position.start);
+                    const originalEnd = this.getAbsolutePosition(this.data.position.end);
                     if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
-                        let directions = this.getSwipeDirections(directionNormalized);
+                        const directions = this.getSwipeDirections(directionNormalized);
                         this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
                     }
                 }
 
                 if (this.settings.callbacks.flick && (this.timeToLastMove <= this.settings.timeTreshold.flick)) {
+                    this.dataClone.speed = speed;
                     this.eventCallback(this.settings.callbacks.flick, this.dataClone);
                 }
             }
 
-            switch (this.data.last.action) {
-                default: this.data.last.action = null;
+            if (this.data.last.action) {
+                this.data.last.action = null;
             }
         }
 
@@ -696,7 +699,7 @@ export class Interact {
      * @return {Point} calculated relative position
      */
     getRelativePosition(e) {
-        let clientBounds = this.container.getBoundingClientRect(),
+        const clientBounds = this.container.getBoundingClientRect(),
             pos = new Point(e.clientX, e.clientY),
             bounds = new Point(clientBounds.left, clientBounds.top);
         return pos.substract(bounds).divide(clientBounds.width, clientBounds.height);
@@ -708,7 +711,7 @@ export class Interact {
      * @return {Point} calculated absolute position
      */
     getAbsolutePosition(point) {
-        let clientBounds = this.container.getBoundingClientRect();
+        const clientBounds = this.container.getBoundingClientRect();
         return point.mult(clientBounds.width, clientBounds.height);
     }
 
@@ -718,8 +721,8 @@ export class Interact {
      * @return {string[]} an array with scroll directions
      */
     getScrollDirection(event) {
-        let axis = parseInt(event.axis, 10),
-            direction = [];
+        const axis = parseInt(event.axis, 10);
+        const direction = [];
 
         // down
         if (event.deltaY > 0 || (!event.deltaY && event.wheelDeltaY < 0) || ((axis === 2) && (event.detail > 0)) || (Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail))) < 0)) {
