@@ -101,6 +101,21 @@
             get: function get() {
                 return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
             }
+        }, {
+            key: 'timeToLastMove',
+            get: function get() {
+                return this.data.time.end - this.data.time.last;
+            }
+        }, {
+            key: 'time',
+            get: function get() {
+                return this.data.time.end - this.data.time.start;
+            }
+        }, {
+            key: 'dataClone',
+            get: function get() {
+                return (0, _jquery2.default)(this.data)[0];
+            }
 
             /**
              * Constructor
@@ -204,20 +219,34 @@
 
             _jquery2.default.extend(true, this.settings, settings || {});
 
-            this.isDown = false;
-            this.hasMoved = false;
-            this.multitouch = false;
-            this.lastAction = null;
-            this.start = null;
-            this.move = null;
-            this.end = null;
-            this.time = null;
-            this.timeStart = null;
-            this.timeEnd = null;
-            this.timeout = null;
-            this.holdTimeout = null;
-            this.wasPinched = false;
-            this.pointerIDs = {};
+            this.data = {
+                down: false,
+                moved: false,
+                pinched: false,
+                pointerArray: {},
+                multitouch: false,
+                distance: null,
+                difference: null,
+                last: {
+                    position: null,
+                    distance: null,
+                    action: null
+                },
+                position: {
+                    start: null,
+                    move: null,
+                    end: null
+                },
+                time: {
+                    start: null,
+                    last: null,
+                    end: null
+                },
+                timeout: {
+                    hold: null,
+                    default: null
+                }
+            };
 
             if (this.settings.overwriteViewportSettings) {
                 this.handleViewport(this.settings.overwriteViewportSettings);
@@ -254,8 +283,8 @@
         }, {
             key: 'init',
             value: function init(container) {
-                this.$container = typeof container === "string" ? (0, _jquery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jquery2.default)(container);
-                if (!(this.$container instanceof jQuery)) {
+                this.$container = typeof container === "string" ? (0, _jquery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof _jquery2.default ? container : (0, _jquery2.default)(container);
+                if (!(this.$container instanceof _jquery2.default)) {
                     throw new Error("Container " + container + " not found");
                 }
                 this.$container.css({
@@ -327,6 +356,20 @@
                 this.$container.on(this.settings.events.scroll, this.scrollHandler.bind(this)).on(this.settings.events.start.mouse, this.startHandler.bind(this)).on(this.settings.events.move.mouse, this.moveHandler.bind(this)).on(this.settings.events.end.mouse, this.endHandler.bind(this)).on(this.settings.events.leave.mouse, this.endHandler.bind(this));
                 return this;
             }
+        }, {
+            key: 'preHandle',
+            value: function preHandle(event) {
+                if (this.settings.stopPropagation) {
+                    event.stopPropagation();
+                }
+                if (this.settings.preventDefault) {
+                    event.preventDefault();
+                }
+
+                this.target = event.target;
+
+                return this.getEvent(event);
+            }
 
             /**
              * handles cross-browser and -device scroll
@@ -339,20 +382,12 @@
             value: function scrollHandler(event) {
                 event = event || window.event;
 
-                if (this.settings.stopPropagation) {
-                    event.stopPropagation();
-                }
-                if (this.settings.preventDefault) {
-                    event.preventDefault();
-                }
-
-                var e = this.getEvent(event) || event.originalEvent,
+                var e = this.preHandle(event) || event.originalEvent,
                     directions = this.getScrollDirection(e),
                     position = this.getRelativePosition(e);
 
                 if (this.settings.callbacks.wheel) {
                     this.eventCallback(this.settings.callbacks.wheel, {
-                        target: event.target,
                         directions: directions,
                         position: position
                     });
@@ -360,7 +395,6 @@
 
                 if (this.settings.callbacks.zoom && (directions.indexOf("up") > -1 || directions.indexOf("down") > -1)) {
                     this.eventCallback(this.settings.callbacks.zoom, {
-                        target: event.target,
                         direction: directions.indexOf("up") > -1 ? "in" : directions.indexOf("down") > -1 ? "out" : "none",
                         position: position,
                         factor: directions.indexOf("up") > -1 ? 1 : directions.indexOf("down") > -1 ? -1 : 0
@@ -368,6 +402,68 @@
                 }
 
                 return false;
+            }
+        }, {
+            key: 'calculateStart',
+            value: function calculateStart(e) {
+                var data = {
+                    multitouch: false,
+                    distance: 0,
+                    down: true,
+                    position: {
+                        start: new _Point.Point()
+                    }
+                };
+
+                // mouse is used
+                if (e instanceof MouseEvent) {
+                    return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
+                }
+
+                // if is pointerEvent
+                if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
+                    this.data.pointerArray[e.pointerId] = e;
+                    if (Object.keys(this.data.pointerArray).length <= 1) {
+                        return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
+                    } else {
+                        var pointerPos = [];
+                        for (var pointer in this.data.pointerArray) {
+                            pointerPos.push(this.data.pointerArray[pointer]);
+                        }
+                        return _jquery2.default.extend(true, data, this.handleMultitouchStart(pointerPos));
+                    }
+                } // touch is used
+                else {
+                    // singletouch startet
+                    if (e.length === 1) {
+                        return _jquery2.default.extend(true, data, this.handleSingletouchStart(e[0]));
+                    } // multitouch started
+                    else if (e.length === 2) {
+                        return _jquery2.default.extend(true, data, this.handleMultitouchStart(e));
+                    }
+                }
+            }
+        }, {
+            key: 'handleMultitouchStart',
+            value: function handleMultitouchStart(positionsArray) {
+                var pos1 = this.getRelativePosition(positionsArray[0]),
+                    pos2 = this.getRelativePosition(positionsArray[1]);
+                return {
+                    multitouch: true,
+                    distance: pos1.distance(pos2),
+                    position: {
+                        start: pos1.add(pos2).divide(2, 2)
+                    }
+                };
+            }
+        }, {
+            key: 'handleSingletouchStart',
+            value: function handleSingletouchStart(position) {
+                return {
+                    position: {
+                        start: this.getRelativePosition(position)
+                    }
+                };
             }
 
             /**
@@ -380,85 +476,31 @@
             key: 'startHandler',
             value: function startHandler(event) {
 
-                if (this.settings.stopPropagation) {
-                    event.stopPropagation();
-                }
-                if (this.settings.preventDefault) {
-                    event.preventDefault();
-                }
-
                 if (event.button && event.button !== 0) {
                     return false;
                 }
 
-                var e = this.getEvent(event);
+                var e = this.preHandle(event);
 
-                this.target = event.target;
-                this.isDown = true;
-                this.timeStart = event.timeStamp;
+                this.data.time.start = event.timeStamp;
 
-                if (this.timeout) {
-                    this.timeout = clearTimeout(this.timeout);
+                if (this.data.timeout.default) {
+                    this.data.timeout.default = clearTimeout(this.data.timeout.default);
                 }
 
-                // mouse is used
-                if (e instanceof MouseEvent) {
-                    this.start = this.getRelativePosition(e);
-                } // if is pointerEvent
-                if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
-                    this.pointerIDs[e.pointerId] = e;
-                    if (Object.keys(this.pointerIDs).length <= 1) {
-                        this.start = this.getRelativePosition(e);
-                        this.multitouch = false;
-                    } else {
-                        this.multitouch = true;
-                        var pointerPos = [];
-                        for (var pointer in this.pointerIDs) {
-                            if (this.pointerIDs.hasOwnProperty(pointer)) {
-                                pointerPos.push(this.pointerIDs[pointer]);
-                            }
-                        }
-                        var pointerPos1 = this.getRelativePosition(pointerPos[0]),
-                            pointerPos2 = this.getRelativePosition(pointerPos[1]);
+                this.data = _jquery2.default.extend(true, this.data, this.calculateStart(e));
 
-                        this.current.distance = pointerPos1.distance(pointerPos2);
-                        this.start = pointerPos1.add(pointerPos2).divide(2, 2);
-                    }
-                } // touch is used
-                else {
-                    // singletouch startet
-                    if (e.length <= 1) {
-                        this.start = this.getRelativePosition(e[0]);
-                    } // multitouch started
-                    else if (e.length === 2) {
-                        this.multitouch = true;
-                        var pos1 = this.getRelativePosition(e[0]),
-                            pos2 = this.getRelativePosition(e[1]);
-                        this.current.distance = pos1.distance(pos2);
-                        this.start = pos1.add(pos2).divide(2, 2);
-                    }
-                }
-                switch (this.lastAction) {
+                switch (this.data.last.action) {
                     case null:
-                        this.lastAction = "tap";
+                        this.data.last.action = "tap";
                         if (this.settings.autoFireHold) {
-                            this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, {
-                                target: this.target,
-                                positions: {
-                                    start: this.start
-                                }
-                            }, true);
+                            this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, this.dataClone, true);
                         }
                         break;
                     case "tap":
-                        this.lastAction = "doubletap";
+                        this.data.last.action = "doubletap";
                         if (this.settings.autoFireHold) {
-                            this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, {
-                                target: this.target,
-                                positions: {
-                                    start: this.start
-                                }
-                            }, true);
+                            this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, this.dataClone, true);
                         }
                         break;
                     default:
@@ -466,6 +508,68 @@
                 }
 
                 return false;
+            }
+        }, {
+            key: 'calculateMove',
+            value: function calculateMove(e) {
+                var data = {
+                    moved: true,
+                    last: {
+                        action: "moved"
+                    },
+                    position: {
+                        move: new _Point.Point()
+                    }
+                };
+
+                if (e instanceof MouseEvent) {
+                    return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
+                } // if is pointerEvent
+                if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
+                    this.data.pointerArray[e.pointerId] = e;
+                    if (Object.keys(this.data.pointerArray).length <= 1) {
+                        return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
+                    } else {
+                        var pointerPos = [];
+                        for (var pointer in this.data.pointerArray) {
+                            pointerPos.push(this.data.pointerArray[pointer]);
+                        }
+                        return _jquery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
+                    }
+                } // touch is used
+                else {
+                    // singletouch startet
+                    if (e.length === 1) {
+                        return _jquery2.default.extend(true, data, this.handleSingletouchMove(e[0]));
+                    } else if (e.length === 2) {
+                        return _jquery2.default.extend(true, data, this.handleMultitouchMove(e));
+                    }
+                }
+            }
+        }, {
+            key: 'handleMultitouchMove',
+            value: function handleMultitouchMove(positionsArray) {
+                var pointerPos1 = this.getRelativePosition(positionsArray[0]),
+                    pointerPos2 = this.getRelativePosition(positionsArray[1]);
+                return {
+                    position: {
+                        move: pointerPos1.substract(pointerPos2).divide(2, 2)
+                    },
+                    distance: pointerPos1.distance(pointerPos2),
+                    multitouch: true
+                };
+            }
+        }, {
+            key: 'handleSingletouchMove',
+            value: function handleSingletouchMove(position) {
+                var pos = this.getRelativePosition(position);
+                return {
+                    position: {
+                        move: pos
+                    },
+                    distance: this.data.last.position.distance(pos),
+                    multitouch: false
+                };
             }
 
             /**
@@ -477,135 +581,47 @@
         }, {
             key: 'moveHandler',
             value: function moveHandler(event) {
-
-                if (this.settings.stopPropagation) {
-                    event.stopPropagation();
-                }
-                if (this.settings.preventDefault) {
-                    event.preventDefault();
-                }
-
+                // TODO: implement move-callback
                 // if touchstart event was not fired
-                if (!this.isDown || this.wasPinched) {
+                if (!this.data.down || this.data.pinched) {
                     return false;
                 }
 
-                var e = this.getEvent(event),
-                    currentPos = void 0,
-                    currentDist = void 0,
-                    lastPos = this.move ? this.move : this.start,
-                    lastTime = this.time ? this.time : this.timeStart,
-                    currentTime = event.timeStamp;
+                var e = this.preHandle(event);
 
-                if (this.isIE && (this.getRelativePosition(e).equals(lastPos) || this.getRelativePosition(e).equals(this.start))) {
+                this.data.time.last = event.timeStamp;
+
+                this.data.last.position = this.data.position.move ? this.data.position.move : this.data.position.start;
+                this.data.time.last = this.data.time.last ? this.data.time.last : this.data.time.start;
+
+                // if positions have not changed
+                if (this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start))) {
                     return false;
-                } else if (!this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(lastPos)) {
+                } else if (!this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position)) {
                     return false;
                 }
 
-                if (this.timeout) {
-                    this.timeout = clearTimeout(this.timeout);
+                if (this.data.timeout.default) {
+                    this.data.timeout.default = clearTimeout(this.data.timeout.default);
                 }
-                if (this.holdTimeout) {
-                    this.holdTimeout = clearTimeout(this.holdTimeout);
-                }
-
-                this.hasMoved = true;
-                this.lastAction = "move";
-
-                this.time = event.timeStamp;
-
-                if (e instanceof MouseEvent) {
-                    currentPos = this.getRelativePosition(e);
-                    currentDist = lastPos.distance(currentPos);
-                } // if is pointerEvent
-                if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
-                    this.pointerIDs[e.pointerId] = e;
-                    if (Object.keys(this.pointerIDs).length <= 1) {
-                        currentPos = this.getRelativePosition(e);
-                        currentDist = lastPos.distance(currentPos);
-                        this.multitouch = false;
-                    } else {
-                        this.multitouch = true;
-                        var pointerPos = [];
-                        for (var pointer in this.pointerIDs) {
-                            if (this.pointerIDs.hasOwnProperty(pointer)) {
-                                pointerPos.push(this.pointerIDs[pointer]);
-                            }
-                        }
-                        var pointerPos1 = this.getRelativePosition(pointerPos[0]),
-                            pointerPos2 = this.getRelativePosition(pointerPos[1]);
-
-                        currentDist = pointerPos1.distance(pointerPos2);
-                        currentPos = pointerPos1.substract(pointerPos2).divide(2, 2);
-                    }
-                } // touch is used
-                else {
-                    // singletouch startet
-                    if (e.length <= 1) {
-                        currentPos = this.getRelativePosition(e[0]);
-                        currentDist = lastPos.distance(currentPos);
-                    } else if (e.length === 2) {
-                        var pos1 = this.getRelativePosition(e[0]),
-                            pos2 = this.getRelativePosition(e[1]);
-                        currentDist = pos1.distance(pos2);
-                        currentPos = pos1.substract(pos2).divide(2, 2);
-                    }
+                if (this.data.timeout.hold) {
+                    this.data.timeout.hold = clearTimeout(this.data.timeout.hold);
                 }
 
-                var timeDiff = currentTime - lastTime;
+                this.data = _jquery2.default.extend(true, this.data, this.calculateMove(e));
 
-                if (this.multitouch) {
-                    this.current.difference = currentDist - this.current.distance;
-                    this.current.distance = currentDist;
-                    this.oldMove = this.move;
-                    this.move = currentPos;
-                    if (this.settings.callbacks.pinch && this.current.difference !== 0) {
-                        this.eventCallback(this.settings.callbacks.pinch, {
-                            target: event.target,
-                            positions: {
-                                start: this.start,
-                                current: this.move,
-                                last: this.oldMove
-                            },
-                            distance: {
-                                current: currentDist,
-                                differenceToLast: this.current.difference
-                            }
-                        });
+                if (this.data.multitouch) {
+                    this.data.difference = this.data.distance - this.data.last.distance || 0;
+                    this.data.last.position = this.data.position.move;
+                    if (this.settings.callbacks.pinch && this.data.difference !== 0) {
+                        this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
                     }
-                    if (this.settings.callbacks.zoom && this.current.difference !== 0) {
-                        this.eventCallback(this.settings.callbacks.zoom, {
-                            target: event.target,
-                            positions: {
-                                start: this.start,
-                                current: this.move,
-                                last: this.oldMove
-                            },
-                            direction: this.current.difference < 0 ? "out" : this.current.difference > 0 ? "in" : "none",
-                            factor: this.current.difference
-                        });
+                    if (this.settings.callbacks.zoom && this.data.difference !== 0) {
+                        this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
                     }
                 } else {
-                    this.speed = this.calculateSpeed(currentDist, timeDiff);
-
-                    this.oldMove = this.move;
-                    this.move = currentPos;
-
-                    this.eventCallback(this.settings.callbacks.pan, {
-                        target: this.target,
-                        positions: {
-                            start: this.start,
-                            current: this.move,
-                            last: lastPos
-                        },
-                        timeElapsed: {
-                            sinceLast: timeDiff,
-                            sinceStart: currentTime - this.timeStart
-                        },
-                        distanceToLastPoint: currentDist,
-                        speed: this.speed
-                    });
+                    this.speed = this.calculateSpeed(this.data.distance, this.timeToLastMove);
+                    this.eventCallback(this.settings.callbacks.pan, this.dataClone);
                 }
 
                 return false;
@@ -621,155 +637,106 @@
             key: 'endHandler',
             value: function endHandler(event) {
 
-                if (this.settings.stopPropagation) {
-                    event.stopPropagation();
-                }
-                if (this.settings.preventDefault) {
-                    event.preventDefault();
-                }
+                var e = this.preHandle(event);
 
-                var e = this.getEvent(event);
+                this.data.time.end = event.timeStamp;
 
-                this.timeEnd = event.timeStamp;
-
-                var timeDiff = this.timeEnd - this.timeStart,
-                    timeDiffToLastMove = this.timeEnd - this.time;
-
-                if (this.holdTimeout) {
-                    this.holdTimeout = clearTimeout(this.holdTimeout);
+                if (this.data.timeout.hold) {
+                    this.data.timeout.hold = clearTimeout(this.data.timeout.hold);
                 }
 
                 if (e instanceof MouseEvent) {
-                    this.end = this.getRelativePosition(e);
+                    this.data.position.end = this.getRelativePosition(e);
                 } // if is pointerEvent
                 if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
-                    this.end = this.getRelativePosition(e);
-                    delete this.pointerIDs[e.pointerId];
+                    this.data.position.end = this.getRelativePosition(e);
+                    delete this.data.pointerArray[e.pointerId];
                 } // touch is used
                 else {
                     // singletouch ended
                     if (e.length <= 1) {
-                        this.end = this.getRelativePosition(e[0]);
+                        this.data.position.end = this.getRelativePosition(e[0]);
                     }
                 }
 
                 // called only when not moved
-                if (!this.hasMoved && this.isDown && !this.multitouch) {
-                    switch (this.lastAction) {
+                if (!this.data.moved && this.data.down && !this.data.multitouch) {
+                    switch (this.data.last.action) {
                         case "tap":
-                            if (timeDiff < this.settings.timeTreshold.hold) {
-                                this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, {
-                                    target: this.target,
-                                    positions: {
-                                        start: this.start
-                                    }
-                                });
+                            if (this.time < this.settings.timeTreshold.hold) {
+                                this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, this.dataClone);
                             } else {
-                                this.eventCallback(this.settings.callbacks.hold, {
-                                    target: this.target,
-                                    positions: {
-                                        start: this.start
-                                    }
-                                });
+                                this.eventCallback(this.settings.callbacks.hold, this.dataClone);
                             }
                             break;
                         case "doubletap":
-                            if (timeDiff < this.settings.timeTreshold.hold) {
-                                this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, {
-                                    target: this.target,
-                                    positions: {
-                                        start: this.start,
-                                        end: this.end
-                                    }
-                                });
+                            if (this.time < this.settings.timeTreshold.hold) {
+                                this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, this.dataClone);
                             } else {
-                                this.eventCallback(this.settings.callbacks.tapHold, {
-                                    target: this.target,
-                                    positions: {
-                                        start: this.start,
-                                        end: this.end
-                                    }
-                                });
+                                this.eventCallback(this.settings.callbacks.tapHold, this.dataClone);
                             }
                             break;
                         default:
-                            this.lastAction = null;
+                            this.data.last.action = null;
                     }
                 }
                 // if was moved
-                else if (this.hasMoved && this.isDown && !this.multitouch) {
+                else if (this.data.moved && this.data.down && !this.data.multitouch) {
 
                     if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
 
-                        var direction = this.settings.callbacks.swipe ? this.end.substract(this.start) : this.end.substract(this.oldMove);
+                        var direction = this.settings.callbacks.swipe ? this.data.position.end.substract(this.data.position.start) : this.data.position.end.substract(this.data.last.position);
 
                         var vLDirection = direction.length,
                             directionNormalized = direction.divide(vLDirection, vLDirection),
-                            distance = this.end.distance(this.start),
-                            speed = this.calculateSpeed(distance, timeDiff);
+                            distance = this.data.position.end.distance(this.data.position.start),
+                            speed = this.calculateSpeed(distance, this.time);
 
-                        if (this.settings.callbacks.swipe && timeDiff <= this.settings.timeTreshold.swipe) {
-                            var originalStart = this.getAbsolutePosition(this.start),
-                                originalEnd = this.getAbsolutePosition(this.end);
+                        if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
+                            var originalStart = this.getAbsolutePosition(this.data.position.start),
+                                originalEnd = this.getAbsolutePosition(this.data.position.end);
                             if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
                                 var directions = this.getSwipeDirections(directionNormalized);
-                                this.eventCallback(this.settings.callbacks.swipe, {
-                                    positions: {
-                                        start: this.start,
-                                        end: this.end
-                                    },
-                                    speed: speed,
-                                    directions: {
-                                        named: directions,
-                                        detailed: directionNormalized
-                                    }
-                                });
+                                this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
                             }
                         }
 
-                        if (this.settings.callbacks.flick && timeDiffToLastMove <= this.settings.timeTreshold.flick) {
-                            this.eventCallback(this.settings.callbacks.flick, {
-                                speed: speed,
-                                direction: directionNormalized,
-                                positions: {
-                                    start: this.start,
-                                    end: this.end
-                                }
-                            });
+                        if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
+                            this.eventCallback(this.settings.callbacks.flick, this.dataClone);
                         }
                     }
 
-                    switch (this.lastAction) {
-                        default: this.lastAction = null;
+                    switch (this.data.last.action) {
+                        default: this.data.last.action = null;
                     }
                 }
 
-                if (this.multitouch) {
-                    this.wasPinched = true;
+                if (this.data.multitouch) {
+                    this.data.pinched = true;
                     setTimeout(function() {
-                        this.wasPinched = false;
+                        this.data.pinched = false;
                     }.bind(this), this.settings.pinchBalanceTime);
                 }
 
-                this.multitouch = false;
-                this.isDown = false;
-                this.hasMoved = false;
+                this.data.multitouch = false;
+                this.data.down = false;
+                this.data.moved = false;
 
                 // if is pointerEvent
                 if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
-                    if (Object.keys(this.pointerIDs).length > 1) {
-                        this.multitouch = true;
-                    } else if (Object.keys(this.pointerIDs).length > 0) {
-                        this.isDown = true;
+                    if (Object.keys(this.data.pointerArray).length > 1) {
+                        this.data.multitouch = true;
+                    } else if (Object.keys(this.data.pointerArray).length > 0) {
+                        this.data.down = true;
                     }
                 } // touch is used
                 else {
                     if (e.length > 1) {
-                        this.multitouch = true;
+                        this.data.multitouch = true;
                     } else if (e.length > 0) {
-                        this.isDown = true;
+                        this.data.down = true;
                     }
-                    this.move = null;
+                    this.data.position.move = null;
                 }
 
                 return false;
@@ -785,7 +752,7 @@
         }, {
             key: 'calculateSpeed',
             value: function calculateSpeed(distance, time) {
-                return distance / (time || 1) * 100;
+                return distance / (time || 0.00001) * 100;
             }
 
             /**
@@ -813,9 +780,9 @@
             key: 'setTimeoutForEvent',
             value: function setTimeoutForEvent(callback, timeout, args, holdTimeout) {
                 if (holdTimeout) {
-                    this.holdTimeout = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
+                    this.data.timeout.hold = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
                 } else {
-                    this.timeout = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
+                    this.data.timeout.default = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
                 }
                 return this;
             }
@@ -833,7 +800,7 @@
                 if (callback && typeof callback === "function") {
                     callback(args);
                 }
-                this.lastAction = null;
+                this.data.last.action = null;
                 return this;
             }
 
@@ -880,8 +847,7 @@
                 // down
                 if (event.deltaY > 0 || !event.deltaY && event.wheelDeltaY < 0 || axis === 2 && event.detail > 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) < 0) {
                     direction.push("down");
-                }
-                // up
+                } // up
                 else if (event.deltaY < 0 || !event.deltaY && event.wheelDeltaY > 0 || axis === 2 && event.detail < 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) > 0) {
                     direction.push("up");
                 }
@@ -889,9 +855,7 @@
                 // right
                 if (event.deltaX > 0 || !event.deltaX && event.wheelDeltaX > 0 || axis === 1 && event.detail > 0) {
                     direction.push("right");
-                }
-
-                // left
+                } // left
                 else if (event.deltaX < 0 || !event.deltaX && event.wheelDeltaX < 0 || axis === 1 && event.detail < 0) {
                     direction.push("left");
                 }
@@ -908,7 +872,7 @@
         }, {
             key: 'getEvent',
             value: function getEvent(e) {
-                jQuery.event.fix(e);
+                _jquery2.default.event.fix(e);
                 if (e.originalEvent.touches && e.originalEvent.touches.length === 0) {
                     return e.originalEvent.changedTouches || e.originalEvent;
                 }

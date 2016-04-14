@@ -1,22 +1,30 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Rectangle.js', './LatLng.js', './StateHandler.js', './Point.js'], factory);
+        define(['exports', './Rectangle.js', './LatLng.js', './StateHandler.js', './Point.js', 'jquery'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Rectangle.js'), require('./LatLng.js'), require('./StateHandler.js'), require('./Point.js'));
+        factory(exports, require('./Rectangle.js'), require('./LatLng.js'), require('./StateHandler.js'), require('./Point.js'), require('jquery'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Rectangle, global.LatLng, global.StateHandler, global.Point);
+        factory(mod.exports, global.Rectangle, global.LatLng, global.StateHandler, global.Point, global.jquery);
         global.Marker = mod.exports;
     }
-})(this, function(exports, _Rectangle, _LatLng, _StateHandler, _Point) {
+})(this, function(exports, _Rectangle, _LatLng, _StateHandler, _Point, _jquery) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
     exports.Marker = undefined;
+
+    var _jquery2 = _interopRequireDefault(_jquery);
+
+    function _interopRequireDefault(obj) {
+        return obj && obj.__esModule ? obj : {
+            default: obj
+        };
+    }
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {

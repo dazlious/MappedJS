@@ -1,9 +1,8 @@
 /*global PointerEvent,MSPointerEvent*/
 
 import $ from 'jquery';
-import {
-    Point
-} from './Point.js';
+import jQuery from 'jquery';
+import {Point} from './Point.js';
 
 export class Interact {
 
@@ -45,6 +44,10 @@ export class Interact {
 
     get time() {
         return this.data.time.end - this.data.time.start;
+    }
+
+    get dataClone() {
+        return $(this.data)[0];
     }
 
     /**
@@ -297,7 +300,6 @@ export class Interact {
 
         if (this.settings.callbacks.wheel) {
             this.eventCallback(this.settings.callbacks.wheel, {
-                target: event.target,
                 directions: directions,
                 position: position
             });
@@ -305,7 +307,6 @@ export class Interact {
 
         if (this.settings.callbacks.zoom && (directions.indexOf("up") > -1 || directions.indexOf("down") > -1)) {
             this.eventCallback(this.settings.callbacks.zoom, {
-                target: event.target,
                 direction: (directions.indexOf("up") > -1) ? "in" : (directions.indexOf("down") > -1) ? "out" : "none",
                 position: position,
                 factor: (directions.indexOf("up") > -1) ? 1 : (directions.indexOf("down") > -1) ? -1 : 0
@@ -316,16 +317,12 @@ export class Interact {
     }
 
     calculateStart(e) {
-
         let data = {
             multitouch: false,
             distance: 0,
             down: true,
             position: {
                 start: new Point()
-            },
-            time: {
-                start: e.timeStamp
             }
         };
 
@@ -344,16 +341,16 @@ export class Interact {
                 for (let pointer in this.data.pointerArray) {
                     pointerPos.push(this.data.pointerArray[pointer]);
                 }
-                return this.handleMultitouchStart(pointerPos);
+                return $.extend(true, data, this.handleMultitouchStart(pointerPos));
             }
         } // touch is used
         else {
             // singletouch startet
-            if (e.length <= 1) {
+            if (e.length === 1) {
                 return $.extend(true, data, this.handleSingletouchStart(e[0]));
             } // multitouch started
             else if (e.length === 2) {
-                return this.handleMultitouchStart(e);
+                return $.extend(true, data, this.handleMultitouchStart(e));
             }
         }
     }
@@ -391,6 +388,8 @@ export class Interact {
 
         let e = this.preHandle(event);
 
+        this.data.time.start = event.timeStamp;
+
         if (this.data.timeout.default) {
             this.data.timeout.default = clearTimeout(this.data.timeout.default);
         }
@@ -401,23 +400,13 @@ export class Interact {
             case null:
                 this.data.last.action = "tap";
                 if (this.settings.autoFireHold) {
-                    this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, {
-                        target: this.target,
-                        positions: {
-                            start: this.data.position.start
-                        }
-                    }, true);
+                    this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, this.dataClone, true);
                 }
                 break;
             case "tap":
                 this.data.last.action = "doubletap";
                 if (this.settings.autoFireHold) {
-                    this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, {
-                        target: this.target,
-                        positions: {
-                            start: this.data.position.start
-                        }
-                    }, true);
+                    this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, this.dataClone, true);
                 }
                 break;
             default:
@@ -436,21 +425,55 @@ export class Interact {
             },
             position: {
                 move: new Point()
-            },
-            time: {
-                last: e.timeStamp
             }
         };
 
-        return data;
+        if (e instanceof MouseEvent) {
+            return $.extend(true, data, this.handleSingletouchMove(e));
+        } // if is pointerEvent
+        if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
+            this.data.pointerArray[e.pointerId] = e;
+            if (Object.keys(this.data.pointerArray).length <= 1) {
+                return $.extend(true, data, this.handleSingletouchMove(e));
+            } else {
+                let pointerPos = [];
+                for (let pointer in this.data.pointerArray) {
+                    pointerPos.push(this.data.pointerArray[pointer]);
+                }
+                return $.extend(true, data, this.handleMultitouchMove(pointerPos));
+            }
+        } // touch is used
+        else {
+            // singletouch startet
+            if (e.length === 1) {
+                return $.extend(true, data, this.handleSingletouchMove(e[0]));
+            } else if (e.length === 2) {
+                return $.extend(true, data, this.handleMultitouchMove(e));
+            }
+        }
     }
 
     handleMultitouchMove(positionsArray) {
-
+        let pointerPos1 = this.getRelativePosition(positionsArray[0]),
+            pointerPos2 = this.getRelativePosition(positionsArray[1]);
+        return {
+            position: {
+                move: pointerPos1.substract(pointerPos2).divide(2, 2)
+            },
+            distance: pointerPos1.distance(pointerPos2),
+            multitouch: true
+        };
     }
 
     handleSingletouchMove(position) {
-
+        let pos = this.getRelativePosition(position);
+        return {
+            position: {
+                move: pos
+            },
+            distance: this.data.last.position.distance(pos),
+            multitouch: false
+        };
     }
 
     /**
@@ -459,23 +482,23 @@ export class Interact {
      * @return {Boolean} always returns false
      */
     moveHandler(event) {
-
         // TODO: implement move-callback
         // if touchstart event was not fired
         if (!this.data.down || this.data.pinched) {
             return false;
         }
 
-        let e = this.preHandle(event),
-            currentPos,
-            currentDist,
-            lastPos = (this.data.position.move) ? this.data.position.move : this.data.position.start,
-            lastTime = (this.data.time.last) ? this.data.time.last : this.data.time.start;
+        let e = this.preHandle(event);
+
+        this.data.time.last = event.timeStamp;
+
+        this.data.last.position = (this.data.position.move) ? this.data.position.move : this.data.position.start;
+        this.data.time.last = (this.data.time.last) ? this.data.time.last : this.data.time.start;
 
         // if positions have not changed
-        if (this.isIE && (this.getRelativePosition(e).equals(lastPos) || this.getRelativePosition(e).equals(this.data.position.start))) {
+        if (this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start))) {
             return false;
-        } else if (!this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(lastPos)) {
+        } else if (!this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position)) {
             return false;
         }
 
@@ -488,97 +511,18 @@ export class Interact {
 
         this.data = $.extend(true, this.data, this.calculateMove(e));
 
-        if (e instanceof MouseEvent) {
-            currentPos = this.getRelativePosition(e);
-            currentDist = lastPos.distance(currentPos);
-        } // if is pointerEvent
-        if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
-            this.data.pointerArray[e.pointerId] = e;
-            if (Object.keys(this.data.pointerArray).length <= 1) {
-                currentPos = this.getRelativePosition(e);
-                currentDist = lastPos.distance(currentPos);
-                this.data.multitouch = false;
-            } else {
-                this.data.multitouch = true;
-                let pointerPos = [];
-                for (let pointer in this.data.pointerArray) {
-                    if (this.data.pointerArray.hasOwnProperty(pointer)) {
-                        pointerPos.push(this.data.pointerArray[pointer]);
-                    }
-                }
-                let pointerPos1 = this.getRelativePosition(pointerPos[0]),
-                    pointerPos2 = this.getRelativePosition(pointerPos[1]);
-
-                currentDist = pointerPos1.distance(pointerPos2);
-                currentPos = pointerPos1.substract(pointerPos2).divide(2, 2);
-            }
-        } // touch is used
-        else {
-            // singletouch startet
-            if (e.length <= 1) {
-                currentPos = this.getRelativePosition(e[0]);
-                currentDist = lastPos.distance(currentPos);
-            } else if (e.length === 2) {
-                let pos1 = this.getRelativePosition(e[0]),
-                    pos2 = this.getRelativePosition(e[1]);
-                currentDist = pos1.distance(pos2);
-                currentPos = pos1.substract(pos2).divide(2, 2);
-            }
-        }
-
-        let timeDiff = (this.data.time.last - lastTime);
-
         if (this.data.multitouch) {
-            this.data.difference = currentDist - this.data.distance;
-            this.data.distance = currentDist;
+            this.data.difference = this.data.distance - this.data.last.distance || 0;
             this.data.last.position = this.data.position.move;
-            this.data.position.move = currentPos;
             if (this.settings.callbacks.pinch && this.data.difference !== 0) {
-                this.eventCallback(this.settings.callbacks.pinch, {
-                    target: event.target,
-                    positions: {
-                        start: this.data.position.start,
-                        current: this.data.position.move,
-                        last: this.data.last.position
-                    },
-                    distance: {
-                        current: currentDist,
-                        differenceToLast: this.data.difference
-                    }
-                });
+                this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
             }
             if (this.settings.callbacks.zoom && this.data.difference !== 0) {
-                this.eventCallback(this.settings.callbacks.zoom, {
-                    target: event.target,
-                    positions: {
-                        start: this.data.position.start,
-                        current: this.data.position.move,
-                        last: this.data.last.position
-                    },
-                    direction: (this.data.difference < 0) ? "out" : (this.data.difference > 0) ? "in" : "none",
-                    factor: this.data.difference
-                });
+                this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
             }
         } else {
-            this.speed = this.calculateSpeed(currentDist, timeDiff);
-
-            this.data.last.position = this.data.position.move;
-            this.data.position.move = currentPos;
-
-            this.eventCallback(this.settings.callbacks.pan, {
-                target: this.target,
-                positions: {
-                    start: this.data.position.start,
-                    current: this.data.position.move,
-                    last: lastPos
-                },
-                timeElapsed: {
-                    sinceLast: timeDiff,
-                    sinceStart: this.timeToLastMove
-                },
-                distanceToLastPoint: currentDist,
-                speed: this.speed
-            });
+            this.speed = this.calculateSpeed(this.data.distance, this.timeToLastMove);
+            this.eventCallback(this.settings.callbacks.pan, this.dataClone);
         }
 
         return false;
@@ -618,38 +562,16 @@ export class Interact {
             switch (this.data.last.action) {
                 case "tap":
                     if (this.time < this.settings.timeTreshold.hold) {
-                        this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, {
-                            target: this.target,
-                            positions: {
-                                start: this.data.position.start
-                            }
-                        });
+                        this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, this.dataClone);
                     } else {
-                        this.eventCallback(this.settings.callbacks.hold, {
-                            target: this.target,
-                            positions: {
-                                start: this.data.position.start
-                            }
-                        });
+                        this.eventCallback(this.settings.callbacks.hold, this.dataClone);
                     }
                     break;
                 case "doubletap":
                     if (this.time < this.settings.timeTreshold.hold) {
-                        this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, {
-                            target: this.target,
-                            positions: {
-                                start: this.data.position.start,
-                                end: this.data.position.end
-                            }
-                        });
+                        this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, this.dataClone);
                     } else {
-                        this.eventCallback(this.settings.callbacks.tapHold, {
-                            target: this.target,
-                            positions: {
-                                start: this.data.position.start,
-                                end: this.data.position.end
-                            }
-                        });
+                        this.eventCallback(this.settings.callbacks.tapHold, this.dataClone);
                     }
                     break;
                 default:
@@ -673,29 +595,12 @@ export class Interact {
                         originalEnd = this.getAbsolutePosition(this.data.position.end);
                     if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
                         let directions = this.getSwipeDirections(directionNormalized);
-                        this.eventCallback(this.settings.callbacks.swipe, {
-                            positions: {
-                                start: this.data.position.start,
-                                end: this.data.position.end
-                            },
-                            speed: speed,
-                            directions: {
-                                named: directions,
-                                detailed: directionNormalized
-                            }
-                        });
+                        this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
                     }
                 }
 
                 if (this.settings.callbacks.flick && (this.timeToLastMove <= this.settings.timeTreshold.flick)) {
-                    this.eventCallback(this.settings.callbacks.flick, {
-                        speed: speed,
-                        direction: directionNormalized,
-                        positions: {
-                            start: this.data.position.start,
-                            end: this.data.position.end
-                        }
-                    });
+                    this.eventCallback(this.settings.callbacks.flick, this.dataClone);
                 }
             }
 
@@ -742,7 +647,7 @@ export class Interact {
      * @return {number} the calculated speed
      */
     calculateSpeed(distance, time) {
-        return (distance / (time || 1)) * 100;
+        return (distance / (time || 0.00001)) * 100;
     }
 
     /**

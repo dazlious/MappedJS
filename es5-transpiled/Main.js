@@ -184,13 +184,13 @@
                             console.log("tap", data);
                         }.bind(this),
                         pan: function(data) {
-                            var change = data.positions.last.substract(data.positions.current),
+                            var change = data.last.position.substract(data.position.move),
                                 absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height).multiply(-1, -1);
                             this.tileMap.view.moveView(absolutePosition);
                             this.tileMap.redraw();
                         }.bind(this),
                         flick: function(data) {
-                            console.log(data.speed, data.direction);
+                            console.log("flick", data);
                         }.bind(this),
                         zoom: function(data) {
                             console.log("zoom", data);
@@ -206,6 +206,9 @@
                         }.bind(this),
                         doubletap: function(data) {
                             console.log("doubletap", data);
+                        }.bind(this),
+                        pinch: function(data) {
+                            console.log("pinch", data);
                         }.bind(this)
                     }
                 });
