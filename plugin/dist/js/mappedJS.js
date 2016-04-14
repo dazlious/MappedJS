@@ -2269,6 +2269,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(4);
 
+	var _jquery = __webpack_require__(1);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
@@ -2622,6 +2628,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.$container.on(this.settings.events.scroll, this.scrollHandler.bind(this)).on(this.settings.events.start.mouse, this.startHandler.bind(this)).on(this.settings.events.move.mouse, this.moveHandler.bind(this)).on(this.settings.events.end.mouse, this.endHandler.bind(this)).on(this.settings.events.leave.mouse, this.endHandler.bind(this));
 	            return this;
 	        }
+	    }, {
+	        key: 'preHandle',
+	        value: function preHandle(event) {
+	            if (this.settings.stopPropagation) {
+	                event.stopPropagation();
+	            }
+	            if (this.settings.preventDefault) {
+	                event.preventDefault();
+	            }
+
+	            this.target = event.target;
+
+	            return this.getEvent(event);
+	        }
 
 	        /**
 	         * handles cross-browser and -device scroll
@@ -2634,14 +2654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function scrollHandler(event) {
 	            event = event || window.event;
 
-	            if (this.settings.stopPropagation) {
-	                event.stopPropagation();
-	            }
-	            if (this.settings.preventDefault) {
-	                event.preventDefault();
-	            }
-
-	            var e = this.getEvent(event) || event.originalEvent,
+	            var e = this.preHandle(event) || event.originalEvent,
 	                directions = this.getScrollDirection(e),
 	                position = this.getRelativePosition(e);
 
@@ -2664,6 +2677,62 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            return false;
 	        }
+	    }, {
+	        key: 'calculateStart',
+	        value: function calculateStart(e) {
+
+	            var data = {
+	                start: new _Point.Point(),
+	                multitouch: false,
+	                distance: 0
+	            };
+
+	            // mouse is used
+	            if (e instanceof MouseEvent) {
+	                return _jquery2.default.extend(true, data, this.handleSingletouch(e));
+	            }
+
+	            // if is pointerEvent
+	            if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
+	                this.pointerIDs[e.pointerId] = e;
+	                if (Object.keys(this.pointerIDs).length <= 1) {
+	                    return _jquery2.default.extend(true, data, this.handleSingletouch(e));
+	                } else {
+	                    var pointerPos = [];
+	                    for (var pointer in this.pointerIDs) {
+	                        pointerPos.push(this.pointerIDs[pointer]);
+	                    }
+	                    return this.handleMultitouch(pointerPos);
+	                }
+	            } // touch is used
+	            else {
+	                    // singletouch startet
+	                    if (e.length <= 1) {
+	                        return _jquery2.default.extend(true, data, this.handleSingletouch(e[0]));
+	                    } // multitouch started
+	                    else if (e.length === 2) {
+	                            return this.handleMultitouch(e);
+	                        }
+	                }
+	        }
+	    }, {
+	        key: 'handleMultitouch',
+	        value: function handleMultitouch(positionsArray) {
+	            var pos1 = this.getRelativePosition(positionsArray[0]),
+	                pos2 = this.getRelativePosition(positionsArray[1]);
+	            return {
+	                multitouch: true,
+	                distance: pos1.distance(pos2),
+	                start: pos1.add(pos2).divide(2, 2)
+	            };
+	        }
+	    }, {
+	        key: 'handleSingletouch',
+	        value: function handleSingletouch(position) {
+	            return {
+	                start: this.getRelativePosition(position)
+	            };
+	        }
 
 	        /**
 	         * handles cross-browser and -device start-event
@@ -2675,20 +2744,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'startHandler',
 	        value: function startHandler(event) {
 
-	            if (this.settings.stopPropagation) {
-	                event.stopPropagation();
-	            }
-	            if (this.settings.preventDefault) {
-	                event.preventDefault();
-	            }
-
 	            if (event.button && event.button !== 0) {
 	                return false;
 	            }
 
-	            var e = this.getEvent(event);
+	            var e = this.preHandle(event);
 
-	            this.target = event.target;
 	            this.isDown = true;
 	            this.timeStart = event.timeStamp;
 
@@ -2696,43 +2757,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.timeout = clearTimeout(this.timeout);
 	            }
 
-	            // mouse is used
-	            if (e instanceof MouseEvent) {
-	                this.start = this.getRelativePosition(e);
-	            } // if is pointerEvent
-	            if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
-	                this.pointerIDs[e.pointerId] = e;
-	                if (Object.keys(this.pointerIDs).length <= 1) {
-	                    this.start = this.getRelativePosition(e);
-	                    this.multitouch = false;
-	                } else {
-	                    this.multitouch = true;
-	                    var pointerPos = [];
-	                    for (var pointer in this.pointerIDs) {
-	                        if (this.pointerIDs.hasOwnProperty(pointer)) {
-	                            pointerPos.push(this.pointerIDs[pointer]);
-	                        }
-	                    }
-	                    var pointerPos1 = this.getRelativePosition(pointerPos[0]),
-	                        pointerPos2 = this.getRelativePosition(pointerPos[1]);
+	            // TODO
+	            var data = this.calculateStart(e);
+	            this.start = data.start;
+	            if (!this.current) {
+	                this.current = {};
+	            }
+	            this.current.distance = data.distance;
+	            this.multitouch = data.multitouch;
 
-	                    this.current.distance = pointerPos1.distance(pointerPos2);
-	                    this.start = pointerPos1.add(pointerPos2).divide(2, 2);
-	                }
-	            } // touch is used
-	            else {
-	                    // singletouch startet
-	                    if (e.length <= 1) {
-	                        this.start = this.getRelativePosition(e[0]);
-	                    } // multitouch started
-	                    else if (e.length === 2) {
-	                            this.multitouch = true;
-	                            var pos1 = this.getRelativePosition(e[0]),
-	                                pos2 = this.getRelativePosition(e[1]);
-	                            this.current.distance = pos1.distance(pos2);
-	                            this.start = pos1.add(pos2).divide(2, 2);
-	                        }
-	                }
 	            switch (this.lastAction) {
 	                case null:
 	                    this.lastAction = "tap";
@@ -2773,19 +2806,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'moveHandler',
 	        value: function moveHandler(event) {
 
-	            if (this.settings.stopPropagation) {
-	                event.stopPropagation();
-	            }
-	            if (this.settings.preventDefault) {
-	                event.preventDefault();
-	            }
-
 	            // if touchstart event was not fired
 	            if (!this.isDown || this.wasPinched) {
 	                return false;
 	            }
 
-	            var e = this.getEvent(event),
+	            var e = this.preHandle(event),
 	                currentPos = void 0,
 	                currentDist = void 0,
 	                lastPos = this.move ? this.move : this.start,
@@ -2916,14 +2942,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'endHandler',
 	        value: function endHandler(event) {
 
-	            if (this.settings.stopPropagation) {
-	                event.stopPropagation();
-	            }
-	            if (this.settings.preventDefault) {
-	                event.preventDefault();
-	            }
-
-	            var e = this.getEvent(event);
+	            var e = this.preHandle(event);
 
 	            this.timeEnd = event.timeStamp;
 

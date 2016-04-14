@@ -246,6 +246,19 @@ export class Interact {
         return this;
     }
 
+    preHandle(event) {
+        if (this.settings.stopPropagation) {
+            event.stopPropagation();
+        }
+        if (this.settings.preventDefault) {
+            event.preventDefault();
+        }
+
+        this.target = event.target;
+
+        return this.getEvent(event);
+    }
+
     /**
      * handles cross-browser and -device scroll
      * @param  {Object} event - jQuery-Event-Object
@@ -254,14 +267,7 @@ export class Interact {
     scrollHandler(event) {
         event = event || window.event;
 
-        if (this.settings.stopPropagation) {
-            event.stopPropagation();
-        }
-        if (this.settings.preventDefault) {
-            event.preventDefault();
-        }
-
-        let e = this.getEvent(event) || event.originalEvent,
+        let e = this.preHandle(event) || event.originalEvent,
             directions = this.getScrollDirection(e),
             position = this.getRelativePosition(e);
 
@@ -285,6 +291,59 @@ export class Interact {
         return false;
     }
 
+    calculateStart(e) {
+
+        let data = {
+            start: new Point(),
+            multitouch: false,
+            distance: 0
+        };
+
+        // mouse is used
+        if (e instanceof MouseEvent) {
+            return $.extend(true, data, this.handleSingletouch(e));
+        }
+        
+        // if is pointerEvent
+        if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
+            this.pointerIDs[e.pointerId] = e;
+            if (Object.keys(this.pointerIDs).length <= 1) {
+                return $.extend(true, data, this.handleSingletouch(e));
+            } else {
+                let pointerPos = [];
+                for (let pointer in this.pointerIDs) {
+                    pointerPos.push(this.pointerIDs[pointer]);
+                }
+                return this.handleMultitouch(pointerPos);
+            }
+        } // touch is used
+        else {
+            // singletouch startet
+            if (e.length <= 1) {
+                return $.extend(true, data, this.handleSingletouch(e[0]));
+            } // multitouch started
+            else if (e.length === 2) {
+                return this.handleMultitouch(e);
+            }
+        }
+    }
+
+    handleMultitouch(positionsArray) {
+        let pos1 = this.getRelativePosition(positionsArray[0]),
+            pos2 = this.getRelativePosition(positionsArray[1]);
+        return {
+            multitouch: true,
+            distance: pos1.distance(pos2),
+            start: pos1.add(pos2).divide(2, 2)
+        };
+    }
+
+    handleSingletouch(position) {
+        return {
+            start: this.getRelativePosition(position)
+        };
+    }
+
     /**
      * handles cross-browser and -device start-event
      * @param  {Object} event - jQuery-Event-Object
@@ -292,20 +351,13 @@ export class Interact {
      */
     startHandler(event) {
 
-        if (this.settings.stopPropagation) {
-            event.stopPropagation();
-        }
-        if (this.settings.preventDefault) {
-            event.preventDefault();
-        }
-
         if (event.button && event.button !== 0) {
             return false;
         }
 
-        let e = this.getEvent(event);
+        let e = this.preHandle(event);
 
-        this.target = event.target;
+
         this.isDown = true;
         this.timeStart = event.timeStamp;
 
@@ -313,43 +365,15 @@ export class Interact {
             this.timeout = clearTimeout(this.timeout);
         }
 
-        // mouse is used
-        if (e instanceof MouseEvent) {
-            this.start = this.getRelativePosition(e);
-        } // if is pointerEvent
-        if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
-            this.pointerIDs[e.pointerId] = e;
-            if (Object.keys(this.pointerIDs).length <= 1) {
-                this.start = this.getRelativePosition(e);
-                this.multitouch = false;
-            } else {
-                this.multitouch = true;
-                let pointerPos = [];
-                for (let pointer in this.pointerIDs) {
-                    if (this.pointerIDs.hasOwnProperty(pointer)) {
-                        pointerPos.push(this.pointerIDs[pointer]);
-                    }
-                }
-                let pointerPos1 = this.getRelativePosition(pointerPos[0]),
-                    pointerPos2 = this.getRelativePosition(pointerPos[1]);
-
-                this.current.distance = pointerPos1.distance(pointerPos2);
-                this.start = pointerPos1.add(pointerPos2).divide(2, 2);
-            }
-        } // touch is used
-        else {
-            // singletouch startet
-            if (e.length <= 1) {
-                this.start = this.getRelativePosition(e[0]);
-            } // multitouch started
-            else if (e.length === 2) {
-                this.multitouch = true;
-                let pos1 = this.getRelativePosition(e[0]),
-                    pos2 = this.getRelativePosition(e[1]);
-                this.current.distance = pos1.distance(pos2);
-                this.start = pos1.add(pos2).divide(2, 2);
-            }
+        // TODO
+        let data = this.calculateStart(e);
+        this.start = data.start;
+        if (!this.current) {
+            this.current = {};
         }
+        this.current.distance = data.distance;
+        this.multitouch = data.multitouch;
+
         switch (this.lastAction) {
             case null:
                 this.lastAction = "tap";
@@ -387,19 +411,12 @@ export class Interact {
      */
     moveHandler(event) {
 
-        if (this.settings.stopPropagation) {
-            event.stopPropagation();
-        }
-        if (this.settings.preventDefault) {
-            event.preventDefault();
-        }
-
         // if touchstart event was not fired
         if (!this.isDown || this.wasPinched) {
             return false;
         }
 
-        let e = this.getEvent(event),
+        let e = this.preHandle(event),
             currentPos,
             currentDist,
             lastPos = (this.move) ? this.move : this.start,
@@ -527,14 +544,7 @@ export class Interact {
      */
     endHandler(event) {
 
-        if (this.settings.stopPropagation) {
-            event.stopPropagation();
-        }
-        if (this.settings.preventDefault) {
-            event.preventDefault();
-        }
-
-        let e = this.getEvent(event);
+        let e = this.preHandle(event);
 
         this.timeEnd = event.timeStamp;
 

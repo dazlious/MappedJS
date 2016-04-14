@@ -58,7 +58,7 @@ export class View {
         data = {},
         markerData = [],
         context = null
-    }) {
+        }) {
         this.mapView = mapView;
         this.viewport = viewport;
         this.bounds = bounds;

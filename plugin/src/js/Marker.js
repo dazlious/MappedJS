@@ -2,6 +2,7 @@ import {Rectangle} from './Rectangle.js';
 import {LatLng} from './LatLng.js';
 import {StateHandler} from './StateHandler.js';
 import {Point} from './Point.js';
+import $ from 'jquery';
 
 /**
  * States of a marker
@@ -33,7 +34,6 @@ export class Marker {
         this.img = new Image();
         this.img.src = imgPath;
         this.img.onload = this.onImageLoad.bind(this);
-
     }
 
     onImageLoad() {
@@ -47,6 +47,7 @@ export class Marker {
             let p = new Point((this.icon.x + x) * scaleX + offsetX, this.icon.y + y);
             p.add(this.offset);
             context.drawImage(this.img, p.x, p.y, this.icon.width, this.icon.height);
+
         }
     }
 
