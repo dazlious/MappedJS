@@ -78,7 +78,7 @@
         }, {
             key: 'visibleTiles',
             get: function get() {
-                return this.tiles.filter(function(t, i, a) {
+                return this.tiles.filter(function(t) {
                     var newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapView.x * this.equalizationFactor + this.viewportOffset, this.mapView.y);
                     return this.viewport.intersects(newTile);
                 }, this);
@@ -254,7 +254,9 @@
             value: function draw() {
                 var currentlyVisibleTiles = this.visibleTiles;
                 for (var i in currentlyVisibleTiles) {
-                    this.drawHandler(currentlyVisibleTiles[i]);
+                    if (currentlyVisibleTiles[i]) {
+                        this.drawHandler(currentlyVisibleTiles[i]);
+                    }
                 }
                 this.drawMarkers();
                 return this;
@@ -263,8 +265,10 @@
             key: 'drawMarkers',
             value: function drawMarkers() {
                 for (var i in this.markers) {
-                    var m = this.markers[i];
-                    m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
+                    if (this.markers[i]) {
+                        var m = this.markers[i];
+                        m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
+                    }
                 }
                 return this;
             }
@@ -279,10 +283,12 @@
             value: function initializeTiles() {
                 var currentLevel = this.data.tiles;
                 for (var tile in currentLevel) {
-                    var currentTileData = currentLevel[tile];
-                    currentTileData["context"] = this.context;
-                    var currentTile = new _Tile.Tile(currentTileData);
-                    this.tiles.push(currentTile);
+                    if (currentLevel[tile]) {
+                        var currentTileData = currentLevel[tile];
+                        currentTileData["context"] = this.context;
+                        var currentTile = new _Tile.Tile(currentTileData);
+                        this.tiles.push(currentTile);
+                    }
                 }
                 return this;
             }
@@ -291,11 +297,13 @@
             value: function initializeMarkers(markerData) {
                 if (markerData) {
                     for (var i in markerData) {
-                        var currentData = markerData[i],
-                            offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
-                            markerPixelPos = this.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
-                            m = new _Marker.Marker(markerPixelPos, currentData.img, offset);
-                        this.markers.push(m);
+                        if (markerData[i]) {
+                            var currentData = markerData[i],
+                                offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
+                                markerPixelPos = this.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
+                                m = new _Marker.Marker(markerPixelPos, currentData.img, offset);
+                            this.markers.push(m);
+                        }
                     }
                 }
                 return this;

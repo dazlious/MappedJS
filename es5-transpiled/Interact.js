@@ -426,10 +426,7 @@
                     if (Object.keys(this.data.pointerArray).length <= 1) {
                         return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
                     } else {
-                        var pointerPos = [];
-                        for (var pointer in this.data.pointerArray) {
-                            pointerPos.push(this.data.pointerArray[pointer]);
-                        }
+                        var pointerPos = this.getPointerArray();
                         return _jquery2.default.extend(true, data, this.handleMultitouchStart(pointerPos));
                     }
                 } // touch is used
@@ -444,10 +441,21 @@
                 }
             }
         }, {
+            key: 'getPointerArray',
+            value: function getPointerArray() {
+                var pointerPos = [];
+                for (var pointer in this.data.pointerArray) {
+                    if (this.data.pointerArray[pointer]) {
+                        pointerPos.push(this.data.pointerArray[pointer]);
+                    }
+                }
+                return pointerPos;
+            }
+        }, {
             key: 'handleMultitouchStart',
             value: function handleMultitouchStart(positionsArray) {
-                var pos1 = this.getRelativePosition(positionsArray[0]),
-                    pos2 = this.getRelativePosition(positionsArray[1]);
+                var pos1 = this.getRelativePosition(positionsArray[0]);
+                var pos2 = this.getRelativePosition(positionsArray[1]);
                 return {
                     multitouch: true,
                     distance: pos1.distance(pos2),
@@ -530,10 +538,7 @@
                     if (Object.keys(this.data.pointerArray).length <= 1) {
                         return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
                     } else {
-                        var pointerPos = [];
-                        for (var pointer in this.data.pointerArray) {
-                            pointerPos.push(this.data.pointerArray[pointer]);
-                        }
+                        var pointerPos = this.getPointerArray();
                         return _jquery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
                     }
                 } // touch is used
@@ -549,8 +554,8 @@
         }, {
             key: 'handleMultitouchMove',
             value: function handleMultitouchMove(positionsArray) {
-                var pointerPos1 = this.getRelativePosition(positionsArray[0]),
-                    pointerPos2 = this.getRelativePosition(positionsArray[1]);
+                var pointerPos1 = this.getRelativePosition(positionsArray[0]);
+                var pointerPos2 = this.getRelativePosition(positionsArray[1]);
                 return {
                     position: {
                         move: pointerPos1.substract(pointerPos2).divide(2, 2)
@@ -595,9 +600,7 @@
                 this.data.time.last = this.data.time.last ? this.data.time.last : this.data.time.start;
 
                 // if positions have not changed
-                if (this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start))) {
-                    return false;
-                } else if (!this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position)) {
+                if (this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position)) {
                     return false;
                 }
 
@@ -693,8 +696,8 @@
                             speed = this.calculateSpeed(distance, this.time);
 
                         if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
-                            var originalStart = this.getAbsolutePosition(this.data.position.start),
-                                originalEnd = this.getAbsolutePosition(this.data.position.end);
+                            var originalStart = this.getAbsolutePosition(this.data.position.start);
+                            var originalEnd = this.getAbsolutePosition(this.data.position.end);
                             if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
                                 var directions = this.getSwipeDirections(directionNormalized);
                                 this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
@@ -702,12 +705,13 @@
                         }
 
                         if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
+                            this.dataClone.speed = speed;
                             this.eventCallback(this.settings.callbacks.flick, this.dataClone);
                         }
                     }
 
-                    switch (this.data.last.action) {
-                        default: this.data.last.action = null;
+                    if (this.data.last.action) {
+                        this.data.last.action = null;
                     }
                 }
 
@@ -841,8 +845,8 @@
         }, {
             key: 'getScrollDirection',
             value: function getScrollDirection(event) {
-                var axis = parseInt(event.axis, 10),
-                    direction = [];
+                var axis = parseInt(event.axis, 10);
+                var direction = [];
 
                 // down
                 if (event.deltaY > 0 || !event.deltaY && event.wheelDeltaY < 0 || axis === 2 && event.detail > 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) < 0) {
