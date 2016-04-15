@@ -223,21 +223,16 @@
              * @param  {number} y - y-position of tile
              * @param  {number} scaleX - scale x of tile
              * @param  {number} offsetX - offset x for centering
-             * @param  {object} thumb - img-data of thumbnail
-             * @param  {number} thumbScale - thumbnail scale, relative to full image
              * @return {Tile} instance of Tile for chaining
              */
 
         }, {
             key: 'handleDraw',
-            value: function handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) {
+            value: function handleDraw(x, y, scaleX, offsetX) {
                 var distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
                 if (this.state.current.value >= 2) {
                     this.state.next();
                     this.draw(this.img, distortedTile);
-                } else if (this.state.current.value === 1 && thumb && thumbScale) {
-                    var thumbTile = this.clone.scale(thumbScale);
-                    this.draw(thumb, thumbTile, distortedTile);
                 } else if (this.state.current.value === 0) {
                     this.initialize();
                 }
@@ -253,24 +248,17 @@
              * draws image data of tile on context
              * @param  {object} img - img-data to draw
              * @param  {Rectangle} source - specified source sizes
-             * @param  {Rectangle} destination = null - specified destination sizes
              * @return {Tile} instance of Tile for chaining
              */
 
         }, {
             key: 'draw',
             value: function draw(img, source) {
-                var destination = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
-
                 if (!this.context) {
                     console.error("context not specified", this);
                     return false;
                 }
-                if (!destination) {
-                    this.context.drawImage(img, source.x, source.y, source.width, source.height);
-                } else {
-                    this.context.drawImage(img, source.x, source.y, source.width, source.height, destination.x, destination.y, destination.width, destination.height);
-                }
+                this.context.drawImage(img, source.x, source.y, source.width, source.height);
             }
 
             /**
