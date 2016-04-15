@@ -187,6 +187,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	            return this;
 	        }
+	    }, {
+	        key: 'getAbsolutePosition',
+	        value: function getAbsolutePosition(point) {
+	            return point.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+	        }
 
 	        /**
 	         * binds all events to handlers
@@ -205,8 +210,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }.bind(this),
 	                    pan: function (data) {
 	                        var change = data.last.position.substract(data.position.move);
-	                        var absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height).multiply(-1, -1);
-	                        this.tileMap.view.moveView(absolutePosition);
+	                        var absolutePosition = this.getAbsolutePosition(change);
+	                        this.tileMap.view.moveView(absolutePosition.multiply(-1, -1));
 	                        this.tileMap.redraw();
 	                    }.bind(this),
 	                    flick: function (data) {

@@ -89,6 +89,10 @@ export class MappedJS {
         return this;
     }
 
+    getAbsolutePosition(point) {
+        return point.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+    }
+
     /**
      * binds all events to handlers
      * @return {MappedJS} instance of MappedJS
@@ -103,8 +107,8 @@ export class MappedJS {
                 }.bind(this),
                 pan: function(data) {
                     const change = data.last.position.substract(data.position.move);
-                    const absolutePosition = change.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height).multiply(-1, -1);
-                    this.tileMap.view.moveView(absolutePosition);
+                    const absolutePosition = this.getAbsolutePosition(change);
+                    this.tileMap.view.moveView(absolutePosition.multiply(-1, -1));
                     this.tileMap.redraw();
                 }.bind(this),
                 flick: function(data) {
