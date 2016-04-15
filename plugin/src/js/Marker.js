@@ -50,7 +50,6 @@ export class Marker {
             const p = new Point((this.icon.x + x) * scaleX + offsetX, this.icon.y + y);
             p.add(this.offset);
             context.drawImage(this.img, p.x, p.y, this.icon.width, this.icon.height);
-
         }
     }
 

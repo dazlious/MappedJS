@@ -146,7 +146,7 @@ export class TileMap {
     resizeCanvas() {
         this.canvasContext.canvas.width = this.width;
         this.canvasContext.canvas.height = this.height;
-        this.disableSubpixelRendering();
+        //this.disableSubpixelRendering();
         return this;
     }
 

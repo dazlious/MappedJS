@@ -266,12 +266,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return MappedJS;
 	}();
 
-	window.requestAnimFrame = function () {
-	    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-	        window.setTimeout(callback, 1000 / 60);
-	    };
-		}();
-
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
@@ -497,7 +491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function resizeCanvas() {
 	            this.canvasContext.canvas.width = this.width;
 	            this.canvasContext.canvas.height = this.height;
-	            this.disableSubpixelRendering();
+	            //this.disableSubpixelRendering();
 	            return this;
 	        }
 
@@ -1555,7 +1549,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'drawHandler',
 	        value: function drawHandler(o) {
-	            o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
+	            o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset);
 	            this.drawMarkers();
 	            return this;
 	        }
@@ -1626,6 +1620,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'draw',
 	        value: function draw() {
+	            this.drawLargeThumbnail();
+
 	            var currentlyVisibleTiles = this.visibleTiles;
 	            for (var i in currentlyVisibleTiles) {
 	                if (currentlyVisibleTiles[i]) {
@@ -1634,6 +1630,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            this.drawMarkers();
 	            return this;
+	        }
+	    }, {
+	        key: 'drawLargeThumbnail',
+	        value: function drawLargeThumbnail() {
+	            var rect = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
+	            this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
 	        }
 	    }, {
 	        key: 'drawMarkers',
@@ -1834,21 +1836,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {number} y - y-position of tile
 	         * @param  {number} scaleX - scale x of tile
 	         * @param  {number} offsetX - offset x for centering
-	         * @param  {object} thumb - img-data of thumbnail
-	         * @param  {number} thumbScale - thumbnail scale, relative to full image
 	         * @return {Tile} instance of Tile for chaining
 	         */
 
 	    }, {
 	        key: 'handleDraw',
-	        value: function handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) {
+	        value: function handleDraw(x, y, scaleX, offsetX) {
 	            var distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
 	            if (this.state.current.value >= 2) {
 	                this.state.next();
 	                this.draw(this.img, distortedTile);
-	            } else if (this.state.current.value === 1 && thumb && thumbScale) {
-	                var thumbTile = this.clone.scale(thumbScale);
-	                this.draw(thumb, thumbTile, distortedTile);
 	            } else if (this.state.current.value === 0) {
 	                this.initialize();
 	            }
@@ -1864,24 +1861,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * draws image data of tile on context
 	         * @param  {object} img - img-data to draw
 	         * @param  {Rectangle} source - specified source sizes
-	         * @param  {Rectangle} destination = null - specified destination sizes
 	         * @return {Tile} instance of Tile for chaining
 	         */
 
 	    }, {
 	        key: 'draw',
 	        value: function draw(img, source) {
-	            var destination = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
-
 	            if (!this.context) {
 	                console.error("context not specified", this);
 	                return false;
 	            }
-	            if (!destination) {
-	                this.context.drawImage(img, source.x, source.y, source.width, source.height);
-	            } else {
-	                this.context.drawImage(img, source.x, source.y, source.width, source.height, destination.x, destination.y, destination.width, destination.height);
-	            }
+	            this.context.drawImage(img, source.x, source.y, source.width, source.height);
 	        }
 
 	        /**

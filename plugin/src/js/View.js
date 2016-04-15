@@ -114,7 +114,7 @@ export class View {
     }
 
     drawHandler(o) {
-        o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.thumb, this.thumbScale);
+        o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset);
         this.drawMarkers();
         return this;
     }
@@ -177,6 +177,8 @@ export class View {
      * @return {View} instance of View
      */
     draw() {
+        this.drawLargeThumbnail();
+
         const currentlyVisibleTiles = this.visibleTiles;
         for (const i in currentlyVisibleTiles) {
             if (currentlyVisibleTiles[i]) {
@@ -185,6 +187,11 @@ export class View {
         }
         this.drawMarkers();
         return this;
+    }
+
+    drawLargeThumbnail() {
+        let rect = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
+        this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
     }
 
     drawMarkers() {
