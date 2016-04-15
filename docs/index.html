@@ -924,8 +924,8 @@
 <li><a href="#new_Tile_new">new Tile(path, x, y, w, h)</a></li>
 <li><a href="#Tile+Publisher">.Publisher</a></li>
 <li><a href="#Tile+initialize">.initialize()</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
-<li><a href="#Tile+handleDraw">.handleDraw(x, y, scaleX, offsetX, thumb, thumbScale)</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
-<li><a href="#Tile+draw">.draw(img, source, destination)</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
+<li><a href="#Tile+handleDraw">.handleDraw(x, y, scaleX, offsetX)</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
+<li><a href="#Tile+draw">.draw(img, source)</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
 <li><a href="#Tile+equals">.equals(tile)</a> ⇒ <code>Boolean</code></li>
 </ul>
 </li>
@@ -948,7 +948,7 @@
 <h3 id="tile-initialize-code-tile-tile-code-">tile.initialize() ⇒ <code><a href="#Tile">Tile</a></code></h3>
 <p>initializes tile and starts loading image</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile for chaining<br><a name="Tile+handleDraw"></a></p>
-<h3 id="tile-handledraw-x-y-scalex-offsetx-thumb-thumbscale-code-tile-tile-code-">tile.handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) ⇒ <code><a href="#Tile">Tile</a></code></h3>
+<h3 id="tile-handledraw-x-y-scalex-offsetx-code-tile-tile-code-">tile.handleDraw(x, y, scaleX, offsetX) ⇒ <code><a href="#Tile">Tile</a></code></h3>
 <p>handles draw of a tile in each state</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile for chaining<br><strong>Params</strong></p>
 <ul>
@@ -956,17 +956,14 @@
 <li>y <code>number</code> - y-position of tile</li>
 <li>scaleX <code>number</code> - scale x of tile</li>
 <li>offsetX <code>number</code> - offset x for centering</li>
-<li>thumb <code>object</code> - img-data of thumbnail</li>
-<li>thumbScale <code>number</code> - thumbnail scale, relative to full image</li>
 </ul>
 <p><a name="Tile+draw"></a></p>
-<h3 id="tile-draw-img-source-destination-code-tile-tile-code-">tile.draw(img, source, destination) ⇒ <code><a href="#Tile">Tile</a></code></h3>
+<h3 id="tile-draw-img-source-code-tile-tile-code-">tile.draw(img, source) ⇒ <code><a href="#Tile">Tile</a></code></h3>
 <p>draws image data of tile on context</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile for chaining<br><strong>Params</strong></p>
 <ul>
 <li>img <code>object</code> - img-data to draw</li>
 <li>source <code><a href="#Rectangle">Rectangle</a></code> - specified source sizes</li>
-<li>destination <code><a href="#Rectangle">Rectangle</a></code> <code> = </code> - = null - specified destination sizes</li>
 </ul>
 <p><a name="Tile+equals"></a></p>
 <h3 id="tile-equals-tile-code-boolean-code-">tile.equals(tile) ⇒ <code>Boolean</code></h3>

@@ -1252,8 +1252,8 @@ checks if there is a previous element
     * [new Tile(path, x, y, w, h)](#new_Tile_new)
     * [.Publisher](#Tile+Publisher)
     * [.initialize()](#Tile+initialize) ⇒ <code>[Tile](#Tile)</code>
-    * [.handleDraw(x, y, scaleX, offsetX, thumb, thumbScale)](#Tile+handleDraw) ⇒ <code>[Tile](#Tile)</code>
-    * [.draw(img, source, destination)](#Tile+draw) ⇒ <code>[Tile](#Tile)</code>
+    * [.handleDraw(x, y, scaleX, offsetX)](#Tile+handleDraw) ⇒ <code>[Tile](#Tile)</code>
+    * [.draw(img, source)](#Tile+draw) ⇒ <code>[Tile](#Tile)</code>
     * [.equals(tile)](#Tile+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Tile_new"></a>
@@ -1285,7 +1285,7 @@ initializes tile and starts loading image
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
 <a name="Tile+handleDraw"></a>
 
-### tile.handleDraw(x, y, scaleX, offsetX, thumb, thumbScale) ⇒ <code>[Tile](#Tile)</code>
+### tile.handleDraw(x, y, scaleX, offsetX) ⇒ <code>[Tile](#Tile)</code>
 handles draw of a tile in each state
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
@@ -1296,12 +1296,10 @@ handles draw of a tile in each state
 - y <code>number</code> - y-position of tile
 - scaleX <code>number</code> - scale x of tile
 - offsetX <code>number</code> - offset x for centering
-- thumb <code>object</code> - img-data of thumbnail
-- thumbScale <code>number</code> - thumbnail scale, relative to full image
 
 <a name="Tile+draw"></a>
 
-### tile.draw(img, source, destination) ⇒ <code>[Tile](#Tile)</code>
+### tile.draw(img, source) ⇒ <code>[Tile](#Tile)</code>
 draws image data of tile on context
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
@@ -1310,7 +1308,6 @@ draws image data of tile on context
 
 - img <code>object</code> - img-data to draw
 - source <code>[Rectangle](#Rectangle)</code> - specified source sizes
-- destination <code>[Rectangle](#Rectangle)</code> <code> = </code> - = null - specified destination sizes
 
 <a name="Tile+equals"></a>
 
