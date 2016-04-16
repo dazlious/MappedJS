@@ -1459,6 +1459,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.xOffsetToCenter = xOffsetToCenter;
 
 	        this.size = data.size;
+	        this.hover = data.hover;
+	        if (this.hover) {
+	            this.size.divide(2, 1);
+	        }
 	        this.img = data.icon;
 	        this.offset = data.offset;
 	        this.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
@@ -1480,7 +1484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                "margin-left": this.offset.x + 'px',
 	                "margin-top": this.offset.y + 'px',
 	                "background-image": 'url(' + this.img + ')',
-	                "background-size": 2 * this.size.x + 'px ' + this.size.y + 'px'
+	                "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
 	            });
 	            if ($container) {
 	                $container.append(icon);
@@ -2454,6 +2458,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var DATA_MARKER = {
 	    icon: null,
+	    hover: false,
 	    position: {
 	        lat: 0,
 	        lng: 0
@@ -2485,6 +2490,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                offset: offset,
 	                latlng: latlng,
 	                size: size,
+	                hover: entry.hover,
 	                icon: entry.icon
 	            });
 	        });

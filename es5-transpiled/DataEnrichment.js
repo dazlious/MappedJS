@@ -28,6 +28,7 @@
 
     var DATA_MARKER = {
         icon: null,
+        hover: false,
         position: {
             lat: 0,
             lng: 0
@@ -59,6 +60,7 @@
                     offset: offset,
                     latlng: latlng,
                     size: size,
+                    hover: entry.hover,
                     icon: entry.icon
                 });
             });
