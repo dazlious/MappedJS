@@ -54,7 +54,6 @@ export class TileMap {
         this.$container = container;
         this.imgData = tilesData[TileMap.IMG_DATA_NAME];
         this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
-        this.markers = [];
         this.settings = settings;
 
         this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
@@ -74,10 +73,11 @@ export class TileMap {
             bounds: new Bounds(new LatLng(bounds.northWest[0], bounds.northWest[1]), new LatLng(bounds.southEast[0], bounds.southEast[1])),
             center: new LatLng(center.lat, center.lng),
             data: this.getCurrentLevelData(),
+            markerData: this.markerData,
+            $container: this.$container,
             context: this.canvasContext
         });
         this.resizeCanvas();
-        this.initializeMarkers();
         return this;
     }
 
@@ -117,17 +117,7 @@ export class TileMap {
     redraw() {
         this.clearCanvas();
         this.view.draw();
-        this.repositionMarkers();
         return this;
-    }
-
-    repositionMarkers() {
-        for (const i in this.markers) {
-            if (this.markers[i]) {
-                const currentMarker = this.markers[i];
-                currentMarker.moveMarker();
-            }
-        }
     }
 
     /**
@@ -138,7 +128,6 @@ export class TileMap {
         this.resizeCanvas();
         this.resizeView();
         this.view.draw();
-        this.repositionMarkers();
         return this;
     }
 
@@ -161,23 +150,6 @@ export class TileMap {
         this.view.viewport.size(this.left, this.top, this.width, this.height);
         const difference = this.view.viewport.center.substract(oldViewport.center);
         this.view.mapView.translate(difference.x, difference.y);
-        return this;
-    }
-
-    initializeMarkers() {
-        if (this.markerData) {
-            const cont = $("<div class='marker-container' />");
-            this.$container.append(cont);
-            for (const i in this.markerData) {
-                if (this.markerData[i]) {
-                    const currentData = this.markerData[i],
-                        offset = (currentData.offset) ? new Point(currentData.offset[0], currentData.offset[1]) : new Point(0, 0),
-                        markerPixelPos = this.view.convertLatLngToPoint(new LatLng(currentData.position[0], currentData.position[1])),
-                        m = new Marker(markerPixelPos, currentData.img, offset, cont, this.view.getDistortionCalculation, this.view.viewOffsetCalculation, this.view.viewportOffsetCalculation);
-                    this.markers.push(m);
-                }
-            }
-        }
         return this;
     }
 

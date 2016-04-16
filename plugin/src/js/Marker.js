@@ -10,8 +10,9 @@ import $ from 'jquery';
  * @type {Array}
  */
 const STATES = [
+    {value: 0, description: 'Loading'},
     {value: 0, description: 'Initialized'},
-    {value: 1, description: 'Loaded'}
+    {value: 1, description: 'Ready'}
 ];
 
 export class Marker {
@@ -28,52 +29,54 @@ export class Marker {
         return this.xOffsetToCenter();
     }
 
-    constructor(position = new Point(), imgPath = null, offset = new Point(), $container=null, distortionFactor = function(){return 1;}, mapOffset = function(){return new Point();}, xOffsetToCenter = function() {return 0;}) {
-        if (!imgPath) {
-            console.error("Can not initialize Marker", imgPath);
+    constructor(data = null, $container=null, distortionFactor = function(){return 1;}, mapOffset = function(){return new Point();}, xOffsetToCenter = function() {return 0;}, calculateLatLngToPoint = function() {return new Point();}) {
+        if (!data) {
+            console.error("Can not initialize Marker", data);
         }
 
+        this.stateHandler = new StateHandler(STATES);
+
+        this.calculateLatLngToPoint = calculateLatLngToPoint;
         this.distortionFactor = distortionFactor;
         this.mapOffset = mapOffset;
         this.xOffsetToCenter = xOffsetToCenter;
 
-        this.position = position;
-        this.offset = offset;
+        this.size = data.size;
+        this.img = data.icon;
+        this.offset = data.offset;
+        this.offset.add(new Point(-(this.size.x/2), -this.size.y));
+        this.latlng = data.latlng;
 
-        this.$container = $container;
+        this.position = this.calculateLatLngToPoint(this.latlng);
 
-        this.stateHandler = new StateHandler(STATES);
+        this.icon = this.addMarkerToDOM($container);
 
-        Helper.loadImage(imgPath, function(img) {
-            this.onImageLoad(img);
-        }.bind(this));
-    }
-
-    onImageLoad(img) {
-        this.img = img;
-        this.offset.add(new Point(-(this.img.width/2), -this.img.height));
-        this.addMarkerToDOM();
-        this.stateHandler.next();
         this.moveMarker();
     }
 
-    addMarkerToDOM() {
-        this.icon = $(this.img).addClass("marker").css({
-            "position": "absolute",
-            "top": 0,
-            "left": 0
+    addMarkerToDOM($container) {
+        const icon = $("<div class='marker' />").css({
+            "width": `${this.size.x}px`,
+            "height": `${this.size.y}px`,
+            "margin-left": `${this.offset.x}px`,
+            "margin-top": `${this.offset.y}px`,
+            "background-image": `url(${this.img})`,
+            "background-size": `${2*this.size.x}px ${this.size.y}px`
         });
-        if (this.$container) {
-            this.$container.append(this.icon);
+        if ($container) {
+            $container.append(icon);
+            this.stateHandler.next();
         }
+        return icon;
     }
 
     moveMarker() {
         const p = new Point((this.position.x + this.viewOffset.x) * this.scaleX + this.xOffset, this.position.y + this.viewOffset.y);
-        p.add(this.offset);
-        this.icon.css({
-            transform: `translate3d(${p.x}px, ${p.y}px, 0)`
-        });
+        if (this.icon) {
+            this.icon.css({
+                transform: `translate3d(${p.x}px, ${p.y}px, 0)`
+            });
+        }
     }
 
 }

@@ -1456,7 +1456,7 @@ name of marker data in data.json
 
 * [View](#View)
     * [new View(settings, viewport, mapView, bounds, center, data)](#new_View_new)
-    * [.equalizationFactor](#View+equalizationFactor) ⇒ <code>number</code>
+    * [.distortionFactor](#View+distortionFactor) ⇒ <code>number</code>
     * [.viewportOffset](#View+viewportOffset)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
     * [.loadThumb()](#View+loadThumb) ⇒ <code>[View](#View)</code>
@@ -1482,13 +1482,13 @@ Constructor
 - center <code>[LatLng](#LatLng)</code> - = new LatLng() - current center of map
 - data <code>Object</code> - = {} - data of current map
 
-<a name="View+equalizationFactor"></a>
+<a name="View+distortionFactor"></a>
 
-### view.equalizationFactor ⇒ <code>number</code>
-Returns current equalizationFactor
+### view.distortionFactor ⇒ <code>number</code>
+Returns current distortionFactor
 
 **Kind**: instance property of <code>[View](#View)</code>  
-**Returns**: <code>number</code> - returns current equalizationFactor of latitude  
+**Returns**: <code>number</code> - returns current distortionFactor of latitude  
 <a name="View+viewportOffset"></a>
 
 ### view.viewportOffset

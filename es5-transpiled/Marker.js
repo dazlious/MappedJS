@@ -56,10 +56,13 @@
      */
     var STATES = [{
         value: 0,
+        description: 'Loading'
+    }, {
+        value: 0,
         description: 'Initialized'
     }, {
         value: 1,
-        description: 'Loaded'
+        description: 'Ready'
     }];
 
     var Marker = exports.Marker = function() {
@@ -81,71 +84,73 @@
         }]);
 
         function Marker() {
-            var position = arguments.length <= 0 || arguments[0] === undefined ? new _Point.Point() : arguments[0];
-            var imgPath = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-            var offset = arguments.length <= 2 || arguments[2] === undefined ? new _Point.Point() : arguments[2];
-            var $container = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
-            var distortionFactor = arguments.length <= 4 || arguments[4] === undefined ? function() {
+            var data = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+            var $container = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+            var distortionFactor = arguments.length <= 2 || arguments[2] === undefined ? function() {
                 return 1;
+            } : arguments[2];
+            var mapOffset = arguments.length <= 3 || arguments[3] === undefined ? function() {
+                return new _Point.Point();
+            } : arguments[3];
+            var xOffsetToCenter = arguments.length <= 4 || arguments[4] === undefined ? function() {
+                return 0;
             } : arguments[4];
-            var mapOffset = arguments.length <= 5 || arguments[5] === undefined ? function() {
+            var calculateLatLngToPoint = arguments.length <= 5 || arguments[5] === undefined ? function() {
                 return new _Point.Point();
             } : arguments[5];
-            var xOffsetToCenter = arguments.length <= 6 || arguments[6] === undefined ? function() {
-                return 0;
-            } : arguments[6];
 
             _classCallCheck(this, Marker);
 
-            if (!imgPath) {
-                console.error("Can not initialize Marker", imgPath);
+            if (!data) {
+                console.error("Can not initialize Marker", data);
             }
 
+            this.stateHandler = new _StateHandler.StateHandler(STATES);
+
+            this.calculateLatLngToPoint = calculateLatLngToPoint;
             this.distortionFactor = distortionFactor;
             this.mapOffset = mapOffset;
             this.xOffsetToCenter = xOffsetToCenter;
 
-            this.position = position;
-            this.offset = offset;
+            this.size = data.size;
+            this.img = data.icon;
+            this.offset = data.offset;
+            this.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
+            this.latlng = data.latlng;
 
-            this.$container = $container;
+            this.position = this.calculateLatLngToPoint(this.latlng);
 
-            this.stateHandler = new _StateHandler.StateHandler(STATES);
+            this.icon = this.addMarkerToDOM($container);
 
-            _Helper.Helper.loadImage(imgPath, function(img) {
-                this.onImageLoad(img);
-            }.bind(this));
+            this.moveMarker();
         }
 
         _createClass(Marker, [{
-            key: 'onImageLoad',
-            value: function onImageLoad(img) {
-                this.img = img;
-                this.offset.add(new _Point.Point(-(this.img.width / 2), -this.img.height));
-                this.addMarkerToDOM();
-                this.stateHandler.next();
-                this.moveMarker();
-            }
-        }, {
             key: 'addMarkerToDOM',
-            value: function addMarkerToDOM() {
-                this.icon = (0, _jquery2.default)(this.img).addClass("marker").css({
-                    "position": "absolute",
-                    "top": 0,
-                    "left": 0
+            value: function addMarkerToDOM($container) {
+                var icon = (0, _jquery2.default)("<div class='marker' />").css({
+                    "width": this.size.x + 'px',
+                    "height": this.size.y + 'px',
+                    "margin-left": this.offset.x + 'px',
+                    "margin-top": this.offset.y + 'px',
+                    "background-image": 'url(' + this.img + ')',
+                    "background-size": 2 * this.size.x + 'px ' + this.size.y + 'px'
                 });
-                if (this.$container) {
-                    this.$container.append(this.icon);
+                if ($container) {
+                    $container.append(icon);
+                    this.stateHandler.next();
                 }
+                return icon;
             }
         }, {
             key: 'moveMarker',
             value: function moveMarker() {
                 var p = new _Point.Point((this.position.x + this.viewOffset.x) * this.scaleX + this.xOffset, this.position.y + this.viewOffset.y);
-                p.add(this.offset);
-                this.icon.css({
-                    transform: 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)'
-                });
+                if (this.icon) {
+                    this.icon.css({
+                        transform: 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)'
+                    });
+                }
             }
         }]);
 

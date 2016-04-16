@@ -66,6 +66,13 @@
             img.src = path;
             return this;
         },
+        forEach: function forEach(a, fn) {
+            for (var i in a) {
+                if (a[i] && typeof fn === "function") {
+                    fn(a[i], i);
+                }
+            }
+        },
         /**
          * convert degree to radian
          * @param {number} degrees - specified degrees

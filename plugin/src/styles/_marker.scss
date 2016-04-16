@@ -7,9 +7,12 @@
     overflow: hidden;
 }
 .marker {
-    filter: saturate(20%);
+    position: absolute;
+    top: 0;
+    left: 0;
     cursor: pointer;
+    background-position: center left;
     &:hover {
-        filter: saturate(100%);
+        background-position: center right;
     }
 }
