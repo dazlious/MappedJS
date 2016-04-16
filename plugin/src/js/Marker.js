@@ -10,30 +10,41 @@ import $ from 'jquery';
  * @type {Array}
  */
 const STATES = [
-    {value: 0, description: 'Starting'},
+    {value: 0, description: 'Initialized'},
     {value: 1, description: 'Loaded'}
 ];
 
-/**
- * Name of event fired, when marker is loaded
- * @type {String}
- */
-const EVENT_MARKER_LOADED = "marker-loaded";
-
 export class Marker {
 
-    constructor(position = new Point(), imgPath = null, offset = new Point()) {
+    get scaleX() {
+        return this.distortionFactor();
+    }
+
+    get viewOffset() {
+        return this.mapOffset();
+    }
+
+    get xOffset() {
+        return this.xOffsetToCenter();
+    }
+
+    constructor(position = new Point(), imgPath = null, offset = new Point(), $container=null, distortionFactor = function(){return 1;}, mapOffset = function(){return new Point();}, xOffsetToCenter = function() {return 0;}) {
         if (!imgPath) {
             console.error("Can not initialize Marker", imgPath);
         }
 
+        this.distortionFactor = distortionFactor;
+        this.mapOffset = mapOffset;
+        this.xOffsetToCenter = xOffsetToCenter;
+
         this.position = position;
         this.offset = offset;
-        this.path = imgPath;
+
+        this.$container = $container;
 
         this.stateHandler = new StateHandler(STATES);
 
-        Helper.loadImage(this.path, function(img) {
+        Helper.loadImage(imgPath, function(img) {
             this.onImageLoad(img);
         }.bind(this));
     }
@@ -41,16 +52,28 @@ export class Marker {
     onImageLoad(img) {
         this.img = img;
         this.offset.add(new Point(-(this.img.width/2), -this.img.height));
-        this.icon = new Rectangle(this.position.x, this.position.y, this.img.width, this.img.height);
+        this.addMarkerToDOM();
         this.stateHandler.next();
+        this.moveMarker();
     }
 
-    draw(x, y, scaleX, offsetX, context) {
-        if (this.stateHandler.current.value === 1) {
-            const p = new Point((this.icon.x + x) * scaleX + offsetX, this.icon.y + y);
-            p.add(this.offset);
-            context.drawImage(this.img, p.x, p.y, this.icon.width, this.icon.height);
+    addMarkerToDOM() {
+        this.icon = $(this.img).addClass("marker").css({
+            "position": "absolute",
+            "top": 0,
+            "left": 0
+        });
+        if (this.$container) {
+            this.$container.append(this.icon);
         }
+    }
+
+    moveMarker() {
+        const p = new Point((this.position.x + this.viewOffset.x) * this.scaleX + this.xOffset, this.position.y + this.viewOffset.y);
+        p.add(this.offset);
+        this.icon.css({
+            transform: `translate3d(${p.x}px, ${p.y}px, 0)`
+        });
     }
 
 }

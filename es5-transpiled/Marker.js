@@ -56,23 +56,44 @@
      */
     var STATES = [{
         value: 0,
-        description: 'Starting'
+        description: 'Initialized'
     }, {
         value: 1,
         description: 'Loaded'
     }];
 
-    /**
-     * Name of event fired, when marker is loaded
-     * @type {String}
-     */
-    var EVENT_MARKER_LOADED = "marker-loaded";
-
     var Marker = exports.Marker = function() {
+        _createClass(Marker, [{
+            key: 'scaleX',
+            get: function get() {
+                return this.distortionFactor();
+            }
+        }, {
+            key: 'viewOffset',
+            get: function get() {
+                return this.mapOffset();
+            }
+        }, {
+            key: 'xOffset',
+            get: function get() {
+                return this.xOffsetToCenter();
+            }
+        }]);
+
         function Marker() {
             var position = arguments.length <= 0 || arguments[0] === undefined ? new _Point.Point() : arguments[0];
             var imgPath = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
             var offset = arguments.length <= 2 || arguments[2] === undefined ? new _Point.Point() : arguments[2];
+            var $container = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+            var distortionFactor = arguments.length <= 4 || arguments[4] === undefined ? function() {
+                return 1;
+            } : arguments[4];
+            var mapOffset = arguments.length <= 5 || arguments[5] === undefined ? function() {
+                return new _Point.Point();
+            } : arguments[5];
+            var xOffsetToCenter = arguments.length <= 6 || arguments[6] === undefined ? function() {
+                return 0;
+            } : arguments[6];
 
             _classCallCheck(this, Marker);
 
@@ -80,13 +101,18 @@
                 console.error("Can not initialize Marker", imgPath);
             }
 
+            this.distortionFactor = distortionFactor;
+            this.mapOffset = mapOffset;
+            this.xOffsetToCenter = xOffsetToCenter;
+
             this.position = position;
             this.offset = offset;
-            this.path = imgPath;
+
+            this.$container = $container;
 
             this.stateHandler = new _StateHandler.StateHandler(STATES);
 
-            _Helper.Helper.loadImage(this.path, function(img) {
+            _Helper.Helper.loadImage(imgPath, function(img) {
                 this.onImageLoad(img);
             }.bind(this));
         }
@@ -96,17 +122,30 @@
             value: function onImageLoad(img) {
                 this.img = img;
                 this.offset.add(new _Point.Point(-(this.img.width / 2), -this.img.height));
-                this.icon = new _Rectangle.Rectangle(this.position.x, this.position.y, this.img.width, this.img.height);
+                this.addMarkerToDOM();
                 this.stateHandler.next();
+                this.moveMarker();
             }
         }, {
-            key: 'draw',
-            value: function draw(x, y, scaleX, offsetX, context) {
-                if (this.stateHandler.current.value === 1) {
-                    var p = new _Point.Point((this.icon.x + x) * scaleX + offsetX, this.icon.y + y);
-                    p.add(this.offset);
-                    context.drawImage(this.img, p.x, p.y, this.icon.width, this.icon.height);
+            key: 'addMarkerToDOM',
+            value: function addMarkerToDOM() {
+                this.icon = (0, _jquery2.default)(this.img).addClass("marker").css({
+                    "position": "absolute",
+                    "top": 0,
+                    "left": 0
+                });
+                if (this.$container) {
+                    this.$container.append(this.icon);
                 }
+            }
+        }, {
+            key: 'moveMarker',
+            value: function moveMarker() {
+                var p = new _Point.Point((this.position.x + this.viewOffset.x) * this.scaleX + this.xOffset, this.position.y + this.viewOffset.y);
+                p.add(this.offset);
+                this.icon.css({
+                    transform: 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)'
+                });
             }
         }]);
 

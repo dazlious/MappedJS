@@ -22,11 +22,29 @@ export class View {
         return (Math.cos(Helper.toRadians(this.center.lat)));
     }
 
+    get getDistortionCalculation() {
+        return function() {
+            return (Math.cos(Helper.toRadians(this.center.lat)));
+        }.bind(this);
+    }
+
     /**
      * Returns the current equalized viewport
      */
     get viewportOffset() {
         return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
+    }
+
+    get viewportOffsetCalculation() {
+        return function() {
+            return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
+        }.bind(this);
+    }
+
+    get  viewOffsetCalculation() {
+        return function() {
+            return new Point(this.mapView.x, this.mapView.y);
+        }.bind(this);
     }
 
     /**
@@ -56,7 +74,6 @@ export class View {
         bounds = new Bounds(),
         center = new LatLng(),
         data = {},
-        markerData = [],
         context = null
         }) {
         this.mapView = mapView;
@@ -70,11 +87,10 @@ export class View {
         this.mapView.position(newCenter.x, newCenter.y);
 
         this.tiles = [];
-        this.markers = [];
         this.data = data;
         this.context = context;
 
-        this.bindEvents().initializeTiles().loadThumb().initializeMarkers(markerData);
+        this.bindEvents().initializeTiles().loadThumb();
 
         return this;
     }
@@ -115,7 +131,7 @@ export class View {
 
     drawHandler(o) {
         o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset);
-        this.drawMarkers();
+        //this.drawMarkers();
         return this;
     }
 
@@ -185,23 +201,12 @@ export class View {
                 this.drawHandler(currentlyVisibleTiles[i]);
             }
         }
-        this.drawMarkers();
         return this;
     }
 
     drawLargeThumbnail() {
         let rect = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
         this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
-    }
-
-    drawMarkers() {
-        for (const i in this.markers) {
-            if (this.markers[i]) {
-                const m = this.markers[i];
-                m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
-            }
-        }
-        return this;
     }
 
     /**
@@ -216,21 +221,6 @@ export class View {
                 currentTileData["context"] = this.context;
                 const currentTile = new Tile(currentTileData);
                 this.tiles.push(currentTile);
-            }
-        }
-        return this;
-    }
-
-    initializeMarkers(markerData) {
-        if (markerData) {
-            for (const i in markerData) {
-                if (markerData[i]) {
-                    const currentData = markerData[i],
-                        offset = (currentData.offset) ? new Point(currentData.offset[0], currentData.offset[1]) : new Point(0, 0),
-                        markerPixelPos = this.convertLatLngToPoint(new LatLng(currentData.position[0], currentData.position[1])),
-                        m = new Marker(markerPixelPos, currentData.img, offset);
-                    this.markers.push(m);
-                }
             }
         }
         return this;
