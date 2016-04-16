@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Publisher = __webpack_require__(12);
 
-	var _Interact = __webpack_require__(13);
+	var _Interact = __webpack_require__(14);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -381,7 +381,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.$container = container;
 	        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
 	        this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
-	        this.markers = [];
 	        this.settings = settings;
 
 	        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
@@ -405,10 +404,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
 	                center: new _LatLng.LatLng(center.lat, center.lng),
 	                data: this.getCurrentLevelData(),
+	                markerData: this.markerData,
+	                $container: this.$container,
 	                context: this.canvasContext
 	            });
 	            this.resizeCanvas();
-	            this.initializeMarkers();
 	            return this;
 	        }
 
@@ -460,18 +460,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function redraw() {
 	            this.clearCanvas();
 	            this.view.draw();
-	            this.repositionMarkers();
 	            return this;
-	        }
-	    }, {
-	        key: 'repositionMarkers',
-	        value: function repositionMarkers() {
-	            for (var i in this.markers) {
-	                if (this.markers[i]) {
-	                    var currentMarker = this.markers[i];
-	                    currentMarker.moveMarker();
-	                }
-	            }
 	        }
 
 	        /**
@@ -485,7 +474,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.resizeCanvas();
 	            this.resizeView();
 	            this.view.draw();
-	            this.repositionMarkers();
 	            return this;
 	        }
 
@@ -514,24 +502,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.view.viewport.size(this.left, this.top, this.width, this.height);
 	            var difference = this.view.viewport.center.substract(oldViewport.center);
 	            this.view.mapView.translate(difference.x, difference.y);
-	            return this;
-	        }
-	    }, {
-	        key: 'initializeMarkers',
-	        value: function initializeMarkers() {
-	            if (this.markerData) {
-	                var cont = (0, _jquery2.default)("<div class='marker-container' />");
-	                this.$container.append(cont);
-	                for (var i in this.markerData) {
-	                    if (this.markerData[i]) {
-	                        var currentData = this.markerData[i],
-	                            offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
-	                            markerPixelPos = this.view.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
-	                            m = new _Marker.Marker(markerPixelPos, currentData.img, offset, cont, this.view.getDistortionCalculation, this.view.viewOffsetCalculation, this.view.viewportOffsetCalculation);
-	                        this.markers.push(m);
-	                    }
-	                }
-	            }
 	            return this;
 	        }
 	    }]);
@@ -1439,7 +1409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * States of a marker
 	 * @type {Array}
 	 */
-	var STATES = [{ value: 0, description: 'Initialized' }, { value: 1, description: 'Loaded' }];
+	var STATES = [{ value: 0, description: 'Loading' }, { value: 0, description: 'Initialized' }, { value: 1, description: 'Ready' }];
 
 	var Marker = exports.Marker = function () {
 	    _createClass(Marker, [{
@@ -1460,71 +1430,77 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 
 	    function Marker() {
-	        var position = arguments.length <= 0 || arguments[0] === undefined ? new _Point.Point() : arguments[0];
-	        var imgPath = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-	        var offset = arguments.length <= 2 || arguments[2] === undefined ? new _Point.Point() : arguments[2];
-	        var $container = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
-	        var distortionFactor = arguments.length <= 4 || arguments[4] === undefined ? function () {
+	        var data = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+	        var $container = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	        var distortionFactor = arguments.length <= 2 || arguments[2] === undefined ? function () {
 	            return 1;
+	        } : arguments[2];
+	        var mapOffset = arguments.length <= 3 || arguments[3] === undefined ? function () {
+	            return new _Point.Point();
+	        } : arguments[3];
+	        var xOffsetToCenter = arguments.length <= 4 || arguments[4] === undefined ? function () {
+	            return 0;
 	        } : arguments[4];
-	        var mapOffset = arguments.length <= 5 || arguments[5] === undefined ? function () {
+	        var calculateLatLngToPoint = arguments.length <= 5 || arguments[5] === undefined ? function () {
 	            return new _Point.Point();
 	        } : arguments[5];
-	        var xOffsetToCenter = arguments.length <= 6 || arguments[6] === undefined ? function () {
-	            return 0;
-	        } : arguments[6];
 
 	        _classCallCheck(this, Marker);
 
-	        if (!imgPath) {
-	            console.error("Can not initialize Marker", imgPath);
+	        if (!data) {
+	            console.error("Can not initialize Marker", data);
 	        }
 
+	        this.stateHandler = new _StateHandler.StateHandler(STATES);
+
+	        this.calculateLatLngToPoint = calculateLatLngToPoint;
 	        this.distortionFactor = distortionFactor;
 	        this.mapOffset = mapOffset;
 	        this.xOffsetToCenter = xOffsetToCenter;
 
-	        this.position = position;
-	        this.offset = offset;
+	        this.size = data.size;
+	        this.hover = data.hover;
+	        if (this.hover) {
+	            this.size.divide(2, 1);
+	        }
+	        this.img = data.icon;
+	        this.offset = data.offset;
+	        this.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
+	        this.latlng = data.latlng;
 
-	        this.$container = $container;
+	        this.position = this.calculateLatLngToPoint(this.latlng);
 
-	        this.stateHandler = new _StateHandler.StateHandler(STATES);
+	        this.icon = this.addMarkerToDOM($container);
 
-	        _Helper.Helper.loadImage(imgPath, function (img) {
-	            this.onImageLoad(img);
-	        }.bind(this));
+	        this.moveMarker();
 	    }
 
 	    _createClass(Marker, [{
-	        key: 'onImageLoad',
-	        value: function onImageLoad(img) {
-	            this.img = img;
-	            this.offset.add(new _Point.Point(-(this.img.width / 2), -this.img.height));
-	            this.addMarkerToDOM();
-	            this.stateHandler.next();
-	            this.moveMarker();
-	        }
-	    }, {
 	        key: 'addMarkerToDOM',
-	        value: function addMarkerToDOM() {
-	            this.icon = (0, _jquery2.default)(this.img).addClass("marker").css({
-	                "position": "absolute",
-	                "top": 0,
-	                "left": 0
+	        value: function addMarkerToDOM($container) {
+	            var icon = (0, _jquery2.default)("<div class='marker' />").css({
+	                "width": this.size.x + 'px',
+	                "height": this.size.y + 'px',
+	                "margin-left": this.offset.x + 'px',
+	                "margin-top": this.offset.y + 'px',
+	                "background-image": 'url(' + this.img + ')',
+	                "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
 	            });
-	            if (this.$container) {
-	                this.$container.append(this.icon);
+	            if ($container) {
+	                $container.append(icon);
+	                this.stateHandler.next();
 	            }
+	            return icon;
 	        }
 	    }, {
 	        key: 'moveMarker',
 	        value: function moveMarker() {
 	            var p = new _Point.Point((this.position.x + this.viewOffset.x) * this.scaleX + this.xOffset, this.position.y + this.viewOffset.y);
-	            p.add(this.offset);
-	            this.icon.css({
-	                transform: 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)'
-	            });
+	            if (this.icon) {
+	                this.icon.css({
+	                    transform: 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)'
+	                });
+	            }
 	        }
 	    }]);
 
@@ -1734,6 +1710,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        img.src = path;
 	        return this;
 	    },
+	    forEach: function forEach(a, fn) {
+	        for (var i in a) {
+	            if (a[i] && typeof fn === "function") {
+	                fn(a[i], i);
+	            }
+	        }
+	    },
 	    /**
 	     * convert degree to radian
 	     * @param {number} degrees - specified degrees
@@ -1774,6 +1757,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Marker = __webpack_require__(7);
 
+	var _DataEnrichment = __webpack_require__(13);
+
+	var _jquery = __webpack_require__(1);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
@@ -1783,12 +1774,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var View = exports.View = function () {
 	    _createClass(View, [{
-	        key: 'equalizationFactor',
+	        key: 'distortionFactor',
 
 
 	        /**
-	         * Returns current equalizationFactor
-	         * @return {number} returns current equalizationFactor of latitude
+	         * Returns current distortionFactor
+	         * @return {number} returns current distortionFactor of latitude
 	         */
 	        get: function get() {
 	            return Math.cos(_Helper.Helper.toRadians(this.center.lat));
@@ -1808,13 +1799,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'viewportOffset',
 	        get: function get() {
-	            return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
+	            return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
 	        }
 	    }, {
 	        key: 'viewportOffsetCalculation',
 	        get: function get() {
 	            return function () {
-	                return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
+	                return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
 	            }.bind(this);
 	        }
 	    }, {
@@ -1823,6 +1814,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return function () {
 	                return new _Point.Point(this.mapView.x, this.mapView.y);
 	            }.bind(this);
+	        }
+	    }, {
+	        key: 'calculateLatLngToPoint',
+	        get: function get() {
+	            return this.convertLatLngToPoint.bind(this);
+	        }
+	    }, {
+	        key: 'calculatePointToLatLng',
+	        get: function get() {
+	            return this.convertPointToLatLng.bind(this);
 	        }
 
 	        /**
@@ -1834,9 +1835,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'visibleTiles',
 	        get: function get() {
 	            return this.tiles.filter(function (t) {
-	                var newTile = t.getDistortedRect(this.equalizationFactor).translate(this.mapView.x * this.equalizationFactor + this.viewportOffset, this.mapView.y);
+	                var newTile = t.getDistortedRect(this.distortionFactor).translate(this.mapView.x * this.distortionFactor + this.viewportOffset, this.mapView.y);
 	                return this.viewport.intersects(newTile);
 	            }, this);
+	        }
+	    }, {
+	        key: 'pixelPerLatLng',
+	        get: function get() {
+	            return new _Point.Point(this.mapView.width / this.bounds.width, this.mapView.height / this.bounds.height);
 	        }
 
 	        /**
@@ -1863,6 +1869,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? {} : _ref$data;
+	        var _ref$markerData = _ref.markerData;
+	        var markerData = _ref$markerData === undefined ? null : _ref$markerData;
+	        var _ref$$container = _ref.$container;
+	        var $container = _ref$$container === undefined ? null : _ref$$container;
 	        var _ref$context = _ref.context;
 	        var context = _ref$context === undefined ? null : _ref$context;
 
@@ -1873,16 +1883,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.bounds = bounds;
 	        this.center = center;
 
-	        this.CONVERSION_RATIO = new _Point.Point(this.mapView.width / this.bounds.width, this.mapView.height / this.bounds.height);
-
 	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
 	        this.mapView.position(newCenter.x, newCenter.y);
 
 	        this.tiles = [];
 	        this.data = data;
 	        this.context = context;
+	        this.markers = [];
 
-	        this.bindEvents().initializeTiles().loadThumb();
+	        this.bindEvents().initializeTiles().loadThumb().initializeMarkers(markerData, $container);
 
 	        return this;
 	    }
@@ -1913,7 +1922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'convertPointToLatLng',
 	        value: function convertPointToLatLng(point) {
-	            point.divide(this.CONVERSION_RATIO.x, this.CONVERSION_RATIO.y);
+	            point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
 	            return new _LatLng.LatLng(point.y, point.x).substract(this.bounds.nw);
 	        }
 
@@ -1927,14 +1936,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'convertLatLngToPoint',
 	        value: function convertLatLngToPoint(latlng) {
 	            var relativePosition = this.bounds.nw.clone.substract(latlng);
-	            relativePosition.multiply(this.CONVERSION_RATIO.y, this.CONVERSION_RATIO.x);
+	            relativePosition.multiply(this.pixelPerLatLng.y, this.pixelPerLatLng.x);
 	            return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
 	        }
 	    }, {
 	        key: 'drawHandler',
 	        value: function drawHandler(o) {
-	            o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset);
-	            //this.drawMarkers();
+	            o.handleDraw(this.mapView.x, this.mapView.y, this.distortionFactor, this.viewportOffset);
 	            return this;
 	        }
 
@@ -1947,8 +1955,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'moveView',
 	        value: function moveView(pos) {
-	            pos.divide(this.equalizationFactor, 1);
-	            var equalizedMap = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset + pos.x, pos.y);
+	            pos.divide(this.distortionFactor, 1);
+	            var equalizedMap = this.mapView.getDistortedRect(this.distortionFactor).translate(this.viewportOffset + pos.x, pos.y);
 	            if (!equalizedMap.containsRect(this.viewport)) {
 	                if (equalizedMap.width >= this.viewport.width) {
 	                    if (equalizedMap.left - this.viewport.left > 0) {
@@ -2004,20 +2012,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'draw',
 	        value: function draw() {
-	            this.drawLargeThumbnail();
+	            this.drawThumbnail();
 
-	            var currentlyVisibleTiles = this.visibleTiles;
-	            for (var i in currentlyVisibleTiles) {
-	                if (currentlyVisibleTiles[i]) {
-	                    this.drawHandler(currentlyVisibleTiles[i]);
-	                }
-	            }
+	            _Helper.Helper.forEach(this.visibleTiles, function (tile) {
+	                this.drawHandler(tile);
+	            }.bind(this));
+
+	            this.repositionMarkers();
+
 	            return this;
 	        }
 	    }, {
-	        key: 'drawLargeThumbnail',
-	        value: function drawLargeThumbnail() {
-	            var rect = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
+	        key: 'drawThumbnail',
+	        value: function drawThumbnail() {
+	            var rect = this.mapView.getDistortedRect(this.distortionFactor).translate(this.viewportOffset, 0);
 	            this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
 	        }
 
@@ -2030,15 +2038,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'initializeTiles',
 	        value: function initializeTiles() {
 	            var currentLevel = this.data.tiles;
-	            for (var tile in currentLevel) {
-	                if (currentLevel[tile]) {
-	                    var currentTileData = currentLevel[tile];
-	                    currentTileData["context"] = this.context;
-	                    var currentTile = new _Tile.Tile(currentTileData);
-	                    this.tiles.push(currentTile);
-	                }
+	            _Helper.Helper.forEach(currentLevel, function (currentTileData) {
+	                currentTileData["context"] = this.context;
+	                var currentTile = new _Tile.Tile(currentTileData);
+	                this.tiles.push(currentTile);
+	            }.bind(this));
+	            return this;
+	        }
+	    }, {
+	        key: 'enrichMarkerData',
+	        value: function enrichMarkerData(markerData, latlngToPoint) {
+	            // TODO
+	            _DataEnrichment.DataEnrichment.marker(markerData, latlngToPoint, function (data) {
+	                console.log(data);
+	            });
+	        }
+	    }, {
+	        key: 'appendMarkerContainerToDom',
+	        value: function appendMarkerContainerToDom($container) {
+	            this.$markerContainer = (0, _jquery2.default)("<div class='marker-container' />");
+	            $container.append(this.$markerContainer);
+	        }
+	    }, {
+	        key: 'initializeMarkers',
+	        value: function initializeMarkers(markerData, $container) {
+	            if (markerData) {
+
+	                this.enrichMarkerData(markerData, function (enrichedMarkerData) {
+	                    this.appendMarkerContainerToDom($container);
+	                    markerData = enrichedMarkerData;
+	                }.bind(this));
+
+	                _Helper.Helper.forEach(markerData, function (currentData) {
+	                    var m = new _Marker.Marker(currentData, this.$markerContainer, this.getDistortionCalculation, this.viewOffsetCalculation, this.viewportOffsetCalculation, this.calculateLatLngToPoint);
+	                    this.markers.push(m);
+	                }.bind(this));
 	            }
 	            return this;
+	        }
+	    }, {
+	        key: 'repositionMarkers',
+	        value: function repositionMarkers() {
+	            _Helper.Helper.forEach(this.markers, function (marker) {
+	                marker.moveMarker();
+	            }.bind(this));
 	        }
 	    }]);
 
@@ -2392,6 +2435,74 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.DataEnrichment = undefined;
+
+	var _jquery = __webpack_require__(1);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _Point = __webpack_require__(4);
+
+	var _LatLng = __webpack_require__(3);
+
+	var _Helper = __webpack_require__(9);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var DATA_MARKER = {
+	    icon: null,
+	    hover: false,
+	    position: {
+	        lat: 0,
+	        lng: 0
+	    },
+	    offset: {
+	        x: 0,
+	        y: 0
+	    },
+	    size: {
+	        width: 32,
+	        height: 32
+	    }
+	};
+
+	var DataEnrichment = exports.DataEnrichment = {
+	    marker: function marker(data, cb) {
+
+	        var enrichedData = [];
+
+	        _Helper.Helper.forEach(data, function (entry, i) {
+
+	            entry = _jquery2.default.extend(true, DATA_MARKER, entry);
+
+	            var offset = new _Point.Point(entry.offset.x, entry.offset.y);
+	            var latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng);
+	            var size = new _Point.Point(entry.size.width, entry.size.height);
+
+	            enrichedData.push({
+	                offset: offset,
+	                latlng: latlng,
+	                size: size,
+	                hover: entry.hover,
+	                icon: entry.icon
+	            });
+	        });
+
+	        if (typeof cb === "function") {
+	            cb(enrichedData);
+	        }
+	    }
+		};
+
+/***/ },
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

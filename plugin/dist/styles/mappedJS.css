@@ -27,13 +27,14 @@
 
 /* line 9, /Users/mduve/repository/MappedJS/plugin/src/styles/_marker.scss */
 .mappedJS .marker {
-	-webkit-filter: saturate(20%);
-	        filter: saturate(20%);
+	position: absolute;
+	top: 0;
+	left: 0;
 	cursor: pointer;
+	background-position: center left;
 }
 
-/* line 12, /Users/mduve/repository/MappedJS/plugin/src/styles/_marker.scss */
+/* line 15, /Users/mduve/repository/MappedJS/plugin/src/styles/_marker.scss */
 .mappedJS .marker:hover {
-	-webkit-filter: saturate(100%);
-	        filter: saturate(100%);
+	background-position: center right;
 }

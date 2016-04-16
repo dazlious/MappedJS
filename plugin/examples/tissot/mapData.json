@@ -779,40 +779,148 @@
     },
     "marker": [
         {
-            "position": [0, 0],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": 0,
+                "lng": 0
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
         },
         {
-            "position": [60, 0],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": 60,
+                "lng": 0
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
         },
         {
-            "position": [-60, 0],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": -60,
+                "lng": 0
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
         },
         {
-            "position": [0, 60],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": 0,
+                "lng": 60
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
         },
         {
-            "position": [0, -60],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": 0,
+                "lng": -60
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
         },
         {
-            "position": [-60, -60],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": -60,
+                "lng": -60
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
         },
         {
-            "position": [60, 60],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": 60,
+                "lng": 60
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
         },
         {
-            "position": [-60, 60],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": -60,
+                "lng": 60
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
         },
         {
-            "position": [60, -60],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": 60,
+                "lng": -60
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
         }
     ]
 }

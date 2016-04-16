@@ -121,7 +121,6 @@
             this.$container = container;
             this.imgData = tilesData[TileMap.IMG_DATA_NAME];
             this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
-            this.markers = [];
             this.settings = settings;
 
             this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
@@ -145,10 +144,11 @@
                     bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
                     center: new _LatLng.LatLng(center.lat, center.lng),
                     data: this.getCurrentLevelData(),
+                    markerData: this.markerData,
+                    $container: this.$container,
                     context: this.canvasContext
                 });
                 this.resizeCanvas();
-                this.initializeMarkers();
                 return this;
             }
 
@@ -200,18 +200,7 @@
             value: function redraw() {
                 this.clearCanvas();
                 this.view.draw();
-                this.repositionMarkers();
                 return this;
-            }
-        }, {
-            key: 'repositionMarkers',
-            value: function repositionMarkers() {
-                for (var i in this.markers) {
-                    if (this.markers[i]) {
-                        var currentMarker = this.markers[i];
-                        currentMarker.moveMarker();
-                    }
-                }
             }
 
             /**
@@ -225,7 +214,6 @@
                 this.resizeCanvas();
                 this.resizeView();
                 this.view.draw();
-                this.repositionMarkers();
                 return this;
             }
 
@@ -254,24 +242,6 @@
                 this.view.viewport.size(this.left, this.top, this.width, this.height);
                 var difference = this.view.viewport.center.substract(oldViewport.center);
                 this.view.mapView.translate(difference.x, difference.y);
-                return this;
-            }
-        }, {
-            key: 'initializeMarkers',
-            value: function initializeMarkers() {
-                if (this.markerData) {
-                    var cont = (0, _jquery2.default)("<div class='marker-container' />");
-                    this.$container.append(cont);
-                    for (var i in this.markerData) {
-                        if (this.markerData[i]) {
-                            var currentData = this.markerData[i],
-                                offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
-                                markerPixelPos = this.view.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
-                                m = new _Marker.Marker(markerPixelPos, currentData.img, offset, cont, this.view.getDistortionCalculation, this.view.viewOffsetCalculation, this.view.viewportOffsetCalculation);
-                            this.markers.push(m);
-                        }
-                    }
-                }
                 return this;
             }
         }]);

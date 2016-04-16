@@ -299,16 +299,25 @@
     },
     "marker": [
         {
-            "position": [52.5616082,6.76459],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "position": {
+                "lat": 52.5616082,
+                "lng": 6.76459
+            }
         },
         {
-            "position": [53.6275682,9.7679],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "position": {
+                "lat": 53.6275682,
+                "lng": 9.7679
+            }
         },
         {
-            "position": [52.6650522,13.468896],
-            "img": "img/icon.png"
+            "icon": "img/icon.png",
+            "position": {
+                "lat": 52.6650522,
+                "lng": 13.468896
+            }
         }
     ]
 }
