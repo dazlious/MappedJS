@@ -12,10 +12,28 @@
 /* line 8, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS canvas,
 .mappedJS img {
-	image-rendering: optimizeSpeed;
-	image-rendering: -moz-crisp-edges;
-	image-rendering: -webkit-optimize-contrast;
-	image-rendering: optimize-contrast;
-	-ms-interpolation-mode: nearest-neighbor;
 	display: block;
+}
+
+/* line 1, /Users/mduve/repository/MappedJS/plugin/src/styles/_marker.scss */
+.mappedJS .marker-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+/* line 9, /Users/mduve/repository/MappedJS/plugin/src/styles/_marker.scss */
+.mappedJS .marker {
+	-webkit-filter: saturate(20%);
+	        filter: saturate(20%);
+	cursor: pointer;
+}
+
+/* line 12, /Users/mduve/repository/MappedJS/plugin/src/styles/_marker.scss */
+.mappedJS .marker:hover {
+	-webkit-filter: saturate(100%);
+	        filter: saturate(100%);
 }

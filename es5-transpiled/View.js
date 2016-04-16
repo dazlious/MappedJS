@@ -59,6 +59,13 @@
             get: function get() {
                 return Math.cos(_Helper.Helper.toRadians(this.center.lat));
             }
+        }, {
+            key: 'getDistortionCalculation',
+            get: function get() {
+                return function() {
+                    return Math.cos(_Helper.Helper.toRadians(this.center.lat));
+                }.bind(this);
+            }
 
             /**
              * Returns the current equalized viewport
@@ -68,6 +75,20 @@
             key: 'viewportOffset',
             get: function get() {
                 return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
+            }
+        }, {
+            key: 'viewportOffsetCalculation',
+            get: function get() {
+                return function() {
+                    return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
+                }.bind(this);
+            }
+        }, {
+            key: 'viewOffsetCalculation',
+            get: function get() {
+                return function() {
+                    return new _Point.Point(this.mapView.x, this.mapView.y);
+                }.bind(this);
             }
 
             /**
@@ -108,8 +129,6 @@
             var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
             var _ref$data = _ref.data;
             var data = _ref$data === undefined ? {} : _ref$data;
-            var _ref$markerData = _ref.markerData;
-            var markerData = _ref$markerData === undefined ? [] : _ref$markerData;
             var _ref$context = _ref.context;
             var context = _ref$context === undefined ? null : _ref$context;
 
@@ -126,11 +145,10 @@
             this.mapView.position(newCenter.x, newCenter.y);
 
             this.tiles = [];
-            this.markers = [];
             this.data = data;
             this.context = context;
 
-            this.bindEvents().initializeTiles().loadThumb().initializeMarkers(markerData);
+            this.bindEvents().initializeTiles().loadThumb();
 
             return this;
         }
@@ -182,7 +200,7 @@
             key: 'drawHandler',
             value: function drawHandler(o) {
                 o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset);
-                this.drawMarkers();
+                //this.drawMarkers();
                 return this;
             }
 
@@ -260,7 +278,6 @@
                         this.drawHandler(currentlyVisibleTiles[i]);
                     }
                 }
-                this.drawMarkers();
                 return this;
             }
         }, {
@@ -268,17 +285,6 @@
             value: function drawLargeThumbnail() {
                 var rect = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
                 this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
-            }
-        }, {
-            key: 'drawMarkers',
-            value: function drawMarkers() {
-                for (var i in this.markers) {
-                    if (this.markers[i]) {
-                        var m = this.markers[i];
-                        m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
-                    }
-                }
-                return this;
             }
 
             /**
@@ -296,22 +302,6 @@
                         currentTileData["context"] = this.context;
                         var currentTile = new _Tile.Tile(currentTileData);
                         this.tiles.push(currentTile);
-                    }
-                }
-                return this;
-            }
-        }, {
-            key: 'initializeMarkers',
-            value: function initializeMarkers(markerData) {
-                if (markerData) {
-                    for (var i in markerData) {
-                        if (markerData[i]) {
-                            var currentData = markerData[i],
-                                offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
-                                markerPixelPos = this.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
-                                m = new _Marker.Marker(markerPixelPos, currentData.img, offset);
-                            this.markers.push(m);
-                        }
                     }
                 }
                 return this;

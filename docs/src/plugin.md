@@ -39,9 +39,6 @@
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a marker</p>
 </dd>
-<dt><a href="#EVENT_MARKER_LOADED">EVENT_MARKER_LOADED</a> : <code>String</code></dt>
-<dd><p>Name of event fired, when marker is loaded</p>
-</dd>
 <dt><a href="#PUBLISHER">PUBLISHER</a></dt>
 <dd><p>Singleton instance of Publisher</p>
 </dd>
@@ -1334,7 +1331,6 @@ check if tiles are equal
         * [.height](#TileMap+height) ⇒ <code>number</code>
         * [.initialize()](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
         * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.disableSubpixelRendering()](#TileMap+disableSubpixelRendering) ⇒ <code>[TileMap](#TileMap)</code>
         * [.getCurrentLevelData()](#TileMap+getCurrentLevelData) ⇒ <code>Object</code>
         * [.clearCanvas()](#TileMap+clearCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.redraw()](#TileMap+redraw) ⇒ <code>[TileMap](#TileMap)</code>
@@ -1399,13 +1395,6 @@ initializes the canvas, adds to DOM
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
-<a name="TileMap+disableSubpixelRendering"></a>
-
-### tileMap.disableSubpixelRendering() ⇒ <code>[TileMap](#TileMap)</code>
-disables rendering of subpixel in canvas
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+getCurrentLevelData"></a>
 
 ### tileMap.getCurrentLevelData() ⇒ <code>Object</code>
@@ -1584,12 +1573,6 @@ singleton instance
 
 ## STATES : <code>Array</code>
 States of a marker
-
-**Kind**: global constant  
-<a name="EVENT_MARKER_LOADED"></a>
-
-## EVENT_MARKER_LOADED : <code>String</code>
-Name of event fired, when marker is loaded
 
 **Kind**: global constant  
 <a name="PUBLISHER"></a>

@@ -71,9 +71,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _TileMap = __webpack_require__(2);
 
-	var _Helper = __webpack_require__(11);
+	var _Helper = __webpack_require__(9);
 
-	var _Publisher = __webpack_require__(10);
+	var _Publisher = __webpack_require__(12);
 
 	var _Interact = __webpack_require__(13);
 
@@ -296,11 +296,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _LatLng = __webpack_require__(3);
 
+	var _Point = __webpack_require__(4);
+
 	var _Bounds = __webpack_require__(5);
 
 	var _Rectangle = __webpack_require__(6);
 
-	var _View = __webpack_require__(7);
+	var _Marker = __webpack_require__(7);
+
+	var _View = __webpack_require__(10);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -377,6 +381,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.$container = container;
 	        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
 	        this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
+	        this.markers = [];
 	        this.settings = settings;
 
 	        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
@@ -400,10 +405,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
 	                center: new _LatLng.LatLng(center.lat, center.lng),
 	                data: this.getCurrentLevelData(),
-	                markerData: this.markerData,
 	                context: this.canvasContext
 	            });
 	            this.resizeCanvas();
+	            this.initializeMarkers();
 	            return this;
 	        }
 
@@ -419,20 +424,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.canvas = this.$canvas[0];
 	            this.$container.append(this.$canvas);
 	            this.canvasContext = this.canvas.getContext("2d");
-	            return this;
-	        }
-
-	        /**
-	         * disables rendering of subpixel in canvas
-	         * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'disableSubpixelRendering',
-	        value: function disableSubpixelRendering() {
-	            this.canvasContext.mozImageSmoothingEnabled = false;
-	            this.canvasContext.msImageSmoothingEnabled = false;
-	            this.canvasContext.imageSmoothingEnabled = false;
 	            return this;
 	        }
 
@@ -469,7 +460,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function redraw() {
 	            this.clearCanvas();
 	            this.view.draw();
+	            this.repositionMarkers();
 	            return this;
+	        }
+	    }, {
+	        key: 'repositionMarkers',
+	        value: function repositionMarkers() {
+	            for (var i in this.markers) {
+	                if (this.markers[i]) {
+	                    var currentMarker = this.markers[i];
+	                    currentMarker.moveMarker();
+	                }
+	            }
 	        }
 
 	        /**
@@ -483,6 +485,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.resizeCanvas();
 	            this.resizeView();
 	            this.view.draw();
+	            this.repositionMarkers();
 	            return this;
 	        }
 
@@ -496,7 +499,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function resizeCanvas() {
 	            this.canvasContext.canvas.width = this.width;
 	            this.canvasContext.canvas.height = this.height;
-	            //this.disableSubpixelRendering();
 	            return this;
 	        }
 
@@ -512,6 +514,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.view.viewport.size(this.left, this.top, this.width, this.height);
 	            var difference = this.view.viewport.center.substract(oldViewport.center);
 	            this.view.mapView.translate(difference.x, difference.y);
+	            return this;
+	        }
+	    }, {
+	        key: 'initializeMarkers',
+	        value: function initializeMarkers() {
+	            if (this.markerData) {
+	                var cont = (0, _jquery2.default)("<div class='marker-container' />");
+	                this.$container.append(cont);
+	                for (var i in this.markerData) {
+	                    if (this.markerData[i]) {
+	                        var currentData = this.markerData[i],
+	                            offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
+	                            markerPixelPos = this.view.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
+	                            m = new _Marker.Marker(markerPixelPos, currentData.img, offset, cont, this.view.getDistortionCalculation, this.view.viewOffsetCalculation, this.view.viewportOffsetCalculation);
+	                        this.markers.push(m);
+	                    }
+	                }
+	            }
 	            return this;
 	        }
 	    }]);
@@ -1393,6 +1413,347 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.Marker = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Rectangle = __webpack_require__(6);
+
+	var _LatLng = __webpack_require__(3);
+
+	var _StateHandler = __webpack_require__(8);
+
+	var _Point = __webpack_require__(4);
+
+	var _Helper = __webpack_require__(9);
+
+	var _jquery = __webpack_require__(1);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * States of a marker
+	 * @type {Array}
+	 */
+	var STATES = [{ value: 0, description: 'Initialized' }, { value: 1, description: 'Loaded' }];
+
+	var Marker = exports.Marker = function () {
+	    _createClass(Marker, [{
+	        key: 'scaleX',
+	        get: function get() {
+	            return this.distortionFactor();
+	        }
+	    }, {
+	        key: 'viewOffset',
+	        get: function get() {
+	            return this.mapOffset();
+	        }
+	    }, {
+	        key: 'xOffset',
+	        get: function get() {
+	            return this.xOffsetToCenter();
+	        }
+	    }]);
+
+	    function Marker() {
+	        var position = arguments.length <= 0 || arguments[0] === undefined ? new _Point.Point() : arguments[0];
+	        var imgPath = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	        var offset = arguments.length <= 2 || arguments[2] === undefined ? new _Point.Point() : arguments[2];
+	        var $container = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+	        var distortionFactor = arguments.length <= 4 || arguments[4] === undefined ? function () {
+	            return 1;
+	        } : arguments[4];
+	        var mapOffset = arguments.length <= 5 || arguments[5] === undefined ? function () {
+	            return new _Point.Point();
+	        } : arguments[5];
+	        var xOffsetToCenter = arguments.length <= 6 || arguments[6] === undefined ? function () {
+	            return 0;
+	        } : arguments[6];
+
+	        _classCallCheck(this, Marker);
+
+	        if (!imgPath) {
+	            console.error("Can not initialize Marker", imgPath);
+	        }
+
+	        this.distortionFactor = distortionFactor;
+	        this.mapOffset = mapOffset;
+	        this.xOffsetToCenter = xOffsetToCenter;
+
+	        this.position = position;
+	        this.offset = offset;
+
+	        this.$container = $container;
+
+	        this.stateHandler = new _StateHandler.StateHandler(STATES);
+
+	        _Helper.Helper.loadImage(imgPath, function (img) {
+	            this.onImageLoad(img);
+	        }.bind(this));
+	    }
+
+	    _createClass(Marker, [{
+	        key: 'onImageLoad',
+	        value: function onImageLoad(img) {
+	            this.img = img;
+	            this.offset.add(new _Point.Point(-(this.img.width / 2), -this.img.height));
+	            this.addMarkerToDOM();
+	            this.stateHandler.next();
+	            this.moveMarker();
+	        }
+	    }, {
+	        key: 'addMarkerToDOM',
+	        value: function addMarkerToDOM() {
+	            this.icon = (0, _jquery2.default)(this.img).addClass("marker").css({
+	                "position": "absolute",
+	                "top": 0,
+	                "left": 0
+	            });
+	            if (this.$container) {
+	                this.$container.append(this.icon);
+	            }
+	        }
+	    }, {
+	        key: 'moveMarker',
+	        value: function moveMarker() {
+	            var p = new _Point.Point((this.position.x + this.viewOffset.x) * this.scaleX + this.xOffset, this.position.y + this.viewOffset.y);
+	            p.add(this.offset);
+	            this.icon.css({
+	                transform: 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)'
+	            });
+	        }
+	    }]);
+
+	    return Marker;
+	}();
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var StateHandler = exports.StateHandler = function () {
+	    _createClass(StateHandler, [{
+	        key: 'current',
+
+
+	        /**
+	         * get current state
+	         * @return {Object} current state from STATES-array
+	         */
+	        get: function get() {
+	            return this.states[this.i];
+	        }
+
+	        /**
+	         * get number of states
+	         * @return {number} number of states
+	         */
+
+	    }, {
+	        key: 'length',
+	        get: function get() {
+	            return this.states.length;
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }]);
+
+	    function StateHandler() {
+	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{ value: 0, description: 'Default' }] : arguments[0];
+
+	        _classCallCheck(this, StateHandler);
+
+	        this.states = states_array;
+	        this.i = 0;
+	        this.lastState = this.current;
+	        return this;
+	    }
+
+	    /**
+	     * get the next element
+	     * @return {StateHandler} instance of StateHandler
+	     */
+
+
+	    _createClass(StateHandler, [{
+	        key: 'next',
+	        value: function next() {
+	            this.lastState = this.current;
+	            if (this.hasNext()) {
+	                this.i++;
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * get the previous element
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }, {
+	        key: 'previous',
+	        value: function previous() {
+	            this.lastState = this.current;
+	            if (this.hasPrevious()) {
+	                this.i--;
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * change the state to specified state
+	         * @param {number} state - index of state in array
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }, {
+	        key: 'changeTo',
+	        value: function changeTo(state) {
+	            if (state >= 0 && state < this.length) {
+	                this.i = state;
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * change the state to specified value of specified property
+	         * @param {number} state - index of state in array
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }, {
+	        key: 'changeToValue',
+	        value: function changeToValue(prop, value) {
+	            for (var i = 0; i < this.length; i++) {
+	                if (this.states[i] && value === this.states[i][prop]) {
+	                    this.i = i;
+	                }
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * checks if there is a next element
+	         * @return {Boolean} wheter there is a next state or not
+	         */
+
+	    }, {
+	        key: 'hasNext',
+	        value: function hasNext() {
+	            return this.i < this.length - 1;
+	        }
+
+	        /**
+	         * checks if there is a previous element
+	         * @return {Boolean} wheter there is a previous state or not
+	         */
+
+	    }, {
+	        key: 'hasPrevious',
+	        value: function hasPrevious() {
+	            return this.i > 0;
+	        }
+	    }]);
+
+	    return StateHandler;
+	}();
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Helper = undefined;
+
+	var _jquery = __webpack_require__(1);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Helper = exports.Helper = {
+
+	    /**
+	     * request json-data from given file and calls callback on success
+	     * @param  {string} filename - path to file
+	     * @param  {Function} callback - function called when data is loaded successfully
+	     * @return {Helper} Helper
+	     */
+	    requestJSON: function requestJSON(filename, callback) {
+	        _jquery2.default.ajax({
+	            type: "GET",
+	            url: filename,
+	            dataType: "json",
+	            success: function success(data) {
+	                return callback(data);
+	            },
+	            error: function error(response) {
+	                if (response.status === 200) {
+	                    throw new Error("The JSON submitted seems not valid");
+	                }
+	                console.error("Error requesting file: ", response);
+	            }
+	        });
+	        return this;
+	    },
+	    /**
+	     * loads an image and calls callback on success
+	     * @param {Function} cb - callback-function on success
+	     * @return {Helper} Helper
+	     */
+	    loadImage: function loadImage(path, cb) {
+	        var img = new Image();
+	        img.onload = function () {
+	            if (cb && typeof cb === "function") {
+	                cb(img);
+	            }
+	        };
+	        img.src = path;
+	        return this;
+	    },
+	    /**
+	     * convert degree to radian
+	     * @param {number} degrees - specified degrees
+	     * @return {number} converted radian
+	     */
+	    toRadians: function toRadians(degrees) {
+	        return degrees * Math.PI / 180;
+	    }
+
+		};
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.View = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1405,13 +1766,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Rectangle = __webpack_require__(6);
 
-	var _Tile = __webpack_require__(8);
+	var _Tile = __webpack_require__(11);
 
-	var _Publisher = __webpack_require__(10);
+	var _Publisher = __webpack_require__(12);
 
-	var _Helper = __webpack_require__(11);
+	var _Helper = __webpack_require__(9);
 
-	var _Marker = __webpack_require__(12);
+	var _Marker = __webpack_require__(7);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1432,6 +1793,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	            return Math.cos(_Helper.Helper.toRadians(this.center.lat));
 	        }
+	    }, {
+	        key: 'getDistortionCalculation',
+	        get: function get() {
+	            return function () {
+	                return Math.cos(_Helper.Helper.toRadians(this.center.lat));
+	            }.bind(this);
+	        }
 
 	        /**
 	         * Returns the current equalized viewport
@@ -1441,6 +1809,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'viewportOffset',
 	        get: function get() {
 	            return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
+	        }
+	    }, {
+	        key: 'viewportOffsetCalculation',
+	        get: function get() {
+	            return function () {
+	                return (this.viewport.width - this.viewport.width * this.equalizationFactor) / 2;
+	            }.bind(this);
+	        }
+	    }, {
+	        key: 'viewOffsetCalculation',
+	        get: function get() {
+	            return function () {
+	                return new _Point.Point(this.mapView.x, this.mapView.y);
+	            }.bind(this);
 	        }
 
 	        /**
@@ -1481,8 +1863,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? {} : _ref$data;
-	        var _ref$markerData = _ref.markerData;
-	        var markerData = _ref$markerData === undefined ? [] : _ref$markerData;
 	        var _ref$context = _ref.context;
 	        var context = _ref$context === undefined ? null : _ref$context;
 
@@ -1499,11 +1879,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.mapView.position(newCenter.x, newCenter.y);
 
 	        this.tiles = [];
-	        this.markers = [];
 	        this.data = data;
 	        this.context = context;
 
-	        this.bindEvents().initializeTiles().loadThumb().initializeMarkers(markerData);
+	        this.bindEvents().initializeTiles().loadThumb();
 
 	        return this;
 	    }
@@ -1555,7 +1934,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'drawHandler',
 	        value: function drawHandler(o) {
 	            o.handleDraw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset);
-	            this.drawMarkers();
+	            //this.drawMarkers();
 	            return this;
 	        }
 
@@ -1633,7 +2012,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.drawHandler(currentlyVisibleTiles[i]);
 	                }
 	            }
-	            this.drawMarkers();
 	            return this;
 	        }
 	    }, {
@@ -1641,17 +2019,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function drawLargeThumbnail() {
 	            var rect = this.mapView.getDistortedRect(this.equalizationFactor).translate(this.viewportOffset, 0);
 	            this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
-	        }
-	    }, {
-	        key: 'drawMarkers',
-	        value: function drawMarkers() {
-	            for (var i in this.markers) {
-	                if (this.markers[i]) {
-	                    var m = this.markers[i];
-	                    m.draw(this.mapView.x, this.mapView.y, this.equalizationFactor, this.viewportOffset, this.context);
-	                }
-	            }
-	            return this;
 	        }
 
 	        /**
@@ -1673,29 +2040,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return this;
 	        }
-	    }, {
-	        key: 'initializeMarkers',
-	        value: function initializeMarkers(markerData) {
-	            if (markerData) {
-	                for (var i in markerData) {
-	                    if (markerData[i]) {
-	                        var currentData = markerData[i],
-	                            offset = currentData.offset ? new _Point.Point(currentData.offset[0], currentData.offset[1]) : new _Point.Point(0, 0),
-	                            markerPixelPos = this.convertLatLngToPoint(new _LatLng.LatLng(currentData.position[0], currentData.position[1])),
-	                            m = new _Marker.Marker(markerPixelPos, currentData.img, offset);
-	                        this.markers.push(m);
-	                    }
-	                }
-	            }
-	            return this;
-	        }
 	    }]);
 
 	    return View;
 	}();
 
 /***/ },
-/* 8 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1713,13 +2064,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _StateHandler = __webpack_require__(9);
+	var _StateHandler = __webpack_require__(8);
 
 	var _Rectangle2 = __webpack_require__(6);
 
-	var _Publisher = __webpack_require__(10);
+	var _Publisher = __webpack_require__(12);
 
-	var _Helper = __webpack_require__(11);
+	var _Helper = __webpack_require__(9);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1896,153 +2247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_Rectangle2.Rectangle);
 
 /***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var StateHandler = exports.StateHandler = function () {
-	    _createClass(StateHandler, [{
-	        key: 'current',
-
-
-	        /**
-	         * get current state
-	         * @return {Object} current state from STATES-array
-	         */
-	        get: function get() {
-	            return this.states[this.i];
-	        }
-
-	        /**
-	         * get number of states
-	         * @return {number} number of states
-	         */
-
-	    }, {
-	        key: 'length',
-	        get: function get() {
-	            return this.states.length;
-	        }
-
-	        /**
-	         * Constructor
-	         * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
-	         * @return {StateHandler} instance of StateHandler
-	         */
-
-	    }]);
-
-	    function StateHandler() {
-	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{ value: 0, description: 'Default' }] : arguments[0];
-
-	        _classCallCheck(this, StateHandler);
-
-	        this.states = states_array;
-	        this.i = 0;
-	        this.lastState = this.current;
-	        return this;
-	    }
-
-	    /**
-	     * get the next element
-	     * @return {StateHandler} instance of StateHandler
-	     */
-
-
-	    _createClass(StateHandler, [{
-	        key: 'next',
-	        value: function next() {
-	            this.lastState = this.current;
-	            if (this.hasNext()) {
-	                this.i++;
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * get the previous element
-	         * @return {StateHandler} instance of StateHandler
-	         */
-
-	    }, {
-	        key: 'previous',
-	        value: function previous() {
-	            this.lastState = this.current;
-	            if (this.hasPrevious()) {
-	                this.i--;
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * change the state to specified state
-	         * @param {number} state - index of state in array
-	         * @return {StateHandler} instance of StateHandler
-	         */
-
-	    }, {
-	        key: 'changeTo',
-	        value: function changeTo(state) {
-	            if (state >= 0 && state < this.length) {
-	                this.i = state;
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * change the state to specified value of specified property
-	         * @param {number} state - index of state in array
-	         * @return {StateHandler} instance of StateHandler
-	         */
-
-	    }, {
-	        key: 'changeToValue',
-	        value: function changeToValue(prop, value) {
-	            for (var i = 0; i < this.length; i++) {
-	                if (this.states[i] && value === this.states[i][prop]) {
-	                    this.i = i;
-	                }
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * checks if there is a next element
-	         * @return {Boolean} wheter there is a next state or not
-	         */
-
-	    }, {
-	        key: 'hasNext',
-	        value: function hasNext() {
-	            return this.i < this.length - 1;
-	        }
-
-	        /**
-	         * checks if there is a previous element
-	         * @return {Boolean} wheter there is a previous state or not
-	         */
-
-	    }, {
-	        key: 'hasPrevious',
-	        value: function hasPrevious() {
-	            return this.i > 0;
-	        }
-	    }]);
-
-	    return StateHandler;
-	}();
-
-/***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2184,162 +2389,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @type {String}
 	 */
 		Publisher.UNSUBSCRIBE = "unsubscribe";
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Helper = undefined;
-
-	var _jquery = __webpack_require__(1);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Helper = exports.Helper = {
-
-	    /**
-	     * request json-data from given file and calls callback on success
-	     * @param  {string} filename - path to file
-	     * @param  {Function} callback - function called when data is loaded successfully
-	     * @return {Helper} Helper
-	     */
-	    requestJSON: function requestJSON(filename, callback) {
-	        _jquery2.default.ajax({
-	            type: "GET",
-	            url: filename,
-	            dataType: "json",
-	            success: function success(data) {
-	                return callback(data);
-	            },
-	            error: function error(response) {
-	                if (response.status === 200) {
-	                    throw new Error("The JSON submitted seems not valid");
-	                }
-	                console.error("Error requesting file: ", response);
-	            }
-	        });
-	        return this;
-	    },
-	    /**
-	     * loads an image and calls callback on success
-	     * @param {Function} cb - callback-function on success
-	     * @return {Helper} Helper
-	     */
-	    loadImage: function loadImage(path, cb) {
-	        var img = new Image();
-	        img.onload = function () {
-	            if (cb && typeof cb === "function") {
-	                cb(img);
-	            }
-	        };
-	        img.src = path;
-	        return this;
-	    },
-	    /**
-	     * convert degree to radian
-	     * @param {number} degrees - specified degrees
-	     * @return {number} converted radian
-	     */
-	    toRadians: function toRadians(degrees) {
-	        return degrees * Math.PI / 180;
-	    }
-
-		};
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Marker = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _Rectangle = __webpack_require__(6);
-
-	var _LatLng = __webpack_require__(3);
-
-	var _StateHandler = __webpack_require__(9);
-
-	var _Point = __webpack_require__(4);
-
-	var _Helper = __webpack_require__(11);
-
-	var _jquery = __webpack_require__(1);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * States of a marker
-	 * @type {Array}
-	 */
-	var STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Loaded' }];
-
-	/**
-	 * Name of event fired, when marker is loaded
-	 * @type {String}
-	 */
-	var EVENT_MARKER_LOADED = "marker-loaded";
-
-	var Marker = exports.Marker = function () {
-	    function Marker() {
-	        var position = arguments.length <= 0 || arguments[0] === undefined ? new _Point.Point() : arguments[0];
-	        var imgPath = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-	        var offset = arguments.length <= 2 || arguments[2] === undefined ? new _Point.Point() : arguments[2];
-
-	        _classCallCheck(this, Marker);
-
-	        if (!imgPath) {
-	            console.error("Can not initialize Marker", imgPath);
-	        }
-
-	        this.position = position;
-	        this.offset = offset;
-	        this.path = imgPath;
-
-	        this.stateHandler = new _StateHandler.StateHandler(STATES);
-
-	        _Helper.Helper.loadImage(this.path, function (img) {
-	            this.onImageLoad(img);
-	        }.bind(this));
-	    }
-
-	    _createClass(Marker, [{
-	        key: 'onImageLoad',
-	        value: function onImageLoad(img) {
-	            this.img = img;
-	            this.offset.add(new _Point.Point(-(this.img.width / 2), -this.img.height));
-	            this.icon = new _Rectangle.Rectangle(this.position.x, this.position.y, this.img.width, this.img.height);
-	            this.stateHandler.next();
-	        }
-	    }, {
-	        key: 'draw',
-	        value: function draw(x, y, scaleX, offsetX, context) {
-	            if (this.stateHandler.current.value === 1) {
-	                var p = new _Point.Point((this.icon.x + x) * scaleX + offsetX, this.icon.y + y);
-	                p.add(this.offset);
-	                context.drawImage(this.img, p.x, p.y, this.icon.width, this.icon.height);
-	            }
-	        }
-	    }]);
-
-	    return Marker;
-	}();
 
 /***/ },
 /* 13 */
