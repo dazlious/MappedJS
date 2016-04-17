@@ -1,13 +1,13 @@
-import {LatLng} from './LatLng.js';
+import $ from 'jquery';
 import {Point} from './Point.js';
+import {LatLng} from './LatLng.js';
 import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
+import {Marker} from './Marker.js';
 import {Publisher} from './Publisher.js';
 import {Helper} from './Helper.js';
-import {Marker} from './Marker.js';
 import {DataEnrichment} from './DataEnrichment.js';
-import $ from 'jquery';
 
 /**
  * Singleton instance of Publisher
@@ -238,26 +238,22 @@ export class View {
         return this;
     }
 
-    enrichMarkerData(markerData, latlngToPoint) {
-        // TODO
-        DataEnrichment.marker(markerData, latlngToPoint, function(data) {
-            console.log(data);
-        });
-    }
-
     appendMarkerContainerToDom($container) {
         this.$markerContainer = $("<div class='marker-container' />");
         $container.append(this.$markerContainer);
     }
 
+    enrichMarkerData(markerData, $container) {
+        DataEnrichment.marker(markerData, function(enrichedMarkerData) {
+            this.appendMarkerContainerToDom($container);
+            markerData = enrichedMarkerData;
+        }.bind(this));
+        return markerData;
+    }
+
     initializeMarkers(markerData, $container) {
         if (markerData) {
-
-            this.enrichMarkerData(markerData, function(enrichedMarkerData) {
-                this.appendMarkerContainerToDom($container);
-                markerData = enrichedMarkerData;
-            }.bind(this));
-
+            markerData = this.enrichMarkerData(markerData, $container);
             Helper.forEach(markerData, function(currentData) {
                 const m = new Marker(currentData, this.$markerContainer, this.getDistortionCalculation, this.viewOffsetCalculation, this.viewportOffsetCalculation, this.calculateLatLngToPoint);
                 this.markers.push(m);

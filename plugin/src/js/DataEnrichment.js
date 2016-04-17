@@ -3,31 +3,14 @@ import {Point} from './Point.js';
 import {LatLng} from './LatLng.js';
 import {Helper} from './Helper.js';
 
-const DATA_MARKER = {
-    icon: null,
-    hover: false,
-    position: {
-        lat: 0,
-        lng: 0
-    },
-    offset: {
-        x: 0,
-        y: 0
-    },
-    size: {
-        width: 32,
-        height: 32
-    }
-};
-
 export var DataEnrichment = {
     marker: function(data, cb) {
 
         const enrichedData = [];
 
-        Helper.forEach(data, function(entry, i) {
+        Helper.forEach(data, function(entry) {
 
-            entry = $.extend(true, DATA_MARKER, entry);
+            entry = $.extend(true, DataEnrichment.DATA_MARKER, entry);
 
             const offset = new Point(entry.offset.x, entry.offset.y);
             const latlng = new LatLng(entry.position.lat, entry.position.lng);
@@ -46,5 +29,22 @@ export var DataEnrichment = {
         if (typeof cb === "function") {
             cb(enrichedData);
         }
+    }
+};
+
+DataEnrichment.DATA_MARKER = {
+    icon: null,
+    hover: false,
+    position: {
+        lat: 0,
+        lng: 0
+    },
+    offset: {
+        x: 0,
+        y: 0
+    },
+    size: {
+        width: 32,
+        height: 32
     }
 };

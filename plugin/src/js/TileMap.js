@@ -1,10 +1,8 @@
 import $ from 'jquery';
+import {View} from './View.js';
 import {LatLng} from './LatLng.js';
-import {Point} from './Point.js';
 import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
-import {Marker} from './Marker.js';
-import {View} from './View.js';
 
 export class TileMap {
 

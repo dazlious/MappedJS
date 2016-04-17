@@ -1,5 +1,3 @@
-import {LatLng} from './LatLng.js';
-
 export class Point {
 
     /**
@@ -18,6 +16,10 @@ export class Point {
         return Point.createFromPoint(this);
     }
 
+    /**
+     * gets absolute Point
+     * @return {Point} returns Point with absolute values
+     */
     get abs() {
         return new Point(Math.abs(this.x), Math.abs(this.y));
     }

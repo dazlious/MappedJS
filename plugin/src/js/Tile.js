@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import {StateHandler} from './StateHandler.js';
 import {Rectangle} from './Rectangle.js';
 import {Publisher} from './Publisher.js';

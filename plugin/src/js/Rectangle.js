@@ -168,7 +168,7 @@ export class Rectangle extends Point {
     }
 
     /**
-     * distort rectangle by factor
+     * distorts rectangle by factor
      * @param  {number} factor - the specified factor of distortion
      * @return {Rectangle} a new instance of Rectangle
      */
@@ -176,6 +176,11 @@ export class Rectangle extends Point {
         return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
     }
 
+    /**
+     * redistorts rectangle by factor
+     * @param  {number} factor - the specified factor of distortion
+     * @return {Rectangle} a new instance of Rectangle
+     */
     getNormalRect(factor) {
         return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1/factor);
     }

@@ -1,5 +1,3 @@
-import {Point} from './Point.js';
-
 export class LatLng {
 
     /**

@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Rectangle.js', './LatLng.js', './StateHandler.js', './Point.js', './Helper.js', 'jquery'], factory);
+        define(['exports', 'jquery', './Point.js', './StateHandler.js', './DataEnrichment.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Rectangle.js'), require('./LatLng.js'), require('./StateHandler.js'), require('./Point.js'), require('./Helper.js'), require('jquery'));
+        factory(exports, require('jquery'), require('./Point.js'), require('./StateHandler.js'), require('./DataEnrichment.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Rectangle, global.LatLng, global.StateHandler, global.Point, global.Helper, global.jquery);
+        factory(mod.exports, global.jquery, global.Point, global.StateHandler, global.DataEnrichment);
         global.Marker = mod.exports;
     }
-})(this, function(exports, _Rectangle, _LatLng, _StateHandler, _Point, _Helper, _jquery) {
+})(this, function(exports, _jquery, _Point, _StateHandler, _DataEnrichment) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -84,7 +84,7 @@
         }]);
 
         function Marker() {
-            var data = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+            var data = arguments.length <= 0 || arguments[0] === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : arguments[0];
             var $container = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
             var distortionFactor = arguments.length <= 2 || arguments[2] === undefined ? function() {
                 return 1;
@@ -100,10 +100,6 @@
             } : arguments[5];
 
             _classCallCheck(this, Marker);
-
-            if (!data) {
-                console.error("Can not initialize Marker", data);
-            }
 
             this.stateHandler = new _StateHandler.StateHandler(STATES);
 

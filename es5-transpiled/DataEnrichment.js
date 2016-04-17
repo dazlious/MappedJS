@@ -26,31 +26,14 @@
         };
     }
 
-    var DATA_MARKER = {
-        icon: null,
-        hover: false,
-        position: {
-            lat: 0,
-            lng: 0
-        },
-        offset: {
-            x: 0,
-            y: 0
-        },
-        size: {
-            width: 32,
-            height: 32
-        }
-    };
-
     var DataEnrichment = exports.DataEnrichment = {
         marker: function marker(data, cb) {
 
             var enrichedData = [];
 
-            _Helper.Helper.forEach(data, function(entry, i) {
+            _Helper.Helper.forEach(data, function(entry) {
 
-                entry = _jquery2.default.extend(true, DATA_MARKER, entry);
+                entry = _jquery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
 
                 var offset = new _Point.Point(entry.offset.x, entry.offset.y);
                 var latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng);
@@ -68,6 +51,23 @@
             if (typeof cb === "function") {
                 cb(enrichedData);
             }
+        }
+    };
+
+    DataEnrichment.DATA_MARKER = {
+        icon: null,
+        hover: false,
+        position: {
+            lat: 0,
+            lng: 0
+        },
+        offset: {
+            x: 0,
+            y: 0
+        },
+        size: {
+            width: 32,
+            height: 32
         }
     };
 });

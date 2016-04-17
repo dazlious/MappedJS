@@ -1,9 +1,7 @@
-import {Rectangle} from './Rectangle.js';
-import {LatLng} from './LatLng.js';
-import {StateHandler} from './StateHandler.js';
-import {Point} from './Point.js';
-import {Helper} from './Helper.js';
 import $ from 'jquery';
+import {Point} from './Point.js';
+import {StateHandler} from './StateHandler.js';
+import {DataEnrichment} from './DataEnrichment.js';
 
 /**
  * States of a marker
@@ -29,10 +27,7 @@ export class Marker {
         return this.xOffsetToCenter();
     }
 
-    constructor(data = null, $container=null, distortionFactor = function(){return 1;}, mapOffset = function(){return new Point();}, xOffsetToCenter = function() {return 0;}, calculateLatLngToPoint = function() {return new Point();}) {
-        if (!data) {
-            console.error("Can not initialize Marker", data);
-        }
+    constructor(data = DataEnrichment.DATA_MARKER, $container=null, distortionFactor = function(){return 1;}, mapOffset = function(){return new Point();}, xOffsetToCenter = function() {return 0;}, calculateLatLngToPoint = function() {return new Point();}) {
 
         this.stateHandler = new StateHandler(STATES);
 

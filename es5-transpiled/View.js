@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './LatLng.js', './Point.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './Helper.js', './Marker.js', './DataEnrichment.js', 'jquery'], factory);
+        define(['exports', 'jquery', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Marker.js', './Publisher.js', './Helper.js', './DataEnrichment.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./LatLng.js'), require('./Point.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./Helper.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('jquery'));
+        factory(exports, require('jquery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Marker.js'), require('./Publisher.js'), require('./Helper.js'), require('./DataEnrichment.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.LatLng, global.Point, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.Helper, global.Marker, global.DataEnrichment, global.jquery);
+        factory(mod.exports, global.jquery, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Marker, global.Publisher, global.Helper, global.DataEnrichment);
         global.View = mod.exports;
     }
-})(this, function(exports, _LatLng, _Point, _Bounds, _Rectangle, _Tile, _Publisher, _Helper, _Marker, _DataEnrichment, _jquery) {
+})(this, function(exports, _jquery, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Marker, _Publisher, _Helper, _DataEnrichment) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -329,29 +329,25 @@
                 return this;
             }
         }, {
-            key: 'enrichMarkerData',
-            value: function enrichMarkerData(markerData, latlngToPoint) {
-                // TODO
-                _DataEnrichment.DataEnrichment.marker(markerData, latlngToPoint, function(data) {
-                    console.log(data);
-                });
-            }
-        }, {
             key: 'appendMarkerContainerToDom',
             value: function appendMarkerContainerToDom($container) {
                 this.$markerContainer = (0, _jquery2.default)("<div class='marker-container' />");
                 $container.append(this.$markerContainer);
             }
         }, {
+            key: 'enrichMarkerData',
+            value: function enrichMarkerData(markerData, $container) {
+                _DataEnrichment.DataEnrichment.marker(markerData, function(enrichedMarkerData) {
+                    this.appendMarkerContainerToDom($container);
+                    markerData = enrichedMarkerData;
+                }.bind(this));
+                return markerData;
+            }
+        }, {
             key: 'initializeMarkers',
             value: function initializeMarkers(markerData, $container) {
                 if (markerData) {
-
-                    this.enrichMarkerData(markerData, function(enrichedMarkerData) {
-                        this.appendMarkerContainerToDom($container);
-                        markerData = enrichedMarkerData;
-                    }.bind(this));
-
+                    markerData = this.enrichMarkerData(markerData, $container);
                     _Helper.Helper.forEach(markerData, function(currentData) {
                         var m = new _Marker.Marker(currentData, this.$markerContainer, this.getDistortionCalculation, this.viewOffsetCalculation, this.viewportOffsetCalculation, this.calculateLatLngToPoint);
                         this.markers.push(m);
