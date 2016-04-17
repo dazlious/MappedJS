@@ -478,6 +478,7 @@
 <li><em>instance</em><ul>
 <li><a href="#Point+length">.length</a> ⇒ <code>number</code></li>
 <li><a href="#Point+clone">.clone</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#Point+abs">.abs</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+substract">.substract(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+add">.add(point)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#Point+multiply">.multiply(x, y)</a> ⇒ <code><a href="#Point">Point</a></code></li>
@@ -510,7 +511,10 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code>number</code> - length of a point<br><a name="Point+clone"></a></p>
 <h3 id="point-clone-code-point-point-code-">point.clone ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>gets a clone of this point</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - new instance equals this point<br><a name="Point+substract"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - new instance equals this point<br><a name="Point+abs"></a></p>
+<h3 id="point-abs-code-point-point-code-">point.abs ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>gets absolute Point</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - returns Point with absolute values<br><a name="Point+substract"></a></p>
 <h3 id="point-substract-point-code-point-point-code-">point.substract(point) ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>substracts 2 points</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - difference between this point and parameter point<br><strong>Params</strong></p>
@@ -672,6 +676,7 @@
 <li><a href="#Rectangle+containsPoint">.containsPoint(point)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+containsRect">.containsRect(rect)</a> ⇒ <code>Boolean</code></li>
 <li><a href="#Rectangle+getDistortedRect">.getDistortedRect(factor)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+<li><a href="#Rectangle+getNormalRect">.getNormalRect(factor)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+scaleX">.scaleX(x)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+scaleY">.scaleY(y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+scale">.scale(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
@@ -780,7 +785,14 @@
 </ul>
 <p><a name="Rectangle+getDistortedRect"></a></p>
 <h3 id="rectangle-getdistortedrect-factor-code-rectangle-rectangle-code-">rectangle.getDistortedRect(factor) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
-<p>distort rectangle by factor</p>
+<p>distorts rectangle by factor</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - a new instance of Rectangle<br><strong>Params</strong></p>
+<ul>
+<li>factor <code>number</code> - the specified factor of distortion</li>
+</ul>
+<p><a name="Rectangle+getNormalRect"></a></p>
+<h3 id="rectangle-getnormalrect-factor-code-rectangle-rectangle-code-">rectangle.getNormalRect(factor) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>redistorts rectangle by factor</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - a new instance of Rectangle<br><strong>Params</strong></p>
 <ul>
 <li>factor <code>number</code> - the specified factor of distortion</li>

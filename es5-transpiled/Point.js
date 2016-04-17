@@ -1,22 +1,21 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './LatLng.js'], factory);
+        define(["exports"], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./LatLng.js'));
+        factory(exports);
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.LatLng);
+        factory(mod.exports);
         global.Point = mod.exports;
     }
-})(this, function(exports, _LatLng) {
-    'use strict';
+})(this, function(exports) {
+    "use strict";
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
-    exports.Point = undefined;
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -44,7 +43,7 @@
 
     var Point = exports.Point = function() {
         _createClass(Point, [{
-            key: 'length',
+            key: "length",
 
 
             /**
@@ -61,12 +60,18 @@
              */
 
         }, {
-            key: 'clone',
+            key: "clone",
             get: function get() {
                 return Point.createFromPoint(this);
             }
+
+            /**
+             * gets absolute Point
+             * @return {Point} returns Point with absolute values
+             */
+
         }, {
-            key: 'abs',
+            key: "abs",
             get: function get() {
                 return new Point(Math.abs(this.x), Math.abs(this.y));
             }
@@ -99,7 +104,7 @@
 
 
         _createClass(Point, [{
-            key: 'substract',
+            key: "substract",
             value: function substract(point) {
                 this.x -= point.x;
                 this.y -= point.y;
@@ -113,7 +118,7 @@
              */
 
         }, {
-            key: 'add',
+            key: "add",
             value: function add(point) {
                 this.x += point.x;
                 this.y += point.y;
@@ -128,7 +133,7 @@
              */
 
         }, {
-            key: 'multiply',
+            key: "multiply",
             value: function multiply(x) {
                 var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
@@ -145,7 +150,7 @@
              */
 
         }, {
-            key: 'divide',
+            key: "divide",
             value: function divide(x) {
                 var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
@@ -161,7 +166,7 @@
              */
 
         }, {
-            key: 'equals',
+            key: "equals",
             value: function equals(point) {
                 return this.x === point.x && this.y === point.y;
             }
@@ -173,7 +178,7 @@
              */
 
         }, {
-            key: 'distance',
+            key: "distance",
             value: function distance(point) {
                 return this.clone.substract(point).length;
             }
@@ -186,7 +191,7 @@
              */
 
         }, {
-            key: 'translate',
+            key: "translate",
             value: function translate(x, y) {
                 this.x += x;
                 this.y += y;
@@ -201,7 +206,7 @@
              */
 
         }, {
-            key: 'position',
+            key: "position",
             value: function position(x, y) {
                 this.x = x;
                 this.y = y;
@@ -214,7 +219,7 @@
              */
 
         }, {
-            key: 'toArray',
+            key: "toArray",
             value: function toArray() {
                 return [this.x, this.y];
             }

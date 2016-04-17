@@ -326,7 +326,7 @@
             }
 
             /**
-             * distort rectangle by factor
+             * distorts rectangle by factor
              * @param  {number} factor - the specified factor of distortion
              * @return {Rectangle} a new instance of Rectangle
              */
@@ -336,6 +336,13 @@
             value: function getDistortedRect(factor) {
                 return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
             }
+
+            /**
+             * redistorts rectangle by factor
+             * @param  {number} factor - the specified factor of distortion
+             * @return {Rectangle} a new instance of Rectangle
+             */
+
         }, {
             key: 'getNormalRect',
             value: function getNormalRect(factor) {

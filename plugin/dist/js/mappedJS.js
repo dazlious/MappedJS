@@ -71,9 +71,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _TileMap = __webpack_require__(2);
 
-	var _Helper = __webpack_require__(9);
-
-	var _Publisher = __webpack_require__(12);
+	var _Helper = __webpack_require__(11);
 
 	var _Interact = __webpack_require__(14);
 
@@ -294,17 +292,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _LatLng = __webpack_require__(3);
+	var _View = __webpack_require__(3);
 
-	var _Point = __webpack_require__(4);
+	var _LatLng = __webpack_require__(5);
 
-	var _Bounds = __webpack_require__(5);
+	var _Bounds = __webpack_require__(6);
 
-	var _Rectangle = __webpack_require__(6);
-
-	var _Marker = __webpack_require__(7);
-
-	var _View = __webpack_require__(10);
+	var _Rectangle = __webpack_require__(7);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -530,1238 +524,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.LatLng = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _Point = __webpack_require__(4);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var LatLng = exports.LatLng = function () {
-	  _createClass(LatLng, [{
-	    key: 'length',
-
-
-	    /**
-	     * length of a latlng
-	     * @return {number} length of a latlng
-	     */
-	    get: function get() {
-	      return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
-	    }
-
-	    /**
-	     * gets a clone of this latlng
-	     * @return {LatLng} new instance equals this latlng
-	     */
-
-	  }, {
-	    key: 'clone',
-	    get: function get() {
-	      return LatLng.createFromLatLng(this);
-	    }
-
-	    /**
-	     * Constructor
-	     * @param  {number} lat = 0 - representation of latitude
-	     * @param  {number} lng = 0 - representation of longitude
-	     * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
-	     * @return {LatLng} new instance of LatLng
-	     */
-
-	  }]);
-
-	  function LatLng() {
-	    var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-
-	    _classCallCheck(this, LatLng);
-
-	    this.lat = lat;
-	    this.lng = lng;
-	    return this;
-	  }
-
-	  /**
-	   * substract specified coord from this coordinate
-	   * @param  {LatLng} coord - specified coordinate to substract from this coord
-	   * @return {LatLng} the new calculated LatLng
-	   */
-
-
-	  _createClass(LatLng, [{
-	    key: 'substract',
-	    value: function substract(coord) {
-	      this.lat -= coord.lat;
-	      this.lng -= coord.lng;
-	      return this;
-	    }
-
-	    /**
-	     * add specified coord to this coordinate
-	     * @param  {LatLng} coord - specified coordinate to add to this coord
-	     * @return {LatLng} the new calculated LatLng
-	     */
-
-	  }, {
-	    key: 'add',
-	    value: function add(coord) {
-	      this.lat += coord.lat;
-	      this.lng += coord.lng;
-	      return this;
-	    }
-
-	    /**
-	    * divides a latlng with a given factor
-	    * @param  {number} factorLat - factor to divide lat with
-	    * @param  {number} factorLng = factorLat - factor to divide lng with
-	     * @return {LatLng} Returns instance for chaining
-	     */
-
-	  }, {
-	    key: 'divide',
-	    value: function divide(factorLat) {
-	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
-
-	      this.lat /= factorLat;
-	      this.lng /= factorLng;
-	      return this;
-	    }
-
-	    /**
-	     * multiplicates a latlng with a given factor
-	     * @param  {number} factorLat - factor to multiplicate lat with
-	     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
-	     * @return {LatLng} Returns instance for chaining
-	     */
-
-	  }, {
-	    key: 'multiply',
-	    value: function multiply(factorLat) {
-	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
-
-	      this.lat *= factorLat;
-	      this.lng *= factorLng;
-	      return this;
-	    }
-
-	    /**
-	     * checks if specified coord equals this coord
-	     * @param  {LatLng} coord - specified coord to check against
-	     * @return {Boolean} Returns if specified coord equals this coord
-	     */
-
-	  }, {
-	    key: 'equals',
-	    value: function equals(coord) {
-	      return this.lat === coord.lat && this.lng === coord.lng;
-	    }
-	  }]);
-
-	  return LatLng;
-	}();
-
-	/**
-	 * Creates a LatLng from specified LatLng
-	 * @param  {LatLng} LatLng - specified LatLng
-	 * @return {LatLng} the LatLng specified
-	 */
-
-
-	LatLng.createFromLatLng = function (latlng) {
-	  return new LatLng(latlng.lat, latlng.lng);
-		};
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Point = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _LatLng = __webpack_require__(3);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Point = exports.Point = function () {
-	    _createClass(Point, [{
-	        key: 'length',
-
-
-	        /**
-	         * length of a point
-	         * @return {number} length of a point
-	         */
-	        get: function get() {
-	            return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-	        }
-
-	        /**
-	         * gets a clone of this point
-	         * @return {Point} new instance equals this point
-	         */
-
-	    }, {
-	        key: 'clone',
-	        get: function get() {
-	            return Point.createFromPoint(this);
-	        }
-	    }, {
-	        key: 'abs',
-	        get: function get() {
-	            return new Point(Math.abs(this.x), Math.abs(this.y));
-	        }
-
-	        /**
-	         * Constructor
-	         * @param  {number} x = 0 - representation of x coordinate
-	         * @param  {number} y = 0 - representation of y coordinate
-	         * @return {Point} new instance of point
-	         */
-
-	    }]);
-
-	    function Point() {
-	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-
-	        _classCallCheck(this, Point);
-
-	        this.x = x;
-	        this.y = y;
-	        return this;
-	    }
-
-	    /**
-	     * substracts 2 points
-	     * @param  {Point} point - the point to substract from this
-	     * @return {Point} difference between this point and parameter point
-	     */
-
-
-	    _createClass(Point, [{
-	        key: 'substract',
-	        value: function substract(point) {
-	            this.x -= point.x;
-	            this.y -= point.y;
-	            return this;
-	        }
-
-	        /**
-	         * adds 2 points
-	         * @param  {Point} point - the point to add to this
-	         * @return {Point} addition of this point and parameter point
-	         */
-
-	    }, {
-	        key: 'add',
-	        value: function add(point) {
-	            this.x += point.x;
-	            this.y += point.y;
-	            return this;
-	        }
-
-	        /**
-	         * multiplicates a point with a given x and y
-	         * @param  {number} x - factor to multiplicate x with
-	         * @param  {number} y - factor to multiplicate y with
-	         * @return {Point} Returns a new instance
-	         */
-
-	    }, {
-	        key: 'multiply',
-	        value: function multiply(x) {
-	            var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-
-	            this.x *= x;
-	            this.y *= y;
-	            return this;
-	        }
-
-	        /**
-	         * divide a point with a given x and y
-	         * @param  {number} x - factor to divide x with
-	         * @param  {number} y - factor to divide y with
-	         * @return {Point} Returns a new instance
-	         */
-
-	    }, {
-	        key: 'divide',
-	        value: function divide(x) {
-	            var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-
-	            this.x /= x;
-	            this.y /= y;
-	            return this;
-	        }
-
-	        /**
-	         * check if points are equal
-	         * @param  {Point} point - the point to check against this
-	         * @return {Boolean} is true, if x and y are the same
-	         */
-
-	    }, {
-	        key: 'equals',
-	        value: function equals(point) {
-	            return this.x === point.x && this.y === point.y;
-	        }
-
-	        /**
-	         * Returns the distance from this Point to a specified Point
-	         * @param  {Point} point - the specified point to be measured against this Point
-	         * @return {Point} the distance between this Point and specified point
-	         */
-
-	    }, {
-	        key: 'distance',
-	        value: function distance(point) {
-	            return this.clone.substract(point).length;
-	        }
-
-	        /**
-	         * translates a point by x and y
-	         * @param  {number} x - value to move x
-	         * @param  {number} y - value to move y
-	         * @return {Point} instance of Point
-	         */
-
-	    }, {
-	        key: 'translate',
-	        value: function translate(x, y) {
-	            this.x += x;
-	            this.y += y;
-	            return this;
-	        }
-
-	        /**
-	         * positions a point by x and y
-	         * @param  {number} x - value to position x
-	         * @param  {number} y - value to position y
-	         * @return {Point} instance of Point
-	         */
-
-	    }, {
-	        key: 'position',
-	        value: function position(x, y) {
-	            this.x = x;
-	            this.y = y;
-	            return this;
-	        }
-
-	        /**
-	         * translates a Point to an array
-	         * @return {Array} Returns Point as Array(x, y)
-	         */
-
-	    }, {
-	        key: 'toArray',
-	        value: function toArray() {
-	            return [this.x, this.y];
-	        }
-	    }]);
-
-	    return Point;
-	}();
-
-	/**
-	 * Creates a Point from specified point
-	 * @param  {Point} point - specified point
-	 * @return {Point} the point specified
-	 */
-
-
-	Point.createFromPoint = function (point) {
-	    return new Point(point.x, point.y);
-		};
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Bounds = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _LatLng = __webpack_require__(3);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Bounds = exports.Bounds = function () {
-	    _createClass(Bounds, [{
-	        key: 'width',
-
-
-	        /**
-	         * gets width of boundaries
-	         * @return {number} width of boundaries
-	         */
-	        get: function get() {
-	            return Math.abs(this.so.lng - this.nw.lng);
-	        }
-
-	        /**
-	         * gets height of boundaries
-	         * @return {number} height of boundaries
-	         */
-
-	    }, {
-	        key: 'height',
-	        get: function get() {
-	            return Math.abs(this.so.lat - this.nw.lat);
-	        }
-
-	        /**
-	         * gets size
-	         * @return {Point} calculated Size of boundaries
-	         */
-
-	    }, {
-	        key: 'range',
-	        get: function get() {
-	            return this.nw.clone.substract(this.so);
-	        }
-
-	        /**
-	         * Constructor
-	         * @param  {number} northWest = new LatLng() - representation of northWest boundary
-	         * @param  {number} southEast = new LatLng() - representation of southEast boundary
-	         * @return {Bounds} new instance of Bounds
-	         */
-
-	    }]);
-
-	    function Bounds() {
-	        var northWest = arguments.length <= 0 || arguments[0] === undefined ? new _LatLng.LatLng() : arguments[0];
-	        var southEast = arguments.length <= 1 || arguments[1] === undefined ? new _LatLng.LatLng() : arguments[1];
-
-	        _classCallCheck(this, Bounds);
-
-	        if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) {
-	            throw new Error(northWest + ' needs to be top-right corner and ' + southEast + ' bottom-left');
-	        }
-	        this.nw = northWest;
-	        this.so = southEast;
-	        return this;
-	    }
-
-	    return Bounds;
-	}();
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Rectangle = undefined;
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _Point2 = __webpack_require__(4);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Rectangle = exports.Rectangle = function (_Point) {
-	    _inherits(Rectangle, _Point);
-
-	    _createClass(Rectangle, [{
-	        key: 'center',
-
-
-	        /**
-	         * get center-position of rectangle
-	         * @return {Point} center point
-	         */
-	        get: function get() {
-	            return new _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
-	        }
-
-	        /**
-	         * get top-left-position of rectangle
-	         * @return {Point} top-left point
-	         */
-
-	    }, {
-	        key: 'topLeft',
-	        get: function get() {
-	            return new _Point2.Point(this.x, this.y);
-	        }
-
-	        /**
-	         * get top-right-position of rectangle
-	         * @return {Point} top-right point
-	         */
-
-	    }, {
-	        key: 'topRight',
-	        get: function get() {
-	            return new _Point2.Point(this.x + this.width, this.y);
-	        }
-
-	        /**
-	         * get bottom-left-position of rectangle
-	         * @return {Point} bottom-left point
-	         */
-
-	    }, {
-	        key: 'bottomLeft',
-	        get: function get() {
-	            return new _Point2.Point(this.x, this.y + this.height);
-	        }
-
-	        /**
-	         * get bottom-right-position of rectangle
-	         * @return {Point} bottom-right point
-	         */
-
-	    }, {
-	        key: 'bottomRight',
-	        get: function get() {
-	            return new _Point2.Point(this.x + this.width, this.y + this.height);
-	        }
-
-	        /**
-	         * Returns right position of Rectangle
-	         * @return {number} right position
-	         */
-
-	    }, {
-	        key: 'right',
-	        get: function get() {
-	            return this.x + this.width;
-	        }
-
-	        /**
-	         * Returns left position of Rectangle
-	         * @return {number} left position
-	         */
-
-	    }, {
-	        key: 'left',
-	        get: function get() {
-	            return this.x;
-	        }
-
-	        /**
-	         * Returns top position of Rectangle
-	         * @return {number} top position
-	         */
-
-	    }, {
-	        key: 'top',
-	        get: function get() {
-	            return this.y;
-	        }
-
-	        /**
-	         * Returns bottom position of Rectangle
-	         * @return {number} bottom position
-	         */
-
-	    }, {
-	        key: 'bottom',
-	        get: function get() {
-	            return this.y + this.height;
-	        }
-
-	        /**
-	         * clones a rectangle
-	         * @return {Rectangle} duplicated rectangle
-	         */
-
-	    }, {
-	        key: 'clone',
-	        get: function get() {
-	            return Rectangle.createFromRectangle(this);
-	        }
-
-	        /**
-	         * Constructor
-	         * @param  {number} x=0 - x-position of specified rectangle
-	         * @param  {number} y=0 - y-position of specified rectangle
-	         * @param  {number} width=0 - width of specified rectangle
-	         * @param  {number} height=0 - height of specified rectangle
-	         * @return {Rectangle} instance of Rectangle
-	         */
-
-	    }]);
-
-	    function Rectangle() {
-	        var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	        var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-	        var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-
-	        var _ret;
-
-	        var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
-
-	        _classCallCheck(this, Rectangle);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
-
-	        _this.width = width;
-	        _this.height = height;
-	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
-	    }
-
-	    /**
-	     * Checks whether Rectangle intersects with specified Rectangle
-	     * @param  {Rectangle} rect - the specified rectangle to check against
-	     * @return {Boolean} true if containment is entirely
-	     */
-
-
-	    _createClass(Rectangle, [{
-	        key: 'intersects',
-	        value: function intersects(rect) {
-	            return !(rect.left > this.right || rect.right < this.left || rect.top > this.bottom || rect.bottom < this.top);
-	        }
-
-	        /**
-	         * Checks whether Rectangle entirely contains the Rectangle or Point
-	         * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
-	         * @return {Boolean} true if containment is entirely
-	         */
-
-	    }, {
-	        key: 'contains',
-	        value: function contains(rectOrPoint) {
-	            return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
-	        }
-
-	        /**
-	         * Sets the center of this Rectangle to specified point
-	         * @param  {Point} point - specified point to set center of rectangle to
-	         * @return {Rectangle} instance of Rectangle
-	         */
-
-	    }, {
-	        key: 'setCenter',
-	        value: function setCenter(point) {
-	            var difference = point.substract(this.center);
-	            this.translate(difference.x, difference.y);
-	            return this;
-	        }
-
-	        /**
-	         * Sets the x-center of this Rectangle to specified x
-	         * @param  {number} x - specified x coordinate to set x center of rectangle to
-	         * @return {Rectangle} instance of Rectangle
-	         */
-
-	    }, {
-	        key: 'setCenterX',
-	        value: function setCenterX(x) {
-	            var difference = x - this.center.x;
-	            this.translate(difference, 0);
-	            return this;
-	        }
-
-	        /**
-	         * Sets the y-center of this Rectangle to specified y
-	         * @param  {number} y - specified y coordinate to set y center of rectangle to
-	         * @return {Rectangle} instance of Rectangle
-	         */
-
-	    }, {
-	        key: 'setCenterY',
-	        value: function setCenterY(y) {
-	            var difference = y - this.center.y;
-	            this.translate(0, difference);
-	            return this;
-	        }
-
-	        /**
-	         * Checks whether Rectangle entirely contains the Point
-	         * @param  {Point} point - the specified point to check against
-	         * @return {Boolean} true if containment is entirely
-	         */
-
-	    }, {
-	        key: 'containsPoint',
-	        value: function containsPoint(point) {
-	            return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
-	        }
-
-	        /**
-	         * Checks whether Rectangle entirely contains the Rectangle
-	         * @param  {Rectangle} rect - the specified rectangle to check against
-	         * @return {Boolean} true if containment is entirely
-	         */
-
-	    }, {
-	        key: 'containsRect',
-	        value: function containsRect(rect) {
-	            return rect instanceof Rectangle ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
-	        }
-
-	        /**
-	         * distort rectangle by factor
-	         * @param  {number} factor - the specified factor of distortion
-	         * @return {Rectangle} a new instance of Rectangle
-	         */
-
-	    }, {
-	        key: 'getDistortedRect',
-	        value: function getDistortedRect(factor) {
-	            return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
-	        }
-	    }, {
-	        key: 'getNormalRect',
-	        value: function getNormalRect(factor) {
-	            return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1 / factor);
-	        }
-
-	        /**
-	         * scale x and width of rectangle
-	         * @param  {number} x - factor to be applied to scale
-	         * @return {Rectangle} scaled Rectangle
-	         */
-
-	    }, {
-	        key: 'scaleX',
-	        value: function scaleX(x) {
-	            this.x *= x;
-	            this.width *= x;
-	            return this;
-	        }
-
-	        /**
-	         * scale y and height of rectangle
-	         * @param  {number} y - factor to be applied to scale
-	         * @return {Rectangle} new scaled Rectangle
-	         */
-
-	    }, {
-	        key: 'scaleY',
-	        value: function scaleY(y) {
-	            this.y *= y;
-	            this.height *= y;
-	            return this;
-	        }
-
-	        /**
-	         * scale x and y for width and height of rectangle
-	         * @param  {number} x - factor to be applied to scale
-	         * @param  {number} y = x - factor to be applied to scale
-	         * @return {Rectangle} new scaled Rectangle
-	         */
-
-	    }, {
-	        key: 'scale',
-	        value: function scale(x) {
-	            var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-
-	            this.x *= x;
-	            this.y *= y;
-	            this.width *= x;
-	            this.height *= y;
-	            return this;
-	        }
-
-	        /**
-	         * moves a rectangle by specified coords
-	         * @param  {number} x - specified x to be added to x position
-	         * @param  {number} y - specified y to be added to y position
-	         * @return {Rectangle} Returns the altered rectangle
-	         */
-
-	    }, {
-	        key: 'translate',
-	        value: function translate(x, y) {
-	            _get(Object.getPrototypeOf(Rectangle.prototype), 'translate', this).call(this, x, y);
-	            return this;
-	        }
-
-	        /**
-	         * transforms a rectangle by specified coords
-	         * @param  {number} x - specified x to be added to x position
-	         * @param  {number} y - specified y to be added to y position
-	         * @param  {number} width - specified width to be added to this width
-	         * @param  {number} height - specified height to be added to this height
-	         * @return {Rectangle} Returns the altered rectangle
-	         */
-
-	    }, {
-	        key: 'transform',
-	        value: function transform(x, y, width, height) {
-	            this.translate(x, y);
-	            this.width += width;
-	            this.height += height;
-	            return this;
-	        }
-
-	        /**
-	         * changes the position a rectangle by specified coords
-	         * @param  {number} x - the new x position
-	         * @param  {number} y - he new y position
-	         * @return {Rectangle} Returns the altered rectangle
-	         */
-
-	    }, {
-	        key: 'position',
-	        value: function position(x, y) {
-	            _get(Object.getPrototypeOf(Rectangle.prototype), 'position', this).call(this, x, y);
-	            return this;
-	        }
-
-	        /**
-	         * changes the size of a rectangle by specified params
-	         * @param  {number} x - the new x position
-	         * @param  {number} y - the new y position
-	         * @param  {number} width - the new width
-	         * @param  {number} height - the new width
-	         * @return {Rectangle} Returns the altered rectangle
-	         */
-
-	    }, {
-	        key: 'size',
-	        value: function size(x, y, width, height) {
-	            this.position(x, y);
-	            this.width = width;
-	            this.height = height;
-	            return this;
-	        }
-
-	        /**
-	         * check if rectangles are equal
-	         * @param  {Rectangle} rectangle - the specified rectangle to check against this
-	         * @return {Boolean} is true, if x, y, width and height are the same
-	         */
-
-	    }, {
-	        key: 'equals',
-	        value: function equals(rectangle) {
-	            return rectangle instanceof Rectangle ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
-	        }
-	    }]);
-
-	    return Rectangle;
-	}(_Point2.Point);
-
-	/**
-	 * Creates a Rectangle from specified Rectangle
-	 * @param  {Rectangle} rect - specified Rectangle
-	 * @return {Rectangle} the point specified
-	 */
-
-
-	Rectangle.createFromRectangle = function (rect) {
-	    return new Rectangle(rect.x, rect.y, rect.width, rect.height);
-		};
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Marker = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _Rectangle = __webpack_require__(6);
-
-	var _LatLng = __webpack_require__(3);
-
-	var _StateHandler = __webpack_require__(8);
-
-	var _Point = __webpack_require__(4);
-
-	var _Helper = __webpack_require__(9);
-
-	var _jquery = __webpack_require__(1);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * States of a marker
-	 * @type {Array}
-	 */
-	var STATES = [{ value: 0, description: 'Loading' }, { value: 0, description: 'Initialized' }, { value: 1, description: 'Ready' }];
-
-	var Marker = exports.Marker = function () {
-	    _createClass(Marker, [{
-	        key: 'scaleX',
-	        get: function get() {
-	            return this.distortionFactor();
-	        }
-	    }, {
-	        key: 'viewOffset',
-	        get: function get() {
-	            return this.mapOffset();
-	        }
-	    }, {
-	        key: 'xOffset',
-	        get: function get() {
-	            return this.xOffsetToCenter();
-	        }
-	    }]);
-
-	    function Marker() {
-	        var data = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
-	        var $container = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-	        var distortionFactor = arguments.length <= 2 || arguments[2] === undefined ? function () {
-	            return 1;
-	        } : arguments[2];
-	        var mapOffset = arguments.length <= 3 || arguments[3] === undefined ? function () {
-	            return new _Point.Point();
-	        } : arguments[3];
-	        var xOffsetToCenter = arguments.length <= 4 || arguments[4] === undefined ? function () {
-	            return 0;
-	        } : arguments[4];
-	        var calculateLatLngToPoint = arguments.length <= 5 || arguments[5] === undefined ? function () {
-	            return new _Point.Point();
-	        } : arguments[5];
-
-	        _classCallCheck(this, Marker);
-
-	        if (!data) {
-	            console.error("Can not initialize Marker", data);
-	        }
-
-	        this.stateHandler = new _StateHandler.StateHandler(STATES);
-
-	        this.calculateLatLngToPoint = calculateLatLngToPoint;
-	        this.distortionFactor = distortionFactor;
-	        this.mapOffset = mapOffset;
-	        this.xOffsetToCenter = xOffsetToCenter;
-
-	        this.size = data.size;
-	        this.hover = data.hover;
-	        if (this.hover) {
-	            this.size.divide(2, 1);
-	        }
-	        this.img = data.icon;
-	        this.offset = data.offset;
-	        this.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
-	        this.latlng = data.latlng;
-
-	        this.position = this.calculateLatLngToPoint(this.latlng);
-
-	        this.icon = this.addMarkerToDOM($container);
-
-	        this.moveMarker();
-	    }
-
-	    _createClass(Marker, [{
-	        key: 'addMarkerToDOM',
-	        value: function addMarkerToDOM($container) {
-	            var icon = (0, _jquery2.default)("<div class='marker' />").css({
-	                "width": this.size.x + 'px',
-	                "height": this.size.y + 'px',
-	                "margin-left": this.offset.x + 'px',
-	                "margin-top": this.offset.y + 'px',
-	                "background-image": 'url(' + this.img + ')',
-	                "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
-	            });
-	            if ($container) {
-	                $container.append(icon);
-	                this.stateHandler.next();
-	            }
-	            return icon;
-	        }
-	    }, {
-	        key: 'moveMarker',
-	        value: function moveMarker() {
-	            var p = new _Point.Point((this.position.x + this.viewOffset.x) * this.scaleX + this.xOffset, this.position.y + this.viewOffset.y);
-	            if (this.icon) {
-	                this.icon.css({
-	                    transform: 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)'
-	                });
-	            }
-	        }
-	    }]);
-
-	    return Marker;
-	}();
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var StateHandler = exports.StateHandler = function () {
-	    _createClass(StateHandler, [{
-	        key: 'current',
-
-
-	        /**
-	         * get current state
-	         * @return {Object} current state from STATES-array
-	         */
-	        get: function get() {
-	            return this.states[this.i];
-	        }
-
-	        /**
-	         * get number of states
-	         * @return {number} number of states
-	         */
-
-	    }, {
-	        key: 'length',
-	        get: function get() {
-	            return this.states.length;
-	        }
-
-	        /**
-	         * Constructor
-	         * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
-	         * @return {StateHandler} instance of StateHandler
-	         */
-
-	    }]);
-
-	    function StateHandler() {
-	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{ value: 0, description: 'Default' }] : arguments[0];
-
-	        _classCallCheck(this, StateHandler);
-
-	        this.states = states_array;
-	        this.i = 0;
-	        this.lastState = this.current;
-	        return this;
-	    }
-
-	    /**
-	     * get the next element
-	     * @return {StateHandler} instance of StateHandler
-	     */
-
-
-	    _createClass(StateHandler, [{
-	        key: 'next',
-	        value: function next() {
-	            this.lastState = this.current;
-	            if (this.hasNext()) {
-	                this.i++;
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * get the previous element
-	         * @return {StateHandler} instance of StateHandler
-	         */
-
-	    }, {
-	        key: 'previous',
-	        value: function previous() {
-	            this.lastState = this.current;
-	            if (this.hasPrevious()) {
-	                this.i--;
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * change the state to specified state
-	         * @param {number} state - index of state in array
-	         * @return {StateHandler} instance of StateHandler
-	         */
-
-	    }, {
-	        key: 'changeTo',
-	        value: function changeTo(state) {
-	            if (state >= 0 && state < this.length) {
-	                this.i = state;
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * change the state to specified value of specified property
-	         * @param {number} state - index of state in array
-	         * @return {StateHandler} instance of StateHandler
-	         */
-
-	    }, {
-	        key: 'changeToValue',
-	        value: function changeToValue(prop, value) {
-	            for (var i = 0; i < this.length; i++) {
-	                if (this.states[i] && value === this.states[i][prop]) {
-	                    this.i = i;
-	                }
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * checks if there is a next element
-	         * @return {Boolean} wheter there is a next state or not
-	         */
-
-	    }, {
-	        key: 'hasNext',
-	        value: function hasNext() {
-	            return this.i < this.length - 1;
-	        }
-
-	        /**
-	         * checks if there is a previous element
-	         * @return {Boolean} wheter there is a previous state or not
-	         */
-
-	    }, {
-	        key: 'hasPrevious',
-	        value: function hasPrevious() {
-	            return this.i > 0;
-	        }
-	    }]);
-
-	    return StateHandler;
-	}();
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Helper = undefined;
-
-	var _jquery = __webpack_require__(1);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Helper = exports.Helper = {
-
-	    /**
-	     * request json-data from given file and calls callback on success
-	     * @param  {string} filename - path to file
-	     * @param  {Function} callback - function called when data is loaded successfully
-	     * @return {Helper} Helper
-	     */
-	    requestJSON: function requestJSON(filename, callback) {
-	        _jquery2.default.ajax({
-	            type: "GET",
-	            url: filename,
-	            dataType: "json",
-	            success: function success(data) {
-	                return callback(data);
-	            },
-	            error: function error(response) {
-	                if (response.status === 200) {
-	                    throw new Error("The JSON submitted seems not valid");
-	                }
-	                console.error("Error requesting file: ", response);
-	            }
-	        });
-	        return this;
-	    },
-	    /**
-	     * loads an image and calls callback on success
-	     * @param {Function} cb - callback-function on success
-	     * @return {Helper} Helper
-	     */
-	    loadImage: function loadImage(path, cb) {
-	        var img = new Image();
-	        img.onload = function () {
-	            if (cb && typeof cb === "function") {
-	                cb(img);
-	            }
-	        };
-	        img.src = path;
-	        return this;
-	    },
-	    forEach: function forEach(a, fn) {
-	        for (var i in a) {
-	            if (a[i] && typeof fn === "function") {
-	                fn(a[i], i);
-	            }
-	        }
-	    },
-	    /**
-	     * convert degree to radian
-	     * @param {number} degrees - specified degrees
-	     * @return {number} converted radian
-	     */
-	    toRadians: function toRadians(degrees) {
-	        return degrees * Math.PI / 180;
-	    }
-
-		};
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	exports.View = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _LatLng = __webpack_require__(3);
-
-	var _Point = __webpack_require__(4);
-
-	var _Bounds = __webpack_require__(5);
-
-	var _Rectangle = __webpack_require__(6);
-
-	var _Tile = __webpack_require__(11);
-
-	var _Publisher = __webpack_require__(12);
-
-	var _Helper = __webpack_require__(9);
-
-	var _Marker = __webpack_require__(7);
-
-	var _DataEnrichment = __webpack_require__(13);
-
 	var _jquery = __webpack_require__(1);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _Point = __webpack_require__(4);
+
+	var _LatLng = __webpack_require__(5);
+
+	var _Bounds = __webpack_require__(6);
+
+	var _Rectangle = __webpack_require__(7);
+
+	var _Tile = __webpack_require__(8);
+
+	var _Marker = __webpack_require__(12);
+
+	var _Publisher = __webpack_require__(10);
+
+	var _Helper = __webpack_require__(11);
+
+	var _DataEnrichment = __webpack_require__(13);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2046,29 +835,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this;
 	        }
 	    }, {
-	        key: 'enrichMarkerData',
-	        value: function enrichMarkerData(markerData, latlngToPoint) {
-	            // TODO
-	            _DataEnrichment.DataEnrichment.marker(markerData, latlngToPoint, function (data) {
-	                console.log(data);
-	            });
-	        }
-	    }, {
 	        key: 'appendMarkerContainerToDom',
 	        value: function appendMarkerContainerToDom($container) {
 	            this.$markerContainer = (0, _jquery2.default)("<div class='marker-container' />");
 	            $container.append(this.$markerContainer);
 	        }
 	    }, {
+	        key: 'enrichMarkerData',
+	        value: function enrichMarkerData(markerData, $container) {
+	            _DataEnrichment.DataEnrichment.marker(markerData, function (enrichedMarkerData) {
+	                this.appendMarkerContainerToDom($container);
+	                markerData = enrichedMarkerData;
+	            }.bind(this));
+	            return markerData;
+	        }
+	    }, {
 	        key: 'initializeMarkers',
 	        value: function initializeMarkers(markerData, $container) {
 	            if (markerData) {
-
-	                this.enrichMarkerData(markerData, function (enrichedMarkerData) {
-	                    this.appendMarkerContainerToDom($container);
-	                    markerData = enrichedMarkerData;
-	                }.bind(this));
-
+	                markerData = this.enrichMarkerData(markerData, $container);
 	                _Helper.Helper.forEach(markerData, function (currentData) {
 	                    var m = new _Marker.Marker(currentData, this.$markerContainer, this.getDistortionCalculation, this.viewOffsetCalculation, this.viewportOffsetCalculation, this.calculateLatLngToPoint);
 	                    this.markers.push(m);
@@ -2089,7 +874,865 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 11 */
+/* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Point = exports.Point = function () {
+	  _createClass(Point, [{
+	    key: "length",
+
+
+	    /**
+	     * length of a point
+	     * @return {number} length of a point
+	     */
+	    get: function get() {
+	      return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+	    }
+
+	    /**
+	     * gets a clone of this point
+	     * @return {Point} new instance equals this point
+	     */
+
+	  }, {
+	    key: "clone",
+	    get: function get() {
+	      return Point.createFromPoint(this);
+	    }
+
+	    /**
+	     * gets absolute Point
+	     * @return {Point} returns Point with absolute values
+	     */
+
+	  }, {
+	    key: "abs",
+	    get: function get() {
+	      return new Point(Math.abs(this.x), Math.abs(this.y));
+	    }
+
+	    /**
+	     * Constructor
+	     * @param  {number} x = 0 - representation of x coordinate
+	     * @param  {number} y = 0 - representation of y coordinate
+	     * @return {Point} new instance of point
+	     */
+
+	  }]);
+
+	  function Point() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	    _classCallCheck(this, Point);
+
+	    this.x = x;
+	    this.y = y;
+	    return this;
+	  }
+
+	  /**
+	   * substracts 2 points
+	   * @param  {Point} point - the point to substract from this
+	   * @return {Point} difference between this point and parameter point
+	   */
+
+
+	  _createClass(Point, [{
+	    key: "substract",
+	    value: function substract(point) {
+	      this.x -= point.x;
+	      this.y -= point.y;
+	      return this;
+	    }
+
+	    /**
+	     * adds 2 points
+	     * @param  {Point} point - the point to add to this
+	     * @return {Point} addition of this point and parameter point
+	     */
+
+	  }, {
+	    key: "add",
+	    value: function add(point) {
+	      this.x += point.x;
+	      this.y += point.y;
+	      return this;
+	    }
+
+	    /**
+	     * multiplicates a point with a given x and y
+	     * @param  {number} x - factor to multiplicate x with
+	     * @param  {number} y - factor to multiplicate y with
+	     * @return {Point} Returns a new instance
+	     */
+
+	  }, {
+	    key: "multiply",
+	    value: function multiply(x) {
+	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	      this.x *= x;
+	      this.y *= y;
+	      return this;
+	    }
+
+	    /**
+	     * divide a point with a given x and y
+	     * @param  {number} x - factor to divide x with
+	     * @param  {number} y - factor to divide y with
+	     * @return {Point} Returns a new instance
+	     */
+
+	  }, {
+	    key: "divide",
+	    value: function divide(x) {
+	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	      this.x /= x;
+	      this.y /= y;
+	      return this;
+	    }
+
+	    /**
+	     * check if points are equal
+	     * @param  {Point} point - the point to check against this
+	     * @return {Boolean} is true, if x and y are the same
+	     */
+
+	  }, {
+	    key: "equals",
+	    value: function equals(point) {
+	      return this.x === point.x && this.y === point.y;
+	    }
+
+	    /**
+	     * Returns the distance from this Point to a specified Point
+	     * @param  {Point} point - the specified point to be measured against this Point
+	     * @return {Point} the distance between this Point and specified point
+	     */
+
+	  }, {
+	    key: "distance",
+	    value: function distance(point) {
+	      return this.clone.substract(point).length;
+	    }
+
+	    /**
+	     * translates a point by x and y
+	     * @param  {number} x - value to move x
+	     * @param  {number} y - value to move y
+	     * @return {Point} instance of Point
+	     */
+
+	  }, {
+	    key: "translate",
+	    value: function translate(x, y) {
+	      this.x += x;
+	      this.y += y;
+	      return this;
+	    }
+
+	    /**
+	     * positions a point by x and y
+	     * @param  {number} x - value to position x
+	     * @param  {number} y - value to position y
+	     * @return {Point} instance of Point
+	     */
+
+	  }, {
+	    key: "position",
+	    value: function position(x, y) {
+	      this.x = x;
+	      this.y = y;
+	      return this;
+	    }
+
+	    /**
+	     * translates a Point to an array
+	     * @return {Array} Returns Point as Array(x, y)
+	     */
+
+	  }, {
+	    key: "toArray",
+	    value: function toArray() {
+	      return [this.x, this.y];
+	    }
+	  }]);
+
+	  return Point;
+	}();
+
+	/**
+	 * Creates a Point from specified point
+	 * @param  {Point} point - specified point
+	 * @return {Point} the point specified
+	 */
+
+
+	Point.createFromPoint = function (point) {
+	  return new Point(point.x, point.y);
+		};
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var LatLng = exports.LatLng = function () {
+	  _createClass(LatLng, [{
+	    key: "length",
+
+
+	    /**
+	     * length of a latlng
+	     * @return {number} length of a latlng
+	     */
+	    get: function get() {
+	      return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
+	    }
+
+	    /**
+	     * gets a clone of this latlng
+	     * @return {LatLng} new instance equals this latlng
+	     */
+
+	  }, {
+	    key: "clone",
+	    get: function get() {
+	      return LatLng.createFromLatLng(this);
+	    }
+
+	    /**
+	     * Constructor
+	     * @param  {number} lat = 0 - representation of latitude
+	     * @param  {number} lng = 0 - representation of longitude
+	     * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
+	     * @return {LatLng} new instance of LatLng
+	     */
+
+	  }]);
+
+	  function LatLng() {
+	    var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	    _classCallCheck(this, LatLng);
+
+	    this.lat = lat;
+	    this.lng = lng;
+	    return this;
+	  }
+
+	  /**
+	   * substract specified coord from this coordinate
+	   * @param  {LatLng} coord - specified coordinate to substract from this coord
+	   * @return {LatLng} the new calculated LatLng
+	   */
+
+
+	  _createClass(LatLng, [{
+	    key: "substract",
+	    value: function substract(coord) {
+	      this.lat -= coord.lat;
+	      this.lng -= coord.lng;
+	      return this;
+	    }
+
+	    /**
+	     * add specified coord to this coordinate
+	     * @param  {LatLng} coord - specified coordinate to add to this coord
+	     * @return {LatLng} the new calculated LatLng
+	     */
+
+	  }, {
+	    key: "add",
+	    value: function add(coord) {
+	      this.lat += coord.lat;
+	      this.lng += coord.lng;
+	      return this;
+	    }
+
+	    /**
+	    * divides a latlng with a given factor
+	    * @param  {number} factorLat - factor to divide lat with
+	    * @param  {number} factorLng = factorLat - factor to divide lng with
+	     * @return {LatLng} Returns instance for chaining
+	     */
+
+	  }, {
+	    key: "divide",
+	    value: function divide(factorLat) {
+	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+
+	      this.lat /= factorLat;
+	      this.lng /= factorLng;
+	      return this;
+	    }
+
+	    /**
+	     * multiplicates a latlng with a given factor
+	     * @param  {number} factorLat - factor to multiplicate lat with
+	     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
+	     * @return {LatLng} Returns instance for chaining
+	     */
+
+	  }, {
+	    key: "multiply",
+	    value: function multiply(factorLat) {
+	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+
+	      this.lat *= factorLat;
+	      this.lng *= factorLng;
+	      return this;
+	    }
+
+	    /**
+	     * checks if specified coord equals this coord
+	     * @param  {LatLng} coord - specified coord to check against
+	     * @return {Boolean} Returns if specified coord equals this coord
+	     */
+
+	  }, {
+	    key: "equals",
+	    value: function equals(coord) {
+	      return this.lat === coord.lat && this.lng === coord.lng;
+	    }
+	  }]);
+
+	  return LatLng;
+	}();
+
+	/**
+	 * Creates a LatLng from specified LatLng
+	 * @param  {LatLng} LatLng - specified LatLng
+	 * @return {LatLng} the LatLng specified
+	 */
+
+
+	LatLng.createFromLatLng = function (latlng) {
+	  return new LatLng(latlng.lat, latlng.lng);
+		};
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Bounds = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _LatLng = __webpack_require__(5);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Bounds = exports.Bounds = function () {
+	    _createClass(Bounds, [{
+	        key: 'width',
+
+
+	        /**
+	         * gets width of boundaries
+	         * @return {number} width of boundaries
+	         */
+	        get: function get() {
+	            return Math.abs(this.so.lng - this.nw.lng);
+	        }
+
+	        /**
+	         * gets height of boundaries
+	         * @return {number} height of boundaries
+	         */
+
+	    }, {
+	        key: 'height',
+	        get: function get() {
+	            return Math.abs(this.so.lat - this.nw.lat);
+	        }
+
+	        /**
+	         * gets size
+	         * @return {Point} calculated Size of boundaries
+	         */
+
+	    }, {
+	        key: 'range',
+	        get: function get() {
+	            return this.nw.clone.substract(this.so);
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {number} northWest = new LatLng() - representation of northWest boundary
+	         * @param  {number} southEast = new LatLng() - representation of southEast boundary
+	         * @return {Bounds} new instance of Bounds
+	         */
+
+	    }]);
+
+	    function Bounds() {
+	        var northWest = arguments.length <= 0 || arguments[0] === undefined ? new _LatLng.LatLng() : arguments[0];
+	        var southEast = arguments.length <= 1 || arguments[1] === undefined ? new _LatLng.LatLng() : arguments[1];
+
+	        _classCallCheck(this, Bounds);
+
+	        if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) {
+	            throw new Error(northWest + ' needs to be top-right corner and ' + southEast + ' bottom-left');
+	        }
+	        this.nw = northWest;
+	        this.so = southEast;
+	        return this;
+	    }
+
+	    return Bounds;
+	}();
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Rectangle = undefined;
+
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Point2 = __webpack_require__(4);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Rectangle = exports.Rectangle = function (_Point) {
+	  _inherits(Rectangle, _Point);
+
+	  _createClass(Rectangle, [{
+	    key: 'center',
+
+
+	    /**
+	     * get center-position of rectangle
+	     * @return {Point} center point
+	     */
+	    get: function get() {
+	      return new _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
+	    }
+
+	    /**
+	     * get top-left-position of rectangle
+	     * @return {Point} top-left point
+	     */
+
+	  }, {
+	    key: 'topLeft',
+	    get: function get() {
+	      return new _Point2.Point(this.x, this.y);
+	    }
+
+	    /**
+	     * get top-right-position of rectangle
+	     * @return {Point} top-right point
+	     */
+
+	  }, {
+	    key: 'topRight',
+	    get: function get() {
+	      return new _Point2.Point(this.x + this.width, this.y);
+	    }
+
+	    /**
+	     * get bottom-left-position of rectangle
+	     * @return {Point} bottom-left point
+	     */
+
+	  }, {
+	    key: 'bottomLeft',
+	    get: function get() {
+	      return new _Point2.Point(this.x, this.y + this.height);
+	    }
+
+	    /**
+	     * get bottom-right-position of rectangle
+	     * @return {Point} bottom-right point
+	     */
+
+	  }, {
+	    key: 'bottomRight',
+	    get: function get() {
+	      return new _Point2.Point(this.x + this.width, this.y + this.height);
+	    }
+
+	    /**
+	     * Returns right position of Rectangle
+	     * @return {number} right position
+	     */
+
+	  }, {
+	    key: 'right',
+	    get: function get() {
+	      return this.x + this.width;
+	    }
+
+	    /**
+	     * Returns left position of Rectangle
+	     * @return {number} left position
+	     */
+
+	  }, {
+	    key: 'left',
+	    get: function get() {
+	      return this.x;
+	    }
+
+	    /**
+	     * Returns top position of Rectangle
+	     * @return {number} top position
+	     */
+
+	  }, {
+	    key: 'top',
+	    get: function get() {
+	      return this.y;
+	    }
+
+	    /**
+	     * Returns bottom position of Rectangle
+	     * @return {number} bottom position
+	     */
+
+	  }, {
+	    key: 'bottom',
+	    get: function get() {
+	      return this.y + this.height;
+	    }
+
+	    /**
+	     * clones a rectangle
+	     * @return {Rectangle} duplicated rectangle
+	     */
+
+	  }, {
+	    key: 'clone',
+	    get: function get() {
+	      return Rectangle.createFromRectangle(this);
+	    }
+
+	    /**
+	     * Constructor
+	     * @param  {number} x=0 - x-position of specified rectangle
+	     * @param  {number} y=0 - y-position of specified rectangle
+	     * @param  {number} width=0 - width of specified rectangle
+	     * @param  {number} height=0 - height of specified rectangle
+	     * @return {Rectangle} instance of Rectangle
+	     */
+
+	  }]);
+
+	  function Rectangle() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	    var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+
+	    var _ret;
+
+	    var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
+	    _classCallCheck(this, Rectangle);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
+
+	    _this.width = width;
+	    _this.height = height;
+	    return _ret = _this, _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  /**
+	   * Checks whether Rectangle intersects with specified Rectangle
+	   * @param  {Rectangle} rect - the specified rectangle to check against
+	   * @return {Boolean} true if containment is entirely
+	   */
+
+
+	  _createClass(Rectangle, [{
+	    key: 'intersects',
+	    value: function intersects(rect) {
+	      return !(rect.left > this.right || rect.right < this.left || rect.top > this.bottom || rect.bottom < this.top);
+	    }
+
+	    /**
+	     * Checks whether Rectangle entirely contains the Rectangle or Point
+	     * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
+	     * @return {Boolean} true if containment is entirely
+	     */
+
+	  }, {
+	    key: 'contains',
+	    value: function contains(rectOrPoint) {
+	      return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
+	    }
+
+	    /**
+	     * Sets the center of this Rectangle to specified point
+	     * @param  {Point} point - specified point to set center of rectangle to
+	     * @return {Rectangle} instance of Rectangle
+	     */
+
+	  }, {
+	    key: 'setCenter',
+	    value: function setCenter(point) {
+	      var difference = point.substract(this.center);
+	      this.translate(difference.x, difference.y);
+	      return this;
+	    }
+
+	    /**
+	     * Sets the x-center of this Rectangle to specified x
+	     * @param  {number} x - specified x coordinate to set x center of rectangle to
+	     * @return {Rectangle} instance of Rectangle
+	     */
+
+	  }, {
+	    key: 'setCenterX',
+	    value: function setCenterX(x) {
+	      var difference = x - this.center.x;
+	      this.translate(difference, 0);
+	      return this;
+	    }
+
+	    /**
+	     * Sets the y-center of this Rectangle to specified y
+	     * @param  {number} y - specified y coordinate to set y center of rectangle to
+	     * @return {Rectangle} instance of Rectangle
+	     */
+
+	  }, {
+	    key: 'setCenterY',
+	    value: function setCenterY(y) {
+	      var difference = y - this.center.y;
+	      this.translate(0, difference);
+	      return this;
+	    }
+
+	    /**
+	     * Checks whether Rectangle entirely contains the Point
+	     * @param  {Point} point - the specified point to check against
+	     * @return {Boolean} true if containment is entirely
+	     */
+
+	  }, {
+	    key: 'containsPoint',
+	    value: function containsPoint(point) {
+	      return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
+	    }
+
+	    /**
+	     * Checks whether Rectangle entirely contains the Rectangle
+	     * @param  {Rectangle} rect - the specified rectangle to check against
+	     * @return {Boolean} true if containment is entirely
+	     */
+
+	  }, {
+	    key: 'containsRect',
+	    value: function containsRect(rect) {
+	      return rect instanceof Rectangle ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
+	    }
+
+	    /**
+	     * distorts rectangle by factor
+	     * @param  {number} factor - the specified factor of distortion
+	     * @return {Rectangle} a new instance of Rectangle
+	     */
+
+	  }, {
+	    key: 'getDistortedRect',
+	    value: function getDistortedRect(factor) {
+	      return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
+	    }
+
+	    /**
+	     * redistorts rectangle by factor
+	     * @param  {number} factor - the specified factor of distortion
+	     * @return {Rectangle} a new instance of Rectangle
+	     */
+
+	  }, {
+	    key: 'getNormalRect',
+	    value: function getNormalRect(factor) {
+	      return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1 / factor);
+	    }
+
+	    /**
+	     * scale x and width of rectangle
+	     * @param  {number} x - factor to be applied to scale
+	     * @return {Rectangle} scaled Rectangle
+	     */
+
+	  }, {
+	    key: 'scaleX',
+	    value: function scaleX(x) {
+	      this.x *= x;
+	      this.width *= x;
+	      return this;
+	    }
+
+	    /**
+	     * scale y and height of rectangle
+	     * @param  {number} y - factor to be applied to scale
+	     * @return {Rectangle} new scaled Rectangle
+	     */
+
+	  }, {
+	    key: 'scaleY',
+	    value: function scaleY(y) {
+	      this.y *= y;
+	      this.height *= y;
+	      return this;
+	    }
+
+	    /**
+	     * scale x and y for width and height of rectangle
+	     * @param  {number} x - factor to be applied to scale
+	     * @param  {number} y = x - factor to be applied to scale
+	     * @return {Rectangle} new scaled Rectangle
+	     */
+
+	  }, {
+	    key: 'scale',
+	    value: function scale(x) {
+	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	      this.x *= x;
+	      this.y *= y;
+	      this.width *= x;
+	      this.height *= y;
+	      return this;
+	    }
+
+	    /**
+	     * moves a rectangle by specified coords
+	     * @param  {number} x - specified x to be added to x position
+	     * @param  {number} y - specified y to be added to y position
+	     * @return {Rectangle} Returns the altered rectangle
+	     */
+
+	  }, {
+	    key: 'translate',
+	    value: function translate(x, y) {
+	      _get(Object.getPrototypeOf(Rectangle.prototype), 'translate', this).call(this, x, y);
+	      return this;
+	    }
+
+	    /**
+	     * transforms a rectangle by specified coords
+	     * @param  {number} x - specified x to be added to x position
+	     * @param  {number} y - specified y to be added to y position
+	     * @param  {number} width - specified width to be added to this width
+	     * @param  {number} height - specified height to be added to this height
+	     * @return {Rectangle} Returns the altered rectangle
+	     */
+
+	  }, {
+	    key: 'transform',
+	    value: function transform(x, y, width, height) {
+	      this.translate(x, y);
+	      this.width += width;
+	      this.height += height;
+	      return this;
+	    }
+
+	    /**
+	     * changes the position a rectangle by specified coords
+	     * @param  {number} x - the new x position
+	     * @param  {number} y - he new y position
+	     * @return {Rectangle} Returns the altered rectangle
+	     */
+
+	  }, {
+	    key: 'position',
+	    value: function position(x, y) {
+	      _get(Object.getPrototypeOf(Rectangle.prototype), 'position', this).call(this, x, y);
+	      return this;
+	    }
+
+	    /**
+	     * changes the size of a rectangle by specified params
+	     * @param  {number} x - the new x position
+	     * @param  {number} y - the new y position
+	     * @param  {number} width - the new width
+	     * @param  {number} height - the new width
+	     * @return {Rectangle} Returns the altered rectangle
+	     */
+
+	  }, {
+	    key: 'size',
+	    value: function size(x, y, width, height) {
+	      this.position(x, y);
+	      this.width = width;
+	      this.height = height;
+	      return this;
+	    }
+
+	    /**
+	     * check if rectangles are equal
+	     * @param  {Rectangle} rectangle - the specified rectangle to check against this
+	     * @return {Boolean} is true, if x, y, width and height are the same
+	     */
+
+	  }, {
+	    key: 'equals',
+	    value: function equals(rectangle) {
+	      return rectangle instanceof Rectangle ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
+	    }
+	  }]);
+
+	  return Rectangle;
+	}(_Point2.Point);
+
+	/**
+	 * Creates a Rectangle from specified Rectangle
+	 * @param  {Rectangle} rect - specified Rectangle
+	 * @return {Rectangle} the point specified
+	 */
+
+
+	Rectangle.createFromRectangle = function (rect) {
+	  return new Rectangle(rect.x, rect.y, rect.width, rect.height);
+		};
+
+/***/ },
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2103,19 +1746,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _jquery = __webpack_require__(1);
+	var _StateHandler = __webpack_require__(9);
 
-	var _jquery2 = _interopRequireDefault(_jquery);
+	var _Rectangle2 = __webpack_require__(7);
 
-	var _StateHandler = __webpack_require__(8);
+	var _Publisher = __webpack_require__(10);
 
-	var _Rectangle2 = __webpack_require__(6);
-
-	var _Publisher = __webpack_require__(12);
-
-	var _Helper = __webpack_require__(9);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _Helper = __webpack_require__(11);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2290,7 +1927,153 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_Rectangle2.Rectangle);
 
 /***/ },
-/* 12 */
+/* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var StateHandler = exports.StateHandler = function () {
+	    _createClass(StateHandler, [{
+	        key: 'current',
+
+
+	        /**
+	         * get current state
+	         * @return {Object} current state from STATES-array
+	         */
+	        get: function get() {
+	            return this.states[this.i];
+	        }
+
+	        /**
+	         * get number of states
+	         * @return {number} number of states
+	         */
+
+	    }, {
+	        key: 'length',
+	        get: function get() {
+	            return this.states.length;
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }]);
+
+	    function StateHandler() {
+	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{ value: 0, description: 'Default' }] : arguments[0];
+
+	        _classCallCheck(this, StateHandler);
+
+	        this.states = states_array;
+	        this.i = 0;
+	        this.lastState = this.current;
+	        return this;
+	    }
+
+	    /**
+	     * get the next element
+	     * @return {StateHandler} instance of StateHandler
+	     */
+
+
+	    _createClass(StateHandler, [{
+	        key: 'next',
+	        value: function next() {
+	            this.lastState = this.current;
+	            if (this.hasNext()) {
+	                this.i++;
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * get the previous element
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }, {
+	        key: 'previous',
+	        value: function previous() {
+	            this.lastState = this.current;
+	            if (this.hasPrevious()) {
+	                this.i--;
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * change the state to specified state
+	         * @param {number} state - index of state in array
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }, {
+	        key: 'changeTo',
+	        value: function changeTo(state) {
+	            if (state >= 0 && state < this.length) {
+	                this.i = state;
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * change the state to specified value of specified property
+	         * @param {number} state - index of state in array
+	         * @return {StateHandler} instance of StateHandler
+	         */
+
+	    }, {
+	        key: 'changeToValue',
+	        value: function changeToValue(prop, value) {
+	            for (var i = 0; i < this.length; i++) {
+	                if (this.states[i] && value === this.states[i][prop]) {
+	                    this.i = i;
+	                }
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * checks if there is a next element
+	         * @return {Boolean} wheter there is a next state or not
+	         */
+
+	    }, {
+	        key: 'hasNext',
+	        value: function hasNext() {
+	            return this.i < this.length - 1;
+	        }
+
+	        /**
+	         * checks if there is a previous element
+	         * @return {Boolean} wheter there is a previous state or not
+	         */
+
+	    }, {
+	        key: 'hasPrevious',
+	        value: function hasPrevious() {
+	            return this.i > 0;
+	        }
+	    }]);
+
+	    return StateHandler;
+	}();
+
+/***/ },
+/* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2434,6 +2217,206 @@ return /******/ (function(modules) { // webpackBootstrap
 		Publisher.UNSUBSCRIBE = "unsubscribe";
 
 /***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Helper = undefined;
+
+	var _jquery = __webpack_require__(1);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Helper = exports.Helper = {
+
+	    /**
+	     * request json-data from given file and calls callback on success
+	     * @param  {string} filename - path to file
+	     * @param  {Function} callback - function called when data is loaded successfully
+	     * @return {Helper} Helper
+	     */
+	    requestJSON: function requestJSON(filename, callback) {
+	        _jquery2.default.ajax({
+	            type: "GET",
+	            url: filename,
+	            dataType: "json",
+	            success: function success(data) {
+	                return callback(data);
+	            },
+	            error: function error(response) {
+	                if (response.status === 200) {
+	                    throw new Error("The JSON submitted seems not valid");
+	                }
+	                console.error("Error requesting file: ", response);
+	            }
+	        });
+	        return this;
+	    },
+	    /**
+	     * loads an image and calls callback on success
+	     * @param {Function} cb - callback-function on success
+	     * @return {Helper} Helper
+	     */
+	    loadImage: function loadImage(path, cb) {
+	        var img = new Image();
+	        img.onload = function () {
+	            if (cb && typeof cb === "function") {
+	                cb(img);
+	            }
+	        };
+	        img.src = path;
+	        return this;
+	    },
+	    forEach: function forEach(a, fn) {
+	        for (var i in a) {
+	            if (a[i] && typeof fn === "function") {
+	                fn(a[i], i);
+	            }
+	        }
+	    },
+	    /**
+	     * convert degree to radian
+	     * @param {number} degrees - specified degrees
+	     * @return {number} converted radian
+	     */
+	    toRadians: function toRadians(degrees) {
+	        return degrees * Math.PI / 180;
+	    }
+
+		};
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Marker = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _jquery = __webpack_require__(1);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _Point = __webpack_require__(4);
+
+	var _StateHandler = __webpack_require__(9);
+
+	var _DataEnrichment = __webpack_require__(13);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * States of a marker
+	 * @type {Array}
+	 */
+	var STATES = [{ value: 0, description: 'Loading' }, { value: 0, description: 'Initialized' }, { value: 1, description: 'Ready' }];
+
+	var Marker = exports.Marker = function () {
+	    _createClass(Marker, [{
+	        key: 'scaleX',
+	        get: function get() {
+	            return this.distortionFactor();
+	        }
+	    }, {
+	        key: 'viewOffset',
+	        get: function get() {
+	            return this.mapOffset();
+	        }
+	    }, {
+	        key: 'xOffset',
+	        get: function get() {
+	            return this.xOffsetToCenter();
+	        }
+	    }]);
+
+	    function Marker() {
+	        var data = arguments.length <= 0 || arguments[0] === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : arguments[0];
+	        var $container = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	        var distortionFactor = arguments.length <= 2 || arguments[2] === undefined ? function () {
+	            return 1;
+	        } : arguments[2];
+	        var mapOffset = arguments.length <= 3 || arguments[3] === undefined ? function () {
+	            return new _Point.Point();
+	        } : arguments[3];
+	        var xOffsetToCenter = arguments.length <= 4 || arguments[4] === undefined ? function () {
+	            return 0;
+	        } : arguments[4];
+	        var calculateLatLngToPoint = arguments.length <= 5 || arguments[5] === undefined ? function () {
+	            return new _Point.Point();
+	        } : arguments[5];
+
+	        _classCallCheck(this, Marker);
+
+	        this.stateHandler = new _StateHandler.StateHandler(STATES);
+
+	        this.calculateLatLngToPoint = calculateLatLngToPoint;
+	        this.distortionFactor = distortionFactor;
+	        this.mapOffset = mapOffset;
+	        this.xOffsetToCenter = xOffsetToCenter;
+
+	        this.size = data.size;
+	        this.hover = data.hover;
+	        if (this.hover) {
+	            this.size.divide(2, 1);
+	        }
+	        this.img = data.icon;
+	        this.offset = data.offset;
+	        this.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
+	        this.latlng = data.latlng;
+
+	        this.position = this.calculateLatLngToPoint(this.latlng);
+
+	        this.icon = this.addMarkerToDOM($container);
+
+	        this.moveMarker();
+	    }
+
+	    _createClass(Marker, [{
+	        key: 'addMarkerToDOM',
+	        value: function addMarkerToDOM($container) {
+	            var icon = (0, _jquery2.default)("<div class='marker' />").css({
+	                "width": this.size.x + 'px',
+	                "height": this.size.y + 'px',
+	                "margin-left": this.offset.x + 'px',
+	                "margin-top": this.offset.y + 'px',
+	                "background-image": 'url(' + this.img + ')',
+	                "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
+	            });
+	            if ($container) {
+	                $container.append(icon);
+	                this.stateHandler.next();
+	            }
+	            return icon;
+	        }
+	    }, {
+	        key: 'moveMarker',
+	        value: function moveMarker() {
+	            var p = new _Point.Point((this.position.x + this.viewOffset.x) * this.scaleX + this.xOffset, this.position.y + this.viewOffset.y);
+	            if (this.icon) {
+	                this.icon.css({
+	                    transform: 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)'
+	                });
+	            }
+	        }
+	    }]);
+
+	    return Marker;
+	}();
+
+/***/ },
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -2450,37 +2433,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(4);
 
-	var _LatLng = __webpack_require__(3);
+	var _LatLng = __webpack_require__(5);
 
-	var _Helper = __webpack_require__(9);
+	var _Helper = __webpack_require__(11);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var DATA_MARKER = {
-	    icon: null,
-	    hover: false,
-	    position: {
-	        lat: 0,
-	        lng: 0
-	    },
-	    offset: {
-	        x: 0,
-	        y: 0
-	    },
-	    size: {
-	        width: 32,
-	        height: 32
-	    }
-	};
 
 	var DataEnrichment = exports.DataEnrichment = {
 	    marker: function marker(data, cb) {
 
 	        var enrichedData = [];
 
-	        _Helper.Helper.forEach(data, function (entry, i) {
+	        _Helper.Helper.forEach(data, function (entry) {
 
-	            entry = _jquery2.default.extend(true, DATA_MARKER, entry);
+	            entry = _jquery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
 
 	            var offset = new _Point.Point(entry.offset.x, entry.offset.y);
 	            var latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng);
@@ -2498,6 +2464,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (typeof cb === "function") {
 	            cb(enrichedData);
 	        }
+	    }
+	};
+
+	DataEnrichment.DATA_MARKER = {
+	    icon: null,
+	    hover: false,
+	    position: {
+	        lat: 0,
+	        lng: 0
+	    },
+	    offset: {
+	        x: 0,
+	        y: 0
+	    },
+	    size: {
+	        width: 32,
+	        height: 32
 	    }
 		};
 
@@ -2638,23 +2621,46 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Interact);
 
-	        this.settings = {
-	            container: ".interact-container",
-	            timeTreshold: {
-	                tap: 200,
-	                hold: 500,
-	                swipe: 300,
-	                flick: 30
-	            },
-	            distanceTreshold: {
-	                swipe: 200
-	            },
-	            overwriteViewportSettings: false,
-	            stopPropagation: true,
-	            preventDefault: true,
-	            autoFireHold: false,
-	            pinchBalanceTime: 50,
-	            callbacks: {
+	        this.settings = this.getDefaultSettings();
+
+	        _jquery2.default.extend(true, this.settings, settings || {});
+
+	        this.data = this.getDefaultData();
+
+	        if (this.settings.overwriteViewportSettings) {
+	            this.handleViewport(this.settings.overwriteViewportSettings);
+	        }
+
+	        this.init(this.settings.container).bindEvents();
+	    }
+
+	    _createClass(Interact, [{
+	        key: 'getDefaultSettings',
+	        value: function getDefaultSettings() {
+	            return {
+	                container: ".interact-container",
+	                timeTreshold: {
+	                    tap: 200,
+	                    hold: 500,
+	                    swipe: 300,
+	                    flick: 30
+	                },
+	                distanceTreshold: {
+	                    swipe: 200
+	                },
+	                overwriteViewportSettings: false,
+	                stopPropagation: true,
+	                preventDefault: true,
+	                autoFireHold: false,
+	                pinchBalanceTime: 50,
+	                callbacks: this.getDefaultCallbacks(),
+	                events: this.getDefaultEventNames()
+	            };
+	        }
+	    }, {
+	        key: 'getDefaultCallbacks',
+	        value: function getDefaultCallbacks() {
+	            return {
 	                tap: null,
 	                tapHold: null,
 	                doubletap: null,
@@ -2665,8 +2671,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                zoom: null,
 	                wheel: null,
 	                pinch: null
-	            },
-	            events: {
+	            };
+	        }
+	    }, {
+	        key: 'getDefaultEventNames',
+	        value: function getDefaultEventNames() {
+	            return {
 	                start: {
 	                    touch: this.isIE ? "MSPointerDown pointerdown" : "touchstart",
 	                    mouse: this.isIE ? "MSPointerDown pointerdown" : "mousedown"
@@ -2684,55 +2694,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    mouse: this.isIE ? "MSPointerLeave pointerleave" : "mouseleave"
 	                },
 	                scroll: this.scrollEvent
-	            }
-	        };
-
-	        _jquery2.default.extend(true, this.settings, settings || {});
-
-	        this.data = {
-	            down: false,
-	            moved: false,
-	            pinched: false,
-	            pointerArray: {},
-	            multitouch: false,
-	            distance: null,
-	            difference: null,
-	            last: {
-	                position: null,
+	            };
+	        }
+	    }, {
+	        key: 'getDefaultData',
+	        value: function getDefaultData() {
+	            return {
+	                down: false,
+	                moved: false,
+	                pinched: false,
+	                pointerArray: {},
+	                multitouch: false,
 	                distance: null,
-	                action: null
-	            },
-	            position: {
-	                start: null,
-	                move: null,
-	                end: null
-	            },
-	            time: {
-	                start: null,
-	                last: null,
-	                end: null
-	            },
-	            timeout: {
-	                hold: null,
-	                default: null
-	            }
-	        };
-
-	        if (this.settings.overwriteViewportSettings) {
-	            this.handleViewport(this.settings.overwriteViewportSettings);
+	                directions: [],
+	                zoom: 0,
+	                difference: null,
+	                target: null,
+	                last: {
+	                    position: null,
+	                    distance: null,
+	                    action: null
+	                },
+	                position: {
+	                    start: null,
+	                    move: null,
+	                    end: null
+	                },
+	                time: {
+	                    start: null,
+	                    last: null,
+	                    end: null
+	                },
+	                timeout: {
+	                    hold: null,
+	                    default: null
+	                }
+	            };
 	        }
 
-	        this.init(this.settings.container).bindEvents();
-	    }
+	        /**
+	         * handles the overwrite of viewport meta
+	         * @param  {Boolean|string} viewport - specified viewport option
+	         * @return {Interact} Returns this instance
+	         */
 
-	    /**
-	     * handles the overwrite of viewport meta
-	     * @param  {Boolean|string} viewport - specified viewport option
-	     * @return {Interact} Returns this instance
-	     */
-
-
-	    _createClass(Interact, [{
+	    }, {
 	        key: 'handleViewport',
 	        value: function handleViewport(viewport) {
 	            if (typeof viewport !== "string") {
@@ -2836,7 +2842,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                event.preventDefault();
 	            }
 
-	            this.target = event.target;
+	            this.data.target = event.target;
 
 	            return this.getEvent(event);
 	        }
@@ -2852,26 +2858,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function scrollHandler(event) {
 	            event = event || window.event;
 
-	            var e = this.preHandle(event) || event.originalEvent,
-	                directions = this.getScrollDirection(e),
-	                position = this.getRelativePosition(e);
+	            var e = this.preHandle(event) || event.originalEvent;
+
+	            this.data.position.start = this.getRelativePosition(e);
+	            this.data.directions = this.getScrollDirection(e);
 
 	            if (this.settings.callbacks.wheel) {
-	                this.eventCallback(this.settings.callbacks.wheel, {
-	                    directions: directions,
-	                    position: position
-	                });
+	                this.eventCallback(this.settings.callbacks.wheel, this.dataClone);
 	            }
 
-	            if (this.settings.callbacks.zoom && (directions.indexOf("up") > -1 || directions.indexOf("down") > -1)) {
-	                this.eventCallback(this.settings.callbacks.zoom, {
-	                    direction: directions.indexOf("up") > -1 ? "in" : directions.indexOf("down") > -1 ? "out" : "none",
-	                    position: position,
-	                    factor: directions.indexOf("up") > -1 ? 1 : directions.indexOf("down") > -1 ? -1 : 0
-	                });
+	            this.data.zoom = 0;
+	            if (this.settings.callbacks.zoom && (this.data.directions.indexOf("up") > -1 || this.data.directions.indexOf("down") > -1)) {
+	                this.data.zoom = this.data.directions.indexOf("up") > -1 ? 1 : this.data.directions.indexOf("down") > -1 ? -1 : 0;
+	                this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
 	            }
 
 	            return false;
+	        }
+	    }, {
+	        key: 'isPointerEvent',
+	        value: function isPointerEvent(e) {
+	            return this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent);
 	        }
 	    }, {
 	        key: 'calculateStart',
@@ -2884,31 +2891,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    start: new _Point.Point()
 	                }
 	            };
-
 	            // mouse is used
 	            if (e instanceof MouseEvent) {
 	                return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
 	            }
-
 	            // if is pointerEvent
-	            if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
-	                this.data.pointerArray[e.pointerId] = e;
-	                if (Object.keys(this.data.pointerArray).length <= 1) {
-	                    return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
-	                } else {
-	                    var pointerPos = this.getPointerArray();
-	                    return _jquery2.default.extend(true, data, this.handleMultitouchStart(pointerPos));
-	                }
+	            if (this.isPointerEvent(e)) {
+	                return this.handlePointerEventStart(data, e);
 	            } // touch is used
 	            else {
 	                    // singletouch startet
-	                    if (e.length === 1) {
-	                        return _jquery2.default.extend(true, data, this.handleSingletouchStart(e[0]));
-	                    } // multitouch started
-	                    else if (e.length === 2) {
-	                            return _jquery2.default.extend(true, data, this.handleMultitouchStart(e));
-	                        }
+	                    return this.handleTouchEventStart(data, e);
 	                }
+	        }
+	    }, {
+	        key: 'handlePointerEventStart',
+	        value: function handlePointerEventStart(data, e) {
+	            this.data.pointerArray[e.pointerId] = e;
+	            if (Object.keys(this.data.pointerArray).length <= 1) {
+	                return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
+	            } else {
+	                return _jquery2.default.extend(true, data, this.handleMultitouchStart(this.getPointerArray()));
+	            }
+	        }
+	    }, {
+	        key: 'handleTouchEventStart',
+	        value: function handleTouchEventStart(data, e) {
+	            if (e.length === 1) {
+	                return _jquery2.default.extend(true, data, this.handleSingletouchStart(e[0]));
+	            } // multitouch started
+	            else if (e.length === 2) {
+	                    return _jquery2.default.extend(true, data, this.handleMultitouchStart(e));
+	                }
+	            return data;
 	        }
 	    }, {
 	        key: 'getPointerArray',
@@ -2924,8 +2939,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handleMultitouchStart',
 	        value: function handleMultitouchStart(positionsArray) {
-	            var pos1 = this.getRelativePosition(positionsArray[0]);
-	            var pos2 = this.getRelativePosition(positionsArray[1]);
+	            var pos1 = this.getRelativePosition(positionsArray[0]),
+	                pos2 = this.getRelativePosition(positionsArray[1]);
 	            return {
 	                multitouch: true,
 	                distance: pos1.distance(pos2),
@@ -2943,32 +2958,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            };
 	        }
-
-	        /**
-	         * handles cross-browser and -device start-event
-	         * @param  {Object} event - jQuery-Event-Object
-	         * @return {Boolean} always returns false
-	         */
-
 	    }, {
-	        key: 'startHandler',
-	        value: function startHandler(event) {
-
-	            if (event.button && event.button !== 0) {
-	                return false;
-	            }
-
-	            var e = this.preHandle(event);
-
-	            this.data.time.start = event.timeStamp;
-
-	            if (this.data.timeout.default) {
-	                this.data.timeout.default = clearTimeout(this.data.timeout.default);
-	            }
-
-	            this.data = _jquery2.default.extend(true, this.data, this.calculateStart(e));
-
-	            switch (this.data.last.action) {
+	        key: 'takeActionStart',
+	        value: function takeActionStart(action) {
+	            switch (action) {
 	                case null:
 	                    this.data.last.action = "tap";
 	                    if (this.settings.autoFireHold) {
@@ -2984,8 +2977,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	                default:
 	                    break;
 	            }
+	        }
 
+	        /**
+	         * handles cross-browser and -device start-event
+	         * @param  {Object} event - jQuery-Event-Object
+	         * @return {Boolean} always returns false
+	         */
+
+	    }, {
+	        key: 'startHandler',
+	        value: function startHandler(event) {
+	            if (event.button && event.button !== 0) {
+	                return false;
+	            }
+	            var e = this.preHandle(event);
+	            this.data.time.start = event.timeStamp;
+	            this.clearTimeouts(this.data.timeout.default);
+	            this.data = _jquery2.default.extend(true, this.data, this.calculateStart(e));
+	            this.takeActionStart(this.data.last.action);
 	            return false;
+	        }
+	    }, {
+	        key: 'clearTimeouts',
+	        value: function clearTimeouts(timeout) {
+	            if (timeout) {
+	                timeout = clearTimeout(timeout);
+	            }
 	        }
 	    }, {
 	        key: 'calculateMove',
@@ -3003,23 +3021,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (e instanceof MouseEvent) {
 	                return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
 	            } // if is pointerEvent
-	            if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
-	                this.data.pointerArray[e.pointerId] = e;
-	                if (Object.keys(this.data.pointerArray).length <= 1) {
-	                    return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
-	                } else {
-	                    var pointerPos = this.getPointerArray();
-	                    return _jquery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
-	                }
+	            if (this.isPointerEvent(e)) {
+	                return this.handlePointerEventMove(data, e);
 	            } // touch is used
 	            else {
-	                    // singletouch startet
-	                    if (e.length === 1) {
-	                        return _jquery2.default.extend(true, data, this.handleSingletouchMove(e[0]));
-	                    } else if (e.length === 2) {
-	                        return _jquery2.default.extend(true, data, this.handleMultitouchMove(e));
-	                    }
+	                    return this.handleTouchEventMove(data, e);
 	                }
+	        }
+	    }, {
+	        key: 'handlePointerEventMove',
+	        value: function handlePointerEventMove(data, e) {
+	            this.data.pointerArray[e.pointerId] = e;
+	            if (Object.keys(this.data.pointerArray).length <= 1) {
+	                return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
+	            } else {
+	                var pointerPos = this.getPointerArray();
+	                return _jquery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
+	            }
+	        }
+	    }, {
+	        key: 'handleTouchEventMove',
+	        value: function handleTouchEventMove(data, e) {
+	            // singletouch startet
+	            if (e.length === 1) {
+	                return _jquery2.default.extend(true, data, this.handleSingletouchMove(e[0]));
+	            } else if (e.length === 2) {
+	                return _jquery2.default.extend(true, data, this.handleMultitouchMove(e));
+	            }
+	            return data;
 	        }
 	    }, {
 	        key: 'handleMultitouchMove',
@@ -3056,48 +3085,104 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'moveHandler',
 	        value: function moveHandler(event) {
-	            // TODO: implement move-callback
 	            // if touchstart event was not fired
 	            if (!this.data.down || this.data.pinched) {
 	                return false;
 	            }
 
 	            var e = this.preHandle(event);
-
 	            this.data.time.last = event.timeStamp;
-
 	            this.data.last.position = this.data.position.move ? this.data.position.move : this.data.position.start;
 	            this.data.time.last = this.data.time.last ? this.data.time.last : this.data.time.start;
 
 	            // if positions have not changed
-	            if (this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position)) {
+	            if (this.positionDidNotChange(e)) {
 	                return false;
 	            }
 
-	            if (this.data.timeout.default) {
-	                this.data.timeout.default = clearTimeout(this.data.timeout.default);
-	            }
-	            if (this.data.timeout.hold) {
-	                this.data.timeout.hold = clearTimeout(this.data.timeout.hold);
-	            }
-
+	            this.clearTimeouts(this.data.timeout.default);
+	            this.clearTimeouts(this.data.timeout.hold);
 	            this.data = _jquery2.default.extend(true, this.data, this.calculateMove(e));
 
 	            if (this.data.multitouch) {
-	                this.data.difference = this.data.distance - this.data.last.distance || 0;
-	                this.data.last.position = this.data.position.move;
-	                if (this.settings.callbacks.pinch && this.data.difference !== 0) {
-	                    this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
-	                }
-	                if (this.settings.callbacks.zoom && this.data.difference !== 0) {
-	                    this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
-	                }
+	                this.handlePinchAndZoom();
 	            } else {
-	                this.speed = this.calculateSpeed(this.data.distance, this.timeToLastMove);
+	                this.data.speed = this.calculateSpeed(this.data.distance, this.timeToLastMove);
 	                this.eventCallback(this.settings.callbacks.pan, this.dataClone);
 	            }
-
 	            return false;
+	        }
+	    }, {
+	        key: 'handlePinchAndZoom',
+	        value: function handlePinchAndZoom() {
+	            this.data.difference = this.data.distance - this.data.last.distance || 0;
+	            this.data.last.position = this.data.position.move;
+	            if (this.settings.callbacks.pinch && this.data.difference !== 0) {
+	                this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
+	            }
+	            if (this.settings.callbacks.zoom && this.data.difference !== 0) {
+	                this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
+	            }
+	        }
+	    }, {
+	        key: 'positionDidNotChange',
+	        value: function positionDidNotChange(e) {
+	            return this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position);
+	        }
+	    }, {
+	        key: 'calculateEnd',
+	        value: function calculateEnd(e) {
+	            var data = {
+	                position: {
+	                    end: new _Point.Point()
+	                }
+	            };
+
+	            if (e instanceof MouseEvent) {
+	                return _jquery2.default.extend(true, data, this.handleSingletouchEnd(e));
+	            } // if is pointerEvent
+	            if (this.isPointerEvent(e)) {
+	                var end = this.handleSingletouchEnd(e);
+	                delete this.data.pointerArray[e.pointerId];
+	                return _jquery2.default.extend(true, data, end);
+	            } // touch is used
+	            else {
+	                    // singletouch ended
+	                    if (e.length <= 1) {
+	                        return _jquery2.default.extend(true, data, this.handleSingletouchEnd(e[0]));
+	                    }
+	                }
+	        }
+	    }, {
+	        key: 'handleSingletouchEnd',
+	        value: function handleSingletouchEnd(position) {
+	            return {
+	                position: {
+	                    end: this.getRelativePosition(position)
+	                }
+	            };
+	        }
+	    }, {
+	        key: 'takeActionEnd',
+	        value: function takeActionEnd(action) {
+	            switch (action) {
+	                case "tap":
+	                    if (this.time < this.settings.timeTreshold.hold) {
+	                        this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, this.dataClone);
+	                    } else {
+	                        this.eventCallback(this.settings.callbacks.hold, this.dataClone);
+	                    }
+	                    break;
+	                case "doubletap":
+	                    if (this.time < this.settings.timeTreshold.hold) {
+	                        this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, this.dataClone);
+	                    } else {
+	                        this.eventCallback(this.settings.callbacks.tapHold, this.dataClone);
+	                    }
+	                    break;
+	                default:
+	                    this.data.last.action = null;
+	            }
 	        }
 
 	        /**
@@ -3114,90 +3199,58 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.data.time.end = event.timeStamp;
 
-	            if (this.data.timeout.hold) {
-	                this.data.timeout.hold = clearTimeout(this.data.timeout.hold);
-	            }
+	            this.clearTimeouts(this.data.timeout.hold);
 
-	            if (e instanceof MouseEvent) {
-	                this.data.position.end = this.getRelativePosition(e);
-	            } // if is pointerEvent
-	            if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
-	                this.data.position.end = this.getRelativePosition(e);
-	                delete this.data.pointerArray[e.pointerId];
-	            } // touch is used
-	            else {
-	                    // singletouch ended
-	                    if (e.length <= 1) {
-	                        this.data.position.end = this.getRelativePosition(e[0]);
-	                    }
-	                }
+	            this.data = _jquery2.default.extend(true, this.data, this.calculateEnd(e));
 
 	            // called only when not moved
 	            if (!this.data.moved && this.data.down && !this.data.multitouch) {
-	                switch (this.data.last.action) {
-	                    case "tap":
-	                        if (this.time < this.settings.timeTreshold.hold) {
-	                            this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, this.dataClone);
-	                        } else {
-	                            this.eventCallback(this.settings.callbacks.hold, this.dataClone);
-	                        }
-	                        break;
-	                    case "doubletap":
-	                        if (this.time < this.settings.timeTreshold.hold) {
-	                            this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, this.dataClone);
-	                        } else {
-	                            this.eventCallback(this.settings.callbacks.tapHold, this.dataClone);
-	                        }
-	                        break;
-	                    default:
-	                        this.data.last.action = null;
-	                }
+	                this.takeActionEnd(this.data.last.action);
 	            }
 	            // if was moved
 	            else if (this.data.moved && this.data.down && !this.data.multitouch) {
-
 	                    if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
-
-	                        var direction = this.settings.callbacks.swipe ? this.data.position.end.substract(this.data.position.start) : this.data.position.end.substract(this.data.last.position);
-
-	                        var vLDirection = direction.length,
-	                            directionNormalized = direction.divide(vLDirection, vLDirection),
-	                            distance = this.data.position.end.distance(this.data.position.start),
-	                            speed = this.calculateSpeed(distance, this.time);
-
-	                        if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
-	                            var originalStart = this.getAbsolutePosition(this.data.position.start);
-	                            var originalEnd = this.getAbsolutePosition(this.data.position.end);
-	                            if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
-	                                var directions = this.getSwipeDirections(directionNormalized);
-	                                this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
-	                            }
-	                        }
-
-	                        if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
-	                            this.dataClone.speed = speed;
-	                            this.eventCallback(this.settings.callbacks.flick, this.dataClone);
-	                        }
+	                        this.handleSwipeAndFlick();
 	                    }
-
-	                    if (this.data.last.action) {
-	                        this.data.last.action = null;
-	                    }
+	                    this.data.last.action = null;
 	                }
+	            this.pinchBalance();
+	            this.handleMultitouchEnd(e);
+	            return false;
+	        }
+	    }, {
+	        key: 'handleSwipeAndFlick',
+	        value: function handleSwipeAndFlick() {
+	            var direction = this.settings.callbacks.swipe ? this.data.position.end.substract(this.data.position.start) : this.data.position.end.substract(this.data.last.position);
 
-	            if (this.data.multitouch) {
-	                this.data.pinched = true;
-	                setTimeout(function () {
-	                    this.data.pinched = false;
-	                }.bind(this), this.settings.pinchBalanceTime);
+	            var vLDirection = direction.length,
+	                directionNormalized = direction.divide(vLDirection, vLDirection);
+
+	            if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
+	                var originalStart = this.getAbsolutePosition(this.data.position.start);
+	                var originalEnd = this.getAbsolutePosition(this.data.position.end);
+	                if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
+	                    this.data.directions = this.getSwipeDirections(directionNormalized);
+	                    this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
+	                }
 	            }
 
+	            if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
+	                var distance = this.data.position.end.distance(this.data.position.start);
+	                this.data.distance = distance;
+	                this.data.speed = this.calculateSpeed(distance, this.time);
+	                this.eventCallback(this.settings.callbacks.flick, this.dataClone);
+	            }
+	        }
+	    }, {
+	        key: 'handleMultitouchEnd',
+	        value: function handleMultitouchEnd(e) {
 	            this.data.multitouch = false;
 	            this.data.down = false;
 	            this.data.moved = false;
 
 	            // if is pointerEvent
-	            if (this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent)) {
+	            if (this.isPointerEvent(e)) {
 	                if (Object.keys(this.data.pointerArray).length > 1) {
 	                    this.data.multitouch = true;
 	                } else if (Object.keys(this.data.pointerArray).length > 0) {
@@ -3212,8 +3265,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                    this.data.position.move = null;
 	                }
-
-	            return false;
+	        }
+	    }, {
+	        key: 'pinchBalance',
+	        value: function pinchBalance() {
+	            if (this.data.multitouch) {
+	                this.data.pinched = true;
+	                setTimeout(function () {
+	                    this.data.pinched = false;
+	                }.bind(this), this.settings.pinchBalanceTime);
+	            }
 	        }
 
 	        /**
@@ -3319,22 +3380,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var direction = [];
 
 	            // down
-	            if (event.deltaY > 0 || !event.deltaY && event.wheelDeltaY < 0 || axis === 2 && event.detail > 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) < 0) {
+	            if (this.isDownDirection(axis, event)) {
 	                direction.push("down");
 	            } // up
-	            else if (event.deltaY < 0 || !event.deltaY && event.wheelDeltaY > 0 || axis === 2 && event.detail < 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) > 0) {
+	            else if (this.isUpDirection(axis, event)) {
 	                    direction.push("up");
 	                }
 
 	            // right
-	            if (event.deltaX > 0 || !event.deltaX && event.wheelDeltaX > 0 || axis === 1 && event.detail > 0) {
+	            if (this.isRightDirection(axis, event)) {
 	                direction.push("right");
 	            } // left
-	            else if (event.deltaX < 0 || !event.deltaX && event.wheelDeltaX < 0 || axis === 1 && event.detail < 0) {
+	            else if (this.isLeftDirection(axis, event)) {
 	                    direction.push("left");
 	                }
 
 	            return direction;
+	        }
+	    }, {
+	        key: 'isDownDirection',
+	        value: function isDownDirection(axis, event) {
+	            return event.deltaY > 0 || !event.deltaY && event.wheelDeltaY < 0 || axis === 2 && event.detail > 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) < 0;
+	        }
+	    }, {
+	        key: 'isUpDirection',
+	        value: function isUpDirection(axis, event) {
+	            return event.deltaY < 0 || !event.deltaY && event.wheelDeltaY > 0 || axis === 2 && event.detail < 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) > 0;
+	        }
+	    }, {
+	        key: 'isRightDirection',
+	        value: function isRightDirection(axis, event) {
+	            return event.deltaX > 0 || !event.deltaX && event.wheelDeltaX > 0 || axis === 1 && event.detail > 0;
+	        }
+	    }, {
+	        key: 'isLeftDirection',
+	        value: function isLeftDirection(axis, event) {
+	            return event.deltaX < 0 || !event.deltaX && event.wheelDeltaX < 0 || axis === 1 && event.detail < 0;
 	        }
 
 	        /**

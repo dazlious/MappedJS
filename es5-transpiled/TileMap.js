@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './LatLng.js', './Point.js', './Bounds.js', './Rectangle.js', './Marker.js', './View.js'], factory);
+        define(['exports', 'jquery', './View.js', './LatLng.js', './Bounds.js', './Rectangle.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./LatLng.js'), require('./Point.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Marker.js'), require('./View.js'));
+        factory(exports, require('jquery'), require('./View.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.LatLng, global.Point, global.Bounds, global.Rectangle, global.Marker, global.View);
+        factory(mod.exports, global.jquery, global.View, global.LatLng, global.Bounds, global.Rectangle);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jquery, _LatLng, _Point, _Bounds, _Rectangle, _Marker, _View) {
+})(this, function(exports, _jquery, _View, _LatLng, _Bounds, _Rectangle) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {

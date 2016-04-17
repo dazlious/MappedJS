@@ -597,6 +597,7 @@ called when loading and initialization is finished
     * _instance_
         * [.length](#Point+length) ⇒ <code>number</code>
         * [.clone](#Point+clone) ⇒ <code>[Point](#Point)</code>
+        * [.abs](#Point+abs) ⇒ <code>[Point](#Point)</code>
         * [.substract(point)](#Point+substract) ⇒ <code>[Point](#Point)</code>
         * [.add(point)](#Point+add) ⇒ <code>[Point](#Point)</code>
         * [.multiply(x, y)](#Point+multiply) ⇒ <code>[Point](#Point)</code>
@@ -634,6 +635,13 @@ gets a clone of this point
 
 **Kind**: instance property of <code>[Point](#Point)</code>  
 **Returns**: <code>[Point](#Point)</code> - new instance equals this point  
+<a name="Point+abs"></a>
+
+### point.abs ⇒ <code>[Point](#Point)</code>
+gets absolute Point
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+**Returns**: <code>[Point](#Point)</code> - returns Point with absolute values  
 <a name="Point+substract"></a>
 
 ### point.substract(point) ⇒ <code>[Point](#Point)</code>
@@ -860,6 +868,7 @@ Eventname for unsubscribing
         * [.containsPoint(point)](#Rectangle+containsPoint) ⇒ <code>Boolean</code>
         * [.containsRect(rect)](#Rectangle+containsRect) ⇒ <code>Boolean</code>
         * [.getDistortedRect(factor)](#Rectangle+getDistortedRect) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.getNormalRect(factor)](#Rectangle+getNormalRect) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.scaleX(x)](#Rectangle+scaleX) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.scaleY(y)](#Rectangle+scaleY) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.scale(x, y)](#Rectangle+scale) ⇒ <code>[Rectangle](#Rectangle)</code>
@@ -1034,7 +1043,18 @@ Checks whether Rectangle entirely contains the Rectangle
 <a name="Rectangle+getDistortedRect"></a>
 
 ### rectangle.getDistortedRect(factor) ⇒ <code>[Rectangle](#Rectangle)</code>
-distort rectangle by factor
+distorts rectangle by factor
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - a new instance of Rectangle  
+**Params**
+
+- factor <code>number</code> - the specified factor of distortion
+
+<a name="Rectangle+getNormalRect"></a>
+
+### rectangle.getNormalRect(factor) ⇒ <code>[Rectangle](#Rectangle)</code>
+redistorts rectangle by factor
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
 **Returns**: <code>[Rectangle](#Rectangle)</code> - a new instance of Rectangle  

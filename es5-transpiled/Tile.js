@@ -1,30 +1,22 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './StateHandler.js', './Rectangle.js', './Publisher.js', './Helper.js'], factory);
+        define(['exports', './StateHandler.js', './Rectangle.js', './Publisher.js', './Helper.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./StateHandler.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./Helper.js'));
+        factory(exports, require('./StateHandler.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./Helper.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.StateHandler, global.Rectangle, global.Publisher, global.Helper);
+        factory(mod.exports, global.StateHandler, global.Rectangle, global.Publisher, global.Helper);
         global.Tile = mod.exports;
     }
-})(this, function(exports, _jquery, _StateHandler, _Rectangle2, _Publisher, _Helper) {
+})(this, function(exports, _StateHandler, _Rectangle2, _Publisher, _Helper) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
     exports.Tile = undefined;
-
-    var _jquery2 = _interopRequireDefault(_jquery);
-
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            default: obj
-        };
-    }
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
