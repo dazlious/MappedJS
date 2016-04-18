@@ -66,47 +66,19 @@
     }];
 
     var Marker = exports.Marker = function() {
-        _createClass(Marker, [{
-            key: 'scaleX',
-            get: function get() {
-                return this.distortionFactor();
-            }
-        }, {
-            key: 'viewOffset',
-            get: function get() {
-                return this.mapOffset();
-            }
-        }, {
-            key: 'xOffset',
-            get: function get() {
-                return this.xOffsetToCenter();
-            }
-        }]);
-
         function Marker() {
             var data = arguments.length <= 0 || arguments[0] === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : arguments[0];
-            var $container = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-            var distortionFactor = arguments.length <= 2 || arguments[2] === undefined ? function() {
-                return 1;
-            } : arguments[2];
-            var mapOffset = arguments.length <= 3 || arguments[3] === undefined ? function() {
-                return new _Point.Point();
-            } : arguments[3];
-            var xOffsetToCenter = arguments.length <= 4 || arguments[4] === undefined ? function() {
-                return 0;
-            } : arguments[4];
-            var calculateLatLngToPoint = arguments.length <= 5 || arguments[5] === undefined ? function() {
-                return new _Point.Point();
-            } : arguments[5];
+
+            var _instance = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
             _classCallCheck(this, Marker);
 
             this.stateHandler = new _StateHandler.StateHandler(STATES);
 
-            this.calculateLatLngToPoint = calculateLatLngToPoint;
-            this.distortionFactor = distortionFactor;
-            this.mapOffset = mapOffset;
-            this.xOffsetToCenter = xOffsetToCenter;
+            if (!_instance) {
+                throw new Error('Tile needs an instance');
+            }
+            this.instance = _instance;
 
             this.size = data.size;
             this.hover = data.hover;
@@ -118,9 +90,9 @@
             this.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
             this.latlng = data.latlng;
 
-            this.position = this.calculateLatLngToPoint(this.latlng);
+            this.position = this.instance.convertLatLngToPoint(this.latlng);
 
-            this.icon = this.addMarkerToDOM($container);
+            this.icon = this.addMarkerToDOM(this.instance.$markerContainer);
 
             this.moveMarker();
         }
@@ -145,7 +117,8 @@
         }, {
             key: 'moveMarker',
             value: function moveMarker() {
-                var p = new _Point.Point((this.position.x + this.viewOffset.x) * this.scaleX + this.xOffset, this.position.y + this.viewOffset.y);
+                this.position = this.instance.convertLatLngToPoint(this.latlng);
+                var p = new _Point.Point((this.position.x + this.instance.currentView.x) * this.instance.distortionFactor + this.instance.offsetToCenter, this.position.y + this.instance.currentView.y);
                 if (this.icon) {
                     this.icon.css({
                         transform: 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)'

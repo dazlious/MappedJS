@@ -2,7 +2,7 @@
 
 describe('Tile', function() {
     "use strict";
-
+/*
     it("is an instanceof Tile and initializes without Rectangle parameters", function() {
         expect(new Tile.Tile({
             path: "http://dummyimage.com/800x200/000/fff"
@@ -34,50 +34,5 @@ describe('Tile', function() {
         expect(t.width).toEqual(0);
         expect(t.height).toEqual(0);
     });
-
-    it("initializes in correct state", function(done) {
-        var t = new Tile.Tile({
-            path: "http://dummyimage.com/800x200/000/fff"
-        });
-        var _listener = function(tile) {
-            expect(t).toBe(tile);
-            t.Publisher.unsubscribe("tile-loaded", _listener);
-            done();
-        };
-        t.Publisher.subscribe("tile-loaded", _listener);
-        expect(t.state.current.value).toEqual(0);
-        t.initialize();
-        expect(t.state.current.value).toEqual(1);
-    });
-
-    it("calls event after loading", function(done) {
-        var t = new Tile.Tile({
-            path: "http://dummyimage.com/800x200/000/fff"
-        });
-        var _listener = function(tile) {
-            expect(t).toBe(tile);
-            t.Publisher.unsubscribe("tile-loaded", _listener);
-            done();
-        };
-        t.Publisher.subscribe("tile-loaded", _listener);
-        expect(t.state.current.value).toEqual(0);
-        t.initialize();
-        expect(t.state.current.value).toEqual(1);
-    });
-
-    it("calls event after loading", function() {
-        var t1 = new Tile.Tile({
-                path: "http://dummyimage.com/800x200/000/fff"
-            }),
-            t2 = new Tile.Tile({
-                path: "http://dummyimage.com/800x200/000/fff"
-            }),
-            t3 = new Tile.Tile({
-                path: "http://dummyimage.com/800x200/000/ddd"
-            });
-        expect(t1.equals(t1)).toEqual(true);
-        expect(t1.equals(t2)).toEqual(true);
-        expect(t1.equals(t3)).toEqual(false);
-    });
-
+*/
 });

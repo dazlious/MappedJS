@@ -190,7 +190,7 @@
                         tap: 200,
                         hold: 500,
                         swipe: 300,
-                        flick: 30
+                        flick: 20
                     },
                     distanceTreshold: {
                         swipe: 200
@@ -783,10 +783,14 @@
                 }
 
                 if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
-                    var distance = this.data.position.end.distance(this.data.position.start);
+                    var distance = this.data.last.position.distance(this.data.position.end);
                     this.data.distance = distance;
+                    var _direction = this.data.last.position.clone.substract(this.data.position.end);
+                    this.data.directions = [_direction.x, _direction.y];
                     this.data.speed = this.calculateSpeed(distance, this.time);
-                    this.eventCallback(this.settings.callbacks.flick, this.dataClone);
+                    if (this.data.speed >= 1) {
+                        this.eventCallback(this.settings.callbacks.flick, this.dataClone);
+                    }
                 }
             }
         }, {

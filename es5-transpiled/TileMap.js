@@ -213,7 +213,7 @@
             value: function resize() {
                 this.resizeCanvas();
                 this.resizeView();
-                this.view.draw();
+                this.redraw();
                 return this;
             }
 

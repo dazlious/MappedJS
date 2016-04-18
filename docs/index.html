@@ -63,23 +63,8 @@
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a marker</p>
 </dd>
-<dt><a href="#PUBLISHER">PUBLISHER</a></dt>
-<dd><p>Singleton instance of Publisher</p>
-</dd>
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a tile</p>
-</dd>
-<dt><a href="#EVENT_TILE_LOADED">EVENT_TILE_LOADED</a> : <code>String</code></dt>
-<dd><p>Name of event fired, when tile is loaded</p>
-</dd>
-<dt><a href="#EVENT_TILE_INITIALIZED">EVENT_TILE_INITIALIZED</a> : <code>String</code></dt>
-<dd><p>Name of event fired, when tile is initialized</p>
-</dd>
-<dt><a href="#EVENT_TILE_FAILED">EVENT_TILE_FAILED</a> : <code>String</code></dt>
-<dd><p>Name of event fired, when tile is not found on loading</p>
-</dd>
-<dt><a href="#PUBLISHER">PUBLISHER</a></dt>
-<dd><p>Singleton instance of Publisher</p>
 </dd>
 </dl>
 
@@ -931,9 +916,7 @@
 <ul>
 <li><a href="#Tile">Tile</a><ul>
 <li><a href="#new_Tile_new">new Tile(path, x, y, w, h)</a></li>
-<li><a href="#Tile+Publisher">.Publisher</a></li>
 <li><a href="#Tile+initialize">.initialize()</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
-<li><a href="#Tile+handleDraw">.handleDraw(x, y, scaleX, offsetX)</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
 <li><a href="#Tile+draw">.draw(img, source)</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
 <li><a href="#Tile+equals">.equals(tile)</a> ⇒ <code>Boolean</code></li>
 </ul>
@@ -950,23 +933,10 @@
 <li>w <code>number</code> <code> = 0</code> - tile width</li>
 <li>h <code>number</code> <code> = 0</code> - tile height</li>
 </ul>
-<p><a name="Tile+Publisher"></a></p>
-<h3 id="tile-publisher">tile.Publisher</h3>
-<p>Return the Publisher</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Tile">Tile</a></code><br><a name="Tile+initialize"></a></p>
+<p><a name="Tile+initialize"></a></p>
 <h3 id="tile-initialize-code-tile-tile-code-">tile.initialize() ⇒ <code><a href="#Tile">Tile</a></code></h3>
 <p>initializes tile and starts loading image</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile for chaining<br><a name="Tile+handleDraw"></a></p>
-<h3 id="tile-handledraw-x-y-scalex-offsetx-code-tile-tile-code-">tile.handleDraw(x, y, scaleX, offsetX) ⇒ <code><a href="#Tile">Tile</a></code></h3>
-<p>handles draw of a tile in each state</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile for chaining<br><strong>Params</strong></p>
-<ul>
-<li>x <code>number</code> - x-position of tile</li>
-<li>y <code>number</code> - y-position of tile</li>
-<li>scaleX <code>number</code> - scale x of tile</li>
-<li>offsetX <code>number</code> - offset x for centering</li>
-</ul>
-<p><a name="Tile+draw"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile for chaining<br><a name="Tile+draw"></a></p>
 <h3 id="tile-draw-img-source-code-tile-tile-code-">tile.draw(img, source) ⇒ <code><a href="#Tile">Tile</a></code></h3>
 <p>draws image data of tile on context</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Tile">Tile</a></code><br><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile for chaining<br><strong>Params</strong></p>
@@ -1068,13 +1038,12 @@
 <li><a href="#View">View</a><ul>
 <li><a href="#new_View_new">new View(settings, viewport, mapView, bounds, center, data)</a></li>
 <li><a href="#View+distortionFactor">.distortionFactor</a> ⇒ <code>number</code></li>
-<li><a href="#View+viewportOffset">.viewportOffset</a></li>
+<li><a href="#View+offsetToCenter">.offsetToCenter</a></li>
 <li><a href="#View+visibleTiles">.visibleTiles</a> ⇒ <code>array</code></li>
 <li><a href="#View+loadThumb">.loadThumb()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+convertPointToLatLng">.convertPointToLatLng(point)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
 <li><a href="#View+convertLatLngToPoint">.convertLatLngToPoint(latlng)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#View+moveView">.moveView(pos)</a> ⇒ <code><a href="#View">View</a></code></li>
-<li><a href="#View+bindEvents">.bindEvents()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+draw">.draw()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+initializeTiles">.initializeTiles()</a> ⇒ <code><a href="#View">View</a></code></li>
 </ul>
@@ -1095,8 +1064,8 @@
 <p><a name="View+distortionFactor"></a></p>
 <h3 id="view-distortionfactor-code-number-code-">view.distortionFactor ⇒ <code>number</code></h3>
 <p>Returns current distortionFactor</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - returns current distortionFactor of latitude<br><a name="View+viewportOffset"></a></p>
-<h3 id="view-viewportoffset">view.viewportOffset</h3>
+<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - returns current distortionFactor of latitude<br><a name="View+offsetToCenter"></a></p>
+<h3 id="view-offsettocenter">view.offsetToCenter</h3>
 <p>Returns the current equalized viewport</p>
 <p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><a name="View+visibleTiles"></a></p>
 <h3 id="view-visibletiles-code-array-code-">view.visibleTiles ⇒ <code>array</code></h3>
@@ -1125,10 +1094,7 @@
 <ul>
 <li>pos <code><a href="#Point">Point</a></code> - specified additional offset</li>
 </ul>
-<p><a name="View+bindEvents"></a></p>
-<h3 id="view-bindevents-code-view-view-code-">view.bindEvents() ⇒ <code><a href="#View">View</a></code></h3>
-<p>Handles all events for class</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View<br><a name="View+draw"></a></p>
+<p><a name="View+draw"></a></p>
 <h3 id="view-draw-code-view-view-code-">view.draw() ⇒ <code><a href="#View">View</a></code></h3>
 <p>Handles draw of visible elements</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View<br><a name="View+initializeTiles"></a></p>
@@ -1140,24 +1106,9 @@
 <p><strong>Kind</strong>: global variable<br><a name="STATES"></a></p>
 <h2 id="states-code-array-code-">STATES : <code>Array</code></h2>
 <p>States of a marker</p>
-<p><strong>Kind</strong>: global constant<br><a name="PUBLISHER"></a></p>
-<h2 id="publisher">PUBLISHER</h2>
-<p>Singleton instance of Publisher</p>
 <p><strong>Kind</strong>: global constant<br><a name="STATES"></a></p>
 <h2 id="states-code-array-code-">STATES : <code>Array</code></h2>
 <p>States of a tile</p>
-<p><strong>Kind</strong>: global constant<br><a name="EVENT_TILE_LOADED"></a></p>
-<h2 id="event_tile_loaded-code-string-code-">EVENT_TILE_LOADED : <code>String</code></h2>
-<p>Name of event fired, when tile is loaded</p>
-<p><strong>Kind</strong>: global constant<br><a name="EVENT_TILE_INITIALIZED"></a></p>
-<h2 id="event_tile_initialized-code-string-code-">EVENT_TILE_INITIALIZED : <code>String</code></h2>
-<p>Name of event fired, when tile is initialized</p>
-<p><strong>Kind</strong>: global constant<br><a name="EVENT_TILE_FAILED"></a></p>
-<h2 id="event_tile_failed-code-string-code-">EVENT_TILE_FAILED : <code>String</code></h2>
-<p>Name of event fired, when tile is not found on loading</p>
-<p><strong>Kind</strong>: global constant<br><a name="PUBLISHER"></a></p>
-<h2 id="publisher">PUBLISHER</h2>
-<p>Singleton instance of Publisher</p>
 <p><strong>Kind</strong>: global constant  </p>
         <footer class="site-footer">
             <span class="site-footer-owner"><a href="https://github.com/dazlious/MappedJS">MappedJS</a> is maintained by <a href="https://github.com/dazlious">dazlious</a>.</span>
