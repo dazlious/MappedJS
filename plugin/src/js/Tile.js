@@ -1,12 +1,6 @@
 import {StateHandler} from './StateHandler.js';
 import {Rectangle} from './Rectangle.js';
-import {Publisher} from './Publisher.js';
 import {Helper} from './Helper.js';
-
-/**
- * Singleton instance of Publisher
- */
-const PUBLISHER = new Publisher();
 
 /**
  * States of a tile
@@ -19,33 +13,7 @@ const STATES = [
     {value: 3, description: 'Drawn'}
 ];
 
-/**
- * Name of event fired, when tile is loaded
- * @type {String}
- */
-const EVENT_TILE_LOADED = "tile-loaded";
-
-/**
- * Name of event fired, when tile is initialized
- * @type {String}
- */
-const EVENT_TILE_INITIALIZED = "tile-initialized";
-
-
-/**
- * Name of event fired, when tile is not found on loading
- * @type {String}
- */
-const EVENT_TILE_FAILED = "tile-failed";
-
 export class Tile extends Rectangle {
-
-    /**
-     * Return the Publisher
-     */
-    get Publisher() {
-        return PUBLISHER;
-    }
 
     /**
      * Constructor
@@ -56,14 +24,17 @@ export class Tile extends Rectangle {
      * @param  {number} h=0 - tile height
      * @return {Tile} instance of Tile
      */
-    constructor({path, x = 0, y = 0, w = 0, h = 0, context = null} = {}) {
+    constructor({path, x = 0, y = 0, w = 0, h = 0} = {}, _instance = null) {
         super(x, y, w, h);
         this.state = new StateHandler(STATES);
         if (!path || typeof path !== "string" || path.length === 0) {
             throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
+        } else if(!_instance) {
+            throw new Error(`Tile needs an instance`);
         }
+        this.instance = _instance;
         this.markers = [];
-        this.context = context;
+        this.context = this.instance.context;
         this.path = path;
         return this;
     }
@@ -74,32 +45,12 @@ export class Tile extends Rectangle {
      */
     initialize() {
         this.state.next();
-        PUBLISHER.publish(EVENT_TILE_INITIALIZED, this);
         Helper.loadImage(this.path, function(img) {
             this.img = img;
             this.state.next();
-            PUBLISHER.publish(EVENT_TILE_LOADED, this);
+            this.draw();
         }.bind(this));
 
-        return this;
-    }
-
-    /**
-     * handles draw of a tile in each state
-     * @param  {number} x - x-position of tile
-     * @param  {number} y - y-position of tile
-     * @param  {number} scaleX - scale x of tile
-     * @param  {number} offsetX - offset x for centering
-     * @return {Tile} instance of Tile for chaining
-     */
-    handleDraw(x, y, scaleX, offsetX, zoom) {
-        const distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0).scale(zoom.x, zoom.y);
-        if (this.state.current.value >= 2) {
-            this.state.next();
-            this.draw(this.img, distortedTile);
-        } else if (this.state.current.value === 0) {
-            this.initialize();
-        }
         return this;
     }
 
@@ -114,11 +65,21 @@ export class Tile extends Rectangle {
      * @return {Tile} instance of Tile for chaining
      */
     draw(img, source) {
-        if (!this.context) {
-            console.error("context not specified", this);
-            return false;
+        const distortedTile = this.clone.scale(this.instance.zoomFactor)
+                                        .translate(this.instance.currentView.x, this.instance.currentView.y)
+                                        .scaleX(this.instance.distortionFactor)
+                                        .translate(this.instance.offsetToCenter, 0);
+        if (this.state.current.value >= 2) {
+            if (!this.context) {
+                console.error("context not specified", this);
+                return false;
+            }
+            this.state.next();
+            this.context.drawImage(this.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+        } else if (this.state.current.value === 0) {
+            this.initialize();
         }
-        this.context.drawImage(img, source.x, source.y, source.width, source.height);
+        return this;
     }
 
     /**

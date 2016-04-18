@@ -15,26 +15,14 @@ const STATES = [
 
 export class Marker {
 
-    get scaleX() {
-        return this.distortionFactor();
-    }
-
-    get viewOffset() {
-        return this.mapOffset();
-    }
-
-    get xOffset() {
-        return this.xOffsetToCenter();
-    }
-
-    constructor(data = DataEnrichment.DATA_MARKER, $container=null, distortionFactor = function(){return 1;}, mapOffset = function(){return new Point();}, xOffsetToCenter = function() {return 0;}, calculateLatLngToPoint = function() {return new Point();}) {
+    constructor(data = DataEnrichment.DATA_MARKER, _instance = null) {
 
         this.stateHandler = new StateHandler(STATES);
 
-        this.calculateLatLngToPoint = calculateLatLngToPoint;
-        this.distortionFactor = distortionFactor;
-        this.mapOffset = mapOffset;
-        this.xOffsetToCenter = xOffsetToCenter;
+        if(!_instance) {
+            throw new Error(`Tile needs an instance`);
+        }
+        this.instance = _instance;
 
         this.size = data.size;
         this.hover = data.hover;
@@ -46,9 +34,9 @@ export class Marker {
         this.offset.add(new Point(-(this.size.x/2), -this.size.y));
         this.latlng = data.latlng;
 
-        this.position = this.calculateLatLngToPoint(this.latlng);
+        this.position = this.instance.convertLatLngToPoint(this.latlng);
 
-        this.icon = this.addMarkerToDOM($container);
+        this.icon = this.addMarkerToDOM(this.instance.$markerContainer);
 
         this.moveMarker();
     }
@@ -70,7 +58,8 @@ export class Marker {
     }
 
     moveMarker() {
-        const p = new Point((this.position.x + this.viewOffset.x) * this.scaleX + this.xOffset, this.position.y + this.viewOffset.y);
+        this.position = this.instance.convertLatLngToPoint(this.latlng);
+        const p = new Point((this.position.x + this.instance.currentView.x) * this.instance.distortionFactor + this.instance.offsetToCenter, this.position.y + this.instance.currentView.y);
         if (this.icon) {
             this.icon.css({
                 transform: `translate3d(${p.x}px, ${p.y}px, 0)`

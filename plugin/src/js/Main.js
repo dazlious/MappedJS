@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import {Point} from './Point.js';
 import {TileMap} from './TileMap.js';
 import {Helper} from './Helper.js';
 import {Interact} from './Interact.js';
@@ -115,7 +114,16 @@ export class MappedJS {
                     console.log("flick", data);
                 }.bind(this),
                 zoom: function(data) {
-                    this.tileMap.view.zoom(data.zoom, 30);
+                    /*
+                    const absolutePosition = this.getAbsolutePosition(data.position.start);
+                    const pos = this.tileMap.view.currentView.topLeft.add(absolutePosition);
+                    console.info(pos);
+                    this.tileMap.view.currentView.setCenter(pos.multiply(-1));
+                    //this.tileMap.view.moveView();
+                    */
+
+                    this.tileMap.view.zoom(data.zoom, 0.1);
+                    this.tileMap.redraw();
                 }.bind(this),
                 hold: function(data) {
                     console.log("hold", data);
@@ -123,14 +131,14 @@ export class MappedJS {
                 tapHold: function(data) {
                     console.log("tapHold", data);
                 }.bind(this),
-                wheel: function(data) {
+                /*wheel: function(data) {
                     console.log("wheel", data);
-                }.bind(this),
-                doubletap: function(data) {
-                    console.log("doubletap", data);
                 }.bind(this),
                 pinch: function(data) {
                     console.log("pinch", data);
+                }.bind(this),*/
+                doubletap: function(data) {
+                    console.log("doubletap", data);
                 }.bind(this)
             }
         });

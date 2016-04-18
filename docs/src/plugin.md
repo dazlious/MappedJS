@@ -39,23 +39,8 @@
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a marker</p>
 </dd>
-<dt><a href="#PUBLISHER">PUBLISHER</a></dt>
-<dd><p>Singleton instance of Publisher</p>
-</dd>
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a tile</p>
-</dd>
-<dt><a href="#EVENT_TILE_LOADED">EVENT_TILE_LOADED</a> : <code>String</code></dt>
-<dd><p>Name of event fired, when tile is loaded</p>
-</dd>
-<dt><a href="#EVENT_TILE_INITIALIZED">EVENT_TILE_INITIALIZED</a> : <code>String</code></dt>
-<dd><p>Name of event fired, when tile is initialized</p>
-</dd>
-<dt><a href="#EVENT_TILE_FAILED">EVENT_TILE_FAILED</a> : <code>String</code></dt>
-<dd><p>Name of event fired, when tile is not found on loading</p>
-</dd>
-<dt><a href="#PUBLISHER">PUBLISHER</a></dt>
-<dd><p>Singleton instance of Publisher</p>
 </dd>
 </dl>
 
@@ -1267,9 +1252,7 @@ checks if there is a previous element
 
 * [Tile](#Tile)
     * [new Tile(path, x, y, w, h)](#new_Tile_new)
-    * [.Publisher](#Tile+Publisher)
     * [.initialize()](#Tile+initialize) ⇒ <code>[Tile](#Tile)</code>
-    * [.handleDraw(x, y, scaleX, offsetX)](#Tile+handleDraw) ⇒ <code>[Tile](#Tile)</code>
     * [.draw(img, source)](#Tile+draw) ⇒ <code>[Tile](#Tile)</code>
     * [.equals(tile)](#Tile+equals) ⇒ <code>Boolean</code>
 
@@ -1287,12 +1270,6 @@ Constructor
 - w <code>number</code> <code> = 0</code> - tile width
 - h <code>number</code> <code> = 0</code> - tile height
 
-<a name="Tile+Publisher"></a>
-
-### tile.Publisher
-Return the Publisher
-
-**Kind**: instance property of <code>[Tile](#Tile)</code>  
 <a name="Tile+initialize"></a>
 
 ### tile.initialize() ⇒ <code>[Tile](#Tile)</code>
@@ -1300,20 +1277,6 @@ initializes tile and starts loading image
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
-<a name="Tile+handleDraw"></a>
-
-### tile.handleDraw(x, y, scaleX, offsetX) ⇒ <code>[Tile](#Tile)</code>
-handles draw of a tile in each state
-
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
-**Params**
-
-- x <code>number</code> - x-position of tile
-- y <code>number</code> - y-position of tile
-- scaleX <code>number</code> - scale x of tile
-- offsetX <code>number</code> - offset x for centering
-
 <a name="Tile+draw"></a>
 
 ### tile.draw(img, source) ⇒ <code>[Tile](#Tile)</code>
@@ -1477,13 +1440,12 @@ name of marker data in data.json
 * [View](#View)
     * [new View(settings, viewport, mapView, bounds, center, data)](#new_View_new)
     * [.distortionFactor](#View+distortionFactor) ⇒ <code>number</code>
-    * [.viewportOffset](#View+viewportOffset)
+    * [.offsetToCenter](#View+offsetToCenter)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
     * [.loadThumb()](#View+loadThumb) ⇒ <code>[View](#View)</code>
     * [.convertPointToLatLng(point)](#View+convertPointToLatLng) ⇒ <code>[LatLng](#LatLng)</code>
     * [.convertLatLngToPoint(latlng)](#View+convertLatLngToPoint) ⇒ <code>[Point](#Point)</code>
     * [.moveView(pos)](#View+moveView) ⇒ <code>[View](#View)</code>
-    * [.bindEvents()](#View+bindEvents) ⇒ <code>[View](#View)</code>
     * [.draw()](#View+draw) ⇒ <code>[View](#View)</code>
     * [.initializeTiles()](#View+initializeTiles) ⇒ <code>[View](#View)</code>
 
@@ -1509,9 +1471,9 @@ Returns current distortionFactor
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>number</code> - returns current distortionFactor of latitude  
-<a name="View+viewportOffset"></a>
+<a name="View+offsetToCenter"></a>
 
-### view.viewportOffset
+### view.offsetToCenter
 Returns the current equalized viewport
 
 **Kind**: instance property of <code>[View](#View)</code>  
@@ -1562,13 +1524,6 @@ moves the view's current position by pos
 
 - pos <code>[Point](#Point)</code> - specified additional offset
 
-<a name="View+bindEvents"></a>
-
-### view.bindEvents() ⇒ <code>[View](#View)</code>
-Handles all events for class
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View  
 <a name="View+draw"></a>
 
 ### view.draw() ⇒ <code>[View](#View)</code>
@@ -1595,39 +1550,9 @@ singleton instance
 States of a marker
 
 **Kind**: global constant  
-<a name="PUBLISHER"></a>
-
-## PUBLISHER
-Singleton instance of Publisher
-
-**Kind**: global constant  
 <a name="STATES"></a>
 
 ## STATES : <code>Array</code>
 States of a tile
-
-**Kind**: global constant  
-<a name="EVENT_TILE_LOADED"></a>
-
-## EVENT_TILE_LOADED : <code>String</code>
-Name of event fired, when tile is loaded
-
-**Kind**: global constant  
-<a name="EVENT_TILE_INITIALIZED"></a>
-
-## EVENT_TILE_INITIALIZED : <code>String</code>
-Name of event fired, when tile is initialized
-
-**Kind**: global constant  
-<a name="EVENT_TILE_FAILED"></a>
-
-## EVENT_TILE_FAILED : <code>String</code>
-Name of event fired, when tile is not found on loading
-
-**Kind**: global constant  
-<a name="PUBLISHER"></a>
-
-## PUBLISHER
-Singleton instance of Publisher
 
 **Kind**: global constant  

@@ -5,14 +5,8 @@ import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
 import {Marker} from './Marker.js';
-import {Publisher} from './Publisher.js';
 import {Helper} from './Helper.js';
 import {DataEnrichment} from './DataEnrichment.js';
-
-/**
- * Singleton instance of Publisher
- */
-const PUBLISHER = new Publisher();
 
 export class View {
 
@@ -24,37 +18,15 @@ export class View {
         return (Math.cos(Helper.toRadians(this.center.lat)));
     }
 
-    get getDistortionCalculation() {
-        return function() {
-            return (Math.cos(Helper.toRadians(this.center.lat)));
-        }.bind(this);
-    }
-
     /**
      * Returns the current equalized viewport
      */
-    get viewportOffset() {
+    get offsetToCenter() {
         return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
     }
 
-    get viewportOffsetCalculation() {
-        return function() {
-            return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
-        }.bind(this);
-    }
-
-    get viewOffsetCalculation() {
-        return function() {
-            return new Point(this.mapView.x, this.mapView.y);
-        }.bind(this);
-    }
-
-    get calculateLatLngToPoint() {
-        return this.convertLatLngToPoint.bind(this);
-    }
-
-    get calculatePointToLatLng() {
-        return this.convertPointToLatLng.bind(this);
+    get currentView() {
+        return this.mapView;
     }
 
     /**
@@ -63,13 +35,13 @@ export class View {
      */
     get visibleTiles() {
         return this.tiles.filter(function(t) {
-            const newTile = t.getDistortedRect(this.distortionFactor).translate(this.mapView.x * this.distortionFactor + this.viewportOffset, this.mapView.y);
+            const newTile = t.clone.scale(this.zoomFactor.x, this.zoomFactor.y).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
             return this.viewport.intersects(newTile);
         }, this);
     }
 
     get pixelPerLatLng() {
-        return new Point(this.mapView.width / this.bounds.width, this.mapView.height / this.bounds.height);
+        return new Point(this.currentView.width / this.bounds.width, this.currentView.height / this.bounds.height);
     }
 
     /**
@@ -94,20 +66,21 @@ export class View {
         }) {
 
         this.mapView = mapView;
+        this.originalMapView = mapView.clone;
         this.viewport = viewport;
         this.bounds = bounds;
         this.center = center;
-        this.zoomFactor = new Point(1, 1);
+        this.zoomFactor = 1;
 
         const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
-        this.mapView.position(newCenter.x, newCenter.y);
+        this.currentView.position(newCenter.x, newCenter.y);
 
         this.tiles = [];
         this.data = data;
         this.context = context;
         this.markers = [];
 
-        this.bindEvents().initializeTiles().loadThumb().initializeMarkers(markerData, $container);
+        this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
 
         return this;
     }
@@ -118,7 +91,6 @@ export class View {
      */
     loadThumb() {
         Helper.loadImage(this.data.thumb, function(img) {
-            this.thumbScale = img.width / this.mapView.width;
             this.thumb = img;
             this.draw();
         }.bind(this));
@@ -132,7 +104,7 @@ export class View {
      */
     convertPointToLatLng(point) {
         point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
-        return new LatLng(point.y, point.x).substract(this.bounds.nw);
+        return new LatLng(this.bounds.nw.lat - point.y, point.x + this.bounds.nw.lng).multiply(-1);
     }
 
     /**
@@ -146,17 +118,13 @@ export class View {
         return new Point(relativePosition.lng, relativePosition.lat).abs;
     }
 
-    drawHandler(o) {
-        o.handleDraw(this.mapView.x, this.mapView.y, this.distortionFactor, this.viewportOffset, this.zoomFactor);
-        return this;
-    }
-
     zoom(direction, scale) {
-        const ratio = this.mapView.width / this.mapView.height;
-        const factorX = (direction * ratio * scale) / this.mapView.width;
-        const factorY = (direction * scale) / this.mapView.height;
-        this.zoomFactor.add(new Point(factorX, factorY));
-        this.draw();
+        this.zoomFactor += direction * scale;
+        if (this.zoomFactor <= 0.1) {
+            this.zoomFactor = 0.1;
+        }
+        const newSize = this.originalMapView.clone.scale(this.zoomFactor);
+        this.currentView.size(this.currentView.x, this.currentView.y, newSize.width, newSize.height);
     }
 
     /**
@@ -166,7 +134,7 @@ export class View {
      */
     moveView(pos) {
         pos.divide(this.distortionFactor, 1);
-        const equalizedMap = this.mapView.getDistortedRect(this.distortionFactor).translate(this.viewportOffset + pos.x, pos.y);
+        const equalizedMap = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
         if (!equalizedMap.containsRect(this.viewport)) {
             if (equalizedMap.width >= this.viewport.width) {
                 if (equalizedMap.left - this.viewport.left > 0) {
@@ -176,7 +144,7 @@ export class View {
                     pos.x -= (equalizedMap.right - this.viewport.right);
                 }
             } else {
-                this.mapView.setCenterX(this.viewport.center.x);
+                this.currentView.setCenterX(this.viewport.center.x);
                 pos.x = 0;
             }
 
@@ -188,27 +156,16 @@ export class View {
                     pos.y -= (equalizedMap.bottom - this.viewport.bottom);
                 }
             } else {
-                this.mapView.setCenterY(this.viewport.center.y);
+                this.currentView.setCenterY(this.viewport.center.y);
                 pos.y = 0;
             }
-
         }
 
-        this.mapView.translate(pos.x, pos.y);
+        this.currentView.translate(pos.x, pos.y);
 
-        const newCenter = this.mapView.topLeft.substract(this.viewport.center).multiply(-1);
-        this.center = this.convertPointToLatLng(newCenter).multiply(-1);
+        const newCenter = this.viewport.center.substract(this.currentView.topLeft);
+        this.center = this.convertPointToLatLng(newCenter);
 
-        return this;
-    }
-
-    /**
-     * Handles all events for class
-     * @return {View} instance of View
-     */
-    bindEvents() {
-        PUBLISHER.subscribe("tile-loaded", this.drawHandler.bind(this));
-        PUBLISHER.subscribe("tile-initialized", this.drawHandler.bind(this));
         return this;
     }
 
@@ -218,18 +175,19 @@ export class View {
      */
     draw() {
         this.drawThumbnail();
-
-        Helper.forEach(this.visibleTiles, function(tile) {
-            this.drawHandler(tile);
-        }.bind(this));
-
+        this.drawVisibleTiles();
         this.repositionMarkers();
-
         return this;
     }
 
+    drawVisibleTiles() {
+        Helper.forEach(this.visibleTiles, function(tile) {
+            tile.draw();
+        }.bind(this));
+    }
+
     drawThumbnail() {
-        const rect = this.mapView.getDistortedRect(this.distortionFactor).translate(this.viewportOffset, 0);
+        const rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
         this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
     }
 
@@ -240,8 +198,7 @@ export class View {
     initializeTiles() {
         const currentLevel = this.data.tiles;
         Helper.forEach(currentLevel, function(currentTileData) {
-            currentTileData["context"] = this.context;
-            const currentTile = new Tile(currentTileData);
+            const currentTile = new Tile(currentTileData, this);
             this.tiles.push(currentTile);
         }.bind(this));
         return this;
@@ -264,7 +221,7 @@ export class View {
         if (markerData) {
             markerData = this.enrichMarkerData(markerData, $container);
             Helper.forEach(markerData, function(currentData) {
-                const m = new Marker(currentData, this.$markerContainer, this.getDistortionCalculation, this.viewOffsetCalculation, this.viewportOffsetCalculation, this.calculateLatLngToPoint);
+                const m = new Marker(currentData, this);
                 this.markers.push(m);
             }.bind(this));
         }

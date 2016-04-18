@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Marker.js', './Publisher.js', './Helper.js', './DataEnrichment.js'], factory);
+        define(['exports', 'jquery', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Marker.js', './Helper.js', './DataEnrichment.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Marker.js'), require('./Publisher.js'), require('./Helper.js'), require('./DataEnrichment.js'));
+        factory(exports, require('jquery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Marker.js'), require('./Helper.js'), require('./DataEnrichment.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Marker, global.Publisher, global.Helper, global.DataEnrichment);
+        factory(mod.exports, global.jquery, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Marker, global.Helper, global.DataEnrichment);
         global.View = mod.exports;
     }
-})(this, function(exports, _jquery, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Marker, _Publisher, _Helper, _DataEnrichment) {
+})(this, function(exports, _jquery, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Marker, _Helper, _DataEnrichment) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -50,11 +50,6 @@
         };
     }();
 
-    /**
-     * Singleton instance of Publisher
-     */
-    var PUBLISHER = new _Publisher.Publisher();
-
     var View = exports.View = function() {
         _createClass(View, [{
             key: 'distortionFactor',
@@ -67,46 +62,20 @@
             get: function get() {
                 return Math.cos(_Helper.Helper.toRadians(this.center.lat));
             }
-        }, {
-            key: 'getDistortionCalculation',
-            get: function get() {
-                return function() {
-                    return Math.cos(_Helper.Helper.toRadians(this.center.lat));
-                }.bind(this);
-            }
 
             /**
              * Returns the current equalized viewport
              */
 
         }, {
-            key: 'viewportOffset',
+            key: 'offsetToCenter',
             get: function get() {
                 return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
             }
         }, {
-            key: 'viewportOffsetCalculation',
+            key: 'currentView',
             get: function get() {
-                return function() {
-                    return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
-                }.bind(this);
-            }
-        }, {
-            key: 'viewOffsetCalculation',
-            get: function get() {
-                return function() {
-                    return new _Point.Point(this.mapView.x, this.mapView.y);
-                }.bind(this);
-            }
-        }, {
-            key: 'calculateLatLngToPoint',
-            get: function get() {
-                return this.convertLatLngToPoint.bind(this);
-            }
-        }, {
-            key: 'calculatePointToLatLng',
-            get: function get() {
-                return this.convertPointToLatLng.bind(this);
+                return this.mapView;
             }
 
             /**
@@ -118,14 +87,14 @@
             key: 'visibleTiles',
             get: function get() {
                 return this.tiles.filter(function(t) {
-                    var newTile = t.getDistortedRect(this.distortionFactor).translate(this.mapView.x * this.distortionFactor + this.viewportOffset, this.mapView.y);
+                    var newTile = t.clone.scale(this.zoomFactor.x, this.zoomFactor.y).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
                     return this.viewport.intersects(newTile);
                 }, this);
             }
         }, {
             key: 'pixelPerLatLng',
             get: function get() {
-                return new _Point.Point(this.mapView.width / this.bounds.width, this.mapView.height / this.bounds.height);
+                return new _Point.Point(this.currentView.width / this.bounds.width, this.currentView.height / this.bounds.height);
             }
 
             /**
@@ -162,19 +131,21 @@
             _classCallCheck(this, View);
 
             this.mapView = mapView;
+            this.originalMapView = mapView.clone;
             this.viewport = viewport;
             this.bounds = bounds;
             this.center = center;
+            this.zoomFactor = 1;
 
             var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
-            this.mapView.position(newCenter.x, newCenter.y);
+            this.currentView.position(newCenter.x, newCenter.y);
 
             this.tiles = [];
             this.data = data;
             this.context = context;
             this.markers = [];
 
-            this.bindEvents().initializeTiles().loadThumb().initializeMarkers(markerData, $container);
+            this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
 
             return this;
         }
@@ -189,7 +160,6 @@
             key: 'loadThumb',
             value: function loadThumb() {
                 _Helper.Helper.loadImage(this.data.thumb, function(img) {
-                    this.thumbScale = img.width / this.mapView.width;
                     this.thumb = img;
                     this.draw();
                 }.bind(this));
@@ -206,7 +176,7 @@
             key: 'convertPointToLatLng',
             value: function convertPointToLatLng(point) {
                 point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
-                return new _LatLng.LatLng(point.y, point.x).substract(this.bounds.nw);
+                return new _LatLng.LatLng(this.bounds.nw.lat - point.y, point.x + this.bounds.nw.lng).multiply(-1);
             }
 
             /**
@@ -223,10 +193,14 @@
                 return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
             }
         }, {
-            key: 'drawHandler',
-            value: function drawHandler(o) {
-                o.handleDraw(this.mapView.x, this.mapView.y, this.distortionFactor, this.viewportOffset);
-                return this;
+            key: 'zoom',
+            value: function zoom(direction, scale) {
+                this.zoomFactor += direction * scale;
+                if (this.zoomFactor <= 0.1) {
+                    this.zoomFactor = 0.1;
+                }
+                var newSize = this.originalMapView.clone.scale(this.zoomFactor);
+                this.currentView.size(this.currentView.x, this.currentView.y, newSize.width, newSize.height);
             }
 
             /**
@@ -239,7 +213,7 @@
             key: 'moveView',
             value: function moveView(pos) {
                 pos.divide(this.distortionFactor, 1);
-                var equalizedMap = this.mapView.getDistortedRect(this.distortionFactor).translate(this.viewportOffset + pos.x, pos.y);
+                var equalizedMap = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
                 if (!equalizedMap.containsRect(this.viewport)) {
                     if (equalizedMap.width >= this.viewport.width) {
                         if (equalizedMap.left - this.viewport.left > 0) {
@@ -249,7 +223,7 @@
                             pos.x -= equalizedMap.right - this.viewport.right;
                         }
                     } else {
-                        this.mapView.setCenterX(this.viewport.center.x);
+                        this.currentView.setCenterX(this.viewport.center.x);
                         pos.x = 0;
                     }
 
@@ -261,29 +235,16 @@
                             pos.y -= equalizedMap.bottom - this.viewport.bottom;
                         }
                     } else {
-                        this.mapView.setCenterY(this.viewport.center.y);
+                        this.currentView.setCenterY(this.viewport.center.y);
                         pos.y = 0;
                     }
                 }
 
-                this.mapView.translate(pos.x, pos.y);
+                this.currentView.translate(pos.x, pos.y);
 
-                var newCenter = this.mapView.topLeft.substract(this.viewport.center).multiply(-1);
-                this.center = this.convertPointToLatLng(newCenter).multiply(-1);
+                var newCenter = this.viewport.center.substract(this.currentView.topLeft);
+                this.center = this.convertPointToLatLng(newCenter);
 
-                return this;
-            }
-
-            /**
-             * Handles all events for class
-             * @return {View} instance of View
-             */
-
-        }, {
-            key: 'bindEvents',
-            value: function bindEvents() {
-                PUBLISHER.subscribe("tile-loaded", this.drawHandler.bind(this));
-                PUBLISHER.subscribe("tile-initialized", this.drawHandler.bind(this));
                 return this;
             }
 
@@ -296,19 +257,21 @@
             key: 'draw',
             value: function draw() {
                 this.drawThumbnail();
-
-                _Helper.Helper.forEach(this.visibleTiles, function(tile) {
-                    this.drawHandler(tile);
-                }.bind(this));
-
+                this.drawVisibleTiles();
                 this.repositionMarkers();
-
                 return this;
+            }
+        }, {
+            key: 'drawVisibleTiles',
+            value: function drawVisibleTiles() {
+                _Helper.Helper.forEach(this.visibleTiles, function(tile) {
+                    tile.draw();
+                }.bind(this));
             }
         }, {
             key: 'drawThumbnail',
             value: function drawThumbnail() {
-                var rect = this.mapView.getDistortedRect(this.distortionFactor).translate(this.viewportOffset, 0);
+                var rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
                 this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
             }
 
@@ -322,8 +285,7 @@
             value: function initializeTiles() {
                 var currentLevel = this.data.tiles;
                 _Helper.Helper.forEach(currentLevel, function(currentTileData) {
-                    currentTileData["context"] = this.context;
-                    var currentTile = new _Tile.Tile(currentTileData);
+                    var currentTile = new _Tile.Tile(currentTileData, this);
                     this.tiles.push(currentTile);
                 }.bind(this));
                 return this;
@@ -349,7 +311,7 @@
                 if (markerData) {
                     markerData = this.enrichMarkerData(markerData, $container);
                     _Helper.Helper.forEach(markerData, function(currentData) {
-                        var m = new _Marker.Marker(currentData, this.$markerContainer, this.getDistortionCalculation, this.viewOffsetCalculation, this.viewportOffsetCalculation, this.calculateLatLngToPoint);
+                        var m = new _Marker.Marker(currentData, this);
                         this.markers.push(m);
                     }.bind(this));
                 }

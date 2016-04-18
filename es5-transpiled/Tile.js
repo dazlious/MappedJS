@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './StateHandler.js', './Rectangle.js', './Publisher.js', './Helper.js'], factory);
+        define(['exports', './StateHandler.js', './Rectangle.js', './Helper.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./StateHandler.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./Helper.js'));
+        factory(exports, require('./StateHandler.js'), require('./Rectangle.js'), require('./Helper.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.StateHandler, global.Rectangle, global.Publisher, global.Helper);
+        factory(mod.exports, global.StateHandler, global.Rectangle, global.Helper);
         global.Tile = mod.exports;
     }
-})(this, function(exports, _StateHandler, _Rectangle2, _Publisher, _Helper) {
+})(this, function(exports, _StateHandler, _Rectangle2, _Helper) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -23,6 +23,24 @@
             throw new TypeError("Cannot call a class as a function");
         }
     }
+
+    var _createClass = function() {
+        function defineProperties(target, props) {
+            for (var i = 0; i < props.length; i++) {
+                var descriptor = props[i];
+                descriptor.enumerable = descriptor.enumerable || false;
+                descriptor.configurable = true;
+                if ("value" in descriptor) descriptor.writable = true;
+                Object.defineProperty(target, descriptor.key, descriptor);
+            }
+        }
+
+        return function(Constructor, protoProps, staticProps) {
+            if (protoProps) defineProperties(Constructor.prototype, protoProps);
+            if (staticProps) defineProperties(Constructor, staticProps);
+            return Constructor;
+        };
+    }();
 
     function _possibleConstructorReturn(self, call) {
         if (!self) {
@@ -57,24 +75,6 @@
         }
     };
 
-    var _createClass = function() {
-        function defineProperties(target, props) {
-            for (var i = 0; i < props.length; i++) {
-                var descriptor = props[i];
-                descriptor.enumerable = descriptor.enumerable || false;
-                descriptor.configurable = true;
-                if ("value" in descriptor) descriptor.writable = true;
-                Object.defineProperty(target, descriptor.key, descriptor);
-            }
-        }
-
-        return function(Constructor, protoProps, staticProps) {
-            if (protoProps) defineProperties(Constructor.prototype, protoProps);
-            if (staticProps) defineProperties(Constructor, staticProps);
-            return Constructor;
-        };
-    }();
-
     function _inherits(subClass, superClass) {
         if (typeof superClass !== "function" && superClass !== null) {
             throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
@@ -90,11 +90,6 @@
         });
         if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
     }
-
-    /**
-     * Singleton instance of Publisher
-     */
-    var PUBLISHER = new _Publisher.Publisher();
 
     /**
      * States of a tile
@@ -114,53 +109,20 @@
         description: 'Drawn'
     }];
 
-    /**
-     * Name of event fired, when tile is loaded
-     * @type {String}
-     */
-    var EVENT_TILE_LOADED = "tile-loaded";
-
-    /**
-     * Name of event fired, when tile is initialized
-     * @type {String}
-     */
-    var EVENT_TILE_INITIALIZED = "tile-initialized";
-
-    /**
-     * Name of event fired, when tile is not found on loading
-     * @type {String}
-     */
-    var EVENT_TILE_FAILED = "tile-failed";
-
     var Tile = exports.Tile = function(_Rectangle) {
         _inherits(Tile, _Rectangle);
 
-        _createClass(Tile, [{
-            key: 'Publisher',
-
-
-            /**
-             * Return the Publisher
-             */
-            get: function get() {
-                return PUBLISHER;
-            }
-
-            /**
-             * Constructor
-             * @param  {string} path=null - path to image
-             * @param  {number} x=0 - position x of tile
-             * @param  {number} y=0 - position y of tile
-             * @param  {number} w=0 - tile width
-             * @param  {number} h=0 - tile height
-             * @return {Tile} instance of Tile
-             */
-
-        }]);
+        /**
+         * Constructor
+         * @param  {string} path=null - path to image
+         * @param  {number} x=0 - position x of tile
+         * @param  {number} y=0 - position y of tile
+         * @param  {number} w=0 - tile width
+         * @param  {number} h=0 - tile height
+         * @return {Tile} instance of Tile
+         */
 
         function Tile() {
-            var _ret;
-
             var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
             var path = _ref.path;
@@ -172,8 +134,10 @@
             var w = _ref$w === undefined ? 0 : _ref$w;
             var _ref$h = _ref.h;
             var h = _ref$h === undefined ? 0 : _ref$h;
-            var _ref$context = _ref.context;
-            var context = _ref$context === undefined ? null : _ref$context;
+
+            var _ret;
+
+            var _instance = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
             _classCallCheck(this, Tile);
 
@@ -182,9 +146,12 @@
             _this.state = new _StateHandler.StateHandler(STATES);
             if (!path || typeof path !== "string" || path.length === 0) {
                 throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
+            } else if (!_instance) {
+                throw new Error('Tile needs an instance');
             }
+            _this.instance = _instance;
             _this.markers = [];
-            _this.context = context;
+            _this.context = _this.instance.context;
             _this.path = path;
             return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
@@ -199,35 +166,12 @@
             key: 'initialize',
             value: function initialize() {
                 this.state.next();
-                PUBLISHER.publish(EVENT_TILE_INITIALIZED, this);
                 _Helper.Helper.loadImage(this.path, function(img) {
                     this.img = img;
                     this.state.next();
-                    PUBLISHER.publish(EVENT_TILE_LOADED, this);
+                    this.draw();
                 }.bind(this));
 
-                return this;
-            }
-
-            /**
-             * handles draw of a tile in each state
-             * @param  {number} x - x-position of tile
-             * @param  {number} y - y-position of tile
-             * @param  {number} scaleX - scale x of tile
-             * @param  {number} offsetX - offset x for centering
-             * @return {Tile} instance of Tile for chaining
-             */
-
-        }, {
-            key: 'handleDraw',
-            value: function handleDraw(x, y, scaleX, offsetX) {
-                var distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
-                if (this.state.current.value >= 2) {
-                    this.state.next();
-                    this.draw(this.img, distortedTile);
-                } else if (this.state.current.value === 0) {
-                    this.initialize();
-                }
                 return this;
             }
         }, {
@@ -246,11 +190,18 @@
         }, {
             key: 'draw',
             value: function draw(img, source) {
-                if (!this.context) {
-                    console.error("context not specified", this);
-                    return false;
+                var distortedTile = this.clone.scale(this.instance.zoomFactor).translate(this.instance.currentView.x, this.instance.currentView.y).scaleX(this.instance.distortionFactor).translate(this.instance.offsetToCenter, 0);
+                if (this.state.current.value >= 2) {
+                    if (!this.context) {
+                        console.error("context not specified", this);
+                        return false;
+                    }
+                    this.state.next();
+                    this.context.drawImage(this.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+                } else if (this.state.current.value === 0) {
+                    this.initialize();
                 }
-                this.context.drawImage(img, source.x, source.y, source.width, source.height);
+                return this;
             }
 
             /**
