@@ -115,7 +115,7 @@ export class MappedJS {
                     console.log("flick", data);
                 }.bind(this),
                 zoom: function(data) {
-                    console.log("zoom", data);
+                    this.tileMap.view.zoom(data.zoom, 30);
                 }.bind(this),
                 hold: function(data) {
                     console.log("hold", data);

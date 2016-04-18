@@ -92,8 +92,8 @@ export class Tile extends Rectangle {
      * @param  {number} offsetX - offset x for centering
      * @return {Tile} instance of Tile for chaining
      */
-    handleDraw(x, y, scaleX, offsetX) {
-        const distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
+    handleDraw(x, y, scaleX, offsetX, zoom) {
+        const distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0).scale(zoom.x, zoom.y);
         if (this.state.current.value >= 2) {
             this.state.next();
             this.draw(this.img, distortedTile);

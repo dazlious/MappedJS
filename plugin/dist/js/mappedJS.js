@@ -218,7 +218,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        console.log("flick", data);
 	                    }.bind(this),
 	                    zoom: function (data) {
-	                        console.log("zoom", data);
+	                        this.tileMap.view.zoom(data.zoom, 30);
 	                    }.bind(this),
 	                    hold: function (data) {
 	                        console.log("hold", data);
@@ -885,6 +885,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.viewport = viewport;
 	        this.bounds = bounds;
 	        this.center = center;
+	        this.zoomFactor = new _Point.Point(1, 1);
 
 	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
 	        this.mapView.position(newCenter.x, newCenter.y);
@@ -945,8 +946,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'drawHandler',
 	        value: function drawHandler(o) {
-	            o.handleDraw(this.mapView.x, this.mapView.y, this.distortionFactor, this.viewportOffset);
+	            o.handleDraw(this.mapView.x, this.mapView.y, this.distortionFactor, this.viewportOffset, this.zoomFactor);
 	            return this;
+	        }
+	    }, {
+	        key: 'zoom',
+	        value: function zoom(direction, scale) {
+	            var ratio = this.mapView.width / this.mapView.height;
+	            var factorX = direction * ratio * scale / this.mapView.width;
+	            var factorY = direction * scale / this.mapView.height;
+	            this.zoomFactor.add(new _Point.Point(factorX, factorY));
+	            this.draw();
 	        }
 
 	        /**
@@ -1879,8 +1889,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    }, {
 	        key: 'handleDraw',
-	        value: function handleDraw(x, y, scaleX, offsetX) {
-	            var distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0);
+	        value: function handleDraw(x, y, scaleX, offsetX, zoom) {
+	            var distortedTile = this.clone.translate(x, y).scaleX(scaleX).translate(offsetX, 0).scale(zoom.x, zoom.y);
 	            if (this.state.current.value >= 2) {
 	                this.state.next();
 	                this.draw(this.img, distortedTile);

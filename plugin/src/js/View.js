@@ -97,6 +97,7 @@ export class View {
         this.viewport = viewport;
         this.bounds = bounds;
         this.center = center;
+        this.zoomFactor = new Point(1, 1);
 
         const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
         this.mapView.position(newCenter.x, newCenter.y);
@@ -146,8 +147,16 @@ export class View {
     }
 
     drawHandler(o) {
-        o.handleDraw(this.mapView.x, this.mapView.y, this.distortionFactor, this.viewportOffset);
+        o.handleDraw(this.mapView.x, this.mapView.y, this.distortionFactor, this.viewportOffset, this.zoomFactor);
         return this;
+    }
+
+    zoom(direction, scale) {
+        const ratio = this.mapView.width / this.mapView.height;
+        const factorX = (direction * ratio * scale) / this.mapView.width;
+        const factorY = (direction * scale) / this.mapView.height;
+        this.zoomFactor.add(new Point(factorX, factorY));
+        this.draw();
     }
 
     /**
