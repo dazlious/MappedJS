@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import {Point} from './Point.js';
 import {TileMap} from './TileMap.js';
 import {Helper} from './Helper.js';
 import {Interact} from './Interact.js';

@@ -115,7 +115,7 @@ export class Interact {
                 tap: 200,
                 hold: 500,
                 swipe: 300,
-                flick: 30
+                flick: 20
             },
             distanceTreshold: {
                 swipe: 200
@@ -660,10 +660,14 @@ export class Interact {
         }
 
         if (this.settings.callbacks.flick && (this.timeToLastMove <= this.settings.timeTreshold.flick)) {
-            const distance = this.data.position.end.distance(this.data.position.start);
+            const distance = this.data.last.position.distance(this.data.position.end);
             this.data.distance = distance;
+            const direction = this.data.last.position.clone.substract(this.data.position.end);
+            this.data.directions = [direction.x, direction.y];
             this.data.speed = this.calculateSpeed(distance, this.time);
-            this.eventCallback(this.settings.callbacks.flick, this.dataClone);
+            if (this.data.speed >= 1) {
+                this.eventCallback(this.settings.callbacks.flick, this.dataClone);
+            }
         }
     }
 
