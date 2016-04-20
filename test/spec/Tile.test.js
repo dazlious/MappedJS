@@ -1,5 +1,5 @@
 /*global Tile,Rectangle,Publisher*/
-
+// TODO: Reimplement test
 describe('Tile', function() {
     "use strict";
 /*

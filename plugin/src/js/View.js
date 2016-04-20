@@ -15,7 +15,8 @@ export class View {
      * @return {number} returns current distortionFactor of latitude
      */
     get distortionFactor() {
-        return (Math.cos(Helper.toRadians(this.center.lat)));
+        return 1;
+        //return (Math.cos(Helper.toRadians(this.center.lat)));
     }
 
     /**
@@ -118,13 +119,17 @@ export class View {
         return new Point(relativePosition.lng, relativePosition.lat).abs;
     }
 
-    zoom(direction, scale) {
-        this.zoomFactor += direction * scale;
-        if (this.zoomFactor <= 0.1) {
-            this.zoomFactor = 0.1;
-        }
+    zoom(direction, scale, pos) {
+        const oldZoom = this.zoomFactor;
+        this.zoomFactor = Math.max(Math.min(this.zoomFactor + (direction * scale), 2), 0.5);
+        var scaleChange = this.zoomFactor - oldZoom;
+        let zoomOffset = this.currentView.topLeft.substract(pos).multiply(-1);
+        zoomOffset.multiply(scaleChange).multiply(-1);
         const newSize = this.originalMapView.clone.scale(this.zoomFactor);
-        this.currentView.size(this.currentView.x, this.currentView.y, newSize.width, newSize.height);
+        this.currentView.size(this.currentView.x + zoomOffset.x, this.currentView.y + zoomOffset.y, newSize.width, newSize.height);
+
+        const newCenter = this.viewport.center.substract(this.currentView.topLeft);
+        this.center = this.convertPointToLatLng(newCenter);
     }
 
     /**

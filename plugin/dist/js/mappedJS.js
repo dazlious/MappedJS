@@ -216,15 +216,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        console.log("flick", data);
 	                    }.bind(this),
 	                    zoom: function (data) {
-	                        /*
-	                        const absolutePosition = this.getAbsolutePosition(data.position.start);
-	                        const pos = this.tileMap.view.currentView.topLeft.add(absolutePosition);
-	                        console.info(pos);
-	                        this.tileMap.view.currentView.setCenter(pos.multiply(-1));
-	                        //this.tileMap.view.moveView();
-	                        */
-
-	                        this.tileMap.view.zoom(data.zoom, 0.1);
+	                        var absolutePosition = this.getAbsolutePosition(data.position.start);
+	                        //const pos = this.tileMap.view.currentView.topLeft.substract(absolutePosition).multiply(-1);
+	                        this.tileMap.view.zoom(data.zoom, 0.1, absolutePosition);
 	                        this.tileMap.redraw();
 	                    }.bind(this),
 	                    hold: function (data) {
@@ -573,7 +567,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {number} returns current distortionFactor of latitude
 	         */
 	        get: function get() {
-	            return Math.cos(_Helper.Helper.toRadians(this.center.lat));
+	            return 1;
+	            //return (Math.cos(Helper.toRadians(this.center.lat)));
 	        }
 
 	        /**
@@ -707,13 +702,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }, {
 	        key: 'zoom',
-	        value: function zoom(direction, scale) {
-	            this.zoomFactor += direction * scale;
-	            if (this.zoomFactor <= 0.1) {
-	                this.zoomFactor = 0.1;
-	            }
+	        value: function zoom(direction, scale, pos) {
+	            var oldZoom = this.zoomFactor;
+	            this.zoomFactor = Math.max(Math.min(this.zoomFactor + direction * scale, 2), 0.5);
+	            var scaleChange = this.zoomFactor - oldZoom;
+	            var zoomOffset = this.currentView.topLeft.substract(pos).multiply(-1);
+	            zoomOffset.multiply(scaleChange).multiply(-1);
 	            var newSize = this.originalMapView.clone.scale(this.zoomFactor);
-	            this.currentView.size(this.currentView.x, this.currentView.y, newSize.width, newSize.height);
+	            this.currentView.size(this.currentView.x + zoomOffset.x, this.currentView.y + zoomOffset.y, newSize.width, newSize.height);
+
+	            var newCenter = this.viewport.center.substract(this.currentView.topLeft);
+	            this.center = this.convertPointToLatLng(newCenter);
 	        }
 
 	        /**
