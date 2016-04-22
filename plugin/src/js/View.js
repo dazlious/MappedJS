@@ -15,8 +15,7 @@ export class View {
      * @return {number} returns current distortionFactor of latitude
      */
     get distortionFactor() {
-        return 1;
-        //return (Math.cos(Helper.toRadians(this.center.lat)));
+        return (Math.cos(Helper.toRadians(this.center.lat)));
     }
 
     /**
@@ -72,6 +71,7 @@ export class View {
         this.bounds = bounds;
         this.center = center;
         this.zoomFactor = 1;
+        this.origin = new Point(0,0);
 
         const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
         this.currentView.position(newCenter.x, newCenter.y);
@@ -82,6 +82,7 @@ export class View {
         this.markers = [];
 
         this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
+
 
         return this;
     }
@@ -119,15 +120,22 @@ export class View {
         return new Point(relativePosition.lng, relativePosition.lat).abs;
     }
 
-    zoom(direction, scale, pos) {
-        const oldZoom = this.zoomFactor;
-        this.zoomFactor = Math.max(Math.min(this.zoomFactor + (direction * scale), 2), 0.5);
-        var scaleChange = this.zoomFactor - oldZoom;
-        let zoomOffset = this.currentView.topLeft.substract(pos).multiply(-1);
-        zoomOffset.multiply(scaleChange).multiply(-1);
-        const newSize = this.originalMapView.clone.scale(this.zoomFactor);
-        this.currentView.size(this.currentView.x + zoomOffset.x, this.currentView.y + zoomOffset.y, newSize.width, newSize.height);
+    zoom(scale, pos) {
+        this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
 
+        let zoomOffset = this.currentView.topLeft.substract(pos).multiply(-1);
+        zoomOffset.divide(this.currentView.width, this.currentView.height);
+
+        const newSize = this.originalMapView.clone.scale(this.zoomFactor);
+        this.currentView.size(newSize.x, newSize.y, newSize.width, newSize.height);
+
+        zoomOffset.multiply(this.currentView.width, this.currentView.height).substract(pos);
+        this.currentView.position(-zoomOffset.x, -zoomOffset.y);
+
+        this.calculateNewCenter();
+    }
+
+    calculateNewCenter() {
         const newCenter = this.viewport.center.substract(this.currentView.topLeft);
         this.center = this.convertPointToLatLng(newCenter);
     }
@@ -168,8 +176,7 @@ export class View {
 
         this.currentView.translate(pos.x, pos.y);
 
-        const newCenter = this.viewport.center.substract(this.currentView.topLeft);
-        this.center = this.convertPointToLatLng(newCenter);
+        this.calculateNewCenter();
 
         return this;
     }

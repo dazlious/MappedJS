@@ -60,8 +60,7 @@
              * @return {number} returns current distortionFactor of latitude
              */
             get: function get() {
-                return 1;
-                //return (Math.cos(Helper.toRadians(this.center.lat)));
+                return Math.cos(_Helper.Helper.toRadians(this.center.lat));
             }
 
             /**
@@ -137,6 +136,7 @@
             this.bounds = bounds;
             this.center = center;
             this.zoomFactor = 1;
+            this.origin = new _Point.Point(0, 0);
 
             var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
             this.currentView.position(newCenter.x, newCenter.y);
@@ -195,15 +195,23 @@
             }
         }, {
             key: 'zoom',
-            value: function zoom(direction, scale, pos) {
-                var oldZoom = this.zoomFactor;
-                this.zoomFactor = Math.max(Math.min(this.zoomFactor + direction * scale, 2), 0.5);
-                var scaleChange = this.zoomFactor - oldZoom;
-                var zoomOffset = this.currentView.topLeft.substract(pos).multiply(-1);
-                zoomOffset.multiply(scaleChange).multiply(-1);
-                var newSize = this.originalMapView.clone.scale(this.zoomFactor);
-                this.currentView.size(this.currentView.x + zoomOffset.x, this.currentView.y + zoomOffset.y, newSize.width, newSize.height);
+            value: function zoom(scale, pos) {
+                this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
 
+                var zoomOffset = this.currentView.topLeft.substract(pos).multiply(-1);
+                zoomOffset.divide(this.currentView.width, this.currentView.height);
+
+                var newSize = this.originalMapView.clone.scale(this.zoomFactor);
+                this.currentView.size(newSize.x, newSize.y, newSize.width, newSize.height);
+
+                zoomOffset.multiply(this.currentView.width, this.currentView.height).substract(pos);
+                this.currentView.position(-zoomOffset.x, -zoomOffset.y);
+
+                this.calculateNewCenter();
+            }
+        }, {
+            key: 'calculateNewCenter',
+            value: function calculateNewCenter() {
                 var newCenter = this.viewport.center.substract(this.currentView.topLeft);
                 this.center = this.convertPointToLatLng(newCenter);
             }
@@ -247,8 +255,7 @@
 
                 this.currentView.translate(pos.x, pos.y);
 
-                var newCenter = this.viewport.center.substract(this.currentView.topLeft);
-                this.center = this.convertPointToLatLng(newCenter);
+                this.calculateNewCenter();
 
                 return this;
             }

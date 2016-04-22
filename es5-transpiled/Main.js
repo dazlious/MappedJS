@@ -200,7 +200,9 @@
                         zoom: function(data) {
                             var absolutePosition = this.getAbsolutePosition(data.position.start);
                             //const pos = this.tileMap.view.currentView.topLeft.substract(absolutePosition).multiply(-1);
-                            this.tileMap.view.zoom(data.zoom, 0.1, absolutePosition);
+                            //const factor = (data.zoom === 1) ? 1.5 : 1/1.5;
+                            var factor = data.zoom === 1 ? 0.1 : -0.1;
+                            this.tileMap.view.zoom(factor, absolutePosition);
                             this.tileMap.redraw();
                         }.bind(this),
                         hold: function(data) {
