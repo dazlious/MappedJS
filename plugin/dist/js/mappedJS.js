@@ -216,15 +216,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        console.log("flick", data);
 	                    }.bind(this),
 	                    zoom: function (data) {
-	                        /*
-	                        const absolutePosition = this.getAbsolutePosition(data.position.start);
-	                        const pos = this.tileMap.view.currentView.topLeft.add(absolutePosition);
-	                        console.info(pos);
-	                        this.tileMap.view.currentView.setCenter(pos.multiply(-1));
-	                        //this.tileMap.view.moveView();
-	                        */
-
-	                        this.tileMap.view.zoom(data.zoom, 0.1);
+	                        var absolutePosition = this.getAbsolutePosition(data.position.start);
+	                        //const pos = this.tileMap.view.currentView.topLeft.substract(absolutePosition).multiply(-1);
+	                        //const factor = (data.zoom === 1) ? 1.5 : 1/1.5;
+	                        var factor = data.zoom === 1 ? 0.1 : -0.1;
+	                        this.tileMap.view.zoom(factor, absolutePosition);
 	                        this.tileMap.redraw();
 	                    }.bind(this),
 	                    hold: function (data) {
@@ -649,6 +645,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.bounds = bounds;
 	        this.center = center;
 	        this.zoomFactor = 1;
+	        this.origin = new _Point.Point(0, 0);
 
 	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
 	        this.currentView.position(newCenter.x, newCenter.y);
@@ -707,13 +704,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }, {
 	        key: 'zoom',
-	        value: function zoom(direction, scale) {
-	            this.zoomFactor += direction * scale;
-	            if (this.zoomFactor <= 0.1) {
-	                this.zoomFactor = 0.1;
-	            }
+	        value: function zoom(scale, pos) {
+	            this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
+
+	            var zoomOffset = this.currentView.topLeft.substract(pos).multiply(-1);
+	            zoomOffset.divide(this.currentView.width, this.currentView.height);
+
 	            var newSize = this.originalMapView.clone.scale(this.zoomFactor);
-	            this.currentView.size(this.currentView.x, this.currentView.y, newSize.width, newSize.height);
+	            this.currentView.size(newSize.x, newSize.y, newSize.width, newSize.height);
+
+	            zoomOffset.multiply(this.currentView.width, this.currentView.height).substract(pos);
+	            this.currentView.position(-zoomOffset.x, -zoomOffset.y);
+
+	            this.calculateNewCenter();
+	        }
+	    }, {
+	        key: 'calculateNewCenter',
+	        value: function calculateNewCenter() {
+	            var newCenter = this.viewport.center.substract(this.currentView.topLeft);
+	            this.center = this.convertPointToLatLng(newCenter);
 	        }
 
 	        /**
@@ -755,8 +764,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.currentView.translate(pos.x, pos.y);
 
-	            var newCenter = this.viewport.center.substract(this.currentView.topLeft);
-	            this.center = this.convertPointToLatLng(newCenter);
+	            this.calculateNewCenter();
 
 	            return this;
 	        }

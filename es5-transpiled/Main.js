@@ -198,15 +198,11 @@
                             console.log("flick", data);
                         }.bind(this),
                         zoom: function(data) {
-                            /*
-                            const absolutePosition = this.getAbsolutePosition(data.position.start);
-                            const pos = this.tileMap.view.currentView.topLeft.add(absolutePosition);
-                            console.info(pos);
-                            this.tileMap.view.currentView.setCenter(pos.multiply(-1));
-                            //this.tileMap.view.moveView();
-                            */
-
-                            this.tileMap.view.zoom(data.zoom, 0.1);
+                            var absolutePosition = this.getAbsolutePosition(data.position.start);
+                            //const pos = this.tileMap.view.currentView.topLeft.substract(absolutePosition).multiply(-1);
+                            //const factor = (data.zoom === 1) ? 1.5 : 1/1.5;
+                            var factor = data.zoom === 1 ? 0.1 : -0.1;
+                            this.tileMap.view.zoom(factor, absolutePosition);
                             this.tileMap.redraw();
                         }.bind(this),
                         hold: function(data) {
