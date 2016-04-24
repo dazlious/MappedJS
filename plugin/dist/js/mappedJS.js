@@ -75,6 +75,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Interact = __webpack_require__(13);
 
+	var _LatLng = __webpack_require__(5);
+
+	var _Point = __webpack_require__(4);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -204,7 +208,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                autoFireHold: 300,
 	                callbacks: {
 	                    tap: function (data) {
-	                        console.log("tap", data);
+	                        //console.log("tap", data);
+	                        var absolutePosition = this.getAbsolutePosition(data.position.start);
+	                        //const pos = this.tileMap.view.currentView.topLeft.substract(absolutePosition).multiply(-1);
+	                        this.tileMap.view.setLatLngToPosition(new _LatLng.LatLng(80, 30), absolutePosition);
 	                    }.bind(this),
 	                    pan: function (data) {
 	                        var change = data.last.position.substract(data.position.move);
@@ -213,7 +220,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        this.tileMap.redraw();
 	                    }.bind(this),
 	                    flick: function (data) {
-	                        console.log("flick", data);
+	                        //console.log("flick", data);
 	                    }.bind(this),
 	                    zoom: function (data) {
 	                        var absolutePosition = this.getAbsolutePosition(data.position.start);
@@ -224,10 +231,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        this.tileMap.redraw();
 	                    }.bind(this),
 	                    hold: function (data) {
-	                        console.log("hold", data);
+	                        //console.log("hold", data);
 	                    }.bind(this),
 	                    tapHold: function (data) {
-	                        console.log("tapHold", data);
+	                        //console.log("tapHold", data);
 	                    }.bind(this),
 	                    /*wheel: function(data) {
 	                        console.log("wheel", data);
@@ -236,7 +243,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        console.log("pinch", data);
 	                    }.bind(this),*/
 	                    doubletap: function (data) {
-	                        console.log("doubletap", data);
+	                        //console.log("doubletap", data);
 	                    }.bind(this)
 	                }
 	            });
@@ -569,11 +576,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {number} returns current distortionFactor of latitude
 	         */
 	        get: function get() {
-	            return Math.cos(_Helper.Helper.toRadians(this.center.lat));
+	            return this.getDistortionFactorForLatitude(this.center);
 	        }
 
 	        /**
-	         * Returns the current equalized viewport
+	         * Returns the current distorted viewport
 	         */
 
 	    }, {
@@ -688,6 +695,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
 	            return new _LatLng.LatLng(this.bounds.nw.lat - point.y, point.x + this.bounds.nw.lng).multiply(-1);
 	        }
+	    }, {
+	        key: 'setLatLngToPosition',
+	        value: function setLatLngToPosition(latlng, position) {
+	            var diffToCenter = position.clone.substract(this.viewport.center);
+	            var coordAsPoint = this.convertLatLngToPoint(latlng);
+	            var currentPosition = this.currentView.topLeft.substract(position).multiply(-1);
+	            var diff = currentPosition.clone.substract(coordAsPoint);
+	            this.currentView.translate(0, diff.y);
+	            this.calculateNewCenter();
+	            this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
+	        }
 
 	        /**
 	         * converts a LatLng to Point in view
@@ -703,26 +721,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
 	        }
 	    }, {
+	        key: 'getDeltaXToCenter',
+	        value: function getDeltaXToCenter(pos) {
+	            var diffToCenter = pos.clone.substract(this.viewport.center);
+	            var distanceToCenter = diffToCenter.x / this.viewport.center.x;
+	            var delta = distanceToCenter * this.offsetToCenter;
+	            return delta / this.distortionFactor;
+	        }
+	    }, {
 	        key: 'zoom',
 	        value: function zoom(scale, pos) {
 	            this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
-
-	            var zoomOffset = this.currentView.topLeft.substract(pos).multiply(-1);
-	            zoomOffset.divide(this.currentView.width, this.currentView.height);
+	            var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
+	            mapPosition.x += this.getDeltaXToCenter(pos);
+	            var latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
 
 	            var newSize = this.originalMapView.clone.scale(this.zoomFactor);
-	            this.currentView.size(newSize.x, newSize.y, newSize.width, newSize.height);
+	            this.currentView.setSize(newSize.width, newSize.height);
 
-	            zoomOffset.multiply(this.currentView.width, this.currentView.height).substract(pos);
-	            this.currentView.position(-zoomOffset.x, -zoomOffset.y);
-
-	            this.calculateNewCenter();
+	            this.setLatLngToPosition(latlngPosition, pos);
+	        }
+	    }, {
+	        key: 'getDistortionFactorForLatitude',
+	        value: function getDistortionFactorForLatitude(latlng) {
+	            return Math.cos(_Helper.Helper.toRadians(latlng.lat));
 	        }
 	    }, {
 	        key: 'calculateNewCenter',
 	        value: function calculateNewCenter() {
 	            var newCenter = this.viewport.center.substract(this.currentView.topLeft);
 	            this.center = this.convertPointToLatLng(newCenter);
+	        }
+	    }, {
+	        key: 'getOffsetToCenter',
+	        value: function getOffsetToCenter(dist) {
+	            return (this.viewport.width - this.viewport.width * dist) / 2;
 	        }
 
 	        /**
@@ -1676,6 +1709,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'size',
 	    value: function size(x, y, width, height) {
 	      this.position(x, y);
+	      this.width = width;
+	      this.height = height;
+	      return this;
+	    }
+
+	    /**
+	     * changes the size of a rectangle by specified params
+	     * @param  {number} width - the new width
+	     * @param  {number} height - the new width
+	     * @return {Rectangle} Returns the altered rectangle
+	     */
+
+	  }, {
+	    key: 'setSize',
+	    value: function setSize(width, height) {
 	      this.width = width;
 	      this.height = height;
 	      return this;

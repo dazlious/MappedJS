@@ -13,6 +13,23 @@
         this.center = this.convertPointToLatLng(newCenter);
 */
 
+    /*
+    WORKING TOO
+
+    this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
+    let mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
+    let latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
+    const newSize = this.originalMapView.clone.scale(this.zoomFactor);
+    this.currentView.size(newSize.x, newSize.y, newSize.width, newSize.height);
+    let newFocus = this.convertLatLngToPoint(latlngPosition);
+    let t = this.viewport.center.substract(newFocus);
+    this.currentView.position(t.x, t.y);
+    this.calculateNewCenter();
+    var off = pos.clone.substract(this.viewport.center);
+    this.currentView.translate(off.x, off.y);
+    this.calculateNewCenter();
+
+     */
         /* WORKING
         const oldZoom = this.zoomFactor;
         this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);

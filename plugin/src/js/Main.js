@@ -2,6 +2,8 @@ import $ from 'jquery';
 import {TileMap} from './TileMap.js';
 import {Helper} from './Helper.js';
 import {Interact} from './Interact.js';
+import {LatLng} from './LatLng.js';
+import {Point} from './Point.js';
 
 export class MappedJS {
 
@@ -102,7 +104,10 @@ export class MappedJS {
             autoFireHold: 300,
             callbacks: {
                 tap: function(data) {
-                    console.log("tap", data);
+                    //console.log("tap", data);
+                    const absolutePosition = this.getAbsolutePosition(data.position.start);
+                    //const pos = this.tileMap.view.currentView.topLeft.substract(absolutePosition).multiply(-1);
+                    this.tileMap.view.setLatLngToPosition(new LatLng(80, 30), absolutePosition);
                 }.bind(this),
                 pan: function(data) {
                     const change = data.last.position.substract(data.position.move);
@@ -111,7 +116,7 @@ export class MappedJS {
                     this.tileMap.redraw();
                 }.bind(this),
                 flick: function(data) {
-                    console.log("flick", data);
+                    //console.log("flick", data);
                 }.bind(this),
                 zoom: function(data) {
                     const absolutePosition = this.getAbsolutePosition(data.position.start);
@@ -122,10 +127,10 @@ export class MappedJS {
                     this.tileMap.redraw();
                 }.bind(this),
                 hold: function(data) {
-                    console.log("hold", data);
+                    //console.log("hold", data);
                 }.bind(this),
                 tapHold: function(data) {
-                    console.log("tapHold", data);
+                    //console.log("tapHold", data);
                 }.bind(this),
                 /*wheel: function(data) {
                     console.log("wheel", data);
@@ -134,7 +139,7 @@ export class MappedJS {
                     console.log("pinch", data);
                 }.bind(this),*/
                 doubletap: function(data) {
-                    console.log("doubletap", data);
+                    //console.log("doubletap", data);
                 }.bind(this)
             }
         });

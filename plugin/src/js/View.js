@@ -15,11 +15,11 @@ export class View {
      * @return {number} returns current distortionFactor of latitude
      */
     get distortionFactor() {
-        return (Math.cos(Helper.toRadians(this.center.lat)));
+        return this.getDistortionFactorForLatitude(this.center);
     }
 
     /**
-     * Returns the current equalized viewport
+     * Returns the current distorted viewport
      */
     get offsetToCenter() {
         return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
@@ -109,6 +109,16 @@ export class View {
         return new LatLng(this.bounds.nw.lat - point.y, point.x + this.bounds.nw.lng).multiply(-1);
     }
 
+    setLatLngToPosition(latlng, position) {
+        const diffToCenter = position.clone.substract(this.viewport.center);
+        const coordAsPoint = this.convertLatLngToPoint(latlng);
+        const currentPosition = this.currentView.topLeft.substract(position).multiply(-1);
+        const diff = currentPosition.clone.substract(coordAsPoint);
+        this.currentView.translate(0, diff.y);
+        this.calculateNewCenter();
+        this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
+    }
+
     /**
      * converts a LatLng to Point in view
      * @param  {LatLng} latlng - specified latlng to be converted
@@ -120,24 +130,36 @@ export class View {
         return new Point(relativePosition.lng, relativePosition.lat).abs;
     }
 
+    getDeltaXToCenter(pos) {
+        const diffToCenter = pos.clone.substract(this.viewport.center);
+        const distanceToCenter = (diffToCenter.x / this.viewport.center.x);
+        var delta = distanceToCenter * this.offsetToCenter;
+        return delta / this.distortionFactor;
+    }
+
     zoom(scale, pos) {
         this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
-
-        let zoomOffset = this.currentView.topLeft.substract(pos).multiply(-1);
-        zoomOffset.divide(this.currentView.width, this.currentView.height);
+        let mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
+        mapPosition.x += this.getDeltaXToCenter(pos);
+        const latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
 
         const newSize = this.originalMapView.clone.scale(this.zoomFactor);
-        this.currentView.size(newSize.x, newSize.y, newSize.width, newSize.height);
+        this.currentView.setSize(newSize.width, newSize.height);
 
-        zoomOffset.multiply(this.currentView.width, this.currentView.height).substract(pos);
-        this.currentView.position(-zoomOffset.x, -zoomOffset.y);
+        this.setLatLngToPosition(latlngPosition, pos);
+    }
 
-        this.calculateNewCenter();
+    getDistortionFactorForLatitude(latlng) {
+         return (Math.cos(Helper.toRadians(latlng.lat)));
     }
 
     calculateNewCenter() {
         const newCenter = this.viewport.center.substract(this.currentView.topLeft);
         this.center = this.convertPointToLatLng(newCenter);
+    }
+
+    getOffsetToCenter(dist) {
+        return (this.viewport.width - this.viewport.width * dist) / 2;
     }
 
     /**

@@ -861,6 +861,7 @@ Eventname for unsubscribing
         * [.transform(x, y, width, height)](#Rectangle+transform) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.position(x, y)](#Rectangle+position) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.size(x, y, width, height)](#Rectangle+size) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.setSize(width, height)](#Rectangle+setSize) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.equals(rectangle)](#Rectangle+equals) ⇒ <code>Boolean</code>
     * _static_
         * [.createFromRectangle(rect)](#Rectangle.createFromRectangle) ⇒ <code>[Rectangle](#Rectangle)</code>
@@ -1130,6 +1131,18 @@ changes the size of a rectangle by specified params
 
 - x <code>number</code> - the new x position
 - y <code>number</code> - the new y position
+- width <code>number</code> - the new width
+- height <code>number</code> - the new width
+
+<a name="Rectangle+setSize"></a>
+
+### rectangle.setSize(width, height) ⇒ <code>[Rectangle](#Rectangle)</code>
+changes the size of a rectangle by specified params
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
+**Params**
+
 - width <code>number</code> - the new width
 - height <code>number</code> - the new width
 
@@ -1474,7 +1487,7 @@ Returns current distortionFactor
 <a name="View+offsetToCenter"></a>
 
 ### view.offsetToCenter
-Returns the current equalized viewport
+Returns the current distorted viewport
 
 **Kind**: instance property of <code>[View](#View)</code>  
 <a name="View+visibleTiles"></a>
