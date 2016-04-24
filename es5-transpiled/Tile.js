@@ -182,14 +182,12 @@
 
             /**
              * draws image data of tile on context
-             * @param  {object} img - img-data to draw
-             * @param  {Rectangle} source - specified source sizes
              * @return {Tile} instance of Tile for chaining
              */
 
         }, {
             key: 'draw',
-            value: function draw(img, source) {
+            value: function draw() {
                 var distortedTile = this.clone.scale(this.instance.zoomFactor).translate(this.instance.currentView.x, this.instance.currentView.y).scaleX(this.instance.distortionFactor).translate(this.instance.offsetToCenter, 0);
                 if (this.state.current.value >= 2) {
                     if (!this.context) {

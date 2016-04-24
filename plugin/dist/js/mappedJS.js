@@ -207,43 +207,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	                container: this.$container,
 	                autoFireHold: 300,
 	                callbacks: {
-	                    tap: function (data) {
-	                        //console.log("tap", data);
-	                        var absolutePosition = this.getAbsolutePosition(data.position.start);
-	                        //const pos = this.tileMap.view.currentView.topLeft.substract(absolutePosition).multiply(-1);
-	                        this.tileMap.view.setLatLngToPosition(new _LatLng.LatLng(80, 30), absolutePosition);
-	                    }.bind(this),
+	                    tap: function (data) {}.bind(this),
 	                    pan: function (data) {
 	                        var change = data.last.position.substract(data.position.move);
-	                        var absolutePosition = this.getAbsolutePosition(change);
-	                        this.tileMap.view.moveView(absolutePosition.multiply(-1, -1));
+	                        this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
 	                        this.tileMap.redraw();
 	                    }.bind(this),
-	                    flick: function (data) {
-	                        //console.log("flick", data);
-	                    }.bind(this),
-	                    zoom: function (data) {
-	                        var absolutePosition = this.getAbsolutePosition(data.position.start);
-	                        //const pos = this.tileMap.view.currentView.topLeft.substract(absolutePosition).multiply(-1);
-	                        //const factor = (data.zoom === 1) ? 1.5 : 1/1.5;
-	                        var factor = data.zoom === 1 ? 0.1 : -0.1;
-	                        this.tileMap.view.zoom(factor, absolutePosition);
-	                        this.tileMap.redraw();
-	                    }.bind(this),
+	                    flick: function (data) {}.bind(this),
+	                    zoom: function (data) {}.bind(this),
 	                    hold: function (data) {
-	                        //console.log("hold", data);
+	                        this.zoom(-0.1, this.getAbsolutePosition(data.position.start));
 	                    }.bind(this),
-	                    tapHold: function (data) {
-	                        //console.log("tapHold", data);
+	                    wheel: function (data) {
+	                        var factor = data.zoom === 1 ? 0.1 : -0.1;
+	                        this.zoom(factor, this.getAbsolutePosition(data.position.start));
 	                    }.bind(this),
-	                    /*wheel: function(data) {
-	                        console.log("wheel", data);
-	                    }.bind(this),
-	                    pinch: function(data) {
-	                        console.log("pinch", data);
-	                    }.bind(this),*/
+	                    pinch: function (data) {}.bind(this),
 	                    doubletap: function (data) {
-	                        //console.log("doubletap", data);
+	                        this.zoom(0.1, this.getAbsolutePosition(data.position.start));
 	                    }.bind(this)
 	                }
 	            });
@@ -251,6 +232,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
 	            return this;
+	        }
+	    }, {
+	        key: 'zoom',
+	        value: function zoom(factor, position) {
+	            this.tileMap.view.zoom(factor, position);
+	            this.tileMap.redraw();
 	        }
 
 	        /**
@@ -698,10 +685,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'setLatLngToPosition',
 	        value: function setLatLngToPosition(latlng, position) {
-	            var diffToCenter = position.clone.substract(this.viewport.center);
-	            var coordAsPoint = this.convertLatLngToPoint(latlng);
-	            var currentPosition = this.currentView.topLeft.substract(position).multiply(-1);
-	            var diff = currentPosition.clone.substract(coordAsPoint);
+	            var currentPosition = this.currentView.topLeft.substract(position).multiply(-1),
+	                diff = currentPosition.substract(this.convertLatLngToPoint(latlng));
+
 	            this.currentView.translate(0, diff.y);
 	            this.calculateNewCenter();
 	            this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
@@ -751,11 +737,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function calculateNewCenter() {
 	            var newCenter = this.viewport.center.substract(this.currentView.topLeft);
 	            this.center = this.convertPointToLatLng(newCenter);
-	        }
-	    }, {
-	        key: 'getOffsetToCenter',
-	        value: function getOffsetToCenter(dist) {
-	            return (this.viewport.width - this.viewport.width * dist) / 2;
 	        }
 
 	        /**
@@ -1862,14 +1843,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * draws image data of tile on context
-	         * @param  {object} img - img-data to draw
-	         * @param  {Rectangle} source - specified source sizes
 	         * @return {Tile} instance of Tile for chaining
 	         */
 
 	    }, {
 	        key: 'draw',
-	        value: function draw(img, source) {
+	        value: function draw() {
 	            var distortedTile = this.clone.scale(this.instance.zoomFactor).translate(this.instance.currentView.x, this.instance.currentView.y).scaleX(this.instance.distortionFactor).translate(this.instance.offsetToCenter, 0);
 	            if (this.state.current.value >= 2) {
 	                if (!this.context) {
@@ -2918,7 +2897,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handlePinchAndZoom',
 	        value: function handlePinchAndZoom() {
-	            this.data.difference = this.data.distance - this.data.last.distance || 0;
+	            this.data.difference = this.data.distance - (this.data.last.distance || 0);
 	            this.data.last.position = this.data.position.move;
 	            if (this.settings.callbacks.pinch && this.data.difference !== 0) {
 	                this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
