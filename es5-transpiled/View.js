@@ -182,10 +182,9 @@
         }, {
             key: 'setLatLngToPosition',
             value: function setLatLngToPosition(latlng, position) {
-                var diffToCenter = position.clone.substract(this.viewport.center);
-                var coordAsPoint = this.convertLatLngToPoint(latlng);
-                var currentPosition = this.currentView.topLeft.substract(position).multiply(-1);
-                var diff = currentPosition.clone.substract(coordAsPoint);
+                var currentPosition = this.currentView.topLeft.substract(position).multiply(-1),
+                    diff = currentPosition.substract(this.convertLatLngToPoint(latlng));
+
                 this.currentView.translate(0, diff.y);
                 this.calculateNewCenter();
                 this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
@@ -235,11 +234,6 @@
             value: function calculateNewCenter() {
                 var newCenter = this.viewport.center.substract(this.currentView.topLeft);
                 this.center = this.convertPointToLatLng(newCenter);
-            }
-        }, {
-            key: 'getOffsetToCenter',
-            value: function getOffsetToCenter(dist) {
-                return (this.viewport.width - this.viewport.width * dist) / 2;
             }
 
             /**

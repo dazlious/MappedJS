@@ -60,11 +60,9 @@ export class Tile extends Rectangle {
 
     /**
      * draws image data of tile on context
-     * @param  {object} img - img-data to draw
-     * @param  {Rectangle} source - specified source sizes
      * @return {Tile} instance of Tile for chaining
      */
-    draw(img, source) {
+    draw() {
         const distortedTile = this.clone.scale(this.instance.zoomFactor)
                                         .translate(this.instance.currentView.x, this.instance.currentView.y)
                                         .scaleX(this.instance.distortionFactor)

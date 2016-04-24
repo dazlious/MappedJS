@@ -1266,7 +1266,7 @@ checks if there is a previous element
 * [Tile](#Tile)
     * [new Tile(path, x, y, w, h)](#new_Tile_new)
     * [.initialize()](#Tile+initialize) ⇒ <code>[Tile](#Tile)</code>
-    * [.draw(img, source)](#Tile+draw) ⇒ <code>[Tile](#Tile)</code>
+    * [.draw()](#Tile+draw) ⇒ <code>[Tile](#Tile)</code>
     * [.equals(tile)](#Tile+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Tile_new"></a>
@@ -1292,16 +1292,11 @@ initializes tile and starts loading image
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
 <a name="Tile+draw"></a>
 
-### tile.draw(img, source) ⇒ <code>[Tile](#Tile)</code>
+### tile.draw() ⇒ <code>[Tile](#Tile)</code>
 draws image data of tile on context
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
-**Params**
-
-- img <code>object</code> - img-data to draw
-- source <code>[Rectangle](#Rectangle)</code> - specified source sizes
-
 <a name="Tile+equals"></a>
 
 ### tile.equals(tile) ⇒ <code>Boolean</code>

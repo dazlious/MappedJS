@@ -104,42 +104,27 @@ export class MappedJS {
             autoFireHold: 300,
             callbacks: {
                 tap: function(data) {
-                    //console.log("tap", data);
-                    const absolutePosition = this.getAbsolutePosition(data.position.start);
-                    //const pos = this.tileMap.view.currentView.topLeft.substract(absolutePosition).multiply(-1);
-                    this.tileMap.view.setLatLngToPosition(new LatLng(80, 30), absolutePosition);
                 }.bind(this),
                 pan: function(data) {
                     const change = data.last.position.substract(data.position.move);
-                    const absolutePosition = this.getAbsolutePosition(change);
-                    this.tileMap.view.moveView(absolutePosition.multiply(-1, -1));
+                    this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                     this.tileMap.redraw();
                 }.bind(this),
                 flick: function(data) {
-                    //console.log("flick", data);
                 }.bind(this),
                 zoom: function(data) {
-                    const absolutePosition = this.getAbsolutePosition(data.position.start);
-                    //const pos = this.tileMap.view.currentView.topLeft.substract(absolutePosition).multiply(-1);
-                    //const factor = (data.zoom === 1) ? 1.5 : 1/1.5;
-                    const factor = (data.zoom === 1) ? 0.1 : -0.1;
-                    this.tileMap.view.zoom(factor, absolutePosition);
-                    this.tileMap.redraw();
                 }.bind(this),
                 hold: function(data) {
-                    //console.log("hold", data);
+                    this.zoom(-0.1, this.getAbsolutePosition(data.position.start));
                 }.bind(this),
-                tapHold: function(data) {
-                    //console.log("tapHold", data);
-                }.bind(this),
-                /*wheel: function(data) {
-                    console.log("wheel", data);
+                wheel: function(data) {
+                    const factor = (data.zoom === 1) ? 0.1 : -0.1;
+                    this.zoom(factor, this.getAbsolutePosition(data.position.start));
                 }.bind(this),
                 pinch: function(data) {
-                    console.log("pinch", data);
-                }.bind(this),*/
+                }.bind(this),
                 doubletap: function(data) {
-                    //console.log("doubletap", data);
+                    this.zoom(0.1, this.getAbsolutePosition(data.position.start));
                 }.bind(this)
             }
         });
@@ -147,6 +132,11 @@ export class MappedJS {
         $(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
         return this;
+    }
+
+    zoom(factor, position) {
+        this.tileMap.view.zoom(factor, position);
+        this.tileMap.redraw();
     }
 
     /**

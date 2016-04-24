@@ -110,10 +110,9 @@ export class View {
     }
 
     setLatLngToPosition(latlng, position) {
-        const diffToCenter = position.clone.substract(this.viewport.center);
-        const coordAsPoint = this.convertLatLngToPoint(latlng);
-        const currentPosition = this.currentView.topLeft.substract(position).multiply(-1);
-        const diff = currentPosition.clone.substract(coordAsPoint);
+        const currentPosition = this.currentView.topLeft.substract(position).multiply(-1),
+              diff = currentPosition.substract(this.convertLatLngToPoint(latlng));
+
         this.currentView.translate(0, diff.y);
         this.calculateNewCenter();
         this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
@@ -139,7 +138,7 @@ export class View {
 
     zoom(scale, pos) {
         this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
-        let mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
+        const mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
         mapPosition.x += this.getDeltaXToCenter(pos);
         const latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
 
@@ -156,10 +155,6 @@ export class View {
     calculateNewCenter() {
         const newCenter = this.viewport.center.substract(this.currentView.topLeft);
         this.center = this.convertPointToLatLng(newCenter);
-    }
-
-    getOffsetToCenter(dist) {
-        return (this.viewport.width - this.viewport.width * dist) / 2;
     }
 
     /**

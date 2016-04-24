@@ -547,7 +547,7 @@ export class Interact {
     }
 
     handlePinchAndZoom() {
-        this.data.difference = this.data.distance - this.data.last.distance || 0;
+        this.data.difference = this.data.distance - (this.data.last.distance || 0);
         this.data.last.position = this.data.position.move;
         if (this.settings.callbacks.pinch && this.data.difference !== 0) {
             this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
