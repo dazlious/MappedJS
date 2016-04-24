@@ -798,6 +798,70 @@
             "icon": "img/icon.png",
             "hover": true,
             "position": {
+                "lat": 80,
+                "lng": 30
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
+        },
+        {
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": 10,
+                "lng": 10
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
+        },
+        {
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": 20,
+                "lng": 20
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
+        },
+        {
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": 30,
+                "lng": 30
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
+        },
+        {
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
                 "lat": 60,
                 "lng": 0
             },

@@ -669,6 +669,7 @@
 <li><a href="#Rectangle+transform">.transform(x, y, width, height)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+position">.position(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+size">.size(x, y, width, height)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+<li><a href="#Rectangle+setSize">.setSize(width, height)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+equals">.equals(rectangle)</a> ⇒ <code>Boolean</code></li>
 </ul>
 </li>
@@ -837,6 +838,14 @@
 <ul>
 <li>x <code>number</code> - the new x position</li>
 <li>y <code>number</code> - the new y position</li>
+<li>width <code>number</code> - the new width</li>
+<li>height <code>number</code> - the new width</li>
+</ul>
+<p><a name="Rectangle+setSize"></a></p>
+<h3 id="rectangle-setsize-width-height-code-rectangle-rectangle-code-">rectangle.setSize(width, height) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>changes the size of a rectangle by specified params</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
+<ul>
 <li>width <code>number</code> - the new width</li>
 <li>height <code>number</code> - the new width</li>
 </ul>
@@ -1066,7 +1075,7 @@
 <p>Returns current distortionFactor</p>
 <p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - returns current distortionFactor of latitude<br><a name="View+offsetToCenter"></a></p>
 <h3 id="view-offsettocenter">view.offsetToCenter</h3>
-<p>Returns the current equalized viewport</p>
+<p>Returns the current distorted viewport</p>
 <p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><a name="View+visibleTiles"></a></p>
 <h3 id="view-visibletiles-code-array-code-">view.visibleTiles ⇒ <code>array</code></h3>
 <p>get all visible tiles</p>

@@ -461,6 +461,21 @@
             }
 
             /**
+             * changes the size of a rectangle by specified params
+             * @param  {number} width - the new width
+             * @param  {number} height - the new width
+             * @return {Rectangle} Returns the altered rectangle
+             */
+
+        }, {
+            key: 'setSize',
+            value: function setSize(width, height) {
+                this.width = width;
+                this.height = height;
+                return this;
+            }
+
+            /**
              * check if rectangles are equal
              * @param  {Rectangle} rectangle - the specified rectangle to check against this
              * @return {Boolean} is true, if x, y, width and height are the same

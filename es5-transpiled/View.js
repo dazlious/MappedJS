@@ -60,11 +60,11 @@
              * @return {number} returns current distortionFactor of latitude
              */
             get: function get() {
-                return Math.cos(_Helper.Helper.toRadians(this.center.lat));
+                return this.getDistortionFactorForLatitude(this.center);
             }
 
             /**
-             * Returns the current equalized viewport
+             * Returns the current distorted viewport
              */
 
         }, {
@@ -179,6 +179,17 @@
                 point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
                 return new _LatLng.LatLng(this.bounds.nw.lat - point.y, point.x + this.bounds.nw.lng).multiply(-1);
             }
+        }, {
+            key: 'setLatLngToPosition',
+            value: function setLatLngToPosition(latlng, position) {
+                var diffToCenter = position.clone.substract(this.viewport.center);
+                var coordAsPoint = this.convertLatLngToPoint(latlng);
+                var currentPosition = this.currentView.topLeft.substract(position).multiply(-1);
+                var diff = currentPosition.clone.substract(coordAsPoint);
+                this.currentView.translate(0, diff.y);
+                this.calculateNewCenter();
+                this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
+            }
 
             /**
              * converts a LatLng to Point in view
@@ -194,26 +205,41 @@
                 return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
             }
         }, {
+            key: 'getDeltaXToCenter',
+            value: function getDeltaXToCenter(pos) {
+                var diffToCenter = pos.clone.substract(this.viewport.center);
+                var distanceToCenter = diffToCenter.x / this.viewport.center.x;
+                var delta = distanceToCenter * this.offsetToCenter;
+                return delta / this.distortionFactor;
+            }
+        }, {
             key: 'zoom',
             value: function zoom(scale, pos) {
                 this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
-
-                var zoomOffset = this.currentView.topLeft.substract(pos).multiply(-1);
-                zoomOffset.divide(this.currentView.width, this.currentView.height);
+                var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
+                mapPosition.x += this.getDeltaXToCenter(pos);
+                var latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
 
                 var newSize = this.originalMapView.clone.scale(this.zoomFactor);
-                this.currentView.size(newSize.x, newSize.y, newSize.width, newSize.height);
+                this.currentView.setSize(newSize.width, newSize.height);
 
-                zoomOffset.multiply(this.currentView.width, this.currentView.height).substract(pos);
-                this.currentView.position(-zoomOffset.x, -zoomOffset.y);
-
-                this.calculateNewCenter();
+                this.setLatLngToPosition(latlngPosition, pos);
+            }
+        }, {
+            key: 'getDistortionFactorForLatitude',
+            value: function getDistortionFactorForLatitude(latlng) {
+                return Math.cos(_Helper.Helper.toRadians(latlng.lat));
             }
         }, {
             key: 'calculateNewCenter',
             value: function calculateNewCenter() {
                 var newCenter = this.viewport.center.substract(this.currentView.topLeft);
                 this.center = this.convertPointToLatLng(newCenter);
+            }
+        }, {
+            key: 'getOffsetToCenter',
+            value: function getOffsetToCenter(dist) {
+                return (this.viewport.width - this.viewport.width * dist) / 2;
             }
 
             /**
