@@ -595,7 +595,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'visibleTiles',
 	        get: function get() {
 	            return this.tiles.filter(function (t) {
-	                var newTile = t.clone.scale(this.zoomFactor.x, this.zoomFactor.y).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
+	                var newTile = t.clone.scale(this.zoomFactor, this.zoomFactor).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
 	                return this.viewport.intersects(newTile);
 	            }, this);
 	        }

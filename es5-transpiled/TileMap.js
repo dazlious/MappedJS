@@ -199,7 +199,7 @@
             key: 'redraw',
             value: function redraw() {
                 this.clearCanvas();
-                this.view.draw();
+                this.view.drawIsNeeded = true;
                 return this;
             }
 
