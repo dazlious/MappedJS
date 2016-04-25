@@ -87,7 +87,7 @@
             key: 'visibleTiles',
             get: function get() {
                 return this.tiles.filter(function(t) {
-                    var newTile = t.clone.scale(this.zoomFactor.x, this.zoomFactor.y).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
+                    var newTile = t.clone.scale(this.zoomFactor, this.zoomFactor).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
                     return this.viewport.intersects(newTile);
                 }, this);
             }
@@ -146,23 +146,35 @@
             this.context = context;
             this.markers = [];
 
+            this.drawIsNeeded = true;
+
             this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
 
             return this;
         }
 
-        /**
-         * loads thumbnail of view
-         * @return {View} instance of View for chaining
-         */
-
-
         _createClass(View, [{
+            key: 'mainLoop',
+            value: function mainLoop() {
+                if (this.drawIsNeeded) {
+                    this.drawIsNeeded = false;
+                    this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
+                    this.draw();
+                }
+                window.requestAnimFrame(this.mainLoop.bind(this));
+            }
+
+            /**
+             * loads thumbnail of view
+             * @return {View} instance of View for chaining
+             */
+
+        }, {
             key: 'loadThumb',
             value: function loadThumb() {
                 _Helper.Helper.loadImage(this.data.thumb, function(img) {
                     this.thumb = img;
-                    this.draw();
+                    window.requestAnimFrame(this.mainLoop.bind(this));
                 }.bind(this));
                 return this;
             }
@@ -359,5 +371,11 @@
         }]);
 
         return View;
+    }();
+
+    window.requestAnimFrame = function() {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
     }();
 });

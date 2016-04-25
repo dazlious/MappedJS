@@ -192,7 +192,7 @@
                         pan: function(data) {
                             var change = data.last.position.substract(data.position.move);
                             this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
-                            this.tileMap.redraw();
+                            this.tileMap.view.drawIsNeeded = true;
                         }.bind(this),
                         flick: function(data) {}.bind(this),
                         zoom: function(data) {}.bind(this),
@@ -220,7 +220,7 @@
             key: 'zoom',
             value: function zoom(factor, position) {
                 this.tileMap.view.zoom(factor, position);
-                this.tileMap.redraw();
+                this.tileMap.view.drawIsNeeded = true;
             }
 
             /**
