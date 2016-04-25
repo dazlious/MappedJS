@@ -170,7 +170,7 @@
         }, {
             key: 'getAbsolutePosition',
             value: function getAbsolutePosition(point) {
-                return point.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+                return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
             }
 
             /**
@@ -184,8 +184,11 @@
                 this.interact = new _Interact.Interact({
                     container: this.$container,
                     autoFireHold: 300,
+                    overwriteViewportSettings: true,
                     callbacks: {
-                        tap: function(data) {}.bind(this),
+                        tap: function(data) {
+                            console.log(data.position.start);
+                        }.bind(this),
                         pan: function(data) {
                             var change = data.last.position.substract(data.position.move);
                             this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
@@ -194,15 +197,17 @@
                         flick: function(data) {}.bind(this),
                         zoom: function(data) {}.bind(this),
                         hold: function(data) {
-                            this.zoom(-0.1, this.getAbsolutePosition(data.position.start));
+                            this.zoom(-0.4, this.getAbsolutePosition(data.position.start));
                         }.bind(this),
                         wheel: function(data) {
                             var factor = data.zoom === 1 ? 0.1 : -0.1;
                             this.zoom(factor, this.getAbsolutePosition(data.position.start));
                         }.bind(this),
-                        pinch: function(data) {}.bind(this),
+                        pinch: function(data) {
+                            this.zoom(-1 * data.difference, this.getAbsolutePosition(data.position.start));
+                        }.bind(this),
                         doubletap: function(data) {
-                            this.zoom(0.1, this.getAbsolutePosition(data.position.start));
+                            this.zoom(0.4, this.getAbsolutePosition(data.position.start));
                         }.bind(this)
                     }
                 });

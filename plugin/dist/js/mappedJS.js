@@ -192,7 +192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'getAbsolutePosition',
 	        value: function getAbsolutePosition(point) {
-	            return point.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+	            return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
 	        }
 
 	        /**
@@ -206,8 +206,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.interact = new _Interact.Interact({
 	                container: this.$container,
 	                autoFireHold: 300,
+	                overwriteViewportSettings: true,
 	                callbacks: {
-	                    tap: function (data) {}.bind(this),
+	                    tap: function (data) {
+	                        console.log(data.position.start);
+	                    }.bind(this),
 	                    pan: function (data) {
 	                        var change = data.last.position.substract(data.position.move);
 	                        this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
@@ -216,15 +219,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    flick: function (data) {}.bind(this),
 	                    zoom: function (data) {}.bind(this),
 	                    hold: function (data) {
-	                        this.zoom(-0.1, this.getAbsolutePosition(data.position.start));
+	                        this.zoom(-0.4, this.getAbsolutePosition(data.position.start));
 	                    }.bind(this),
 	                    wheel: function (data) {
 	                        var factor = data.zoom === 1 ? 0.1 : -0.1;
 	                        this.zoom(factor, this.getAbsolutePosition(data.position.start));
 	                    }.bind(this),
-	                    pinch: function (data) {}.bind(this),
+	                    pinch: function (data) {
+	                        this.zoom(-1 * data.difference, this.getAbsolutePosition(data.position.start));
+	                    }.bind(this),
 	                    doubletap: function (data) {
-	                        this.zoom(0.1, this.getAbsolutePosition(data.position.start));
+	                        this.zoom(0.4, this.getAbsolutePosition(data.position.start));
 	                    }.bind(this)
 	                }
 	            });
@@ -2550,6 +2555,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                "touch-action": "none",
 	                "-ms-content-zooming": "none"
 	            });
+	            this.$container.find("> *").css({
+	                "-ms-touch-action": "none",
+	                "touch-action": "none",
+	                "-ms-content-zooming": "none"
+	            });
 	            this.container = this.$container[0];
 	            return this;
 	        }
@@ -2674,7 +2684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            };
 	            // mouse is used
-	            if (e instanceof MouseEvent) {
+	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
 	                return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
 	            }
 	            // if is pointerEvent
@@ -2800,7 +2810,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            };
 
-	            if (e instanceof MouseEvent) {
+	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
 	                return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
 	            } // if is pointerEvent
 	            if (this.isPointerEvent(e)) {
@@ -2837,11 +2847,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function handleMultitouchMove(positionsArray) {
 	            var pointerPos1 = this.getRelativePosition(positionsArray[0]);
 	            var pointerPos2 = this.getRelativePosition(positionsArray[1]);
+	            var pos = pointerPos1.clone.substract(pointerPos2).divide(2, 2);
 	            return {
 	                position: {
-	                    move: pointerPos1.substract(pointerPos2).divide(2, 2)
+	                    move: pos
 	                },
-	                distance: pointerPos1.distance(pointerPos2),
+	                distance: pos.length,
 	                multitouch: true
 	            };
 	        }
@@ -2897,8 +2908,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handlePinchAndZoom',
 	        value: function handlePinchAndZoom() {
-	            this.data.difference = this.data.distance - (this.data.last.distance || 0);
-	            this.data.last.position = this.data.position.move;
+	            if (!this.data.last.distance) {
+	                this.data.last.distance = this.data.distance;
+	            }
+	            this.data.difference = this.data.last.distance - this.data.distance;
+
 	            if (this.settings.callbacks.pinch && this.data.difference !== 0) {
 	                this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
 	            }
@@ -2920,7 +2934,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            };
 
-	            if (e instanceof MouseEvent) {
+	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
 	                return _jquery2.default.extend(true, data, this.handleSingletouchEnd(e));
 	            } // if is pointerEvent
 	            if (this.isPointerEvent(e)) {
@@ -3059,6 +3073,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.data.pinched = true;
 	                setTimeout(function () {
 	                    this.data.pinched = false;
+	                    this.data.last.distance = null;
 	                }.bind(this), this.settings.pinchBalanceTime);
 	            }
 	        }
