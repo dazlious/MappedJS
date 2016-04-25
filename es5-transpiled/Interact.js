@@ -315,6 +315,11 @@
                     "touch-action": "none",
                     "-ms-content-zooming": "none"
                 });
+                this.$container.find("> *").css({
+                    "-ms-touch-action": "none",
+                    "touch-action": "none",
+                    "-ms-content-zooming": "none"
+                });
                 this.container = this.$container[0];
                 return this;
             }
@@ -439,7 +444,7 @@
                     }
                 };
                 // mouse is used
-                if (e instanceof MouseEvent) {
+                if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
                     return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
                 }
                 // if is pointerEvent
@@ -565,7 +570,7 @@
                     }
                 };
 
-                if (e instanceof MouseEvent) {
+                if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
                     return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
                 } // if is pointerEvent
                 if (this.isPointerEvent(e)) {
@@ -602,11 +607,12 @@
             value: function handleMultitouchMove(positionsArray) {
                 var pointerPos1 = this.getRelativePosition(positionsArray[0]);
                 var pointerPos2 = this.getRelativePosition(positionsArray[1]);
+                var pos = pointerPos1.clone.substract(pointerPos2).divide(2, 2);
                 return {
                     position: {
-                        move: pointerPos1.substract(pointerPos2).divide(2, 2)
+                        move: pos
                     },
-                    distance: pointerPos1.distance(pointerPos2),
+                    distance: pos.length,
                     multitouch: true
                 };
             }
@@ -662,8 +668,11 @@
         }, {
             key: 'handlePinchAndZoom',
             value: function handlePinchAndZoom() {
-                this.data.difference = this.data.distance - (this.data.last.distance || 0);
-                this.data.last.position = this.data.position.move;
+                if (!this.data.last.distance) {
+                    this.data.last.distance = this.data.distance;
+                }
+                this.data.difference = this.data.last.distance - this.data.distance;
+
                 if (this.settings.callbacks.pinch && this.data.difference !== 0) {
                     this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
                 }
@@ -685,7 +694,7 @@
                     }
                 };
 
-                if (e instanceof MouseEvent) {
+                if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
                     return _jquery2.default.extend(true, data, this.handleSingletouchEnd(e));
                 } // if is pointerEvent
                 if (this.isPointerEvent(e)) {
@@ -824,6 +833,7 @@
                     this.data.pinched = true;
                     setTimeout(function() {
                         this.data.pinched = false;
+                        this.data.last.distance = null;
                     }.bind(this), this.settings.pinchBalanceTime);
                 }
             }

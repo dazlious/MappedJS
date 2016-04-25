@@ -210,7 +210,7 @@ export class Interact {
             viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
         }
         const metaViewInHead = $("meta[name=viewport]").length,
-            $viewportMeta = (metaViewInHead !== 0) ? $("meta[name=viewport]") : $("head").append($("<meta name='viewport' />"));
+              $viewportMeta = (metaViewInHead !== 0) ? $("meta[name=viewport]") : $("head").append($("<meta name='viewport' />"));
         $viewportMeta.attr("content", viewport);
         return this;
     }
@@ -226,6 +226,11 @@ export class Interact {
             throw new Error("Container " + container + " not found");
         }
         this.$container.css({
+            "-ms-touch-action": "none",
+            "touch-action": "none",
+            "-ms-content-zooming": "none"
+        });
+        this.$container.find("> *").css({
             "-ms-touch-action": "none",
             "touch-action": "none",
             "-ms-content-zooming": "none"
@@ -344,7 +349,7 @@ export class Interact {
             }
         };
         // mouse is used
-        if (e instanceof MouseEvent) {
+        if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
             return $.extend(true, data, this.handleSingletouchStart(e));
         }
         // if is pointerEvent
@@ -458,7 +463,7 @@ export class Interact {
             }
         };
 
-        if (e instanceof MouseEvent) {
+        if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
             return $.extend(true, data, this.handleSingletouchMove(e));
         } // if is pointerEvent
         if (this.isPointerEvent(e)) {
@@ -492,11 +497,12 @@ export class Interact {
     handleMultitouchMove(positionsArray) {
         const pointerPos1 = this.getRelativePosition(positionsArray[0]);
         const pointerPos2 = this.getRelativePosition(positionsArray[1]);
+        const pos = pointerPos1.clone.substract(pointerPos2).divide(2, 2);
         return {
             position: {
-                move: pointerPos1.substract(pointerPos2).divide(2, 2)
+                move: pos
             },
-            distance: pointerPos1.distance(pointerPos2),
+            distance: pos.length,
             multitouch: true
         };
     }
@@ -547,8 +553,11 @@ export class Interact {
     }
 
     handlePinchAndZoom() {
-        this.data.difference = this.data.distance - (this.data.last.distance || 0);
-        this.data.last.position = this.data.position.move;
+        if (!this.data.last.distance) {
+            this.data.last.distance = this.data.distance;
+        }
+        this.data.difference = this.data.last.distance - this.data.distance;
+
         if (this.settings.callbacks.pinch && this.data.difference !== 0) {
             this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
         }
@@ -568,7 +577,7 @@ export class Interact {
             }
         };
 
-        if (e instanceof MouseEvent) {
+        if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
             return $.extend(true, data, this.handleSingletouchEnd(e));
         } // if is pointerEvent
         if (this.isPointerEvent(e)) {
@@ -699,6 +708,7 @@ export class Interact {
             this.data.pinched = true;
             setTimeout((function() {
                 this.data.pinched = false;
+                this.data.last.distance = null;
             }).bind(this), this.settings.pinchBalanceTime);
         }
     }

@@ -127,9 +127,13 @@
                 }
             });
 
+            function replacer(name, val) {
+                return (name === "target") ? "" : val;
+            }
+
             function displayData(data, name) {
                 console.log(name, data);
-                $log.html(JSON.stringify(data, null, 4));
+                $log.html(JSON.stringify(data, replacer, 4));
                 $eventname.html(name);
             }
 

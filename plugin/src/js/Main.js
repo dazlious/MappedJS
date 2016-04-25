@@ -91,7 +91,7 @@ export class MappedJS {
     }
 
     getAbsolutePosition(point) {
-        return point.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+        return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
     }
 
     /**
@@ -102,8 +102,10 @@ export class MappedJS {
         this.interact = new Interact({
             container: this.$container,
             autoFireHold: 300,
+            overwriteViewportSettings: true,
             callbacks: {
                 tap: function(data) {
+                    console.log(data.position.start);
                 }.bind(this),
                 pan: function(data) {
                     const change = data.last.position.substract(data.position.move);
@@ -115,16 +117,17 @@ export class MappedJS {
                 zoom: function(data) {
                 }.bind(this),
                 hold: function(data) {
-                    this.zoom(-0.1, this.getAbsolutePosition(data.position.start));
+                    this.zoom(-0.4, this.getAbsolutePosition(data.position.start));
                 }.bind(this),
                 wheel: function(data) {
                     const factor = (data.zoom === 1) ? 0.1 : -0.1;
                     this.zoom(factor, this.getAbsolutePosition(data.position.start));
                 }.bind(this),
                 pinch: function(data) {
+                    this.zoom(-1 * data.difference, this.getAbsolutePosition(data.position.start));
                 }.bind(this),
                 doubletap: function(data) {
-                    this.zoom(0.1, this.getAbsolutePosition(data.position.start));
+                    this.zoom(0.4, this.getAbsolutePosition(data.position.start));
                 }.bind(this)
             }
         });
