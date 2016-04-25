@@ -81,10 +81,20 @@ export class View {
         this.context = context;
         this.markers = [];
 
+        this.drawIsNeeded = true;
+
         this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
 
-
         return this;
+    }
+
+    mainLoop() {
+        if (this.drawIsNeeded) {
+            this.drawIsNeeded = false;
+            this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
+            this.draw();
+        }
+        window.requestAnimFrame(this.mainLoop.bind(this));
     }
 
     /**
@@ -94,7 +104,7 @@ export class View {
     loadThumb() {
         Helper.loadImage(this.data.thumb, function(img) {
             this.thumb = img;
-            this.draw();
+            window.requestAnimFrame(this.mainLoop.bind(this));
         }.bind(this));
         return this;
     }
@@ -264,3 +274,12 @@ export class View {
     }
 
 }
+
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();

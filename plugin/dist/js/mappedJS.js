@@ -214,7 +214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    pan: function (data) {
 	                        var change = data.last.position.substract(data.position.move);
 	                        this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
-	                        this.tileMap.redraw();
+	                        this.tileMap.view.drawIsNeeded = true;
 	                    }.bind(this),
 	                    flick: function (data) {}.bind(this),
 	                    zoom: function (data) {}.bind(this),
@@ -242,7 +242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'zoom',
 	        value: function zoom(factor, position) {
 	            this.tileMap.view.zoom(factor, position);
-	            this.tileMap.redraw();
+	            this.tileMap.view.drawIsNeeded = true;
 	        }
 
 	        /**
@@ -457,7 +457,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'redraw',
 	        value: function redraw() {
 	            this.clearCanvas();
-	            this.view.draw();
+	            this.view.drawIsNeeded = true;
 	            return this;
 	        }
 
@@ -654,23 +654,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.context = context;
 	        this.markers = [];
 
+	        this.drawIsNeeded = true;
+
 	        this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
 
 	        return this;
 	    }
 
-	    /**
-	     * loads thumbnail of view
-	     * @return {View} instance of View for chaining
-	     */
-
-
 	    _createClass(View, [{
+	        key: 'mainLoop',
+	        value: function mainLoop() {
+	            if (this.drawIsNeeded) {
+	                this.drawIsNeeded = false;
+	                this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
+	                this.draw();
+	            }
+	            window.requestAnimFrame(this.mainLoop.bind(this));
+	        }
+
+	        /**
+	         * loads thumbnail of view
+	         * @return {View} instance of View for chaining
+	         */
+
+	    }, {
 	        key: 'loadThumb',
 	        value: function loadThumb() {
 	            _Helper.Helper.loadImage(this.data.thumb, function (img) {
 	                this.thumb = img;
-	                this.draw();
+	                window.requestAnimFrame(this.mainLoop.bind(this));
 	            }.bind(this));
 	            return this;
 	        }
@@ -868,6 +880,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return View;
 	}();
+
+	window.requestAnimFrame = function () {
+	    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
+	        window.setTimeout(callback, 1000 / 60);
+	    };
+		}();
 
 /***/ },
 /* 4 */

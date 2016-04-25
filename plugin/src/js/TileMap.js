@@ -114,7 +114,7 @@ export class TileMap {
      */
     redraw() {
         this.clearCanvas();
-        this.view.draw();
+        this.view.drawIsNeeded = true;
         return this;
     }
 

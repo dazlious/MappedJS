@@ -110,7 +110,7 @@ export class MappedJS {
                 pan: function(data) {
                     const change = data.last.position.substract(data.position.move);
                     this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
-                    this.tileMap.redraw();
+                    this.tileMap.view.drawIsNeeded = true;
                 }.bind(this),
                 flick: function(data) {
                 }.bind(this),
@@ -139,7 +139,7 @@ export class MappedJS {
 
     zoom(factor, position) {
         this.tileMap.view.zoom(factor, position);
-        this.tileMap.redraw();
+        this.tileMap.view.drawIsNeeded = true;
     }
 
     /**
