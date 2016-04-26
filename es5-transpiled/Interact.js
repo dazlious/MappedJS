@@ -199,7 +199,7 @@
                     stopPropagation: true,
                     preventDefault: true,
                     autoFireHold: false,
-                    pinchBalanceTime: 50,
+                    pinchBalanceTime: 20,
                     callbacks: this.getDefaultCallbacks(),
                     events: this.getDefaultEventNames()
                 };
@@ -607,12 +607,12 @@
             value: function handleMultitouchMove(positionsArray) {
                 var pointerPos1 = this.getRelativePosition(positionsArray[0]);
                 var pointerPos2 = this.getRelativePosition(positionsArray[1]);
-                var pos = pointerPos1.clone.substract(pointerPos2).divide(2, 2);
+                var pos = pointerPos2.clone.add(pointerPos1).divide(2);
                 return {
                     position: {
                         move: pos
                     },
-                    distance: pos.length,
+                    distance: pointerPos1.distance(pointerPos2),
                     multitouch: true
                 };
             }
@@ -671,13 +671,15 @@
                 if (!this.data.last.distance) {
                     this.data.last.distance = this.data.distance;
                 }
-                this.data.difference = this.data.last.distance - this.data.distance;
-
-                if (this.settings.callbacks.pinch && this.data.difference !== 0) {
-                    this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
-                }
-                if (this.settings.callbacks.zoom && this.data.difference !== 0) {
-                    this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
+                this.data.difference = this.data.distance - this.data.last.distance;
+                if (Math.abs(this.data.difference) >= 0.005) {
+                    if (this.settings.callbacks.pinch) {
+                        this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
+                    }
+                    if (this.settings.callbacks.zoom) {
+                        this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
+                    }
+                    this.data.last.distance = this.data.distance;
                 }
             }
         }, {
