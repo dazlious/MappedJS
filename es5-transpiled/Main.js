@@ -196,19 +196,15 @@
                         }.bind(this),
                         flick: function(data) {}.bind(this),
                         zoom: function(data) {}.bind(this),
-                        hold: function(data) {
-                            this.zoom(-0.4, this.getAbsolutePosition(data.position.start));
-                        }.bind(this),
+                        hold: function(data) {}.bind(this),
                         wheel: function(data) {
                             var factor = data.zoom === 1 ? 0.1 : -0.1;
                             this.zoom(factor, this.getAbsolutePosition(data.position.start));
                         }.bind(this),
                         pinch: function(data) {
-                            this.zoom(-1 * data.difference, this.getAbsolutePosition(data.position.start));
+                            this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
                         }.bind(this),
-                        doubletap: function(data) {
-                            this.zoom(0.4, this.getAbsolutePosition(data.position.start));
-                        }.bind(this)
+                        doubletap: function(data) {}.bind(this)
                     }
                 });
 
