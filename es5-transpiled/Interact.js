@@ -415,13 +415,12 @@
                 this.data.position.start = this.getRelativePosition(e);
                 this.data.directions = this.getScrollDirection(e);
 
+                this.data.zoom = this.data.directions.indexOf("up") > -1 ? 1 : this.data.directions.indexOf("down") > -1 ? -1 : 0;
+
                 if (this.settings.callbacks.wheel) {
                     this.eventCallback(this.settings.callbacks.wheel, this.dataClone);
                 }
-
-                this.data.zoom = 0;
                 if (this.settings.callbacks.zoom && (this.data.directions.indexOf("up") > -1 || this.data.directions.indexOf("down") > -1)) {
-                    this.data.zoom = this.data.directions.indexOf("up") > -1 ? 1 : this.data.directions.indexOf("down") > -1 ? -1 : 0;
                     this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
                 }
 

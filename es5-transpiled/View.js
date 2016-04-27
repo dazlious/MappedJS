@@ -127,6 +127,10 @@
             var $container = _ref$$container === undefined ? null : _ref$$container;
             var _ref$context = _ref.context;
             var context = _ref$context === undefined ? null : _ref$context;
+            var _ref$maxZoom = _ref.maxZoom;
+            var maxZoom = _ref$maxZoom === undefined ? 1.5 : _ref$maxZoom;
+            var _ref$minZoom = _ref.minZoom;
+            var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
 
             _classCallCheck(this, View);
 
@@ -136,6 +140,8 @@
             this.bounds = bounds;
             this.center = center;
             this.zoomFactor = 1;
+            this.maxZoom = maxZoom;
+            this.minZoom = minZoom;
             this.origin = new _Point.Point(0, 0);
 
             var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
@@ -226,7 +232,7 @@
         }, {
             key: 'zoom',
             value: function zoom(scale, pos) {
-                this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
+                this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, this.maxZoom), this.minZoom);
                 var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
                 mapPosition.x += this.getDeltaXToCenter(pos);
                 var latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
