@@ -273,9 +273,18 @@ export class View {
     }
 
     repositionMarkers() {
+        /*
         Helper.forEach(this.markers, function(marker) {
             marker.moveMarker();
         }.bind(this));
+        */
+       const newSize = this.currentView.getDistortedRect(this.distortionFactor);
+       this.$markerContainer.css({
+          "width": `${newSize.width}px`,
+          "height": `${newSize.height}px`,
+          "left": `${newSize.left + this.offsetToCenter}px`,
+          "top": `${newSize.top}px`
+       });
     }
 
 }

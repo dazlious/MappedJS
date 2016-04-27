@@ -204,8 +204,8 @@
                             this.zoom(0.2, this.getAbsolutePosition(data.position.start));
                         }.bind(this),
                         flick: function(data) {
-                            var direction = new _Point.Point(data.directions[0], data.directions[1]);
-                            var velocity = direction.clone.divide(data.speed).multiply(20);
+                            var direction = new _Point.Point(data.directions[0], data.directions[1]),
+                                velocity = direction.clone.divide(data.speed).multiply(20);
                             this.momentumAccerlation(velocity);
                         }.bind(this)
                     }

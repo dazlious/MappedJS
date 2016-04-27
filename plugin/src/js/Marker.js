@@ -38,7 +38,7 @@ export class Marker {
 
         this.icon = this.addMarkerToDOM(this.instance.$markerContainer);
 
-        this.moveMarker();
+        this.positionMarker();
     }
 
     addMarkerToDOM($container) {
@@ -57,12 +57,14 @@ export class Marker {
         return icon;
     }
 
-    moveMarker() {
+    positionMarker() {
         this.position = this.instance.convertLatLngToPoint(this.latlng);
-        const p = new Point((this.position.x + this.instance.currentView.x) * this.instance.distortionFactor + this.instance.offsetToCenter, this.position.y + this.instance.currentView.y);
+        //const p = new Point((this.position.x + this.instance.currentView.x) * this.instance.distortionFactor + this.instance.offsetToCenter, this.position.y + this.instance.currentView.y);
         if (this.icon) {
             this.icon.css({
-                transform: `translate3d(${p.x}px, ${p.y}px, 0)`
+                "left": `${this.position.x / this.instance.currentView.width * 100}%`,
+                "top": `${this.position.y / this.instance.currentView.height * 100}%`
+                //transform: `translate3d(${p.x}px, ${p.y}px, 0)`
             });
         }
     }
