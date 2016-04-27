@@ -120,6 +120,7 @@ export class Interact {
             distanceTreshold: {
                 swipe: 200
             },
+            speedThreshold: 0.01,
             overwriteViewportSettings: false,
             stopPropagation: true,
             preventDefault: true,
@@ -545,9 +546,9 @@ export class Interact {
         if (this.data.multitouch) {
             this.handlePinchAndZoom();
         } else {
-            this.data.speed = this.calculateSpeed(this.data.distance, this.timeToLastMove);
             this.eventCallback(this.settings.callbacks.pan, this.dataClone);
         }
+
         return false;
     }
 
@@ -651,11 +652,12 @@ export class Interact {
         }
         this.pinchBalance();
         this.handleMultitouchEnd(e);
+        this.data.last.position = null;
         return false;
     }
 
     handleSwipeAndFlick() {
-        const direction = (this.settings.callbacks.swipe) ? this.data.position.end.substract(this.data.position.start) : this.data.position.end.substract(this.data.last.position);
+        const direction = this.data.position.end.clone.substract(this.data.last.position);
 
         const vLDirection = direction.length,
               directionNormalized = direction.divide(vLDirection, vLDirection);
@@ -675,7 +677,7 @@ export class Interact {
             const direction = this.data.last.position.clone.substract(this.data.position.end);
             this.data.directions = [direction.x, direction.y];
             this.data.speed = this.calculateSpeed(distance, this.time);
-            if (this.data.speed >= 1) {
+            if (this.data.speed >= this.settings.speedThreshold) {
                 this.eventCallback(this.settings.callbacks.flick, this.dataClone);
             }
         }

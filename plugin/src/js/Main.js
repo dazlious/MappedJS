@@ -25,6 +25,8 @@ export class MappedJS {
             this.loadingFinished();
         }.bind(this));
 
+        this.momentum = null;
+
         return this;
     }
 
@@ -104,14 +106,10 @@ export class MappedJS {
             autoFireHold: 300,
             overwriteViewportSettings: true,
             callbacks: {
-                tap: function(data) {
-                }.bind(this),
                 pan: function(data) {
-                    const change = data.last.position.substract(data.position.move);
+                    const change = data.last.position.clone.substract(data.position.move);
                     this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                     this.tileMap.view.drawIsNeeded = true;
-                }.bind(this),
-                hold: function(data) {
                 }.bind(this),
                 wheel: function(data) {
                     const factor = data.zoom / 10;
@@ -124,6 +122,10 @@ export class MappedJS {
                     this.zoom(0.2, this.getAbsolutePosition(data.position.start));
                 }.bind(this),
                 flick: function(data) {
+                    let direction = new Point(data.directions[0], data.directions[1]);
+                    const velocity = direction.clone.divide(data.speed).multiply(20);
+                    this.momentumAccerlation(velocity);
+
                 }.bind(this)
             }
         });
@@ -131,6 +133,27 @@ export class MappedJS {
         $(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
         return this;
+    }
+
+    momentumAccerlation(velocity) {
+        this.maxMomentumSteps = 30;
+        this.triggerMomentum(this.maxMomentumSteps, 10, velocity.multiply(-1));
+    }
+
+    triggerMomentum(steps, timing, change) {
+        this.momentum = setTimeout(function() {
+            steps--;
+            const delta = Helper.easeOutQuadratic((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
+            this.moveViewByMomentum(delta);
+            if (steps >= 0) {
+                this.triggerMomentum(steps, timing, change);
+            }
+        }.bind(this), timing);
+    }
+
+    moveViewByMomentum(delta) {
+        this.tileMap.view.moveView(delta);
+        this.tileMap.view.drawIsNeeded = true;
     }
 
     zoom(factor, position) {

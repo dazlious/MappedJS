@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import {Point} from './Point.js';
 
 export var Helper = {
 
@@ -47,6 +48,11 @@ export var Helper = {
             }
         }
     },
+    easeOutQuadratic: function (t, b, c, d) {
+	    t /= d;
+        return c.clone.multiply(-1 * t * (t-2)).add(b);
+    },
+
     /**
      * convert degree to radian
      * @param {number} degrees - specified degrees
