@@ -27,6 +27,12 @@
     }
 
     var DataEnrichment = exports.DataEnrichment = {
+        /**
+         * enriches marker data with all needed data
+         * @param  {object} data - specified data for marker
+         * @param  {Function} cb - callback function, when enrichment is done
+         * @return {DataEnrichment} DataEnrichment object for chaining
+         */
         marker: function marker(data, cb) {
 
             var enrichedData = [];
@@ -51,9 +57,15 @@
             if (typeof cb === "function") {
                 cb(enrichedData);
             }
+
+            return this;
         }
     };
 
+    /**
+     * Default initial values for a Marker
+     * @type {Object}
+     */
     DataEnrichment.DATA_MARKER = {
         icon: null,
         hover: false,

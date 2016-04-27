@@ -15,6 +15,12 @@ const STATES = [
 
 export class Marker {
 
+    /**
+     * Constructor
+     * @param  {Object} data = DataEnrichment.DATA_MARKER - enriched data
+     * @param  {View} _instance = parent instance - instance of parent view
+     * @return {Marker} - instance of Marker for chaining
+     */
     constructor(data = DataEnrichment.DATA_MARKER, _instance = null) {
 
         this.stateHandler = new StateHandler(STATES);
@@ -39,8 +45,15 @@ export class Marker {
         this.icon = this.addMarkerToDOM(this.instance.$markerContainer);
 
         this.positionMarker();
+
+        return this;
     }
 
+    /**
+     * adds a marker to the DOM
+     * @param {Object} $container - container to append to (jQuery selector)
+     * @returns {Object} jQuery-selector of append markup
+     */
     addMarkerToDOM($container) {
         const icon = $("<div class='marker' />").css({
             "width": `${this.size.x}px`,
@@ -57,6 +70,10 @@ export class Marker {
         return icon;
     }
 
+    /**
+     * set initial position of this marker
+     * @return {Marker} - instance of Marker for chaining
+     */
     positionMarker() {
         this.position = this.instance.convertLatLngToPoint(this.latlng);
         //const p = new Point((this.position.x + this.instance.currentView.x) * this.instance.distortionFactor + this.instance.offsetToCenter, this.position.y + this.instance.currentView.y);
@@ -67,6 +84,7 @@ export class Marker {
                 //transform: `translate3d(${p.x}px, ${p.y}px, 0)`
             });
         }
+        return this;
     }
 
 }

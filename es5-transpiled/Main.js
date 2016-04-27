@@ -64,8 +64,7 @@
          * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
          * @param  {Object} mapSettings={} - settings for map, must be json
          * @param  {Object} events={loaded: "mjs-loaded"} - List of events
-         * @param  {Boolean} jasmine=false - Option for jasmine tests
-         * @return {MappedJS} instance of MappedJS
+         * @return {MappedJS} instance of MappedJS for chaining
          */
 
         function MappedJS(_ref) {
@@ -103,7 +102,7 @@
          * initializes the settings and handles errors
          * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
          * @param  {object} events - List of events
-         * @return {MappedJS} instance of MappedJS
+         * @return {MappedJS} instance of MappedJS for chaining
          */
 
 
@@ -139,7 +138,7 @@
              * initializes the data, asynchronous
              * @param  {Object} mapData - data of map tiles, can be json or path to file
              * @param  {Function} cb - called, when data is received
-             * @return {MappedJS} instance of MappedJS
+             * @return {MappedJS} instance of MappedJS for chaining
              */
 
         }, {
@@ -160,7 +159,7 @@
 
             /**
              * initializes Map module
-             * @return {MappedJS} instance of MappedJS
+             * @return {MappedJS} instance of MappedJS for chaining
              */
 
         }, {
@@ -174,6 +173,13 @@
                 });
                 return this;
             }
+
+            /**
+             * get absolute position of a point
+             * @param  {Point} point - specified relative position
+             * @return {Point} absolute position to viewport
+             */
+
         }, {
             key: 'getAbsolutePosition',
             value: function getAbsolutePosition(point) {
@@ -182,7 +188,7 @@
 
             /**
              * binds all events to handlers
-             * @return {MappedJS} instance of MappedJS
+             * @return {MappedJS} instance of MappedJS for chaining
              */
 
         }, {
@@ -220,12 +226,29 @@
 
                 return this;
             }
+
+            /**
+             * momentum flicking
+             * @param  {number} velocity - speed
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'momentumAccerlation',
             value: function momentumAccerlation(velocity) {
                 this.maxMomentumSteps = 30;
                 this.triggerMomentum(this.maxMomentumSteps, 10, velocity.multiply(-1));
+                return this;
             }
+
+            /**
+             * recursive momentum handler
+             * @param  {number} steps - current step (decreasing)
+             * @param  {number} timing - time for step
+             * @param  {Point} change - distance
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'triggerMomentum',
             value: function triggerMomentum(steps, timing, change) {
@@ -237,13 +260,30 @@
                         this.triggerMomentum(steps, timing, change);
                     }
                 }.bind(this), timing);
+                return this;
             }
+
+            /**
+             * move by delta momentum
+             * @param  {Point} delta - delta of x/y
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'moveViewByMomentum',
             value: function moveViewByMomentum(delta) {
                 this.tileMap.view.moveView(delta);
                 this.tileMap.view.drawIsNeeded = true;
+                return this;
             }
+
+            /**
+             * handles zoom by factor and position
+             * @param  {number} factor - difference in zoom scale
+             * @param  {Point} position - position to zoom to
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'zoom',
             value: function zoom(factor, position) {
@@ -251,11 +291,12 @@
                     this.tileMap.view.zoom(factor, position);
                     this.tileMap.view.drawIsNeeded = true;
                 }
+                return this;
             }
 
             /**
              * handles resizing of window
-             * @return {MappedJS} instance of MappedJS
+             * @return {MappedJS} instance of MappedJS for chaining
              */
 
         }, {
@@ -267,7 +308,7 @@
 
             /**
              * called when loading and initialization is finished
-             * @return {MappedJS} instance of MappedJS
+             * @return {MappedJS} instance of MappedJS for chaining
              */
 
         }, {

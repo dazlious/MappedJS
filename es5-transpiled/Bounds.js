@@ -48,7 +48,7 @@
 
 
             /**
-             * gets width of boundaries
+             * get width of boundaries
              * @return {number} width of boundaries
              */
             get: function get() {
@@ -56,7 +56,7 @@
             }
 
             /**
-             * gets height of boundaries
+             * get height of boundaries
              * @return {number} height of boundaries
              */
 
@@ -67,7 +67,7 @@
             }
 
             /**
-             * gets size
+             * get size
              * @return {Point} calculated Size of boundaries
              */
 
@@ -81,7 +81,7 @@
              * Constructor
              * @param  {number} northWest = new LatLng() - representation of northWest boundary
              * @param  {number} southEast = new LatLng() - representation of southEast boundary
-             * @return {Bounds} new instance of Bounds
+             * @return {Bounds} instance of Bounds for chaining
              */
 
         }]);

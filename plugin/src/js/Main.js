@@ -13,8 +13,7 @@ export class MappedJS {
      * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
      * @param  {Object} mapSettings={} - settings for map, must be json
      * @param  {Object} events={loaded: "mjs-loaded"} - List of events
-     * @param  {Boolean} jasmine=false - Option for jasmine tests
-     * @return {MappedJS} instance of MappedJS
+     * @return {MappedJS} instance of MappedJS for chaining
      */
     constructor({container=".mjs", mapData={}, mapSettings={}, events={loaded:"mjs-loaded"}, debug = false}) {
         this.initializeSettings(container, events, mapSettings);
@@ -36,7 +35,7 @@ export class MappedJS {
      * initializes the settings and handles errors
      * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
      * @param  {object} events - List of events
-     * @return {MappedJS} instance of MappedJS
+     * @return {MappedJS} instance of MappedJS for chaining
      */
     initializeSettings(container, events, mapSettings) {
         this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
@@ -65,7 +64,7 @@ export class MappedJS {
      * initializes the data, asynchronous
      * @param  {Object} mapData - data of map tiles, can be json or path to file
      * @param  {Function} cb - called, when data is received
-     * @return {MappedJS} instance of MappedJS
+     * @return {MappedJS} instance of MappedJS for chaining
      */
     initializeData(mapData, cb) {
         const _this = this;
@@ -83,7 +82,7 @@ export class MappedJS {
 
     /**
      * initializes Map module
-     * @return {MappedJS} instance of MappedJS
+     * @return {MappedJS} instance of MappedJS for chaining
      */
     initializeMap() {
         this.tileMap = new TileMap({
@@ -95,13 +94,18 @@ export class MappedJS {
         return this;
     }
 
+    /**
+     * get absolute position of a point
+     * @param  {Point} point - specified relative position
+     * @return {Point} absolute position to viewport
+     */
     getAbsolutePosition(point) {
         return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
     }
 
     /**
      * binds all events to handlers
-     * @return {MappedJS} instance of MappedJS
+     * @return {MappedJS} instance of MappedJS for chaining
      */
     bindEvents() {
         this.interact = new Interact({
@@ -138,11 +142,24 @@ export class MappedJS {
         return this;
     }
 
+    /**
+     * momentum flicking
+     * @param  {number} velocity - speed
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     momentumAccerlation(velocity) {
         this.maxMomentumSteps = 30;
         this.triggerMomentum(this.maxMomentumSteps, 10, velocity.multiply(-1));
+        return this;
     }
 
+    /**
+     * recursive momentum handler
+     * @param  {number} steps - current step (decreasing)
+     * @param  {number} timing - time for step
+     * @param  {Point} change - distance
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     triggerMomentum(steps, timing, change) {
         this.momentum = setTimeout(function() {
             steps--;
@@ -152,23 +169,37 @@ export class MappedJS {
                 this.triggerMomentum(steps, timing, change);
             }
         }.bind(this), timing);
+        return this;
     }
 
+    /**
+     * move by delta momentum
+     * @param  {Point} delta - delta of x/y
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     moveViewByMomentum(delta) {
         this.tileMap.view.moveView(delta);
         this.tileMap.view.drawIsNeeded = true;
+        return this;
     }
 
+    /**
+     * handles zoom by factor and position
+     * @param  {number} factor - difference in zoom scale
+     * @param  {Point} position - position to zoom to
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     zoom(factor, position) {
         if (factor !== 0) {
             this.tileMap.view.zoom(factor, position);
             this.tileMap.view.drawIsNeeded = true;
         }
+        return this;
     }
 
     /**
      * handles resizing of window
-     * @return {MappedJS} instance of MappedJS
+     * @return {MappedJS} instance of MappedJS for chaining
      */
     resizeHandler() {
         this.tileMap.resize();
@@ -177,7 +208,7 @@ export class MappedJS {
 
     /**
      * called when loading and initialization is finished
-     * @return {MappedJS} instance of MappedJS
+     * @return {MappedJS} instance of MappedJS for chaining
      */
     loadingFinished() {
         this.$container.trigger(this.events.loaded);

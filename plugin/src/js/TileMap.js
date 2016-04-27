@@ -42,6 +42,7 @@ export class TileMap {
      * @param  {Object} container - jQuery-object holding the container
      * @param  {Object} tilesData={} - json object representing data of TileMap
      * @param  {Object} settings={} - json object representing settings of TileMap
+     * @param  {Boolean} debug=false - Option for enabling debug-mode
      * @return {TileMap} instance of TileMap
      */
     constructor({container, tilesData = {}, settings = {}, debug = false}) {

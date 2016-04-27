@@ -66,6 +66,14 @@
     }];
 
     var Marker = exports.Marker = function() {
+
+        /**
+         * Constructor
+         * @param  {Object} data = DataEnrichment.DATA_MARKER - enriched data
+         * @param  {View} _instance = parent instance - instance of parent view
+         * @return {Marker} - instance of Marker for chaining
+         */
+
         function Marker() {
             var data = arguments.length <= 0 || arguments[0] === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : arguments[0];
 
@@ -95,7 +103,16 @@
             this.icon = this.addMarkerToDOM(this.instance.$markerContainer);
 
             this.positionMarker();
+
+            return this;
         }
+
+        /**
+         * adds a marker to the DOM
+         * @param {Object} $container - container to append to (jQuery selector)
+         * @returns {Object} jQuery-selector of append markup
+         */
+
 
         _createClass(Marker, [{
             key: 'addMarkerToDOM',
@@ -114,6 +131,12 @@
                 }
                 return icon;
             }
+
+            /**
+             * set initial position of this marker
+             * @return {Marker} - instance of Marker for chaining
+             */
+
         }, {
             key: 'positionMarker',
             value: function positionMarker() {
@@ -126,6 +149,7 @@
                             //transform: `translate3d(${p.x}px, ${p.y}px, 0)`
                     });
                 }
+                return this;
             }
         }]);
 
