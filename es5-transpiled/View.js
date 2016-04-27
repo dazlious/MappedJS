@@ -391,8 +391,8 @@
             key: 'draw',
             value: function draw() {
                 this.drawThumbnail();
-                this.drawVisibleTiles();
                 this.repositionMarkerContainer();
+                this.drawVisibleTiles();
                 return this;
             }
 
