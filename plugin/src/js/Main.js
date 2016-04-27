@@ -111,20 +111,19 @@ export class MappedJS {
                     this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                     this.tileMap.view.drawIsNeeded = true;
                 }.bind(this),
-                flick: function(data) {
-                }.bind(this),
-                zoom: function(data) {
-                }.bind(this),
                 hold: function(data) {
                 }.bind(this),
                 wheel: function(data) {
-                    const factor = (data.zoom === 1) ? 0.1 : -0.1;
+                    const factor = data.zoom / 10;
                     this.zoom(factor, this.getAbsolutePosition(data.position.start));
                 }.bind(this),
                 pinch: function(data) {
                     this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
                 }.bind(this),
                 doubletap: function(data) {
+                    this.zoom(0.2, this.getAbsolutePosition(data.position.start));
+                }.bind(this),
+                flick: function(data) {
                 }.bind(this)
             }
         });
@@ -135,8 +134,10 @@ export class MappedJS {
     }
 
     zoom(factor, position) {
-        this.tileMap.view.zoom(factor, position);
-        this.tileMap.view.drawIsNeeded = true;
+        if (factor !== 0) {
+            this.tileMap.view.zoom(factor, position);
+            this.tileMap.view.drawIsNeeded = true;
+        }
     }
 
     /**

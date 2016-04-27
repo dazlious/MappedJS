@@ -62,7 +62,9 @@ export class View {
         data = {},
         markerData = null,
         $container = null,
-        context = null
+        context = null,
+        maxZoom = 1.5,
+        minZoom = 0.8
         }) {
 
         this.mapView = mapView;
@@ -71,6 +73,8 @@ export class View {
         this.bounds = bounds;
         this.center = center;
         this.zoomFactor = 1;
+        this.maxZoom = maxZoom;
+        this.minZoom = minZoom;
         this.origin = new Point(0,0);
 
         const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
@@ -147,7 +151,7 @@ export class View {
     }
 
     zoom(scale, pos) {
-        this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
+        this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, this.maxZoom), this.minZoom);
         const mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
         mapPosition.x += this.getDeltaXToCenter(pos);
         const latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);

@@ -214,17 +214,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
 	                        this.tileMap.view.drawIsNeeded = true;
 	                    }.bind(this),
-	                    flick: function (data) {}.bind(this),
-	                    zoom: function (data) {}.bind(this),
 	                    hold: function (data) {}.bind(this),
 	                    wheel: function (data) {
-	                        var factor = data.zoom === 1 ? 0.1 : -0.1;
+	                        var factor = data.zoom / 10;
 	                        this.zoom(factor, this.getAbsolutePosition(data.position.start));
 	                    }.bind(this),
 	                    pinch: function (data) {
 	                        this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
 	                    }.bind(this),
-	                    doubletap: function (data) {}.bind(this)
+	                    doubletap: function (data) {
+	                        this.zoom(0.2, this.getAbsolutePosition(data.position.start));
+	                    }.bind(this),
+	                    flick: function (data) {}.bind(this)
 	                }
 	            });
 
@@ -235,8 +236,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'zoom',
 	        value: function zoom(factor, position) {
-	            this.tileMap.view.zoom(factor, position);
-	            this.tileMap.view.drawIsNeeded = true;
+	            if (factor !== 0) {
+	                this.tileMap.view.zoom(factor, position);
+	                this.tileMap.view.drawIsNeeded = true;
+	            }
 	        }
 
 	        /**
@@ -629,6 +632,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var $container = _ref$$container === undefined ? null : _ref$$container;
 	        var _ref$context = _ref.context;
 	        var context = _ref$context === undefined ? null : _ref$context;
+	        var _ref$maxZoom = _ref.maxZoom;
+	        var maxZoom = _ref$maxZoom === undefined ? 1.5 : _ref$maxZoom;
+	        var _ref$minZoom = _ref.minZoom;
+	        var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
 
 	        _classCallCheck(this, View);
 
@@ -638,6 +645,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.bounds = bounds;
 	        this.center = center;
 	        this.zoomFactor = 1;
+	        this.maxZoom = maxZoom;
+	        this.minZoom = minZoom;
 	        this.origin = new _Point.Point(0, 0);
 
 	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
@@ -728,7 +737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'zoom',
 	        value: function zoom(scale, pos) {
-	            this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, 2), 0.5);
+	            this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, this.maxZoom), this.minZoom);
 	            var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
 	            mapPosition.x += this.getDeltaXToCenter(pos);
 	            var latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
@@ -2667,13 +2676,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.data.position.start = this.getRelativePosition(e);
 	            this.data.directions = this.getScrollDirection(e);
 
+	            this.data.zoom = this.data.directions.indexOf("up") > -1 ? 1 : this.data.directions.indexOf("down") > -1 ? -1 : 0;
+
 	            if (this.settings.callbacks.wheel) {
 	                this.eventCallback(this.settings.callbacks.wheel, this.dataClone);
 	            }
-
-	            this.data.zoom = 0;
 	            if (this.settings.callbacks.zoom && (this.data.directions.indexOf("up") > -1 || this.data.directions.indexOf("down") > -1)) {
-	                this.data.zoom = this.data.directions.indexOf("up") > -1 ? 1 : this.data.directions.indexOf("down") > -1 ? -1 : 0;
 	                this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
 	            }
 

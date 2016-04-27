@@ -186,25 +186,24 @@
                     autoFireHold: 300,
                     overwriteViewportSettings: true,
                     callbacks: {
-                        tap: function(data) {
-                            console.log(data.position.start);
-                        }.bind(this),
+                        tap: function(data) {}.bind(this),
                         pan: function(data) {
                             var change = data.last.position.substract(data.position.move);
                             this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                             this.tileMap.view.drawIsNeeded = true;
                         }.bind(this),
-                        flick: function(data) {}.bind(this),
-                        zoom: function(data) {}.bind(this),
                         hold: function(data) {}.bind(this),
                         wheel: function(data) {
-                            var factor = data.zoom === 1 ? 0.1 : -0.1;
+                            var factor = data.zoom / 10;
                             this.zoom(factor, this.getAbsolutePosition(data.position.start));
                         }.bind(this),
                         pinch: function(data) {
                             this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
                         }.bind(this),
-                        doubletap: function(data) {}.bind(this)
+                        doubletap: function(data) {
+                            this.zoom(0.2, this.getAbsolutePosition(data.position.start));
+                        }.bind(this),
+                        flick: function(data) {}.bind(this)
                     }
                 });
 
@@ -215,8 +214,10 @@
         }, {
             key: 'zoom',
             value: function zoom(factor, position) {
-                this.tileMap.view.zoom(factor, position);
-                this.tileMap.view.drawIsNeeded = true;
+                if (factor !== 0) {
+                    this.tileMap.view.zoom(factor, position);
+                    this.tileMap.view.drawIsNeeded = true;
+                }
             }
 
             /**
