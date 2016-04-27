@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for spec/LatLng.test.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">spec/</a> LatLng.test.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>31/31</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>8/8</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>31/31</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*global LatLng,Bounds,Rectangle,Point*/
+&nbsp;
+describe('LatLng', function() {
+    "use strict";
+&nbsp;
+    it("is an instanceof LatLng", function() {
+        expect(new LatLng.LatLng() instanceof LatLng.LatLng).toEqual(true);
+    });
+&nbsp;
+    it("initializes with zeros", function() {
+        var latlng = new LatLng.LatLng();
+        expect(latlng.lat).toEqual(0);
+        expect(latlng.lng).toEqual(0);
+    });
+&nbsp;
+    it("substraction works", function() {
+        var coord1 = new LatLng.LatLng(30, 30),
+            coord2 = new LatLng.LatLng(30, -30),
+            coord3 = new LatLng.LatLng(-30, 30),
+            coord4 = new LatLng.LatLng(-30, -30);
+        expect(coord1.substract(coord2)).toEqual(new LatLng.LatLng(0, 60));
+        expect(coord2.substract(coord1)).toEqual(new LatLng.LatLng(30, -90));
+        expect(coord3.substract(coord4)).toEqual(new LatLng.LatLng(0, 60));
+    });
+&nbsp;
+    it("length works as expected", function() {
+        var c1 = new LatLng.LatLng(3, -3),
+            c2 = new LatLng.LatLng(-8, 9);
+        expect(c1.length).toEqual(Math.sqrt(18));
+        expect(c2.length).toEqual(Math.sqrt(145));
+    });
+&nbsp;
+    it("clone works as expected", function() {
+        var c1 = new LatLng.LatLng(2, 2);
+        expect(c1.clone).toEqual(c1);
+        expect(c1.clone).not.toBe(c1);
+    });
+&nbsp;
+    it("addition works", function() {
+        var coord1 = new LatLng.LatLng(30, 30),
+            coord2 = new LatLng.LatLng(30, -30),
+            coord3 = new LatLng.LatLng(-30, 30),
+            coord4 = new LatLng.LatLng(-30, -30);
+        expect(coord1.add(coord2)).toEqual(new LatLng.LatLng(60, 0));
+        expect(coord3.add(coord4)).toEqual(new LatLng.LatLng(-60, 0));
+        expect(coord2.add(coord4)).toEqual(new LatLng.LatLng(0, -60));
+    });
+&nbsp;
+    it("equals works", function() {
+        var coord1 = new LatLng.LatLng(50, 50),
+            coord2 = new LatLng.LatLng(50, -50),
+            coord3 = new LatLng.LatLng(-50, 50),
+            coord4 = new LatLng.LatLng(-50, -50),
+            coord5 = new LatLng.LatLng(50, 50);
+&nbsp;
+        expect(coord1.equals(coord1)).toEqual(true);
+        expect(coord1.equals(coord5)).toEqual(true);
+&nbsp;
+        expect(coord1.equals(coord2)).toEqual(false);
+        expect(coord3.equals(coord4)).toEqual(false);
+&nbsp;
+    });
+&nbsp;
+});
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 28 2016 01:02:09 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

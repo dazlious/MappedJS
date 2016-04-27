@@ -976,8 +976,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'draw',
 	        value: function draw() {
 	            this.drawThumbnail();
-	            this.drawVisibleTiles();
 	            this.repositionMarkerContainer();
+	            this.drawVisibleTiles();
 	            return this;
 	        }
 
@@ -2461,6 +2461,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
 	            });
 	            if ($container) {
+	                icon.hide();
 	                $container.append(icon);
 	                this.stateHandler.next();
 	            }
@@ -2483,6 +2484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    "top": this.position.y / this.instance.currentView.height * 100 + '%'
 	                    //transform: `translate3d(${p.x}px, ${p.y}px, 0)`
 	                });
+	                this.icon.show();
 	            }
 	            return this;
 	        }

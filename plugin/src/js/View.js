@@ -287,8 +287,8 @@ export class View {
      */
     draw() {
         this.drawThumbnail();
-        this.drawVisibleTiles();
         this.repositionMarkerContainer();
+        this.drawVisibleTiles();
         return this;
     }
 

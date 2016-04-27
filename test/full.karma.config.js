@@ -62,7 +62,7 @@ module.exports = function(config) {
             pageTitle: 'Unit tests of plugins'
         },
         coverageReporter: {
-            type : 'html',
+            type : 'lcov',
             dir : 'reports/',
             subdir: 'coverage'
         }
