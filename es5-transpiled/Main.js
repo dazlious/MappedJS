@@ -90,6 +90,8 @@
                 this.loadingFinished();
             }.bind(this));
 
+            this.momentum = null;
+
             return this;
         }
 
@@ -186,13 +188,11 @@
                     autoFireHold: 300,
                     overwriteViewportSettings: true,
                     callbacks: {
-                        tap: function(data) {}.bind(this),
                         pan: function(data) {
-                            var change = data.last.position.substract(data.position.move);
+                            var change = data.last.position.clone.substract(data.position.move);
                             this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                             this.tileMap.view.drawIsNeeded = true;
                         }.bind(this),
-                        hold: function(data) {}.bind(this),
                         wheel: function(data) {
                             var factor = data.zoom / 10;
                             this.zoom(factor, this.getAbsolutePosition(data.position.start));
@@ -203,13 +203,41 @@
                         doubletap: function(data) {
                             this.zoom(0.2, this.getAbsolutePosition(data.position.start));
                         }.bind(this),
-                        flick: function(data) {}.bind(this)
+                        flick: function(data) {
+                            var direction = new _Point.Point(data.directions[0], data.directions[1]);
+                            var velocity = direction.clone.divide(data.speed).multiply(20);
+                            this.momentumAccerlation(velocity);
+                        }.bind(this)
                     }
                 });
 
                 (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
                 return this;
+            }
+        }, {
+            key: 'momentumAccerlation',
+            value: function momentumAccerlation(velocity) {
+                this.maxMomentumSteps = 30;
+                this.triggerMomentum(this.maxMomentumSteps, 10, velocity.multiply(-1));
+            }
+        }, {
+            key: 'triggerMomentum',
+            value: function triggerMomentum(steps, timing, change) {
+                this.momentum = setTimeout(function() {
+                    steps--;
+                    var delta = _Helper.Helper.easeOutQuadratic((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
+                    this.moveViewByMomentum(delta);
+                    if (steps >= 0) {
+                        this.triggerMomentum(steps, timing, change);
+                    }
+                }.bind(this), timing);
+            }
+        }, {
+            key: 'moveViewByMomentum',
+            value: function moveViewByMomentum(delta) {
+                this.tileMap.view.moveView(delta);
+                this.tileMap.view.drawIsNeeded = true;
             }
         }, {
             key: 'zoom',

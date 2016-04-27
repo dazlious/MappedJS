@@ -1,17 +1,17 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(["exports", "jquery"], factory);
+        define(['exports', 'jquery', './Point.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require("jquery"));
+        factory(exports, require('jquery'), require('./Point.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery);
+        factory(mod.exports, global.jquery, global.Point);
         global.Helper = mod.exports;
     }
-})(this, function(exports, _jquery) {
-    "use strict";
+})(this, function(exports, _jquery, _Point) {
+    'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
@@ -73,6 +73,11 @@
                 }
             }
         },
+        easeOutQuadratic: function easeOutQuadratic(t, b, c, d) {
+            t /= d;
+            return c.clone.multiply(-1 * t * (t - 2)).add(b);
+        },
+
         /**
          * convert degree to radian
          * @param {number} degrees - specified degrees

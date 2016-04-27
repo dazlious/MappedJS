@@ -115,6 +115,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.loadingFinished();
 	        }.bind(this));
 
+	        this.momentum = null;
+
 	        return this;
 	    }
 
@@ -208,13 +210,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                autoFireHold: 300,
 	                overwriteViewportSettings: true,
 	                callbacks: {
-	                    tap: function (data) {}.bind(this),
 	                    pan: function (data) {
-	                        var change = data.last.position.substract(data.position.move);
+	                        var change = data.last.position.clone.substract(data.position.move);
 	                        this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
 	                        this.tileMap.view.drawIsNeeded = true;
 	                    }.bind(this),
-	                    hold: function (data) {}.bind(this),
 	                    wheel: function (data) {
 	                        var factor = data.zoom / 10;
 	                        this.zoom(factor, this.getAbsolutePosition(data.position.start));
@@ -225,13 +225,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    doubletap: function (data) {
 	                        this.zoom(0.2, this.getAbsolutePosition(data.position.start));
 	                    }.bind(this),
-	                    flick: function (data) {}.bind(this)
+	                    flick: function (data) {
+	                        var direction = new _Point.Point(data.directions[0], data.directions[1]);
+	                        var velocity = direction.clone.divide(data.speed).multiply(20);
+	                        this.momentumAccerlation(velocity);
+	                    }.bind(this)
 	                }
 	            });
 
 	            (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
 	            return this;
+	        }
+	    }, {
+	        key: 'momentumAccerlation',
+	        value: function momentumAccerlation(velocity) {
+	            this.maxMomentumSteps = 30;
+	            this.triggerMomentum(this.maxMomentumSteps, 10, velocity.multiply(-1));
+	        }
+	    }, {
+	        key: 'triggerMomentum',
+	        value: function triggerMomentum(steps, timing, change) {
+	            this.momentum = setTimeout(function () {
+	                steps--;
+	                var delta = _Helper.Helper.easeOutQuadratic((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
+	                this.moveViewByMomentum(delta);
+	                if (steps >= 0) {
+	                    this.triggerMomentum(steps, timing, change);
+	                }
+	            }.bind(this), timing);
+	        }
+	    }, {
+	        key: 'moveViewByMomentum',
+	        value: function moveViewByMomentum(delta) {
+	            this.tileMap.view.moveView(delta);
+	            this.tileMap.view.drawIsNeeded = true;
 	        }
 	    }, {
 	        key: 'zoom',
@@ -2055,7 +2083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -2065,6 +2093,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _jquery = __webpack_require__(1);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _Point = __webpack_require__(4);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2115,6 +2145,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    },
+	    easeOutQuadratic: function easeOutQuadratic(t, b, c, d) {
+	        t /= d;
+	        return c.clone.multiply(-1 * t * (t - 2)).add(b);
+	    },
+
 	    /**
 	     * convert degree to radian
 	     * @param {number} degrees - specified degrees
@@ -2456,6 +2491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                distanceTreshold: {
 	                    swipe: 200
 	                },
+	                speedThreshold: 0.01,
 	                overwriteViewportSettings: false,
 	                stopPropagation: true,
 	                preventDefault: true,
@@ -2920,9 +2956,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.data.multitouch) {
 	                this.handlePinchAndZoom();
 	            } else {
-	                this.data.speed = this.calculateSpeed(this.data.distance, this.timeToLastMove);
 	                this.eventCallback(this.settings.callbacks.pan, this.dataClone);
 	            }
+
 	            return false;
 	        }
 	    }, {
@@ -3034,12 +3070,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            this.pinchBalance();
 	            this.handleMultitouchEnd(e);
+	            this.data.last.position = null;
 	            return false;
 	        }
 	    }, {
 	        key: 'handleSwipeAndFlick',
 	        value: function handleSwipeAndFlick() {
-	            var direction = this.settings.callbacks.swipe ? this.data.position.end.substract(this.data.position.start) : this.data.position.end.substract(this.data.last.position);
+	            var direction = this.data.position.end.clone.substract(this.data.last.position);
 
 	            var vLDirection = direction.length,
 	                directionNormalized = direction.divide(vLDirection, vLDirection);
@@ -3059,7 +3096,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var _direction = this.data.last.position.clone.substract(this.data.position.end);
 	                this.data.directions = [_direction.x, _direction.y];
 	                this.data.speed = this.calculateSpeed(distance, this.time);
-	                if (this.data.speed >= 1) {
+	                if (this.data.speed >= this.settings.speedThreshold) {
 	                    this.eventCallback(this.settings.callbacks.flick, this.dataClone);
 	                }
 	            }
