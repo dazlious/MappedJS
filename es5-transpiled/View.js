@@ -91,6 +91,12 @@
                     return this.viewport.intersects(newTile);
                 }, this);
             }
+
+            /**
+             * how many pixels per lat and lng
+             * @return {Point} pixels per lat/lng
+             */
+
         }, {
             key: 'pixelPerLatLng',
             get: function get() {
@@ -99,13 +105,18 @@
 
             /**
              * Constructor
-             * @param  {Object} settings - the settings Object
              * @param  {Rectangle} viewport = new Rectangle() - current representation of viewport
              * @param  {Rectangle} mapView = new Rectangle() - current representation of map
              * @param  {Bounds} bounds = new Bounds() - current bounds of map
              * @param  {LatLng} center = new LatLng() - current center of map
-             * @param  {Object} data = {} - data of current map
-             * @return {View} Instance of View
+             * @param  {Object} data = {} - tile data of current map
+             * @param  {Object} markerData = {} - marker data of current map
+             * @param  {Object} $container = null - parent container for markers
+             * @param  {Object} context = null - canvas context for drawing
+             * @param  {number} maxZoom = 1.5 - maximal zoom of view
+             * @param  {number} minZoom = 0.8 - minimal zoom of view
+             * @param  {Boolean} debug=false - Option for enabling debug-mode
+             * @return {View} instance of View for chaining
              */
 
         }]);
@@ -179,6 +190,11 @@
             return this;
         }
 
+        /**
+         * main draw call
+         */
+
+
         _createClass(View, [{
             key: 'mainLoop',
             value: function mainLoop() {
@@ -225,6 +241,14 @@
                 point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
                 return new _LatLng.LatLng(this.bounds.nw.lat - point.y, point.x + this.bounds.nw.lng).multiply(-1);
             }
+
+            /**
+             * set specified lat/lng to position x/y
+             * @param {LatLng} latlng - specified latlng to be set Point to
+             * @param {Point} position - specified position to set LatLng to
+             * @return {View} instance of View for chaining
+             */
+
         }, {
             key: 'setLatLngToPosition',
             value: function setLatLngToPosition(latlng, position) {
@@ -234,6 +258,7 @@
                 this.currentView.translate(0, diff.y);
                 this.calculateNewCenter();
                 this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
+                return this;
             }
 
             /**
@@ -249,6 +274,13 @@
                 relativePosition.multiply(this.pixelPerLatLng.y, this.pixelPerLatLng.x);
                 return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
             }
+
+            /**
+             * receive relative Position to center of viewport
+             * @param  {Point} pos - specified position
+             * @return {number} delta of point to center of viewport
+             */
+
         }, {
             key: 'getDeltaXToCenter',
             value: function getDeltaXToCenter(pos) {
@@ -257,10 +289,18 @@
                 var delta = distanceToCenter * this.offsetToCenter;
                 return delta / this.distortionFactor;
             }
+
+            /**
+             * zooming handler
+             * @param  {number} factor - increase/decrease factor
+             * @param  {Point} pos - Position to zoom to
+             * @return {View} instance of View for chaining
+             */
+
         }, {
             key: 'zoom',
-            value: function zoom(scale, pos) {
-                this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, this.maxZoom), this.minZoom);
+            value: function zoom(factor, pos) {
+                this.zoomFactor = Math.max(Math.min(this.zoomFactor + factor, this.maxZoom), this.minZoom);
                 var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
                 mapPosition.x += this.getDeltaXToCenter(pos);
                 var latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
@@ -270,17 +310,32 @@
 
                 this.setLatLngToPosition(latlngPosition, pos);
                 this.moveView(new _Point.Point());
+                return this;
             }
+
+            /**
+             * get distortion factor for specified latitude
+             * @param  {LatLng} latlng - lat/lng position
+             * @return {number} distortion factor
+             */
+
         }, {
             key: 'getDistortionFactorForLatitude',
             value: function getDistortionFactorForLatitude(latlng) {
                 return Math.cos(_Helper.Helper.toRadians(latlng.lat));
             }
+
+            /**
+             * update center position of view
+             * @return {View} instance of View for chaining
+             */
+
         }, {
             key: 'calculateNewCenter',
             value: function calculateNewCenter() {
                 var newCenter = this.viewport.center.substract(this.currentView.topLeft);
                 this.center = this.convertPointToLatLng(newCenter);
+                return this;
             }
 
             /**
@@ -329,7 +384,7 @@
 
             /**
              * Handles draw of visible elements
-             * @return {View} instance of View
+             * @return {View} instance of View for chaining
              */
 
         }, {
@@ -337,26 +392,40 @@
             value: function draw() {
                 this.drawThumbnail();
                 this.drawVisibleTiles();
-                this.repositionMarkers();
+                this.repositionMarkerContainer();
                 return this;
             }
+
+            /**
+             * draws all visible tiles
+             * @return {View} instance of View for chaining
+             */
+
         }, {
             key: 'drawVisibleTiles',
             value: function drawVisibleTiles() {
                 _Helper.Helper.forEach(this.visibleTiles, function(tile) {
                     tile.draw();
                 }.bind(this));
+                return this;
             }
+
+            /**
+             * draws the thumbnail
+             * @return {View} instance of View for chaining
+             */
+
         }, {
             key: 'drawThumbnail',
             value: function drawThumbnail() {
                 var rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
                 this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
+                return this;
             }
 
             /**
              * initializes tiles
-             * @return {View} instance of View
+             * @return {View} instance of View for chaining
              */
 
         }, {
@@ -369,12 +438,28 @@
                 }.bind(this));
                 return this;
             }
+
+            /**
+             * append marker container to DOM
+             * @param  {Object} $container - jQuery-selector
+             * @return {View} instance of View for chaining
+             */
+
         }, {
             key: 'appendMarkerContainerToDom',
             value: function appendMarkerContainerToDom($container) {
                 this.$markerContainer = (0, _jquery2.default)("<div class='marker-container' />");
                 $container.append(this.$markerContainer);
+                return this;
             }
+
+            /**
+             * enrich marker data
+             * @param  {Object} markerData - data of markers
+             * @param  {Object} $container - jQuery-selector
+             * @return {Object} enriched marker data
+             */
+
         }, {
             key: 'enrichMarkerData',
             value: function enrichMarkerData(markerData, $container) {
@@ -384,6 +469,14 @@
                 }.bind(this));
                 return markerData;
             }
+
+            /**
+             * initializes all markers
+             * @param  {Object} markerData - data of all markers
+             * @param  {Object} $container - jQuery-selector
+             * @return {View} instance of View for chaining
+             */
+
         }, {
             key: 'initializeMarkers',
             value: function initializeMarkers(markerData, $container) {
@@ -396,14 +489,15 @@
                 }
                 return this;
             }
+
+            /**
+             * reposition marker container
+             * @return {View} instance of View for chaining
+             */
+
         }, {
-            key: 'repositionMarkers',
-            value: function repositionMarkers() {
-                /*
-                Helper.forEach(this.markers, function(marker) {
-                    marker.moveMarker();
-                }.bind(this));
-                */
+            key: 'repositionMarkerContainer',
+            value: function repositionMarkerContainer() {
                 var newSize = this.currentView.getDistortedRect(this.distortionFactor);
                 this.$markerContainer.css({
                     "width": newSize.width + 'px',
@@ -411,12 +505,17 @@
                     "left": newSize.left + this.offsetToCenter + 'px',
                     "top": newSize.top + 'px'
                 });
+                return this;
             }
         }]);
 
         return View;
     }();
 
+    /**
+     * request animation frame browser polyfill
+     * @return {Function} supported requestAnimationFrame-function
+     */
     window.requestAnimFrame = function() {
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(callback) {
             window.setTimeout(callback, 1000 / 60);

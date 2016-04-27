@@ -9,6 +9,8 @@
 <dd></dd>
 <dt><a href="#MappedJS">MappedJS</a></dt>
 <dd></dd>
+<dt><a href="#Marker">Marker</a></dt>
+<dd></dd>
 <dt><a href="#Point">Point</a></dt>
 <dd></dd>
 <dt><a href="#Publisher">Publisher</a></dt>
@@ -60,7 +62,7 @@
 ### new Bounds(northWest, southEast)
 Constructor
 
-**Returns**: <code>[Bounds](#Bounds)</code> - new instance of Bounds  
+**Returns**: <code>[Bounds](#Bounds)</code> - instance of Bounds for chaining  
 **Params**
 
 - northWest <code>number</code> - = new LatLng() - representation of northWest boundary
@@ -69,21 +71,21 @@ Constructor
 <a name="Bounds+width"></a>
 
 ### bounds.width ⇒ <code>number</code>
-gets width of boundaries
+get width of boundaries
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
 **Returns**: <code>number</code> - width of boundaries  
 <a name="Bounds+height"></a>
 
 ### bounds.height ⇒ <code>number</code>
-gets height of boundaries
+get height of boundaries
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
 **Returns**: <code>number</code> - height of boundaries  
 <a name="Bounds+range"></a>
 
 ### bounds.range ⇒ <code>[Point](#Point)</code>
-gets size
+get size
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
 **Returns**: <code>[Point](#Point)</code> - calculated Size of boundaries  
@@ -98,16 +100,46 @@ gets size
     * [.isTouch](#Interact+isTouch) ⇒ <code>Boolean</code>
     * [.isIE](#Interact+isIE) ⇒ <code>Boolean</code>
     * [.scrollEvent](#Interact+scrollEvent) ⇒ <code>string</code>
+    * [.timeToLastMove](#Interact+timeToLastMove) ⇒ <code>number</code>
+    * [.time](#Interact+time) ⇒ <code>number</code>
+    * [.dataClone](#Interact+dataClone) ⇒ <code>Object</code>
+    * [.getDefaultSettings()](#Interact+getDefaultSettings) ⇒ <code>Object</code>
+    * [.getDefaultCallbacks()](#Interact+getDefaultCallbacks) ⇒ <code>Object</code>
+    * [.getDefaultEventNames()](#Interact+getDefaultEventNames) ⇒ <code>Object</code>
+    * [.getDefaultData()](#Interact+getDefaultData) ⇒ <code>Object</code>
     * [.handleViewport(viewport)](#Interact+handleViewport) ⇒ <code>[Interact](#Interact)</code>
     * [.init(container)](#Interact+init) ⇒ <code>[Interact](#Interact)</code>
     * [.bindEvents()](#Interact+bindEvents) ⇒ <code>[Interact](#Interact)</code>
     * [.bindIEEvents()](#Interact+bindIEEvents) ⇒ <code>[Interact](#Interact)</code>
     * [.bindTouchEvents()](#Interact+bindTouchEvents) ⇒ <code>[Interact](#Interact)</code>
     * [.bindMouseEvents()](#Interact+bindMouseEvents) ⇒ <code>[Interact](#Interact)</code>
+    * [.preHandle(event)](#Interact+preHandle) ⇒ <code>Object</code>
     * [.scrollHandler(event)](#Interact+scrollHandler) ⇒ <code>Boolean</code>
+    * [.isPointerEvent(event)](#Interact+isPointerEvent) ⇒ <code>Boolean</code>
+    * [.calculateStart(e)](#Interact+calculateStart) ⇒ <code>Object</code>
+    * [.handlePointerEventStart(data, e)](#Interact+handlePointerEventStart) ⇒ <code>Object</code>
+    * [.handleTouchEventStart(data, e)](#Interact+handleTouchEventStart) ⇒ <code>Object</code>
+    * [.getPointerArray()](#Interact+getPointerArray) ⇒ <code>Object</code>
+    * [.handleMultitouchStart(positionsArray)](#Interact+handleMultitouchStart) ⇒ <code>Object</code>
+    * [.handleSingletouchStart(position)](#Interact+handleSingletouchStart) ⇒ <code>Object</code>
+    * [.takeActionStart(action)](#Interact+takeActionStart) ⇒ <code>[Interact](#Interact)</code>
     * [.startHandler(event)](#Interact+startHandler) ⇒ <code>Boolean</code>
+    * [.clearTimeouts(timeout)](#Interact+clearTimeouts) ⇒ <code>[Interact](#Interact)</code>
+    * [.calculateMove(e)](#Interact+calculateMove) ⇒ <code>Object</code>
+    * [.handlePointerEventMove(data, e)](#Interact+handlePointerEventMove) ⇒ <code>Object</code>
+    * [.handleTouchEventMove(data, e)](#Interact+handleTouchEventMove) ⇒ <code>Object</code>
+    * [.handleMultitouchMove(positionsArray)](#Interact+handleMultitouchMove) ⇒ <code>Object</code>
+    * [.handleSingletouchMove(position)](#Interact+handleSingletouchMove) ⇒ <code>Object</code>
     * [.moveHandler(event)](#Interact+moveHandler) ⇒ <code>Boolean</code>
+    * [.handlePinchAndZoom()](#Interact+handlePinchAndZoom) ⇒ <code>[Interact](#Interact)</code>
+    * [.positionDidNotChange(e)](#Interact+positionDidNotChange) ⇒ <code>Boolean</code>
+    * [.calculateEnd(e)](#Interact+calculateEnd) ⇒ <code>Object</code>
+    * [.handleSingletouchEnd(position)](#Interact+handleSingletouchEnd) ⇒ <code>Object</code>
+    * [.takeActionEnd(action)](#Interact+takeActionEnd) ⇒ <code>[Interact](#Interact)</code>
     * [.endHandler(event)](#Interact+endHandler) ⇒ <code>Boolean</code>
+    * [.handleSwipeAndFlick()](#Interact+handleSwipeAndFlick) ⇒ <code>[Interact](#Interact)</code>
+    * [.handleMultitouchEnd(e)](#Interact+handleMultitouchEnd) ⇒ <code>[Interact](#Interact)</code>
+    * [.pinchBalance()](#Interact+pinchBalance) ⇒ <code>[Interact](#Interact)</code>
     * [.calculateSpeed(distance, time)](#Interact+calculateSpeed) ⇒ <code>number</code>
     * [.getSwipeDirections(direction)](#Interact+getSwipeDirections) ⇒ <code>Array.&lt;string&gt;</code>
     * [.setTimeoutForEvent(callback, timeout, args, holdTimeout)](#Interact+setTimeoutForEvent) ⇒ <code>[Interact](#Interact)</code>
@@ -115,6 +147,10 @@ gets size
     * [.getRelativePosition(e)](#Interact+getRelativePosition) ⇒ <code>[Point](#Point)</code>
     * [.getAbsolutePosition(e)](#Interact+getAbsolutePosition) ⇒ <code>[Point](#Point)</code>
     * [.getScrollDirection(event)](#Interact+getScrollDirection) ⇒ <code>Array.&lt;string&gt;</code>
+    * [.isDownDirection(axis, event)](#Interact+isDownDirection) ⇒ <code>Boolean</code>
+    * [.isUpDirection(axis, event)](#Interact+isUpDirection) ⇒ <code>Boolean</code>
+    * [.isRightDirection(axis, event)](#Interact+isRightDirection) ⇒ <code>Boolean</code>
+    * [.isLeftDirection(axis, event)](#Interact+isLeftDirection) ⇒ <code>Boolean</code>
     * [.getEvent(e)](#Interact+getEvent) ⇒ <code>Object</code>
 
 <a name="new_Interact_new"></a>
@@ -193,6 +229,55 @@ gets cross-browser scroll-event
 
 **Kind**: instance property of <code>[Interact](#Interact)</code>  
 **Returns**: <code>string</code> - name of scroll event  
+<a name="Interact+timeToLastMove"></a>
+
+### interact.timeToLastMove ⇒ <code>number</code>
+get time difference to last
+
+**Kind**: instance property of <code>[Interact](#Interact)</code>  
+**Returns**: <code>number</code> - difference  
+<a name="Interact+time"></a>
+
+### interact.time ⇒ <code>number</code>
+get time difference to start
+
+**Kind**: instance property of <code>[Interact](#Interact)</code>  
+**Returns**: <code>number</code> - difference  
+<a name="Interact+dataClone"></a>
+
+### interact.dataClone ⇒ <code>Object</code>
+clones the data object
+
+**Kind**: instance property of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - data object  
+<a name="Interact+getDefaultSettings"></a>
+
+### interact.getDefaultSettings() ⇒ <code>Object</code>
+get the default settings
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - settings  
+<a name="Interact+getDefaultCallbacks"></a>
+
+### interact.getDefaultCallbacks() ⇒ <code>Object</code>
+get default callbacks
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - callbacks  
+<a name="Interact+getDefaultEventNames"></a>
+
+### interact.getDefaultEventNames() ⇒ <code>Object</code>
+get default eventnames
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - eventnames  
+<a name="Interact+getDefaultData"></a>
+
+### interact.getDefaultData() ⇒ <code>Object</code>
+get default data
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - data  
 <a name="Interact+handleViewport"></a>
 
 ### interact.handleViewport(viewport) ⇒ <code>[Interact](#Interact)</code>
@@ -243,6 +328,17 @@ binds all needed events for mouse devices
 
 **Kind**: instance method of <code>[Interact](#Interact)</code>  
 **Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
+<a name="Interact+preHandle"></a>
+
+### interact.preHandle(event) ⇒ <code>Object</code>
+pre handle all events
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - normalized jQuery-fixed event  
+**Params**
+
+- event <code>Object</code> - original event of Vanilla JS
+
 <a name="Interact+scrollHandler"></a>
 
 ### interact.scrollHandler(event) ⇒ <code>Boolean</code>
@@ -253,6 +349,92 @@ handles cross-browser and -device scroll
 **Params**
 
 - event <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+isPointerEvent"></a>
+
+### interact.isPointerEvent(event) ⇒ <code>Boolean</code>
+check if event is a PointerEvent (IE)
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - Whether event is PointerEvent  
+**Params**
+
+- event <code>Object</code> - original event of Vanilla JS
+
+<a name="Interact+calculateStart"></a>
+
+### interact.calculateStart(e) ⇒ <code>Object</code>
+calculation to be made at start-handler
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - calculated data  
+**Params**
+
+- e <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+handlePointerEventStart"></a>
+
+### interact.handlePointerEventStart(data, e) ⇒ <code>Object</code>
+handle PointerEvent calculations
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - manipulated enriched data  
+**Params**
+
+- data <code>Object</code> - current data
+- e <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+handleTouchEventStart"></a>
+
+### interact.handleTouchEventStart(data, e) ⇒ <code>Object</code>
+handle TouchEvent calculations for start
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - manipulated enriched data  
+**Params**
+
+- data <code>Object</code> - current data
+- e <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+getPointerArray"></a>
+
+### interact.getPointerArray() ⇒ <code>Object</code>
+get array of pointers (IE)
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - array of pointerIDs  
+<a name="Interact+handleMultitouchStart"></a>
+
+### interact.handleMultitouchStart(positionsArray) ⇒ <code>Object</code>
+handles multitouch for start
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - manipulated enriched data  
+**Params**
+
+- positionsArray <code>Object</code> - array of positions
+
+<a name="Interact+handleSingletouchStart"></a>
+
+### interact.handleSingletouchStart(position) ⇒ <code>Object</code>
+handles singletouch for start
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - manipulated enriched data  
+**Params**
+
+- position <code>[Point](#Point)</code> - position of touch
+
+<a name="Interact+takeActionStart"></a>
+
+### interact.takeActionStart(action) ⇒ <code>[Interact](#Interact)</code>
+handle action at start event handler
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - instance of Interact for chaining  
+**Params**
+
+- action <code>String</code> - last action made
 
 <a name="Interact+startHandler"></a>
 
@@ -265,6 +447,74 @@ handles cross-browser and -device start-event
 
 - event <code>Object</code> - jQuery-Event-Object
 
+<a name="Interact+clearTimeouts"></a>
+
+### interact.clearTimeouts(timeout) ⇒ <code>[Interact](#Interact)</code>
+clear timeout helper
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - instance of Interact for chaining  
+**Params**
+
+- timeout <code>Object</code> - timeout object to be cleared
+
+<a name="Interact+calculateMove"></a>
+
+### interact.calculateMove(e) ⇒ <code>Object</code>
+calculation to be made at move-handler
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - calculated data  
+**Params**
+
+- e <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+handlePointerEventMove"></a>
+
+### interact.handlePointerEventMove(data, e) ⇒ <code>Object</code>
+handle PointerEvent at moving (IE)
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - manipulated enriched data  
+**Params**
+
+- data <code>Object</code> - specified input data
+- e <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+handleTouchEventMove"></a>
+
+### interact.handleTouchEventMove(data, e) ⇒ <code>Object</code>
+handle TouchEvent calculations for move
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - manipulated enriched data  
+**Params**
+
+- data <code>Object</code> - current data
+- e <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+handleMultitouchMove"></a>
+
+### interact.handleMultitouchMove(positionsArray) ⇒ <code>Object</code>
+handles multitouch for move
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - manipulated enriched data  
+**Params**
+
+- positionsArray <code>Object</code> - array of positions
+
+<a name="Interact+handleSingletouchMove"></a>
+
+### interact.handleSingletouchMove(position) ⇒ <code>Object</code>
+handles singletouch for move
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - manipulated enriched data  
+**Params**
+
+- position <code>[Point](#Point)</code> - position
+
 <a name="Interact+moveHandler"></a>
 
 ### interact.moveHandler(event) ⇒ <code>Boolean</code>
@@ -275,6 +525,57 @@ handles cross-browser and -device move-event
 **Params**
 
 - event <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+handlePinchAndZoom"></a>
+
+### interact.handlePinchAndZoom() ⇒ <code>[Interact](#Interact)</code>
+handles pinch and zoom
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - instance of Interact for chaining  
+<a name="Interact+positionDidNotChange"></a>
+
+### interact.positionDidNotChange(e) ⇒ <code>Boolean</code>
+check if position has been changed
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - Whether or not position has changed  
+**Params**
+
+- e <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+calculateEnd"></a>
+
+### interact.calculateEnd(e) ⇒ <code>Object</code>
+calculation to be made at end-handler
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - calculated data  
+**Params**
+
+- e <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+handleSingletouchEnd"></a>
+
+### interact.handleSingletouchEnd(position) ⇒ <code>Object</code>
+handles singletouch for end
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Object</code> - manipulated enriched data  
+**Params**
+
+- position <code>Object</code> - position
+
+<a name="Interact+takeActionEnd"></a>
+
+### interact.takeActionEnd(action) ⇒ <code>[Interact](#Interact)</code>
+handle action at end event handler
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - instance of Interact for chaining  
+**Params**
+
+- action <code>String</code> - last action made
 
 <a name="Interact+endHandler"></a>
 
@@ -287,6 +588,31 @@ handles cross-browser and -device end-event
 
 - event <code>Object</code> - jQuery-Event-Object
 
+<a name="Interact+handleSwipeAndFlick"></a>
+
+### interact.handleSwipeAndFlick() ⇒ <code>[Interact](#Interact)</code>
+handles flick and swipe events
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - instance of Interact for chaining  
+<a name="Interact+handleMultitouchEnd"></a>
+
+### interact.handleMultitouchEnd(e) ⇒ <code>[Interact](#Interact)</code>
+handles multitouch for end
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - instance of Interact for chaining  
+**Params**
+
+- e <code>e</code> - jQuery-Event-Object
+
+<a name="Interact+pinchBalance"></a>
+
+### interact.pinchBalance() ⇒ <code>[Interact](#Interact)</code>
+balances pinching after release of finger
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>[Interact](#Interact)</code> - instance of Interact for chaining  
 <a name="Interact+calculateSpeed"></a>
 
 ### interact.calculateSpeed(distance, time) ⇒ <code>number</code>
@@ -368,6 +694,54 @@ get scroll direction from event
 **Params**
 
 - event <code>Object</code> - event object
+
+<a name="Interact+isDownDirection"></a>
+
+### interact.isDownDirection(axis, event) ⇒ <code>Boolean</code>
+checks if direction is down
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - Whether or not direction is down  
+**Params**
+
+- axis <code>number</code> - what axis is used
+- event <code>Object</code> - Vanilla JS event
+
+<a name="Interact+isUpDirection"></a>
+
+### interact.isUpDirection(axis, event) ⇒ <code>Boolean</code>
+checks if direction is up
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - Whether or not direction is up  
+**Params**
+
+- axis <code>number</code> - what axis is used
+- event <code>Object</code> - Vanilla JS event
+
+<a name="Interact+isRightDirection"></a>
+
+### interact.isRightDirection(axis, event) ⇒ <code>Boolean</code>
+checks if direction is right
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - Whether or not direction is right  
+**Params**
+
+- axis <code>number</code> - what axis is used
+- event <code>Object</code> - Vanilla JS event
+
+<a name="Interact+isLeftDirection"></a>
+
+### interact.isLeftDirection(axis, event) ⇒ <code>Boolean</code>
+checks if direction is left
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>Boolean</code> - Whether or not direction is left  
+**Params**
+
+- axis <code>number</code> - what axis is used
+- event <code>Object</code> - Vanilla JS event
 
 <a name="Interact+getEvent"></a>
 
@@ -498,27 +872,31 @@ Creates a LatLng from specified LatLng
 **Kind**: global class  
 
 * [MappedJS](#MappedJS)
-    * [new MappedJS(container, mapData, mapSettings, events, jasmine)](#new_MappedJS_new)
+    * [new MappedJS(container, mapData, mapSettings, events)](#new_MappedJS_new)
     * [.initializeSettings(container, events)](#MappedJS+initializeSettings) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.initializeData(mapData, cb)](#MappedJS+initializeData) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.initializeMap()](#MappedJS+initializeMap) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.getAbsolutePosition(point)](#MappedJS+getAbsolutePosition) ⇒ <code>[Point](#Point)</code>
     * [.bindEvents()](#MappedJS+bindEvents) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.momentumAccerlation(velocity)](#MappedJS+momentumAccerlation) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.triggerMomentum(steps, timing, change)](#MappedJS+triggerMomentum) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.moveViewByMomentum(delta)](#MappedJS+moveViewByMomentum) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.zoom(factor, position)](#MappedJS+zoom) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.resizeHandler()](#MappedJS+resizeHandler) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.loadingFinished()](#MappedJS+loadingFinished) ⇒ <code>[MappedJS](#MappedJS)</code>
 
 <a name="new_MappedJS_new"></a>
 
-### new MappedJS(container, mapData, mapSettings, events, jasmine)
+### new MappedJS(container, mapData, mapSettings, events)
 Constructor
 
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
 **Params**
 
 - container <code>string</code> | <code>Object</code> <code> = &quot;\&quot;.mjs\&quot;&quot;</code> - Container, either string, jQuery-object or dom-object
 - mapData <code>string</code> | <code>Object</code> <code> = &quot;{}&quot;</code> - data of map tiles, can be json or path to file
 - mapSettings <code>Object</code> <code> = {}</code> - settings for map, must be json
 - events <code>Object</code> <code> = {loaded:</code> - "mjs-loaded"} - List of events
-- jasmine <code>Boolean</code> <code> = false</code> - Option for jasmine tests
 
 <a name="MappedJS+initializeSettings"></a>
 
@@ -526,7 +904,7 @@ Constructor
 initializes the settings and handles errors
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
 **Params**
 
 - container <code>string</code> | <code>Object</code> - Container, either string, jQuery-object or dom-object
@@ -538,7 +916,7 @@ initializes the settings and handles errors
 initializes the data, asynchronous
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
 **Params**
 
 - mapData <code>Object</code> - data of map tiles, can be json or path to file
@@ -550,28 +928,125 @@ initializes the data, asynchronous
 initializes Map module
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+<a name="MappedJS+getAbsolutePosition"></a>
+
+### mappedJS.getAbsolutePosition(point) ⇒ <code>[Point](#Point)</code>
+get absolute position of a point
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[Point](#Point)</code> - absolute position to viewport  
+**Params**
+
+- point <code>[Point](#Point)</code> - specified relative position
+
 <a name="MappedJS+bindEvents"></a>
 
 ### mappedJS.bindEvents() ⇒ <code>[MappedJS](#MappedJS)</code>
 binds all events to handlers
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+<a name="MappedJS+momentumAccerlation"></a>
+
+### mappedJS.momentumAccerlation(velocity) ⇒ <code>[MappedJS](#MappedJS)</code>
+momentum flicking
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+**Params**
+
+- velocity <code>number</code> - speed
+
+<a name="MappedJS+triggerMomentum"></a>
+
+### mappedJS.triggerMomentum(steps, timing, change) ⇒ <code>[MappedJS](#MappedJS)</code>
+recursive momentum handler
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+**Params**
+
+- steps <code>number</code> - current step (decreasing)
+- timing <code>number</code> - time for step
+- change <code>[Point](#Point)</code> - distance
+
+<a name="MappedJS+moveViewByMomentum"></a>
+
+### mappedJS.moveViewByMomentum(delta) ⇒ <code>[MappedJS](#MappedJS)</code>
+move by delta momentum
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+**Params**
+
+- delta <code>[Point](#Point)</code> - delta of x/y
+
+<a name="MappedJS+zoom"></a>
+
+### mappedJS.zoom(factor, position) ⇒ <code>[MappedJS](#MappedJS)</code>
+handles zoom by factor and position
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+**Params**
+
+- factor <code>number</code> - difference in zoom scale
+- position <code>[Point](#Point)</code> - position to zoom to
+
 <a name="MappedJS+resizeHandler"></a>
 
 ### mappedJS.resizeHandler() ⇒ <code>[MappedJS](#MappedJS)</code>
 handles resizing of window
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
 <a name="MappedJS+loadingFinished"></a>
 
 ### mappedJS.loadingFinished() ⇒ <code>[MappedJS](#MappedJS)</code>
 called when loading and initialization is finished
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+<a name="Marker"></a>
+
+## Marker
+**Kind**: global class  
+
+* [Marker](#Marker)
+    * [new Marker(data, _instance)](#new_Marker_new)
+    * [.addMarkerToDOM($container)](#Marker+addMarkerToDOM) ⇒ <code>Object</code>
+    * [.positionMarker()](#Marker+positionMarker) ⇒ <code>[Marker](#Marker)</code>
+
+<a name="new_Marker_new"></a>
+
+### new Marker(data, _instance)
+Constructor
+
+**Returns**: <code>[Marker](#Marker)</code> - - instance of Marker for chaining  
+**Params**
+
+- data <code>Object</code> - = DataEnrichment.DATA_MARKER - enriched data
+- _instance <code>[View](#View)</code> <code> = </code> - = parent instance - instance of parent view
+
+<a name="Marker+addMarkerToDOM"></a>
+
+### marker.addMarkerToDOM($container) ⇒ <code>Object</code>
+adds a marker to the DOM
+
+**Kind**: instance method of <code>[Marker](#Marker)</code>  
+**Returns**: <code>Object</code> - jQuery-selector of append markup  
+**Params**
+
+- $container <code>Object</code> - container to append to (jQuery selector)
+
+<a name="Marker+positionMarker"></a>
+
+### marker.positionMarker() ⇒ <code>[Marker](#Marker)</code>
+set initial position of this marker
+
+**Kind**: instance method of <code>[Marker](#Marker)</code>  
+**Returns**: <code>[Marker](#Marker)</code> - - instance of Marker for chaining  
 <a name="Point"></a>
 
 ## Point
@@ -1314,7 +1789,7 @@ check if tiles are equal
 **Kind**: global class  
 
 * [TileMap](#TileMap)
-    * [new TileMap(container, tilesData, settings)](#new_TileMap_new)
+    * [new TileMap(container, tilesData, settings, debug)](#new_TileMap_new)
     * _instance_
         * [.left](#TileMap+left) ⇒ <code>number</code>
         * [.top](#TileMap+top) ⇒ <code>number</code>
@@ -1334,7 +1809,7 @@ check if tiles are equal
 
 <a name="new_TileMap_new"></a>
 
-### new TileMap(container, tilesData, settings)
+### new TileMap(container, tilesData, settings, debug)
 Constructor
 
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
@@ -1343,6 +1818,7 @@ Constructor
 - container <code>Object</code> - jQuery-object holding the container
 - tilesData <code>Object</code> <code> = {}</code> - json object representing data of TileMap
 - settings <code>Object</code> <code> = {}</code> - json object representing settings of TileMap
+- debug <code>Boolean</code> <code> = false</code> - Option for enabling debug-mode
 
 <a name="TileMap+left"></a>
 
@@ -1446,31 +1922,49 @@ name of marker data in data.json
 **Kind**: global class  
 
 * [View](#View)
-    * [new View(settings, viewport, mapView, bounds, center, data)](#new_View_new)
+    * [new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom, debug)](#new_View_new)
     * [.distortionFactor](#View+distortionFactor) ⇒ <code>number</code>
     * [.offsetToCenter](#View+offsetToCenter)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
+    * [.pixelPerLatLng](#View+pixelPerLatLng) ⇒ <code>[Point](#Point)</code>
+    * [.mainLoop()](#View+mainLoop)
     * [.loadThumb()](#View+loadThumb) ⇒ <code>[View](#View)</code>
     * [.convertPointToLatLng(point)](#View+convertPointToLatLng) ⇒ <code>[LatLng](#LatLng)</code>
+    * [.setLatLngToPosition(latlng, position)](#View+setLatLngToPosition) ⇒ <code>[View](#View)</code>
     * [.convertLatLngToPoint(latlng)](#View+convertLatLngToPoint) ⇒ <code>[Point](#Point)</code>
+    * [.getDeltaXToCenter(pos)](#View+getDeltaXToCenter) ⇒ <code>number</code>
+    * [.zoom(factor, pos)](#View+zoom) ⇒ <code>[View](#View)</code>
+    * [.getDistortionFactorForLatitude(latlng)](#View+getDistortionFactorForLatitude) ⇒ <code>number</code>
+    * [.calculateNewCenter()](#View+calculateNewCenter) ⇒ <code>[View](#View)</code>
     * [.moveView(pos)](#View+moveView) ⇒ <code>[View](#View)</code>
     * [.draw()](#View+draw) ⇒ <code>[View](#View)</code>
+    * [.drawVisibleTiles()](#View+drawVisibleTiles) ⇒ <code>[View](#View)</code>
+    * [.drawThumbnail()](#View+drawThumbnail) ⇒ <code>[View](#View)</code>
     * [.initializeTiles()](#View+initializeTiles) ⇒ <code>[View](#View)</code>
+    * [.appendMarkerContainerToDom($container)](#View+appendMarkerContainerToDom) ⇒ <code>[View](#View)</code>
+    * [.enrichMarkerData(markerData, $container)](#View+enrichMarkerData) ⇒ <code>Object</code>
+    * [.initializeMarkers(markerData, $container)](#View+initializeMarkers) ⇒ <code>[View](#View)</code>
+    * [.repositionMarkerContainer()](#View+repositionMarkerContainer) ⇒ <code>[View](#View)</code>
 
 <a name="new_View_new"></a>
 
-### new View(settings, viewport, mapView, bounds, center, data)
+### new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom, debug)
 Constructor
 
-**Returns**: <code>[View](#View)</code> - Instance of View  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
 **Params**
 
-- settings <code>Object</code> - the settings Object
 - viewport <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - current representation of viewport
 - mapView <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - current representation of map
 - bounds <code>[Bounds](#Bounds)</code> - = new Bounds() - current bounds of map
 - center <code>[LatLng](#LatLng)</code> - = new LatLng() - current center of map
-- data <code>Object</code> - = {} - data of current map
+- data <code>Object</code> - = {} - tile data of current map
+- markerData <code>Object</code> - = {} - marker data of current map
+- $container <code>Object</code> - = null - parent container for markers
+- context <code>Object</code> - = null - canvas context for drawing
+- maxZoom <code>number</code> - = 1.5 - maximal zoom of view
+- minZoom <code>number</code> - = 0.8 - minimal zoom of view
+- debug <code>Boolean</code> <code> = false</code> - Option for enabling debug-mode
 
 <a name="View+distortionFactor"></a>
 
@@ -1492,6 +1986,19 @@ get all visible tiles
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>array</code> - all tiles that are currently visible  
+<a name="View+pixelPerLatLng"></a>
+
+### view.pixelPerLatLng ⇒ <code>[Point](#Point)</code>
+how many pixels per lat and lng
+
+**Kind**: instance property of <code>[View](#View)</code>  
+**Returns**: <code>[Point](#Point)</code> - pixels per lat/lng  
+<a name="View+mainLoop"></a>
+
+### view.mainLoop()
+main draw call
+
+**Kind**: instance method of <code>[View](#View)</code>  
 <a name="View+loadThumb"></a>
 
 ### view.loadThumb() ⇒ <code>[View](#View)</code>
@@ -1510,6 +2017,18 @@ converts a Point to LatLng in view
 
 - point <code>[Point](#Point)</code> - specified point to be converted
 
+<a name="View+setLatLngToPosition"></a>
+
+### view.setLatLngToPosition(latlng, position) ⇒ <code>[View](#View)</code>
+set specified lat/lng to position x/y
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+**Params**
+
+- latlng <code>[LatLng](#LatLng)</code> - specified latlng to be set Point to
+- position <code>[Point](#Point)</code> - specified position to set LatLng to
+
 <a name="View+convertLatLngToPoint"></a>
 
 ### view.convertLatLngToPoint(latlng) ⇒ <code>[Point](#Point)</code>
@@ -1521,6 +2040,47 @@ converts a LatLng to Point in view
 
 - latlng <code>[LatLng](#LatLng)</code> - specified latlng to be converted
 
+<a name="View+getDeltaXToCenter"></a>
+
+### view.getDeltaXToCenter(pos) ⇒ <code>number</code>
+receive relative Position to center of viewport
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>number</code> - delta of point to center of viewport  
+**Params**
+
+- pos <code>[Point](#Point)</code> - specified position
+
+<a name="View+zoom"></a>
+
+### view.zoom(factor, pos) ⇒ <code>[View](#View)</code>
+zooming handler
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+**Params**
+
+- factor <code>number</code> - increase/decrease factor
+- pos <code>[Point](#Point)</code> - Position to zoom to
+
+<a name="View+getDistortionFactorForLatitude"></a>
+
+### view.getDistortionFactorForLatitude(latlng) ⇒ <code>number</code>
+get distortion factor for specified latitude
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>number</code> - distortion factor  
+**Params**
+
+- latlng <code>[LatLng](#LatLng)</code> - lat/lng position
+
+<a name="View+calculateNewCenter"></a>
+
+### view.calculateNewCenter() ⇒ <code>[View](#View)</code>
+update center position of view
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
 <a name="View+moveView"></a>
 
 ### view.moveView(pos) ⇒ <code>[View](#View)</code>
@@ -1538,14 +2098,70 @@ moves the view's current position by pos
 Handles draw of visible elements
 
 **Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+<a name="View+drawVisibleTiles"></a>
+
+### view.drawVisibleTiles() ⇒ <code>[View](#View)</code>
+draws all visible tiles
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+<a name="View+drawThumbnail"></a>
+
+### view.drawThumbnail() ⇒ <code>[View](#View)</code>
+draws the thumbnail
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
 <a name="View+initializeTiles"></a>
 
 ### view.initializeTiles() ⇒ <code>[View](#View)</code>
 initializes tiles
 
 **Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+<a name="View+appendMarkerContainerToDom"></a>
+
+### view.appendMarkerContainerToDom($container) ⇒ <code>[View](#View)</code>
+append marker container to DOM
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+**Params**
+
+- $container <code>Object</code> - jQuery-selector
+
+<a name="View+enrichMarkerData"></a>
+
+### view.enrichMarkerData(markerData, $container) ⇒ <code>Object</code>
+enrich marker data
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>Object</code> - enriched marker data  
+**Params**
+
+- markerData <code>Object</code> - data of markers
+- $container <code>Object</code> - jQuery-selector
+
+<a name="View+initializeMarkers"></a>
+
+### view.initializeMarkers(markerData, $container) ⇒ <code>[View](#View)</code>
+initializes all markers
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+**Params**
+
+- markerData <code>Object</code> - data of all markers
+- $container <code>Object</code> - jQuery-selector
+
+<a name="View+repositionMarkerContainer"></a>
+
+### view.repositionMarkerContainer() ⇒ <code>[View](#View)</code>
+reposition marker container
+
+**Kind**: instance method of <code>[View](#View)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
 <a name="instance"></a>
 
 ## instance : <code>[Publisher](#Publisher)</code>

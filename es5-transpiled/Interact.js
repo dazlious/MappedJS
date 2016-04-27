@@ -101,16 +101,34 @@
             get: function get() {
                 return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
             }
+
+            /**
+             * get time difference to last
+             * @return {number} difference
+             */
+
         }, {
             key: 'timeToLastMove',
             get: function get() {
                 return this.data.time.end - this.data.time.last;
             }
+
+            /**
+             * get time difference to start
+             * @return {number} difference
+             */
+
         }, {
             key: 'time',
             get: function get() {
                 return this.data.time.end - this.data.time.start;
             }
+
+            /**
+             * clones the data object
+             * @return {Object} data object
+             */
+
         }, {
             key: 'dataClone',
             get: function get() {
@@ -181,6 +199,12 @@
             this.init(this.settings.container).bindEvents();
         }
 
+        /**
+         * get the default settings
+         * @return {Object} settings
+         */
+
+
         _createClass(Interact, [{
             key: 'getDefaultSettings',
             value: function getDefaultSettings() {
@@ -205,6 +229,12 @@
                     events: this.getDefaultEventNames()
                 };
             }
+
+            /**
+             * get default callbacks
+             * @return {Object} callbacks
+             */
+
         }, {
             key: 'getDefaultCallbacks',
             value: function getDefaultCallbacks() {
@@ -221,6 +251,12 @@
                     pinch: null
                 };
             }
+
+            /**
+             * get default eventnames
+             * @return {Object} eventnames
+             */
+
         }, {
             key: 'getDefaultEventNames',
             value: function getDefaultEventNames() {
@@ -244,6 +280,12 @@
                     scroll: this.scrollEvent
                 };
             }
+
+            /**
+             * get default data
+             * @return {Object} data
+             */
+
         }, {
             key: 'getDefaultData',
             value: function getDefaultData() {
@@ -385,6 +427,13 @@
                 this.$container.on(this.settings.events.scroll, this.scrollHandler.bind(this)).on(this.settings.events.start.mouse, this.startHandler.bind(this)).on(this.settings.events.move.mouse, this.moveHandler.bind(this)).on(this.settings.events.end.mouse, this.endHandler.bind(this)).on(this.settings.events.leave.mouse, this.endHandler.bind(this));
                 return this;
             }
+
+            /**
+             * pre handle all events
+             * @param  {Object} event - original event of Vanilla JS
+             * @return {Object} normalized jQuery-fixed event
+             */
+
         }, {
             key: 'preHandle',
             value: function preHandle(event) {
@@ -427,11 +476,25 @@
 
                 return false;
             }
+
+            /**
+             * check if event is a PointerEvent (IE)
+             * @param  {Object} event - original event of Vanilla JS
+             * @return {Boolean} Whether event is PointerEvent
+             */
+
         }, {
             key: 'isPointerEvent',
             value: function isPointerEvent(e) {
                 return this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent);
             }
+
+            /**
+             * calculation to be made at start-handler
+             * @param  {Object} e - jQuery-Event-Object
+             * @return {Object} calculated data
+             */
+
         }, {
             key: 'calculateStart',
             value: function calculateStart(e) {
@@ -456,6 +519,14 @@
                     return this.handleTouchEventStart(data, e);
                 }
             }
+
+            /**
+             * handle PointerEvent calculations
+             * @param  {Object} data - current data
+             * @param  {Object} e - jQuery-Event-Object
+             * @return {Object} manipulated enriched data
+             */
+
         }, {
             key: 'handlePointerEventStart',
             value: function handlePointerEventStart(data, e) {
@@ -466,6 +537,14 @@
                     return _jquery2.default.extend(true, data, this.handleMultitouchStart(this.getPointerArray()));
                 }
             }
+
+            /**
+             * handle TouchEvent calculations for start
+             * @param  {Object} data - current data
+             * @param  {Object} e - jQuery-Event-Object
+             * @return {Object} manipulated enriched data
+             */
+
         }, {
             key: 'handleTouchEventStart',
             value: function handleTouchEventStart(data, e) {
@@ -477,6 +556,12 @@
                 }
                 return data;
             }
+
+            /**
+             * get array of pointers (IE)
+             * @return {Object} array of pointerIDs
+             */
+
         }, {
             key: 'getPointerArray',
             value: function getPointerArray() {
@@ -488,6 +573,13 @@
                 }
                 return pointerPos;
             }
+
+            /**
+             * handles multitouch for start
+             * @param  {Object} positionsArray - array of positions
+             * @return {Object} manipulated enriched data
+             */
+
         }, {
             key: 'handleMultitouchStart',
             value: function handleMultitouchStart(positionsArray) {
@@ -501,6 +593,13 @@
                     }
                 };
             }
+
+            /**
+             * handles singletouch for start
+             * @param  {Point} position - position of touch
+             * @return {Object} manipulated enriched data
+             */
+
         }, {
             key: 'handleSingletouchStart',
             value: function handleSingletouchStart(position) {
@@ -510,6 +609,13 @@
                     }
                 };
             }
+
+            /**
+             * handle action at start event handler
+             * @param  {String} action - last action made
+             * @return {Interact} instance of Interact for chaining
+             */
+
         }, {
             key: 'takeActionStart',
             value: function takeActionStart(action) {
@@ -529,6 +635,7 @@
                     default:
                         break;
                 }
+                return this;
             }
 
             /**
@@ -550,13 +657,28 @@
                 this.takeActionStart(this.data.last.action);
                 return false;
             }
+
+            /**
+             * clear timeout helper
+             * @param  {Object} timeout - timeout object to be cleared
+             * @return {Interact} instance of Interact for chaining
+             */
+
         }, {
             key: 'clearTimeouts',
             value: function clearTimeouts(timeout) {
                 if (timeout) {
                     timeout = clearTimeout(timeout);
                 }
+                return this;
             }
+
+            /**
+             * calculation to be made at move-handler
+             * @param  {Object} e - jQuery-Event-Object
+             * @return {Object} calculated data
+             */
+
         }, {
             key: 'calculateMove',
             value: function calculateMove(e) {
@@ -580,6 +702,14 @@
                     return this.handleTouchEventMove(data, e);
                 }
             }
+
+            /**
+             * handle PointerEvent at moving (IE)
+             * @param  {Object} data - specified input data
+             * @param  {Object} e - jQuery-Event-Object
+             * @return {Object} manipulated enriched data
+             */
+
         }, {
             key: 'handlePointerEventMove',
             value: function handlePointerEventMove(data, e) {
@@ -591,6 +721,14 @@
                     return _jquery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
                 }
             }
+
+            /**
+             * handle TouchEvent calculations for move
+             * @param  {Object} data - current data
+             * @param  {Object} e - jQuery-Event-Object
+             * @return {Object} manipulated enriched data
+             */
+
         }, {
             key: 'handleTouchEventMove',
             value: function handleTouchEventMove(data, e) {
@@ -602,6 +740,13 @@
                 }
                 return data;
             }
+
+            /**
+             * handles multitouch for move
+             * @param  {Object} positionsArray - array of positions
+             * @return {Object} manipulated enriched data
+             */
+
         }, {
             key: 'handleMultitouchMove',
             value: function handleMultitouchMove(positionsArray) {
@@ -616,6 +761,13 @@
                     multitouch: true
                 };
             }
+
+            /**
+             * handles singletouch for move
+             * @param  {Point} position - position
+             * @return {Object} manipulated enriched data
+             */
+
         }, {
             key: 'handleSingletouchMove',
             value: function handleSingletouchMove(position) {
@@ -665,6 +817,12 @@
 
                 return false;
             }
+
+            /**
+             * handles pinch and zoom
+             * @return {Interact} instance of Interact for chaining
+             */
+
         }, {
             key: 'handlePinchAndZoom',
             value: function handlePinchAndZoom() {
@@ -681,12 +839,27 @@
                     }
                     this.data.last.distance = this.data.distance;
                 }
+                return this;
             }
+
+            /**
+             * check if position has been changed
+             * @param  {Object} e - jQuery-Event-Object
+             * @return {Boolean} Whether or not position has changed
+             */
+
         }, {
             key: 'positionDidNotChange',
             value: function positionDidNotChange(e) {
                 return this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position);
             }
+
+            /**
+             * calculation to be made at end-handler
+             * @param  {Object} e - jQuery-Event-Object
+             * @return {Object} calculated data
+             */
+
         }, {
             key: 'calculateEnd',
             value: function calculateEnd(e) {
@@ -711,6 +884,13 @@
                     }
                 }
             }
+
+            /**
+             * handles singletouch for end
+             * @param  {Object} position - position
+             * @return {Object} manipulated enriched data
+             */
+
         }, {
             key: 'handleSingletouchEnd',
             value: function handleSingletouchEnd(position) {
@@ -720,6 +900,13 @@
                     }
                 };
             }
+
+            /**
+             * handle action at end event handler
+             * @param  {String} action - last action made
+             * @return {Interact} instance of Interact for chaining
+             */
+
         }, {
             key: 'takeActionEnd',
             value: function takeActionEnd(action) {
@@ -777,6 +964,12 @@
                 this.data.last.position = null;
                 return false;
             }
+
+            /**
+             * handles flick and swipe events
+             * @return {Interact} instance of Interact for chaining
+             */
+
         }, {
             key: 'handleSwipeAndFlick',
             value: function handleSwipeAndFlick() {
@@ -804,7 +997,16 @@
                         this.eventCallback(this.settings.callbacks.flick, this.dataClone);
                     }
                 }
+
+                return this;
             }
+
+            /**
+             * handles multitouch for end
+             * @param  {e} e - jQuery-Event-Object
+             * @return {Interact} instance of Interact for chaining
+             */
+
         }, {
             key: 'handleMultitouchEnd',
             value: function handleMultitouchEnd(e) {
@@ -828,7 +1030,14 @@
                     }
                     this.data.position.move = null;
                 }
+                return this;
             }
+
+            /**
+             * balances pinching after release of finger
+             * @return {Interact} instance of Interact for chaining
+             */
+
         }, {
             key: 'pinchBalance',
             value: function pinchBalance() {
@@ -839,6 +1048,7 @@
                         this.data.last.distance = null;
                     }.bind(this), this.settings.pinchBalanceTime);
                 }
+                return this;
             }
 
             /**
@@ -961,21 +1171,53 @@
 
                 return direction;
             }
+
+            /**
+             * checks if direction is down
+             * @param  {number} axis - what axis is used
+             * @param  {Object} event - Vanilla JS event
+             * @return {Boolean} Whether or not direction is down
+             */
+
         }, {
             key: 'isDownDirection',
             value: function isDownDirection(axis, event) {
                 return event.deltaY > 0 || !event.deltaY && event.wheelDeltaY < 0 || axis === 2 && event.detail > 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) < 0;
             }
+
+            /**
+             * checks if direction is up
+             * @param  {number} axis - what axis is used
+             * @param  {Object} event - Vanilla JS event
+             * @return {Boolean} Whether or not direction is up
+             */
+
         }, {
             key: 'isUpDirection',
             value: function isUpDirection(axis, event) {
                 return event.deltaY < 0 || !event.deltaY && event.wheelDeltaY > 0 || axis === 2 && event.detail < 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) > 0;
             }
+
+            /**
+             * checks if direction is right
+             * @param  {number} axis - what axis is used
+             * @param  {Object} event - Vanilla JS event
+             * @return {Boolean} Whether or not direction is right
+             */
+
         }, {
             key: 'isRightDirection',
             value: function isRightDirection(axis, event) {
                 return event.deltaX > 0 || !event.deltaX && event.wheelDeltaX > 0 || axis === 1 && event.detail > 0;
             }
+
+            /**
+             * checks if direction is left
+             * @param  {number} axis - what axis is used
+             * @param  {Object} event - Vanilla JS event
+             * @return {Boolean} Whether or not direction is left
+             */
+
         }, {
             key: 'isLeftDirection',
             value: function isLeftDirection(axis, event) {

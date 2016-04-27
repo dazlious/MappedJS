@@ -91,8 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
 	     * @param  {Object} mapSettings={} - settings for map, must be json
 	     * @param  {Object} events={loaded: "mjs-loaded"} - List of events
-	     * @param  {Boolean} jasmine=false - Option for jasmine tests
-	     * @return {MappedJS} instance of MappedJS
+	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
 
 	    function MappedJS(_ref) {
@@ -128,7 +127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * initializes the settings and handles errors
 	     * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
 	     * @param  {object} events - List of events
-	     * @return {MappedJS} instance of MappedJS
+	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
 
 
@@ -161,7 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * initializes the data, asynchronous
 	         * @param  {Object} mapData - data of map tiles, can be json or path to file
 	         * @param  {Function} cb - called, when data is received
-	         * @return {MappedJS} instance of MappedJS
+	         * @return {MappedJS} instance of MappedJS for chaining
 	         */
 
 	    }, {
@@ -182,7 +181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * initializes Map module
-	         * @return {MappedJS} instance of MappedJS
+	         * @return {MappedJS} instance of MappedJS for chaining
 	         */
 
 	    }, {
@@ -196,6 +195,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	            return this;
 	        }
+
+	        /**
+	         * get absolute position of a point
+	         * @param  {Point} point - specified relative position
+	         * @return {Point} absolute position to viewport
+	         */
+
 	    }, {
 	        key: 'getAbsolutePosition',
 	        value: function getAbsolutePosition(point) {
@@ -204,7 +210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * binds all events to handlers
-	         * @return {MappedJS} instance of MappedJS
+	         * @return {MappedJS} instance of MappedJS for chaining
 	         */
 
 	    }, {
@@ -242,12 +248,29 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            return this;
 	        }
+
+	        /**
+	         * momentum flicking
+	         * @param  {number} velocity - speed
+	         * @return {MappedJS} instance of MappedJS for chaining
+	         */
+
 	    }, {
 	        key: 'momentumAccerlation',
 	        value: function momentumAccerlation(velocity) {
 	            this.maxMomentumSteps = 30;
 	            this.triggerMomentum(this.maxMomentumSteps, 10, velocity.multiply(-1));
+	            return this;
 	        }
+
+	        /**
+	         * recursive momentum handler
+	         * @param  {number} steps - current step (decreasing)
+	         * @param  {number} timing - time for step
+	         * @param  {Point} change - distance
+	         * @return {MappedJS} instance of MappedJS for chaining
+	         */
+
 	    }, {
 	        key: 'triggerMomentum',
 	        value: function triggerMomentum(steps, timing, change) {
@@ -259,13 +282,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.triggerMomentum(steps, timing, change);
 	                }
 	            }.bind(this), timing);
+	            return this;
 	        }
+
+	        /**
+	         * move by delta momentum
+	         * @param  {Point} delta - delta of x/y
+	         * @return {MappedJS} instance of MappedJS for chaining
+	         */
+
 	    }, {
 	        key: 'moveViewByMomentum',
 	        value: function moveViewByMomentum(delta) {
 	            this.tileMap.view.moveView(delta);
 	            this.tileMap.view.drawIsNeeded = true;
+	            return this;
 	        }
+
+	        /**
+	         * handles zoom by factor and position
+	         * @param  {number} factor - difference in zoom scale
+	         * @param  {Point} position - position to zoom to
+	         * @return {MappedJS} instance of MappedJS for chaining
+	         */
+
 	    }, {
 	        key: 'zoom',
 	        value: function zoom(factor, position) {
@@ -273,11 +313,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.tileMap.view.zoom(factor, position);
 	                this.tileMap.view.drawIsNeeded = true;
 	            }
+	            return this;
 	        }
 
 	        /**
 	         * handles resizing of window
-	         * @return {MappedJS} instance of MappedJS
+	         * @return {MappedJS} instance of MappedJS for chaining
 	         */
 
 	    }, {
@@ -289,7 +330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * called when loading and initialization is finished
-	         * @return {MappedJS} instance of MappedJS
+	         * @return {MappedJS} instance of MappedJS for chaining
 	         */
 
 	    }, {
@@ -388,6 +429,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {Object} container - jQuery-object holding the container
 	         * @param  {Object} tilesData={} - json object representing data of TileMap
 	         * @param  {Object} settings={} - json object representing settings of TileMap
+	         * @param  {Boolean} debug=false - Option for enabling debug-mode
 	         * @return {TileMap} instance of TileMap
 	         */
 
@@ -634,6 +676,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return this.viewport.intersects(newTile);
 	            }, this);
 	        }
+
+	        /**
+	         * how many pixels per lat and lng
+	         * @return {Point} pixels per lat/lng
+	         */
+
 	    }, {
 	        key: 'pixelPerLatLng',
 	        get: function get() {
@@ -642,13 +690,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * Constructor
-	         * @param  {Object} settings - the settings Object
 	         * @param  {Rectangle} viewport = new Rectangle() - current representation of viewport
 	         * @param  {Rectangle} mapView = new Rectangle() - current representation of map
 	         * @param  {Bounds} bounds = new Bounds() - current bounds of map
 	         * @param  {LatLng} center = new LatLng() - current center of map
-	         * @param  {Object} data = {} - data of current map
-	         * @return {View} Instance of View
+	         * @param  {Object} data = {} - tile data of current map
+	         * @param  {Object} markerData = {} - marker data of current map
+	         * @param  {Object} $container = null - parent container for markers
+	         * @param  {Object} context = null - canvas context for drawing
+	         * @param  {number} maxZoom = 1.5 - maximal zoom of view
+	         * @param  {number} minZoom = 0.8 - minimal zoom of view
+	         * @param  {Boolean} debug=false - Option for enabling debug-mode
+	         * @return {View} instance of View for chaining
 	         */
 
 	    }]);
@@ -722,6 +775,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
+	    /**
+	     * main draw call
+	     */
+
+
 	    _createClass(View, [{
 	        key: 'mainLoop',
 	        value: function mainLoop() {
@@ -768,6 +826,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
 	            return new _LatLng.LatLng(this.bounds.nw.lat - point.y, point.x + this.bounds.nw.lng).multiply(-1);
 	        }
+
+	        /**
+	         * set specified lat/lng to position x/y
+	         * @param {LatLng} latlng - specified latlng to be set Point to
+	         * @param {Point} position - specified position to set LatLng to
+	         * @return {View} instance of View for chaining
+	         */
+
 	    }, {
 	        key: 'setLatLngToPosition',
 	        value: function setLatLngToPosition(latlng, position) {
@@ -777,6 +843,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.currentView.translate(0, diff.y);
 	            this.calculateNewCenter();
 	            this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
+	            return this;
 	        }
 
 	        /**
@@ -792,6 +859,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            relativePosition.multiply(this.pixelPerLatLng.y, this.pixelPerLatLng.x);
 	            return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
 	        }
+
+	        /**
+	         * receive relative Position to center of viewport
+	         * @param  {Point} pos - specified position
+	         * @return {number} delta of point to center of viewport
+	         */
+
 	    }, {
 	        key: 'getDeltaXToCenter',
 	        value: function getDeltaXToCenter(pos) {
@@ -800,10 +874,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var delta = distanceToCenter * this.offsetToCenter;
 	            return delta / this.distortionFactor;
 	        }
+
+	        /**
+	         * zooming handler
+	         * @param  {number} factor - increase/decrease factor
+	         * @param  {Point} pos - Position to zoom to
+	         * @return {View} instance of View for chaining
+	         */
+
 	    }, {
 	        key: 'zoom',
-	        value: function zoom(scale, pos) {
-	            this.zoomFactor = Math.max(Math.min(this.zoomFactor + scale, this.maxZoom), this.minZoom);
+	        value: function zoom(factor, pos) {
+	            this.zoomFactor = Math.max(Math.min(this.zoomFactor + factor, this.maxZoom), this.minZoom);
 	            var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
 	            mapPosition.x += this.getDeltaXToCenter(pos);
 	            var latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
@@ -813,17 +895,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.setLatLngToPosition(latlngPosition, pos);
 	            this.moveView(new _Point.Point());
+	            return this;
 	        }
+
+	        /**
+	         * get distortion factor for specified latitude
+	         * @param  {LatLng} latlng - lat/lng position
+	         * @return {number} distortion factor
+	         */
+
 	    }, {
 	        key: 'getDistortionFactorForLatitude',
 	        value: function getDistortionFactorForLatitude(latlng) {
 	            return Math.cos(_Helper.Helper.toRadians(latlng.lat));
 	        }
+
+	        /**
+	         * update center position of view
+	         * @return {View} instance of View for chaining
+	         */
+
 	    }, {
 	        key: 'calculateNewCenter',
 	        value: function calculateNewCenter() {
 	            var newCenter = this.viewport.center.substract(this.currentView.topLeft);
 	            this.center = this.convertPointToLatLng(newCenter);
+	            return this;
 	        }
 
 	        /**
@@ -872,7 +969,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * Handles draw of visible elements
-	         * @return {View} instance of View
+	         * @return {View} instance of View for chaining
 	         */
 
 	    }, {
@@ -880,26 +977,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function draw() {
 	            this.drawThumbnail();
 	            this.drawVisibleTiles();
-	            this.repositionMarkers();
+	            this.repositionMarkerContainer();
 	            return this;
 	        }
+
+	        /**
+	         * draws all visible tiles
+	         * @return {View} instance of View for chaining
+	         */
+
 	    }, {
 	        key: 'drawVisibleTiles',
 	        value: function drawVisibleTiles() {
 	            _Helper.Helper.forEach(this.visibleTiles, function (tile) {
 	                tile.draw();
 	            }.bind(this));
+	            return this;
 	        }
+
+	        /**
+	         * draws the thumbnail
+	         * @return {View} instance of View for chaining
+	         */
+
 	    }, {
 	        key: 'drawThumbnail',
 	        value: function drawThumbnail() {
 	            var rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
 	            this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
+	            return this;
 	        }
 
 	        /**
 	         * initializes tiles
-	         * @return {View} instance of View
+	         * @return {View} instance of View for chaining
 	         */
 
 	    }, {
@@ -912,12 +1023,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }.bind(this));
 	            return this;
 	        }
+
+	        /**
+	         * append marker container to DOM
+	         * @param  {Object} $container - jQuery-selector
+	         * @return {View} instance of View for chaining
+	         */
+
 	    }, {
 	        key: 'appendMarkerContainerToDom',
 	        value: function appendMarkerContainerToDom($container) {
 	            this.$markerContainer = (0, _jquery2.default)("<div class='marker-container' />");
 	            $container.append(this.$markerContainer);
+	            return this;
 	        }
+
+	        /**
+	         * enrich marker data
+	         * @param  {Object} markerData - data of markers
+	         * @param  {Object} $container - jQuery-selector
+	         * @return {Object} enriched marker data
+	         */
+
 	    }, {
 	        key: 'enrichMarkerData',
 	        value: function enrichMarkerData(markerData, $container) {
@@ -927,6 +1054,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }.bind(this));
 	            return markerData;
 	        }
+
+	        /**
+	         * initializes all markers
+	         * @param  {Object} markerData - data of all markers
+	         * @param  {Object} $container - jQuery-selector
+	         * @return {View} instance of View for chaining
+	         */
+
 	    }, {
 	        key: 'initializeMarkers',
 	        value: function initializeMarkers(markerData, $container) {
@@ -939,14 +1074,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return this;
 	        }
+
+	        /**
+	         * reposition marker container
+	         * @return {View} instance of View for chaining
+	         */
+
 	    }, {
-	        key: 'repositionMarkers',
-	        value: function repositionMarkers() {
-	            /*
-	            Helper.forEach(this.markers, function(marker) {
-	                marker.moveMarker();
-	            }.bind(this));
-	            */
+	        key: 'repositionMarkerContainer',
+	        value: function repositionMarkerContainer() {
 	            var newSize = this.currentView.getDistortedRect(this.distortionFactor);
 	            this.$markerContainer.css({
 	                "width": newSize.width + 'px',
@@ -954,11 +1090,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	                "left": newSize.left + this.offsetToCenter + 'px',
 	                "top": newSize.top + 'px'
 	            });
+	            return this;
 	        }
 	    }]);
 
 	    return View;
 	}();
+
+	/**
+	 * request animation frame browser polyfill
+	 * @return {Function} supported requestAnimationFrame-function
+	 */
+
 
 	window.requestAnimFrame = function () {
 	    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
@@ -1350,7 +1493,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	        /**
-	         * gets width of boundaries
+	         * get width of boundaries
 	         * @return {number} width of boundaries
 	         */
 	        get: function get() {
@@ -1358,7 +1501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * gets height of boundaries
+	         * get height of boundaries
 	         * @return {number} height of boundaries
 	         */
 
@@ -1369,7 +1512,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * gets size
+	         * get size
 	         * @return {Point} calculated Size of boundaries
 	         */
 
@@ -1383,7 +1526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Constructor
 	         * @param  {number} northWest = new LatLng() - representation of northWest boundary
 	         * @param  {number} southEast = new LatLng() - representation of southEast boundary
-	         * @return {Bounds} new instance of Bounds
+	         * @return {Bounds} instance of Bounds for chaining
 	         */
 
 	    }]);
@@ -2152,7 +2295,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * request json-data from given file and calls callback on success
 	     * @param  {string} filename - path to file
 	     * @param  {Function} callback - function called when data is loaded successfully
-	     * @return {Helper} Helper
+	     * @return {Helper} Helper object for chaining
 	     */
 	    requestJSON: function requestJSON(filename, callback) {
 	        _jquery2.default.ajax({
@@ -2174,7 +2317,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * loads an image and calls callback on success
 	     * @param {Function} cb - callback-function on success
-	     * @return {Helper} Helper
+	     * @return {Helper} Helper object for chaining
 	     */
 	    loadImage: function loadImage(path, cb) {
 	        var img = new Image();
@@ -2186,13 +2329,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	        img.src = path;
 	        return this;
 	    },
+	    /**
+	     * for each helper
+	     * @param  {Object[]} a - array to iterate over each value
+	     * @param  {Function} fn - callback for each object
+	     * @return {Helper} Helper object for chaining
+	     */
 	    forEach: function forEach(a, fn) {
 	        for (var i in a) {
 	            if (a[i] && typeof fn === "function") {
 	                fn(a[i], i);
 	            }
 	        }
+	        return this;
 	    },
+	    /**
+	     * formula for quadratic ease out
+	     * @param  {number} t - current time
+	     * @param  {Point} b - start value
+	     * @param  {Point} c - total difference to start
+	     * @param  {number} d - duration
+	     * @return {number} quadratic value at specific time
+	     */
 	    easeOutQuadratic: function easeOutQuadratic(t, b, c, d) {
 	        t /= d;
 	        return c.clone.multiply(-1 * t * (t - 2)).add(b);
@@ -2243,6 +2401,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var STATES = [{ value: 0, description: 'Loading' }, { value: 0, description: 'Initialized' }, { value: 1, description: 'Ready' }];
 
 	var Marker = exports.Marker = function () {
+
+	    /**
+	     * Constructor
+	     * @param  {Object} data = DataEnrichment.DATA_MARKER - enriched data
+	     * @param  {View} _instance = parent instance - instance of parent view
+	     * @return {Marker} - instance of Marker for chaining
+	     */
+
 	    function Marker() {
 	        var data = arguments.length <= 0 || arguments[0] === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : arguments[0];
 
@@ -2272,7 +2438,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.icon = this.addMarkerToDOM(this.instance.$markerContainer);
 
 	        this.positionMarker();
+
+	        return this;
 	    }
+
+	    /**
+	     * adds a marker to the DOM
+	     * @param {Object} $container - container to append to (jQuery selector)
+	     * @returns {Object} jQuery-selector of append markup
+	     */
+
 
 	    _createClass(Marker, [{
 	        key: 'addMarkerToDOM',
@@ -2291,6 +2466,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return icon;
 	        }
+
+	        /**
+	         * set initial position of this marker
+	         * @return {Marker} - instance of Marker for chaining
+	         */
+
 	    }, {
 	        key: 'positionMarker',
 	        value: function positionMarker() {
@@ -2303,6 +2484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    //transform: `translate3d(${p.x}px, ${p.y}px, 0)`
 	                });
 	            }
+	            return this;
 	        }
 	    }]);
 
@@ -2333,6 +2515,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var DataEnrichment = exports.DataEnrichment = {
+	    /**
+	     * enriches marker data with all needed data
+	     * @param  {object} data - specified data for marker
+	     * @param  {Function} cb - callback function, when enrichment is done
+	     * @return {DataEnrichment} DataEnrichment object for chaining
+	     */
 	    marker: function marker(data, cb) {
 
 	        var enrichedData = [];
@@ -2357,9 +2545,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (typeof cb === "function") {
 	            cb(enrichedData);
 	        }
+
+	        return this;
 	    }
 	};
 
+	/**
+	 * Default initial values for a Marker
+	 * @type {Object}
+	 */
 	DataEnrichment.DATA_MARKER = {
 	    icon: null,
 	    hover: false,
@@ -2447,16 +2641,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	            return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
 	        }
+
+	        /**
+	         * get time difference to last
+	         * @return {number} difference
+	         */
+
 	    }, {
 	        key: 'timeToLastMove',
 	        get: function get() {
 	            return this.data.time.end - this.data.time.last;
 	        }
+
+	        /**
+	         * get time difference to start
+	         * @return {number} difference
+	         */
+
 	    }, {
 	        key: 'time',
 	        get: function get() {
 	            return this.data.time.end - this.data.time.start;
 	        }
+
+	        /**
+	         * clones the data object
+	         * @return {Object} data object
+	         */
+
 	    }, {
 	        key: 'dataClone',
 	        get: function get() {
@@ -2527,6 +2739,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.init(this.settings.container).bindEvents();
 	    }
 
+	    /**
+	     * get the default settings
+	     * @return {Object} settings
+	     */
+
+
 	    _createClass(Interact, [{
 	        key: 'getDefaultSettings',
 	        value: function getDefaultSettings() {
@@ -2551,6 +2769,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                events: this.getDefaultEventNames()
 	            };
 	        }
+
+	        /**
+	         * get default callbacks
+	         * @return {Object} callbacks
+	         */
+
 	    }, {
 	        key: 'getDefaultCallbacks',
 	        value: function getDefaultCallbacks() {
@@ -2567,6 +2791,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                pinch: null
 	            };
 	        }
+
+	        /**
+	         * get default eventnames
+	         * @return {Object} eventnames
+	         */
+
 	    }, {
 	        key: 'getDefaultEventNames',
 	        value: function getDefaultEventNames() {
@@ -2590,6 +2820,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                scroll: this.scrollEvent
 	            };
 	        }
+
+	        /**
+	         * get default data
+	         * @return {Object} data
+	         */
+
 	    }, {
 	        key: 'getDefaultData',
 	        value: function getDefaultData() {
@@ -2731,6 +2967,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.$container.on(this.settings.events.scroll, this.scrollHandler.bind(this)).on(this.settings.events.start.mouse, this.startHandler.bind(this)).on(this.settings.events.move.mouse, this.moveHandler.bind(this)).on(this.settings.events.end.mouse, this.endHandler.bind(this)).on(this.settings.events.leave.mouse, this.endHandler.bind(this));
 	            return this;
 	        }
+
+	        /**
+	         * pre handle all events
+	         * @param  {Object} event - original event of Vanilla JS
+	         * @return {Object} normalized jQuery-fixed event
+	         */
+
 	    }, {
 	        key: 'preHandle',
 	        value: function preHandle(event) {
@@ -2773,11 +3016,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            return false;
 	        }
+
+	        /**
+	         * check if event is a PointerEvent (IE)
+	         * @param  {Object} event - original event of Vanilla JS
+	         * @return {Boolean} Whether event is PointerEvent
+	         */
+
 	    }, {
 	        key: 'isPointerEvent',
 	        value: function isPointerEvent(e) {
 	            return this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent);
 	        }
+
+	        /**
+	         * calculation to be made at start-handler
+	         * @param  {Object} e - jQuery-Event-Object
+	         * @return {Object} calculated data
+	         */
+
 	    }, {
 	        key: 'calculateStart',
 	        value: function calculateStart(e) {
@@ -2802,6 +3059,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    return this.handleTouchEventStart(data, e);
 	                }
 	        }
+
+	        /**
+	         * handle PointerEvent calculations
+	         * @param  {Object} data - current data
+	         * @param  {Object} e - jQuery-Event-Object
+	         * @return {Object} manipulated enriched data
+	         */
+
 	    }, {
 	        key: 'handlePointerEventStart',
 	        value: function handlePointerEventStart(data, e) {
@@ -2812,6 +3077,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return _jquery2.default.extend(true, data, this.handleMultitouchStart(this.getPointerArray()));
 	            }
 	        }
+
+	        /**
+	         * handle TouchEvent calculations for start
+	         * @param  {Object} data - current data
+	         * @param  {Object} e - jQuery-Event-Object
+	         * @return {Object} manipulated enriched data
+	         */
+
 	    }, {
 	        key: 'handleTouchEventStart',
 	        value: function handleTouchEventStart(data, e) {
@@ -2823,6 +3096,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            return data;
 	        }
+
+	        /**
+	         * get array of pointers (IE)
+	         * @return {Object} array of pointerIDs
+	         */
+
 	    }, {
 	        key: 'getPointerArray',
 	        value: function getPointerArray() {
@@ -2834,6 +3113,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return pointerPos;
 	        }
+
+	        /**
+	         * handles multitouch for start
+	         * @param  {Object} positionsArray - array of positions
+	         * @return {Object} manipulated enriched data
+	         */
+
 	    }, {
 	        key: 'handleMultitouchStart',
 	        value: function handleMultitouchStart(positionsArray) {
@@ -2847,6 +3133,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            };
 	        }
+
+	        /**
+	         * handles singletouch for start
+	         * @param  {Point} position - position of touch
+	         * @return {Object} manipulated enriched data
+	         */
+
 	    }, {
 	        key: 'handleSingletouchStart',
 	        value: function handleSingletouchStart(position) {
@@ -2856,6 +3149,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            };
 	        }
+
+	        /**
+	         * handle action at start event handler
+	         * @param  {String} action - last action made
+	         * @return {Interact} instance of Interact for chaining
+	         */
+
 	    }, {
 	        key: 'takeActionStart',
 	        value: function takeActionStart(action) {
@@ -2875,6 +3175,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                default:
 	                    break;
 	            }
+	            return this;
 	        }
 
 	        /**
@@ -2896,13 +3197,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.takeActionStart(this.data.last.action);
 	            return false;
 	        }
+
+	        /**
+	         * clear timeout helper
+	         * @param  {Object} timeout - timeout object to be cleared
+	         * @return {Interact} instance of Interact for chaining
+	         */
+
 	    }, {
 	        key: 'clearTimeouts',
 	        value: function clearTimeouts(timeout) {
 	            if (timeout) {
 	                timeout = clearTimeout(timeout);
 	            }
+	            return this;
 	        }
+
+	        /**
+	         * calculation to be made at move-handler
+	         * @param  {Object} e - jQuery-Event-Object
+	         * @return {Object} calculated data
+	         */
+
 	    }, {
 	        key: 'calculateMove',
 	        value: function calculateMove(e) {
@@ -2926,6 +3242,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    return this.handleTouchEventMove(data, e);
 	                }
 	        }
+
+	        /**
+	         * handle PointerEvent at moving (IE)
+	         * @param  {Object} data - specified input data
+	         * @param  {Object} e - jQuery-Event-Object
+	         * @return {Object} manipulated enriched data
+	         */
+
 	    }, {
 	        key: 'handlePointerEventMove',
 	        value: function handlePointerEventMove(data, e) {
@@ -2937,6 +3261,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return _jquery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
 	            }
 	        }
+
+	        /**
+	         * handle TouchEvent calculations for move
+	         * @param  {Object} data - current data
+	         * @param  {Object} e - jQuery-Event-Object
+	         * @return {Object} manipulated enriched data
+	         */
+
 	    }, {
 	        key: 'handleTouchEventMove',
 	        value: function handleTouchEventMove(data, e) {
@@ -2948,6 +3280,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return data;
 	        }
+
+	        /**
+	         * handles multitouch for move
+	         * @param  {Object} positionsArray - array of positions
+	         * @return {Object} manipulated enriched data
+	         */
+
 	    }, {
 	        key: 'handleMultitouchMove',
 	        value: function handleMultitouchMove(positionsArray) {
@@ -2962,6 +3301,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                multitouch: true
 	            };
 	        }
+
+	        /**
+	         * handles singletouch for move
+	         * @param  {Point} position - position
+	         * @return {Object} manipulated enriched data
+	         */
+
 	    }, {
 	        key: 'handleSingletouchMove',
 	        value: function handleSingletouchMove(position) {
@@ -3011,6 +3357,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            return false;
 	        }
+
+	        /**
+	         * handles pinch and zoom
+	         * @return {Interact} instance of Interact for chaining
+	         */
+
 	    }, {
 	        key: 'handlePinchAndZoom',
 	        value: function handlePinchAndZoom() {
@@ -3027,12 +3379,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	                this.data.last.distance = this.data.distance;
 	            }
+	            return this;
 	        }
+
+	        /**
+	         * check if position has been changed
+	         * @param  {Object} e - jQuery-Event-Object
+	         * @return {Boolean} Whether or not position has changed
+	         */
+
 	    }, {
 	        key: 'positionDidNotChange',
 	        value: function positionDidNotChange(e) {
 	            return this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position);
 	        }
+
+	        /**
+	         * calculation to be made at end-handler
+	         * @param  {Object} e - jQuery-Event-Object
+	         * @return {Object} calculated data
+	         */
+
 	    }, {
 	        key: 'calculateEnd',
 	        value: function calculateEnd(e) {
@@ -3057,6 +3424,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 	        }
+
+	        /**
+	         * handles singletouch for end
+	         * @param  {Object} position - position
+	         * @return {Object} manipulated enriched data
+	         */
+
 	    }, {
 	        key: 'handleSingletouchEnd',
 	        value: function handleSingletouchEnd(position) {
@@ -3066,6 +3440,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            };
 	        }
+
+	        /**
+	         * handle action at end event handler
+	         * @param  {String} action - last action made
+	         * @return {Interact} instance of Interact for chaining
+	         */
+
 	    }, {
 	        key: 'takeActionEnd',
 	        value: function takeActionEnd(action) {
@@ -3123,6 +3504,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.data.last.position = null;
 	            return false;
 	        }
+
+	        /**
+	         * handles flick and swipe events
+	         * @return {Interact} instance of Interact for chaining
+	         */
+
 	    }, {
 	        key: 'handleSwipeAndFlick',
 	        value: function handleSwipeAndFlick() {
@@ -3150,7 +3537,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.eventCallback(this.settings.callbacks.flick, this.dataClone);
 	                }
 	            }
+
+	            return this;
 	        }
+
+	        /**
+	         * handles multitouch for end
+	         * @param  {e} e - jQuery-Event-Object
+	         * @return {Interact} instance of Interact for chaining
+	         */
+
 	    }, {
 	        key: 'handleMultitouchEnd',
 	        value: function handleMultitouchEnd(e) {
@@ -3174,7 +3570,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                    this.data.position.move = null;
 	                }
+	            return this;
 	        }
+
+	        /**
+	         * balances pinching after release of finger
+	         * @return {Interact} instance of Interact for chaining
+	         */
+
 	    }, {
 	        key: 'pinchBalance',
 	        value: function pinchBalance() {
@@ -3185,6 +3588,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this.data.last.distance = null;
 	                }.bind(this), this.settings.pinchBalanceTime);
 	            }
+	            return this;
 	        }
 
 	        /**
@@ -3307,21 +3711,53 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            return direction;
 	        }
+
+	        /**
+	         * checks if direction is down
+	         * @param  {number} axis - what axis is used
+	         * @param  {Object} event - Vanilla JS event
+	         * @return {Boolean} Whether or not direction is down
+	         */
+
 	    }, {
 	        key: 'isDownDirection',
 	        value: function isDownDirection(axis, event) {
 	            return event.deltaY > 0 || !event.deltaY && event.wheelDeltaY < 0 || axis === 2 && event.detail > 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) < 0;
 	        }
+
+	        /**
+	         * checks if direction is up
+	         * @param  {number} axis - what axis is used
+	         * @param  {Object} event - Vanilla JS event
+	         * @return {Boolean} Whether or not direction is up
+	         */
+
 	    }, {
 	        key: 'isUpDirection',
 	        value: function isUpDirection(axis, event) {
 	            return event.deltaY < 0 || !event.deltaY && event.wheelDeltaY > 0 || axis === 2 && event.detail < 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) > 0;
 	        }
+
+	        /**
+	         * checks if direction is right
+	         * @param  {number} axis - what axis is used
+	         * @param  {Object} event - Vanilla JS event
+	         * @return {Boolean} Whether or not direction is right
+	         */
+
 	    }, {
 	        key: 'isRightDirection',
 	        value: function isRightDirection(axis, event) {
 	            return event.deltaX > 0 || !event.deltaX && event.wheelDeltaX > 0 || axis === 1 && event.detail > 0;
 	        }
+
+	        /**
+	         * checks if direction is left
+	         * @param  {number} axis - what axis is used
+	         * @param  {Object} event - Vanilla JS event
+	         * @return {Boolean} Whether or not direction is left
+	         */
+
 	    }, {
 	        key: 'isLeftDirection',
 	        value: function isLeftDirection(axis, event) {
