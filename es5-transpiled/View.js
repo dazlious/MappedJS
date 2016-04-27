@@ -241,6 +241,7 @@
                 this.currentView.setSize(newSize.width, newSize.height);
 
                 this.setLatLngToPosition(latlngPosition, pos);
+                this.moveView(new _Point.Point());
             }
         }, {
             key: 'getDistortionFactorForLatitude',
@@ -370,9 +371,18 @@
         }, {
             key: 'repositionMarkers',
             value: function repositionMarkers() {
-                _Helper.Helper.forEach(this.markers, function(marker) {
+                /*
+                Helper.forEach(this.markers, function(marker) {
                     marker.moveMarker();
                 }.bind(this));
+                */
+                var newSize = this.currentView.getDistortedRect(this.distortionFactor);
+                this.$markerContainer.css({
+                    "width": newSize.width + 'px',
+                    "height": newSize.height + 'px',
+                    "left": newSize.left + this.offsetToCenter + 'px',
+                    "top": newSize.top + 'px'
+                });
             }
         }]);
 

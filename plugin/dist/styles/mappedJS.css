@@ -1,15 +1,16 @@
 /* line 3, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS {
+	position: relative;
 	overflow: hidden;
 }
 
-/* line 5, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
+/* line 6, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS * {
 	-moz-box-sizing: border-box;
 	     box-sizing: border-box;
 }
 
-/* line 8, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
+/* line 9, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS canvas,
 .mappedJS img {
 	display: block;

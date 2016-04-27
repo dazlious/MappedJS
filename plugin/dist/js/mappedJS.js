@@ -226,8 +226,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        this.zoom(0.2, this.getAbsolutePosition(data.position.start));
 	                    }.bind(this),
 	                    flick: function (data) {
-	                        var direction = new _Point.Point(data.directions[0], data.directions[1]);
-	                        var velocity = direction.clone.divide(data.speed).multiply(20);
+	                        var direction = new _Point.Point(data.directions[0], data.directions[1]),
+	                            velocity = direction.clone.divide(data.speed).multiply(20);
 	                        this.momentumAccerlation(velocity);
 	                    }.bind(this)
 	                }
@@ -774,6 +774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.currentView.setSize(newSize.width, newSize.height);
 
 	            this.setLatLngToPosition(latlngPosition, pos);
+	            this.moveView(new _Point.Point());
 	        }
 	    }, {
 	        key: 'getDistortionFactorForLatitude',
@@ -903,9 +904,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'repositionMarkers',
 	        value: function repositionMarkers() {
-	            _Helper.Helper.forEach(this.markers, function (marker) {
+	            /*
+	            Helper.forEach(this.markers, function(marker) {
 	                marker.moveMarker();
 	            }.bind(this));
+	            */
+	            var newSize = this.currentView.getDistortedRect(this.distortionFactor);
+	            this.$markerContainer.css({
+	                "width": newSize.width + 'px',
+	                "height": newSize.height + 'px',
+	                "left": newSize.left + this.offsetToCenter + 'px',
+	                "top": newSize.top + 'px'
+	            });
 	        }
 	    }]);
 
@@ -2223,7 +2233,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.icon = this.addMarkerToDOM(this.instance.$markerContainer);
 
-	        this.moveMarker();
+	        this.positionMarker();
 	    }
 
 	    _createClass(Marker, [{
@@ -2244,13 +2254,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return icon;
 	        }
 	    }, {
-	        key: 'moveMarker',
-	        value: function moveMarker() {
+	        key: 'positionMarker',
+	        value: function positionMarker() {
 	            this.position = this.instance.convertLatLngToPoint(this.latlng);
-	            var p = new _Point.Point((this.position.x + this.instance.currentView.x) * this.instance.distortionFactor + this.instance.offsetToCenter, this.position.y + this.instance.currentView.y);
+	            //const p = new Point((this.position.x + this.instance.currentView.x) * this.instance.distortionFactor + this.instance.offsetToCenter, this.position.y + this.instance.currentView.y);
 	            if (this.icon) {
 	                this.icon.css({
-	                    transform: 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)'
+	                    "left": this.position.x / this.instance.currentView.width * 100 + '%',
+	                    "top": this.position.y / this.instance.currentView.height * 100 + '%'
+	                    //transform: `translate3d(${p.x}px, ${p.y}px, 0)`
 	                });
 	            }
 	        }
