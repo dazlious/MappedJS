@@ -64,7 +64,8 @@ export class View {
         $container = null,
         context = null,
         maxZoom = 1.5,
-        minZoom = 0.8
+        minZoom = 0.8,
+        debug = false
         }) {
 
         this.mapView = mapView;
@@ -76,6 +77,24 @@ export class View {
         this.maxZoom = maxZoom;
         this.minZoom = minZoom;
         this.origin = new Point(0,0);
+        this.debug = debug;
+        this.lastDraw = new Date();
+
+        if (this.debug) {
+            this.$debugContainer = $("<div class='debug'></div>");
+            this.$debugContainer.css({
+                "position": "absolute",
+                "width": "100%",
+                "height": "20px",
+                "top": 0,
+                "right": 0,
+                "background": "rgba(0,0,0,.6)",
+                "color": "#fff",
+                "text-align": "right",
+                "padding-right": "10px"
+            });
+            $container.prepend(this.$debugContainer);
+        }
 
         const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
         this.currentView.position(newCenter.x, newCenter.y);
@@ -93,11 +112,19 @@ export class View {
     }
 
     mainLoop() {
+        if (this.debug && this.drawIsNeeded) {
+            const now = new Date();
+            const fps = (1000 / (now - this.lastDraw)).toFixed(2);
+            this.lastDraw = now;
+            this.$debugContainer.text(`FPS: ${fps}`);
+        }
+
         if (this.drawIsNeeded) {
             this.drawIsNeeded = false;
             this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
             this.draw();
         }
+
         window.requestAnimFrame(this.mainLoop.bind(this));
     }
 

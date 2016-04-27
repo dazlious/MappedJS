@@ -16,7 +16,7 @@ export class MappedJS {
      * @param  {Boolean} jasmine=false - Option for jasmine tests
      * @return {MappedJS} instance of MappedJS
      */
-    constructor({container=".mjs", mapData={}, mapSettings={}, events={loaded:"mjs-loaded"}}) {
+    constructor({container=".mjs", mapData={}, mapSettings={}, events={loaded:"mjs-loaded"}, debug = false}) {
         this.initializeSettings(container, events, mapSettings);
 
         this.initializeData(mapData, function() {
@@ -26,6 +26,8 @@ export class MappedJS {
         }.bind(this));
 
         this.momentum = null;
+
+        this.debug = debug;
 
         return this;
     }
@@ -87,7 +89,8 @@ export class MappedJS {
         this.tileMap = new TileMap({
             container: this.$container,
             tilesData: this.mapData,
-            settings: this.mapSettings
+            settings: this.mapSettings,
+            debug: this.debug
         });
         return this;
     }

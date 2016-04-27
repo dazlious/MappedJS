@@ -79,6 +79,8 @@
             var events = _ref$events === undefined ? {
                 loaded: "mjs-loaded"
             } : _ref$events;
+            var _ref$debug = _ref.debug;
+            var debug = _ref$debug === undefined ? false : _ref$debug;
 
             _classCallCheck(this, MappedJS);
 
@@ -91,6 +93,8 @@
             }.bind(this));
 
             this.momentum = null;
+
+            this.debug = debug;
 
             return this;
         }
@@ -165,7 +169,8 @@
                 this.tileMap = new _TileMap.TileMap({
                     container: this.$container,
                     tilesData: this.mapData,
-                    settings: this.mapSettings
+                    settings: this.mapSettings,
+                    debug: this.debug
                 });
                 return this;
             }

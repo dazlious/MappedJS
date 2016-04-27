@@ -104,6 +104,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
 	        var _ref$events = _ref.events;
 	        var events = _ref$events === undefined ? { loaded: "mjs-loaded" } : _ref$events;
+	        var _ref$debug = _ref.debug;
+	        var debug = _ref$debug === undefined ? false : _ref$debug;
 
 	        _classCallCheck(this, MappedJS);
 
@@ -116,6 +118,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }.bind(this));
 
 	        this.momentum = null;
+
+	        this.debug = debug;
 
 	        return this;
 	    }
@@ -187,7 +191,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.tileMap = new _TileMap.TileMap({
 	                container: this.$container,
 	                tilesData: this.mapData,
-	                settings: this.mapSettings
+	                settings: this.mapSettings,
+	                debug: this.debug
 	            });
 	            return this;
 	        }
@@ -394,6 +399,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
 	        var _ref$settings = _ref.settings;
 	        var settings = _ref$settings === undefined ? {} : _ref$settings;
+	        var _ref$debug = _ref.debug;
+	        var debug = _ref$debug === undefined ? false : _ref$debug;
 
 	        _classCallCheck(this, TileMap);
 
@@ -405,6 +412,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
 	        this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
 	        this.settings = settings;
+
+	        this.debug = debug;
 
 	        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
 
@@ -429,7 +438,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                data: this.getCurrentLevelData(),
 	                markerData: this.markerData,
 	                $container: this.$container,
-	                context: this.canvasContext
+	                context: this.canvasContext,
+	                debug: this.debug
 	            });
 	            this.resizeCanvas();
 	            return this;
@@ -664,6 +674,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var maxZoom = _ref$maxZoom === undefined ? 1.5 : _ref$maxZoom;
 	        var _ref$minZoom = _ref.minZoom;
 	        var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
+	        var _ref$debug = _ref.debug;
+	        var debug = _ref$debug === undefined ? false : _ref$debug;
 
 	        _classCallCheck(this, View);
 
@@ -676,6 +688,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.maxZoom = maxZoom;
 	        this.minZoom = minZoom;
 	        this.origin = new _Point.Point(0, 0);
+	        this.debug = debug;
+	        this.lastDraw = new Date();
+
+	        if (this.debug) {
+	            this.$debugContainer = (0, _jquery2.default)("<div class='debug'></div>");
+	            this.$debugContainer.css({
+	                "position": "absolute",
+	                "width": "100%",
+	                "height": "20px",
+	                "top": 0,
+	                "right": 0,
+	                "background": "rgba(0,0,0,.6)",
+	                "color": "#fff",
+	                "text-align": "right",
+	                "padding-right": "10px"
+	            });
+	            $container.prepend(this.$debugContainer);
+	        }
 
 	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
 	        this.currentView.position(newCenter.x, newCenter.y);
@@ -695,11 +725,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(View, [{
 	        key: 'mainLoop',
 	        value: function mainLoop() {
+	            if (this.debug && this.drawIsNeeded) {
+	                var now = new Date();
+	                var fps = (1000 / (now - this.lastDraw)).toFixed(2);
+	                this.lastDraw = now;
+	                this.$debugContainer.text('FPS: ' + fps);
+	            }
+
 	            if (this.drawIsNeeded) {
 	                this.drawIsNeeded = false;
 	                this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
 	                this.draw();
 	            }
+
 	            window.requestAnimFrame(this.mainLoop.bind(this));
 	        }
 

@@ -131,6 +131,8 @@
             var maxZoom = _ref$maxZoom === undefined ? 1.5 : _ref$maxZoom;
             var _ref$minZoom = _ref.minZoom;
             var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
+            var _ref$debug = _ref.debug;
+            var debug = _ref$debug === undefined ? false : _ref$debug;
 
             _classCallCheck(this, View);
 
@@ -143,6 +145,24 @@
             this.maxZoom = maxZoom;
             this.minZoom = minZoom;
             this.origin = new _Point.Point(0, 0);
+            this.debug = debug;
+            this.lastDraw = new Date();
+
+            if (this.debug) {
+                this.$debugContainer = (0, _jquery2.default)("<div class='debug'></div>");
+                this.$debugContainer.css({
+                    "position": "absolute",
+                    "width": "100%",
+                    "height": "20px",
+                    "top": 0,
+                    "right": 0,
+                    "background": "rgba(0,0,0,.6)",
+                    "color": "#fff",
+                    "text-align": "right",
+                    "padding-right": "10px"
+                });
+                $container.prepend(this.$debugContainer);
+            }
 
             var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
             this.currentView.position(newCenter.x, newCenter.y);
@@ -162,11 +182,19 @@
         _createClass(View, [{
             key: 'mainLoop',
             value: function mainLoop() {
+                if (this.debug && this.drawIsNeeded) {
+                    var now = new Date();
+                    var fps = (1000 / (now - this.lastDraw)).toFixed(2);
+                    this.lastDraw = now;
+                    this.$debugContainer.text('FPS: ' + fps);
+                }
+
                 if (this.drawIsNeeded) {
                     this.drawIsNeeded = false;
                     this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
                     this.draw();
                 }
+
                 window.requestAnimFrame(this.mainLoop.bind(this));
             }
 

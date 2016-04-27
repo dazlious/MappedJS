@@ -44,7 +44,7 @@ export class TileMap {
      * @param  {Object} settings={} - json object representing settings of TileMap
      * @return {TileMap} instance of TileMap
      */
-    constructor({container, tilesData = {}, settings = {}}) {
+    constructor({container, tilesData = {}, settings = {}, debug = false}) {
         if (!container) {
             throw Error("You must define a container to initialize a TileMap");
         }
@@ -53,6 +53,8 @@ export class TileMap {
         this.imgData = tilesData[TileMap.IMG_DATA_NAME];
         this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
         this.settings = settings;
+
+        this.debug = debug;
 
         this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
 
@@ -73,7 +75,8 @@ export class TileMap {
             data: this.getCurrentLevelData(),
             markerData: this.markerData,
             $container: this.$container,
-            context: this.canvasContext
+            context: this.canvasContext,
+            debug: this.debug
         });
         this.resizeCanvas();
         return this;
