@@ -111,6 +111,8 @@
             var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
             var _ref$settings = _ref.settings;
             var settings = _ref$settings === undefined ? {} : _ref$settings;
+            var _ref$debug = _ref.debug;
+            var debug = _ref$debug === undefined ? false : _ref$debug;
 
             _classCallCheck(this, TileMap);
 
@@ -122,6 +124,8 @@
             this.imgData = tilesData[TileMap.IMG_DATA_NAME];
             this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
             this.settings = settings;
+
+            this.debug = debug;
 
             this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
 
@@ -146,7 +150,8 @@
                     data: this.getCurrentLevelData(),
                     markerData: this.markerData,
                     $container: this.$container,
-                    context: this.canvasContext
+                    context: this.canvasContext,
+                    debug: this.debug
                 });
                 this.resizeCanvas();
                 return this;
