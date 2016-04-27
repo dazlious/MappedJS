@@ -160,6 +160,7 @@ export class View {
         this.currentView.setSize(newSize.width, newSize.height);
 
         this.setLatLngToPosition(latlngPosition, pos);
+        this.moveView(new Point());
     }
 
     getDistortionFactorForLatitude(latlng) {

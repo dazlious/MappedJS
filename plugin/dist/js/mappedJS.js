@@ -774,6 +774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.currentView.setSize(newSize.width, newSize.height);
 
 	            this.setLatLngToPosition(latlngPosition, pos);
+	            this.moveView(new _Point.Point());
 	        }
 	    }, {
 	        key: 'getDistortionFactorForLatitude',
