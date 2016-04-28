@@ -24,6 +24,9 @@ module.exports = function(config) {
                 included: false
             },
             '../es5-transpiled/Point.js',
+            '../es5-transpiled/LatLng.js',
+            '../es5-transpiled/Helper.js',
+            '../es5-transpiled/DataEnrichment.js',
             '../es5-transpiled/**.js',
             'spec/**/*.test.js'
         ],

@@ -53,7 +53,6 @@ describe('Helper', function() {
         for (var i = 0; i <= 100; i += 10) {
             var newValue = Helper.Helper.easeOutQuadratic(start + i, moveBy, moveBy.clone.multiply(-1), duration);
             if (i === 0) {
-                console.log(newValue);
                 expect(newValue.equals(moveBy)).toBe(true);
             }
             if (!lastValue) {
