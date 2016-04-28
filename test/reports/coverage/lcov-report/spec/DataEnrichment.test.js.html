@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for spec/Tile.test.js</title>
+    <title>Code coverage report for spec/DataEnrichment.test.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -16,13 +16,13 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../index.html">all files</a> / <a href="index.html">spec/</a> Tile.test.js
+      <a href="../index.html">all files</a> / <a href="index.html">spec/</a> DataEnrichment.test.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/1</span>
+        <span class='fraction'>20/20</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/1</span>
+        <span class='fraction'>7/7</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/1</span>
+        <span class='fraction'>20/20</span>
       </div>
     </div>
   </div>
@@ -81,8 +81,40 @@
 36
 37
 38
-39</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -99,63 +131,64 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*global Tile,Rectangle,Publisher*/
-// TODO: Reimplement test
-describe('Tile', function() {
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*global DataEnrichment,Point,LatLng*/
+describe('DataEnrichment', function() {
     "use strict";
-/*
-    it("is an instanceof Tile and initializes without Rectangle parameters", function() {
-        expect(new Tile.Tile({
-            path: "http://dummyimage.com/800x200/000/fff"
-        }) instanceof Tile.Tile).toEqual(true);
-    });
 &nbsp;
-    it("can not initialize without correct path", function() {
-        expect(function() {
-            var t = new Tile.Tile();
-        }).toThrowError(TypeError);
-        expect(function() {
-            var t = new Tile.Tile({
-                path: ""
-            });
-        }).toThrowError(TypeError);
-        expect(function() {
-            var t = new Tile.Tile({
-                path: 123
-            });
-        }).toThrowError(TypeError);
-    });
-&nbsp;
-    it("initializes without Rectangle parameters an Rectangle(0,0,0,0)", function() {
-        var t = new Tile.Tile({
-            path: "http://dummyimage.com/800x200/000/fff"
+    it("Empty input returns empty data", function() {
+        DataEnrichment.DataEnrichment.marker([], function(data) {
+            expect(data.length).toEqual(0);
         });
-        expect(t.x).toEqual(0);
-        expect(t.y).toEqual(0);
-        expect(t.width).toEqual(0);
-        expect(t.height).toEqual(0);
     });
-*/
+&nbsp;
+&nbsp;
+    it("Empty data in input returns default object", function() {
+        DataEnrichment.DataEnrichment.marker([{}], function(data) {
+            expect(data.length).toEqual(1);
+            expect(data[0].offset instanceof Point.Point).toEqual(true);
+            expect(data[0].latlng instanceof LatLng.LatLng).toEqual(true);
+            expect(data[0].size instanceof Point.Point).toEqual(true);
+            expect(data[0].hover).toEqual(false);
+            expect(data[0].icon).toBeNull();
+        });
+    });
+&nbsp;
+    it("data in input returns correct object", function() {
+        var item = {
+            "icon": "img/icon.png",
+            "hover": true,
+            "position": {
+                "lat": -60,
+                "lng": 60
+            },
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            }
+        };
+        DataEnrichment.DataEnrichment.marker([item], function(data) {
+            expect(data[0].offset.equals(new Point.Point(0, 0))).toEqual(true);
+            expect(data[0].latlng.equals(new LatLng.LatLng(-60, 60))).toEqual(true);
+            expect(data[0].size.equals(new Point.Point(64,32))).toEqual(true);
+            expect(data[0].hover).toEqual(true);
+            expect(data[0].icon).toEqual(item.icon);
+        });
+    });
+&nbsp;
 });
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -163,7 +196,7 @@ describe('Tile', function() {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 28 2016 14:58:18 GMT+0200 (CEST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 28 2016 17:07:55 GMT+0200 (CEST)
 </div>
 </div>
 <script src="../prettify.js"></script>

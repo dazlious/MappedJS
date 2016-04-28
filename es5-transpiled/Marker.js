@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './Point.js', './StateHandler.js', './DataEnrichment.js'], factory);
+        define(['exports', 'jQuery', './Point.js', './StateHandler.js', './DataEnrichment.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./Point.js'), require('./StateHandler.js'), require('./DataEnrichment.js'));
+        factory(exports, require('jQuery'), require('./Point.js'), require('./StateHandler.js'), require('./DataEnrichment.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.Point, global.StateHandler, global.DataEnrichment);
+        factory(mod.exports, global.jQuery, global.Point, global.StateHandler, global.DataEnrichment);
         global.Marker = mod.exports;
     }
-})(this, function(exports, _jquery, _Point, _StateHandler, _DataEnrichment) {
+})(this, function(exports, _jQuery, _Point, _StateHandler, _DataEnrichment) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -18,7 +18,7 @@
     });
     exports.Marker = undefined;
 
-    var _jquery2 = _interopRequireDefault(_jquery);
+    var _jQuery2 = _interopRequireDefault(_jQuery);
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
@@ -117,7 +117,7 @@
         _createClass(Marker, [{
             key: 'addMarkerToDOM',
             value: function addMarkerToDOM($container) {
-                var icon = (0, _jquery2.default)("<div class='marker' />").css({
+                var icon = (0, _jQuery2.default)("<div class='marker' />").css({
                     "width": this.size.x + 'px',
                     "height": this.size.y + 'px',
                     "margin-left": this.offset.x + 'px',

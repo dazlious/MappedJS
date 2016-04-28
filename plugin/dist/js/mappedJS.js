@@ -65,9 +65,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _jquery = __webpack_require__(1);
+	var _jQuery = __webpack_require__(1);
 
-	var _jquery2 = _interopRequireDefault(_jquery);
+	var _jQuery2 = _interopRequireDefault(_jQuery);
 
 	var _TileMap = __webpack_require__(2);
 
@@ -134,7 +134,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(MappedJS, [{
 	        key: 'initializeSettings',
 	        value: function initializeSettings(container, events, mapSettings) {
-	            this.$container = typeof container === "string" ? (0, _jquery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jquery2.default)(container);
+	            this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
 	            if (!(this.$container instanceof jQuery)) {
 	                throw new Error("Container " + container + " not found");
 	            }
@@ -244,7 +244,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            });
 
-	            (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
+	            (0, _jQuery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
 	            return this;
 	        }
@@ -363,9 +363,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _jquery = __webpack_require__(1);
+	var _jQuery = __webpack_require__(1);
 
-	var _jquery2 = _interopRequireDefault(_jquery);
+	var _jQuery2 = _interopRequireDefault(_jQuery);
 
 	var _View = __webpack_require__(3);
 
@@ -495,7 +495,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'initializeCanvas',
 	        value: function initializeCanvas() {
-	            this.$canvas = (0, _jquery2.default)("<canvas class='mjs-canvas' />");
+	            this.$canvas = (0, _jQuery2.default)("<canvas class='mjs-canvas' />");
 	            this.canvas = this.$canvas[0];
 	            this.$container.append(this.$canvas);
 	            this.canvasContext = this.canvas.getContext("2d");
@@ -611,9 +611,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _jquery = __webpack_require__(1);
+	var _jQuery = __webpack_require__(1);
 
-	var _jquery2 = _interopRequireDefault(_jquery);
+	var _jQuery2 = _interopRequireDefault(_jQuery);
 
 	var _Point = __webpack_require__(4);
 
@@ -745,7 +745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.lastDraw = new Date();
 
 	        if (this.debug) {
-	            this.$debugContainer = (0, _jquery2.default)("<div class='debug'></div>");
+	            this.$debugContainer = (0, _jQuery2.default)("<div class='debug'></div>");
 	            this.$debugContainer.css({
 	                "position": "absolute",
 	                "width": "100%",
@@ -1033,7 +1033,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'appendMarkerContainerToDom',
 	        value: function appendMarkerContainerToDom($container) {
-	            this.$markerContainer = (0, _jquery2.default)("<div class='marker-container' />");
+	            this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
 	            $container.append(this.$markerContainer);
 	            return this;
 	        }
@@ -2025,6 +2025,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {number} y=0 - position y of tile
 	     * @param  {number} w=0 - tile width
 	     * @param  {number} h=0 - tile height
+	     * @param  {View} _instance = null - instance of parent View
 	     * @return {Tile} instance of Tile
 	     */
 
@@ -2281,9 +2282,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.Helper = undefined;
 
-	var _jquery = __webpack_require__(1);
+	var _jQuery = __webpack_require__(1);
 
-	var _jquery2 = _interopRequireDefault(_jquery);
+	var _jQuery2 = _interopRequireDefault(_jQuery);
 
 	var _Point = __webpack_require__(4);
 
@@ -2298,7 +2299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {Helper} Helper object for chaining
 	     */
 	    requestJSON: function requestJSON(filename, callback) {
-	        _jquery2.default.ajax({
+	        _jQuery2.default.ajax({
 	            type: "GET",
 	            url: filename,
 	            dataType: "json",
@@ -2380,9 +2381,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _jquery = __webpack_require__(1);
+	var _jQuery = __webpack_require__(1);
 
-	var _jquery2 = _interopRequireDefault(_jquery);
+	var _jQuery2 = _interopRequireDefault(_jQuery);
 
 	var _Point = __webpack_require__(4);
 
@@ -2452,7 +2453,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(Marker, [{
 	        key: 'addMarkerToDOM',
 	        value: function addMarkerToDOM($container) {
-	            var icon = (0, _jquery2.default)("<div class='marker' />").css({
+	            var icon = (0, _jQuery2.default)("<div class='marker' />").css({
 	                "width": this.size.x + 'px',
 	                "height": this.size.y + 'px',
 	                "margin-left": this.offset.x + 'px',
@@ -2504,9 +2505,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.DataEnrichment = undefined;
 
-	var _jquery = __webpack_require__(1);
+	var _jQuery = __webpack_require__(1);
 
-	var _jquery2 = _interopRequireDefault(_jquery);
+	var _jQuery2 = _interopRequireDefault(_jQuery);
 
 	var _Point = __webpack_require__(4);
 
@@ -2529,7 +2530,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _Helper.Helper.forEach(data, function (entry) {
 
-	            entry = _jquery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
+	            entry = _jQuery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
 
 	            var offset = new _Point.Point(entry.offset.x, entry.offset.y);
 	            var latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng);
@@ -2588,9 +2589,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*global PointerEvent,MSPointerEvent*/
 
-	var _jquery = __webpack_require__(1);
+	var _jQuery = __webpack_require__(1);
 
-	var _jquery2 = _interopRequireDefault(_jquery);
+	var _jQuery2 = _interopRequireDefault(_jQuery);
 
 	var _Point = __webpack_require__(4);
 
@@ -2674,7 +2675,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'dataClone',
 	        get: function get() {
-	            return (0, _jquery2.default)(this.data)[0];
+	            return (0, _jQuery2.default)(this.data)[0];
 	        }
 
 	        /**
@@ -2730,7 +2731,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.settings = this.getDefaultSettings();
 
-	        _jquery2.default.extend(true, this.settings, settings || {});
+	        _jQuery2.default.extend(true, this.settings, settings || {});
 
 	        this.data = this.getDefaultData();
 
@@ -2876,8 +2877,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (typeof viewport !== "string") {
 	                viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
 	            }
-	            var metaViewInHead = (0, _jquery2.default)("meta[name=viewport]").length,
-	                $viewportMeta = metaViewInHead !== 0 ? (0, _jquery2.default)("meta[name=viewport]") : (0, _jquery2.default)("head").append((0, _jquery2.default)("<meta name='viewport' />"));
+	            var metaViewInHead = (0, _jQuery2.default)("meta[name=viewport]").length,
+	                $viewportMeta = metaViewInHead !== 0 ? (0, _jQuery2.default)("meta[name=viewport]") : (0, _jQuery2.default)("head").append((0, _jQuery2.default)("<meta name='viewport' />"));
 	            $viewportMeta.attr("content", viewport);
 	            return this;
 	        }
@@ -2891,8 +2892,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'init',
 	        value: function init(container) {
-	            this.$container = typeof container === "string" ? (0, _jquery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof _jquery2.default ? container : (0, _jquery2.default)(container);
-	            if (!(this.$container instanceof _jquery2.default)) {
+	            this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
+	            if (!(this.$container instanceof jQuery)) {
 	                throw new Error("Container " + container + " not found");
 	            }
 	            this.$container.css({
@@ -3050,7 +3051,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 	            // mouse is used
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-	                return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
+	                return _jQuery2.default.extend(true, data, this.handleSingletouchStart(e));
 	            }
 	            // if is pointerEvent
 	            if (this.isPointerEvent(e)) {
@@ -3074,9 +3075,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function handlePointerEventStart(data, e) {
 	            this.data.pointerArray[e.pointerId] = e;
 	            if (Object.keys(this.data.pointerArray).length <= 1) {
-	                return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
+	                return _jQuery2.default.extend(true, data, this.handleSingletouchStart(e));
 	            } else {
-	                return _jquery2.default.extend(true, data, this.handleMultitouchStart(this.getPointerArray()));
+	                return _jQuery2.default.extend(true, data, this.handleMultitouchStart(this.getPointerArray()));
 	            }
 	        }
 
@@ -3091,10 +3092,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'handleTouchEventStart',
 	        value: function handleTouchEventStart(data, e) {
 	            if (e.length === 1) {
-	                return _jquery2.default.extend(true, data, this.handleSingletouchStart(e[0]));
+	                return _jQuery2.default.extend(true, data, this.handleSingletouchStart(e[0]));
 	            } // multitouch started
 	            else if (e.length === 2) {
-	                    return _jquery2.default.extend(true, data, this.handleMultitouchStart(e));
+	                    return _jQuery2.default.extend(true, data, this.handleMultitouchStart(e));
 	                }
 	            return data;
 	        }
@@ -3195,7 +3196,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var e = this.preHandle(event);
 	            this.data.time.start = event.timeStamp;
 	            this.clearTimeouts(this.data.timeout.default);
-	            this.data = _jquery2.default.extend(true, this.data, this.calculateStart(e));
+	            this.data = _jQuery2.default.extend(true, this.data, this.calculateStart(e));
 	            this.takeActionStart(this.data.last.action);
 	            return false;
 	        }
@@ -3235,7 +3236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-	                return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
+	                return _jQuery2.default.extend(true, data, this.handleSingletouchMove(e));
 	            } // if is pointerEvent
 	            if (this.isPointerEvent(e)) {
 	                return this.handlePointerEventMove(data, e);
@@ -3257,10 +3258,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function handlePointerEventMove(data, e) {
 	            this.data.pointerArray[e.pointerId] = e;
 	            if (Object.keys(this.data.pointerArray).length <= 1) {
-	                return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
+	                return _jQuery2.default.extend(true, data, this.handleSingletouchMove(e));
 	            } else {
 	                var pointerPos = this.getPointerArray();
-	                return _jquery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
+	                return _jQuery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
 	            }
 	        }
 
@@ -3276,9 +3277,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function handleTouchEventMove(data, e) {
 	            // singletouch startet
 	            if (e.length === 1) {
-	                return _jquery2.default.extend(true, data, this.handleSingletouchMove(e[0]));
+	                return _jQuery2.default.extend(true, data, this.handleSingletouchMove(e[0]));
 	            } else if (e.length === 2) {
-	                return _jquery2.default.extend(true, data, this.handleMultitouchMove(e));
+	                return _jQuery2.default.extend(true, data, this.handleMultitouchMove(e));
 	            }
 	            return data;
 	        }
@@ -3349,7 +3350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.clearTimeouts(this.data.timeout.default);
 	            this.clearTimeouts(this.data.timeout.hold);
-	            this.data = _jquery2.default.extend(true, this.data, this.calculateMove(e));
+	            this.data = _jQuery2.default.extend(true, this.data, this.calculateMove(e));
 
 	            if (this.data.multitouch) {
 	                this.handlePinchAndZoom();
@@ -3412,17 +3413,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-	                return _jquery2.default.extend(true, data, this.handleSingletouchEnd(e));
+	                return _jQuery2.default.extend(true, data, this.handleSingletouchEnd(e));
 	            } // if is pointerEvent
 	            if (this.isPointerEvent(e)) {
 	                var end = this.handleSingletouchEnd(e);
 	                delete this.data.pointerArray[e.pointerId];
-	                return _jquery2.default.extend(true, data, end);
+	                return _jQuery2.default.extend(true, data, end);
 	            } // touch is used
 	            else {
 	                    // singletouch ended
 	                    if (e.length <= 1) {
-	                        return _jquery2.default.extend(true, data, this.handleSingletouchEnd(e[0]));
+	                        return _jQuery2.default.extend(true, data, this.handleSingletouchEnd(e[0]));
 	                    }
 	                }
 	        }
@@ -3488,7 +3489,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.clearTimeouts(this.data.timeout.hold);
 
-	            this.data = _jquery2.default.extend(true, this.data, this.calculateEnd(e));
+	            this.data = _jQuery2.default.extend(true, this.data, this.calculateEnd(e));
 
 	            // called only when not moved
 	            if (!this.data.moved && this.data.down && !this.data.multitouch) {
@@ -3775,7 +3776,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'getEvent',
 	        value: function getEvent(e) {
-	            _jquery2.default.event.fix(e);
+	            jQuery.event.fix(e);
 	            if (e.originalEvent.touches && e.originalEvent.touches.length === 0) {
 	                return e.originalEvent.changedTouches || e.originalEvent;
 	            }

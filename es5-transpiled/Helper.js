@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './Point.js'], factory);
+        define(['exports', 'jQuery', './Point.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./Point.js'));
+        factory(exports, require('jQuery'), require('./Point.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.Point);
+        factory(mod.exports, global.jQuery, global.Point);
         global.Helper = mod.exports;
     }
-})(this, function(exports, _jquery, _Point) {
+})(this, function(exports, _jQuery, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -18,7 +18,7 @@
     });
     exports.Helper = undefined;
 
-    var _jquery2 = _interopRequireDefault(_jquery);
+    var _jQuery2 = _interopRequireDefault(_jQuery);
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
@@ -35,7 +35,7 @@
          * @return {Helper} Helper object for chaining
          */
         requestJSON: function requestJSON(filename, callback) {
-            _jquery2.default.ajax({
+            _jQuery2.default.ajax({
                 type: "GET",
                 url: filename,
                 dataType: "json",

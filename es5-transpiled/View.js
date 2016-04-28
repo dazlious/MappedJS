@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Marker.js', './Helper.js', './DataEnrichment.js'], factory);
+        define(['exports', 'jQuery', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Marker.js', './Helper.js', './DataEnrichment.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Marker.js'), require('./Helper.js'), require('./DataEnrichment.js'));
+        factory(exports, require('jQuery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Marker.js'), require('./Helper.js'), require('./DataEnrichment.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Marker, global.Helper, global.DataEnrichment);
+        factory(mod.exports, global.jQuery, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Marker, global.Helper, global.DataEnrichment);
         global.View = mod.exports;
     }
-})(this, function(exports, _jquery, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Marker, _Helper, _DataEnrichment) {
+})(this, function(exports, _jQuery, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Marker, _Helper, _DataEnrichment) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -18,7 +18,7 @@
     });
     exports.View = undefined;
 
-    var _jquery2 = _interopRequireDefault(_jquery);
+    var _jQuery2 = _interopRequireDefault(_jQuery);
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
@@ -160,7 +160,7 @@
             this.lastDraw = new Date();
 
             if (this.debug) {
-                this.$debugContainer = (0, _jquery2.default)("<div class='debug'></div>");
+                this.$debugContainer = (0, _jQuery2.default)("<div class='debug'></div>");
                 this.$debugContainer.css({
                     "position": "absolute",
                     "width": "100%",
@@ -448,7 +448,7 @@
         }, {
             key: 'appendMarkerContainerToDom',
             value: function appendMarkerContainerToDom($container) {
-                this.$markerContainer = (0, _jquery2.default)("<div class='marker-container' />");
+                this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
                 $container.append(this.$markerContainer);
                 return this;
             }

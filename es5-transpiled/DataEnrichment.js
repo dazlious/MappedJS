@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './Point.js', './LatLng.js', './Helper.js'], factory);
+        define(['exports', 'jQuery', './Point.js', './LatLng.js', './Helper.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./Point.js'), require('./LatLng.js'), require('./Helper.js'));
+        factory(exports, require('jQuery'), require('./Point.js'), require('./LatLng.js'), require('./Helper.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.Point, global.LatLng, global.Helper);
+        factory(mod.exports, global.jQuery, global.Point, global.LatLng, global.Helper);
         global.DataEnrichment = mod.exports;
     }
-})(this, function(exports, _jquery, _Point, _LatLng, _Helper) {
+})(this, function(exports, _jQuery, _Point, _LatLng, _Helper) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -18,7 +18,7 @@
     });
     exports.DataEnrichment = undefined;
 
-    var _jquery2 = _interopRequireDefault(_jquery);
+    var _jQuery2 = _interopRequireDefault(_jQuery);
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
@@ -39,7 +39,7 @@
 
             _Helper.Helper.forEach(data, function(entry) {
 
-                entry = _jquery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
+                entry = _jQuery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
 
                 var offset = new _Point.Point(entry.offset.x, entry.offset.y);
                 var latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng);

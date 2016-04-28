@@ -1739,14 +1739,14 @@ checks if there is a previous element
 **Kind**: global class  
 
 * [Tile](#Tile)
-    * [new Tile(path, x, y, w, h)](#new_Tile_new)
+    * [new Tile(path, x, y, w, h, _instance)](#new_Tile_new)
     * [.initialize()](#Tile+initialize) ⇒ <code>[Tile](#Tile)</code>
     * [.draw()](#Tile+draw) ⇒ <code>[Tile](#Tile)</code>
     * [.equals(tile)](#Tile+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Tile_new"></a>
 
-### new Tile(path, x, y, w, h)
+### new Tile(path, x, y, w, h, _instance)
 Constructor
 
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile  
@@ -1757,6 +1757,7 @@ Constructor
 - y <code>number</code> <code> = 0</code> - position y of tile
 - w <code>number</code> <code> = 0</code> - tile width
 - h <code>number</code> <code> = 0</code> - tile height
+- _instance <code>[View](#View)</code> - = null - instance of parent View
 
 <a name="Tile+initialize"></a>
 

@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './TileMap.js', './Helper.js', './Interact.js', './LatLng.js', './Point.js'], factory);
+        define(['exports', 'jQuery', './TileMap.js', './Helper.js', './Interact.js', './LatLng.js', './Point.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./TileMap.js'), require('./Helper.js'), require('./Interact.js'), require('./LatLng.js'), require('./Point.js'));
+        factory(exports, require('jQuery'), require('./TileMap.js'), require('./Helper.js'), require('./Interact.js'), require('./LatLng.js'), require('./Point.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.TileMap, global.Helper, global.Interact, global.LatLng, global.Point);
+        factory(mod.exports, global.jQuery, global.TileMap, global.Helper, global.Interact, global.LatLng, global.Point);
         global.Main = mod.exports;
     }
-})(this, function(exports, _jquery, _TileMap, _Helper, _Interact, _LatLng, _Point) {
+})(this, function(exports, _jQuery, _TileMap, _Helper, _Interact, _LatLng, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -18,7 +18,7 @@
     });
     exports.MappedJS = undefined;
 
-    var _jquery2 = _interopRequireDefault(_jquery);
+    var _jQuery2 = _interopRequireDefault(_jQuery);
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
@@ -109,7 +109,7 @@
         _createClass(MappedJS, [{
             key: 'initializeSettings',
             value: function initializeSettings(container, events, mapSettings) {
-                this.$container = typeof container === "string" ? (0, _jquery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jquery2.default)(container);
+                this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
                 if (!(this.$container instanceof jQuery)) {
                     throw new Error("Container " + container + " not found");
                 }
@@ -222,7 +222,7 @@
                     }
                 });
 
-                (0, _jquery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
+                (0, _jQuery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
                 return this;
             }

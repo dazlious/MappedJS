@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './View.js', './LatLng.js', './Bounds.js', './Rectangle.js'], factory);
+        define(['exports', 'jQuery', './View.js', './LatLng.js', './Bounds.js', './Rectangle.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./View.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'));
+        factory(exports, require('jQuery'), require('./View.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.View, global.LatLng, global.Bounds, global.Rectangle);
+        factory(mod.exports, global.jQuery, global.View, global.LatLng, global.Bounds, global.Rectangle);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jquery, _View, _LatLng, _Bounds, _Rectangle) {
+})(this, function(exports, _jQuery, _View, _LatLng, _Bounds, _Rectangle) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -18,7 +18,7 @@
     });
     exports.TileMap = undefined;
 
-    var _jquery2 = _interopRequireDefault(_jquery);
+    var _jQuery2 = _interopRequireDefault(_jQuery);
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
@@ -166,7 +166,7 @@
         }, {
             key: 'initializeCanvas',
             value: function initializeCanvas() {
-                this.$canvas = (0, _jquery2.default)("<canvas class='mjs-canvas' />");
+                this.$canvas = (0, _jQuery2.default)("<canvas class='mjs-canvas' />");
                 this.canvas = this.$canvas[0];
                 this.$container.append(this.$canvas);
                 this.canvasContext = this.canvas.getContext("2d");
