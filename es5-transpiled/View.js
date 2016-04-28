@@ -183,6 +183,11 @@
             this.context = context;
             this.markers = [];
 
+            this.initial = {
+                position: this.center,
+                zoom: this.zoomFactor
+            };
+
             this.drawIsNeeded = true;
 
             this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
@@ -190,12 +195,22 @@
             return this;
         }
 
-        /**
-         * main draw call
-         */
+        // TODO: Reset function not working properly
 
 
         _createClass(View, [{
+            key: 'reset',
+            value: function reset() {
+                this.setLatLngToPosition(this.initial.position, this.viewport.center);
+                var delta = this.initial.zoom - this.zoomFactor;
+                this.zoom(delta, this.viewport.center);
+            }
+
+            /**
+             * main draw call
+             */
+
+        }, {
             key: 'mainLoop',
             value: function mainLoop() {
                 if (this.debug && this.drawIsNeeded) {
