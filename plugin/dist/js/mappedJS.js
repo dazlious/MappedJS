@@ -117,6 +117,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }.bind(this));
 
 	        this.momentum = null;
+	        this.keyTicks = 0;
 
 	        this.debug = debug;
 
@@ -246,7 +247,58 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            (0, _jQuery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
+	            (0, _jQuery2.default)(document).on("keydown", this.keyPress.bind(this));
+	            (0, _jQuery2.default)(document).on("keyup", this.keyRelease.bind(this));
+
 	            return this;
+	        }
+	    }, {
+	        key: 'keyPress',
+	        value: function keyPress(e) {
+	            switch (e.keyCode) {
+	                case 38:
+	                    // up
+	                    this.handleMovementByKeys(new _Point.Point(0, 1));
+	                    break;
+	                case 37:
+	                    // left
+	                    this.handleMovementByKeys(new _Point.Point(1, 0));
+	                    break;
+	                case 39:
+	                    // right
+	                    this.handleMovementByKeys(new _Point.Point(-1, 0));
+	                    break;
+	                case 40:
+	                    // down
+	                    this.handleMovementByKeys(new _Point.Point(0, -1));
+	                    break;
+	                case 187:
+	                    // plus
+	                    this.zoom(0.1, this.tileMap.view.viewport.center);
+	                    break;
+	                case 189:
+	                    // minus
+	                    this.zoom(-0.1, this.tileMap.view.viewport.center);
+	                    break;
+	                case 72:
+	                    // home
+	                    this.tileMap.view.reset();
+	                    break;
+	                default:
+	                    break;
+	            }
+	            this.tileMap.view.drawIsNeeded = true;
+	        }
+	    }, {
+	        key: 'handleMovementByKeys',
+	        value: function handleMovementByKeys(direction) {
+	            this.keyTicks++;
+	            this.tileMap.view.moveView(direction.multiply(this.keyTicks));
+	        }
+	    }, {
+	        key: 'keyRelease',
+	        value: function keyRelease() {
+	            this.keyTicks = 0;
 	        }
 
 	        /**
@@ -768,6 +820,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.context = context;
 	        this.markers = [];
 
+	        this.initial = {
+	            position: this.center,
+	            zoom: this.zoomFactor
+	        };
+
 	        this.drawIsNeeded = true;
 
 	        this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
@@ -775,12 +832,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
-	    /**
-	     * main draw call
-	     */
+	    // TODO: Reset function not working properly
 
 
 	    _createClass(View, [{
+	        key: 'reset',
+	        value: function reset() {
+	            this.setLatLngToPosition(this.initial.position, this.viewport.center);
+	            var delta = this.initial.zoom - this.zoomFactor;
+	            this.zoom(delta, this.viewport.center);
+	        }
+
+	        /**
+	         * main draw call
+	         */
+
+	    }, {
 	        key: 'mainLoop',
 	        value: function mainLoop() {
 	            if (this.debug && this.drawIsNeeded) {

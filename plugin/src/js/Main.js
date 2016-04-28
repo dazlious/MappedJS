@@ -25,6 +25,7 @@ export class MappedJS {
         }.bind(this));
 
         this.momentum = null;
+        this.keyTicks = 0;
 
         this.debug = debug;
 
@@ -139,7 +140,48 @@ export class MappedJS {
 
         $(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
+        $(document).on("keydown", this.keyPress.bind(this));
+        $(document).on("keyup", this.keyRelease.bind(this));
+
         return this;
+    }
+
+    keyPress(e) {
+        switch(e.keyCode) {
+            case 38: // up
+                this.handleMovementByKeys(new Point(0, 1));
+                break;
+            case 37: // left
+                this.handleMovementByKeys(new Point(1, 0));
+                break;
+            case 39: // right
+                this.handleMovementByKeys(new Point(-1, 0));
+                break;
+            case 40: // down
+                this.handleMovementByKeys(new Point(0, -1));
+                break;
+            case 187: // plus
+                this.zoom(0.1, this.tileMap.view.viewport.center);
+                break;
+            case 189: // minus
+                this.zoom(-0.1, this.tileMap.view.viewport.center);
+                break;
+            case 72: // home
+                this.tileMap.view.reset();
+                break;
+            default:
+                break;
+        }
+        this.tileMap.view.drawIsNeeded = true;
+    }
+
+    handleMovementByKeys(direction) {
+        this.keyTicks++;
+        this.tileMap.view.moveView(direction.multiply(this.keyTicks));
+    }
+
+    keyRelease() {
+        this.keyTicks = 0;
     }
 
     /**
