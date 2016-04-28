@@ -1,7 +1,6 @@
 /*global PointerEvent,MSPointerEvent*/
 
-import $ from 'jquery';
-import jQuery from 'jquery';
+import $ from 'jQuery';
 import {Point} from './Point.js';
 
 export class Interact {

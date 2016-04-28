@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'jQuery';
 import {View} from './View.js';
 import {LatLng} from './LatLng.js';
 import {Bounds} from './Bounds.js';

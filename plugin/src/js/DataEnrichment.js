@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'jQuery';
 import {Point} from './Point.js';
 import {LatLng} from './LatLng.js';
 import {Helper} from './Helper.js';

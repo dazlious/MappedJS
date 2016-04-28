@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'jQuery';
 import {Point} from './Point.js';
 
 export var Helper = {

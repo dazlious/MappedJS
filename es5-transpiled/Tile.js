@@ -119,6 +119,7 @@
          * @param  {number} y=0 - position y of tile
          * @param  {number} w=0 - tile width
          * @param  {number} h=0 - tile height
+         * @param  {View} _instance = null - instance of parent View
          * @return {Tile} instance of Tile
          */
 

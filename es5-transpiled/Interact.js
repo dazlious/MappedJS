@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jquery', './Point.js'], factory);
+        define(['exports', 'jQuery', './Point.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jquery'), require('./Point.js'));
+        factory(exports, require('jQuery'), require('./Point.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jquery, global.Point);
+        factory(mod.exports, global.jQuery, global.Point);
         global.Interact = mod.exports;
     }
-})(this, function(exports, _jquery, _Point) {
+})(this, function(exports, _jQuery, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -18,7 +18,7 @@
     });
     exports.Interact = undefined;
 
-    var _jquery2 = _interopRequireDefault(_jquery);
+    var _jQuery2 = _interopRequireDefault(_jQuery);
 
     function _interopRequireDefault(obj) {
         return obj && obj.__esModule ? obj : {
@@ -132,7 +132,7 @@
         }, {
             key: 'dataClone',
             get: function get() {
-                return (0, _jquery2.default)(this.data)[0];
+                return (0, _jQuery2.default)(this.data)[0];
             }
 
             /**
@@ -188,7 +188,7 @@
 
             this.settings = this.getDefaultSettings();
 
-            _jquery2.default.extend(true, this.settings, settings || {});
+            _jQuery2.default.extend(true, this.settings, settings || {});
 
             this.data = this.getDefaultData();
 
@@ -334,8 +334,8 @@
                 if (typeof viewport !== "string") {
                     viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
                 }
-                var metaViewInHead = (0, _jquery2.default)("meta[name=viewport]").length,
-                    $viewportMeta = metaViewInHead !== 0 ? (0, _jquery2.default)("meta[name=viewport]") : (0, _jquery2.default)("head").append((0, _jquery2.default)("<meta name='viewport' />"));
+                var metaViewInHead = (0, _jQuery2.default)("meta[name=viewport]").length,
+                    $viewportMeta = metaViewInHead !== 0 ? (0, _jQuery2.default)("meta[name=viewport]") : (0, _jQuery2.default)("head").append((0, _jQuery2.default)("<meta name='viewport' />"));
                 $viewportMeta.attr("content", viewport);
                 return this;
             }
@@ -349,8 +349,8 @@
         }, {
             key: 'init',
             value: function init(container) {
-                this.$container = typeof container === "string" ? (0, _jquery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof _jquery2.default ? container : (0, _jquery2.default)(container);
-                if (!(this.$container instanceof _jquery2.default)) {
+                this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
+                if (!(this.$container instanceof jQuery)) {
                     throw new Error("Container " + container + " not found");
                 }
                 this.$container.css({
@@ -508,7 +508,7 @@
                 };
                 // mouse is used
                 if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-                    return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
+                    return _jQuery2.default.extend(true, data, this.handleSingletouchStart(e));
                 }
                 // if is pointerEvent
                 if (this.isPointerEvent(e)) {
@@ -532,9 +532,9 @@
             value: function handlePointerEventStart(data, e) {
                 this.data.pointerArray[e.pointerId] = e;
                 if (Object.keys(this.data.pointerArray).length <= 1) {
-                    return _jquery2.default.extend(true, data, this.handleSingletouchStart(e));
+                    return _jQuery2.default.extend(true, data, this.handleSingletouchStart(e));
                 } else {
-                    return _jquery2.default.extend(true, data, this.handleMultitouchStart(this.getPointerArray()));
+                    return _jQuery2.default.extend(true, data, this.handleMultitouchStart(this.getPointerArray()));
                 }
             }
 
@@ -549,10 +549,10 @@
             key: 'handleTouchEventStart',
             value: function handleTouchEventStart(data, e) {
                 if (e.length === 1) {
-                    return _jquery2.default.extend(true, data, this.handleSingletouchStart(e[0]));
+                    return _jQuery2.default.extend(true, data, this.handleSingletouchStart(e[0]));
                 } // multitouch started
                 else if (e.length === 2) {
-                    return _jquery2.default.extend(true, data, this.handleMultitouchStart(e));
+                    return _jQuery2.default.extend(true, data, this.handleMultitouchStart(e));
                 }
                 return data;
             }
@@ -653,7 +653,7 @@
                 var e = this.preHandle(event);
                 this.data.time.start = event.timeStamp;
                 this.clearTimeouts(this.data.timeout.default);
-                this.data = _jquery2.default.extend(true, this.data, this.calculateStart(e));
+                this.data = _jQuery2.default.extend(true, this.data, this.calculateStart(e));
                 this.takeActionStart(this.data.last.action);
                 return false;
             }
@@ -693,7 +693,7 @@
                 };
 
                 if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-                    return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
+                    return _jQuery2.default.extend(true, data, this.handleSingletouchMove(e));
                 } // if is pointerEvent
                 if (this.isPointerEvent(e)) {
                     return this.handlePointerEventMove(data, e);
@@ -715,10 +715,10 @@
             value: function handlePointerEventMove(data, e) {
                 this.data.pointerArray[e.pointerId] = e;
                 if (Object.keys(this.data.pointerArray).length <= 1) {
-                    return _jquery2.default.extend(true, data, this.handleSingletouchMove(e));
+                    return _jQuery2.default.extend(true, data, this.handleSingletouchMove(e));
                 } else {
                     var pointerPos = this.getPointerArray();
-                    return _jquery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
+                    return _jQuery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
                 }
             }
 
@@ -734,9 +734,9 @@
             value: function handleTouchEventMove(data, e) {
                 // singletouch startet
                 if (e.length === 1) {
-                    return _jquery2.default.extend(true, data, this.handleSingletouchMove(e[0]));
+                    return _jQuery2.default.extend(true, data, this.handleSingletouchMove(e[0]));
                 } else if (e.length === 2) {
-                    return _jquery2.default.extend(true, data, this.handleMultitouchMove(e));
+                    return _jQuery2.default.extend(true, data, this.handleMultitouchMove(e));
                 }
                 return data;
             }
@@ -807,7 +807,7 @@
 
                 this.clearTimeouts(this.data.timeout.default);
                 this.clearTimeouts(this.data.timeout.hold);
-                this.data = _jquery2.default.extend(true, this.data, this.calculateMove(e));
+                this.data = _jQuery2.default.extend(true, this.data, this.calculateMove(e));
 
                 if (this.data.multitouch) {
                     this.handlePinchAndZoom();
@@ -870,17 +870,17 @@
                 };
 
                 if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-                    return _jquery2.default.extend(true, data, this.handleSingletouchEnd(e));
+                    return _jQuery2.default.extend(true, data, this.handleSingletouchEnd(e));
                 } // if is pointerEvent
                 if (this.isPointerEvent(e)) {
                     var end = this.handleSingletouchEnd(e);
                     delete this.data.pointerArray[e.pointerId];
-                    return _jquery2.default.extend(true, data, end);
+                    return _jQuery2.default.extend(true, data, end);
                 } // touch is used
                 else {
                     // singletouch ended
                     if (e.length <= 1) {
-                        return _jquery2.default.extend(true, data, this.handleSingletouchEnd(e[0]));
+                        return _jQuery2.default.extend(true, data, this.handleSingletouchEnd(e[0]));
                     }
                 }
             }
@@ -946,7 +946,7 @@
 
                 this.clearTimeouts(this.data.timeout.hold);
 
-                this.data = _jquery2.default.extend(true, this.data, this.calculateEnd(e));
+                this.data = _jQuery2.default.extend(true, this.data, this.calculateEnd(e));
 
                 // called only when not moved
                 if (!this.data.moved && this.data.down && !this.data.multitouch) {
@@ -1233,7 +1233,7 @@
         }, {
             key: 'getEvent',
             value: function getEvent(e) {
-                _jquery2.default.event.fix(e);
+                jQuery.event.fix(e);
                 if (e.originalEvent.touches && e.originalEvent.touches.length === 0) {
                     return e.originalEvent.changedTouches || e.originalEvent;
                 }

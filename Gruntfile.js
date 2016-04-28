@@ -86,7 +86,7 @@ module.exports = function(grunt) {
                 keepalive: false,
                 inline: true,
                 externals: {
-                    jquery: "jQuery"
+                    jQuery: "jQuery"
                 },
                 target: "web",
                 module: {

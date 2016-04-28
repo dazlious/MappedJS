@@ -22,6 +22,7 @@ export class Tile extends Rectangle {
      * @param  {number} y=0 - position y of tile
      * @param  {number} w=0 - tile width
      * @param  {number} h=0 - tile height
+     * @param  {View} _instance = null - instance of parent View
      * @return {Tile} instance of Tile
      */
     constructor({path, x = 0, y = 0, w = 0, h = 0} = {}, _instance = null) {

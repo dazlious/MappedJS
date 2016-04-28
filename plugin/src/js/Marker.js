@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import $ from 'jQuery';
 import {Point} from './Point.js';
 import {StateHandler} from './StateHandler.js';
 import {DataEnrichment} from './DataEnrichment.js';
