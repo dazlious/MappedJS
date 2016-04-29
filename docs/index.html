@@ -105,10 +105,6 @@
 <ul>
 <li><a href="#Interact">Interact</a><ul>
 <li><a href="#new_Interact_new">new Interact(settings)</a></li>
-<li><a href="#Interact+isMouse">.isMouse</a> ⇒ <code>Boolean</code></li>
-<li><a href="#Interact+isTouch">.isTouch</a> ⇒ <code>Boolean</code></li>
-<li><a href="#Interact+isIE">.isIE</a> ⇒ <code>Boolean</code></li>
-<li><a href="#Interact+scrollEvent">.scrollEvent</a> ⇒ <code>string</code></li>
 <li><a href="#Interact+timeToLastMove">.timeToLastMove</a> ⇒ <code>number</code></li>
 <li><a href="#Interact+time">.time</a> ⇒ <code>number</code></li>
 <li><a href="#Interact+dataClone">.dataClone</a> ⇒ <code>Object</code></li>
@@ -227,19 +223,7 @@
 </ul>
 </li>
 </ul>
-<p><a name="Interact+isMouse"></a></p>
-<h3 id="interact-ismouse-code-boolean-code-">interact.isMouse ⇒ <code>Boolean</code></h3>
-<p>checks if mouse is possible</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - if true, mouse is possible<br><a name="Interact+isTouch"></a></p>
-<h3 id="interact-istouch-code-boolean-code-">interact.isTouch ⇒ <code>Boolean</code></h3>
-<p>checks if touch is possible</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - if true, touch is possible<br><a name="Interact+isIE"></a></p>
-<h3 id="interact-isie-code-boolean-code-">interact.isIE ⇒ <code>Boolean</code></h3>
-<p>checks if IE is used</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - if true, IE is used<br><a name="Interact+scrollEvent"></a></p>
-<h3 id="interact-scrollevent-code-string-code-">interact.scrollEvent ⇒ <code>string</code></h3>
-<p>gets cross-browser scroll-event</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>string</code> - name of scroll event<br><a name="Interact+timeToLastMove"></a></p>
+<p><a name="Interact+timeToLastMove"></a></p>
 <h3 id="interact-timetolastmove-code-number-code-">interact.timeToLastMove ⇒ <code>number</code></h3>
 <p>get time difference to last</p>
 <p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>number</code> - difference<br><a name="Interact+time"></a></p>
@@ -651,7 +635,7 @@
 <li><a href="#MappedJS+bindEvents">.bindEvents()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+momentumAccerlation">.momentumAccerlation(velocity)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+triggerMomentum">.triggerMomentum(steps, timing, change)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+moveViewByMomentum">.moveViewByMomentum(delta)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
+<li><a href="#MappedJS+moveView">.moveView(delta)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+zoom">.zoom(factor, position)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+resizeHandler">.resizeHandler()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+loadingFinished">.loadingFinished()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
@@ -713,8 +697,8 @@
 <li>timing <code>number</code> - time for step</li>
 <li>change <code><a href="#Point">Point</a></code> - distance</li>
 </ul>
-<p><a name="MappedJS+moveViewByMomentum"></a></p>
-<h3 id="mappedjs-moveviewbymomentum-delta-code-mappedjs-mappedjs-code-">mappedJS.moveViewByMomentum(delta) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
+<p><a name="MappedJS+moveView"></a></p>
+<h3 id="mappedjs-moveview-delta-code-mappedjs-mappedjs-code-">mappedJS.moveView(delta) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
 <p>move by delta momentum</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
 <ul>

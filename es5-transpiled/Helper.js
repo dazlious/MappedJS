@@ -100,6 +100,37 @@
          */
         toRadians: function toRadians(degrees) {
             return degrees * Math.PI / 180;
+        },
+        /**
+         * checks if mouse is possible
+         * @return {Boolean} if true, mouse is possible
+         */
+        isMouse: function isMouse() {
+            return 'onmousedown' in window;
+        },
+
+        /**
+         * checks if touch is possible
+         * @return {Boolean} if true, touch is possible
+         */
+        isTouch: function isTouch() {
+            return 'ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+        },
+
+        /**
+         * checks if IE is used
+         * @return {Boolean} if true, IE is used
+         */
+        isIE: function isIE() {
+            return navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+        },
+
+        /**
+         * gets cross-browser scroll-event
+         * @return {string} name of scroll event
+         */
+        scrollEvent: function scrollEvent() {
+            return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
         }
 
     };

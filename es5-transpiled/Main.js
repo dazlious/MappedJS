@@ -187,15 +187,9 @@
             value: function getAbsolutePosition(point) {
                 return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
             }
-
-            /**
-             * binds all events to handlers
-             * @return {MappedJS} instance of MappedJS for chaining
-             */
-
         }, {
-            key: 'bindEvents',
-            value: function bindEvents() {
+            key: 'initializeInteractForMap',
+            value: function initializeInteractForMap() {
                 this.interact = new _Interact.Interact({
                     container: this.$container,
                     autoFireHold: 300,
@@ -206,8 +200,7 @@
                                 return false;
                             }
                             var change = data.last.position.clone.substract(data.position.move);
-                            this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
-                            this.tileMap.view.drawIsNeeded = true;
+                            this.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                         }.bind(this),
                         wheel: function(data) {
                             var factor = data.zoom / 10;
@@ -229,15 +222,29 @@
                         }.bind(this)
                     }
                 });
+            }
+
+            /**
+             * binds all events to handlers
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
+        }, {
+            key: 'bindEvents',
+            value: function bindEvents() {
+
+                this.initializeInteractForMap();
 
                 (0, _jQuery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
                 (0, _jQuery2.default)(document).on("keydown", this.keyPress.bind(this));
                 (0, _jQuery2.default)(document).on("keyup", this.keyRelease.bind(this));
 
-                this.$zoomIn.on("click", this.zoomInToCenter.bind(this));
-                this.$zoomOut.on("click", this.zoomOutToCenter.bind(this));
-                this.$home.on("click", this.resetToInitialState.bind(this));
+                var gesture = _Helper.Helper.isTouch() ? "touchstart" : "mousedown";
+
+                this.$zoomIn.on(gesture, this.zoomInToCenter.bind(this));
+                this.$zoomOut.on(gesture, this.zoomOutToCenter.bind(this));
+                this.$home.on(gesture, this.resetToInitialState.bind(this));
 
                 return this;
             }
@@ -334,7 +341,7 @@
                 this.momentum = setTimeout(function() {
                     steps--;
                     var delta = _Helper.Helper.easeOutQuadratic((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
-                    this.moveViewByMomentum(delta);
+                    this.moveView(delta);
                     if (steps >= 0) {
                         this.triggerMomentum(steps, timing, change);
                     }
@@ -349,8 +356,8 @@
              */
 
         }, {
-            key: 'moveViewByMomentum',
-            value: function moveViewByMomentum(delta) {
+            key: 'moveView',
+            value: function moveView(delta) {
                 this.tileMap.view.moveView(delta);
                 this.tileMap.view.drawIsNeeded = true;
                 return this;

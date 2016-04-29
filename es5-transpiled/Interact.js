@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js'], factory);
+        define(['exports', 'jQuery', './Point.js', './Helper.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'));
+        factory(exports, require('jQuery'), require('./Point.js'), require('./Helper.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point);
+        factory(mod.exports, global.jQuery, global.Point, global.Helper);
         global.Interact = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point) {
+})(this, function(exports, _jQuery, _Point, _Helper) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -58,57 +58,13 @@
 
     var Interact = exports.Interact = function() {
         _createClass(Interact, [{
-            key: 'isMouse',
+            key: 'timeToLastMove',
 
-
-            /**
-             * checks if mouse is possible
-             * @return {Boolean} if true, mouse is possible
-             */
-            get: function get() {
-                return 'onmousedown' in window;
-            }
-
-            /**
-             * checks if touch is possible
-             * @return {Boolean} if true, touch is possible
-             */
-
-        }, {
-            key: 'isTouch',
-            get: function get() {
-                return 'ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-            }
-
-            /**
-             * checks if IE is used
-             * @return {Boolean} if true, IE is used
-             */
-
-        }, {
-            key: 'isIE',
-            get: function get() {
-                return navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-            }
-
-            /**
-             * gets cross-browser scroll-event
-             * @return {string} name of scroll event
-             */
-
-        }, {
-            key: 'scrollEvent',
-            get: function get() {
-                return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
-            }
 
             /**
              * get time difference to last
              * @return {number} difference
              */
-
-        }, {
-            key: 'timeToLastMove',
             get: function get() {
                 return this.data.time.end - this.data.time.last;
             }
@@ -262,22 +218,22 @@
             value: function getDefaultEventNames() {
                 return {
                     start: {
-                        touch: this.isIE ? "MSPointerDown pointerdown" : "touchstart",
-                        mouse: this.isIE ? "MSPointerDown pointerdown" : "mousedown"
+                        touch: _Helper.Helper.isIE() ? "MSPointerDown pointerdown" : "touchstart",
+                        mouse: _Helper.Helper.isIE() ? "MSPointerDown pointerdown" : "mousedown"
                     },
                     move: {
-                        touch: this.isIE ? "MSPointerMove pointermove" : "touchmove",
-                        mouse: this.isIE ? "MSPointerMove pointermove" : "mousemove"
+                        touch: _Helper.Helper.isIE() ? "MSPointerMove pointermove" : "touchmove",
+                        mouse: _Helper.Helper.isIE() ? "MSPointerMove pointermove" : "mousemove"
                     },
                     end: {
-                        touch: this.isIE ? "MSPointerUp pointerup" : "touchend",
-                        mouse: this.isIE ? "MSPointerUp pointerup" : "mouseup"
+                        touch: _Helper.Helper.isIE() ? "MSPointerUp pointerup" : "touchend",
+                        mouse: _Helper.Helper.isIE() ? "MSPointerUp pointerup" : "mouseup"
                     },
                     leave: {
-                        touch: this.isIE ? "MSPointerLeave pointerleave" : "touchleave",
-                        mouse: this.isIE ? "MSPointerLeave pointerleave" : "mouseleave"
+                        touch: _Helper.Helper.isIE() ? "MSPointerLeave pointerleave" : "touchleave",
+                        mouse: _Helper.Helper.isIE() ? "MSPointerLeave pointerleave" : "mouseleave"
                     },
-                    scroll: this.scrollEvent
+                    scroll: _Helper.Helper.scrollEvent()
                 };
             }
 
@@ -375,13 +331,13 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
-                if (this.isIE) {
+                if (_Helper.Helper.isIE()) {
                     this.bindIEEvents();
                 } else {
-                    if (this.isTouch) {
+                    if (_Helper.Helper.isTouch()) {
                         this.bindTouchEvents();
                     }
-                    if (this.isMouse) {
+                    if (_Helper.Helper.isMouse()) {
                         this.bindMouseEvents();
                     }
                 }
@@ -486,7 +442,7 @@
         }, {
             key: 'isPointerEvent',
             value: function isPointerEvent(e) {
-                return this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent);
+                return _Helper.Helper.isIE() && (e instanceof MSPointerEvent || e instanceof PointerEvent);
             }
 
             /**
@@ -851,7 +807,7 @@
         }, {
             key: 'positionDidNotChange',
             value: function positionDidNotChange(e) {
-                return this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position);
+                return _Helper.Helper.isIE() && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !_Helper.Helper.isIE() && _Helper.Helper.isTouch() && this.getRelativePosition(e[0]).equals(this.data.last.position);
             }
 
             /**

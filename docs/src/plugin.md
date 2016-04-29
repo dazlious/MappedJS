@@ -96,10 +96,6 @@ get size
 
 * [Interact](#Interact)
     * [new Interact(settings)](#new_Interact_new)
-    * [.isMouse](#Interact+isMouse) ⇒ <code>Boolean</code>
-    * [.isTouch](#Interact+isTouch) ⇒ <code>Boolean</code>
-    * [.isIE](#Interact+isIE) ⇒ <code>Boolean</code>
-    * [.scrollEvent](#Interact+scrollEvent) ⇒ <code>string</code>
     * [.timeToLastMove](#Interact+timeToLastMove) ⇒ <code>number</code>
     * [.time](#Interact+time) ⇒ <code>number</code>
     * [.dataClone](#Interact+dataClone) ⇒ <code>Object</code>
@@ -201,34 +197,6 @@ Constructor
             - .mouse <code>Object</code> - = ("MSPointerLeave pointerleave" || "mouseleave") - settings leave mouse eventnames
         - .scroll <code>string</code> - = ("wheel" || "mousewhell" || "DOMMouseScroll") - settings all scroll eventnames
 
-<a name="Interact+isMouse"></a>
-
-### interact.isMouse ⇒ <code>Boolean</code>
-checks if mouse is possible
-
-**Kind**: instance property of <code>[Interact](#Interact)</code>  
-**Returns**: <code>Boolean</code> - if true, mouse is possible  
-<a name="Interact+isTouch"></a>
-
-### interact.isTouch ⇒ <code>Boolean</code>
-checks if touch is possible
-
-**Kind**: instance property of <code>[Interact](#Interact)</code>  
-**Returns**: <code>Boolean</code> - if true, touch is possible  
-<a name="Interact+isIE"></a>
-
-### interact.isIE ⇒ <code>Boolean</code>
-checks if IE is used
-
-**Kind**: instance property of <code>[Interact](#Interact)</code>  
-**Returns**: <code>Boolean</code> - if true, IE is used  
-<a name="Interact+scrollEvent"></a>
-
-### interact.scrollEvent ⇒ <code>string</code>
-gets cross-browser scroll-event
-
-**Kind**: instance property of <code>[Interact](#Interact)</code>  
-**Returns**: <code>string</code> - name of scroll event  
 <a name="Interact+timeToLastMove"></a>
 
 ### interact.timeToLastMove ⇒ <code>number</code>
@@ -880,7 +848,7 @@ Creates a LatLng from specified LatLng
     * [.bindEvents()](#MappedJS+bindEvents) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.momentumAccerlation(velocity)](#MappedJS+momentumAccerlation) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.triggerMomentum(steps, timing, change)](#MappedJS+triggerMomentum) ⇒ <code>[MappedJS](#MappedJS)</code>
-    * [.moveViewByMomentum(delta)](#MappedJS+moveViewByMomentum) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.moveView(delta)](#MappedJS+moveView) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.zoom(factor, position)](#MappedJS+zoom) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.resizeHandler()](#MappedJS+resizeHandler) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.loadingFinished()](#MappedJS+loadingFinished) ⇒ <code>[MappedJS](#MappedJS)</code>
@@ -971,9 +939,9 @@ recursive momentum handler
 - timing <code>number</code> - time for step
 - change <code>[Point](#Point)</code> - distance
 
-<a name="MappedJS+moveViewByMomentum"></a>
+<a name="MappedJS+moveView"></a>
 
-### mappedJS.moveViewByMomentum(delta) ⇒ <code>[MappedJS](#MappedJS)</code>
+### mappedJS.moveView(delta) ⇒ <code>[MappedJS](#MappedJS)</code>
 move by delta momentum
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
