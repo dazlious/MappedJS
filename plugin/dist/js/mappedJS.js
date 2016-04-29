@@ -214,15 +214,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function getAbsolutePosition(point) {
 	            return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
 	        }
-
-	        /**
-	         * binds all events to handlers
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
 	    }, {
-	        key: 'bindEvents',
-	        value: function bindEvents() {
+	        key: 'initializeInteractForMap',
+	        value: function initializeInteractForMap() {
 	            this.interact = new _Interact.Interact({
 	                container: this.$container,
 	                autoFireHold: 300,
@@ -233,8 +227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            return false;
 	                        }
 	                        var change = data.last.position.clone.substract(data.position.move);
-	                        this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
-	                        this.tileMap.view.drawIsNeeded = true;
+	                        this.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
 	                    }.bind(this),
 	                    wheel: function (data) {
 	                        var factor = data.zoom / 10;
@@ -256,15 +249,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }.bind(this)
 	                }
 	            });
+	        }
+
+	        /**
+	         * binds all events to handlers
+	         * @return {MappedJS} instance of MappedJS for chaining
+	         */
+
+	    }, {
+	        key: 'bindEvents',
+	        value: function bindEvents() {
+
+	            this.initializeInteractForMap();
 
 	            (0, _jQuery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
 	            (0, _jQuery2.default)(document).on("keydown", this.keyPress.bind(this));
 	            (0, _jQuery2.default)(document).on("keyup", this.keyRelease.bind(this));
 
-	            this.$zoomIn.on("click", this.zoomInToCenter.bind(this));
-	            this.$zoomOut.on("click", this.zoomOutToCenter.bind(this));
-	            this.$home.on("click", this.resetToInitialState.bind(this));
+	            var gesture = _Helper.Helper.isTouch() ? "touchstart" : "mousedown";
+
+	            this.$zoomIn.on(gesture, this.zoomInToCenter.bind(this));
+	            this.$zoomOut.on(gesture, this.zoomOutToCenter.bind(this));
+	            this.$home.on(gesture, this.resetToInitialState.bind(this));
 
 	            return this;
 	        }
@@ -361,7 +368,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.momentum = setTimeout(function () {
 	                steps--;
 	                var delta = _Helper.Helper.easeOutQuadratic((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
-	                this.moveViewByMomentum(delta);
+	                this.moveView(delta);
 	                if (steps >= 0) {
 	                    this.triggerMomentum(steps, timing, change);
 	                }
@@ -376,8 +383,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 
 	    }, {
-	        key: 'moveViewByMomentum',
-	        value: function moveViewByMomentum(delta) {
+	        key: 'moveView',
+	        value: function moveView(delta) {
 	            this.tileMap.view.moveView(delta);
 	            this.tileMap.view.drawIsNeeded = true;
 	            return this;
@@ -2463,6 +2470,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    toRadians: function toRadians(degrees) {
 	        return degrees * Math.PI / 180;
+	    },
+	    /**
+	     * checks if mouse is possible
+	     * @return {Boolean} if true, mouse is possible
+	     */
+	    isMouse: function isMouse() {
+	        return 'onmousedown' in window;
+	    },
+
+	    /**
+	     * checks if touch is possible
+	     * @return {Boolean} if true, touch is possible
+	     */
+	    isTouch: function isTouch() {
+	        return 'ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+	    },
+
+	    /**
+	     * checks if IE is used
+	     * @return {Boolean} if true, IE is used
+	     */
+	    isIE: function isIE() {
+	        return navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+	    },
+
+	    /**
+	     * gets cross-browser scroll-event
+	     * @return {string} name of scroll event
+	     */
+	    scrollEvent: function scrollEvent() {
+	        return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
 	    }
 
 		};
@@ -2725,63 +2763,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(4);
 
+	var _Helper = __webpack_require__(10);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Interact = exports.Interact = function () {
 	    _createClass(Interact, [{
-	        key: 'isMouse',
+	        key: 'timeToLastMove',
 
-
-	        /**
-	         * checks if mouse is possible
-	         * @return {Boolean} if true, mouse is possible
-	         */
-	        get: function get() {
-	            return 'onmousedown' in window;
-	        }
-
-	        /**
-	         * checks if touch is possible
-	         * @return {Boolean} if true, touch is possible
-	         */
-
-	    }, {
-	        key: 'isTouch',
-	        get: function get() {
-	            return 'ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-	        }
-
-	        /**
-	         * checks if IE is used
-	         * @return {Boolean} if true, IE is used
-	         */
-
-	    }, {
-	        key: 'isIE',
-	        get: function get() {
-	            return navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-	        }
-
-	        /**
-	         * gets cross-browser scroll-event
-	         * @return {string} name of scroll event
-	         */
-
-	    }, {
-	        key: 'scrollEvent',
-	        get: function get() {
-	            return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
-	        }
 
 	        /**
 	         * get time difference to last
 	         * @return {number} difference
 	         */
-
-	    }, {
-	        key: 'timeToLastMove',
 	        get: function get() {
 	            return this.data.time.end - this.data.time.last;
 	        }
@@ -2935,22 +2931,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function getDefaultEventNames() {
 	            return {
 	                start: {
-	                    touch: this.isIE ? "MSPointerDown pointerdown" : "touchstart",
-	                    mouse: this.isIE ? "MSPointerDown pointerdown" : "mousedown"
+	                    touch: _Helper.Helper.isIE() ? "MSPointerDown pointerdown" : "touchstart",
+	                    mouse: _Helper.Helper.isIE() ? "MSPointerDown pointerdown" : "mousedown"
 	                },
 	                move: {
-	                    touch: this.isIE ? "MSPointerMove pointermove" : "touchmove",
-	                    mouse: this.isIE ? "MSPointerMove pointermove" : "mousemove"
+	                    touch: _Helper.Helper.isIE() ? "MSPointerMove pointermove" : "touchmove",
+	                    mouse: _Helper.Helper.isIE() ? "MSPointerMove pointermove" : "mousemove"
 	                },
 	                end: {
-	                    touch: this.isIE ? "MSPointerUp pointerup" : "touchend",
-	                    mouse: this.isIE ? "MSPointerUp pointerup" : "mouseup"
+	                    touch: _Helper.Helper.isIE() ? "MSPointerUp pointerup" : "touchend",
+	                    mouse: _Helper.Helper.isIE() ? "MSPointerUp pointerup" : "mouseup"
 	                },
 	                leave: {
-	                    touch: this.isIE ? "MSPointerLeave pointerleave" : "touchleave",
-	                    mouse: this.isIE ? "MSPointerLeave pointerleave" : "mouseleave"
+	                    touch: _Helper.Helper.isIE() ? "MSPointerLeave pointerleave" : "touchleave",
+	                    mouse: _Helper.Helper.isIE() ? "MSPointerLeave pointerleave" : "mouseleave"
 	                },
-	                scroll: this.scrollEvent
+	                scroll: _Helper.Helper.scrollEvent()
 	            };
 	        }
 
@@ -3048,13 +3044,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
-	            if (this.isIE) {
+	            if (_Helper.Helper.isIE()) {
 	                this.bindIEEvents();
 	            } else {
-	                if (this.isTouch) {
+	                if (_Helper.Helper.isTouch()) {
 	                    this.bindTouchEvents();
 	                }
-	                if (this.isMouse) {
+	                if (_Helper.Helper.isMouse()) {
 	                    this.bindMouseEvents();
 	                }
 	            }
@@ -3159,7 +3155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'isPointerEvent',
 	        value: function isPointerEvent(e) {
-	            return this.isIE && (e instanceof MSPointerEvent || e instanceof PointerEvent);
+	            return _Helper.Helper.isIE() && (e instanceof MSPointerEvent || e instanceof PointerEvent);
 	        }
 
 	        /**
@@ -3524,7 +3520,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'positionDidNotChange',
 	        value: function positionDidNotChange(e) {
-	            return this.isIE && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !this.isIE && this.isTouch && this.getRelativePosition(e[0]).equals(this.data.last.position);
+	            return _Helper.Helper.isIE() && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !_Helper.Helper.isIE() && _Helper.Helper.isTouch() && this.getRelativePosition(e[0]).equals(this.data.last.position);
 	        }
 
 	        /**

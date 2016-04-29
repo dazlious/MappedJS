@@ -73,7 +73,31 @@ export var Helper = {
      * @param {number} degrees - specified degrees
      * @return {number} converted radian
      */
-    toRadians: degrees => degrees * Math.PI / 180
+    toRadians: degrees => degrees * Math.PI / 180,
+    /**
+     * checks if mouse is possible
+     * @return {Boolean} if true, mouse is possible
+     */
+    isMouse: () => ('onmousedown' in window),
+
+    /**
+     * checks if touch is possible
+     * @return {Boolean} if true, touch is possible
+     */
+    isTouch: () => (('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
+
+    /**
+     * checks if IE is used
+     * @return {Boolean} if true, IE is used
+     */
+    isIE: () => ((navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
+
+    /**
+     * gets cross-browser scroll-event
+     * @return {string} name of scroll event
+     */
+    scrollEvent: () => "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll"
+
 
 
 };

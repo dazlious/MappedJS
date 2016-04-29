@@ -108,11 +108,7 @@ export class MappedJS {
         return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
     }
 
-    /**
-     * binds all events to handlers
-     * @return {MappedJS} instance of MappedJS for chaining
-     */
-    bindEvents() {
+    initializeInteractForMap() {
         this.interact = new Interact({
             container: this.$container,
             autoFireHold: 300,
@@ -123,8 +119,7 @@ export class MappedJS {
                         return false;
                     }
                     const change = data.last.position.clone.substract(data.position.move);
-                    this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
-                    this.tileMap.view.drawIsNeeded = true;
+                    this.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                 }.bind(this),
                 wheel: function(data) {
                     const factor = data.zoom / 10;
@@ -147,15 +142,26 @@ export class MappedJS {
                 }.bind(this)
             }
         });
+    }
+
+    /**
+     * binds all events to handlers
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
+    bindEvents() {
+
+        this.initializeInteractForMap();
 
         $(window).on("resize orientationchange", this.resizeHandler.bind(this));
 
         $(document).on("keydown", this.keyPress.bind(this));
         $(document).on("keyup", this.keyRelease.bind(this));
 
-        this.$zoomIn.on("click", this.zoomInToCenter.bind(this));
-        this.$zoomOut.on("click", this.zoomOutToCenter.bind(this));
-        this.$home.on("click", this.resetToInitialState.bind(this));
+        const gesture = Helper.isTouch() ? "touchstart": "mousedown";
+
+        this.$zoomIn.on(gesture, this.zoomInToCenter.bind(this));
+        this.$zoomOut.on(gesture, this.zoomOutToCenter.bind(this));
+        this.$home.on(gesture, this.resetToInitialState.bind(this));
 
         return this;
     }
@@ -233,7 +239,7 @@ export class MappedJS {
         this.momentum = setTimeout(function() {
             steps--;
             const delta = Helper.easeOutQuadratic((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
-            this.moveViewByMomentum(delta);
+            this.moveView(delta);
             if (steps >= 0) {
                 this.triggerMomentum(steps, timing, change);
             }
@@ -246,7 +252,7 @@ export class MappedJS {
      * @param  {Point} delta - delta of x/y
      * @return {MappedJS} instance of MappedJS for chaining
      */
-    moveViewByMomentum(delta) {
+    moveView(delta) {
         this.tileMap.view.moveView(delta);
         this.tileMap.view.drawIsNeeded = true;
         return this;
