@@ -71,6 +71,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _TileMap = __webpack_require__(2);
 
+	var _DataEnrichment = __webpack_require__(12);
+
 	var _Helper = __webpack_require__(10);
 
 	var _Interact = __webpack_require__(13);
@@ -112,6 +114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.initializeData(mapData, function () {
 	            this.initializeMap();
+	            this.addControls();
 	            this.bindEvents();
 	            this.loadingFinished();
 	        }.bind(this));
@@ -124,33 +127,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
-	    /**
-	     * initializes the settings and handles errors
-	     * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
-	     * @param  {object} events - List of events
-	     * @return {MappedJS} instance of MappedJS for chaining
-	     */
-
-
 	    _createClass(MappedJS, [{
+	        key: 'addControls',
+	        value: function addControls() {
+	            if (this.mapSettings.controls) {
+	                this.$controls = (0, _jQuery2.default)('<div class="control-container ' + this.mapSettings.controls.theme + ' ' + this.mapSettings.controls.position + '" />');
+	                this.$zoomIn = (0, _jQuery2.default)("<div class='control zoom-in' />");
+	                this.$zoomOut = (0, _jQuery2.default)("<div class='control zoom-out' />");
+	                this.$home = (0, _jQuery2.default)("<div class='control home' />");
+	                this.$controls.append(this.$home).append(this.$zoomIn).append(this.$zoomOut);
+	                this.$container.append(this.$controls);
+	            }
+	        }
+
+	        /**
+	         * initializes the settings and handles errors
+	         * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
+	         * @param  {object} events - List of events
+	         * @return {MappedJS} instance of MappedJS for chaining
+	         */
+
+	    }, {
 	        key: 'initializeSettings',
-	        value: function initializeSettings(container, events, mapSettings) {
+	        value: function initializeSettings(container, events, settings) {
 	            this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
 	            if (!(this.$container instanceof jQuery)) {
 	                throw new Error("Container " + container + " not found");
 	            }
 	            this.$container.addClass("mappedJS");
 
-	            this.mapSettings = {
-	                level: mapSettings.level || 0,
-	                center: mapSettings.center || { "lat": 0, "lng": 0 },
-	                bounds: mapSettings.bounds || {
-	                    "top": 90,
-	                    "left": -180,
-	                    "width": 360,
-	                    "height": 180
-	                }
-	            };
+	            this.mapSettings = _DataEnrichment.DataEnrichment.mapSettings(settings);
 
 	            this.events = events;
 
@@ -223,6 +229,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                overwriteViewportSettings: true,
 	                callbacks: {
 	                    pan: function (data) {
+	                        if ((0, _jQuery2.default)(data.target).hasClass("control")) {
+	                            return false;
+	                        }
 	                        var change = data.last.position.clone.substract(data.position.move);
 	                        this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
 	                        this.tileMap.view.drawIsNeeded = true;
@@ -235,6 +244,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
 	                    }.bind(this),
 	                    doubletap: function (data) {
+	                        if ((0, _jQuery2.default)(data.target).hasClass("control")) {
+	                            return false;
+	                        }
 	                        this.zoom(0.2, this.getAbsolutePosition(data.position.start));
 	                    }.bind(this),
 	                    flick: function (data) {
@@ -250,7 +262,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	            (0, _jQuery2.default)(document).on("keydown", this.keyPress.bind(this));
 	            (0, _jQuery2.default)(document).on("keyup", this.keyRelease.bind(this));
 
+	            this.$zoomIn.on("click", this.zoomInToCenter.bind(this));
+	            this.$zoomOut.on("click", this.zoomOutToCenter.bind(this));
+	            this.$home.on("click", this.resetToInitialState.bind(this));
+
 	            return this;
+	        }
+	    }, {
+	        key: 'resetToInitialState',
+	        value: function resetToInitialState() {
+	            this.tileMap.view.reset();
+	            this.tileMap.view.drawIsNeeded = true;
+	        }
+	    }, {
+	        key: 'zoomInToCenter',
+	        value: function zoomInToCenter() {
+	            this.zoom(0.1, this.tileMap.view.viewport.center);
+	        }
+	    }, {
+	        key: 'zoomOutToCenter',
+	        value: function zoomOutToCenter() {
+	            this.zoom(-0.1, this.tileMap.view.viewport.center);
 	        }
 	    }, {
 	        key: 'keyPress',
@@ -274,15 +306,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    break;
 	                case 187:
 	                    // plus
-	                    this.zoom(0.1, this.tileMap.view.viewport.center);
+	                    this.zoomInToCenter();
 	                    break;
 	                case 189:
 	                    // minus
-	                    this.zoom(-0.1, this.tileMap.view.viewport.center);
+	                    this.zoomOutToCenter();
 	                    break;
 	                case 72:
 	                    // home
-	                    this.tileMap.view.reset();
+	                    this.resetToInitialState();
 	                    break;
 	                default:
 	                    break;
@@ -527,8 +559,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.view = new _View.View({
 	                viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
 	                mapView: new _Rectangle.Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
-	                bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
-	                center: new _LatLng.LatLng(center.lat, center.lng),
+	                bounds: bounds,
+	                center: center,
 	                data: this.getCurrentLevelData(),
 	                markerData: this.markerData,
 	                $container: this.$container,
@@ -2580,6 +2612,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _LatLng = __webpack_require__(5);
 
+	var _Bounds = __webpack_require__(6);
+
 	var _Helper = __webpack_require__(10);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -2617,6 +2651,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        return this;
+	    },
+	    mapSettings: function mapSettings(data) {
+
+	        var enrichedData = _jQuery2.default.extend(true, DataEnrichment.MAP_SETTINGS, data);
+
+	        var bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1]));
+	        var center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
+
+	        enrichedData.bounds = bounds;
+	        enrichedData.center = center;
+
+	        return enrichedData;
 	    }
 	};
 
@@ -2638,6 +2684,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    size: {
 	        width: 32,
 	        height: 32
+	    }
+	};
+
+	DataEnrichment.MAP_SETTINGS = {
+	    level: 0,
+	    center: { "lat": 0, "lng": 0 },
+	    bounds: {
+	        "top": 90,
+	        "left": -180,
+	        "width": 360,
+	        "height": 180
+	    },
+	    controls: {
+	        zoom: false,
+	        home: false,
+	        position: "bottom-right",
+	        theme: "dark"
 	    }
 		};
 

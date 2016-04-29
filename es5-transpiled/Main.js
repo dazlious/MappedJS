@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './TileMap.js', './Helper.js', './Interact.js', './LatLng.js', './Point.js'], factory);
+        define(['exports', 'jQuery', './TileMap.js', './DataEnrichment.js', './Helper.js', './Interact.js', './LatLng.js', './Point.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./TileMap.js'), require('./Helper.js'), require('./Interact.js'), require('./LatLng.js'), require('./Point.js'));
+        factory(exports, require('jQuery'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Helper.js'), require('./Interact.js'), require('./LatLng.js'), require('./Point.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.TileMap, global.Helper, global.Interact, global.LatLng, global.Point);
+        factory(mod.exports, global.jQuery, global.TileMap, global.DataEnrichment, global.Helper, global.Interact, global.LatLng, global.Point);
         global.Main = mod.exports;
     }
-})(this, function(exports, _jQuery, _TileMap, _Helper, _Interact, _LatLng, _Point) {
+})(this, function(exports, _jQuery, _TileMap, _DataEnrichment, _Helper, _Interact, _LatLng, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -87,6 +87,7 @@
 
             this.initializeData(mapData, function() {
                 this.initializeMap();
+                this.addControls();
                 this.bindEvents();
                 this.loadingFinished();
             }.bind(this));
@@ -99,36 +100,36 @@
             return this;
         }
 
-        /**
-         * initializes the settings and handles errors
-         * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
-         * @param  {object} events - List of events
-         * @return {MappedJS} instance of MappedJS for chaining
-         */
-
-
         _createClass(MappedJS, [{
+            key: 'addControls',
+            value: function addControls() {
+                if (this.mapSettings.controls) {
+                    this.$controls = (0, _jQuery2.default)('<div class="control-container ' + this.mapSettings.controls.theme + ' ' + this.mapSettings.controls.position + '" />');
+                    this.$zoomIn = (0, _jQuery2.default)("<div class='control zoom-in' />");
+                    this.$zoomOut = (0, _jQuery2.default)("<div class='control zoom-out' />");
+                    this.$home = (0, _jQuery2.default)("<div class='control home' />");
+                    this.$controls.append(this.$home).append(this.$zoomIn).append(this.$zoomOut);
+                    this.$container.append(this.$controls);
+                }
+            }
+
+            /**
+             * initializes the settings and handles errors
+             * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
+             * @param  {object} events - List of events
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
+        }, {
             key: 'initializeSettings',
-            value: function initializeSettings(container, events, mapSettings) {
+            value: function initializeSettings(container, events, settings) {
                 this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
                 if (!(this.$container instanceof jQuery)) {
                     throw new Error("Container " + container + " not found");
                 }
                 this.$container.addClass("mappedJS");
 
-                this.mapSettings = {
-                    level: mapSettings.level || 0,
-                    center: mapSettings.center || {
-                        "lat": 0,
-                        "lng": 0
-                    },
-                    bounds: mapSettings.bounds || {
-                        "top": 90,
-                        "left": -180,
-                        "width": 360,
-                        "height": 180
-                    }
-                };
+                this.mapSettings = _DataEnrichment.DataEnrichment.mapSettings(settings);
 
                 this.events = events;
 
@@ -201,6 +202,9 @@
                     overwriteViewportSettings: true,
                     callbacks: {
                         pan: function(data) {
+                            if ((0, _jQuery2.default)(data.target).hasClass("control")) {
+                                return false;
+                            }
                             var change = data.last.position.clone.substract(data.position.move);
                             this.tileMap.view.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                             this.tileMap.view.drawIsNeeded = true;
@@ -213,6 +217,9 @@
                             this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
                         }.bind(this),
                         doubletap: function(data) {
+                            if ((0, _jQuery2.default)(data.target).hasClass("control")) {
+                                return false;
+                            }
                             this.zoom(0.2, this.getAbsolutePosition(data.position.start));
                         }.bind(this),
                         flick: function(data) {
@@ -228,7 +235,27 @@
                 (0, _jQuery2.default)(document).on("keydown", this.keyPress.bind(this));
                 (0, _jQuery2.default)(document).on("keyup", this.keyRelease.bind(this));
 
+                this.$zoomIn.on("click", this.zoomInToCenter.bind(this));
+                this.$zoomOut.on("click", this.zoomOutToCenter.bind(this));
+                this.$home.on("click", this.resetToInitialState.bind(this));
+
                 return this;
+            }
+        }, {
+            key: 'resetToInitialState',
+            value: function resetToInitialState() {
+                this.tileMap.view.reset();
+                this.tileMap.view.drawIsNeeded = true;
+            }
+        }, {
+            key: 'zoomInToCenter',
+            value: function zoomInToCenter() {
+                this.zoom(0.1, this.tileMap.view.viewport.center);
+            }
+        }, {
+            key: 'zoomOutToCenter',
+            value: function zoomOutToCenter() {
+                this.zoom(-0.1, this.tileMap.view.viewport.center);
             }
         }, {
             key: 'keyPress',
@@ -252,15 +279,15 @@
                         break;
                     case 187:
                         // plus
-                        this.zoom(0.1, this.tileMap.view.viewport.center);
+                        this.zoomInToCenter();
                         break;
                     case 189:
                         // minus
-                        this.zoom(-0.1, this.tileMap.view.viewport.center);
+                        this.zoomOutToCenter();
                         break;
                     case 72:
                         // home
-                        this.tileMap.view.reset();
+                        this.resetToInitialState();
                         break;
                     default:
                         break;

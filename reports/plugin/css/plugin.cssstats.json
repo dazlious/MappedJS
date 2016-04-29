@@ -1,36 +1,42 @@
 {
     "fileSize": {
-        "size": "0.99 KB",
-        "gzipSize": "0.33 KB"
+        "size": "13.74 KB",
+        "gzipSize": "3.40 KB"
     },
     "selectorSpecifity": {
-        "max": 30,
-        "average": 16
+        "max": 50,
+        "average": 30.46153846153846
     },
     "totals": {
-        "rules": 6,
-        "selectors": 7,
-        "declarations": 17,
-        "properties": 11,
+        "rules": 25,
+        "selectors": 26,
+        "declarations": 53,
+        "properties": 26,
         "vendorPrefixes": 1,
         "mediaQueries": 0,
         "importants": 0
     },
     "uniqueDeclarations": {
-        "width": 1,
-        "height": 1
+        "width": 2,
+        "height": 2,
+        "background-color": 4
     },
     "selectors": {
         "type": 2,
-        "class": 7,
+        "class": 26,
         "id": 0,
-        "pseudoClass": 1,
+        "pseudoClass": 3,
         "pseudoElement": 0
     },
     "propertyResets": {},
     "uniqueValues": {
         "colors": {},
-        "backgroundColors": {},
+        "backgroundColors": {
+            "rgba(0, 0, 0, 0.5)": 1,
+            "rgba(0, 0, 0, 0.8)": 1,
+            "rgba(255, 255, 255, 0.5)": 1,
+            "#fff": 1
+        },
         "fontSizes": [],
         "fontFamilies": {}
     },
@@ -43,7 +49,26 @@
             11,
             20,
             20,
-            30
+            30,
+            20,
+            30,
+            30,
+            30,
+            30,
+            30,
+            30,
+            30,
+            30,
+            40,
+            50,
+            40,
+            40,
+            40,
+            40,
+            50,
+            40,
+            40,
+            40
         ],
         "rulesetSize": [
             2,
@@ -51,6 +76,25 @@
             1,
             6,
             5,
+            1,
+            1,
+            2,
+            2,
+            2,
+            2,
+            7,
+            3,
+            2,
+            1,
+            2,
+            1,
+            2,
+            1,
+            1,
+            2,
+            1,
+            2,
+            1,
             1
         ]
     }

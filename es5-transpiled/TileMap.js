@@ -146,8 +146,8 @@
                 this.view = new _View.View({
                     viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
                     mapView: new _Rectangle.Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
-                    bounds: new _Bounds.Bounds(new _LatLng.LatLng(bounds.northWest[0], bounds.northWest[1]), new _LatLng.LatLng(bounds.southEast[0], bounds.southEast[1])),
-                    center: new _LatLng.LatLng(center.lat, center.lng),
+                    bounds: bounds,
+                    center: center,
                     data: this.getCurrentLevelData(),
                     markerData: this.markerData,
                     $container: this.$container,
