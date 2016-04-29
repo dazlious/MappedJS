@@ -71,8 +71,8 @@ export class TileMap {
         this.view = new View({
             viewport: new Rectangle(this.left, this.top, this.width, this.height),
             mapView: new Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
-            bounds: new Bounds(new LatLng(bounds.northWest[0], bounds.northWest[1]), new LatLng(bounds.southEast[0], bounds.southEast[1])),
-            center: new LatLng(center.lat, center.lng),
+            bounds: bounds,
+            center: center,
             data: this.getCurrentLevelData(),
             markerData: this.markerData,
             $container: this.$container,

@@ -1,6 +1,7 @@
 import $ from 'jQuery';
 import {Point} from './Point.js';
 import {LatLng} from './LatLng.js';
+import {Bounds} from './Bounds.js';
 import {Helper} from './Helper.js';
 
 export var DataEnrichment = {
@@ -37,6 +38,18 @@ export var DataEnrichment = {
         }
 
         return this;
+    },
+    mapSettings: function(data) {
+
+        const enrichedData = $.extend(true, DataEnrichment.MAP_SETTINGS, data);
+
+        const bounds = new Bounds(new LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1]));
+        const center = new LatLng(enrichedData.center.lat, enrichedData.center.lng);
+
+        enrichedData.bounds = bounds;
+        enrichedData.center = center;
+
+        return enrichedData;
     }
 };
 
@@ -58,5 +71,22 @@ DataEnrichment.DATA_MARKER = {
     size: {
         width: 32,
         height: 32
+    }
+};
+
+DataEnrichment.MAP_SETTINGS = {
+    level: 0,
+    center: {"lat": 0, "lng": 0},
+    bounds: {
+        "top": 90,
+        "left": -180,
+        "width": 360,
+        "height": 180
+    },
+    controls: {
+        zoom: false,
+        home: false,
+        position: "bottom-right",
+        theme: "dark"
     }
 };

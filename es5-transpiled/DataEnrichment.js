@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js', './LatLng.js', './Helper.js'], factory);
+        define(['exports', 'jQuery', './Point.js', './LatLng.js', './Bounds.js', './Helper.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'), require('./LatLng.js'), require('./Helper.js'));
+        factory(exports, require('jQuery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Helper.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point, global.LatLng, global.Helper);
+        factory(mod.exports, global.jQuery, global.Point, global.LatLng, global.Bounds, global.Helper);
         global.DataEnrichment = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point, _LatLng, _Helper) {
+})(this, function(exports, _jQuery, _Point, _LatLng, _Bounds, _Helper) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -59,6 +59,18 @@
             }
 
             return this;
+        },
+        mapSettings: function mapSettings(data) {
+
+            var enrichedData = _jQuery2.default.extend(true, DataEnrichment.MAP_SETTINGS, data);
+
+            var bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1]));
+            var center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
+
+            enrichedData.bounds = bounds;
+            enrichedData.center = center;
+
+            return enrichedData;
         }
     };
 
@@ -80,6 +92,26 @@
         size: {
             width: 32,
             height: 32
+        }
+    };
+
+    DataEnrichment.MAP_SETTINGS = {
+        level: 0,
+        center: {
+            "lat": 0,
+            "lng": 0
+        },
+        bounds: {
+            "top": 90,
+            "left": -180,
+            "width": 360,
+            "height": 180
+        },
+        controls: {
+            zoom: false,
+            home: false,
+            position: "bottom-right",
+            theme: "dark"
         }
     };
 });
