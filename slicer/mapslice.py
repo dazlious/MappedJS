@@ -1,8 +1,8 @@
 # USAGE:
 # python mapslice.py -i image/src/germany.png -o image/dist/ger/ -p img/ -t 512 -s 512 -m 256
+# python mapslice.py -i image/src/kartel-level-0.png image/src/kartel-level-1.png -o image/dist/multilevel/ -p img/ -t 512 -s 512 -m 256 -e png
 
-
-from PIL import Image, ImageOps
+from PIL import Image
 import math
 import time
 import argparse
@@ -15,9 +15,6 @@ json_data = {
    "img_data": {}
 }
 
-level = 0
-
-
 def main():
     global settings
     try:
@@ -25,7 +22,9 @@ def main():
 
         start = time.time()
 
-        build_level(settings.input, settings.output, settings.path, settings.size, settings.minsize)
+        for i in range(len(settings.input)):
+            current_level = settings.input[i]
+            build_level(current_level, settings.output, settings.path, settings.size, settings.minsize, i)
 
         end = time.time()
         elapsed = end - start
@@ -38,8 +37,7 @@ def main():
         print "-> Aborted through user interaction"
 
 
-def build_level(input_path, output, path, size, minsize):
-    global level
+def build_level(input_path, output, path, size, minsize, current_level):
 
     img = open_image(input_path)
 
@@ -58,23 +56,21 @@ def build_level(input_path, output, path, size, minsize):
 
     create_output_path(output)
 
-    build_data_json(output, slices, path, data_in_current_level, level)
+    build_data_json(output, slices, path, data_in_current_level, current_level)
 
-    slice_img(img, slices)
+    slice_img(img, slices, current_level)
 
-    create_thumb(img, data_in_current_level, path)
+    create_thumb(img, data_in_current_level, path, current_level)
 
     result_rows = len(slices)
     result_cols = len(slices[0])
     result_number = result_cols * result_rows
 
-    print("Sliced image into %dx%d and created %d tiles" % (result_cols, result_rows, result_number))
-
-    level += 1
+    print("Sliced image for level %d into %dx%d and created %d tiles" % (current_level, result_cols, result_rows, result_number))
 
 
-def create_thumb(img, data, path):
-    outfile = "map_thumb." + settings.extension
+def create_thumb(img, data, path, current_level):
+    outfile = "map_thumb_"+str(current_level)+"." + settings.extension
     thumb_img = img
     thumb_img.thumbnail((settings.thumbSize, settings.thumbSize), Image.ANTIALIAS)
     thumb_img.save(settings.output + outfile)
@@ -91,12 +87,12 @@ def create_output_path(filename):
                 raise
 
 
-def build_data_json(output, slices, path, current_data, level):
+def build_data_json(output, slices, path, current_data, current_level):
     for y in range(len(slices)):
         for x in range(len(slices[y])):
             current_slice = slices[y][x]
             data = {
-                "path": path + "map_"+str(y)+"_"+str(x)+"." + settings.extension,
+                "path": path + "map_"+str(current_level)+"_"+str(y)+"_"+str(x)+"." + settings.extension,
                 "x": current_slice[0],
                 "y": current_slice[1],
                 "w": current_slice[2] - current_slice[0],
@@ -104,14 +100,14 @@ def build_data_json(output, slices, path, current_data, level):
             }
             current_data["tiles"].append(data)
 
-    json_data["img_data"]["level-" + str(level)] = current_data
+    json_data["img_data"]["level-" + str(current_level)] = current_data
 
 
-def slice_img(image, slices):
+def slice_img(image, slices, current_level):
     for y in range(len(slices)):
         for x in range(len(slices[y])):
             item = slices[y][x]
-            crop_save(image, item, x, y)
+            crop_save(image, item, x, y, current_level)
 
 
 def calculate_slices(image, size, minsize):
@@ -169,12 +165,12 @@ def calculate_slices_normal(width, height, size, x_remainder, y_remainder, small
     return column_array
 
 
-def crop_save(image, box, x, y):
+def crop_save(image, box, x, y, current_level):
     cropped_img = image.crop(box)
-    cropped_img.save(settings.output + "map_"+str(y)+"_"+str(x)+"."+settings.extension)
+    cropped_img.save(settings.output + "map_"+str(current_level)+"_"+str(y)+"_"+str(x)+"."+settings.extension)
 
 
-def open_image(file_name) :
+def open_image(file_name):
     try:
         img = Image.open(file_name)
         return img
@@ -186,7 +182,7 @@ def open_image(file_name) :
 def init_settings():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-i', '--input', help='path to source', required=True, type=str)
+    parser.add_argument('-i', '--input', help='path to source', required=True, type=str, nargs=argparse.ONE_OR_MORE)
     parser.add_argument('-o', '--output', help='path to destination', required=True, type=str)
     parser.add_argument('-s', '--size', help='size of a tile', default=512, type=int)
     parser.add_argument('-m', '--minsize', help='minimum size of a tile', default=128, type=int)
@@ -194,7 +190,6 @@ def init_settings():
     parser.add_argument('-p', '--path', help='additional path information for relative paths', default="", type=str)
     parser.add_argument('-c', '--clearfolder', help='empties output folder', default=False, type=bool)
     parser.add_argument('-e', '--extension', help='file type', default="jpg", type=str)
-
 
     args = parser.parse_args()
 
