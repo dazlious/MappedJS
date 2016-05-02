@@ -1118,6 +1118,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'moveView',
 	        value: function moveView(pos) {
+	            var redo = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
 
 	            var nw = this.convertLatLngToPoint(this.limitToBounds.nw);
 	            var so = this.convertLatLngToPoint(this.limitToBounds.so);
@@ -1155,6 +1157,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.calculateNewCenter();
 
+	            // could be more optimized
+	            if (redo) {
+	                this.moveView(new _Point.Point(), false);
+	            }
 	            return this;
 	        }
 
