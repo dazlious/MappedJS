@@ -270,12 +270,12 @@ export class View {
      * @param  {Point} pos - specified additional offset
      * @return {View} instance of View for chaining
      */
-    moveView(pos) {
+    moveView(pos, redo = true) {
 
         const nw = this.convertLatLngToPoint(this.limitToBounds.nw);
         const so = this.convertLatLngToPoint(this.limitToBounds.so);
         const limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, so.x - nw.x, so.y - nw.y);
-        
+
         pos.divide(this.distortionFactor, 1);
         const equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
         if (!equalizedMap.containsRect(this.viewport)) {
@@ -308,6 +308,10 @@ export class View {
 
         this.calculateNewCenter();
 
+        // could be more optimized
+        if (redo) {
+            this.moveView(new Point(), false);
+        }
         return this;
     }
 
