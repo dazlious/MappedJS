@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Marker.js', './Helper.js', './DataEnrichment.js'], factory);
+        define(['exports', 'jQuery', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Marker.js', './Helper.js', './DataEnrichment.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Marker.js'), require('./Helper.js'), require('./DataEnrichment.js'));
+        factory(exports, require('jQuery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Marker.js'), require('./Helper.js'), require('./DataEnrichment.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Marker, global.Helper, global.DataEnrichment);
+        factory(mod.exports, global.jQuery, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Marker, global.Helper, global.DataEnrichment, global.Publisher);
         global.View = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Marker, _Helper, _DataEnrichment) {
+})(this, function(exports, _jQuery, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Marker, _Helper, _DataEnrichment, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -159,6 +159,8 @@
             this.debug = debug;
             this.lastDraw = new Date();
 
+            this.eventManager = new _Publisher.Publisher();
+
             if (this.debug) {
                 this.$debugContainer = (0, _jQuery2.default)("<div class='debug'></div>");
                 this.$debugContainer.css({
@@ -194,9 +196,6 @@
 
             return this;
         }
-
-        // TODO: Reset function not working properly
-
 
         _createClass(View, [{
             key: 'reset',
@@ -316,6 +315,7 @@
             key: 'zoom',
             value: function zoom(factor, pos) {
                 this.zoomFactor = Math.max(Math.min(this.zoomFactor + factor, this.maxZoom), this.minZoom);
+
                 var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
                 mapPosition.x += this.getDeltaXToCenter(pos);
                 var latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
@@ -325,6 +325,15 @@
 
                 this.setLatLngToPosition(latlngPosition, pos);
                 this.moveView(new _Point.Point());
+
+                this.drawIsNeeded = true;
+
+                if (this.zoomFactor === this.maxZoom) {
+                    this.eventManager.publish("next-level", [this.center, this.bounds]);
+                } else if (this.zoomFactor === this.minZoom) {
+                    this.eventManager.publish("previous-level", [this.center, this.bounds]);
+                }
+
                 return this;
             }
 
@@ -513,13 +522,15 @@
         }, {
             key: 'repositionMarkerContainer',
             value: function repositionMarkerContainer() {
-                var newSize = this.currentView.getDistortedRect(this.distortionFactor);
-                this.$markerContainer.css({
-                    "width": newSize.width + 'px',
-                    "height": newSize.height + 'px',
-                    "left": newSize.left + this.offsetToCenter + 'px',
-                    "top": newSize.top + 'px'
-                });
+                if (this.$markerContainer) {
+                    var newSize = this.currentView.getDistortedRect(this.distortionFactor);
+                    this.$markerContainer.css({
+                        "width": newSize.width + 'px',
+                        "height": newSize.height + 'px',
+                        "left": newSize.left + this.offsetToCenter + 'px',
+                        "top": newSize.top + 'px'
+                    });
+                }
                 return this;
             }
         }]);

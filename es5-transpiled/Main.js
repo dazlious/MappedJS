@@ -284,12 +284,14 @@
                         // down
                         this.handleMovementByKeys(new _Point.Point(0, -1));
                         break;
-                    case 187:
-                        // plus
+                    case 187: // plus
+                    case 107:
+                        // plus numpad
                         this.zoomInToCenter();
                         break;
-                    case 189:
-                        // minus
+                    case 189: // minus
+                    case 109:
+                        // minus numpad
                         this.zoomOutToCenter();
                         break;
                     case 72:

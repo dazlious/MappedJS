@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './View.js', './LatLng.js', './Bounds.js', './Rectangle.js'], factory);
+        define(['exports', 'jQuery', './View.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Publisher.js', './StateHandler.js', './Helper.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./View.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'));
+        factory(exports, require('jQuery'), require('./View.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Helper.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.View, global.LatLng, global.Bounds, global.Rectangle);
+        factory(mod.exports, global.jQuery, global.View, global.LatLng, global.Bounds, global.Rectangle, global.Publisher, global.StateHandler, global.Helper);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jQuery, _View, _LatLng, _Bounds, _Rectangle) {
+})(this, function(exports, _jQuery, _View, _LatLng, _Bounds, _Rectangle, _Publisher, _StateHandler, _Helper) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -96,6 +96,17 @@
                 return this.$container.innerHeight();
             }
 
+            /**
+             * gets data of current zoom level
+             * @return {Object} data for current level as json
+             */
+
+        }, {
+            key: 'currentLevelData',
+            get: function get() {
+                return this.levelHandler.current.value;
+            }
+
             /** Constructor
              * @param  {Object} container - jQuery-object holding the container
              * @param  {Object} tilesData={} - json object representing data of TileMap
@@ -126,9 +137,23 @@
             this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
             this.settings = settings;
 
+            this.levels = [];
+
+            _Helper.Helper.forEach(this.imgData, function(element, i) {
+                var currentLevel = {
+                    value: element,
+                    description: i
+                };
+                this.levels.push(currentLevel);
+            }.bind(this));
+
+            this.levelHandler = new _StateHandler.StateHandler(this.levels);
+
+            this.eventManager = new _Publisher.Publisher();
+
             this.debug = debug;
 
-            this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
+            this.initialize(settings.bounds, settings.center, this.currentLevelData);
 
             return this;
         }
@@ -141,21 +166,56 @@
 
         _createClass(TileMap, [{
             key: 'initialize',
-            value: function initialize(bounds, center, mapDimensions) {
+            value: function initialize(bounds, center, data) {
                 this.initializeCanvas();
+
+                this.bindEvents();
+
+                this.createViewFromData(bounds, center, data);
+
+                this.resizeCanvas();
+
+                return this;
+            }
+        }, {
+            key: 'createViewFromData',
+            value: function createViewFromData(bounds, center, data) {
                 this.view = new _View.View({
                     viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
-                    mapView: new _Rectangle.Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
+                    mapView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
                     bounds: bounds,
                     center: center,
-                    data: this.getCurrentLevelData(),
+                    data: data,
+                    maxZoom: data.zoom.max,
+                    minZoom: data.zoom.min,
                     markerData: this.markerData,
                     $container: this.$container,
                     context: this.canvasContext,
                     debug: this.debug
                 });
-                this.resizeCanvas();
-                return this;
+            }
+        }, {
+            key: 'bindEvents',
+            value: function bindEvents() {
+                this.eventManager.subscribe("next-level", function(argument_array) {
+                    var center = argument_array[0],
+                        bounds = argument_array[1];
+                    var lastLevel = this.levelHandler.current.description;
+                    this.levelHandler.next();
+                    if (lastLevel !== this.levelHandler.current.description) {
+                        this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+                    }
+                }.bind(this));
+
+                this.eventManager.subscribe("previous-level", function(argument_array) {
+                    var center = argument_array[0],
+                        bounds = argument_array[1];
+                    var lastLevel = this.levelHandler.current.description;
+                    this.levelHandler.previous();
+                    if (lastLevel !== this.levelHandler.current.description) {
+                        this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+                    }
+                }.bind(this));
             }
 
             /**
@@ -171,17 +231,6 @@
                 this.$container.append(this.$canvas);
                 this.canvasContext = this.canvas.getContext("2d");
                 return this;
-            }
-
-            /**
-             * gets data of current zoom level
-             * @return {Object} data for current level as json
-             */
-
-        }, {
-            key: 'getCurrentLevelData',
-            value: function getCurrentLevelData() {
-                return this.imgData["level-" + this.settings.level];
             }
 
             /**
