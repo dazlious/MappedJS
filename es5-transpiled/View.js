@@ -130,6 +130,8 @@
             var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
             var _ref$center = _ref.center;
             var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
+            var _ref$initialCenter = _ref.initialCenter;
+            var initialCenter = _ref$initialCenter === undefined ? new _LatLng.LatLng() : _ref$initialCenter;
             var _ref$data = _ref.data;
             var data = _ref$data === undefined ? {} : _ref$data;
             var _ref$markerData = _ref.markerData;
@@ -144,6 +146,8 @@
             var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
             var _ref$debug = _ref.debug;
             var debug = _ref$debug === undefined ? false : _ref$debug;
+            var _ref$limitToBounds = _ref.limitToBounds;
+            var limitToBounds = _ref$limitToBounds === undefined ? bounds : _ref$limitToBounds;
 
             _classCallCheck(this, View);
 
@@ -158,8 +162,8 @@
             this.origin = new _Point.Point(0, 0);
             this.debug = debug;
             this.lastDraw = new Date();
-
             this.eventManager = new _Publisher.Publisher();
+            this.limitToBounds = limitToBounds;
 
             if (this.debug) {
                 this.$debugContainer = (0, _jQuery2.default)("<div class='debug'></div>");
@@ -184,9 +188,8 @@
             this.data = data;
             this.context = context;
             this.markers = [];
-
             this.initial = {
-                position: this.center,
+                position: initialCenter,
                 zoom: this.zoomFactor
             };
 
@@ -371,8 +374,13 @@
         }, {
             key: 'moveView',
             value: function moveView(pos) {
+
+                var nw = this.convertLatLngToPoint(this.limitToBounds.nw);
+                var so = this.convertLatLngToPoint(this.limitToBounds.so);
+                var limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, so.x - nw.x, so.y - nw.y);
+
                 pos.divide(this.distortionFactor, 1);
-                var equalizedMap = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
+                var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
                 if (!equalizedMap.containsRect(this.viewport)) {
                     if (equalizedMap.width >= this.viewport.width) {
                         if (equalizedMap.left - this.viewport.left > 0) {
