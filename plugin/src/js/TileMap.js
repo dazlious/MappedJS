@@ -57,7 +57,7 @@ export class TileMap {
 
         this.debug = debug;
 
-        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
+        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData());
 
         return this;
     }
@@ -66,14 +66,16 @@ export class TileMap {
      * initializes the TileMap
      * @return {TileMap} instance of TileMap
      */
-    initialize(bounds, center, mapDimensions) {
+    initialize(bounds, center, data) {
         this.initializeCanvas();
         this.view = new View({
             viewport: new Rectangle(this.left, this.top, this.width, this.height),
-            mapView: new Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
+            mapView: new Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
             bounds: bounds,
             center: center,
-            data: this.getCurrentLevelData(),
+            data: data,
+            maxZoom: data.zoom.max,
+            minZoom: data.zoom.min,
             markerData: this.markerData,
             $container: this.$container,
             context: this.canvasContext,

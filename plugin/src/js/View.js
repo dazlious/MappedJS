@@ -385,14 +385,16 @@ export class View {
      * @return {View} instance of View for chaining
      */
     repositionMarkerContainer() {
-       const newSize = this.currentView.getDistortedRect(this.distortionFactor);
-       this.$markerContainer.css({
-          "width": `${newSize.width}px`,
-          "height": `${newSize.height}px`,
-          "left": `${newSize.left + this.offsetToCenter}px`,
-          "top": `${newSize.top}px`
-       });
-       return this;
+        if (this.$markerContainer) {
+            const newSize = this.currentView.getDistortedRect(this.distortionFactor);
+            this.$markerContainer.css({
+               "width": `${newSize.width}px`,
+               "height": `${newSize.height}px`,
+               "left": `${newSize.left + this.offsetToCenter}px`,
+               "top": `${newSize.top}px`
+            });
+        }
+        return this;
     }
 
 }

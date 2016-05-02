@@ -180,6 +180,7 @@ export class MappedJS {
     }
 
     keyPress(e) {
+        console.log(e.keyCode);
         switch(e.keyCode) {
             case 38: // up
                 this.handleMovementByKeys(new Point(0, 1));
@@ -196,7 +197,13 @@ export class MappedJS {
             case 187: // plus
                 this.zoomInToCenter();
                 break;
+            case 107: // plus numpad
+                this.zoomInToCenter();
+                break;
             case 189: // minus
+                this.zoomOutToCenter();
+                break;
+            case 109: // minus numpad
                 this.zoomOutToCenter();
                 break;
             case 72: // home

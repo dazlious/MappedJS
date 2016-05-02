@@ -128,7 +128,7 @@
 
             this.debug = debug;
 
-            this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
+            this.initialize(settings.bounds, settings.center, this.getCurrentLevelData());
 
             return this;
         }
@@ -141,14 +141,16 @@
 
         _createClass(TileMap, [{
             key: 'initialize',
-            value: function initialize(bounds, center, mapDimensions) {
+            value: function initialize(bounds, center, data) {
                 this.initializeCanvas();
                 this.view = new _View.View({
                     viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
-                    mapView: new _Rectangle.Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
+                    mapView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
                     bounds: bounds,
                     center: center,
-                    data: this.getCurrentLevelData(),
+                    data: data,
+                    maxZoom: data.zoom.max,
+                    minZoom: data.zoom.min,
                     markerData: this.markerData,
                     $container: this.$container,
                     context: this.canvasContext,

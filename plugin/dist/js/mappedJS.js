@@ -294,6 +294,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'keyPress',
 	        value: function keyPress(e) {
+	            console.log(e.keyCode);
 	            switch (e.keyCode) {
 	                case 38:
 	                    // up
@@ -315,8 +316,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    // plus
 	                    this.zoomInToCenter();
 	                    break;
+	                case 107:
+	                    // plus numpad
+	                    this.zoomInToCenter();
+	                    break;
 	                case 189:
 	                    // minus
+	                    this.zoomOutToCenter();
+	                    break;
+	                case 109:
+	                    // minus numpad
 	                    this.zoomOutToCenter();
 	                    break;
 	                case 72:
@@ -548,7 +557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.debug = debug;
 
-	        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData().dimensions);
+	        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData());
 
 	        return this;
 	    }
@@ -561,14 +570,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _createClass(TileMap, [{
 	        key: 'initialize',
-	        value: function initialize(bounds, center, mapDimensions) {
+	        value: function initialize(bounds, center, data) {
 	            this.initializeCanvas();
 	            this.view = new _View.View({
 	                viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
-	                mapView: new _Rectangle.Rectangle(0, 0, mapDimensions.width, mapDimensions.height),
+	                mapView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
 	                bounds: bounds,
 	                center: center,
-	                data: this.getCurrentLevelData(),
+	                data: data,
+	                maxZoom: data.zoom.max,
+	                minZoom: data.zoom.min,
 	                markerData: this.markerData,
 	                $container: this.$container,
 	                context: this.canvasContext,
@@ -1189,13 +1200,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'repositionMarkerContainer',
 	        value: function repositionMarkerContainer() {
-	            var newSize = this.currentView.getDistortedRect(this.distortionFactor);
-	            this.$markerContainer.css({
-	                "width": newSize.width + 'px',
-	                "height": newSize.height + 'px',
-	                "left": newSize.left + this.offsetToCenter + 'px',
-	                "top": newSize.top + 'px'
-	            });
+	            if (this.$markerContainer) {
+	                var newSize = this.currentView.getDistortedRect(this.distortionFactor);
+	                this.$markerContainer.css({
+	                    "width": newSize.width + 'px',
+	                    "height": newSize.height + 'px',
+	                    "left": newSize.left + this.offsetToCenter + 'px',
+	                    "top": newSize.top + 'px'
+	                });
+	            }
 	            return this;
 	        }
 	    }]);

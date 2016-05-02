@@ -11,9 +11,12 @@ import os
 
 settings = None
 
+last_image = None
+
 json_data = {
    "img_data": {}
 }
+
 
 def main():
     global settings
@@ -21,6 +24,8 @@ def main():
         settings = init_settings()
 
         start = time.time()
+
+        print settings.zoom
 
         for i in range(len(settings.input)):
             current_level = settings.input[i]
@@ -38,7 +43,7 @@ def main():
 
 
 def build_level(input_path, output, path, size, minsize, current_level):
-
+    global last_image
     img = open_image(input_path)
 
     data_in_current_level = {
@@ -48,6 +53,23 @@ def build_level(input_path, output, path, size, minsize, current_level):
         },
         "tiles": []
     }
+
+    if last_image is None:
+        data_in_current_level["zoom"] = {
+            "min": settings.zoom[0]
+        }
+    else:
+        last_dimension = last_image["dimensions"]
+        last_image["zoom"]["max"] = img.width / float(last_dimension["width"])
+
+        data_in_current_level["zoom"] = {
+            "min": float(last_dimension["width"]) / img.width
+        }
+
+    if current_level == (len(settings.input) - 1):
+        data_in_current_level["zoom"]["max"] = settings.zoom[1]
+
+    last_image = data_in_current_level
 
     slices = calculate_slices(img, size, minsize)
 
@@ -186,6 +208,7 @@ def init_settings():
     parser.add_argument('-o', '--output', help='path to destination', required=True, type=str)
     parser.add_argument('-s', '--size', help='size of a tile', default=512, type=int)
     parser.add_argument('-m', '--minsize', help='minimum size of a tile', default=128, type=int)
+    parser.add_argument('-z', '--zoom', help='minimum and maximum zoom level', default=[0.5, 1.5], type=float, nargs=2)
     parser.add_argument('-t', '--thumbSize', help='size of thumbnail', default=256, type=int)
     parser.add_argument('-p', '--path', help='additional path information for relative paths', default="", type=str)
     parser.add_argument('-c', '--clearfolder', help='empties output folder', default=False, type=bool)
