@@ -69,6 +69,7 @@ export class View {
         mapView = new Rectangle(),
         bounds = new Bounds(),
         center = new LatLng(),
+        initialCenter = new LatLng(),
         data = {},
         markerData = null,
         $container = null,
@@ -115,9 +116,8 @@ export class View {
         this.data = data;
         this.context = context;
         this.markers = [];
-
         this.initial = {
-            position: this.center,
+            position: initialCenter,
             zoom: this.zoomFactor
         };
 
@@ -127,7 +127,7 @@ export class View {
 
         return this;
     }
-    
+
     reset() {
         this.setLatLngToPosition(this.initial.position, this.viewport.center);
         const delta = this.initial.zoom - this.zoomFactor;

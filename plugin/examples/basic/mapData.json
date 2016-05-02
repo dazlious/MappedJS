@@ -294,7 +294,11 @@
                 "width": 2000,
                 "height": 1601
             },
-            "thumb": "img/map_thumb.jpg"
+            "thumb": "img/map_thumb.jpg",
+            "zoom": {
+                "max": 1.2,
+                "min": 0.6
+            }
         }
     },
     "marker": [

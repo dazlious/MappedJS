@@ -136,7 +136,6 @@
             this.imgData = tilesData[TileMap.IMG_DATA_NAME];
             this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
             this.settings = settings;
-
             this.levels = [];
 
             _Helper.Helper.forEach(this.imgData, function(element, i) {
@@ -148,13 +147,15 @@
             }.bind(this));
 
             this.levelHandler = new _StateHandler.StateHandler(this.levels);
-
             this.eventManager = new _Publisher.Publisher();
-
             this.debug = debug;
+            this.initial = {
+                bounds: settings.bounds,
+                center: settings.center,
+                level: settings.level
+            };
 
             this.initialize(settings.bounds, settings.center, this.currentLevelData);
-
             return this;
         }
 
@@ -168,14 +169,20 @@
             key: 'initialize',
             value: function initialize(bounds, center, data) {
                 this.initializeCanvas();
-
                 this.bindEvents();
-
                 this.createViewFromData(bounds, center, data);
-
                 this.resizeCanvas();
-
                 return this;
+            }
+        }, {
+            key: 'reset',
+            value: function reset() {
+                if (this.levelHandler.hasPrevious()) {
+                    this.levelHandler.changeTo(0);
+                    this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData);
+                } else {
+                    this.view.reset();
+                }
             }
         }, {
             key: 'createViewFromData',
@@ -185,6 +192,7 @@
                     mapView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
                     bounds: bounds,
                     center: center,
+                    initialCenter: this.initial.center,
                     data: data,
                     maxZoom: data.zoom ? data.zoom.max : 1,
                     minZoom: data.zoom ? data.zoom.min : 1,
@@ -197,6 +205,7 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
+
                 this.eventManager.subscribe("next-level", function(argument_array) {
                     var center = argument_array[0],
                         bounds = argument_array[1];

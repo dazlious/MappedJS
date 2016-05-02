@@ -130,6 +130,8 @@
             var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
             var _ref$center = _ref.center;
             var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
+            var _ref$initialCenter = _ref.initialCenter;
+            var initialCenter = _ref$initialCenter === undefined ? new _LatLng.LatLng() : _ref$initialCenter;
             var _ref$data = _ref.data;
             var data = _ref$data === undefined ? {} : _ref$data;
             var _ref$markerData = _ref.markerData;
@@ -184,9 +186,8 @@
             this.data = data;
             this.context = context;
             this.markers = [];
-
             this.initial = {
-                position: this.center,
+                position: initialCenter,
                 zoom: this.zoomFactor
             };
 

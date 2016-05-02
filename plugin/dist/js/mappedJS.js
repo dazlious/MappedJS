@@ -278,8 +278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resetToInitialState',
 	        value: function resetToInitialState() {
-	            this.tileMap.view.reset();
-	            this.tileMap.view.drawIsNeeded = true;
+	            this.tileMap.reset();
 	        }
 	    }, {
 	        key: 'zoomInToCenter',
@@ -564,7 +563,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
 	        this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
 	        this.settings = settings;
-
 	        this.levels = [];
 
 	        _Helper.Helper.forEach(this.imgData, function (element, i) {
@@ -576,13 +574,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }.bind(this));
 
 	        this.levelHandler = new _StateHandler.StateHandler(this.levels);
-
 	        this.eventManager = new _Publisher.Publisher();
-
 	        this.debug = debug;
+	        this.initial = {
+	            bounds: settings.bounds,
+	            center: settings.center,
+	            level: settings.level
+	        };
 
 	        this.initialize(settings.bounds, settings.center, this.currentLevelData);
-
 	        return this;
 	    }
 
@@ -596,14 +596,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'initialize',
 	        value: function initialize(bounds, center, data) {
 	            this.initializeCanvas();
-
 	            this.bindEvents();
-
 	            this.createViewFromData(bounds, center, data);
-
 	            this.resizeCanvas();
-
 	            return this;
+	        }
+	    }, {
+	        key: 'reset',
+	        value: function reset() {
+	            if (this.levelHandler.hasPrevious()) {
+	                this.levelHandler.changeTo(0);
+	                this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData);
+	            } else {
+	                this.view.reset();
+	            }
 	        }
 	    }, {
 	        key: 'createViewFromData',
@@ -613,6 +619,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                mapView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
 	                bounds: bounds,
 	                center: center,
+	                initialCenter: this.initial.center,
 	                data: data,
 	                maxZoom: data.zoom ? data.zoom.max : 1,
 	                minZoom: data.zoom ? data.zoom.min : 1,
@@ -625,6 +632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
+
 	            this.eventManager.subscribe("next-level", function (argument_array) {
 	                var center = argument_array[0],
 	                    bounds = argument_array[1];
@@ -865,6 +873,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
 	        var _ref$center = _ref.center;
 	        var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
+	        var _ref$initialCenter = _ref.initialCenter;
+	        var initialCenter = _ref$initialCenter === undefined ? new _LatLng.LatLng() : _ref$initialCenter;
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? {} : _ref$data;
 	        var _ref$markerData = _ref.markerData;
@@ -919,9 +929,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.data = data;
 	        this.context = context;
 	        this.markers = [];
-
 	        this.initial = {
-	            position: this.center,
+	            position: initialCenter,
 	            zoom: this.zoomFactor
 	        };
 

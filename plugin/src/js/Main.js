@@ -167,8 +167,7 @@ export class MappedJS {
     }
 
     resetToInitialState() {
-        this.tileMap.view.reset();
-        this.tileMap.view.drawIsNeeded = true;
+        this.tileMap.reset();
     }
 
     zoomInToCenter() {

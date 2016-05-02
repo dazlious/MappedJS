@@ -66,7 +66,6 @@ export class TileMap {
         this.imgData = tilesData[TileMap.IMG_DATA_NAME];
         this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
         this.settings = settings;
-
         this.levels = [];
 
         Helper.forEach(this.imgData, function(element, i) {
@@ -78,13 +77,15 @@ export class TileMap {
         }.bind(this));
 
         this.levelHandler = new StateHandler(this.levels);
-
         this.eventManager = new Publisher();
-
         this.debug = debug;
+        this.initial = {
+            bounds: settings.bounds,
+            center: settings.center,
+            level: settings.level
+        };
 
         this.initialize(settings.bounds, settings.center, this.currentLevelData);
-
         return this;
     }
 
@@ -94,14 +95,19 @@ export class TileMap {
      */
     initialize(bounds, center, data) {
         this.initializeCanvas();
-
         this.bindEvents();
-
         this.createViewFromData(bounds, center, data);
-
         this.resizeCanvas();
-
         return this;
+    }
+
+    reset() {
+        if (this.levelHandler.hasPrevious()) {
+            this.levelHandler.changeTo(0);
+            this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData);
+        } else {
+            this.view.reset();
+        }
     }
 
     createViewFromData(bounds, center, data) {
@@ -110,6 +116,7 @@ export class TileMap {
             mapView: new Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
             bounds: bounds,
             center: center,
+            initialCenter: this.initial.center,
             data: data,
             maxZoom: (data.zoom) ? data.zoom.max : 1,
             minZoom: (data.zoom) ? data.zoom.min : 1,
@@ -121,6 +128,7 @@ export class TileMap {
     }
 
     bindEvents() {
+
         this.eventManager.subscribe("next-level", function(argument_array) {
             const center = argument_array[0],
                   bounds = argument_array[1];
@@ -140,6 +148,7 @@ export class TileMap {
                 this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
             }
         }.bind(this));
+
     }
 
     /**

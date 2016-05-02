@@ -251,8 +251,7 @@
         }, {
             key: 'resetToInitialState',
             value: function resetToInitialState() {
-                this.tileMap.view.reset();
-                this.tileMap.view.drawIsNeeded = true;
+                this.tileMap.reset();
             }
         }, {
             key: 'zoomInToCenter',
