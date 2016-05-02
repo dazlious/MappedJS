@@ -267,7 +267,6 @@
         }, {
             key: 'keyPress',
             value: function keyPress(e) {
-                console.log(e.keyCode);
                 switch (e.keyCode) {
                     case 38:
                         // up
@@ -285,18 +284,12 @@
                         // down
                         this.handleMovementByKeys(new _Point.Point(0, -1));
                         break;
-                    case 187:
-                        // plus
-                        this.zoomInToCenter();
-                        break;
+                    case 187: // plus
                     case 107:
                         // plus numpad
                         this.zoomInToCenter();
                         break;
-                    case 189:
-                        // minus
-                        this.zoomOutToCenter();
-                        break;
+                    case 189: // minus
                     case 109:
                         // minus numpad
                         this.zoomOutToCenter();

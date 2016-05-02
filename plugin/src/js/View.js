@@ -7,6 +7,7 @@ import {Tile} from './Tile.js';
 import {Marker} from './Marker.js';
 import {Helper} from './Helper.js';
 import {DataEnrichment} from './DataEnrichment.js';
+import {Publisher} from './Publisher.js';
 
 export class View {
 
@@ -89,6 +90,8 @@ export class View {
         this.debug = debug;
         this.lastDraw = new Date();
 
+        this.eventManager = new Publisher();
+
         if (this.debug) {
             this.$debugContainer = $("<div class='debug'></div>");
             this.$debugContainer.css({
@@ -124,8 +127,7 @@ export class View {
 
         return this;
     }
-
-    // TODO: Reset function not working properly
+    
     reset() {
         this.setLatLngToPosition(this.initial.position, this.viewport.center);
         const delta = this.initial.zoom - this.zoomFactor;
@@ -221,6 +223,7 @@ export class View {
      */
     zoom(factor, pos) {
         this.zoomFactor = Math.max(Math.min(this.zoomFactor + factor, this.maxZoom), this.minZoom);
+
         const mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
         mapPosition.x += this.getDeltaXToCenter(pos);
         const latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
@@ -230,6 +233,15 @@ export class View {
 
         this.setLatLngToPosition(latlngPosition, pos);
         this.moveView(new Point());
+
+        this.drawIsNeeded = true;
+
+        if (this.zoomFactor === this.maxZoom) {
+            this.eventManager.publish("next-level", [this.center, this.bounds]);
+        } else if (this.zoomFactor === this.minZoom) {
+            this.eventManager.publish("previous-level", [this.center, this.bounds]);
+        }
+
         return this;
     }
 

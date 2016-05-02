@@ -3,6 +3,9 @@ import {View} from './View.js';
 import {LatLng} from './LatLng.js';
 import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
+import {Publisher} from './Publisher.js';
+import {StateHandler} from './StateHandler.js';
+import {Helper} from './Helper.js';
 
 export class TileMap {
 
@@ -38,6 +41,15 @@ export class TileMap {
         return this.$container.innerHeight();
     }
 
+    /**
+     * gets data of current zoom level
+     * @return {Object} data for current level as json
+     */
+    get currentLevelData() {
+        return this.levelHandler.current.value;
+    }
+
+
     /** Constructor
      * @param  {Object} container - jQuery-object holding the container
      * @param  {Object} tilesData={} - json object representing data of TileMap
@@ -55,9 +67,23 @@ export class TileMap {
         this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
         this.settings = settings;
 
+        this.levels = [];
+
+        Helper.forEach(this.imgData, function(element, i) {
+            const currentLevel = {
+                value: element,
+                description: i
+            };
+            this.levels.push(currentLevel);
+        }.bind(this));
+
+        this.levelHandler = new StateHandler(this.levels);
+
+        this.eventManager = new Publisher();
+
         this.debug = debug;
 
-        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData());
+        this.initialize(settings.bounds, settings.center, this.currentLevelData);
 
         return this;
     }
@@ -68,6 +94,17 @@ export class TileMap {
      */
     initialize(bounds, center, data) {
         this.initializeCanvas();
+
+        this.bindEvents();
+
+        this.createViewFromData(bounds, center, data);
+
+        this.resizeCanvas();
+
+        return this;
+    }
+
+    createViewFromData(bounds, center, data) {
         this.view = new View({
             viewport: new Rectangle(this.left, this.top, this.width, this.height),
             mapView: new Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
@@ -81,8 +118,28 @@ export class TileMap {
             context: this.canvasContext,
             debug: this.debug
         });
-        this.resizeCanvas();
-        return this;
+    }
+
+    bindEvents() {
+        this.eventManager.subscribe("next-level", function(argument_array) {
+            const center = argument_array[0],
+                  bounds = argument_array[1];
+            const lastLevel = this.levelHandler.current.description;
+            this.levelHandler.next();
+            if (lastLevel !== this.levelHandler.current.description) {
+                this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+            }
+        }.bind(this));
+
+        this.eventManager.subscribe("previous-level", function(argument_array) {
+            const center = argument_array[0],
+                  bounds = argument_array[1];
+            const lastLevel = this.levelHandler.current.description;
+            this.levelHandler.previous();
+            if (lastLevel !== this.levelHandler.current.description) {
+                this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+            }
+        }.bind(this));
     }
 
     /**
@@ -95,14 +152,6 @@ export class TileMap {
         this.$container.append(this.$canvas);
         this.canvasContext = this.canvas.getContext("2d");
         return this;
-    }
-
-    /**
-     * gets data of current zoom level
-     * @return {Object} data for current level as json
-     */
-    getCurrentLevelData() {
-        return this.imgData["level-" + this.settings.level];
     }
 
     /**

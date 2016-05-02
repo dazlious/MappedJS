@@ -1764,9 +1764,9 @@ check if tiles are equal
         * [.top](#TileMap+top) ⇒ <code>number</code>
         * [.width](#TileMap+width) ⇒ <code>number</code>
         * [.height](#TileMap+height) ⇒ <code>number</code>
+        * [.currentLevelData](#TileMap+currentLevelData) ⇒ <code>Object</code>
         * [.initialize()](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
         * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.getCurrentLevelData()](#TileMap+getCurrentLevelData) ⇒ <code>Object</code>
         * [.clearCanvas()](#TileMap+clearCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.redraw()](#TileMap+redraw) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resize()](#TileMap+resize) ⇒ <code>[TileMap](#TileMap)</code>
@@ -1817,6 +1817,13 @@ Returns height of container
 
 **Kind**: instance property of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>number</code> - - height of container  
+<a name="TileMap+currentLevelData"></a>
+
+### tileMap.currentLevelData ⇒ <code>Object</code>
+gets data of current zoom level
+
+**Kind**: instance property of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>Object</code> - data for current level as json  
 <a name="TileMap+initialize"></a>
 
 ### tileMap.initialize() ⇒ <code>[TileMap](#TileMap)</code>
@@ -1831,13 +1838,6 @@ initializes the canvas, adds to DOM
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
-<a name="TileMap+getCurrentLevelData"></a>
-
-### tileMap.getCurrentLevelData() ⇒ <code>Object</code>
-gets data of current zoom level
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>Object</code> - data for current level as json  
 <a name="TileMap+clearCanvas"></a>
 
 ### tileMap.clearCanvas() ⇒ <code>[TileMap](#TileMap)</code>

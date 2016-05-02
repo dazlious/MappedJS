@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(10);
 
-	var _Interact = __webpack_require__(13);
+	var _Interact = __webpack_require__(14);
 
 	var _LatLng = __webpack_require__(5);
 
@@ -294,7 +294,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'keyPress',
 	        value: function keyPress(e) {
-	            console.log(e.keyCode);
 	            switch (e.keyCode) {
 	                case 38:
 	                    // up
@@ -312,18 +311,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    // down
 	                    this.handleMovementByKeys(new _Point.Point(0, -1));
 	                    break;
-	                case 187:
-	                    // plus
-	                    this.zoomInToCenter();
-	                    break;
+	                case 187: // plus
 	                case 107:
 	                    // plus numpad
 	                    this.zoomInToCenter();
 	                    break;
-	                case 189:
-	                    // minus
-	                    this.zoomOutToCenter();
-	                    break;
+	                case 189: // minus
 	                case 109:
 	                    // minus numpad
 	                    this.zoomOutToCenter();
@@ -475,6 +468,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Rectangle = __webpack_require__(7);
 
+	var _Publisher = __webpack_require__(13);
+
+	var _StateHandler = __webpack_require__(9);
+
+	var _Helper = __webpack_require__(10);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -525,6 +524,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this.$container.innerHeight();
 	        }
 
+	        /**
+	         * gets data of current zoom level
+	         * @return {Object} data for current level as json
+	         */
+
+	    }, {
+	        key: 'currentLevelData',
+	        get: function get() {
+	            return this.levelHandler.current.value;
+	        }
+
 	        /** Constructor
 	         * @param  {Object} container - jQuery-object holding the container
 	         * @param  {Object} tilesData={} - json object representing data of TileMap
@@ -555,9 +565,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
 	        this.settings = settings;
 
+	        this.levels = [];
+
+	        _Helper.Helper.forEach(this.imgData, function (element, i) {
+	            var currentLevel = {
+	                value: element,
+	                description: i
+	            };
+	            this.levels.push(currentLevel);
+	        }.bind(this));
+
+	        this.levelHandler = new _StateHandler.StateHandler(this.levels);
+
+	        this.eventManager = new _Publisher.Publisher();
+
 	        this.debug = debug;
 
-	        this.initialize(settings.bounds, settings.center, this.getCurrentLevelData());
+	        this.initialize(settings.bounds, settings.center, this.currentLevelData);
 
 	        return this;
 	    }
@@ -572,6 +596,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'initialize',
 	        value: function initialize(bounds, center, data) {
 	            this.initializeCanvas();
+
+	            this.bindEvents();
+
+	            this.createViewFromData(bounds, center, data);
+
+	            this.resizeCanvas();
+
+	            return this;
+	        }
+	    }, {
+	        key: 'createViewFromData',
+	        value: function createViewFromData(bounds, center, data) {
 	            this.view = new _View.View({
 	                viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
 	                mapView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
@@ -585,8 +621,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	                context: this.canvasContext,
 	                debug: this.debug
 	            });
-	            this.resizeCanvas();
-	            return this;
+	        }
+	    }, {
+	        key: 'bindEvents',
+	        value: function bindEvents() {
+	            this.eventManager.subscribe("next-level", function (argument_array) {
+	                var center = argument_array[0],
+	                    bounds = argument_array[1];
+	                var lastLevel = this.levelHandler.current.description;
+	                this.levelHandler.next();
+	                if (lastLevel !== this.levelHandler.current.description) {
+	                    this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+	                }
+	            }.bind(this));
+
+	            this.eventManager.subscribe("previous-level", function (argument_array) {
+	                var center = argument_array[0],
+	                    bounds = argument_array[1];
+	                var lastLevel = this.levelHandler.current.description;
+	                this.levelHandler.previous();
+	                if (lastLevel !== this.levelHandler.current.description) {
+	                    this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+	                }
+	            }.bind(this));
 	        }
 
 	        /**
@@ -602,17 +659,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.$container.append(this.$canvas);
 	            this.canvasContext = this.canvas.getContext("2d");
 	            return this;
-	        }
-
-	        /**
-	         * gets data of current zoom level
-	         * @return {Object} data for current level as json
-	         */
-
-	    }, {
-	        key: 'getCurrentLevelData',
-	        value: function getCurrentLevelData() {
-	            return this.imgData["level-" + this.settings.level];
 	        }
 
 	        /**
@@ -733,6 +779,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _DataEnrichment = __webpack_require__(12);
 
+	var _Publisher = __webpack_require__(13);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -846,6 +894,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.debug = debug;
 	        this.lastDraw = new Date();
 
+	        this.eventManager = new _Publisher.Publisher();
+
 	        if (this.debug) {
 	            this.$debugContainer = (0, _jQuery2.default)("<div class='debug'></div>");
 	            this.$debugContainer.css({
@@ -881,9 +931,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return this;
 	    }
-
-	    // TODO: Reset function not working properly
-
 
 	    _createClass(View, [{
 	        key: 'reset',
@@ -1003,6 +1050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'zoom',
 	        value: function zoom(factor, pos) {
 	            this.zoomFactor = Math.max(Math.min(this.zoomFactor + factor, this.maxZoom), this.minZoom);
+
 	            var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
 	            mapPosition.x += this.getDeltaXToCenter(pos);
 	            var latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
@@ -1012,6 +1060,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.setLatLngToPosition(latlngPosition, pos);
 	            this.moveView(new _Point.Point());
+
+	            this.drawIsNeeded = true;
+
+	            if (this.zoomFactor === this.maxZoom) {
+	                this.eventManager.publish("next-level", [this.center, this.bounds]);
+	            } else if (this.zoomFactor === this.minZoom) {
+	                this.eventManager.publish("previous-level", [this.center, this.bounds]);
+	            }
+
 	            return this;
 	        }
 
@@ -2757,6 +2814,150 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 13 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * singleton instance
+	 * @type {Publisher}
+	 */
+	var instance = null;
+
+	var Publisher = exports.Publisher = function () {
+
+	    /**
+	     * Constructor
+	     * @return {Publisher} instance of Publisher
+	     */
+
+	    function Publisher() {
+	        _classCallCheck(this, Publisher);
+
+	        if (!instance) {
+	            this.subscribers = {};
+	            instance = this;
+	        }
+	        return instance;
+	    }
+
+	    /**
+	     * subscribe to a topic
+	     * @param  {string} type="any" - a topic
+	     * @param  {Function} fn=function(){} - a function to callback
+	     * @return {Publisher} instance of Publisher
+	     */
+
+
+	    _createClass(Publisher, [{
+	        key: "subscribe",
+	        value: function subscribe() {
+	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	            var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
+
+	            if (!this.subscribers[type]) {
+	                this.subscribers[type] = [];
+	            }
+	            this.subscribers[type].push(fn);
+	            return this;
+	        }
+
+	        /**
+	         * unsubscribe from a topic
+	         * @param  {string} type="any" - a topic
+	         * @param  {Function} fn=function(){} - a function to callback
+	         * @return {Publisher} instance of Publisher
+	         */
+
+	    }, {
+	        key: "unsubscribe",
+	        value: function unsubscribe() {
+	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	            var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
+
+	            this.handle(Publisher.UNSUBSCRIBE, type, fn);
+	            return this;
+	        }
+
+	        /**
+	         * publish to a topic
+	         * @param  {string} type="any" - a topic
+	         * @param  {Function} arg=[] - list of parameters
+	         * @return {Publisher} instance of Publisher
+	         */
+
+	    }, {
+	        key: "publish",
+	        value: function publish() {
+	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	            var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+
+	            this.handle(Publisher.PUBLISH, type, arg);
+	            return this;
+	        }
+
+	        /**
+	         * handle subscribe to a topic
+	         * @param  {string} action - eventname
+	         * @param  {string} type="any" - a topic
+	         * @param  {Object} a function to callback or arguments
+	         * @return {Publisher} instance of Publisher
+	         */
+
+	    }, {
+	        key: "handle",
+	        value: function handle(action, type, data) {
+	            var subs = this.subscribers[type] ? this.subscribers[type] : [];
+	            for (var i = 0; i < subs.length; i++) {
+	                if (action === Publisher.PUBLISH) {
+	                    subs[i](data);
+	                } else {
+	                    if (subs[i] === data) {
+	                        subs.splice(i, 1);
+	                    }
+	                }
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * destroys singleton instance
+	         */
+
+	    }, {
+	        key: "destroy",
+	        value: function destroy() {
+	            instance = null;
+	        }
+	    }]);
+
+	    return Publisher;
+	}();
+
+	/**
+	 * Eventname for publishing
+	 * @type {String}
+	 */
+
+
+	Publisher.PUBLISH = "publish";
+
+	/**
+	 * Eventname for unsubscribing
+	 * @type {String}
+	 */
+		Publisher.UNSUBSCRIBE = "unsubscribe";
+
+/***/ },
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
