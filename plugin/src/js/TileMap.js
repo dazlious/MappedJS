@@ -123,7 +123,8 @@ export class TileMap {
             markerData: this.markerData,
             $container: this.$container,
             context: this.canvasContext,
-            debug: this.debug
+            debug: this.debug,
+            limitToBounds: this.settings.limitToBounds
         });
     }
 

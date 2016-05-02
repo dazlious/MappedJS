@@ -67,6 +67,12 @@
             var bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1]));
             var center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
+            if (!enrichedData.limitToBounds) {
+                enrichedData.limitToBounds = bounds;
+            } else {
+                enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
+            }
+
             enrichedData.bounds = bounds;
             enrichedData.center = center;
 
@@ -102,10 +108,8 @@
             "lng": 0
         },
         bounds: {
-            "top": 90,
-            "left": -180,
-            "width": 360,
-            "height": 180
+            "northWest": [90, -180],
+            "southEast": [-90, 180]
         },
         controls: {
             zoom: false,

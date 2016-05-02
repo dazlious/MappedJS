@@ -626,7 +626,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                markerData: this.markerData,
 	                $container: this.$container,
 	                context: this.canvasContext,
-	                debug: this.debug
+	                debug: this.debug,
+	                limitToBounds: this.settings.limitToBounds
 	            });
 	        }
 	    }, {
@@ -889,6 +890,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
 	        var _ref$debug = _ref.debug;
 	        var debug = _ref$debug === undefined ? false : _ref$debug;
+	        var _ref$limitToBounds = _ref.limitToBounds;
+	        var limitToBounds = _ref$limitToBounds === undefined ? bounds : _ref$limitToBounds;
 
 	        _classCallCheck(this, View);
 
@@ -903,8 +906,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.origin = new _Point.Point(0, 0);
 	        this.debug = debug;
 	        this.lastDraw = new Date();
-
 	        this.eventManager = new _Publisher.Publisher();
+	        this.limitToBounds = limitToBounds;
 
 	        if (this.debug) {
 	            this.$debugContainer = (0, _jQuery2.default)("<div class='debug'></div>");
@@ -1115,8 +1118,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'moveView',
 	        value: function moveView(pos) {
+
+	            var nw = this.convertLatLngToPoint(this.limitToBounds.nw);
+	            var so = this.convertLatLngToPoint(this.limitToBounds.so);
+	            var limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, so.x - nw.x, so.y - nw.y);
+
 	            pos.divide(this.distortionFactor, 1);
-	            var equalizedMap = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
+	            var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
 	            if (!equalizedMap.containsRect(this.viewport)) {
 	                if (equalizedMap.width >= this.viewport.width) {
 	                    if (equalizedMap.left - this.viewport.left > 0) {
@@ -2776,6 +2784,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1]));
 	        var center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
+	        if (!enrichedData.limitToBounds) {
+	            enrichedData.limitToBounds = bounds;
+	        } else {
+	            enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
+	        }
+
 	        enrichedData.bounds = bounds;
 	        enrichedData.center = center;
 
@@ -2808,10 +2822,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    level: 0,
 	    center: { "lat": 0, "lng": 0 },
 	    bounds: {
-	        "top": 90,
-	        "left": -180,
-	        "width": 360,
-	        "height": 180
+	        "northWest": [90, -180],
+	        "southEast": [-90, 180]
 	    },
 	    controls: {
 	        zoom: false,

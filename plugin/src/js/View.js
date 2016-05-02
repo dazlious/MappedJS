@@ -76,7 +76,8 @@ export class View {
         context = null,
         maxZoom = 1.5,
         minZoom = 0.8,
-        debug = false
+        debug = false,
+        limitToBounds = bounds
         }) {
 
         this.mapView = mapView;
@@ -90,8 +91,8 @@ export class View {
         this.origin = new Point(0,0);
         this.debug = debug;
         this.lastDraw = new Date();
-
         this.eventManager = new Publisher();
+        this.limitToBounds = limitToBounds;
 
         if (this.debug) {
             this.$debugContainer = $("<div class='debug'></div>");
@@ -270,8 +271,13 @@ export class View {
      * @return {View} instance of View for chaining
      */
     moveView(pos) {
+
+        const nw = this.convertLatLngToPoint(this.limitToBounds.nw);
+        const so = this.convertLatLngToPoint(this.limitToBounds.so);
+        const limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, so.x - nw.x, so.y - nw.y);
+        
         pos.divide(this.distortionFactor, 1);
-        const equalizedMap = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
+        const equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
         if (!equalizedMap.containsRect(this.viewport)) {
             if (equalizedMap.width >= this.viewport.width) {
                 if (equalizedMap.left - this.viewport.left > 0) {
