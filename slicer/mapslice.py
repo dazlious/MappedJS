@@ -14,7 +14,7 @@ settings = None
 last_image = None
 
 json_data = {
-   "img_data": {}
+   "img_data": []
 }
 
 
@@ -122,7 +122,7 @@ def build_data_json(output, slices, path, current_data, current_level):
             }
             current_data["tiles"].append(data)
 
-    json_data["img_data"]["level-" + str(current_level)] = current_data
+    json_data["img_data"].append(current_data)
 
 
 def slice_img(image, slices, current_level):

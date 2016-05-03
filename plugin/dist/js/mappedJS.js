@@ -3134,7 +3134,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                stopPropagation: true,
 	                preventDefault: true,
 	                autoFireHold: false,
-	                pinchBalanceTime: 20,
+	                pinchBalanceTime: 50,
 	                callbacks: this.getDefaultCallbacks(),
 	                events: this.getDefaultEventNames()
 	            };
