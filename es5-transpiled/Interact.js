@@ -60,7 +60,6 @@
         _createClass(Interact, [{
             key: 'timeToLastMove',
 
-
             /**
              * get time difference to last
              * @return {number} difference
@@ -143,15 +142,10 @@
             _classCallCheck(this, Interact);
 
             this.settings = this.getDefaultSettings();
-
             _jQuery2.default.extend(true, this.settings, settings || {});
 
             this.data = this.getDefaultData();
-
-            if (this.settings.overwriteViewportSettings) {
-                this.handleViewport(this.settings.overwriteViewportSettings);
-            }
-
+            if (this.settings.overwriteViewportSettings) this.handleViewport(this.settings.overwriteViewportSettings);
             this.init(this.settings.container).bindEvents();
         }
 
@@ -180,7 +174,7 @@
                     stopPropagation: true,
                     preventDefault: true,
                     autoFireHold: false,
-                    pinchBalanceTime: 20,
+                    pinchBalanceTime: 50,
                     callbacks: this.getDefaultCallbacks(),
                     events: this.getDefaultEventNames()
                 };
@@ -306,19 +300,14 @@
             key: 'init',
             value: function init(container) {
                 this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
-                if (!(this.$container instanceof jQuery)) {
-                    throw new Error("Container " + container + " not found");
-                }
-                this.$container.css({
+                if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
+                var css = {
                     "-ms-touch-action": "none",
                     "touch-action": "none",
                     "-ms-content-zooming": "none"
-                });
-                this.$container.find("> *").css({
-                    "-ms-touch-action": "none",
-                    "touch-action": "none",
-                    "-ms-content-zooming": "none"
-                });
+                };
+                this.$container.css(css);
+                this.$container.find("> *").css(css);
                 this.container = this.$container[0];
                 return this;
             }
@@ -334,12 +323,8 @@
                 if (_Helper.Helper.isIE()) {
                     this.bindIEEvents();
                 } else {
-                    if (_Helper.Helper.isTouch()) {
-                        this.bindTouchEvents();
-                    }
-                    if (_Helper.Helper.isMouse()) {
-                        this.bindMouseEvents();
-                    }
+                    if (_Helper.Helper.isTouch()) this.bindTouchEvents();
+                    if (_Helper.Helper.isMouse()) this.bindMouseEvents();
                 }
                 return this;
             }
@@ -355,7 +340,7 @@
                 this.$container.on(this.settings.events.scroll, this.scrollHandler.bind(this));
                 this.bindTouchEvents();
                 this.container.addEventListener("contextmenu", function(e) {
-                    e.preventDefault();
+                    return e.preventDefault();
                 }, false);
                 return this;
             }
@@ -393,15 +378,9 @@
         }, {
             key: 'preHandle',
             value: function preHandle(event) {
-                if (this.settings.stopPropagation) {
-                    event.stopPropagation();
-                }
-                if (this.settings.preventDefault) {
-                    event.preventDefault();
-                }
-
+                if (this.settings.stopPropagation) event.stopPropagation();
+                if (this.settings.preventDefault) event.preventDefault();
                 this.data.target = event.target;
-
                 return this.getEvent(event);
             }
 
@@ -417,6 +396,7 @@
                 event = event || window.event;
 
                 var e = this.preHandle(event) || event.originalEvent;
+                this.data.delta = this.normalizeWheelDelta(event);
 
                 this.data.position.start = this.getRelativePosition(e);
                 this.data.directions = this.getScrollDirection(e);
@@ -429,8 +409,33 @@
                 if (this.settings.callbacks.zoom && (this.data.directions.indexOf("up") > -1 || this.data.directions.indexOf("down") > -1)) {
                     this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
                 }
-
                 return false;
+            }
+
+            /**
+             *
+             * Solution from http://jsfiddle.net/uNeBr/
+             * @param  {Object} event - VanillaJS-Event-Object
+             * @return {number} normalized wheel delta
+             */
+
+        }, {
+            key: 'normalizeWheelDelta',
+            value: function normalizeWheelDelta(e) {
+                var o = e.originalEvent,
+                    w = o.wheelDelta || o.deltaY * -1 * 10,
+                    n = 225,
+                    n1 = n - 1;
+
+                var d = o.detail,
+                    f = void 0;
+
+                // Normalize delta
+                d = d ? w && (f = w / d) ? d / f : -d / 1.35 : w / 120;
+                // Quadratic scale if |d| > 1
+                d = d < 1 ? d < -1 ? (-Math.pow(d, 2) - n1) / n : d : (Math.pow(d, 2) + n1) / n;
+                // Delta *should* not be greater than 2...
+                return Math.min(Math.max(d / 2, -1), 1);
             }
 
             /**
@@ -487,11 +492,8 @@
             key: 'handlePointerEventStart',
             value: function handlePointerEventStart(data, e) {
                 this.data.pointerArray[e.pointerId] = e;
-                if (Object.keys(this.data.pointerArray).length <= 1) {
-                    return _jQuery2.default.extend(true, data, this.handleSingletouchStart(e));
-                } else {
-                    return _jQuery2.default.extend(true, data, this.handleMultitouchStart(this.getPointerArray()));
-                }
+                var getData = Object.keys(this.data.pointerArray).length <= 1 ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
+                return _jQuery2.default.extend(true, data, getData);
             }
 
             /**
@@ -504,13 +506,7 @@
         }, {
             key: 'handleTouchEventStart',
             value: function handleTouchEventStart(data, e) {
-                if (e.length === 1) {
-                    return _jQuery2.default.extend(true, data, this.handleSingletouchStart(e[0]));
-                } // multitouch started
-                else if (e.length === 2) {
-                    return _jQuery2.default.extend(true, data, this.handleMultitouchStart(e));
-                }
-                return data;
+                return this.handleTouchEvent(data, e, this.handleSingletouchStart, this.handleMultitouchStart);
             }
 
             /**
@@ -688,13 +684,13 @@
         }, {
             key: 'handleTouchEventMove',
             value: function handleTouchEventMove(data, e) {
-                // singletouch startet
-                if (e.length === 1) {
-                    return _jQuery2.default.extend(true, data, this.handleSingletouchMove(e[0]));
-                } else if (e.length === 2) {
-                    return _jQuery2.default.extend(true, data, this.handleMultitouchMove(e));
-                }
-                return data;
+                return this.handleTouchEvent(data, e, this.handleSingletouchMove, this.handleMultitouchMove);
+            }
+        }, {
+            key: 'handleTouchEvent',
+            value: function handleTouchEvent(data, e, fnSingle, fnMulti) {
+                var getData = e.length === 1 ? fnSingle(e[0]) : fnMulti(e);
+                return _jQuery2.default.extend(true, data, getData);
             }
 
             /**
@@ -747,9 +743,7 @@
             key: 'moveHandler',
             value: function moveHandler(event) {
                 // if touchstart event was not fired
-                if (!this.data.down || this.data.pinched) {
-                    return false;
-                }
+                if (!this.data.down || this.data.pinched) return false;
 
                 var e = this.preHandle(event);
                 this.data.time.last = event.timeStamp;
@@ -757,9 +751,7 @@
                 this.data.time.last = this.data.time.last ? this.data.time.last : this.data.time.start;
 
                 // if positions have not changed
-                if (this.positionDidNotChange(e)) {
-                    return false;
-                }
+                if (this.positionDidNotChange(e)) return false;
 
                 this.clearTimeouts(this.data.timeout.default);
                 this.clearTimeouts(this.data.timeout.hold);
@@ -770,7 +762,6 @@
                 } else {
                     this.eventCallback(this.settings.callbacks.pan, this.dataClone);
                 }
-
                 return false;
             }
 
@@ -782,17 +773,12 @@
         }, {
             key: 'handlePinchAndZoom',
             value: function handlePinchAndZoom() {
-                if (!this.data.last.distance) {
-                    this.data.last.distance = this.data.distance;
-                }
+                if (!this.data.last.distance) this.data.last.distance = this.data.distance;
+
                 this.data.difference = this.data.distance - this.data.last.distance;
                 if (Math.abs(this.data.difference) >= 0.005) {
-                    if (this.settings.callbacks.pinch) {
-                        this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
-                    }
-                    if (this.settings.callbacks.zoom) {
-                        this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
-                    }
+                    if (this.settings.callbacks.pinch) this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
+                    if (this.settings.callbacks.zoom) this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
                     this.data.last.distance = this.data.distance;
                 }
                 return this;
@@ -1062,9 +1048,7 @@
         }, {
             key: 'eventCallback',
             value: function eventCallback(callback, args) {
-                if (callback && typeof callback === "function") {
-                    callback(args);
-                }
+                if (callback && typeof callback === "function") callback(args);
                 this.data.last.action = null;
                 return this;
             }
@@ -1108,23 +1092,10 @@
             value: function getScrollDirection(event) {
                 var axis = parseInt(event.axis, 10);
                 var direction = [];
-
-                // down
-                if (this.isDownDirection(axis, event)) {
-                    direction.push("down");
-                } // up
-                else if (this.isUpDirection(axis, event)) {
-                    direction.push("up");
-                }
-
-                // right
-                if (this.isRightDirection(axis, event)) {
-                    direction.push("right");
-                } // left
-                else if (this.isLeftDirection(axis, event)) {
-                    direction.push("left");
-                }
-
+                if (this.isDownDirection(axis, event)) direction.push("down"); // down
+                else if (this.isUpDirection(axis, event)) direction.push("up"); // up
+                if (this.isRightDirection(axis, event)) direction.push("right"); // right
+                else if (this.isLeftDirection(axis, event)) direction.push("left"); // left
                 return direction;
             }
 

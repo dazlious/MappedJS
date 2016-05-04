@@ -122,7 +122,7 @@ export class MappedJS {
                     this.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                 }.bind(this),
                 wheel: function(data) {
-                    const factor = data.zoom / 10;
+                    const factor = data.delta / 4;
                     this.zoom(factor, this.getAbsolutePosition(data.position.start));
                 }.bind(this),
                 pinch: function(data) {
