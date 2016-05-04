@@ -203,7 +203,7 @@
                             this.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                         }.bind(this),
                         wheel: function(data) {
-                            var factor = data.zoom / 10;
+                            var factor = data.delta / 4;
                             this.zoom(factor, this.getAbsolutePosition(data.position.start));
                         }.bind(this),
                         pinch: function(data) {

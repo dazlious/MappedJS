@@ -111,6 +111,7 @@ get size
     * [.bindMouseEvents()](#Interact+bindMouseEvents) ⇒ <code>[Interact](#Interact)</code>
     * [.preHandle(event)](#Interact+preHandle) ⇒ <code>Object</code>
     * [.scrollHandler(event)](#Interact+scrollHandler) ⇒ <code>Boolean</code>
+    * [.normalizeWheelDelta(event)](#Interact+normalizeWheelDelta) ⇒ <code>number</code>
     * [.isPointerEvent(event)](#Interact+isPointerEvent) ⇒ <code>Boolean</code>
     * [.calculateStart(e)](#Interact+calculateStart) ⇒ <code>Object</code>
     * [.handlePointerEventStart(data, e)](#Interact+handlePointerEventStart) ⇒ <code>Object</code>
@@ -317,6 +318,17 @@ handles cross-browser and -device scroll
 **Params**
 
 - event <code>Object</code> - jQuery-Event-Object
+
+<a name="Interact+normalizeWheelDelta"></a>
+
+### interact.normalizeWheelDelta(event) ⇒ <code>number</code>
+Solution from http://jsfiddle.net/uNeBr/
+
+**Kind**: instance method of <code>[Interact](#Interact)</code>  
+**Returns**: <code>number</code> - normalized wheel delta  
+**Params**
+
+- event <code>Object</code> - VanillaJS-Event-Object
 
 <a name="Interact+isPointerEvent"></a>
 
