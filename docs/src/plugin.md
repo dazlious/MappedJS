@@ -1778,6 +1778,9 @@ check if tiles are equal
         * [.height](#TileMap+height) ⇒ <code>number</code>
         * [.currentLevelData](#TileMap+currentLevelData) ⇒ <code>Object</code>
         * [.initialize()](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
+        * [.enrichMarkerData(markerData, $container)](#TileMap+enrichMarkerData) ⇒ <code>Object</code>
+        * [.initializeMarkers(markerData, $container)](#TileMap+initializeMarkers) ⇒ <code>[View](#View)</code>
+        * [.appendMarkerContainerToDom($container)](#TileMap+appendMarkerContainerToDom) ⇒ <code>[View](#View)</code>
         * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.clearCanvas()](#TileMap+clearCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.redraw()](#TileMap+redraw) ⇒ <code>[TileMap](#TileMap)</code>
@@ -1843,6 +1846,41 @@ initializes the TileMap
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+<a name="TileMap+enrichMarkerData"></a>
+
+### tileMap.enrichMarkerData(markerData, $container) ⇒ <code>Object</code>
+enrich marker data
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>Object</code> - enriched marker data  
+**Params**
+
+- markerData <code>Object</code> - data of markers
+- $container <code>Object</code> - jQuery-selector
+
+<a name="TileMap+initializeMarkers"></a>
+
+### tileMap.initializeMarkers(markerData, $container) ⇒ <code>[View](#View)</code>
+initializes all markers
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+**Params**
+
+- markerData <code>Object</code> - data of all markers
+- $container <code>Object</code> - jQuery-selector
+
+<a name="TileMap+appendMarkerContainerToDom"></a>
+
+### tileMap.appendMarkerContainerToDom($container) ⇒ <code>[View](#View)</code>
+append marker container to DOM
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+**Params**
+
+- $container <code>Object</code> - jQuery-selector
+
 <a name="TileMap+initializeCanvas"></a>
 
 ### tileMap.initializeCanvas() ⇒ <code>[TileMap](#TileMap)</code>
@@ -1922,9 +1960,6 @@ name of marker data in data.json
     * [.drawVisibleTiles()](#View+drawVisibleTiles) ⇒ <code>[View](#View)</code>
     * [.drawThumbnail()](#View+drawThumbnail) ⇒ <code>[View](#View)</code>
     * [.initializeTiles()](#View+initializeTiles) ⇒ <code>[View](#View)</code>
-    * [.appendMarkerContainerToDom($container)](#View+appendMarkerContainerToDom) ⇒ <code>[View](#View)</code>
-    * [.enrichMarkerData(markerData, $container)](#View+enrichMarkerData) ⇒ <code>Object</code>
-    * [.initializeMarkers(markerData, $container)](#View+initializeMarkers) ⇒ <code>[View](#View)</code>
     * [.repositionMarkerContainer()](#View+repositionMarkerContainer) ⇒ <code>[View](#View)</code>
 
 <a name="new_View_new"></a>
@@ -2101,41 +2136,6 @@ initializes tiles
 
 **Kind**: instance method of <code>[View](#View)</code>  
 **Returns**: <code>[View](#View)</code> - instance of View for chaining  
-<a name="View+appendMarkerContainerToDom"></a>
-
-### view.appendMarkerContainerToDom($container) ⇒ <code>[View](#View)</code>
-append marker container to DOM
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View for chaining  
-**Params**
-
-- $container <code>Object</code> - jQuery-selector
-
-<a name="View+enrichMarkerData"></a>
-
-### view.enrichMarkerData(markerData, $container) ⇒ <code>Object</code>
-enrich marker data
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>Object</code> - enriched marker data  
-**Params**
-
-- markerData <code>Object</code> - data of markers
-- $container <code>Object</code> - jQuery-selector
-
-<a name="View+initializeMarkers"></a>
-
-### view.initializeMarkers(markerData, $container) ⇒ <code>[View](#View)</code>
-initializes all markers
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View for chaining  
-**Params**
-
-- markerData <code>Object</code> - data of all markers
-- $container <code>Object</code> - jQuery-selector
-
 <a name="View+repositionMarkerContainer"></a>
 
 ### view.repositionMarkerContainer() ⇒ <code>[View](#View)</code>

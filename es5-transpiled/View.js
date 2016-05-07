@@ -134,23 +134,26 @@
             var initialCenter = _ref$initialCenter === undefined ? new _LatLng.LatLng() : _ref$initialCenter;
             var _ref$data = _ref.data;
             var data = _ref$data === undefined ? {} : _ref$data;
-            var _ref$markerData = _ref.markerData;
-            var markerData = _ref$markerData === undefined ? null : _ref$markerData;
             var _ref$$container = _ref.$container;
             var $container = _ref$$container === undefined ? null : _ref$$container;
             var _ref$context = _ref.context;
             var context = _ref$context === undefined ? null : _ref$context;
             var _ref$maxZoom = _ref.maxZoom;
             var maxZoom = _ref$maxZoom === undefined ? 1.5 : _ref$maxZoom;
+            var _ref$currentZoom = _ref.currentZoom;
+            var currentZoom = _ref$currentZoom === undefined ? 1 : _ref$currentZoom;
             var _ref$minZoom = _ref.minZoom;
             var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
             var _ref$debug = _ref.debug;
             var debug = _ref$debug === undefined ? false : _ref$debug;
+            var _ref$$markerContainer = _ref.$markerContainer;
+            var $markerContainer = _ref$$markerContainer === undefined ? null : _ref$$markerContainer;
             var _ref$limitToBounds = _ref.limitToBounds;
             var limitToBounds = _ref$limitToBounds === undefined ? bounds : _ref$limitToBounds;
 
             _classCallCheck(this, View);
 
+            this.$markerContainer = $markerContainer;
             this.mapView = mapView;
             this.originalMapView = mapView.clone;
             this.viewport = viewport;
@@ -187,7 +190,7 @@
             this.tiles = [];
             this.data = data;
             this.context = context;
-            this.markers = [];
+
             this.initial = {
                 position: initialCenter,
                 zoom: this.zoomFactor
@@ -195,7 +198,12 @@
 
             this.drawIsNeeded = true;
 
-            this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
+            this.initializeTiles().loadThumb();
+
+            if (this.zoomFactor !== currentZoom) {
+                var deltaZoom = currentZoom - this.zoomFactor;
+                this.zoom(deltaZoom, this.currentView.center);
+            }
 
             return this;
         }
@@ -331,9 +339,9 @@
 
                 this.drawIsNeeded = true;
 
-                if (this.zoomFactor === this.maxZoom) {
+                if (this.zoomFactor >= this.maxZoom) {
                     this.eventManager.publish("next-level", [this.center, this.bounds]);
-                } else if (this.zoomFactor === this.minZoom) {
+                } else if (this.zoomFactor <= this.minZoom) {
                     this.eventManager.publish("previous-level", [this.center, this.bounds]);
                 }
 
@@ -474,57 +482,6 @@
                     var currentTile = new _Tile.Tile(currentTileData, this);
                     this.tiles.push(currentTile);
                 }.bind(this));
-                return this;
-            }
-
-            /**
-             * append marker container to DOM
-             * @param  {Object} $container - jQuery-selector
-             * @return {View} instance of View for chaining
-             */
-
-        }, {
-            key: 'appendMarkerContainerToDom',
-            value: function appendMarkerContainerToDom($container) {
-                this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
-                $container.append(this.$markerContainer);
-                return this;
-            }
-
-            /**
-             * enrich marker data
-             * @param  {Object} markerData - data of markers
-             * @param  {Object} $container - jQuery-selector
-             * @return {Object} enriched marker data
-             */
-
-        }, {
-            key: 'enrichMarkerData',
-            value: function enrichMarkerData(markerData, $container) {
-                _DataEnrichment.DataEnrichment.marker(markerData, function(enrichedMarkerData) {
-                    this.appendMarkerContainerToDom($container);
-                    markerData = enrichedMarkerData;
-                }.bind(this));
-                return markerData;
-            }
-
-            /**
-             * initializes all markers
-             * @param  {Object} markerData - data of all markers
-             * @param  {Object} $container - jQuery-selector
-             * @return {View} instance of View for chaining
-             */
-
-        }, {
-            key: 'initializeMarkers',
-            value: function initializeMarkers(markerData, $container) {
-                if (markerData) {
-                    markerData = this.enrichMarkerData(markerData, $container);
-                    _Helper.Helper.forEach(markerData, function(currentData) {
-                        var m = new _Marker.Marker(currentData, this);
-                        this.markers.push(m);
-                    }.bind(this));
-                }
                 return this;
             }
 
