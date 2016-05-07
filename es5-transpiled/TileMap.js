@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './View.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Publisher.js', './StateHandler.js', './Helper.js'], factory);
+        define(['exports', 'jQuery', './View.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Publisher.js', './StateHandler.js', './Helper.js', './Marker.js', './DataEnrichment.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./View.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Helper.js'));
+        factory(exports, require('jQuery'), require('./View.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Helper.js'), require('./Marker.js'), require('./DataEnrichment.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.View, global.LatLng, global.Bounds, global.Rectangle, global.Publisher, global.StateHandler, global.Helper);
+        factory(mod.exports, global.jQuery, global.View, global.LatLng, global.Bounds, global.Rectangle, global.Publisher, global.StateHandler, global.Helper, global.Marker, global.DataEnrichment);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jQuery, _View, _LatLng, _Bounds, _Rectangle, _Publisher, _StateHandler, _Helper) {
+})(this, function(exports, _jQuery, _View, _LatLng, _Bounds, _Rectangle, _Publisher, _StateHandler, _Helper, _Marker, _DataEnrichment) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -138,6 +138,8 @@
             this.settings = settings;
             this.levels = [];
 
+            this.markers = [];
+
             _Helper.Helper.forEach(this.imgData, function(element, i) {
                 var currentLevel = {
                     value: element,
@@ -152,10 +154,14 @@
             this.initial = {
                 bounds: settings.bounds,
                 center: settings.center,
-                level: settings.level
+                level: settings.level,
+                zoom: settings.zoom
             };
 
+            this.appendMarkerContainerToDom(container);
+
             this.initialize(settings.bounds, settings.center, this.currentLevelData);
+
             return this;
         }
 
@@ -170,7 +176,8 @@
             value: function initialize(bounds, center, data) {
                 this.initializeCanvas();
                 this.bindEvents();
-                this.createViewFromData(bounds, center, data);
+                this.createViewFromData(bounds, center, data, this.settings.zoom);
+                this.initializeMarkers(this.markerData, this.$container);
                 this.resizeCanvas();
                 return this;
             }
@@ -179,14 +186,14 @@
             value: function reset() {
                 if (this.levelHandler.hasPrevious()) {
                     this.levelHandler.changeTo(0);
-                    this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData);
+                    this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
                 } else {
                     this.view.reset();
                 }
             }
         }, {
             key: 'createViewFromData',
-            value: function createViewFromData(bounds, center, data) {
+            value: function createViewFromData(bounds, center, data, zoom) {
                 this.view = new _View.View({
                     viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
                     mapView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
@@ -195,13 +202,65 @@
                     initialCenter: this.initial.center,
                     data: data,
                     maxZoom: data.zoom ? data.zoom.max : 1,
+                    currentZoom: zoom,
                     minZoom: data.zoom ? data.zoom.min : 1,
                     markerData: this.markerData,
                     $container: this.$container,
+                    $markerContainer: this.$markerContainer,
                     context: this.canvasContext,
                     debug: this.debug,
                     limitToBounds: this.settings.limitToBounds
                 });
+            }
+
+            /**
+             * enrich marker data
+             * @param  {Object} markerData - data of markers
+             * @param  {Object} $container - jQuery-selector
+             * @return {Object} enriched marker data
+             */
+
+        }, {
+            key: 'enrichMarkerData',
+            value: function enrichMarkerData(markerData, $container) {
+                _DataEnrichment.DataEnrichment.marker(markerData, function(enrichedMarkerData) {
+                    markerData = enrichedMarkerData;
+                }.bind(this));
+                return markerData;
+            }
+
+            /**
+             * initializes all markers
+             * @param  {Object} markerData - data of all markers
+             * @param  {Object} $container - jQuery-selector
+             * @return {View} instance of View for chaining
+             */
+
+        }, {
+            key: 'initializeMarkers',
+            value: function initializeMarkers(markerData, $container) {
+                if (markerData) {
+                    markerData = this.enrichMarkerData(markerData, $container);
+                    _Helper.Helper.forEach(markerData, function(currentData) {
+                        var m = new _Marker.Marker(currentData, this.view);
+                        this.markers.push(m);
+                    }.bind(this));
+                }
+                return this;
+            }
+
+            /**
+             * append marker container to DOM
+             * @param  {Object} $container - jQuery-selector
+             * @return {View} instance of View for chaining
+             */
+
+        }, {
+            key: 'appendMarkerContainerToDom',
+            value: function appendMarkerContainerToDom($container) {
+                this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
+                $container.append(this.$markerContainer);
+                return this;
             }
         }, {
             key: 'bindEvents',
@@ -213,7 +272,7 @@
                     var lastLevel = this.levelHandler.current.description;
                     this.levelHandler.next();
                     if (lastLevel !== this.levelHandler.current.description) {
-                        this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+                        this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.min + 0.0000001);
                     }
                 }.bind(this));
 
@@ -223,7 +282,7 @@
                     var lastLevel = this.levelHandler.current.description;
                     this.levelHandler.previous();
                     if (lastLevel !== this.levelHandler.current.description) {
-                        this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+                        this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.max - 0.0000001);
                     }
                 }.bind(this));
             }

@@ -1270,6 +1270,9 @@
 <li><a href="#TileMap+height">.height</a> ⇒ <code>number</code></li>
 <li><a href="#TileMap+currentLevelData">.currentLevelData</a> ⇒ <code>Object</code></li>
 <li><a href="#TileMap+initialize">.initialize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+enrichMarkerData">.enrichMarkerData(markerData, $container)</a> ⇒ <code>Object</code></li>
+<li><a href="#TileMap+initializeMarkers">.initializeMarkers(markerData, $container)</a> ⇒ <code><a href="#View">View</a></code></li>
+<li><a href="#TileMap+appendMarkerContainerToDom">.appendMarkerContainerToDom($container)</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#TileMap+initializeCanvas">.initializeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+clearCanvas">.clearCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+redraw">.redraw()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
@@ -1314,7 +1317,30 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>Object</code> - data for current level as json<br><a name="TileMap+initialize"></a></p>
 <h3 id="tilemap-initialize-code-tilemap-tilemap-code-">tileMap.initialize() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>initializes the TileMap</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+initializeCanvas"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+enrichMarkerData"></a></p>
+<h3 id="tilemap-enrichmarkerdata-markerdata-container-code-object-code-">tileMap.enrichMarkerData(markerData, $container) ⇒ <code>Object</code></h3>
+<p>enrich marker data</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>Object</code> - enriched marker data<br><strong>Params</strong></p>
+<ul>
+<li>markerData <code>Object</code> - data of markers</li>
+<li>$container <code>Object</code> - jQuery-selector</li>
+</ul>
+<p><a name="TileMap+initializeMarkers"></a></p>
+<h3 id="tilemap-initializemarkers-markerdata-container-code-view-view-code-">tileMap.initializeMarkers(markerData, $container) ⇒ <code><a href="#View">View</a></code></h3>
+<p>initializes all markers</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><strong>Params</strong></p>
+<ul>
+<li>markerData <code>Object</code> - data of all markers</li>
+<li>$container <code>Object</code> - jQuery-selector</li>
+</ul>
+<p><a name="TileMap+appendMarkerContainerToDom"></a></p>
+<h3 id="tilemap-appendmarkercontainertodom-container-code-view-view-code-">tileMap.appendMarkerContainerToDom($container) ⇒ <code><a href="#View">View</a></code></h3>
+<p>append marker container to DOM</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><strong>Params</strong></p>
+<ul>
+<li>$container <code>Object</code> - jQuery-selector</li>
+</ul>
+<p><a name="TileMap+initializeCanvas"></a></p>
 <h3 id="tilemap-initializecanvas-code-tilemap-tilemap-code-">tileMap.initializeCanvas() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>initializes the canvas, adds to DOM</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+clearCanvas"></a></p>
@@ -1362,9 +1388,6 @@
 <li><a href="#View+drawVisibleTiles">.drawVisibleTiles()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+drawThumbnail">.drawThumbnail()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+initializeTiles">.initializeTiles()</a> ⇒ <code><a href="#View">View</a></code></li>
-<li><a href="#View+appendMarkerContainerToDom">.appendMarkerContainerToDom($container)</a> ⇒ <code><a href="#View">View</a></code></li>
-<li><a href="#View+enrichMarkerData">.enrichMarkerData(markerData, $container)</a> ⇒ <code>Object</code></li>
-<li><a href="#View+initializeMarkers">.initializeMarkers(markerData, $container)</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+repositionMarkerContainer">.repositionMarkerContainer()</a> ⇒ <code><a href="#View">View</a></code></li>
 </ul>
 </li>
@@ -1470,30 +1493,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="View+initializeTiles"></a></p>
 <h3 id="view-initializetiles-code-view-view-code-">view.initializeTiles() ⇒ <code><a href="#View">View</a></code></h3>
 <p>initializes tiles</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="View+appendMarkerContainerToDom"></a></p>
-<h3 id="view-appendmarkercontainertodom-container-code-view-view-code-">view.appendMarkerContainerToDom($container) ⇒ <code><a href="#View">View</a></code></h3>
-<p>append marker container to DOM</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><strong>Params</strong></p>
-<ul>
-<li>$container <code>Object</code> - jQuery-selector</li>
-</ul>
-<p><a name="View+enrichMarkerData"></a></p>
-<h3 id="view-enrichmarkerdata-markerdata-container-code-object-code-">view.enrichMarkerData(markerData, $container) ⇒ <code>Object</code></h3>
-<p>enrich marker data</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>Object</code> - enriched marker data<br><strong>Params</strong></p>
-<ul>
-<li>markerData <code>Object</code> - data of markers</li>
-<li>$container <code>Object</code> - jQuery-selector</li>
-</ul>
-<p><a name="View+initializeMarkers"></a></p>
-<h3 id="view-initializemarkers-markerdata-container-code-view-view-code-">view.initializeMarkers(markerData, $container) ⇒ <code><a href="#View">View</a></code></h3>
-<p>initializes all markers</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><strong>Params</strong></p>
-<ul>
-<li>markerData <code>Object</code> - data of all markers</li>
-<li>$container <code>Object</code> - jQuery-selector</li>
-</ul>
-<p><a name="View+repositionMarkerContainer"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="View+repositionMarkerContainer"></a></p>
 <h3 id="view-repositionmarkercontainer-code-view-view-code-">view.repositionMarkerContainer() ⇒ <code><a href="#View">View</a></code></h3>
 <p>reposition marker container</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="instance"></a></p>

@@ -71,15 +71,18 @@ export class View {
         center = new LatLng(),
         initialCenter = new LatLng(),
         data = {},
-        markerData = null,
         $container = null,
         context = null,
         maxZoom = 1.5,
+        currentZoom = 1,
         minZoom = 0.8,
         debug = false,
+        $markerContainer = null,
         limitToBounds = bounds
         }) {
 
+
+        this.$markerContainer = $markerContainer;
         this.mapView = mapView;
         this.originalMapView = mapView.clone;
         this.viewport = viewport;
@@ -116,7 +119,7 @@ export class View {
         this.tiles = [];
         this.data = data;
         this.context = context;
-        this.markers = [];
+
         this.initial = {
             position: initialCenter,
             zoom: this.zoomFactor
@@ -124,7 +127,12 @@ export class View {
 
         this.drawIsNeeded = true;
 
-        this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
+        this.initializeTiles().loadThumb();
+
+        if (this.zoomFactor !== currentZoom) {
+            const deltaZoom = currentZoom - this.zoomFactor;
+            this.zoom(deltaZoom, this.currentView.center);
+        }
 
         return this;
     }
@@ -237,9 +245,9 @@ export class View {
 
         this.drawIsNeeded = true;
 
-        if (this.zoomFactor === this.maxZoom) {
+        if (this.zoomFactor >= this.maxZoom) {
             this.eventManager.publish("next-level", [this.center, this.bounds]);
-        } else if (this.zoomFactor === this.minZoom) {
+        } else if (this.zoomFactor <= this.minZoom) {
             this.eventManager.publish("previous-level", [this.center, this.bounds]);
         }
 
@@ -360,47 +368,9 @@ export class View {
         return this;
     }
 
-    /**
-     * append marker container to DOM
-     * @param  {Object} $container - jQuery-selector
-     * @return {View} instance of View for chaining
-     */
-    appendMarkerContainerToDom($container) {
-        this.$markerContainer = $("<div class='marker-container' />");
-        $container.append(this.$markerContainer);
-        return this;
-    }
 
-    /**
-     * enrich marker data
-     * @param  {Object} markerData - data of markers
-     * @param  {Object} $container - jQuery-selector
-     * @return {Object} enriched marker data
-     */
-    enrichMarkerData(markerData, $container) {
-        DataEnrichment.marker(markerData, function(enrichedMarkerData) {
-            this.appendMarkerContainerToDom($container);
-            markerData = enrichedMarkerData;
-        }.bind(this));
-        return markerData;
-    }
 
-    /**
-     * initializes all markers
-     * @param  {Object} markerData - data of all markers
-     * @param  {Object} $container - jQuery-selector
-     * @return {View} instance of View for chaining
-     */
-    initializeMarkers(markerData, $container) {
-        if (markerData) {
-            markerData = this.enrichMarkerData(markerData, $container);
-            Helper.forEach(markerData, function(currentData) {
-                const m = new Marker(currentData, this);
-                this.markers.push(m);
-            }.bind(this));
-        }
-        return this;
-    }
+
 
     /**
      * reposition marker container

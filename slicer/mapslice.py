@@ -60,10 +60,10 @@ def build_level(input_path, output, path, size, minsize, current_level):
         }
     else:
         last_dimension = last_image["dimensions"]
-        last_image["zoom"]["max"] = img.width / float(last_dimension["width"])
+        last_image["zoom"]["max"] = 1.2
 
         data_in_current_level["zoom"] = {
-            "min": float(last_dimension["width"]) / img.width
+            "min": float(last_dimension["width"] * last_image["zoom"]["max"]) / img.width
         }
 
     if current_level == (len(settings.input) - 1):
@@ -208,7 +208,7 @@ def init_settings():
     parser.add_argument('-o', '--output', help='path to destination', required=True, type=str)
     parser.add_argument('-s', '--size', help='size of a tile', default=512, type=int)
     parser.add_argument('-m', '--minsize', help='minimum size of a tile', default=128, type=int)
-    parser.add_argument('-z', '--zoom', help='minimum and maximum zoom level', default=[0.5, 1.5], type=float, nargs=2)
+    parser.add_argument('-z', '--zoom', help='minimum and maximum zoom level', default=[0.8, 1.2], type=float, nargs=2)
     parser.add_argument('-t', '--thumbSize', help='size of thumbnail', default=256, type=int)
     parser.add_argument('-p', '--path', help='additional path information for relative paths', default="", type=str)
     parser.add_argument('-c', '--clearfolder', help='empties output folder', default=False, type=bool)

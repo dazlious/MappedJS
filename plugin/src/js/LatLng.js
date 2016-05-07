@@ -84,6 +84,10 @@ export class LatLng {
         return this.lat === coord.lat && this.lng === coord.lng;
     }
 
+    toString() {
+        return `(${this.lat}, ${this.lng})`;
+    }
+
 }
 
 /**

@@ -473,6 +473,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(10);
 
+	var _Marker = __webpack_require__(11);
+
+	var _DataEnrichment = __webpack_require__(12);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -565,6 +569,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.settings = settings;
 	        this.levels = [];
 
+	        this.markers = [];
+
 	        _Helper.Helper.forEach(this.imgData, function (element, i) {
 	            var currentLevel = {
 	                value: element,
@@ -579,10 +585,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.initial = {
 	            bounds: settings.bounds,
 	            center: settings.center,
-	            level: settings.level
+	            level: settings.level,
+	            zoom: settings.zoom
 	        };
 
+	        this.appendMarkerContainerToDom(container);
+
 	        this.initialize(settings.bounds, settings.center, this.currentLevelData);
+
 	        return this;
 	    }
 
@@ -597,7 +607,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function initialize(bounds, center, data) {
 	            this.initializeCanvas();
 	            this.bindEvents();
-	            this.createViewFromData(bounds, center, data);
+	            this.createViewFromData(bounds, center, data, this.settings.zoom);
+	            this.initializeMarkers(this.markerData, this.$container);
 	            this.resizeCanvas();
 	            return this;
 	        }
@@ -606,14 +617,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function reset() {
 	            if (this.levelHandler.hasPrevious()) {
 	                this.levelHandler.changeTo(0);
-	                this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData);
+	                this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
 	            } else {
 	                this.view.reset();
 	            }
 	        }
 	    }, {
 	        key: 'createViewFromData',
-	        value: function createViewFromData(bounds, center, data) {
+	        value: function createViewFromData(bounds, center, data, zoom) {
 	            this.view = new _View.View({
 	                viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
 	                mapView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
@@ -622,13 +633,65 @@ return /******/ (function(modules) { // webpackBootstrap
 	                initialCenter: this.initial.center,
 	                data: data,
 	                maxZoom: data.zoom ? data.zoom.max : 1,
+	                currentZoom: zoom,
 	                minZoom: data.zoom ? data.zoom.min : 1,
 	                markerData: this.markerData,
 	                $container: this.$container,
+	                $markerContainer: this.$markerContainer,
 	                context: this.canvasContext,
 	                debug: this.debug,
 	                limitToBounds: this.settings.limitToBounds
 	            });
+	        }
+
+	        /**
+	         * enrich marker data
+	         * @param  {Object} markerData - data of markers
+	         * @param  {Object} $container - jQuery-selector
+	         * @return {Object} enriched marker data
+	         */
+
+	    }, {
+	        key: 'enrichMarkerData',
+	        value: function enrichMarkerData(markerData, $container) {
+	            _DataEnrichment.DataEnrichment.marker(markerData, function (enrichedMarkerData) {
+	                markerData = enrichedMarkerData;
+	            }.bind(this));
+	            return markerData;
+	        }
+
+	        /**
+	         * initializes all markers
+	         * @param  {Object} markerData - data of all markers
+	         * @param  {Object} $container - jQuery-selector
+	         * @return {View} instance of View for chaining
+	         */
+
+	    }, {
+	        key: 'initializeMarkers',
+	        value: function initializeMarkers(markerData, $container) {
+	            if (markerData) {
+	                markerData = this.enrichMarkerData(markerData, $container);
+	                _Helper.Helper.forEach(markerData, function (currentData) {
+	                    var m = new _Marker.Marker(currentData, this.view);
+	                    this.markers.push(m);
+	                }.bind(this));
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * append marker container to DOM
+	         * @param  {Object} $container - jQuery-selector
+	         * @return {View} instance of View for chaining
+	         */
+
+	    }, {
+	        key: 'appendMarkerContainerToDom',
+	        value: function appendMarkerContainerToDom($container) {
+	            this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
+	            $container.append(this.$markerContainer);
+	            return this;
 	        }
 	    }, {
 	        key: 'bindEvents',
@@ -640,7 +703,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var lastLevel = this.levelHandler.current.description;
 	                this.levelHandler.next();
 	                if (lastLevel !== this.levelHandler.current.description) {
-	                    this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+	                    this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.min + 0.0000001);
 	                }
 	            }.bind(this));
 
@@ -650,7 +713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var lastLevel = this.levelHandler.current.description;
 	                this.levelHandler.previous();
 	                if (lastLevel !== this.levelHandler.current.description) {
-	                    this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+	                    this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.max - 0.0000001);
 	                }
 	            }.bind(this));
 	        }
@@ -878,23 +941,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var initialCenter = _ref$initialCenter === undefined ? new _LatLng.LatLng() : _ref$initialCenter;
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? {} : _ref$data;
-	        var _ref$markerData = _ref.markerData;
-	        var markerData = _ref$markerData === undefined ? null : _ref$markerData;
 	        var _ref$$container = _ref.$container;
 	        var $container = _ref$$container === undefined ? null : _ref$$container;
 	        var _ref$context = _ref.context;
 	        var context = _ref$context === undefined ? null : _ref$context;
 	        var _ref$maxZoom = _ref.maxZoom;
 	        var maxZoom = _ref$maxZoom === undefined ? 1.5 : _ref$maxZoom;
+	        var _ref$currentZoom = _ref.currentZoom;
+	        var currentZoom = _ref$currentZoom === undefined ? 1 : _ref$currentZoom;
 	        var _ref$minZoom = _ref.minZoom;
 	        var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
 	        var _ref$debug = _ref.debug;
 	        var debug = _ref$debug === undefined ? false : _ref$debug;
+	        var _ref$$markerContainer = _ref.$markerContainer;
+	        var $markerContainer = _ref$$markerContainer === undefined ? null : _ref$$markerContainer;
 	        var _ref$limitToBounds = _ref.limitToBounds;
 	        var limitToBounds = _ref$limitToBounds === undefined ? bounds : _ref$limitToBounds;
 
 	        _classCallCheck(this, View);
 
+	        this.$markerContainer = $markerContainer;
 	        this.mapView = mapView;
 	        this.originalMapView = mapView.clone;
 	        this.viewport = viewport;
@@ -931,7 +997,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.tiles = [];
 	        this.data = data;
 	        this.context = context;
-	        this.markers = [];
+
 	        this.initial = {
 	            position: initialCenter,
 	            zoom: this.zoomFactor
@@ -939,7 +1005,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.drawIsNeeded = true;
 
-	        this.initializeTiles().loadThumb().initializeMarkers(markerData, $container);
+	        this.initializeTiles().loadThumb();
+
+	        if (this.zoomFactor !== currentZoom) {
+	            var deltaZoom = currentZoom - this.zoomFactor;
+	            this.zoom(deltaZoom, this.currentView.center);
+	        }
 
 	        return this;
 	    }
@@ -1075,9 +1146,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.drawIsNeeded = true;
 
-	            if (this.zoomFactor === this.maxZoom) {
+	            if (this.zoomFactor >= this.maxZoom) {
 	                this.eventManager.publish("next-level", [this.center, this.bounds]);
-	            } else if (this.zoomFactor === this.minZoom) {
+	            } else if (this.zoomFactor <= this.minZoom) {
 	                this.eventManager.publish("previous-level", [this.center, this.bounds]);
 	            }
 
@@ -1222,57 +1293,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * append marker container to DOM
-	         * @param  {Object} $container - jQuery-selector
-	         * @return {View} instance of View for chaining
-	         */
-
-	    }, {
-	        key: 'appendMarkerContainerToDom',
-	        value: function appendMarkerContainerToDom($container) {
-	            this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
-	            $container.append(this.$markerContainer);
-	            return this;
-	        }
-
-	        /**
-	         * enrich marker data
-	         * @param  {Object} markerData - data of markers
-	         * @param  {Object} $container - jQuery-selector
-	         * @return {Object} enriched marker data
-	         */
-
-	    }, {
-	        key: 'enrichMarkerData',
-	        value: function enrichMarkerData(markerData, $container) {
-	            _DataEnrichment.DataEnrichment.marker(markerData, function (enrichedMarkerData) {
-	                this.appendMarkerContainerToDom($container);
-	                markerData = enrichedMarkerData;
-	            }.bind(this));
-	            return markerData;
-	        }
-
-	        /**
-	         * initializes all markers
-	         * @param  {Object} markerData - data of all markers
-	         * @param  {Object} $container - jQuery-selector
-	         * @return {View} instance of View for chaining
-	         */
-
-	    }, {
-	        key: 'initializeMarkers',
-	        value: function initializeMarkers(markerData, $container) {
-	            if (markerData) {
-	                markerData = this.enrichMarkerData(markerData, $container);
-	                _Helper.Helper.forEach(markerData, function (currentData) {
-	                    var m = new _Marker.Marker(currentData, this);
-	                    this.markers.push(m);
-	                }.bind(this));
-	            }
-	            return this;
-	        }
-
-	        /**
 	         * reposition marker container
 	         * @return {View} instance of View for chaining
 	         */
@@ -1306,7 +1326,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
 	        window.setTimeout(callback, 1000 / 60);
 	    };
-		}();
+	}();
 
 /***/ },
 /* 4 */
@@ -1527,7 +1547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1535,127 +1555,132 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var LatLng = exports.LatLng = function () {
-	  _createClass(LatLng, [{
-	    key: "length",
+	    _createClass(LatLng, [{
+	        key: "length",
 
 
-	    /**
-	     * length of a latlng
-	     * @return {number} length of a latlng
-	     */
-	    get: function get() {
-	      return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
+	        /**
+	         * length of a latlng
+	         * @return {number} length of a latlng
+	         */
+	        get: function get() {
+	            return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
+	        }
+
+	        /**
+	         * gets a clone of this latlng
+	         * @return {LatLng} new instance equals this latlng
+	         */
+
+	    }, {
+	        key: "clone",
+	        get: function get() {
+	            return LatLng.createFromLatLng(this);
+	        }
+
+	        /**
+	         * Constructor
+	         * @param  {number} lat = 0 - representation of latitude
+	         * @param  {number} lng = 0 - representation of longitude
+	         * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
+	         * @return {LatLng} new instance of LatLng
+	         */
+
+	    }]);
+
+	    function LatLng() {
+	        var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	        _classCallCheck(this, LatLng);
+
+	        this.lat = lat;
+	        this.lng = lng;
+	        return this;
 	    }
 
 	    /**
-	     * gets a clone of this latlng
-	     * @return {LatLng} new instance equals this latlng
-	     */
-
-	  }, {
-	    key: "clone",
-	    get: function get() {
-	      return LatLng.createFromLatLng(this);
-	    }
-
-	    /**
-	     * Constructor
-	     * @param  {number} lat = 0 - representation of latitude
-	     * @param  {number} lng = 0 - representation of longitude
-	     * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
-	     * @return {LatLng} new instance of LatLng
-	     */
-
-	  }]);
-
-	  function LatLng() {
-	    var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-
-	    _classCallCheck(this, LatLng);
-
-	    this.lat = lat;
-	    this.lng = lng;
-	    return this;
-	  }
-
-	  /**
-	   * substract specified coord from this coordinate
-	   * @param  {LatLng} coord - specified coordinate to substract from this coord
-	   * @return {LatLng} the new calculated LatLng
-	   */
-
-
-	  _createClass(LatLng, [{
-	    key: "substract",
-	    value: function substract(coord) {
-	      this.lat -= coord.lat;
-	      this.lng -= coord.lng;
-	      return this;
-	    }
-
-	    /**
-	     * add specified coord to this coordinate
-	     * @param  {LatLng} coord - specified coordinate to add to this coord
+	     * substract specified coord from this coordinate
+	     * @param  {LatLng} coord - specified coordinate to substract from this coord
 	     * @return {LatLng} the new calculated LatLng
 	     */
 
-	  }, {
-	    key: "add",
-	    value: function add(coord) {
-	      this.lat += coord.lat;
-	      this.lng += coord.lng;
-	      return this;
-	    }
 
-	    /**
-	    * divides a latlng with a given factor
-	    * @param  {number} factorLat - factor to divide lat with
-	    * @param  {number} factorLng = factorLat - factor to divide lng with
-	     * @return {LatLng} Returns instance for chaining
-	     */
+	    _createClass(LatLng, [{
+	        key: "substract",
+	        value: function substract(coord) {
+	            this.lat -= coord.lat;
+	            this.lng -= coord.lng;
+	            return this;
+	        }
 
-	  }, {
-	    key: "divide",
-	    value: function divide(factorLat) {
-	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+	        /**
+	         * add specified coord to this coordinate
+	         * @param  {LatLng} coord - specified coordinate to add to this coord
+	         * @return {LatLng} the new calculated LatLng
+	         */
 
-	      this.lat /= factorLat;
-	      this.lng /= factorLng;
-	      return this;
-	    }
+	    }, {
+	        key: "add",
+	        value: function add(coord) {
+	            this.lat += coord.lat;
+	            this.lng += coord.lng;
+	            return this;
+	        }
 
-	    /**
-	     * multiplicates a latlng with a given factor
-	     * @param  {number} factorLat - factor to multiplicate lat with
-	     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
-	     * @return {LatLng} Returns instance for chaining
-	     */
+	        /**
+	        * divides a latlng with a given factor
+	        * @param  {number} factorLat - factor to divide lat with
+	        * @param  {number} factorLng = factorLat - factor to divide lng with
+	         * @return {LatLng} Returns instance for chaining
+	         */
 
-	  }, {
-	    key: "multiply",
-	    value: function multiply(factorLat) {
-	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+	    }, {
+	        key: "divide",
+	        value: function divide(factorLat) {
+	            var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
-	      this.lat *= factorLat;
-	      this.lng *= factorLng;
-	      return this;
-	    }
+	            this.lat /= factorLat;
+	            this.lng /= factorLng;
+	            return this;
+	        }
 
-	    /**
-	     * checks if specified coord equals this coord
-	     * @param  {LatLng} coord - specified coord to check against
-	     * @return {Boolean} Returns if specified coord equals this coord
-	     */
+	        /**
+	         * multiplicates a latlng with a given factor
+	         * @param  {number} factorLat - factor to multiplicate lat with
+	         * @param  {number} factorLng = factorLat - factor to multiplicate lng with
+	         * @return {LatLng} Returns instance for chaining
+	         */
 
-	  }, {
-	    key: "equals",
-	    value: function equals(coord) {
-	      return this.lat === coord.lat && this.lng === coord.lng;
-	    }
-	  }]);
+	    }, {
+	        key: "multiply",
+	        value: function multiply(factorLat) {
+	            var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
-	  return LatLng;
+	            this.lat *= factorLat;
+	            this.lng *= factorLng;
+	            return this;
+	        }
+
+	        /**
+	         * checks if specified coord equals this coord
+	         * @param  {LatLng} coord - specified coord to check against
+	         * @return {Boolean} Returns if specified coord equals this coord
+	         */
+
+	    }, {
+	        key: "equals",
+	        value: function equals(coord) {
+	            return this.lat === coord.lat && this.lng === coord.lng;
+	        }
+	    }, {
+	        key: "toString",
+	        value: function toString() {
+	            return "(" + this.lat + ", " + this.lng + ")";
+	        }
+	    }]);
+
+	    return LatLng;
 	}();
 
 	/**
@@ -1666,7 +1691,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	LatLng.createFromLatLng = function (latlng) {
-	  return new LatLng(latlng.lat, latlng.lng);
+	    return new LatLng(latlng.lat, latlng.lng);
 		};
 
 /***/ },

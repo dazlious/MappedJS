@@ -6,6 +6,8 @@ import {Rectangle} from './Rectangle.js';
 import {Publisher} from './Publisher.js';
 import {StateHandler} from './StateHandler.js';
 import {Helper} from './Helper.js';
+import {Marker} from './Marker.js';
+import {DataEnrichment} from './DataEnrichment.js';
 
 export class TileMap {
 
@@ -68,6 +70,8 @@ export class TileMap {
         this.settings = settings;
         this.levels = [];
 
+        this.markers = [];
+
         Helper.forEach(this.imgData, function(element, i) {
             const currentLevel = {
                 value: element,
@@ -82,10 +86,14 @@ export class TileMap {
         this.initial = {
             bounds: settings.bounds,
             center: settings.center,
-            level: settings.level
+            level: settings.level,
+            zoom: settings.zoom
         };
 
+        this.appendMarkerContainerToDom(container);
+
         this.initialize(settings.bounds, settings.center, this.currentLevelData);
+
         return this;
     }
 
@@ -96,7 +104,8 @@ export class TileMap {
     initialize(bounds, center, data) {
         this.initializeCanvas();
         this.bindEvents();
-        this.createViewFromData(bounds, center, data);
+        this.createViewFromData(bounds, center, data, this.settings.zoom);
+        this.initializeMarkers(this.markerData, this.$container);
         this.resizeCanvas();
         return this;
     }
@@ -104,13 +113,13 @@ export class TileMap {
     reset() {
         if (this.levelHandler.hasPrevious()) {
             this.levelHandler.changeTo(0);
-            this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData);
+            this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
         } else {
             this.view.reset();
         }
     }
 
-    createViewFromData(bounds, center, data) {
+    createViewFromData(bounds, center, data, zoom) {
         this.view = new View({
             viewport: new Rectangle(this.left, this.top, this.width, this.height),
             mapView: new Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
@@ -119,13 +128,56 @@ export class TileMap {
             initialCenter: this.initial.center,
             data: data,
             maxZoom: (data.zoom) ? data.zoom.max : 1,
+            currentZoom: zoom,
             minZoom: (data.zoom) ? data.zoom.min : 1,
             markerData: this.markerData,
             $container: this.$container,
+            $markerContainer: this.$markerContainer,
             context: this.canvasContext,
             debug: this.debug,
             limitToBounds: this.settings.limitToBounds
         });
+    }
+
+    /**
+     * enrich marker data
+     * @param  {Object} markerData - data of markers
+     * @param  {Object} $container - jQuery-selector
+     * @return {Object} enriched marker data
+     */
+    enrichMarkerData(markerData, $container) {
+        DataEnrichment.marker(markerData, function(enrichedMarkerData) {
+            markerData = enrichedMarkerData;
+        }.bind(this));
+        return markerData;
+    }
+
+    /**
+     * initializes all markers
+     * @param  {Object} markerData - data of all markers
+     * @param  {Object} $container - jQuery-selector
+     * @return {View} instance of View for chaining
+     */
+    initializeMarkers(markerData, $container) {
+        if (markerData) {
+            markerData = this.enrichMarkerData(markerData, $container);
+            Helper.forEach(markerData, function(currentData) {
+                const m = new Marker(currentData, this.view);
+                this.markers.push(m);
+            }.bind(this));
+        }
+        return this;
+    }
+
+    /**
+     * append marker container to DOM
+     * @param  {Object} $container - jQuery-selector
+     * @return {View} instance of View for chaining
+     */
+    appendMarkerContainerToDom($container) {
+        this.$markerContainer = $("<div class='marker-container' />");
+        $container.append(this.$markerContainer);
+        return this;
     }
 
     bindEvents() {
@@ -136,7 +188,7 @@ export class TileMap {
             const lastLevel = this.levelHandler.current.description;
             this.levelHandler.next();
             if (lastLevel !== this.levelHandler.current.description) {
-                this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+                this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.min + 0.0000001);
             }
         }.bind(this));
 
@@ -146,7 +198,7 @@ export class TileMap {
             const lastLevel = this.levelHandler.current.description;
             this.levelHandler.previous();
             if (lastLevel !== this.levelHandler.current.description) {
-                this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData);
+                this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.max - 0.0000001);
             }
         }.bind(this));
 

@@ -160,6 +160,11 @@
             value: function equals(coord) {
                 return this.lat === coord.lat && this.lng === coord.lng;
             }
+        }, {
+            key: "toString",
+            value: function toString() {
+                return "(" + this.lat + ", " + this.lng + ")";
+            }
         }]);
 
         return LatLng;
