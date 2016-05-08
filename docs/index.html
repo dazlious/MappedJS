@@ -1270,8 +1270,8 @@
 <li><a href="#TileMap+height">.height</a> ⇒ <code>number</code></li>
 <li><a href="#TileMap+currentLevelData">.currentLevelData</a> ⇒ <code>Object</code></li>
 <li><a href="#TileMap+initialize">.initialize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
-<li><a href="#TileMap+enrichMarkerData">.enrichMarkerData(markerData, $container)</a> ⇒ <code>Object</code></li>
-<li><a href="#TileMap+initializeMarkers">.initializeMarkers(markerData, $container)</a> ⇒ <code><a href="#View">View</a></code></li>
+<li><a href="#TileMap+enrichMarkerData">.enrichMarkerData(markerData)</a> ⇒ <code>Object</code></li>
+<li><a href="#TileMap+initializeMarkers">.initializeMarkers(markerData)</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#TileMap+appendMarkerContainerToDom">.appendMarkerContainerToDom($container)</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#TileMap+initializeCanvas">.initializeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+clearCanvas">.clearCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
@@ -1318,20 +1318,18 @@
 <h3 id="tilemap-initialize-code-tilemap-tilemap-code-">tileMap.initialize() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>initializes the TileMap</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+enrichMarkerData"></a></p>
-<h3 id="tilemap-enrichmarkerdata-markerdata-container-code-object-code-">tileMap.enrichMarkerData(markerData, $container) ⇒ <code>Object</code></h3>
+<h3 id="tilemap-enrichmarkerdata-markerdata-code-object-code-">tileMap.enrichMarkerData(markerData) ⇒ <code>Object</code></h3>
 <p>enrich marker data</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>Object</code> - enriched marker data<br><strong>Params</strong></p>
 <ul>
 <li>markerData <code>Object</code> - data of markers</li>
-<li>$container <code>Object</code> - jQuery-selector</li>
 </ul>
 <p><a name="TileMap+initializeMarkers"></a></p>
-<h3 id="tilemap-initializemarkers-markerdata-container-code-view-view-code-">tileMap.initializeMarkers(markerData, $container) ⇒ <code><a href="#View">View</a></code></h3>
+<h3 id="tilemap-initializemarkers-markerdata-code-view-view-code-">tileMap.initializeMarkers(markerData) ⇒ <code><a href="#View">View</a></code></h3>
 <p>initializes all markers</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><strong>Params</strong></p>
 <ul>
 <li>markerData <code>Object</code> - data of all markers</li>
-<li>$container <code>Object</code> - jQuery-selector</li>
 </ul>
 <p><a name="TileMap+appendMarkerContainerToDom"></a></p>
 <h3 id="tilemap-appendmarkercontainertodom-container-code-view-view-code-">tileMap.appendMarkerContainerToDom($container) ⇒ <code><a href="#View">View</a></code></h3>

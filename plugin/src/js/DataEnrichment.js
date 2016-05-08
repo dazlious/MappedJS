@@ -11,7 +11,7 @@ export var DataEnrichment = {
      * @param  {Function} cb - callback function, when enrichment is done
      * @return {DataEnrichment} DataEnrichment object for chaining
      */
-    marker: function(data, cb) {
+    marker: function(data) {
 
         const enrichedData = [];
 
@@ -33,11 +33,7 @@ export var DataEnrichment = {
 
         });
 
-        if (typeof cb === "function") {
-            cb(enrichedData);
-        }
-
-        return this;
+        return enrichedData;
     },
     mapSettings: function(data) {
 

@@ -149,6 +149,7 @@
             }.bind(this));
 
             this.levelHandler = new _StateHandler.StateHandler(this.levels);
+            this.levelHandler.changeTo(this.settings.level);
             this.eventManager = new _Publisher.Publisher();
             this.debug = debug;
             this.initial = {
@@ -177,7 +178,7 @@
                 this.initializeCanvas();
                 this.bindEvents();
                 this.createViewFromData(bounds, center, data, this.settings.zoom);
-                this.initializeMarkers(this.markerData, this.$container);
+                this.initializeMarkers(this.markerData);
                 this.resizeCanvas();
                 return this;
             }
@@ -216,31 +217,26 @@
             /**
              * enrich marker data
              * @param  {Object} markerData - data of markers
-             * @param  {Object} $container - jQuery-selector
              * @return {Object} enriched marker data
              */
 
         }, {
             key: 'enrichMarkerData',
-            value: function enrichMarkerData(markerData, $container) {
-                _DataEnrichment.DataEnrichment.marker(markerData, function(enrichedMarkerData) {
-                    markerData = enrichedMarkerData;
-                }.bind(this));
-                return markerData;
+            value: function enrichMarkerData(markerData) {
+                return _DataEnrichment.DataEnrichment.marker(markerData);
             }
 
             /**
              * initializes all markers
              * @param  {Object} markerData - data of all markers
-             * @param  {Object} $container - jQuery-selector
              * @return {View} instance of View for chaining
              */
 
         }, {
             key: 'initializeMarkers',
-            value: function initializeMarkers(markerData, $container) {
+            value: function initializeMarkers(markerData) {
                 if (markerData) {
-                    markerData = this.enrichMarkerData(markerData, $container);
+                    markerData = this.enrichMarkerData(markerData);
                     _Helper.Helper.forEach(markerData, function(currentData) {
                         var m = new _Marker.Marker(currentData, this.view);
                         this.markers.push(m);

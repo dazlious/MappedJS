@@ -1778,8 +1778,8 @@ check if tiles are equal
         * [.height](#TileMap+height) ⇒ <code>number</code>
         * [.currentLevelData](#TileMap+currentLevelData) ⇒ <code>Object</code>
         * [.initialize()](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.enrichMarkerData(markerData, $container)](#TileMap+enrichMarkerData) ⇒ <code>Object</code>
-        * [.initializeMarkers(markerData, $container)](#TileMap+initializeMarkers) ⇒ <code>[View](#View)</code>
+        * [.enrichMarkerData(markerData)](#TileMap+enrichMarkerData) ⇒ <code>Object</code>
+        * [.initializeMarkers(markerData)](#TileMap+initializeMarkers) ⇒ <code>[View](#View)</code>
         * [.appendMarkerContainerToDom($container)](#TileMap+appendMarkerContainerToDom) ⇒ <code>[View](#View)</code>
         * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.clearCanvas()](#TileMap+clearCanvas) ⇒ <code>[TileMap](#TileMap)</code>
@@ -1848,7 +1848,7 @@ initializes the TileMap
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
 <a name="TileMap+enrichMarkerData"></a>
 
-### tileMap.enrichMarkerData(markerData, $container) ⇒ <code>Object</code>
+### tileMap.enrichMarkerData(markerData) ⇒ <code>Object</code>
 enrich marker data
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
@@ -1856,11 +1856,10 @@ enrich marker data
 **Params**
 
 - markerData <code>Object</code> - data of markers
-- $container <code>Object</code> - jQuery-selector
 
 <a name="TileMap+initializeMarkers"></a>
 
-### tileMap.initializeMarkers(markerData, $container) ⇒ <code>[View](#View)</code>
+### tileMap.initializeMarkers(markerData) ⇒ <code>[View](#View)</code>
 initializes all markers
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
@@ -1868,7 +1867,6 @@ initializes all markers
 **Params**
 
 - markerData <code>Object</code> - data of all markers
-- $container <code>Object</code> - jQuery-selector
 
 <a name="TileMap+appendMarkerContainerToDom"></a>
 

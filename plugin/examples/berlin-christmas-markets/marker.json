@@ -1,0 +1,1128 @@
+{
+    "marker": [{
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.520202,
+            "lng": 13.295848
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.504820,
+            "lng": 13.335083
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.508332,
+            "lng": 13.306174
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.515409,
+            "lng": 13.259472
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.488472,
+            "lng": 13.277443
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.487400,
+            "lng": 13.328700
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.487972,
+            "lng": 13.312695
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.485160,
+            "lng": 13.274011
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.517122,
+            "lng": 13.308071
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.474514,
+            "lng": 13.309138
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.512320,
+            "lng": 13.258634
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.518874,
+            "lng": 13.295694
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.489651,
+            "lng": 13.397310
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.496520,
+            "lng": 13.395750
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.517665,
+            "lng": 13.466089
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.515923,
+            "lng": 13.479573
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.481640,
+            "lng": 13.527838
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.537960,
+            "lng": 13.605470
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.543956,
+            "lng": 13.544698
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.521213,
+            "lng": 13.587187
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.536894,
+            "lng": 13.605352
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.543404,
+            "lng": 13.560385
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.506059,
+            "lng": 13.582154
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.564697,
+            "lng": 13.570722
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.546922,
+            "lng": 13.556763
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.506943,
+            "lng": 13.372779
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.521663,
+            "lng": 13.413069
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.518294,
+            "lng": 13.408565
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.516101,
+            "lng": 13.416539
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.513638,
+            "lng": 13.392479
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.510405,
+            "lng": 13.373650
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.526306,
+            "lng": 13.338630
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.525656,
+            "lng": 13.400862
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.446915,
+            "lng": 13.437883
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.423704,
+            "lng": 13.436118
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.422324,
+            "lng": 13.430988
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.448277,
+            "lng": 13.436949
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.474233,
+            "lng": 13.446184
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.538602,
+            "lng": 13.413489
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.536412,
+            "lng": 13.417083
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.569085,
+            "lng": 13.388772
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.562956,
+            "lng": 13.328673
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.585434,
+            "lng": 13.287015
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.633762,
+            "lng": 13.290941
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.591479,
+            "lng": 13.329644
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.634142,
+            "lng": 13.291806
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.537149,
+            "lng": 13.204720
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.535689,
+            "lng": 13.201396
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.568712,
+            "lng": 13.198593
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.520916,
+            "lng": 13.193290
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.452563,
+            "lng": 13.149766
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.457323,
+            "lng": 13.292878
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.456320,
+            "lng": 13.299280
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.433399,
+            "lng": 13.257633
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.464874,
+            "lng": 13.326384
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.458610,
+            "lng": 13.288692
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.428302,
+            "lng": 13.328123
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.437773,
+            "lng": 13.232577
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.467213,
+            "lng": 13.261523
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.418013,
+            "lng": 13.150609
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.425365,
+            "lng": 13.204550
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.412405,
+            "lng": 13.141802
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.427363,
+            "lng": 13.258381
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.458707,
+            "lng": 13.355073
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.496701,
+            "lng": 13.354371
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.412134,
+            "lng": 13.366967
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.399340,
+            "lng": 13.409943
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.412953,
+            "lng": 13.367640
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.472891,
+            "lng": 13.335963
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.454530,
+            "lng": 13.473710
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.445020,
+            "lng": 13.576632
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.451896,
+            "lng": 13.624531
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.463286,
+            "lng": 13.523347
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.412190,
+            "lng": 13.662345
+        }
+    }, {
+        "icon": "img/icon.png",
+        "hover": true,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 64,
+            "height": 32
+        },
+        "position": {
+            "lat": 52.422080,
+            "lng": 13.539332
+        }
+    }]
+}

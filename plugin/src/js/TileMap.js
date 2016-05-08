@@ -81,6 +81,7 @@ export class TileMap {
         }.bind(this));
 
         this.levelHandler = new StateHandler(this.levels);
+        this.levelHandler.changeTo(this.settings.level);
         this.eventManager = new Publisher();
         this.debug = debug;
         this.initial = {
@@ -105,7 +106,7 @@ export class TileMap {
         this.initializeCanvas();
         this.bindEvents();
         this.createViewFromData(bounds, center, data, this.settings.zoom);
-        this.initializeMarkers(this.markerData, this.$container);
+        this.initializeMarkers(this.markerData);
         this.resizeCanvas();
         return this;
     }
@@ -142,25 +143,20 @@ export class TileMap {
     /**
      * enrich marker data
      * @param  {Object} markerData - data of markers
-     * @param  {Object} $container - jQuery-selector
      * @return {Object} enriched marker data
      */
-    enrichMarkerData(markerData, $container) {
-        DataEnrichment.marker(markerData, function(enrichedMarkerData) {
-            markerData = enrichedMarkerData;
-        }.bind(this));
-        return markerData;
+    enrichMarkerData(markerData) {
+        return DataEnrichment.marker(markerData);
     }
 
     /**
      * initializes all markers
      * @param  {Object} markerData - data of all markers
-     * @param  {Object} $container - jQuery-selector
      * @return {View} instance of View for chaining
      */
-    initializeMarkers(markerData, $container) {
+    initializeMarkers(markerData) {
         if (markerData) {
-            markerData = this.enrichMarkerData(markerData, $container);
+            markerData = this.enrichMarkerData(markerData);
             Helper.forEach(markerData, function(currentData) {
                 const m = new Marker(currentData, this.view);
                 this.markers.push(m);

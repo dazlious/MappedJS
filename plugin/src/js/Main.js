@@ -16,14 +16,18 @@ export class MappedJS {
      * @param  {Object} events={loaded: "mjs-loaded"} - List of events
      * @return {MappedJS} instance of MappedJS for chaining
      */
-    constructor({container=".mjs", mapData={}, mapSettings={}, events={loaded:"mjs-loaded"}, debug = false}) {
+    constructor({container=".mjs", mapData={}, markerData={}, mapSettings={}, events={loaded:"mjs-loaded"}, debug = false}) {
         this.initializeSettings(container, events, mapSettings);
 
-        this.initializeData(mapData, function() {
-            this.initializeMap();
-            this.addControls();
-            this.bindEvents();
-            this.loadingFinished();
+        this.initializeData(mapData, function(loadedMapData) {
+            this.mapData = loadedMapData;
+            this.initializeData(markerData, function(loadedMarkerData) {
+                this.mapData = $.extend(true, this.mapData, loadedMarkerData);
+                this.initializeMap();
+                this.addControls();
+                this.bindEvents();
+                this.loadingFinished();
+            }.bind(this));
         }.bind(this));
 
         this.momentum = null;
@@ -72,15 +76,12 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     initializeData(mapData, cb) {
-        const _this = this;
         if (typeof mapData === "string") {
             Helper.requestJSON(mapData, function(data) {
-                _this.mapData = data;
-                cb();
+                cb(data);
             });
         } else {
-            this.mapData = (typeof mapData === "object") ? mapData : null;
-            cb();
+            cb((typeof mapData === "object") ? mapData : null);
         }
         return this;
     }
