@@ -965,7 +965,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.viewport = viewport;
 	        this.bounds = bounds;
 	        this.center = center;
-	        this.zoomFactor = 1;
+	        this.zoomFactor = currentZoom;
 	        this.maxZoom = maxZoom;
 	        this.minZoom = minZoom;
 	        this.origin = new _Point.Point(0, 0);
@@ -1006,10 +1006,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.initializeTiles().loadThumb();
 
-	        if (this.zoomFactor !== currentZoom) {
-	            var deltaZoom = currentZoom - this.zoomFactor;
-	            this.zoom(deltaZoom, this.currentView.center);
-	        }
+	        this.zoom(0, this.viewport.center);
 
 	        return this;
 	    }
