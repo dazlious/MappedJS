@@ -88,7 +88,7 @@ export class View {
         this.viewport = viewport;
         this.bounds = bounds;
         this.center = center;
-        this.zoomFactor = 1;
+        this.zoomFactor = currentZoom;
         this.maxZoom = maxZoom;
         this.minZoom = minZoom;
         this.origin = new Point(0,0);
@@ -129,10 +129,7 @@ export class View {
 
         this.initializeTiles().loadThumb();
 
-        if (this.zoomFactor !== currentZoom) {
-            const deltaZoom = currentZoom - this.zoomFactor;
-            this.zoom(deltaZoom, this.currentView.center);
-        }
+        this.zoom(0, this.viewport.center);
 
         return this;
     }
