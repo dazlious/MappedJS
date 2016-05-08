@@ -101,6 +101,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var container = _ref$container === undefined ? ".mjs" : _ref$container;
 	        var _ref$mapData = _ref.mapData;
 	        var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
+	        var _ref$markerData = _ref.markerData;
+	        var markerData = _ref$markerData === undefined ? {} : _ref$markerData;
 	        var _ref$mapSettings = _ref.mapSettings;
 	        var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
 	        var _ref$events = _ref.events;
@@ -112,11 +114,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.initializeSettings(container, events, mapSettings);
 
-	        this.initializeData(mapData, function () {
-	            this.initializeMap();
-	            this.addControls();
-	            this.bindEvents();
-	            this.loadingFinished();
+	        this.initializeData(mapData, function (loadedMapData) {
+	            this.mapData = loadedMapData;
+	            this.initializeData(markerData, function (loadedMarkerData) {
+	                this.mapData = _jQuery2.default.extend(true, this.mapData, loadedMarkerData);
+	                this.initializeMap();
+	                this.addControls();
+	                this.bindEvents();
+	                this.loadingFinished();
+	            }.bind(this));
 	        }.bind(this));
 
 	        this.momentum = null;
@@ -173,15 +179,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'initializeData',
 	        value: function initializeData(mapData, cb) {
-	            var _this = this;
 	            if (typeof mapData === "string") {
 	                _Helper.Helper.requestJSON(mapData, function (data) {
-	                    _this.mapData = data;
-	                    cb();
+	                    cb(data);
 	                });
 	            } else {
-	                this.mapData = (typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null;
-	                cb();
+	                cb((typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null);
 	            }
 	            return this;
 	        }
@@ -580,6 +583,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }.bind(this));
 
 	        this.levelHandler = new _StateHandler.StateHandler(this.levels);
+	        this.levelHandler.changeTo(this.settings.level);
 	        this.eventManager = new _Publisher.Publisher();
 	        this.debug = debug;
 	        this.initial = {
@@ -608,7 +612,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.initializeCanvas();
 	            this.bindEvents();
 	            this.createViewFromData(bounds, center, data, this.settings.zoom);
-	            this.initializeMarkers(this.markerData, this.$container);
+	            this.initializeMarkers(this.markerData);
 	            this.resizeCanvas();
 	            return this;
 	        }
@@ -647,31 +651,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * enrich marker data
 	         * @param  {Object} markerData - data of markers
-	         * @param  {Object} $container - jQuery-selector
 	         * @return {Object} enriched marker data
 	         */
 
 	    }, {
 	        key: 'enrichMarkerData',
-	        value: function enrichMarkerData(markerData, $container) {
-	            _DataEnrichment.DataEnrichment.marker(markerData, function (enrichedMarkerData) {
-	                markerData = enrichedMarkerData;
-	            }.bind(this));
-	            return markerData;
+	        value: function enrichMarkerData(markerData) {
+	            return _DataEnrichment.DataEnrichment.marker(markerData);
 	        }
 
 	        /**
 	         * initializes all markers
 	         * @param  {Object} markerData - data of all markers
-	         * @param  {Object} $container - jQuery-selector
 	         * @return {View} instance of View for chaining
 	         */
 
 	    }, {
 	        key: 'initializeMarkers',
-	        value: function initializeMarkers(markerData, $container) {
+	        value: function initializeMarkers(markerData) {
 	            if (markerData) {
-	                markerData = this.enrichMarkerData(markerData, $container);
+	                markerData = this.enrichMarkerData(markerData);
 	                _Helper.Helper.forEach(markerData, function (currentData) {
 	                    var m = new _Marker.Marker(currentData, this.view);
 	                    this.markers.push(m);
@@ -2781,7 +2780,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Function} cb - callback function, when enrichment is done
 	     * @return {DataEnrichment} DataEnrichment object for chaining
 	     */
-	    marker: function marker(data, cb) {
+	    marker: function marker(data) {
 
 	        var enrichedData = [];
 
@@ -2802,11 +2801,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	        });
 
-	        if (typeof cb === "function") {
-	            cb(enrichedData);
-	        }
-
-	        return this;
+	        return enrichedData;
 	    },
 	    mapSettings: function mapSettings(data) {
 

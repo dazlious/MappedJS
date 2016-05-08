@@ -33,7 +33,7 @@
          * @param  {Function} cb - callback function, when enrichment is done
          * @return {DataEnrichment} DataEnrichment object for chaining
          */
-        marker: function marker(data, cb) {
+        marker: function marker(data) {
 
             var enrichedData = [];
 
@@ -54,11 +54,7 @@
                 });
             });
 
-            if (typeof cb === "function") {
-                cb(enrichedData);
-            }
-
-            return this;
+            return enrichedData;
         },
         mapSettings: function mapSettings(data) {
 

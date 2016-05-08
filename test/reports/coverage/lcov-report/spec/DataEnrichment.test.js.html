@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">40% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>20/20</span>
+        <span class='fraction'>8/20</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,18 +30,18 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">57.14% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>7/7</span>
+        <span class='fraction'>4/7</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">40% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>20/20</span>
+        <span class='fraction'>8/20</span>
       </div>
     </div>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line low'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -98,19 +98,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,11 +132,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -146,20 +146,20 @@ describe('DataEnrichment', function() {
     "use strict";
 &nbsp;
     it("Empty input returns empty data", function() {
-        DataEnrichment.DataEnrichment.marker([], function(data) {
-            expect(data.length).toEqual(0);
+        DataEnrichment.DataEnrichment.marker([], <span class="fstat-no" title="function not covered" >function(data) {</span>
+<span class="cstat-no" title="statement not covered" >            expect(data.length).toEqual(0);</span>
         });
     });
 &nbsp;
 &nbsp;
     it("Empty data in input returns default object", function() {
-        DataEnrichment.DataEnrichment.marker([{}], function(data) {
-            expect(data.length).toEqual(1);
-            expect(data[0].offset instanceof Point.Point).toEqual(true);
-            expect(data[0].latlng instanceof LatLng.LatLng).toEqual(true);
-            expect(data[0].size instanceof Point.Point).toEqual(true);
-            expect(data[0].hover).toEqual(false);
-            expect(data[0].icon).toBeNull();
+        DataEnrichment.DataEnrichment.marker([{}], <span class="fstat-no" title="function not covered" >function(data) {</span>
+<span class="cstat-no" title="statement not covered" >            expect(data.length).toEqual(1);</span>
+<span class="cstat-no" title="statement not covered" >            expect(data[0].offset instanceof Point.Point).toEqual(true);</span>
+<span class="cstat-no" title="statement not covered" >            expect(data[0].latlng instanceof LatLng.LatLng).toEqual(true);</span>
+<span class="cstat-no" title="statement not covered" >            expect(data[0].size instanceof Point.Point).toEqual(true);</span>
+<span class="cstat-no" title="statement not covered" >            expect(data[0].hover).toEqual(false);</span>
+<span class="cstat-no" title="statement not covered" >            expect(data[0].icon).toBeNull();</span>
         });
     });
 &nbsp;
@@ -180,12 +180,12 @@ describe('DataEnrichment', function() {
                 "height": 32
             }
         };
-        DataEnrichment.DataEnrichment.marker([item], function(data) {
-            expect(data[0].offset.equals(new Point.Point(0, 0))).toEqual(true);
-            expect(data[0].latlng.equals(new LatLng.LatLng(-60, 60))).toEqual(true);
-            expect(data[0].size.equals(new Point.Point(64,32))).toEqual(true);
-            expect(data[0].hover).toEqual(true);
-            expect(data[0].icon).toEqual(item.icon);
+        DataEnrichment.DataEnrichment.marker([item], <span class="fstat-no" title="function not covered" >function(data) {</span>
+<span class="cstat-no" title="statement not covered" >            expect(data[0].offset.equals(new Point.Point(0, 0))).toEqual(true);</span>
+<span class="cstat-no" title="statement not covered" >            expect(data[0].latlng.equals(new LatLng.LatLng(-60, 60))).toEqual(true);</span>
+<span class="cstat-no" title="statement not covered" >            expect(data[0].size.equals(new Point.Point(64,32))).toEqual(true);</span>
+<span class="cstat-no" title="statement not covered" >            expect(data[0].hover).toEqual(true);</span>
+<span class="cstat-no" title="statement not covered" >            expect(data[0].icon).toEqual(item.icon);</span>
         });
     });
 &nbsp;
@@ -196,7 +196,7 @@ describe('DataEnrichment', function() {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat May 07 2016 16:52:24 GMT+0200 (CEST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun May 08 2016 19:28:43 GMT+0200 (CEST)
 </div>
 </div>
 <script src="../prettify.js"></script>

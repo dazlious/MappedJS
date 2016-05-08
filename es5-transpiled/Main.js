@@ -72,6 +72,8 @@
             var container = _ref$container === undefined ? ".mjs" : _ref$container;
             var _ref$mapData = _ref.mapData;
             var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
+            var _ref$markerData = _ref.markerData;
+            var markerData = _ref$markerData === undefined ? {} : _ref$markerData;
             var _ref$mapSettings = _ref.mapSettings;
             var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
             var _ref$events = _ref.events;
@@ -85,11 +87,15 @@
 
             this.initializeSettings(container, events, mapSettings);
 
-            this.initializeData(mapData, function() {
-                this.initializeMap();
-                this.addControls();
-                this.bindEvents();
-                this.loadingFinished();
+            this.initializeData(mapData, function(loadedMapData) {
+                this.mapData = loadedMapData;
+                this.initializeData(markerData, function(loadedMarkerData) {
+                    this.mapData = _jQuery2.default.extend(true, this.mapData, loadedMarkerData);
+                    this.initializeMap();
+                    this.addControls();
+                    this.bindEvents();
+                    this.loadingFinished();
+                }.bind(this));
             }.bind(this));
 
             this.momentum = null;
@@ -146,15 +152,12 @@
         }, {
             key: 'initializeData',
             value: function initializeData(mapData, cb) {
-                var _this = this;
                 if (typeof mapData === "string") {
                     _Helper.Helper.requestJSON(mapData, function(data) {
-                        _this.mapData = data;
-                        cb();
+                        cb(data);
                     });
                 } else {
-                    this.mapData = (typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null;
-                    cb();
+                    cb((typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null);
                 }
                 return this;
             }
