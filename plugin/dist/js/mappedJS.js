@@ -3478,7 +3478,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handleTouchEventStart',
 	        value: function handleTouchEventStart(data, e) {
-	            return this.handleTouchEvent(data, e, this.handleSingletouchStart, this.handleMultitouchStart);
+	            return this.handleTouchEvent(data, e, this.handleSingletouchStart.bind(this), this.handleMultitouchStart.bind(this));
 	        }
 
 	        /**
@@ -3656,7 +3656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handleTouchEventMove',
 	        value: function handleTouchEventMove(data, e) {
-	            return this.handleTouchEvent(data, e, this.handleSingletouchMove, this.handleMultitouchMove);
+	            return this.handleTouchEvent(data, e, this.handleSingletouchMove.bind(this), this.handleMultitouchMove.bind(this));
 	        }
 	    }, {
 	        key: 'handleTouchEvent',

@@ -390,7 +390,7 @@ export class Interact {
      * @return {Object} manipulated enriched data
      */
     handleTouchEventStart(data, e) {
-        return this.handleTouchEvent(data, e, this.handleSingletouchStart, this.handleMultitouchStart);
+        return this.handleTouchEvent(data, e, this.handleSingletouchStart.bind(this), this.handleMultitouchStart.bind(this));
     }
 
     /**
@@ -541,7 +541,7 @@ export class Interact {
      * @return {Object} manipulated enriched data
      */
     handleTouchEventMove(data, e) {
-        return this.handleTouchEvent(data, e, this.handleSingletouchMove, this.handleMultitouchMove);
+        return this.handleTouchEvent(data, e, this.handleSingletouchMove.bind(this), this.handleMultitouchMove.bind(this));
     }
 
     handleTouchEvent(data, e, fnSingle, fnMulti) {
