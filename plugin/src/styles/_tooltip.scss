@@ -1,0 +1,90 @@
+$icon-width: (7*$gutter);
+$icon-height: (7*$gutter);
+
+.tooltip-container {
+    position: absolute;
+    bottom: -100%;
+    left: -100%;
+    height: 100%;
+    width: 100%;
+    z-index: 200;
+    background: map-get($light-theme, popupBg);
+    .close-button {
+        position: absolute;
+        z-index: 300;
+        top: 5px;
+        left: 10px;
+        display: block;
+        width: $icon-width;
+        height: $icon-height;
+        transition: background .15s ease;
+        cursor: pointer;
+        background: {
+            color: map-get($light-theme, popupBg);
+            image: url("data:image/svg+xml;charset=utf8,%3Csvg id='close' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23333;}%3C/style%3E%3C/defs%3E%3Ctitle%3Elight%3C/title%3E%3Cpath class='cls-1' d='M503.17157,62.17476a4.01176,4.01176,0,0,0,0-5.65685L455.48209,8.82843a4.01176,4.01176,0,0,0-5.65685,0L258.82843,199.82524a4.01176,4.01176,0,0,1-5.65685,0L62.17476,8.82843a4.01176,4.01176,0,0,0-5.65685,0L8.82843,56.51791a4.01176,4.01176,0,0,0,0,5.65685L199.82524,253.17157a4.01176,4.01176,0,0,1,0,5.65685L8.82843,449.82524a4.01176,4.01176,0,0,0,0,5.65685l47.68948,47.68948a4.01176,4.01176,0,0,0,5.65685,0L253.17157,312.17476a4.01176,4.01176,0,0,1,5.65685,0L449.82524,503.17157a4.01176,4.01176,0,0,0,5.65685,0l47.68948-47.68948a4.01176,4.01176,0,0,0,0-5.65685L312.17476,258.82843a4.01176,4.01176,0,0,1,0-5.65685Z'/%3E%3C/svg%3E");
+            size: 80%;
+            position: center;
+            repeat: no-repeat;
+        }
+        &:hover {
+            background-size: 90%;
+        }
+    }
+    @at-root .mappedJS.left {
+        .tooltip-container {
+            bottom: -100%;
+            left: -100%;
+            box-shadow: 2px 0 2px 0 rgba(0, 0, 0, .25);
+            width: 40%;
+            transition: left .05s ease-out;
+        }
+
+        &.tooltip-open .map-content {
+            left: 40%;
+            width: 60%;
+        }
+        &.tooltip-close .map-content {
+            left: 0;
+            width: 100%;
+        }
+
+        &.tooltip-open .tooltip-container {
+            left: 0;
+            bottom: 0;
+        }
+    }
+    @at-root .mappedJS.bottom {
+        .tooltip-container {
+            left: -100%;
+            height: 40%;
+            bottom: -100%;
+            box-shadow: 0 -2px 2px 0 rgba(0, 0, 0, .25);
+            transition: bottom .05s ease-out;
+        }
+
+        &.tooltip-open .map-content {
+            height: 60%;
+        }
+        &.tooltip-close .map-content {
+            height: 100%;
+        }
+
+        &.tooltip-open .tooltip-container {
+            left: 0;
+            bottom: 0;
+        }
+    }
+    .tooltip-content {
+        height: 100%;
+        padding: (12*$gutter) (3*$gutter) (3*$gutter);
+        overflow: auto;
+        > * {
+            width: 100%;
+        }
+        @import "_tooltip_image.scss";
+        @import "_tooltip_text.scss";
+        @import "_tooltip_headline.scss";
+        @import "_tooltip_crossheading.scss";
+        @import "_tooltip_iframe.scss";
+    }
+}

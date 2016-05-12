@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js', './StateHandler.js', './DataEnrichment.js'], factory);
+        define(['exports', 'jQuery', './Point.js', './Publisher.js', './StateHandler.js', './DataEnrichment.js', './ToolTip.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'), require('./StateHandler.js'), require('./DataEnrichment.js'));
+        factory(exports, require('jQuery'), require('./Point.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./DataEnrichment.js'), require('./ToolTip.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point, global.StateHandler, global.DataEnrichment);
+        factory(mod.exports, global.jQuery, global.Point, global.Publisher, global.StateHandler, global.DataEnrichment, global.ToolTip);
         global.Marker = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point, _StateHandler, _DataEnrichment) {
+})(this, function(exports, _jQuery, _Point, _Publisher, _StateHandler, _DataEnrichment, _ToolTip) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -98,23 +98,34 @@
             this.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
             this.latlng = data.latlng;
 
+            this.content = data.content;
             this.position = this.instance.convertLatLngToPoint(this.latlng);
 
-            this.icon = this.addMarkerToDOM(this.instance.$markerContainer);
+            this.$icon = this.addMarkerToDOM(this.instance.$markerContainer);
+
+            this.bindEvents();
 
             this.positionMarker();
 
             return this;
         }
 
-        /**
-         * adds a marker to the DOM
-         * @param {Object} $container - container to append to (jQuery selector)
-         * @returns {Object} jQuery-selector of append markup
-         */
-
-
         _createClass(Marker, [{
+            key: 'bindEvents',
+            value: function bindEvents() {
+                this.eventManager = new _Publisher.Publisher();
+                this.$icon.on("click", function() {
+                    this.eventManager.publish(_ToolTip.ToolTip.EVENT.OPEN, this.content);
+                }.bind(this));
+            }
+
+            /**
+             * adds a marker to the DOM
+             * @param {Object} $container - container to append to (jQuery selector)
+             * @returns {Object} jQuery-selector of append markup
+             */
+
+        }, {
             key: 'addMarkerToDOM',
             value: function addMarkerToDOM($container) {
                 var icon = (0, _jQuery2.default)("<div class='marker' />").css({
@@ -143,13 +154,13 @@
             value: function positionMarker() {
                 this.position = this.instance.convertLatLngToPoint(this.latlng);
                 //const p = new Point((this.position.x + this.instance.currentView.x) * this.instance.distortionFactor + this.instance.offsetToCenter, this.position.y + this.instance.currentView.y);
-                if (this.icon) {
-                    this.icon.css({
+                if (this.$icon) {
+                    this.$icon.css({
                         "left": this.position.x / this.instance.currentView.width * 100 + '%',
                         "top": this.position.y / this.instance.currentView.height * 100 + '%'
                             //transform: `translate3d(${p.x}px, ${p.y}px, 0)`
                     });
-                    this.icon.show();
+                    this.$icon.show();
                 }
                 return this;
             }

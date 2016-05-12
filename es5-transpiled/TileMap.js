@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './View.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Publisher.js', './StateHandler.js', './Helper.js', './Marker.js', './DataEnrichment.js'], factory);
+        define(['exports', 'jQuery', './View.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Publisher.js', './StateHandler.js', './Helper.js', './Marker.js', './DataEnrichment.js', './ToolTip.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./View.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Helper.js'), require('./Marker.js'), require('./DataEnrichment.js'));
+        factory(exports, require('jQuery'), require('./View.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Helper.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.View, global.LatLng, global.Bounds, global.Rectangle, global.Publisher, global.StateHandler, global.Helper, global.Marker, global.DataEnrichment);
+        factory(mod.exports, global.jQuery, global.View, global.LatLng, global.Bounds, global.Rectangle, global.Publisher, global.StateHandler, global.Helper, global.Marker, global.DataEnrichment, global.ToolTip);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jQuery, _View, _LatLng, _Bounds, _Rectangle, _Publisher, _StateHandler, _Helper, _Marker, _DataEnrichment) {
+})(this, function(exports, _jQuery, _View, _LatLng, _Bounds, _Rectangle, _Publisher, _StateHandler, _Helper, _Marker, _DataEnrichment, _ToolTip) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -60,7 +60,7 @@
              * @return {number} - left offset of container
              */
             get: function get() {
-                return this.$container.offset().left;
+                return this.$container.position().left - this.$container.offset().left;
             }
 
             /**
@@ -71,7 +71,7 @@
         }, {
             key: 'top',
             get: function get() {
-                return this.$container.offset().top;
+                return this.$container.position().top - this.$container.offset().top;
             }
 
             /**
@@ -111,7 +111,6 @@
              * @param  {Object} container - jQuery-object holding the container
              * @param  {Object} tilesData={} - json object representing data of TileMap
              * @param  {Object} settings={} - json object representing settings of TileMap
-             * @param  {Boolean} debug=false - Option for enabling debug-mode
              * @return {TileMap} instance of TileMap
              */
 
@@ -123,21 +122,19 @@
             var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
             var _ref$settings = _ref.settings;
             var settings = _ref$settings === undefined ? {} : _ref$settings;
-            var _ref$debug = _ref.debug;
-            var debug = _ref$debug === undefined ? false : _ref$debug;
 
             _classCallCheck(this, TileMap);
 
             if (!container) {
                 throw Error("You must define a container to initialize a TileMap");
             }
-
             this.$container = container;
+
             this.imgData = tilesData[TileMap.IMG_DATA_NAME];
             this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
             this.settings = settings;
-            this.levels = [];
 
+            this.levels = [];
             this.markers = [];
 
             _Helper.Helper.forEach(this.imgData, function(element, i) {
@@ -151,7 +148,6 @@
             this.levelHandler = new _StateHandler.StateHandler(this.levels);
             this.levelHandler.changeTo(this.settings.level);
             this.eventManager = new _Publisher.Publisher();
-            this.debug = debug;
             this.initial = {
                 bounds: settings.bounds,
                 center: settings.center,
@@ -159,7 +155,7 @@
                 zoom: settings.zoom
             };
 
-            this.appendMarkerContainerToDom(container);
+            this.appendMarkerContainerToDom();
 
             this.initialize(settings.bounds, settings.center, this.currentLevelData);
 
@@ -179,6 +175,9 @@
                 this.bindEvents();
                 this.createViewFromData(bounds, center, data, this.settings.zoom);
                 this.initializeMarkers(this.markerData);
+                if (this.markers.length !== 0) {
+                    this.createTooltipContainer();
+                }
                 this.resizeCanvas();
                 return this;
             }
@@ -209,7 +208,6 @@
                     $container: this.$container,
                     $markerContainer: this.$markerContainer,
                     context: this.canvasContext,
-                    debug: this.debug,
                     limitToBounds: this.settings.limitToBounds
                 });
             }
@@ -253,14 +251,29 @@
 
         }, {
             key: 'appendMarkerContainerToDom',
-            value: function appendMarkerContainerToDom($container) {
+            value: function appendMarkerContainerToDom() {
                 this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
-                $container.append(this.$markerContainer);
+                this.$container.append(this.$markerContainer);
+                return this;
+            }
+        }, {
+            key: 'createTooltipContainer',
+            value: function createTooltipContainer() {
+                this.tooltip = new _ToolTip.ToolTip({
+                    container: (0, _jQuery2.default)(this.$container.parent()),
+                    templates: {
+                        image: "../../src/hbs/image.hbs"
+                    }
+                });
                 return this;
             }
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
+
+                this.eventManager.subscribe("resize", function() {
+                    this.resize();
+                }.bind(this));
 
                 this.eventManager.subscribe("next-level", function(argument_array) {
                     var center = argument_array[0],
@@ -299,18 +312,6 @@
             }
 
             /**
-             * clears canvas
-             * @return {TileMap} instance of TileMap for chaining
-             */
-
-        }, {
-            key: 'clearCanvas',
-            value: function clearCanvas() {
-                this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                return this;
-            }
-
-            /**
              * complete clear and draw of all visible tiles
              * @return {TileMap} instance of TileMap for chaining
              */
@@ -318,7 +319,6 @@
         }, {
             key: 'redraw',
             value: function redraw() {
-                this.clearCanvas();
                 this.view.drawIsNeeded = true;
                 return this;
             }
@@ -360,8 +360,20 @@
             value: function resizeView() {
                 var oldViewport = this.view.viewport.clone;
                 this.view.viewport.size(this.left, this.top, this.width, this.height);
-                var difference = this.view.viewport.center.substract(oldViewport.center);
-                this.view.mapView.translate(difference.x, difference.y);
+                var delta = this.view.viewport.center.substract(oldViewport.center);
+                this.view.mapView.translate(delta.x, delta.y);
+                return this;
+            }
+
+            /**
+             * Handles resizing of view
+             * @return {TileMap} instance of TileMap for chaining
+             */
+
+        }, {
+            key: 'resizeViewAlternative',
+            value: function resizeViewAlternative() {
+                this.view.viewport.size(this.left, this.top, this.width, this.height);
                 return this;
             }
         }]);

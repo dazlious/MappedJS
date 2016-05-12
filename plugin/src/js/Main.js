@@ -5,6 +5,7 @@ import {Helper} from './Helper.js';
 import {Interact} from './Interact.js';
 import {LatLng} from './LatLng.js';
 import {Point} from './Point.js';
+import {Publisher} from './Publisher.js';
 
 export class MappedJS {
 
@@ -16,7 +17,7 @@ export class MappedJS {
      * @param  {Object} events={loaded: "mjs-loaded"} - List of events
      * @return {MappedJS} instance of MappedJS for chaining
      */
-    constructor({container=".mjs", mapData={}, markerData={}, mapSettings={}, events={loaded:"mjs-loaded"}, debug = false}) {
+    constructor({container=".mjs", mapData={}, markerData={}, mapSettings={}, events={loaded:"mjs-loaded"}}) {
         this.initializeSettings(container, events, mapSettings);
 
         this.initializeData(mapData, function(loadedMapData) {
@@ -33,8 +34,6 @@ export class MappedJS {
         this.momentum = null;
         this.keyTicks = 0;
 
-        this.debug = debug;
-
         return this;
     }
 
@@ -45,7 +44,7 @@ export class MappedJS {
             this.$zoomOut = $("<div class='control zoom-out' />");
             this.$home = $("<div class='control home' />");
             this.$controls.append(this.$home).append(this.$zoomIn).append(this.$zoomOut);
-            this.$container.append(this.$controls);
+            this.$content.append(this.$controls);
         }
     }
 
@@ -60,10 +59,12 @@ export class MappedJS {
         if (!(this.$container instanceof jQuery)) {
             throw new Error("Container " + container + " not found");
         }
+
         this.$container.addClass("mappedJS");
+        this.$content = $("<div class='map-content' />");
+        this.$container.append(this.$content);
 
         this.mapSettings = DataEnrichment.mapSettings(settings);
-
         this.events = events;
 
         return this;
@@ -92,10 +93,9 @@ export class MappedJS {
      */
     initializeMap() {
         this.tileMap = new TileMap({
-            container: this.$container,
+            container: this.$content,
             tilesData: this.mapData,
-            settings: this.mapSettings,
-            debug: this.debug
+            settings: this.mapSettings
         });
         return this;
     }
@@ -110,8 +110,9 @@ export class MappedJS {
     }
 
     initializeInteractForMap() {
+        this.tooltipState = false;
         this.interact = new Interact({
-            container: this.$container,
+            container: this.$content,
             autoFireHold: 300,
             overwriteViewportSettings: true,
             callbacks: {
@@ -130,7 +131,7 @@ export class MappedJS {
                     this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
                 }.bind(this),
                 doubletap: function(data) {
-                    if ($(data.target).hasClass("control")) {
+                    if (!$(data.target).hasClass("marker-container")) {
                         return false;
                     }
                     this.zoom(0.2, this.getAbsolutePosition(data.position.start));

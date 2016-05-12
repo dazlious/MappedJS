@@ -61,7 +61,6 @@ export class View {
      * @param  {Object} context = null - canvas context for drawing
      * @param  {number} maxZoom = 1.5 - maximal zoom of view
      * @param  {number} minZoom = 0.8 - minimal zoom of view
-     * @param  {Boolean} debug=false - Option for enabling debug-mode
      * @return {View} instance of View for chaining
      */
     constructor({
@@ -76,7 +75,6 @@ export class View {
         maxZoom = 1.5,
         currentZoom = 1,
         minZoom = 0.8,
-        debug = false,
         $markerContainer = null,
         limitToBounds = bounds
         }) {
@@ -92,26 +90,8 @@ export class View {
         this.maxZoom = maxZoom;
         this.minZoom = minZoom;
         this.origin = new Point(0,0);
-        this.debug = debug;
-        this.lastDraw = new Date();
         this.eventManager = new Publisher();
         this.limitToBounds = limitToBounds;
-
-        if (this.debug) {
-            this.$debugContainer = $("<div class='debug'></div>");
-            this.$debugContainer.css({
-                "position": "absolute",
-                "width": "100%",
-                "height": "20px",
-                "top": 0,
-                "right": 0,
-                "background": "rgba(0,0,0,.6)",
-                "color": "#fff",
-                "text-align": "right",
-                "padding-right": "10px"
-            });
-            $container.prepend(this.$debugContainer);
-        }
 
         const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
         this.currentView.position(newCenter.x, newCenter.y);
@@ -144,19 +124,11 @@ export class View {
      * main draw call
      */
     mainLoop() {
-        if (this.debug && this.drawIsNeeded) {
-            const now = new Date();
-            const fps = (1000 / (now - this.lastDraw)).toFixed(2);
-            this.lastDraw = now;
-            this.$debugContainer.text(`FPS: ${fps}`);
-        }
-
         if (this.drawIsNeeded) {
             this.drawIsNeeded = false;
             this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
             this.draw();
         }
-
         window.requestAnimFrame(this.mainLoop.bind(this));
     }
 

@@ -1262,7 +1262,7 @@
 <p><strong>Kind</strong>: global class  </p>
 <ul>
 <li><a href="#TileMap">TileMap</a><ul>
-<li><a href="#new_TileMap_new">new TileMap(container, tilesData, settings, debug)</a></li>
+<li><a href="#new_TileMap_new">new TileMap(container, tilesData, settings)</a></li>
 <li><em>instance</em><ul>
 <li><a href="#TileMap+left">.left</a> ⇒ <code>number</code></li>
 <li><a href="#TileMap+top">.top</a> ⇒ <code>number</code></li>
@@ -1274,11 +1274,11 @@
 <li><a href="#TileMap+initializeMarkers">.initializeMarkers(markerData)</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#TileMap+appendMarkerContainerToDom">.appendMarkerContainerToDom($container)</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#TileMap+initializeCanvas">.initializeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
-<li><a href="#TileMap+clearCanvas">.clearCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+redraw">.redraw()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resize">.resize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resizeCanvas">.resizeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resizeView">.resizeView()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+resizeViewAlternative">.resizeViewAlternative()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 </ul>
 </li>
 <li><em>static</em><ul>
@@ -1290,14 +1290,13 @@
 </li>
 </ul>
 <p><a name="new_TileMap_new"></a></p>
-<h3 id="new-tilemap-container-tilesdata-settings-debug-">new TileMap(container, tilesData, settings, debug)</h3>
+<h3 id="new-tilemap-container-tilesdata-settings-">new TileMap(container, tilesData, settings)</h3>
 <p>Constructor</p>
 <p><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><strong>Params</strong></p>
 <ul>
 <li>container <code>Object</code> - jQuery-object holding the container</li>
 <li>tilesData <code>Object</code> <code> = {}</code> - json object representing data of TileMap</li>
 <li>settings <code>Object</code> <code> = {}</code> - json object representing settings of TileMap</li>
-<li>debug <code>Boolean</code> <code> = false</code> - Option for enabling debug-mode</li>
 </ul>
 <p><a name="TileMap+left"></a></p>
 <h3 id="tilemap-left-code-number-code-">tileMap.left ⇒ <code>number</code></h3>
@@ -1341,10 +1340,7 @@
 <p><a name="TileMap+initializeCanvas"></a></p>
 <h3 id="tilemap-initializecanvas-code-tilemap-tilemap-code-">tileMap.initializeCanvas() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>initializes the canvas, adds to DOM</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+clearCanvas"></a></p>
-<h3 id="tilemap-clearcanvas-code-tilemap-tilemap-code-">tileMap.clearCanvas() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
-<p>clears canvas</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+redraw"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap<br><a name="TileMap+redraw"></a></p>
 <h3 id="tilemap-redraw-code-tilemap-tilemap-code-">tileMap.redraw() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>complete clear and draw of all visible tiles</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+resize"></a></p>
@@ -1355,6 +1351,9 @@
 <p>resizes the canvas sizes</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+resizeView"></a></p>
 <h3 id="tilemap-resizeview-code-tilemap-tilemap-code-">tileMap.resizeView() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
+<p>Handles resizing of view</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+resizeViewAlternative"></a></p>
+<h3 id="tilemap-resizeviewalternative-code-tilemap-tilemap-code-">tileMap.resizeViewAlternative() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>Handles resizing of view</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap.IMG_DATA_NAME"></a></p>
 <h3 id="tilemap-img_data_name-code-string-code-">TileMap.IMG_DATA_NAME : <code>String</code></h3>
@@ -1367,7 +1366,7 @@
 <p><strong>Kind</strong>: global class  </p>
 <ul>
 <li><a href="#View">View</a><ul>
-<li><a href="#new_View_new">new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom, debug)</a></li>
+<li><a href="#new_View_new">new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom)</a></li>
 <li><a href="#View+distortionFactor">.distortionFactor</a> ⇒ <code>number</code></li>
 <li><a href="#View+offsetToCenter">.offsetToCenter</a></li>
 <li><a href="#View+visibleTiles">.visibleTiles</a> ⇒ <code>array</code></li>
@@ -1391,7 +1390,7 @@
 </li>
 </ul>
 <p><a name="new_View_new"></a></p>
-<h3 id="new-view-viewport-mapview-bounds-center-data-markerdata-container-context-maxzoom-minzoom-debug-">new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom, debug)</h3>
+<h3 id="new-view-viewport-mapview-bounds-center-data-markerdata-container-context-maxzoom-minzoom-">new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom)</h3>
 <p>Constructor</p>
 <p><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><strong>Params</strong></p>
 <ul>
@@ -1405,7 +1404,6 @@
 <li>context <code>Object</code> - = null - canvas context for drawing</li>
 <li>maxZoom <code>number</code> - = 1.5 - maximal zoom of view</li>
 <li>minZoom <code>number</code> - = 0.8 - minimal zoom of view</li>
-<li>debug <code>Boolean</code> <code> = false</code> - Option for enabling debug-mode</li>
 </ul>
 <p><a name="View+distortionFactor"></a></p>
 <h3 id="view-distortionfactor-code-number-code-">view.distortionFactor ⇒ <code>number</code></h3>

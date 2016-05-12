@@ -38,7 +38,6 @@
             var enrichedData = [];
 
             _Helper.Helper.forEach(data, function(entry) {
-
                 entry = _jQuery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
 
                 var offset = new _Point.Point(entry.offset.x, entry.offset.y);
@@ -50,7 +49,8 @@
                     latlng: latlng,
                     size: size,
                     hover: entry.hover,
-                    icon: entry.icon
+                    icon: entry.icon,
+                    content: entry.content
                 });
             });
 
@@ -94,7 +94,8 @@
         size: {
             width: 32,
             height: 32
-        }
+        },
+        content: []
     };
 
     DataEnrichment.MAP_SETTINGS = {

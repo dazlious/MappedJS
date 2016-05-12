@@ -16,7 +16,6 @@ export var DataEnrichment = {
         const enrichedData = [];
 
         Helper.forEach(data, function(entry) {
-
             entry = $.extend(true, DataEnrichment.DATA_MARKER, entry);
 
             const offset = new Point(entry.offset.x, entry.offset.y);
@@ -28,9 +27,9 @@ export var DataEnrichment = {
                 latlng: latlng,
                 size: size,
                 hover: entry.hover,
-                icon: entry.icon
+                icon: entry.icon,
+                content: entry.content
             });
-
         });
 
         return enrichedData;
@@ -73,7 +72,8 @@ DataEnrichment.DATA_MARKER = {
     size: {
         width: 32,
         height: 32
-    }
+    },
+    content: []
 };
 
 DataEnrichment.MAP_SETTINGS = {

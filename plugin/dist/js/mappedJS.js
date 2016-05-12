@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("jQuery"));
+		module.exports = factory(require("jQuery"), require("Handlebars"));
 	else if(typeof define === 'function' && define.amd)
-		define(["jQuery"], factory);
+		define(["jQuery", "Handlebars"], factory);
 	else if(typeof exports === 'object')
-		exports["de"] = factory(require("jQuery"));
+		exports["de"] = factory(require("jQuery"), require("Handlebars"));
 	else
-		root["de"] = factory(root["jQuery"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
+		root["de"] = factory(root["jQuery"], root["Handlebars"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_15__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -71,15 +71,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _TileMap = __webpack_require__(2);
 
-	var _DataEnrichment = __webpack_require__(12);
+	var _DataEnrichment = __webpack_require__(13);
 
 	var _Helper = __webpack_require__(10);
 
-	var _Interact = __webpack_require__(14);
+	var _Interact = __webpack_require__(16);
 
 	var _LatLng = __webpack_require__(5);
 
 	var _Point = __webpack_require__(4);
+
+	var _Publisher = __webpack_require__(12);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -107,8 +109,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
 	        var _ref$events = _ref.events;
 	        var events = _ref$events === undefined ? { loaded: "mjs-loaded" } : _ref$events;
-	        var _ref$debug = _ref.debug;
-	        var debug = _ref$debug === undefined ? false : _ref$debug;
 
 	        _classCallCheck(this, MappedJS);
 
@@ -128,8 +128,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.momentum = null;
 	        this.keyTicks = 0;
 
-	        this.debug = debug;
-
 	        return this;
 	    }
 
@@ -142,7 +140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.$zoomOut = (0, _jQuery2.default)("<div class='control zoom-out' />");
 	                this.$home = (0, _jQuery2.default)("<div class='control home' />");
 	                this.$controls.append(this.$home).append(this.$zoomIn).append(this.$zoomOut);
-	                this.$container.append(this.$controls);
+	                this.$content.append(this.$controls);
 	            }
 	        }
 
@@ -160,10 +158,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!(this.$container instanceof jQuery)) {
 	                throw new Error("Container " + container + " not found");
 	            }
+
 	            this.$container.addClass("mappedJS");
+	            this.$content = (0, _jQuery2.default)("<div class='map-content' />");
+	            this.$container.append(this.$content);
 
 	            this.mapSettings = _DataEnrichment.DataEnrichment.mapSettings(settings);
-
 	            this.events = events;
 
 	            return this;
@@ -198,10 +198,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'initializeMap',
 	        value: function initializeMap() {
 	            this.tileMap = new _TileMap.TileMap({
-	                container: this.$container,
+	                container: this.$content,
 	                tilesData: this.mapData,
-	                settings: this.mapSettings,
-	                debug: this.debug
+	                settings: this.mapSettings
 	            });
 	            return this;
 	        }
@@ -220,8 +219,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'initializeInteractForMap',
 	        value: function initializeInteractForMap() {
+	            this.tooltipState = false;
 	            this.interact = new _Interact.Interact({
-	                container: this.$container,
+	                container: this.$content,
 	                autoFireHold: 300,
 	                overwriteViewportSettings: true,
 	                callbacks: {
@@ -240,7 +240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
 	                    }.bind(this),
 	                    doubletap: function (data) {
-	                        if ((0, _jQuery2.default)(data.target).hasClass("control")) {
+	                        if (!(0, _jQuery2.default)(data.target).hasClass("marker-container")) {
 	                            return false;
 	                        }
 	                        this.zoom(0.2, this.getAbsolutePosition(data.position.start));
@@ -470,7 +470,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Rectangle = __webpack_require__(7);
 
-	var _Publisher = __webpack_require__(13);
+	var _Publisher = __webpack_require__(12);
 
 	var _StateHandler = __webpack_require__(9);
 
@@ -478,7 +478,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Marker = __webpack_require__(11);
 
-	var _DataEnrichment = __webpack_require__(12);
+	var _DataEnrichment = __webpack_require__(13);
+
+	var _ToolTip = __webpack_require__(14);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -494,7 +496,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {number} - left offset of container
 	         */
 	        get: function get() {
-	            return this.$container.offset().left;
+	            return this.$container.position().left - this.$container.offset().left;
 	        }
 
 	        /**
@@ -505,7 +507,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'top',
 	        get: function get() {
-	            return this.$container.offset().top;
+	            return this.$container.position().top - this.$container.offset().top;
 	        }
 
 	        /**
@@ -545,7 +547,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {Object} container - jQuery-object holding the container
 	         * @param  {Object} tilesData={} - json object representing data of TileMap
 	         * @param  {Object} settings={} - json object representing settings of TileMap
-	         * @param  {Boolean} debug=false - Option for enabling debug-mode
 	         * @return {TileMap} instance of TileMap
 	         */
 
@@ -557,21 +558,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
 	        var _ref$settings = _ref.settings;
 	        var settings = _ref$settings === undefined ? {} : _ref$settings;
-	        var _ref$debug = _ref.debug;
-	        var debug = _ref$debug === undefined ? false : _ref$debug;
 
 	        _classCallCheck(this, TileMap);
 
 	        if (!container) {
 	            throw Error("You must define a container to initialize a TileMap");
 	        }
-
 	        this.$container = container;
+
 	        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
 	        this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
 	        this.settings = settings;
-	        this.levels = [];
 
+	        this.levels = [];
 	        this.markers = [];
 
 	        _Helper.Helper.forEach(this.imgData, function (element, i) {
@@ -585,7 +584,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.levelHandler = new _StateHandler.StateHandler(this.levels);
 	        this.levelHandler.changeTo(this.settings.level);
 	        this.eventManager = new _Publisher.Publisher();
-	        this.debug = debug;
 	        this.initial = {
 	            bounds: settings.bounds,
 	            center: settings.center,
@@ -593,7 +591,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            zoom: settings.zoom
 	        };
 
-	        this.appendMarkerContainerToDom(container);
+	        this.appendMarkerContainerToDom();
 
 	        this.initialize(settings.bounds, settings.center, this.currentLevelData);
 
@@ -613,6 +611,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.bindEvents();
 	            this.createViewFromData(bounds, center, data, this.settings.zoom);
 	            this.initializeMarkers(this.markerData);
+	            if (this.markers.length !== 0) {
+	                this.createTooltipContainer();
+	            }
 	            this.resizeCanvas();
 	            return this;
 	        }
@@ -643,7 +644,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                $container: this.$container,
 	                $markerContainer: this.$markerContainer,
 	                context: this.canvasContext,
-	                debug: this.debug,
 	                limitToBounds: this.settings.limitToBounds
 	            });
 	        }
@@ -687,14 +687,29 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    }, {
 	        key: 'appendMarkerContainerToDom',
-	        value: function appendMarkerContainerToDom($container) {
+	        value: function appendMarkerContainerToDom() {
 	            this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
-	            $container.append(this.$markerContainer);
+	            this.$container.append(this.$markerContainer);
+	            return this;
+	        }
+	    }, {
+	        key: 'createTooltipContainer',
+	        value: function createTooltipContainer() {
+	            this.tooltip = new _ToolTip.ToolTip({
+	                container: (0, _jQuery2.default)(this.$container.parent()),
+	                templates: {
+	                    image: "../../src/hbs/image.hbs"
+	                }
+	            });
 	            return this;
 	        }
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
+
+	            this.eventManager.subscribe("resize", function () {
+	                this.resize();
+	            }.bind(this));
 
 	            this.eventManager.subscribe("next-level", function (argument_array) {
 	                var center = argument_array[0],
@@ -733,18 +748,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * clears canvas
-	         * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'clearCanvas',
-	        value: function clearCanvas() {
-	            this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	            return this;
-	        }
-
-	        /**
 	         * complete clear and draw of all visible tiles
 	         * @return {TileMap} instance of TileMap for chaining
 	         */
@@ -752,7 +755,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'redraw',
 	        value: function redraw() {
-	            this.clearCanvas();
 	            this.view.drawIsNeeded = true;
 	            return this;
 	        }
@@ -794,8 +796,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function resizeView() {
 	            var oldViewport = this.view.viewport.clone;
 	            this.view.viewport.size(this.left, this.top, this.width, this.height);
-	            var difference = this.view.viewport.center.substract(oldViewport.center);
-	            this.view.mapView.translate(difference.x, difference.y);
+	            var delta = this.view.viewport.center.substract(oldViewport.center);
+	            this.view.mapView.translate(delta.x, delta.y);
+	            return this;
+	        }
+
+	        /**
+	         * Handles resizing of view
+	         * @return {TileMap} instance of TileMap for chaining
+	         */
+
+	    }, {
+	        key: 'resizeViewAlternative',
+	        value: function resizeViewAlternative() {
+	            this.view.viewport.size(this.left, this.top, this.width, this.height);
 	            return this;
 	        }
 	    }]);
@@ -848,9 +862,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(10);
 
-	var _DataEnrichment = __webpack_require__(12);
+	var _DataEnrichment = __webpack_require__(13);
 
-	var _Publisher = __webpack_require__(13);
+	var _Publisher = __webpack_require__(12);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -921,7 +935,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {Object} context = null - canvas context for drawing
 	         * @param  {number} maxZoom = 1.5 - maximal zoom of view
 	         * @param  {number} minZoom = 0.8 - minimal zoom of view
-	         * @param  {Boolean} debug=false - Option for enabling debug-mode
 	         * @return {View} instance of View for chaining
 	         */
 
@@ -950,8 +963,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var currentZoom = _ref$currentZoom === undefined ? 1 : _ref$currentZoom;
 	        var _ref$minZoom = _ref.minZoom;
 	        var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
-	        var _ref$debug = _ref.debug;
-	        var debug = _ref$debug === undefined ? false : _ref$debug;
 	        var _ref$$markerContainer = _ref.$markerContainer;
 	        var $markerContainer = _ref$$markerContainer === undefined ? null : _ref$$markerContainer;
 	        var _ref$limitToBounds = _ref.limitToBounds;
@@ -969,26 +980,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.maxZoom = maxZoom;
 	        this.minZoom = minZoom;
 	        this.origin = new _Point.Point(0, 0);
-	        this.debug = debug;
-	        this.lastDraw = new Date();
 	        this.eventManager = new _Publisher.Publisher();
 	        this.limitToBounds = limitToBounds;
-
-	        if (this.debug) {
-	            this.$debugContainer = (0, _jQuery2.default)("<div class='debug'></div>");
-	            this.$debugContainer.css({
-	                "position": "absolute",
-	                "width": "100%",
-	                "height": "20px",
-	                "top": 0,
-	                "right": 0,
-	                "background": "rgba(0,0,0,.6)",
-	                "color": "#fff",
-	                "text-align": "right",
-	                "padding-right": "10px"
-	            });
-	            $container.prepend(this.$debugContainer);
-	        }
 
 	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
 	        this.currentView.position(newCenter.x, newCenter.y);
@@ -1026,19 +1019,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'mainLoop',
 	        value: function mainLoop() {
-	            if (this.debug && this.drawIsNeeded) {
-	                var now = new Date();
-	                var fps = (1000 / (now - this.lastDraw)).toFixed(2);
-	                this.lastDraw = now;
-	                this.$debugContainer.text('FPS: ' + fps);
-	            }
-
 	            if (this.drawIsNeeded) {
 	                this.drawIsNeeded = false;
 	                this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
 	                this.draw();
 	            }
-
 	            window.requestAnimFrame(this.mainLoop.bind(this));
 	        }
 
@@ -2638,9 +2623,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(4);
 
+	var _Publisher = __webpack_require__(12);
+
 	var _StateHandler = __webpack_require__(9);
 
-	var _DataEnrichment = __webpack_require__(12);
+	var _DataEnrichment = __webpack_require__(13);
+
+	var _ToolTip = __webpack_require__(14);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2685,23 +2674,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
 	        this.latlng = data.latlng;
 
+	        this.content = data.content;
 	        this.position = this.instance.convertLatLngToPoint(this.latlng);
 
-	        this.icon = this.addMarkerToDOM(this.instance.$markerContainer);
+	        this.$icon = this.addMarkerToDOM(this.instance.$markerContainer);
+
+	        this.bindEvents();
 
 	        this.positionMarker();
 
 	        return this;
 	    }
 
-	    /**
-	     * adds a marker to the DOM
-	     * @param {Object} $container - container to append to (jQuery selector)
-	     * @returns {Object} jQuery-selector of append markup
-	     */
-
-
 	    _createClass(Marker, [{
+	        key: 'bindEvents',
+	        value: function bindEvents() {
+	            this.eventManager = new _Publisher.Publisher();
+	            this.$icon.on("click", function () {
+	                this.eventManager.publish(_ToolTip.ToolTip.EVENT.OPEN, this.content);
+	            }.bind(this));
+	        }
+
+	        /**
+	         * adds a marker to the DOM
+	         * @param {Object} $container - container to append to (jQuery selector)
+	         * @returns {Object} jQuery-selector of append markup
+	         */
+
+	    }, {
 	        key: 'addMarkerToDOM',
 	        value: function addMarkerToDOM($container) {
 	            var icon = (0, _jQuery2.default)("<div class='marker' />").css({
@@ -2730,13 +2730,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function positionMarker() {
 	            this.position = this.instance.convertLatLngToPoint(this.latlng);
 	            //const p = new Point((this.position.x + this.instance.currentView.x) * this.instance.distortionFactor + this.instance.offsetToCenter, this.position.y + this.instance.currentView.y);
-	            if (this.icon) {
-	                this.icon.css({
+	            if (this.$icon) {
+	                this.$icon.css({
 	                    "left": this.position.x / this.instance.currentView.width * 100 + '%',
 	                    "top": this.position.y / this.instance.currentView.height * 100 + '%'
 	                    //transform: `translate3d(${p.x}px, ${p.y}px, 0)`
 	                });
-	                this.icon.show();
+	                this.$icon.show();
 	            }
 	            return this;
 	        }
@@ -2747,117 +2747,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.DataEnrichment = undefined;
-
-	var _jQuery = __webpack_require__(1);
-
-	var _jQuery2 = _interopRequireDefault(_jQuery);
-
-	var _Point = __webpack_require__(4);
-
-	var _LatLng = __webpack_require__(5);
-
-	var _Bounds = __webpack_require__(6);
-
-	var _Helper = __webpack_require__(10);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var DataEnrichment = exports.DataEnrichment = {
-	    /**
-	     * enriches marker data with all needed data
-	     * @param  {object} data - specified data for marker
-	     * @param  {Function} cb - callback function, when enrichment is done
-	     * @return {DataEnrichment} DataEnrichment object for chaining
-	     */
-	    marker: function marker(data) {
-
-	        var enrichedData = [];
-
-	        _Helper.Helper.forEach(data, function (entry) {
-
-	            entry = _jQuery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
-
-	            var offset = new _Point.Point(entry.offset.x, entry.offset.y);
-	            var latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng);
-	            var size = new _Point.Point(entry.size.width, entry.size.height);
-
-	            enrichedData.push({
-	                offset: offset,
-	                latlng: latlng,
-	                size: size,
-	                hover: entry.hover,
-	                icon: entry.icon
-	            });
-	        });
-
-	        return enrichedData;
-	    },
-	    mapSettings: function mapSettings(data) {
-
-	        var enrichedData = _jQuery2.default.extend(true, DataEnrichment.MAP_SETTINGS, data);
-
-	        var bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1]));
-	        var center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
-
-	        if (!enrichedData.limitToBounds) {
-	            enrichedData.limitToBounds = bounds;
-	        } else {
-	            enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
-	        }
-
-	        enrichedData.bounds = bounds;
-	        enrichedData.center = center;
-
-	        return enrichedData;
-	    }
-	};
-
-	/**
-	 * Default initial values for a Marker
-	 * @type {Object}
-	 */
-	DataEnrichment.DATA_MARKER = {
-	    icon: null,
-	    hover: false,
-	    position: {
-	        lat: 0,
-	        lng: 0
-	    },
-	    offset: {
-	        x: 0,
-	        y: 0
-	    },
-	    size: {
-	        width: 32,
-	        height: 32
-	    }
-	};
-
-	DataEnrichment.MAP_SETTINGS = {
-	    level: 0,
-	    center: { "lat": 0, "lng": 0 },
-	    bounds: {
-	        "northWest": [90, -180],
-	        "southEast": [-90, 180]
-	    },
-	    controls: {
-	        zoom: false,
-	        home: false,
-	        position: "bottom-right",
-	        theme: "dark"
-	    }
-		};
-
-/***/ },
-/* 13 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3001,7 +2890,308 @@ return /******/ (function(modules) { // webpackBootstrap
 		Publisher.UNSUBSCRIBE = "unsubscribe";
 
 /***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.DataEnrichment = undefined;
+
+	var _jQuery = __webpack_require__(1);
+
+	var _jQuery2 = _interopRequireDefault(_jQuery);
+
+	var _Point = __webpack_require__(4);
+
+	var _LatLng = __webpack_require__(5);
+
+	var _Bounds = __webpack_require__(6);
+
+	var _Helper = __webpack_require__(10);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var DataEnrichment = exports.DataEnrichment = {
+	    /**
+	     * enriches marker data with all needed data
+	     * @param  {object} data - specified data for marker
+	     * @param  {Function} cb - callback function, when enrichment is done
+	     * @return {DataEnrichment} DataEnrichment object for chaining
+	     */
+	    marker: function marker(data) {
+
+	        var enrichedData = [];
+
+	        _Helper.Helper.forEach(data, function (entry) {
+	            entry = _jQuery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
+
+	            var offset = new _Point.Point(entry.offset.x, entry.offset.y);
+	            var latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng);
+	            var size = new _Point.Point(entry.size.width, entry.size.height);
+
+	            enrichedData.push({
+	                offset: offset,
+	                latlng: latlng,
+	                size: size,
+	                hover: entry.hover,
+	                icon: entry.icon,
+	                content: entry.content
+	            });
+	        });
+
+	        return enrichedData;
+	    },
+	    mapSettings: function mapSettings(data) {
+
+	        var enrichedData = _jQuery2.default.extend(true, DataEnrichment.MAP_SETTINGS, data);
+
+	        var bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1]));
+	        var center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
+
+	        if (!enrichedData.limitToBounds) {
+	            enrichedData.limitToBounds = bounds;
+	        } else {
+	            enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
+	        }
+
+	        enrichedData.bounds = bounds;
+	        enrichedData.center = center;
+
+	        return enrichedData;
+	    }
+	};
+
+	/**
+	 * Default initial values for a Marker
+	 * @type {Object}
+	 */
+	DataEnrichment.DATA_MARKER = {
+	    icon: null,
+	    hover: false,
+	    position: {
+	        lat: 0,
+	        lng: 0
+	    },
+	    offset: {
+	        x: 0,
+	        y: 0
+	    },
+	    size: {
+	        width: 32,
+	        height: 32
+	    },
+	    content: []
+	};
+
+	DataEnrichment.MAP_SETTINGS = {
+	    level: 0,
+	    center: { "lat": 0, "lng": 0 },
+	    bounds: {
+	        "northWest": [90, -180],
+	        "southEast": [-90, 180]
+	    },
+	    controls: {
+	        zoom: false,
+	        home: false,
+	        position: "bottom-right",
+	        theme: "dark"
+	    }
+		};
+
+/***/ },
 /* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.ToolTip = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _jQuery = __webpack_require__(1);
+
+	var _jQuery2 = _interopRequireDefault(_jQuery);
+
+	var _Handlebars = __webpack_require__(15);
+
+	var _Handlebars2 = _interopRequireDefault(_Handlebars);
+
+	var _Helper = __webpack_require__(10);
+
+	var _Publisher = __webpack_require__(12);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var ToolTip = exports.ToolTip = function () {
+	    _createClass(ToolTip, [{
+	        key: 'allTemplatesLoaded',
+	        get: function get() {
+	            return this.loadedTemplates === Object.keys(this.templates).length;
+	        }
+	    }]);
+
+	    function ToolTip(_ref) {
+	        var container = _ref.container;
+	        var templates = _ref.templates;
+
+	        _classCallCheck(this, ToolTip);
+
+	        this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
+	        if (!(this.$container instanceof jQuery)) {
+	            throw new Error("Container " + container + " not found");
+	        }
+	        this.$container.addClass(ToolTip.EVENT.CLOSE);
+
+	        this.$close = (0, _jQuery2.default)('<span class=\'close-button\' />');
+	        this.$content = (0, _jQuery2.default)('<div class=\'tooltip-content\' />');
+	        this.$popup = (0, _jQuery2.default)('<div class=\'tooltip-container\' />').append(this.$close).append(this.$content);
+	        this.eventManager = new _Publisher.Publisher();
+
+	        this.bindEvents();
+	        this.registerHandlebarHelpers();
+
+	        return this.setPosition().initializeTemplates(templates);
+	    }
+
+	    _createClass(ToolTip, [{
+	        key: 'registerHandlebarHelpers',
+	        value: function registerHandlebarHelpers() {
+	            _Handlebars2.default.registerHelper('getRatio', function (w, h) {
+	                return h / w * 100 + "%";
+	            });
+	        }
+	    }, {
+	        key: 'initializeTemplates',
+	        value: function initializeTemplates(templates) {
+	            this.templates = this.getDefaultTemplates();
+	            _jQuery2.default.extend(true, this.templates, templates);
+	            this.loadedTemplates = 0;
+	            this.compileTemplates();
+	            return this;
+	        }
+	    }, {
+	        key: 'getDefaultTemplates',
+	        value: function getDefaultTemplates() {
+	            return {
+	                image: "/plugin/src/hbs/image.hbs",
+	                text: "/plugin/src/hbs/text.hbs",
+	                headline: "/plugin/src/hbs/headline.hbs",
+	                crossheading: "/plugin/src/hbs/crossheading.hbs",
+	                iframe: "/plugin/src/hbs/iframe.hbs"
+	            };
+	        }
+	    }, {
+	        key: 'bindEvents',
+	        value: function bindEvents() {
+	            (0, _jQuery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
+	            this.eventManager.subscribe(ToolTip.EVENT.OPEN, this.open.bind(this));
+	            this.eventManager.subscribe(ToolTip.EVENT.CLOSE, this.close.bind(this));
+	            this.$close.on("click", function () {
+	                this.close();
+	            }.bind(this));
+	        }
+	    }, {
+	        key: 'resizeHandler',
+	        value: function resizeHandler() {
+	            this.setPosition();
+	        }
+	    }, {
+	        key: 'insertContent',
+	        value: function insertContent(content) {
+	            this.$content.html("");
+	            _Helper.Helper.forEach(content, function (data) {
+	                if (this.templates[data.type]) {
+	                    var html = this.templates[data.type](data.content);
+	                    this.$content.append(html);
+	                }
+	            }.bind(this));
+	        }
+	    }, {
+	        key: 'open',
+	        value: function open(data) {
+	            if (data) {
+	                this.insertContent(data);
+	            }
+	            if (this.$container.hasClass(ToolTip.EVENT.CLOSE)) {
+	                this.setPosition();
+	                this.$container.removeClass(ToolTip.EVENT.CLOSE).addClass(ToolTip.EVENT.OPEN);
+	                this.eventManager.publish("resize");
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'close',
+	        value: function close() {
+	            if (this.$container.hasClass(ToolTip.EVENT.OPEN)) {
+	                this.setPosition();
+	                this.$container.removeClass(ToolTip.EVENT.OPEN).addClass(ToolTip.EVENT.CLOSE);
+	                this.eventManager.publish("resize");
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'setPosition',
+	        value: function setPosition() {
+	            if (this.$container.innerWidth() > this.$container.innerHeight()) {
+	                this.$container.addClass("left").removeClass("bottom");
+	            } else {
+	                this.$container.addClass("bottom").removeClass("left");
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'compileTemplates',
+	        value: function compileTemplates() {
+	            _Helper.Helper.forEach(this.templates, function (template, type) {
+	                this.getTemplateFromFile(template, function (compiledTemplate) {
+	                    this.templates[type] = compiledTemplate;
+	                    this.loadedTemplates++;
+	                    if (this.allTemplatesLoaded) {
+	                        this.initialize();
+	                    }
+	                }.bind(this));
+	            }.bind(this));
+	        }
+	    }, {
+	        key: 'getTemplateFromFile',
+	        value: function getTemplateFromFile(url, cb) {
+	            _jQuery2.default.get(url, function (data) {
+	                cb(_Handlebars2.default.compile(data));
+	            }, 'html');
+	        }
+	    }, {
+	        key: 'initialize',
+	        value: function initialize() {
+	            this.$container.prepend(this.$popup);
+	        }
+	    }]);
+
+	    return ToolTip;
+	}();
+
+	ToolTip.EVENT = {
+	    OPEN: "tooltip-open",
+	    CLOSE: "tooltip-close"
+		};
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_15__;
+
+/***/ },
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

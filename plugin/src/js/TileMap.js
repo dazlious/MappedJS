@@ -8,6 +8,7 @@ import {StateHandler} from './StateHandler.js';
 import {Helper} from './Helper.js';
 import {Marker} from './Marker.js';
 import {DataEnrichment} from './DataEnrichment.js';
+import {ToolTip} from './ToolTip.js';
 
 export class TileMap {
 
@@ -16,7 +17,7 @@ export class TileMap {
      * @return {number} - left offset of container
      */
     get left() {
-        return this.$container.offset().left;
+        return this.$container.position().left - this.$container.offset().left;
     }
 
     /**
@@ -24,7 +25,7 @@ export class TileMap {
      * @return {number} - top offset of container
      */
     get top() {
-        return this.$container.offset().top;
+        return this.$container.position().top - this.$container.offset().top;
     }
 
     /**
@@ -56,20 +57,19 @@ export class TileMap {
      * @param  {Object} container - jQuery-object holding the container
      * @param  {Object} tilesData={} - json object representing data of TileMap
      * @param  {Object} settings={} - json object representing settings of TileMap
-     * @param  {Boolean} debug=false - Option for enabling debug-mode
      * @return {TileMap} instance of TileMap
      */
-    constructor({container, tilesData = {}, settings = {}, debug = false}) {
+    constructor({container, tilesData = {}, settings = {}}) {
         if (!container) {
             throw Error("You must define a container to initialize a TileMap");
         }
-
         this.$container = container;
+
         this.imgData = tilesData[TileMap.IMG_DATA_NAME];
         this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
         this.settings = settings;
-        this.levels = [];
 
+        this.levels = [];
         this.markers = [];
 
         Helper.forEach(this.imgData, function(element, i) {
@@ -83,7 +83,6 @@ export class TileMap {
         this.levelHandler = new StateHandler(this.levels);
         this.levelHandler.changeTo(this.settings.level);
         this.eventManager = new Publisher();
-        this.debug = debug;
         this.initial = {
             bounds: settings.bounds,
             center: settings.center,
@@ -91,7 +90,7 @@ export class TileMap {
             zoom: settings.zoom
         };
 
-        this.appendMarkerContainerToDom(container);
+        this.appendMarkerContainerToDom();
 
         this.initialize(settings.bounds, settings.center, this.currentLevelData);
 
@@ -107,6 +106,9 @@ export class TileMap {
         this.bindEvents();
         this.createViewFromData(bounds, center, data, this.settings.zoom);
         this.initializeMarkers(this.markerData);
+        if (this.markers.length !== 0) {
+            this.createTooltipContainer();
+        }
         this.resizeCanvas();
         return this;
     }
@@ -135,7 +137,6 @@ export class TileMap {
             $container: this.$container,
             $markerContainer: this.$markerContainer,
             context: this.canvasContext,
-            debug: this.debug,
             limitToBounds: this.settings.limitToBounds
         });
     }
@@ -170,13 +171,27 @@ export class TileMap {
      * @param  {Object} $container - jQuery-selector
      * @return {View} instance of View for chaining
      */
-    appendMarkerContainerToDom($container) {
+    appendMarkerContainerToDom() {
         this.$markerContainer = $("<div class='marker-container' />");
-        $container.append(this.$markerContainer);
+        this.$container.append(this.$markerContainer);
+        return this;
+    }
+
+    createTooltipContainer() {
+        this.tooltip = new ToolTip({
+            container: $(this.$container.parent()),
+            templates: {
+                image: "../../src/hbs/image.hbs"
+            }
+        });
         return this;
     }
 
     bindEvents() {
+
+        this.eventManager.subscribe("resize", function() {
+            this.resize();
+        }.bind(this));
 
         this.eventManager.subscribe("next-level", function(argument_array) {
             const center = argument_array[0],
@@ -213,20 +228,10 @@ export class TileMap {
     }
 
     /**
-     * clears canvas
-     * @return {TileMap} instance of TileMap for chaining
-     */
-    clearCanvas() {
-        this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        return this;
-    }
-
-    /**
      * complete clear and draw of all visible tiles
      * @return {TileMap} instance of TileMap for chaining
      */
     redraw() {
-        this.clearCanvas();
         this.view.drawIsNeeded = true;
         return this;
     }
@@ -259,8 +264,17 @@ export class TileMap {
     resizeView() {
         const oldViewport = this.view.viewport.clone;
         this.view.viewport.size(this.left, this.top, this.width, this.height);
-        const difference = this.view.viewport.center.substract(oldViewport.center);
-        this.view.mapView.translate(difference.x, difference.y);
+        const delta = this.view.viewport.center.substract(oldViewport.center);
+        this.view.mapView.translate(delta.x, delta.y);
+        return this;
+    }
+
+    /**
+     * Handles resizing of view
+     * @return {TileMap} instance of TileMap for chaining
+     */
+    resizeViewAlternative() {
+        this.view.viewport.size(this.left, this.top, this.width, this.height);
         return this;
     }
 

@@ -1,0 +1,16 @@
+.mjs-image {
+    margin: (6*$gutter) 0 (12*$gutter) 0;
+    img {
+        display: block;
+        max-width: 100%;
+    }
+    figcaption {
+        margin-top: 2*$gutter;
+        font-size: 12px;
+        .credit {
+            display: block;
+            font-size: 85%;
+            color: map-get($dark-theme, border);
+        }
+    }
+}

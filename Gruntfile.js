@@ -86,11 +86,13 @@ module.exports = function(grunt) {
                 keepalive: false,
                 inline: true,
                 externals: {
-                    jQuery: "jQuery"
+                    jQuery: "jQuery",
+                    Handlebars: "Handlebars"
                 },
                 target: "web",
                 module: {
-                    loaders: [{
+                    loaders: [
+                        {
                         test: /\.js?$/,
                         loader: 'babel-loader',
                         exclude: /node_modules/,

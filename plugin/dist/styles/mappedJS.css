@@ -1,19 +1,28 @@
-/* line 3, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
+/* line 26, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS {
 	position: relative;
 	overflow: hidden;
 }
 
-/* line 6, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
+/* line 29, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS * {
 	-moz-box-sizing: border-box;
 	     box-sizing: border-box;
 }
 
-/* line 9, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
+/* line 32, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS canvas,
 .mappedJS img {
 	display: block;
+}
+
+/* line 36, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
+.mappedJS .map-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 
 /* line 1, /Users/mduve/repository/MappedJS/plugin/src/styles/_marker.scss */
@@ -40,114 +49,324 @@
 	background-position: center right;
 }
 
-/* line 25, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 5, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container {
 	position: absolute;
 }
 
-/* line 27, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 7, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.bottom-right {
 	bottom: 3px;
 	right: 3px;
 }
 
-/* line 31, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 11, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.bottom-left {
 	bottom: 3px;
 	left: 3px;
 }
 
-/* line 35, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 15, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.top-left {
 	top: 3px;
 	left: 3px;
 }
 
-/* line 39, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 19, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.top-right {
 	top: 3px;
 	right: 3px;
 }
 
-/* line 43, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 23, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container .control {
 	width: 36px;
 	height: 36px;
 	cursor: pointer;
 	border-radius: 3px;
-	background-size: 18px 18px;
+	background-size: 60%;
 	background-position: center center;
 	background-repeat: no-repeat;
 }
 
-/* line 52, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 32, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container .zoom-in {
 	border-bottom: 1px solid;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
 }
 
-/* line 57, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 37, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container .zoom-out {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
 
-/* line 61, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 41, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container .home {
 	margin-bottom: 3px;
 }
 
-/* line 65, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 45, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.dark .control {
 	background-color: rgba(0, 0, 0, 0.5);
 	box-shadow: 0px 0px 0px 1px rgba(204, 204, 204, 0.2);
 }
 
-/* line 68, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 48, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.dark .control:hover {
 	background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* line 72, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 52, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.dark .zoom-in {
 	border-bottom-color: #888;
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAAEwO1XwAAABEVBMVEXMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMxjTxraAAAAWnRSTlMAAQIDBwkKDQ4WGRweISMkJSYnKTc4OUFFSU1PUV1eX2BhZ2prb3Z4eXp8gYOKi5CWnaCjp6iprK6vsLG0tba3ur7Eyc3O09XW2t/g5efo6evs7/Dx8vP09ficzXzHAAAB1klEQVRo3u2ZaVPCMBRFr+K+7/uGGxTcRUHBfQFBRNGg5v//ED8Uh2aGh3mdVFxyv715czhpm6ahBQBgRgjUIqXkVlPSEwilelMqv4Y6lXfQjrelUShjogsAWGH+dJ2RAhjxHr8Sx0hn1HFz7naibhUDKpKIepmUTivZMTzqz8TIDgpCiLN6DUkyv6uzXr1y1U61WlbnqCTnaHM6f+4qqJ0HNMqt50z0QCdR4uw1iGMR40hO8jKAR8kNvaw2G7nkIxjkAXd2jjUJWeMjGK4B79DMoXBTXNQEujzDetVDlEOZ5SNJPpK2iEV+C7IUc7xRNxc5pedEJgCEmOv+S4PNJ5UNPlLmIxU+Iv434uOM3aPARbqBCx4x+eXkT9h73yJ/AjnhI9tayJUX6dTbXeVrxAx8p/203k2dHYDBJKi147rFmGOVXqG2jElitCRjTOLQkrSVWImVWMm/loRpyb7uU29PBpjTIYC9j+an1IYTGXjy6oe/YFLx8R7Ux58uK/l5ksp3SMrBS54xH7xkF+gL+nacdpfIufhBJk0n1eAbTPHomAYzyc2FkO5SH6Elx/bJaCVWYiVW0kRJyphknJaEzb2K6qf2NGMmX3ihI35TEkqesju9mvAHQo9TlW1QcUsAAAAASUVORK5CYII=);
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='plus' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23cdcdcd;}%3C/style%3E%3C/defs%3E%3Ctitle%3Elight%3C/title%3E%3Cpath class='cls-1' d='M506,215a4.01176,4.01176,0,0,0-4-4H305a4.01176,4.01176,0,0,1-4-4V10a4.01176,4.01176,0,0,0-4-4H215a4.01176,4.01176,0,0,0-4,4V207a4.01176,4.01176,0,0,1-4,4H10a4.01176,4.01176,0,0,0-4,4v82a4.01176,4.01176,0,0,0,4,4H207a4.01176,4.01176,0,0,1,4,4V502a4.01176,4.01176,0,0,0,4,4h82a4.01176,4.01176,0,0,0,4-4V305a4.01176,4.01176,0,0,1,4-4H502a4.01176,4.01176,0,0,0,4-4V215Z'/%3E%3C/svg%3E");
 }
 
-/* line 76, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 56, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.dark .zoom-out {
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAAEwO1XwAAAAk1BMVEXMzMz////MzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMw3xFB6AAAAMHRSTlMAAAEGCAkTGhwiJCkuQ0RIUVlia3iFipGXm5+goqWmt7y9w8jT3+Dm6u7w8vP09fjZ3M7+AAABBklEQVRo3u2Y21LCQBAFO6jg/YKiCDGgCIoJuv//db5mq1jLiQwInPM2NdXVyU5qNwlZPTStrkItlFH1GVWr8f25iK4pXaxUmjl2OB4sSw5VSCQeU9RpJTvrup/96dBfOrk7CMkpbL6jyWVCtg1hGmw54z1Yk95WN4282BFObcAreiyFCBEixO0U4zYf/DqP58CBcd//+uHlM5WeHZnbkcqOlPuNNFixN2ZWpA1jG3GhVwUhQnYBkUQSSSSRRJJdlsBhERzzfAIwCc4pjxgF98xY+EuqBv9BG3x0SfL/JNU6JHN/yQc3/pI+dLwX7BIAru+HxZNDivyhC6BDSxJJJJFEEknq+Qb5YhFZoYAKpwAAAABJRU5ErkJggg==);
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='minus' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23cdcdcd;}%3C/style%3E%3C/defs%3E%3Ctitle%3Elight%3C/title%3E%3Crect class='cls-1' x='6' y='211' width='500' height='90' rx='4' ry='4'/%3E%3C/svg%3E");
 }
 
-/* line 79, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 59, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.dark .home {
-	background-image: url(data:image/png;base64,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);
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='home' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23cdcdcd;}%3C/style%3E%3C/defs%3E%3Ctitle%3Elight%3C/title%3E%3Cpath class='cls-1' d='M327.25707,309.74971a4.01252,4.01252,0,0,0-4.00063-4H188.55758a4.00489,4.00489,0,0,0-3.99433,4l0.11933,192.17052a4.01109,4.01109,0,0,1-3.99745,4.002l-147.99232.07537a4.01723,4.01723,0,0,1-4.00493-3.99958L28.297,184.54589a9.2628,9.2628,0,0,1,3.1504-6.45843L249.16094,8.45844a5.521,5.521,0,0,1,6.34872-.04966L480.51455,178.13a9.06905,9.06905,0,0,1,3.19089,6.40878L483.50684,502a4.01473,4.01473,0,0,1-4.0025,3.99995l-148.21656-.00189a4.01258,4.01258,0,0,1-4.00063-4.00005Z'/%3E%3C/svg%3E");
 }
 
-/* line 84, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 64, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.light .control {
 	background-color: rgba(255, 255, 255, 0.5);
 	box-shadow: 0px 0px 0px 1px rgba(51, 51, 51, 0.2);
 }
 
-/* line 87, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 67, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.light .control:hover {
 	background-color: #fff;
 }
 
-/* line 91, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 71, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.light .zoom-in {
 	border-bottom-color: #eee;
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAAEwO1XwAAABEVBMVEUzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzOHIxKJAAAAWnRSTlMAAQIDBwkKDQ4WGRweISMkJSYnKTc4OUFFSU1PUV1eX2BhZ2prb3Z4eXp8gYOKi5CWnaCjp6iprK6vsLG0tba3ur7Eyc3O09XW2t/g5efo6evs7/Dx8vP09ficzXzHAAAB1klEQVRo3u2ZaVPCMBRFr+K+7/uGGxTcRUHBfQFBRNGg5v//ED8Uh2aGh3mdVFxyv715czhpm6ahBQBgRgjUIqXkVlPSEwilelMqv4Y6lXfQjrelUShjogsAWGH+dJ2RAhjxHr8Sx0hn1HFz7naibhUDKpKIepmUTivZMTzqz8TIDgpCiLN6DUkyv6uzXr1y1U61WlbnqCTnaHM6f+4qqJ0HNMqt50z0QCdR4uw1iGMR40hO8jKAR8kNvaw2G7nkIxjkAXd2jjUJWeMjGK4B79DMoXBTXNQEujzDetVDlEOZ5SNJPpK2iEV+C7IUc7xRNxc5pedEJgCEmOv+S4PNJ5UNPlLmIxU+Iv434uOM3aPARbqBCx4x+eXkT9h73yJ/AjnhI9tayJUX6dTbXeVrxAx8p/203k2dHYDBJKi147rFmGOVXqG2jElitCRjTOLQkrSVWImVWMm/loRpyb7uU29PBpjTIYC9j+an1IYTGXjy6oe/YFLx8R7Ux58uK/l5ksp3SMrBS54xH7xkF+gL+nacdpfIufhBJk0n1eAbTPHomAYzyc2FkO5SH6Elx/bJaCVWYiVW0kRJyphknJaEzb2K6qf2NGMmX3ihI35TEkqesju9mvAHQo9TlW1QcUsAAAAASUVORK5CYII=);
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='plus' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23333;}%3C/style%3E%3C/defs%3E%3Ctitle%3Edark%3C/title%3E%3Cpath class='cls-1' d='M506,215a4.01176,4.01176,0,0,0-4-4H305a4.01176,4.01176,0,0,1-4-4V10a4.01176,4.01176,0,0,0-4-4H215a4.01176,4.01176,0,0,0-4,4V207a4.01176,4.01176,0,0,1-4,4H10a4.01176,4.01176,0,0,0-4,4v82a4.01176,4.01176,0,0,0,4,4H207a4.01176,4.01176,0,0,1,4,4V502a4.01176,4.01176,0,0,0,4,4h82a4.01176,4.01176,0,0,0,4-4V305a4.01176,4.01176,0,0,1,4-4H502a4.01176,4.01176,0,0,0,4-4V215Z'/%3E%3C/svg%3E");
 }
 
-/* line 95, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 75, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.light .zoom-out {
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAAEwO1XwAAAAk1BMVEUzMzP///8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzic8AAAAAMHRSTlMAAAEGCAkTGhwiJCkuQ0RIUVlia3iFipGXm5+goqWmt7y9w8jT3+Dm6u7w8vP09fjZ3M7+AAABBklEQVRo3u2Y21LCQBAFO6jg/YKiCDGgCIoJuv//db5mq1jLiQwInPM2NdXVyU5qNwlZPTStrkItlFH1GVWr8f25iK4pXaxUmjl2OB4sSw5VSCQeU9RpJTvrup/96dBfOrk7CMkpbL6jyWVCtg1hGmw54z1Yk95WN4282BFObcAreiyFCBEixO0U4zYf/DqP58CBcd//+uHlM5WeHZnbkcqOlPuNNFixN2ZWpA1jG3GhVwUhQnYBkUQSSSSRRJJdlsBhERzzfAIwCc4pjxgF98xY+EuqBv9BG3x0SfL/JNU6JHN/yQc3/pI+dLwX7BIAru+HxZNDivyhC6BDSxJJJJFEEknq+Qb5YhFZoYAKpwAAAABJRU5ErkJggg==);
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='minus' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23333;}%3C/style%3E%3C/defs%3E%3Ctitle%3Edark%3C/title%3E%3Crect class='cls-1' x='6' y='211' width='500' height='90' rx='4' ry='4'/%3E%3C/svg%3E");
 }
 
-/* line 98, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 78, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.light .home {
-	background-image: url(data:image/png;base64,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);
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='home' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23333;}%3C/style%3E%3C/defs%3E%3Ctitle%3Edark%3C/title%3E%3Cpath class='cls-1' d='M327.25707,309.74971a4.01252,4.01252,0,0,0-4.00063-4H188.55758a4.00489,4.00489,0,0,0-3.99433,4l0.11933,192.17052a4.01109,4.01109,0,0,1-3.99745,4.002l-147.99232.07537a4.01723,4.01723,0,0,1-4.00493-3.99958L28.297,184.54589a9.2628,9.2628,0,0,1,3.1504-6.45843L249.16094,8.45844a5.521,5.521,0,0,1,6.34872-.04966L480.51455,178.13a9.06905,9.06905,0,0,1,3.19089,6.40878L483.50684,502a4.01473,4.01473,0,0,1-4.0025,3.99995l-148.21656-.00189a4.01258,4.01258,0,0,1-4.00063-4.00005Z'/%3E%3C/svg%3E");
+}
+
+/* line 4, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS .tooltip-container {
+	position: absolute;
+	bottom: -100%;
+	left: -100%;
+	height: 100%;
+	width: 100%;
+	z-index: 200;
+	background: white;
+}
+
+/* line 12, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS .tooltip-container .close-button {
+	position: absolute;
+	z-index: 300;
+	top: 5px;
+	left: 10px;
+	display: block;
+	width: 21px;
+	height: 21px;
+	-webkit-transition: background .15s ease;
+	-moz-transition: background .15s ease;
+	-o-transition: background .15s ease;
+	transition: background .15s ease;
+	cursor: pointer;
+	background-color: white;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='close' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23333;}%3C/style%3E%3C/defs%3E%3Ctitle%3Elight%3C/title%3E%3Cpath class='cls-1' d='M503.17157,62.17476a4.01176,4.01176,0,0,0,0-5.65685L455.48209,8.82843a4.01176,4.01176,0,0,0-5.65685,0L258.82843,199.82524a4.01176,4.01176,0,0,1-5.65685,0L62.17476,8.82843a4.01176,4.01176,0,0,0-5.65685,0L8.82843,56.51791a4.01176,4.01176,0,0,0,0,5.65685L199.82524,253.17157a4.01176,4.01176,0,0,1,0,5.65685L8.82843,449.82524a4.01176,4.01176,0,0,0,0,5.65685l47.68948,47.68948a4.01176,4.01176,0,0,0,5.65685,0L253.17157,312.17476a4.01176,4.01176,0,0,1,5.65685,0L449.82524,503.17157a4.01176,4.01176,0,0,0,5.65685,0l47.68948-47.68948a4.01176,4.01176,0,0,0,0-5.65685L312.17476,258.82843a4.01176,4.01176,0,0,1,0-5.65685Z'/%3E%3C/svg%3E");
+	background-size: 80%;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+/* line 29, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS .tooltip-container .close-button:hover {
+	background-size: 90%;
+}
+
+/* line 34, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS.left .tooltip-container {
+	bottom: -100%;
+	left: -100%;
+	box-shadow: 2px 0 2px 0 rgba(0, 0, 0, 0.25);
+	width: 40%;
+	-webkit-transition: left .05s ease-out;
+	-moz-transition: left .05s ease-out;
+	-o-transition: left .05s ease-out;
+	transition: left .05s ease-out;
+}
+
+/* line 42, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS.left.tooltip-open .map-content {
+	left: 40%;
+	width: 60%;
+}
+
+/* line 46, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS.left.tooltip-close .map-content {
+	left: 0;
+	width: 100%;
+}
+
+/* line 51, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS.left.tooltip-open .tooltip-container {
+	left: 0;
+	bottom: 0;
+}
+
+/* line 57, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS.bottom .tooltip-container {
+	left: -100%;
+	height: 40%;
+	bottom: -100%;
+	box-shadow: 0 -2px 2px 0 rgba(0, 0, 0, 0.25);
+	-webkit-transition: bottom .05s ease-out;
+	-moz-transition: bottom .05s ease-out;
+	-o-transition: bottom .05s ease-out;
+	transition: bottom .05s ease-out;
+}
+
+/* line 65, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS.bottom.tooltip-open .map-content {
+	height: 60%;
+}
+
+/* line 68, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS.bottom.tooltip-close .map-content {
+	height: 100%;
+}
+
+/* line 72, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS.bottom.tooltip-open .tooltip-container {
+	left: 0;
+	bottom: 0;
+}
+
+/* line 77, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS .tooltip-container .tooltip-content {
+	height: 100%;
+	padding: 36px 9px 9px;
+	overflow: auto;
+}
+
+/* line 81, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+.mappedJS .tooltip-container .tooltip-content > * {
+	width: 100%;
+}
+
+/* line 1, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
+.mappedJS .tooltip-container .tooltip-content .mjs-image {
+	margin: 18px 0 36px 0;
+}
+
+/* line 3, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
+.mappedJS .tooltip-container .tooltip-content .mjs-image img {
+	display: block;
+	max-width: 100%;
+}
+
+/* line 7, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
+.mappedJS .tooltip-container .tooltip-content .mjs-image figcaption {
+	margin-top: 6px;
+	font-size: 12px;
+}
+
+/* line 10, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
+.mappedJS .tooltip-container .tooltip-content .mjs-image figcaption .credit {
+	display: block;
+	font-size: 85%;
+	color: #888;
+}
+
+/* line 1, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_text.scss */
+.mappedJS .tooltip-container .tooltip-content p {
+	margin: 0 0 9px 0;
+	font-size: 15px;
+	text-align: justify;
+}
+
+/* line 1, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_headline.scss */
+.mappedJS .tooltip-container .tooltip-content h2 {
+	margin: 0 0 6px 0;
+	font-size: 24px;
+}
+
+/* line 4, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_headline.scss */
+.mappedJS .tooltip-container .tooltip-content h2 > * {
+	display: block;
+}
+
+/* line 7, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_headline.scss */
+.mappedJS .tooltip-container .tooltip-content h2 .kicker {
+	font-size: 40%;
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
+/* line 12, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_headline.scss */
+.mappedJS .tooltip-container .tooltip-content h2 .headline {
+	font-size: 100%;
+	font-weight: 700;
+}
+
+/* line 16, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_headline.scss */
+.mappedJS .tooltip-container .tooltip-content h2 .subheadline {
+	font-size: 60%;
+	font-style: italic;
+	font-weight: 100;
+}
+
+/* line 1, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_crossheading.scss */
+.mappedJS .tooltip-container .tooltip-content h3 {
+	margin: 24px 0 3px 0;
+	font-weight: 700;
+	font-size: 110%;
+}
+
+/* line 2, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
+.mappedJS .tooltip-container .tooltip-content .mjs-iframe .embed-content {
+	position: relative;
+	display: block;
+	height: 0;
+	padding: 0;
+	margin: 18px 0 0 0;
+	overflow: hidden;
+}
+
+/* line 9, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
+.mappedJS .tooltip-container .tooltip-content .mjs-iframe .embed-content iframe {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+/* line 19, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
+.mappedJS .tooltip-container .tooltip-content .mjs-iframe .caption {
+	margin-top: 6px 0 36px 0;
+	font-size: 12px;
+}
+
+/* line 22, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
+.mappedJS .tooltip-container .tooltip-content .mjs-iframe .caption .credit {
+	display: block;
+	font-size: 85%;
+	color: #888;
 }
