@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', 'Handlebars', './Helper.js', './Publisher.js'], factory);
+        define(['exports', 'jQuery', 'Handlebars', './Helper.js', './Marker.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('Handlebars'), require('./Helper.js'), require('./Publisher.js'));
+        factory(exports, require('jQuery'), require('Handlebars'), require('./Helper.js'), require('./Marker.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Handlebars, global.Helper, global.Publisher);
+        factory(mod.exports, global.jQuery, global.Handlebars, global.Helper, global.Marker, global.Publisher);
         global.ToolTip = mod.exports;
     }
-})(this, function(exports, _jQuery, _Handlebars, _Helper, _Publisher) {
+})(this, function(exports, _jQuery, _Handlebars, _Helper, _Marker, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -159,6 +159,7 @@
             key: 'close',
             value: function close() {
                 if (this.$container.hasClass(ToolTip.EVENT.OPEN)) {
+                    this.eventManager.publish(_Marker.Marker.EVENT.DEACTIVATE);
                     this.setPosition();
                     this.$container.removeClass(ToolTip.EVENT.OPEN).addClass(ToolTip.EVENT.CLOSE);
                     this.eventManager.publish("resize");

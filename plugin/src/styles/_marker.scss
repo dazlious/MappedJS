@@ -12,7 +12,8 @@
     left: 0;
     cursor: pointer;
     background-position: center left;
-    &:hover {
+    &:hover,
+    &.active {
         background-position: center right;
     }
 }

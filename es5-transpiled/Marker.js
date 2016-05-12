@@ -116,6 +116,12 @@
                 this.eventManager = new _Publisher.Publisher();
                 this.$icon.on("click", function() {
                     this.eventManager.publish(_ToolTip.ToolTip.EVENT.OPEN, this.content);
+                    this.eventManager.publish(Marker.EVENT.DEACTIVATE);
+                    this.$icon.addClass("active");
+                }.bind(this));
+
+                this.eventManager.subscribe(Marker.EVENT.DEACTIVATE, function() {
+                    this.$icon.removeClass("active");
                 }.bind(this));
             }
 
@@ -168,4 +174,8 @@
 
         return Marker;
     }();
+
+    Marker.EVENT = {
+        DEACTIVATE: "deactivate-marker"
+    };
 });

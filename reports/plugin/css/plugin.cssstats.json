@@ -1,15 +1,15 @@
 {
     "fileSize": {
-        "size": "14.39 KB",
-        "gzipSize": "2.13 KB"
+        "size": "14.42 KB",
+        "gzipSize": "2.14 KB"
     },
     "selectorSpecifity": {
         "max": 60,
-        "average": 34.41818181818182
+        "average": 34.339285714285715
     },
     "totals": {
         "rules": 54,
-        "selectors": 55,
+        "selectors": 56,
         "declarations": 156,
         "properties": 43,
         "vendorPrefixes": 10,
@@ -25,7 +25,7 @@
     },
     "selectors": {
         "type": 13,
-        "class": 55,
+        "class": 56,
         "id": 0,
         "pseudoClass": 4,
         "pseudoElement": 0
@@ -106,6 +106,7 @@
             20,
             20,
             20,
+            30,
             30,
             20,
             30,
