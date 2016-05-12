@@ -1770,7 +1770,7 @@ check if tiles are equal
 **Kind**: global class  
 
 * [TileMap](#TileMap)
-    * [new TileMap(container, tilesData, settings, debug)](#new_TileMap_new)
+    * [new TileMap(container, tilesData, settings)](#new_TileMap_new)
     * _instance_
         * [.left](#TileMap+left) ⇒ <code>number</code>
         * [.top](#TileMap+top) ⇒ <code>number</code>
@@ -1782,18 +1782,18 @@ check if tiles are equal
         * [.initializeMarkers(markerData)](#TileMap+initializeMarkers) ⇒ <code>[View](#View)</code>
         * [.appendMarkerContainerToDom($container)](#TileMap+appendMarkerContainerToDom) ⇒ <code>[View](#View)</code>
         * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.clearCanvas()](#TileMap+clearCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.redraw()](#TileMap+redraw) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resize()](#TileMap+resize) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resizeCanvas()](#TileMap+resizeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
+        * [.resizeViewAlternative()](#TileMap+resizeViewAlternative) ⇒ <code>[TileMap](#TileMap)</code>
     * _static_
         * [.IMG_DATA_NAME](#TileMap.IMG_DATA_NAME) : <code>String</code>
         * [.MARKER_DATA_NAME](#TileMap.MARKER_DATA_NAME) : <code>String</code>
 
 <a name="new_TileMap_new"></a>
 
-### new TileMap(container, tilesData, settings, debug)
+### new TileMap(container, tilesData, settings)
 Constructor
 
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
@@ -1802,7 +1802,6 @@ Constructor
 - container <code>Object</code> - jQuery-object holding the container
 - tilesData <code>Object</code> <code> = {}</code> - json object representing data of TileMap
 - settings <code>Object</code> <code> = {}</code> - json object representing settings of TileMap
-- debug <code>Boolean</code> <code> = false</code> - Option for enabling debug-mode
 
 <a name="TileMap+left"></a>
 
@@ -1886,13 +1885,6 @@ initializes the canvas, adds to DOM
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
-<a name="TileMap+clearCanvas"></a>
-
-### tileMap.clearCanvas() ⇒ <code>[TileMap](#TileMap)</code>
-clears canvas
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+redraw"></a>
 
 ### tileMap.redraw() ⇒ <code>[TileMap](#TileMap)</code>
@@ -1921,6 +1913,13 @@ Handles resizing of view
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
+<a name="TileMap+resizeViewAlternative"></a>
+
+### tileMap.resizeViewAlternative() ⇒ <code>[TileMap](#TileMap)</code>
+Handles resizing of view
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap.IMG_DATA_NAME"></a>
 
 ### TileMap.IMG_DATA_NAME : <code>String</code>
@@ -1939,7 +1938,7 @@ name of marker data in data.json
 **Kind**: global class  
 
 * [View](#View)
-    * [new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom, debug)](#new_View_new)
+    * [new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom)](#new_View_new)
     * [.distortionFactor](#View+distortionFactor) ⇒ <code>number</code>
     * [.offsetToCenter](#View+offsetToCenter)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
@@ -1962,7 +1961,7 @@ name of marker data in data.json
 
 <a name="new_View_new"></a>
 
-### new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom, debug)
+### new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom)
 Constructor
 
 **Returns**: <code>[View](#View)</code> - instance of View for chaining  
@@ -1978,7 +1977,6 @@ Constructor
 - context <code>Object</code> - = null - canvas context for drawing
 - maxZoom <code>number</code> - = 1.5 - maximal zoom of view
 - minZoom <code>number</code> - = 0.8 - minimal zoom of view
-- debug <code>Boolean</code> <code> = false</code> - Option for enabling debug-mode
 
 <a name="View+distortionFactor"></a>
 

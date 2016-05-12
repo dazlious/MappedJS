@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './TileMap.js', './DataEnrichment.js', './Helper.js', './Interact.js', './LatLng.js', './Point.js'], factory);
+        define(['exports', 'jQuery', './TileMap.js', './DataEnrichment.js', './Helper.js', './Interact.js', './LatLng.js', './Point.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Helper.js'), require('./Interact.js'), require('./LatLng.js'), require('./Point.js'));
+        factory(exports, require('jQuery'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Helper.js'), require('./Interact.js'), require('./LatLng.js'), require('./Point.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.TileMap, global.DataEnrichment, global.Helper, global.Interact, global.LatLng, global.Point);
+        factory(mod.exports, global.jQuery, global.TileMap, global.DataEnrichment, global.Helper, global.Interact, global.LatLng, global.Point, global.Publisher);
         global.Main = mod.exports;
     }
-})(this, function(exports, _jQuery, _TileMap, _DataEnrichment, _Helper, _Interact, _LatLng, _Point) {
+})(this, function(exports, _jQuery, _TileMap, _DataEnrichment, _Helper, _Interact, _LatLng, _Point, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -80,8 +80,6 @@
             var events = _ref$events === undefined ? {
                 loaded: "mjs-loaded"
             } : _ref$events;
-            var _ref$debug = _ref.debug;
-            var debug = _ref$debug === undefined ? false : _ref$debug;
 
             _classCallCheck(this, MappedJS);
 
@@ -101,8 +99,6 @@
             this.momentum = null;
             this.keyTicks = 0;
 
-            this.debug = debug;
-
             return this;
         }
 
@@ -115,7 +111,7 @@
                     this.$zoomOut = (0, _jQuery2.default)("<div class='control zoom-out' />");
                     this.$home = (0, _jQuery2.default)("<div class='control home' />");
                     this.$controls.append(this.$home).append(this.$zoomIn).append(this.$zoomOut);
-                    this.$container.append(this.$controls);
+                    this.$content.append(this.$controls);
                 }
             }
 
@@ -133,10 +129,12 @@
                 if (!(this.$container instanceof jQuery)) {
                     throw new Error("Container " + container + " not found");
                 }
+
                 this.$container.addClass("mappedJS");
+                this.$content = (0, _jQuery2.default)("<div class='map-content' />");
+                this.$container.append(this.$content);
 
                 this.mapSettings = _DataEnrichment.DataEnrichment.mapSettings(settings);
-
                 this.events = events;
 
                 return this;
@@ -171,10 +169,9 @@
             key: 'initializeMap',
             value: function initializeMap() {
                 this.tileMap = new _TileMap.TileMap({
-                    container: this.$container,
+                    container: this.$content,
                     tilesData: this.mapData,
-                    settings: this.mapSettings,
-                    debug: this.debug
+                    settings: this.mapSettings
                 });
                 return this;
             }
@@ -193,8 +190,9 @@
         }, {
             key: 'initializeInteractForMap',
             value: function initializeInteractForMap() {
+                this.tooltipState = false;
                 this.interact = new _Interact.Interact({
-                    container: this.$container,
+                    container: this.$content,
                     autoFireHold: 300,
                     overwriteViewportSettings: true,
                     callbacks: {
@@ -213,7 +211,7 @@
                             this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
                         }.bind(this),
                         doubletap: function(data) {
-                            if ((0, _jQuery2.default)(data.target).hasClass("control")) {
+                            if (!(0, _jQuery2.default)(data.target).hasClass("marker-container")) {
                                 return false;
                             }
                             this.zoom(0.2, this.getAbsolutePosition(data.position.start));
