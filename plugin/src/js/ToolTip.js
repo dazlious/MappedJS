@@ -1,8 +1,8 @@
 import $ from 'jQuery';
 import Handlebars from 'Handlebars';
 import {Helper} from './Helper.js';
+import {Marker} from './Marker.js';
 import {Publisher} from './Publisher.js';
-
 
 export class ToolTip {
 
@@ -91,6 +91,7 @@ export class ToolTip {
 
     close() {
         if (this.$container.hasClass(ToolTip.EVENT.OPEN)) {
+            this.eventManager.publish(Marker.EVENT.DEACTIVATE);
             this.setPosition();
             this.$container.removeClass(ToolTip.EVENT.OPEN).addClass(ToolTip.EVENT.CLOSE);
             this.eventManager.publish("resize");
