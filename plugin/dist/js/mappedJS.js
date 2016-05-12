@@ -2692,6 +2692,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.eventManager = new _Publisher.Publisher();
 	            this.$icon.on("click", function () {
 	                this.eventManager.publish(_ToolTip.ToolTip.EVENT.OPEN, this.content);
+	                this.eventManager.publish(Marker.EVENT.DEACTIVATE);
+	                this.$icon.addClass("active");
+	            }.bind(this));
+
+	            this.eventManager.subscribe(Marker.EVENT.DEACTIVATE, function () {
+	                this.$icon.removeClass("active");
 	            }.bind(this));
 	        }
 
@@ -2744,6 +2750,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return Marker;
 	}();
+
+	Marker.EVENT = {
+	    DEACTIVATE: "deactivate-marker"
+		};
 
 /***/ },
 /* 12 */
@@ -3026,6 +3036,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(10);
 
+	var _Marker = __webpack_require__(11);
+
 	var _Publisher = __webpack_require__(12);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -3133,6 +3145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'close',
 	        value: function close() {
 	            if (this.$container.hasClass(ToolTip.EVENT.OPEN)) {
+	                this.eventManager.publish(_Marker.Marker.EVENT.DEACTIVATE);
 	                this.setPosition();
 	                this.$container.removeClass(ToolTip.EVENT.OPEN).addClass(ToolTip.EVENT.CLOSE);
 	                this.eventManager.publish("resize");

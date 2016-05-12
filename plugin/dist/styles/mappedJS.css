@@ -45,7 +45,7 @@
 }
 
 /* line 15, /Users/mduve/repository/MappedJS/plugin/src/styles/_marker.scss */
-.mappedJS .marker:hover {
+.mappedJS .marker:hover, .mappedJS .marker.active {
 	background-position: center right;
 }
 
