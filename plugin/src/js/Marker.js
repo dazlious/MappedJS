@@ -56,7 +56,7 @@ export class Marker {
 
     bindEvents() {
         this.eventManager = new Publisher();
-        this.$icon.on("click", function() {
+        this.$icon.on("touchstart mouseup", function() {
             this.eventManager.publish(ToolTip.EVENT.OPEN, this.content);
             this.eventManager.publish(Marker.EVENT.DEACTIVATE);
             this.$icon.addClass("active");
@@ -95,12 +95,10 @@ export class Marker {
      */
     positionMarker() {
         this.position = this.instance.convertLatLngToPoint(this.latlng);
-        //const p = new Point((this.position.x + this.instance.currentView.x) * this.instance.distortionFactor + this.instance.offsetToCenter, this.position.y + this.instance.currentView.y);
         if (this.$icon) {
             this.$icon.css({
                 "left": `${this.position.x / this.instance.currentView.width * 100}%`,
                 "top": `${this.position.y / this.instance.currentView.height * 100}%`
-                //transform: `translate3d(${p.x}px, ${p.y}px, 0)`
             });
             this.$icon.show();
         }
