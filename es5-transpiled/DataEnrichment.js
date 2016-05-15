@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js', './LatLng.js', './Bounds.js', './Helper.js'], factory);
+        define(['exports', 'jQuery', './Helper.js', './Point.js', './LatLng.js', './Bounds.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Helper.js'));
+        factory(exports, require('jQuery'), require('./Helper.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point, global.LatLng, global.Bounds, global.Helper);
+        factory(mod.exports, global.jQuery, global.Helper, global.Point, global.LatLng, global.Bounds);
         global.DataEnrichment = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point, _LatLng, _Bounds, _Helper) {
+})(this, function(exports, _jQuery, _Helper, _Point, _LatLng, _Bounds) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -26,23 +26,31 @@
         };
     }
 
+    /**
+     * @author Michael Duve <mduve@designmail.net>
+     * @file enriches delivered data with default values
+     * @copyright Michael Duve 2016
+     * @module DataEnrichment
+     */
     var DataEnrichment = exports.DataEnrichment = {
         /**
          * enriches marker data with all needed data
+         * @function
+         * @memberof module:DataEnrichment
          * @param  {object} data - specified data for marker
-         * @param  {Function} cb - callback function, when enrichment is done
-         * @return {DataEnrichment} DataEnrichment object for chaining
+         * @return {object} enriched marker data
          */
+
         marker: function marker(data) {
 
             var enrichedData = [];
 
             _Helper.Helper.forEach(data, function(entry) {
-                entry = _jQuery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
+                entry = Object.assign(DataEnrichment.DATA_MARKER, entry);
 
-                var offset = new _Point.Point(entry.offset.x, entry.offset.y);
-                var latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng);
-                var size = new _Point.Point(entry.size.width, entry.size.height);
+                var offset = new _Point.Point(entry.offset.x, entry.offset.y),
+                    latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng),
+                    size = new _Point.Point(entry.size.width, entry.size.height);
 
                 enrichedData.push({
                     offset: offset,
@@ -56,12 +64,19 @@
 
             return enrichedData;
         },
+
+        /**
+         * enriches map data with all needed data
+         * @function
+         * @memberof module:DataEnrichment
+         * @param  {object} data - specified data for mapsettings
+         * @return {object} enriched mapsettings data
+         */
         mapSettings: function mapSettings(data) {
 
-            var enrichedData = _jQuery2.default.extend(true, DataEnrichment.MAP_SETTINGS, data);
-
-            var bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1]));
-            var center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
+            var enrichedData = Object.assign(DataEnrichment.MAP_SETTINGS, data),
+                bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
+                center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
             if (!enrichedData.limitToBounds) {
                 enrichedData.limitToBounds = bounds;
@@ -97,7 +112,10 @@
         },
         content: []
     };
-
+    /**
+     * Default initial values for a Map
+     * @type {Object}
+     */
     DataEnrichment.MAP_SETTINGS = {
         level: 0,
         center: {

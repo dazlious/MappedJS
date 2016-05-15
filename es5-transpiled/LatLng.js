@@ -56,7 +56,7 @@
 
             /**
              * gets a clone of this latlng
-             * @return {LatLng} new instance equals this latlng
+             * @return {LatLng} create a copy
              */
 
         }, {
@@ -66,11 +66,10 @@
             }
 
             /**
-             * Constructor
+             * @constructor
              * @param  {number} lat = 0 - representation of latitude
              * @param  {number} lng = 0 - representation of longitude
-             * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
-             * @return {LatLng} new instance of LatLng
+             * @return {LatLng} instance of LatLng for chaining
              */
 
         }]);
@@ -88,14 +87,16 @@
 
         /**
          * substract specified coord from this coordinate
-         * @param  {LatLng} coord - specified coordinate to substract from this coord
-         * @return {LatLng} the new calculated LatLng
+         * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
+         * @return {LatLng} instance of LatLng for chaining
          */
 
 
         _createClass(LatLng, [{
             key: "substract",
-            value: function substract(coord) {
+            value: function substract() {
+                var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+
                 this.lat -= coord.lat;
                 this.lng -= coord.lng;
                 return this;
@@ -103,13 +104,15 @@
 
             /**
              * add specified coord to this coordinate
-             * @param  {LatLng} coord - specified coordinate to add to this coord
-             * @return {LatLng} the new calculated LatLng
+             * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
+             * @return {LatLng} instance of LatLng for chaining
              */
 
         }, {
             key: "add",
-            value: function add(coord) {
+            value: function add() {
+                var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+
                 this.lat += coord.lat;
                 this.lng += coord.lng;
                 return this;
@@ -117,14 +120,15 @@
 
             /**
              * divides a latlng with a given factor
-             * @param  {number} factorLat - factor to divide lat with
+             * @param  {number} factorLat = 1 - factor to divide lat with
              * @param  {number} factorLng = factorLat - factor to divide lng with
-             * @return {LatLng} Returns instance for chaining
+             * @return {LatLng} instance of LatLng for chaining
              */
 
         }, {
             key: "divide",
-            value: function divide(factorLat) {
+            value: function divide() {
+                var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
                 var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
                 this.lat /= factorLat;
@@ -134,14 +138,15 @@
 
             /**
              * multiplicates a latlng with a given factor
-             * @param  {number} factorLat - factor to multiplicate lat with
+             * @param  {number} factorLat = 1 - factor to multiplicate lat with
              * @param  {number} factorLng = factorLat - factor to multiplicate lng with
-             * @return {LatLng} Returns instance for chaining
+             * @return {LatLng} instance of LatLng for chaining
              */
 
         }, {
             key: "multiply",
-            value: function multiply(factorLat) {
+            value: function multiply() {
+                var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
                 var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
                 this.lat *= factorLat;
@@ -160,6 +165,12 @@
             value: function equals(coord) {
                 return this.lat === coord.lat && this.lng === coord.lng;
             }
+
+            /**
+             * converts a LatLng to string
+             * @return {string} representing LatLng
+             */
+
         }, {
             key: "toString",
             value: function toString() {

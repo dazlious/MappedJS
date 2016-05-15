@@ -1,30 +1,22 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Marker.js', './Helper.js', './DataEnrichment.js', './Publisher.js'], factory);
+        define(['exports', './Helper.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Marker.js'), require('./Helper.js'), require('./DataEnrichment.js'), require('./Publisher.js'));
+        factory(exports, require('./Helper.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Marker, global.Helper, global.DataEnrichment, global.Publisher);
+        factory(mod.exports, global.Helper, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
         global.View = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Marker, _Helper, _DataEnrichment, _Publisher) {
+})(this, function(exports, _Helper, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
     exports.View = undefined;
-
-    var _jQuery2 = _interopRequireDefault(_jQuery);
-
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            default: obj
-        };
-    }
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -72,11 +64,6 @@
             get: function get() {
                 return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
             }
-        }, {
-            key: 'currentView',
-            get: function get() {
-                return this.mapView;
-            }
 
             /**
              * get all visible tiles
@@ -86,10 +73,12 @@
         }, {
             key: 'visibleTiles',
             get: function get() {
+                var _this = this;
+
                 return this.tiles.filter(function(t) {
-                    var newTile = t.clone.scale(this.zoomFactor, this.zoomFactor).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
-                    return this.viewport.intersects(newTile);
-                }, this);
+                    var newTile = t.clone.scale(_this.zoomFactor, _this.zoomFactor).getDistortedRect(_this.distortionFactor).translate(_this.currentView.x * _this.distortionFactor + _this.offsetToCenter, _this.currentView.y);
+                    return _this.viewport.intersects(newTile);
+                });
             }
 
             /**
@@ -104,17 +93,20 @@
             }
 
             /**
-             * Constructor
+             * @constructor
              * @param  {Rectangle} viewport = new Rectangle() - current representation of viewport
-             * @param  {Rectangle} mapView = new Rectangle() - current representation of map
+             * @param  {Rectangle} currentView = new Rectangle() - current representation of map
              * @param  {Bounds} bounds = new Bounds() - current bounds of map
              * @param  {LatLng} center = new LatLng() - current center of map
+             * @param  {LatLng} initialCenter = new LatLng() - initial center of view
              * @param  {Object} data = {} - tile data of current map
-             * @param  {Object} markerData = {} - marker data of current map
              * @param  {Object} $container = null - parent container for markers
              * @param  {Object} context = null - canvas context for drawing
              * @param  {number} maxZoom = 1.5 - maximal zoom of view
+             * @param  {number} currentZoom = 1 - initial zoom of view
              * @param  {number} minZoom = 0.8 - minimal zoom of view
+             * @param  {object} $container = null - jQuery-selector of container class
+             * @param  {number} limitToBounds - where to limit panning
              * @return {View} instance of View for chaining
              */
 
@@ -123,8 +115,8 @@
         function View(_ref) {
             var _ref$viewport = _ref.viewport;
             var viewport = _ref$viewport === undefined ? new _Rectangle.Rectangle() : _ref$viewport;
-            var _ref$mapView = _ref.mapView;
-            var mapView = _ref$mapView === undefined ? new _Rectangle.Rectangle() : _ref$mapView;
+            var _ref$currentView = _ref.currentView;
+            var currentView = _ref$currentView === undefined ? new _Rectangle.Rectangle() : _ref$currentView;
             var _ref$bounds = _ref.bounds;
             var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
             var _ref$center = _ref.center;
@@ -145,23 +137,22 @@
             var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
             var _ref$$markerContainer = _ref.$markerContainer;
             var $markerContainer = _ref$$markerContainer === undefined ? null : _ref$$markerContainer;
-            var _ref$limitToBounds = _ref.limitToBounds;
-            var limitToBounds = _ref$limitToBounds === undefined ? bounds : _ref$limitToBounds;
+            var limitToBounds = _ref.limitToBounds;
 
             _classCallCheck(this, View);
 
             this.$markerContainer = $markerContainer;
-            this.mapView = mapView;
-            this.originalMapView = mapView.clone;
+            this.currentView = currentView;
+            this.originalMapView = currentView.clone;
             this.viewport = viewport;
             this.bounds = bounds;
             this.center = center;
             this.zoomFactor = currentZoom;
             this.maxZoom = maxZoom;
             this.minZoom = minZoom;
-            this.origin = new _Point.Point(0, 0);
+            this.origin = new _Point.Point();
             this.eventManager = new _Publisher.Publisher();
-            this.limitToBounds = limitToBounds;
+            this.limitToBounds = limitToBounds || bounds;
 
             var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
             this.currentView.position(newCenter.x, newCenter.y);
@@ -184,6 +175,11 @@
             return this;
         }
 
+        /**
+         * resets current View to its initial position
+         */
+
+
         _createClass(View, [{
             key: 'reset',
             value: function reset() {
@@ -199,12 +195,16 @@
         }, {
             key: 'mainLoop',
             value: function mainLoop() {
+                var _this2 = this;
+
                 if (this.drawIsNeeded) {
-                    this.drawIsNeeded = false;
                     this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
                     this.draw();
+                    this.drawIsNeeded = false;
                 }
-                window.requestAnimFrame(this.mainLoop.bind(this));
+                window.requestAnimFrame(function() {
+                    return _this2.mainLoop();
+                });
             }
 
             /**
@@ -215,10 +215,12 @@
         }, {
             key: 'loadThumb',
             value: function loadThumb() {
+                var _this3 = this;
+
                 _Helper.Helper.loadImage(this.data.thumb, function(img) {
-                    this.thumb = img;
-                    window.requestAnimFrame(this.mainLoop.bind(this));
-                }.bind(this));
+                    _this3.thumb = img;
+                    window.requestAnimFrame(_this3.mainLoop.bind(_this3));
+                });
                 return this;
             }
 
@@ -277,9 +279,9 @@
         }, {
             key: 'getDeltaXToCenter',
             value: function getDeltaXToCenter(pos) {
-                var diffToCenter = pos.clone.substract(this.viewport.center);
-                var distanceToCenter = diffToCenter.x / this.viewport.center.x;
-                var delta = distanceToCenter * this.offsetToCenter;
+                var diffToCenter = pos.clone.substract(this.viewport.center),
+                    distanceToCenter = diffToCenter.x / this.viewport.center.x,
+                    delta = distanceToCenter * this.offsetToCenter;
                 return delta / this.distortionFactor;
             }
 
@@ -303,6 +305,7 @@
                 this.currentView.setSize(newSize.width, newSize.height);
 
                 this.setLatLngToPosition(latlngPosition, pos);
+
                 this.moveView(new _Point.Point());
 
                 this.drawIsNeeded = true;
@@ -353,9 +356,9 @@
                 var redo = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
 
-                var nw = this.convertLatLngToPoint(this.limitToBounds.nw);
-                var so = this.convertLatLngToPoint(this.limitToBounds.so);
-                var limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, so.x - nw.x, so.y - nw.y);
+                var nw = this.convertLatLngToPoint(this.limitToBounds.nw),
+                    se = this.convertLatLngToPoint(this.limitToBounds.se),
+                    limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
 
                 pos.divide(this.distortionFactor, 1);
                 var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
@@ -389,10 +392,9 @@
 
                 this.calculateNewCenter();
 
-                // could be more optimized
-                if (redo) {
-                    this.moveView(new _Point.Point(), false);
-                }
+                // TODO: could be more optimized
+                if (redo) this.moveView(new _Point.Point(), false);
+
                 return this;
             }
 
@@ -404,10 +406,7 @@
         }, {
             key: 'draw',
             value: function draw() {
-                this.drawThumbnail();
-                this.repositionMarkerContainer();
-                this.drawVisibleTiles();
-                return this;
+                return this.drawThumbnail().repositionMarkerContainer().drawVisibleTiles();
             }
 
             /**
@@ -419,8 +418,8 @@
             key: 'drawVisibleTiles',
             value: function drawVisibleTiles() {
                 _Helper.Helper.forEach(this.visibleTiles, function(tile) {
-                    tile.draw();
-                }.bind(this));
+                    return tile.draw();
+                });
                 return this;
             }
 
@@ -445,11 +444,12 @@
         }, {
             key: 'initializeTiles',
             value: function initializeTiles() {
+                var _this4 = this;
+
                 var currentLevel = this.data.tiles;
                 _Helper.Helper.forEach(currentLevel, function(currentTileData) {
-                    var currentTile = new _Tile.Tile(currentTileData, this);
-                    this.tiles.push(currentTile);
-                }.bind(this));
+                    _this4.tiles.push(new _Tile.Tile(currentTileData, _this4));
+                });
                 return this;
             }
 

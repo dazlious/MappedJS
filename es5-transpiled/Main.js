@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './TileMap.js', './DataEnrichment.js', './Helper.js', './Interact.js', './LatLng.js', './Point.js', './Publisher.js'], factory);
+        define(['exports', 'jQuery', './TileMap.js', './DataEnrichment.js', './Helper.js', './Interact.js', './Point.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Helper.js'), require('./Interact.js'), require('./LatLng.js'), require('./Point.js'), require('./Publisher.js'));
+        factory(exports, require('jQuery'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Helper.js'), require('./Interact.js'), require('./Point.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.TileMap, global.DataEnrichment, global.Helper, global.Interact, global.LatLng, global.Point, global.Publisher);
+        factory(mod.exports, global.jQuery, global.TileMap, global.DataEnrichment, global.Helper, global.Interact, global.Point);
         global.Main = mod.exports;
     }
-})(this, function(exports, _jQuery, _TileMap, _DataEnrichment, _Helper, _Interact, _LatLng, _Point, _Publisher) {
+})(this, function(exports, _jQuery, _TileMap, _DataEnrichment, _Helper, _Interact, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -59,15 +59,20 @@
     var MappedJS = exports.MappedJS = function() {
 
         /**
-         * Constructor
+         * @constructor
          * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
          * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
+         * @param  {string|Object} markerData={} - data of markers, can be json or path to file
          * @param  {Object} mapSettings={} - settings for map, must be json
          * @param  {Object} events={loaded: "mjs-loaded"} - List of events
          * @return {MappedJS} instance of MappedJS for chaining
          */
 
-        function MappedJS(_ref) {
+        function MappedJS() {
+            var _this = this;
+
+            var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
             var _ref$container = _ref.container;
             var container = _ref$container === undefined ? ".mjs" : _ref$container;
             var _ref$mapData = _ref.mapData;
@@ -86,21 +91,26 @@
             this.initializeSettings(container, events, mapSettings);
 
             this.initializeData(mapData, function(loadedMapData) {
-                this.mapData = loadedMapData;
-                this.initializeData(markerData, function(loadedMarkerData) {
-                    this.mapData = _jQuery2.default.extend(true, this.mapData, loadedMarkerData);
-                    this.initializeMap();
-                    this.addControls();
-                    this.bindEvents();
-                    this.loadingFinished();
-                }.bind(this));
-            }.bind(this));
+                _this.mapData = loadedMapData;
+                _this.initializeData(markerData, function(loadedMarkerData) {
+                    _this.mapData = Object.assign(_this.mapData, loadedMarkerData);
+                    _this.initializeMap();
+                    _this.addControls();
+                    _this.bindEvents();
+                    _this.loadingFinished();
+                });
+            });
 
             this.momentum = null;
             this.keyTicks = 0;
 
             return this;
         }
+
+        /**
+         * add controls (zoom, home) to DOM
+         */
+
 
         _createClass(MappedJS, [{
             key: 'addControls',
@@ -119,16 +129,18 @@
              * initializes the settings and handles errors
              * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
              * @param  {object} events - List of events
+             * @param  {object} settings - List of settings
              * @return {MappedJS} instance of MappedJS for chaining
              */
 
         }, {
             key: 'initializeSettings',
-            value: function initializeSettings(container, events, settings) {
+            value: function initializeSettings(container) {
+                var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+                var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
                 this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
-                if (!(this.$container instanceof jQuery)) {
-                    throw new Error("Container " + container + " not found");
-                }
+                if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
 
                 this.$container.addClass("mappedJS");
                 this.$content = (0, _jQuery2.default)("<div class='map-content' />");
@@ -143,7 +155,7 @@
             /**
              * initializes the data, asynchronous
              * @param  {Object} mapData - data of map tiles, can be json or path to file
-             * @param  {Function} cb - called, when data is received
+             * @param  {Helper~requestJSONCallback} cb - called, when data is received
              * @return {MappedJS} instance of MappedJS for chaining
              */
 
@@ -187,42 +199,51 @@
             value: function getAbsolutePosition(point) {
                 return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
             }
+
+            /**
+             * initializes interaction
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'initializeInteractForMap',
             value: function initializeInteractForMap() {
+                var _this2 = this;
+
                 this.tooltipState = false;
                 this.interact = new _Interact.Interact({
                     container: this.$content,
                     autoFireHold: 300,
                     overwriteViewportSettings: true,
                     callbacks: {
-                        pan: function(data) {
+                        pan: function pan(data) {
                             if ((0, _jQuery2.default)(data.target).hasClass("control")) {
                                 return false;
                             }
                             var change = data.last.position.clone.substract(data.position.move);
-                            this.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
-                        }.bind(this),
-                        wheel: function(data) {
+                            _this2.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
+                        },
+                        wheel: function wheel(data) {
                             var factor = data.delta / 4;
-                            this.zoom(factor, this.getAbsolutePosition(data.position.start));
-                        }.bind(this),
-                        pinch: function(data) {
-                            this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
-                        }.bind(this),
-                        doubletap: function(data) {
+                            _this2.zoom(factor, _this2.getAbsolutePosition(data.position.start));
+                        },
+                        pinch: function pinch(data) {
+                            _this2.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
+                        },
+                        doubletap: function doubletap(data) {
                             if (!(0, _jQuery2.default)(data.target).hasClass("marker-container")) {
                                 return false;
                             }
-                            this.zoom(0.2, this.getAbsolutePosition(data.position.start));
-                        }.bind(this),
-                        flick: function(data) {
+                            _this2.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
+                        },
+                        flick: function flick(data) {
                             var direction = new _Point.Point(data.directions[0], data.directions[1]),
                                 velocity = direction.clone.divide(data.speed).multiply(20);
-                            this.momentumAccerlation(velocity);
-                        }.bind(this)
+                            _this2.momentumAccerlation(velocity);
+                        }
                     }
                 });
+                return this;
             }
 
             /**
@@ -249,21 +270,49 @@
 
                 return this;
             }
+
+            /**
+             * resets map to initial state
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'resetToInitialState',
             value: function resetToInitialState() {
                 this.tileMap.reset();
+                return this;
             }
+
+            /**
+             * zooms into center of map
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'zoomInToCenter',
             value: function zoomInToCenter() {
                 this.zoom(0.1, this.tileMap.view.viewport.center);
+                return this;
             }
+
+            /**
+             * zooms out of center of map
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'zoomOutToCenter',
             value: function zoomOutToCenter() {
                 this.zoom(-0.1, this.tileMap.view.viewport.center);
+                return this;
             }
+
+            /**
+             * Keypress handler
+             * @param  {object} e VanillaJS-Event-Object
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'keyPress',
             value: function keyPress(e) {
@@ -302,12 +351,21 @@
                         break;
                 }
                 this.tileMap.view.drawIsNeeded = true;
+                return this;
             }
+
+            /**
+             * handles the translation of the map by keypress
+             * @param  {Point} direction - x,y point where to translate to
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'handleMovementByKeys',
             value: function handleMovementByKeys(direction) {
                 this.keyTicks++;
                 this.tileMap.view.moveView(direction.multiply(this.keyTicks));
+                return this;
             }
         }, {
             key: 'keyRelease',
@@ -340,14 +398,14 @@
         }, {
             key: 'triggerMomentum',
             value: function triggerMomentum(steps, timing, change) {
+                var _this3 = this;
+
                 this.momentum = setTimeout(function() {
                     steps--;
-                    var delta = _Helper.Helper.easeOutQuadratic((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
-                    this.moveView(delta);
-                    if (steps >= 0) {
-                        this.triggerMomentum(steps, timing, change);
-                    }
-                }.bind(this), timing);
+                    var delta = _Helper.Helper.easeOutQuadratic((_this3.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * _this3.maxMomentumSteps);
+                    _this3.moveView(delta);
+                    if (steps >= 0) _this3.triggerMomentum(steps, timing, change);
+                }, timing);
                 return this;
             }
 

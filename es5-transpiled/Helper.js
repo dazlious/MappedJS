@@ -1,87 +1,88 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js'], factory);
+        define(["exports"], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'));
+        factory(exports);
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point);
+        factory(mod.exports);
         global.Helper = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point) {
-    'use strict';
+})(this, function(exports) {
+    "use strict";
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
-    exports.Helper = undefined;
-
-    var _jQuery2 = _interopRequireDefault(_jQuery);
-
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            default: obj
-        };
-    }
-
+    /**
+     * @author Michael Duve <mduve@designmail.net>
+     * @file Helper for general purposes
+     * @copyright Michael Duve 2016
+     * @module Helper
+     */
     var Helper = exports.Helper = {
-
         /**
          * request json-data from given file and calls callback on success
+         * @function
+         * @memberof module:Helper
          * @param  {string} filename - path to file
-         * @param  {Function} callback - function called when data is loaded successfully
+         * @param  {Helper~requestJSONCallback} callback - function called when data is loaded successfully
          * @return {Helper} Helper object for chaining
          */
+
         requestJSON: function requestJSON(filename, callback) {
-            _jQuery2.default.ajax({
-                type: "GET",
-                url: filename,
-                dataType: "json",
-                success: function success(data) {
-                    return callback(data);
-                },
-                error: function error(response) {
-                    if (response.status === 200) {
-                        throw new Error("The JSON submitted seems not valid");
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        if (callback) callback(JSON.parse(xhr.responseText));
+                    } else {
+                        throw new Error("The JSON submitted seems not valid", xhr);
                     }
-                    console.error("Error requesting file: ", response);
                 }
-            });
+            };
+            xhr.open("GET", filename, true);
+            xhr.send();
             return this;
         },
+
         /**
          * loads an image and calls callback on success
-         * @param {Function} cb - callback-function on success
+         * @function
+         * @memberof module:Helper
+         * @param {requestCallback} cb - callback-function on success
          * @return {Helper} Helper object for chaining
          */
         loadImage: function loadImage(path, cb) {
             var img = new Image();
             img.onload = function() {
-                if (cb && typeof cb === "function") {
-                    cb(img);
-                }
+                if (cb && typeof cb === "function") cb(img);
             };
             img.src = path;
             return this;
         },
+
         /**
          * for each helper
+         * @function
+         * @memberof module:Helper
          * @param  {Object[]} a - array to iterate over each value
-         * @param  {Function} fn - callback for each object
+         * @param  {requestCallback} cb - callback for each object
          * @return {Helper} Helper object for chaining
          */
-        forEach: function forEach(a, fn) {
+        forEach: function forEach(a, cb) {
             for (var i in a) {
-                if (a[i] && typeof fn === "function") {
-                    fn(a[i], i);
-                }
+                if (a[i] && typeof cb === "function") cb(a[i], i);
             }
             return this;
         },
+
         /**
          * formula for quadratic ease out
+         * @function
+         * @memberof module:Helper
          * @param  {number} t - current time
          * @param  {Point} b - start value
          * @param  {Point} c - total difference to start
@@ -95,6 +96,8 @@
 
         /**
          * convert degree to radian
+         * @function
+         * @memberof module:Helper
          * @param {number} degrees - specified degrees
          * @return {number} converted radian
          */
@@ -103,6 +106,8 @@
         },
         /**
          * checks if mouse is possible
+         * @function
+         * @memberof module:Helper
          * @return {Boolean} if true, mouse is possible
          */
         isMouse: function isMouse() {
@@ -111,6 +116,8 @@
 
         /**
          * checks if touch is possible
+         * @function
+         * @memberof module:Helper
          * @return {Boolean} if true, touch is possible
          */
         isTouch: function isTouch() {
@@ -119,6 +126,8 @@
 
         /**
          * checks if IE is used
+         * @function
+         * @memberof module:Helper
          * @return {Boolean} if true, IE is used
          */
         isIE: function isIE() {
@@ -127,11 +136,12 @@
 
         /**
          * gets cross-browser scroll-event
+         * @function
+         * @memberof module:Helper
          * @return {string} name of scroll event
          */
         scrollEvent: function scrollEvent() {
             return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
         }
-
     };
 });

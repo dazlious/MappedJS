@@ -1,21 +1,60 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(["exports"], factory);
+        define(["exports", "./Events.js"], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports);
+        factory(exports, require("./Events.js"));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports);
+        factory(mod.exports, global.Events);
         global.Publisher = mod.exports;
     }
-})(this, function(exports) {
+})(this, function(exports, _Events) {
     "use strict";
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
+    exports.Publisher = undefined;
+
+    var _slicedToArray = function() {
+        function sliceIterator(arr, i) {
+            var _arr = [];
+            var _n = true;
+            var _d = false;
+            var _e = undefined;
+
+            try {
+                for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+                    _arr.push(_s.value);
+
+                    if (i && _arr.length === i) break;
+                }
+            } catch (err) {
+                _d = true;
+                _e = err;
+            } finally {
+                try {
+                    if (!_n && _i["return"]) _i["return"]();
+                } finally {
+                    if (_d) throw _e;
+                }
+            }
+
+            return _arr;
+        }
+
+        return function(arr, i) {
+            if (Array.isArray(arr)) {
+                return arr;
+            } else if (Symbol.iterator in Object(arr)) {
+                return sliceIterator(arr, i);
+            } else {
+                throw new TypeError("Invalid attempt to destructure non-iterable instance");
+            }
+        };
+    }();
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -47,11 +86,21 @@
      */
     var instance = null;
 
+    /**
+     * @author Michael Duve <mduve@designmail.net>
+     * @file Publish/Subscribe pattern
+     * @copyright Michael Duve 2016
+     */
+
     var Publisher = exports.Publisher = function() {
 
         /**
+<<<<<<< HEAD
+         * @constructor
+=======
          * Constructor
-         * @return {Publisher} instance of Publisher
+>>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
+         * @return {Publisher} singleton instance of Publisher for chaining
          */
 
         function Publisher() {
@@ -68,7 +117,7 @@
          * subscribe to a topic
          * @param  {string} type="any" - a topic
          * @param  {Function} fn=function(){} - a function to callback
-         * @return {Publisher} instance of Publisher
+         * @return {Publisher} instance of Publisher for chaining
          */
 
 
@@ -78,9 +127,7 @@
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
                 var fn = arguments.length <= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
-                if (!this.subscribers[type]) {
-                    this.subscribers[type] = [];
-                }
+                if (!this.subscribers[type]) this.subscribers[type] = [];
                 this.subscribers[type].push(fn);
                 return this;
             }
@@ -89,7 +136,7 @@
              * unsubscribe from a topic
              * @param  {string} type="any" - a topic
              * @param  {Function} fn=function(){} - a function to callback
-             * @return {Publisher} instance of Publisher
+             * @return {Publisher} instance of Publisher for chaining
              */
 
         }, {
@@ -98,15 +145,14 @@
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
                 var fn = arguments.length <= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
-                this.handle(Publisher.UNSUBSCRIBE, type, fn);
-                return this;
+                return this.handle(_Events.Events.Publisher.UNSUBSCRIBE, type, fn);
             }
 
             /**
              * publish to a topic
              * @param  {string} type="any" - a topic
              * @param  {Function} arg=[] - list of parameters
-             * @return {Publisher} instance of Publisher
+             * @return {Publisher} instance of Publisher for chaining
              */
 
         }, {
@@ -115,8 +161,7 @@
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
                 var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
-                this.handle(Publisher.PUBLISH, type, arg);
-                return this;
+                return this.handle(_Events.Events.Publisher.PUBLISH, type, arg);
             }
 
             /**
@@ -124,22 +169,45 @@
              * @param  {string} action - eventname
              * @param  {string} type="any" - a topic
              * @param  {Object} a function to callback or arguments
-             * @return {Publisher} instance of Publisher
+             * @return {Publisher} instance of Publisher for chaining
              */
 
         }, {
             key: "handle",
             value: function handle(action, type, data) {
                 var subs = this.subscribers[type] ? this.subscribers[type] : [];
-                for (var i = 0; i < subs.length; i++) {
-                    if (action === Publisher.PUBLISH) {
-                        subs[i](data);
-                    } else {
-                        if (subs[i] === data) {
-                            subs.splice(i, 1);
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = subs.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var _step$value = _slicedToArray(_step.value, 2);
+
+                        var i = _step$value[0];
+                        var fn = _step$value[1];
+
+                        if (action === _Events.Events.Publisher.PUBLISH) {
+                            fn(data);
+                        } else {
+                            if (fn === data) subs.splice(i, 1);
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
                         }
                     }
                 }
+
                 return this;
             }
 
@@ -156,16 +224,4 @@
 
         return Publisher;
     }();
-
-    /**
-     * Eventname for publishing
-     * @type {String}
-     */
-    Publisher.PUBLISH = "publish";
-
-    /**
-     * Eventname for unsubscribing
-     * @type {String}
-     */
-    Publisher.UNSUBSCRIBE = "unsubscribe";
 });

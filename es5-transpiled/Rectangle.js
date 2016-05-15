@@ -206,12 +206,12 @@
             }
 
             /**
-             * Constructor
+             * @constructor
              * @param  {number} x=0 - x-position of specified rectangle
              * @param  {number} y=0 - y-position of specified rectangle
              * @param  {number} width=0 - width of specified rectangle
              * @param  {number} height=0 - height of specified rectangle
-             * @return {Rectangle} instance of Rectangle
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }]);
@@ -236,14 +236,16 @@
 
         /**
          * Checks whether Rectangle intersects with specified Rectangle
-         * @param  {Rectangle} rect - the specified rectangle to check against
+         * @param  {Rectangle} rect = new Rectangle() - the specified rectangle to check against
          * @return {Boolean} true if containment is entirely
          */
 
 
         _createClass(Rectangle, [{
             key: 'intersects',
-            value: function intersects(rect) {
+            value: function intersects() {
+                var rect = arguments.length <= 0 || arguments[0] === undefined ? new Rectangle() : arguments[0];
+
                 return !(rect.left > this.right || rect.right < this.left || rect.top > this.bottom || rect.bottom < this.top);
             }
 
@@ -261,13 +263,15 @@
 
             /**
              * Sets the center of this Rectangle to specified point
-             * @param  {Point} point - specified point to set center of rectangle to
-             * @return {Rectangle} instance of Rectangle
+             * @param  {Point} point = new Point() - specified point to set center of rectangle to
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'setCenter',
-            value: function setCenter(point) {
+            value: function setCenter() {
+                var point = arguments.length <= 0 || arguments[0] === undefined ? new _Point2.Point() : arguments[0];
+
                 var difference = point.substract(this.center);
                 this.translate(difference.x, difference.y);
                 return this;
@@ -275,13 +279,15 @@
 
             /**
              * Sets the x-center of this Rectangle to specified x
-             * @param  {number} x - specified x coordinate to set x center of rectangle to
-             * @return {Rectangle} instance of Rectangle
+             * @param  {number} x = 0 - specified x coordinate to set x center of rectangle to
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'setCenterX',
-            value: function setCenterX(x) {
+            value: function setCenterX() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
                 var difference = x - this.center.x;
                 this.translate(difference, 0);
                 return this;
@@ -289,13 +295,15 @@
 
             /**
              * Sets the y-center of this Rectangle to specified y
-             * @param  {number} y - specified y coordinate to set y center of rectangle to
-             * @return {Rectangle} instance of Rectangle
+             * @param  {number} y = 0 - specified y coordinate to set y center of rectangle to
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'setCenterY',
-            value: function setCenterY(y) {
+            value: function setCenterY() {
+                var y = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
                 var difference = y - this.center.y;
                 this.translate(0, difference);
                 return this;
@@ -303,61 +311,71 @@
 
             /**
              * Checks whether Rectangle entirely contains the Point
-             * @param  {Point} point - the specified point to check against
+             * @param  {Point} point = new Point() - the specified point to check against
              * @return {Boolean} true if containment is entirely
              */
 
         }, {
             key: 'containsPoint',
-            value: function containsPoint(point) {
+            value: function containsPoint() {
+                var point = arguments.length <= 0 || arguments[0] === undefined ? new _Point2.Point() : arguments[0];
+
                 return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
             }
 
             /**
              * Checks whether Rectangle entirely contains the Rectangle
-             * @param  {Rectangle} rect - the specified rectangle to check against
+             * @param  {Rectangle} rect = new Rectangle() - the specified rectangle to check against
              * @return {Boolean} true if containment is entirely
              */
 
         }, {
             key: 'containsRect',
-            value: function containsRect(rect) {
+            value: function containsRect() {
+                var rect = arguments.length <= 0 || arguments[0] === undefined ? new Rectangle() : arguments[0];
+
                 return rect instanceof Rectangle ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
             }
 
             /**
              * distorts rectangle by factor
-             * @param  {number} factor - the specified factor of distortion
-             * @return {Rectangle} a new instance of Rectangle
+             * @param  {number} factor = 1 - the specified factor of distortion
+             * @return {Rectangle} a distorted Rectangle
              */
 
         }, {
             key: 'getDistortedRect',
-            value: function getDistortedRect(factor) {
+            value: function getDistortedRect() {
+                var factor = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+
                 return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
             }
 
             /**
              * redistorts rectangle by factor
-             * @param  {number} factor - the specified factor of distortion
-             * @return {Rectangle} a new instance of Rectangle
+             * @param  {number} factor = 1- the specified factor of distortion
+             * @return {Rectangle} an undistorted Rectangle
              */
 
         }, {
             key: 'getNormalRect',
-            value: function getNormalRect(factor) {
+            value: function getNormalRect() {
+                var factor = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+
                 return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1 / factor);
             }
 
             /**
              * scale x and width of rectangle
-             * @param  {number} x - factor to be applied to scale
-             * @return {Rectangle} scaled Rectangle
+             * @param  {number} x = 1 - factor to be applied to scale
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'scaleX',
-            value: function scaleX(x) {
+            value: function scaleX() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+
                 this.x *= x;
                 this.width *= x;
                 return this;
@@ -365,13 +383,15 @@
 
             /**
              * scale y and height of rectangle
-             * @param  {number} y - factor to be applied to scale
-             * @return {Rectangle} new scaled Rectangle
+             * @param  {number} y = 1- factor to be applied to scale
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'scaleY',
-            value: function scaleY(y) {
+            value: function scaleY() {
+                var y = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+
                 this.y *= y;
                 this.height *= y;
                 return this;
@@ -379,49 +399,56 @@
 
             /**
              * scale x and y for width and height of rectangle
-             * @param  {number} x - factor to be applied to scale
+             * @param  {number} x = 1 - factor to be applied to scale
              * @param  {number} y = x - factor to be applied to scale
-             * @return {Rectangle} new scaled Rectangle
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'scale',
-            value: function scale(x) {
+            value: function scale() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
                 var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-                this.x *= x;
-                this.y *= y;
-                this.width *= x;
-                this.height *= y;
+                this.scaleX(x);
+                this.scaleY(y);
                 return this;
             }
 
             /**
              * moves a rectangle by specified coords
-             * @param  {number} x - specified x to be added to x position
-             * @param  {number} y - specified y to be added to y position
-             * @return {Rectangle} Returns the altered rectangle
+             * @param  {number} x = 0 - specified x to be added to x position
+             * @param  {number} y = x - specified y to be added to y position
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'translate',
-            value: function translate(x, y) {
+            value: function translate() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+                var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
                 _get(Object.getPrototypeOf(Rectangle.prototype), 'translate', this).call(this, x, y);
                 return this;
             }
 
             /**
              * transforms a rectangle by specified coords
-             * @param  {number} x - specified x to be added to x position
-             * @param  {number} y - specified y to be added to y position
-             * @param  {number} width - specified width to be added to this width
-             * @param  {number} height - specified height to be added to this height
-             * @return {Rectangle} Returns the altered rectangle
+             * @param  {number} x = 0 - specified x to be added to x position
+             * @param  {number} y = x - specified y to be added to y position
+             * @param  {number} width = 0 - specified width to be added to this width
+             * @param  {number} height = 0 - specified height to be added to this height
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'transform',
-            value: function transform(x, y, width, height) {
+            value: function transform() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+                var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+                var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+                var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
                 this.translate(x, y);
                 this.width += width;
                 this.height += height;
@@ -430,30 +457,38 @@
 
             /**
              * changes the position a rectangle by specified coords
-             * @param  {number} x - the new x position
-             * @param  {number} y - he new y position
-             * @return {Rectangle} Returns the altered rectangle
+             * @param  {number} x = 0 - the new x position
+             * @param  {number} y = 0 - he new y position
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'position',
-            value: function position(x, y) {
+            value: function position() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+                var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
                 _get(Object.getPrototypeOf(Rectangle.prototype), 'position', this).call(this, x, y);
                 return this;
             }
 
             /**
              * changes the size of a rectangle by specified params
-             * @param  {number} x - the new x position
-             * @param  {number} y - the new y position
-             * @param  {number} width - the new width
-             * @param  {number} height - the new width
-             * @return {Rectangle} Returns the altered rectangle
+             * @param  {number} x = 0- the new x position
+             * @param  {number} y = x - the new y position
+             * @param  {number} width = 0 - the new width
+             * @param  {number} height = 0 - the new width
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'size',
-            value: function size(x, y, width, height) {
+            value: function size() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+                var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+                var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+                var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
                 this.position(x, y);
                 this.width = width;
                 this.height = height;
@@ -462,14 +497,17 @@
 
             /**
              * changes the size of a rectangle by specified params
-             * @param  {number} width - the new width
-             * @param  {number} height - the new width
-             * @return {Rectangle} Returns the altered rectangle
+             * @param  {number} width = 0 - the new width
+             * @param  {number} height = width - the new width
+             * @return {Rectangle} instance of Rectangle for chaining
              */
 
         }, {
             key: 'setSize',
-            value: function setSize(width, height) {
+            value: function setSize() {
+                var width = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+                var height = arguments.length <= 1 || arguments[1] === undefined ? width : arguments[1];
+
                 this.width = width;
                 this.height = height;
                 return this;
@@ -494,7 +532,7 @@
     /**
      * Creates a Rectangle from specified Rectangle
      * @param  {Rectangle} rect - specified Rectangle
-     * @return {Rectangle} the point specified
+     * @return {Rectangle} a copy of specified rectangle
      */
     Rectangle.createFromRectangle = function(rect) {
         return new Rectangle(rect.x, rect.y, rect.width, rect.height);

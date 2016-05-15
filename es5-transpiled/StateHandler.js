@@ -17,6 +17,44 @@
         value: true
     });
 
+    var _slicedToArray = function() {
+        function sliceIterator(arr, i) {
+            var _arr = [];
+            var _n = true;
+            var _d = false;
+            var _e = undefined;
+
+            try {
+                for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+                    _arr.push(_s.value);
+
+                    if (i && _arr.length === i) break;
+                }
+            } catch (err) {
+                _d = true;
+                _e = err;
+            } finally {
+                try {
+                    if (!_n && _i["return"]) _i["return"]();
+                } finally {
+                    if (_d) throw _e;
+                }
+            }
+
+            return _arr;
+        }
+
+        return function(arr, i) {
+            if (Array.isArray(arr)) {
+                return arr;
+            } else if (Symbol.iterator in Object(arr)) {
+                return sliceIterator(arr, i);
+            } else {
+                throw new TypeError("Invalid attempt to destructure non-iterable instance");
+            }
+        };
+    }();
+
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
             throw new TypeError("Cannot call a class as a function");
@@ -66,9 +104,9 @@
             }
 
             /**
-             * Constructor
+             * @constructor
              * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
-             * @return {StateHandler} instance of StateHandler
+             * @return {StateHandler} instance of StateHandler for chaining
              */
 
         }]);
@@ -89,7 +127,7 @@
 
         /**
          * get the next element
-         * @return {StateHandler} instance of StateHandler
+         * @return {StateHandler} instance of StateHandler for chaining
          */
 
 
@@ -97,56 +135,77 @@
             key: 'next',
             value: function next() {
                 this.lastState = this.current;
-                if (this.hasNext()) {
-                    this.i++;
-                }
+                if (this.hasNext()) this.i++;
                 return this;
             }
 
             /**
              * get the previous element
-             * @return {StateHandler} instance of StateHandler
+             * @return {StateHandler} instance of StateHandler for chaining
              */
 
         }, {
             key: 'previous',
             value: function previous() {
                 this.lastState = this.current;
-                if (this.hasPrevious()) {
-                    this.i--;
-                }
+                if (this.hasPrevious()) this.i--;
                 return this;
             }
 
             /**
              * change the state to specified state
              * @param {number} state - index of state in array
-             * @return {StateHandler} instance of StateHandler
+             * @return {StateHandler} instance of StateHandler for chaining
              */
 
         }, {
             key: 'changeTo',
             value: function changeTo(state) {
-                if (state >= 0 && state < this.length) {
-                    this.i = state;
-                }
+                if (state >= 0 && state < this.length) this.i = state;
                 return this;
             }
 
             /**
              * change the state to specified value of specified property
-             * @param {number} state - index of state in array
-             * @return {StateHandler} instance of StateHandler
+             * @param {object} prop - specified property to be changed
+             * @param {object} value - specified value that should be changed to
+             * @return {StateHandler} instance of StateHandler for chaining
              */
 
         }, {
             key: 'changeToValue',
             value: function changeToValue(prop, value) {
-                for (var i = 0; i < this.length; i++) {
-                    if (this.states[i] && value === this.states[i][prop]) {
-                        this.i = i;
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = this.states[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var _step$value = _slicedToArray(_step.value, 2);
+
+                        var i = _step$value[0];
+                        var element = _step$value[1];
+
+                        if (value === element[prop]) {
+                            this.i = i;
+                            break;
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
                     }
                 }
+
                 return this;
             }
 

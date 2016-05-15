@@ -91,7 +91,7 @@
             }
 
             /**
-             * Constructor
+             * @constructor
              * @param {Object} settings = {} - all the settings
              * @param {string|Object} settings.container = ".interact-container" - Container, either string, jQuery-object or dom-object
              * @param {Object} settings.timeTreshold = {} - settings for the timing tresholds
@@ -141,9 +141,7 @@
 
             _classCallCheck(this, Interact);
 
-            this.settings = this.getDefaultSettings();
-            _jQuery2.default.extend(true, this.settings, settings || {});
-
+            this.settings = Object.assign(this.getDefaultSettings(), settings);
             this.data = this.getDefaultData();
             if (this.settings.overwriteViewportSettings) this.handleViewport(this.settings.overwriteViewportSettings);
             this.init(this.settings.container).bindEvents();
@@ -174,7 +172,7 @@
                     stopPropagation: true,
                     preventDefault: true,
                     autoFireHold: false,
-                    pinchBalanceTime: 50,
+                    pinchBalanceTime: 500,
                     callbacks: this.getDefaultCallbacks(),
                     events: this.getDefaultEventNames()
                 };
@@ -210,22 +208,23 @@
         }, {
             key: 'getDefaultEventNames',
             value: function getDefaultEventNames() {
+                var isIE = _Helper.Helper.isIE();
                 return {
                     start: {
-                        touch: _Helper.Helper.isIE() ? "MSPointerDown pointerdown" : "touchstart",
-                        mouse: _Helper.Helper.isIE() ? "MSPointerDown pointerdown" : "mousedown"
+                        touch: isIE ? "MSPointerDown pointerdown" : "touchstart",
+                        mouse: isIE ? "MSPointerDown pointerdown" : "mousedown"
                     },
                     move: {
-                        touch: _Helper.Helper.isIE() ? "MSPointerMove pointermove" : "touchmove",
-                        mouse: _Helper.Helper.isIE() ? "MSPointerMove pointermove" : "mousemove"
+                        touch: isIE ? "MSPointerMove pointermove" : "touchmove",
+                        mouse: isIE ? "MSPointerMove pointermove" : "mousemove"
                     },
                     end: {
-                        touch: _Helper.Helper.isIE() ? "MSPointerUp pointerup" : "touchend",
-                        mouse: _Helper.Helper.isIE() ? "MSPointerUp pointerup" : "mouseup"
+                        touch: isIE ? "MSPointerUp pointerup" : "touchend",
+                        mouse: isIE ? "MSPointerUp pointerup" : "mouseup"
                     },
                     leave: {
-                        touch: _Helper.Helper.isIE() ? "MSPointerLeave pointerleave" : "touchleave",
-                        mouse: _Helper.Helper.isIE() ? "MSPointerLeave pointerleave" : "mouseleave"
+                        touch: isIE ? "MSPointerLeave pointerleave" : "touchleave",
+                        mouse: isIE ? "MSPointerLeave pointerleave" : "mouseleave"
                     },
                     scroll: _Helper.Helper.scrollEvent()
                 };
@@ -396,11 +395,10 @@
                 event = event || window.event;
 
                 var e = this.preHandle(event) || event.originalEvent;
-                this.data.delta = this.normalizeWheelDelta(event);
 
+                this.data.delta = this.normalizeWheelDelta(event);
                 this.data.position.start = this.getRelativePosition(e);
                 this.data.directions = this.getScrollDirection(e);
-
                 this.data.zoom = this.data.directions.indexOf("up") > -1 ? 1 : this.data.directions.indexOf("down") > -1 ? -1 : 0;
 
                 if (this.settings.callbacks.wheel) {

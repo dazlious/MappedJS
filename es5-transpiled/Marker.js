@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js', './Publisher.js', './StateHandler.js', './DataEnrichment.js', './ToolTip.js'], factory);
+        define(['exports', 'jQuery', './Events.js', './Helper.js', './Point.js', './Publisher.js', './DataEnrichment.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./DataEnrichment.js'), require('./ToolTip.js'));
+        factory(exports, require('jQuery'), require('./Events.js'), require('./Helper.js'), require('./Point.js'), require('./Publisher.js'), require('./DataEnrichment.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point, global.Publisher, global.StateHandler, global.DataEnrichment, global.ToolTip);
+        factory(mod.exports, global.jQuery, global.Events, global.Helper, global.Point, global.Publisher, global.DataEnrichment);
         global.Marker = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point, _Publisher, _StateHandler, _DataEnrichment, _ToolTip) {
+})(this, function(exports, _jQuery, _Events, _Helper, _Point, _Publisher, _DataEnrichment) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -50,25 +50,10 @@
         };
     }();
 
-    /**
-     * States of a marker
-     * @type {Array}
-     */
-    var STATES = [{
-        value: 0,
-        description: 'Loading'
-    }, {
-        value: 0,
-        description: 'Initialized'
-    }, {
-        value: 1,
-        description: 'Ready'
-    }];
-
     var Marker = exports.Marker = function() {
 
         /**
-         * Constructor
+         * @constructor
          * @param  {Object} data = DataEnrichment.DATA_MARKER - enriched data
          * @param  {View} _instance = parent instance - instance of parent view
          * @return {Marker} - instance of Marker for chaining
@@ -81,48 +66,51 @@
 
             _classCallCheck(this, Marker);
 
-            this.stateHandler = new _StateHandler.StateHandler(STATES);
-
-            if (!_instance) {
-                throw new Error('Tile needs an instance');
-            }
+            if (!_instance) throw new Error('Tile needs an instance');
             this.instance = _instance;
 
             this.size = data.size;
+
             this.hover = data.hover;
-            if (this.hover) {
-                this.size.divide(2, 1);
-            }
+            if (this.hover) this.size.divide(2, 1);
+
             this.img = data.icon;
-            this.offset = data.offset;
-            this.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
+            this.offset = data.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
             this.latlng = data.latlng;
 
             this.content = data.content;
             this.position = this.instance.convertLatLngToPoint(this.latlng);
-
             this.$icon = this.addMarkerToDOM(this.instance.$markerContainer);
 
-            this.bindEvents();
-
-            this.positionMarker();
-
-            return this;
+            return this.bindEvents().positionMarker();
         }
+
+        /**
+         * binds all events
+         * @return {Marker} instance of Marker for chaining
+         */
+
 
         _createClass(Marker, [{
             key: 'bindEvents',
             value: function bindEvents() {
-                this.eventManager = new _Publisher.Publisher();
-                this.$icon.on("touchstart mouseup", function() {
-                    this.eventManager.publish(_ToolTip.ToolTip.EVENT.OPEN, this.content);
-                    this.eventManager.publish(Marker.EVENT.DEACTIVATE);
-                    this.$icon.addClass("active");
-                }.bind(this));
+                var _this = this;
 
-                this.eventManager.subscribe(Marker.EVENT.DEACTIVATE, function() {
-                    this.$icon.removeClass("active");
-                }.bind(this));
+                this.eventManager = new _Publisher.Publisher();
+
+                var gesture = _Helper.Helper.isTouch() ? "touchstart" : "mousedown";
+
+                this.$icon.on(gesture, function() {
+                    _this.eventManager.publish(_Events.Events.ToolTip.OPEN, _this.content);
+                    _this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
+                    _this.$icon.addClass("active");
+                });
+
+                this.eventManager.subscribe(_Events.Events.Marker.DEACTIVATE, function() {
+                    _this.$icon.removeClass("active");
+                });
+
+                return this;
             }
 
             /**
@@ -145,14 +133,13 @@
                 if ($container) {
                     icon.hide();
                     $container.append(icon);
-                    this.stateHandler.next();
                 }
                 return icon;
             }
 
             /**
              * set initial position of this marker
-             * @return {Marker} - instance of Marker for chaining
+             * @return {Marker} instance of Marker for chaining
              */
 
         }, {
@@ -163,8 +150,7 @@
                     this.$icon.css({
                         "left": this.position.x / this.instance.currentView.width * 100 + '%',
                         "top": this.position.y / this.instance.currentView.height * 100 + '%'
-                    });
-                    this.$icon.show();
+                    }).show();
                 }
                 return this;
             }
@@ -172,8 +158,4 @@
 
         return Marker;
     }();
-
-    Marker.EVENT = {
-        DEACTIVATE: "deactivate-marker"
-    };
 });
