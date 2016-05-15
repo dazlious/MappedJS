@@ -903,11 +903,6 @@ Get event helper, applies jQuery-event-fix too
 <a name="new_LatLng_new"></a>
 
 ### new LatLng(lat, lng)
-<<<<<<< HEAD
-=======
-Constructor
-
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 **Returns**: <code>[LatLng](#LatLng)</code> - instance of LatLng for chaining  
 **Params**
 
@@ -1032,11 +1027,6 @@ Creates a LatLng from specified LatLng
 <a name="new_MappedJS_new"></a>
 
 ### new MappedJS(container, mapData, markerData, mapSettings, events)
-<<<<<<< HEAD
-=======
-Constructor
-
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
 **Params**
 
@@ -1284,11 +1274,6 @@ set initial position of this marker
 <a name="new_Point_new"></a>
 
 ### new Point(x, y)
-<<<<<<< HEAD
-=======
-Constructor
-
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 **Returns**: <code>[Point](#Point)</code> - instance of Point for chaining  
 **Params**
 
@@ -1432,26 +1417,12 @@ Creates a Point from specified point
 **Kind**: global class  
 
 * [Publisher](#Publisher)
-<<<<<<< HEAD
-=======
-    * [new Publisher()](#new_Publisher_new)
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
     * [.subscribe(type, fn)](#Publisher+subscribe) ⇒ <code>[Publisher](#Publisher)</code>
     * [.unsubscribe(type, fn)](#Publisher+unsubscribe) ⇒ <code>[Publisher](#Publisher)</code>
     * [.publish(type, arg)](#Publisher+publish) ⇒ <code>[Publisher](#Publisher)</code>
     * [.handle(action, type, a)](#Publisher+handle) ⇒ <code>[Publisher](#Publisher)</code>
     * [.destroy()](#Publisher+destroy)
-<<<<<<< HEAD
 
-=======
-
-<a name="new_Publisher_new"></a>
-
-### new Publisher()
-Constructor
-
-**Returns**: <code>[Publisher](#Publisher)</code> - singleton instance of Publisher for chaining  
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 <a name="Publisher+subscribe"></a>
 
 ### publisher.subscribe(type, fn) ⇒ <code>[Publisher](#Publisher)</code>
@@ -1549,11 +1520,6 @@ destroys singleton instance
 <a name="new_Rectangle_new"></a>
 
 ### new Rectangle(x, y, width, height)
-<<<<<<< HEAD
-=======
-Constructor
-
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 **Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
@@ -1870,11 +1836,6 @@ Creates a Rectangle from specified Rectangle
 <a name="new_StateHandler_new"></a>
 
 ### new StateHandler(states_array)
-<<<<<<< HEAD
-=======
-Constructor
-
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 **Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler for chaining  
 **Params**
 
@@ -1959,11 +1920,6 @@ checks if there is a previous element
 <a name="new_Tile_new"></a>
 
 ### new Tile(path, x, y, w, h, _instance)
-<<<<<<< HEAD
-=======
-Constructor
-
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
 **Params**
 
@@ -2028,11 +1984,6 @@ check if tiles are equal
 <a name="new_TileMap_new"></a>
 
 ### new TileMap(container, tilesData, settings)
-<<<<<<< HEAD
-=======
-Constructor
-
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 **Params**
 
@@ -2138,7 +2089,6 @@ append marker container to DOM
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 <a name="TileMap+createTooltipContainer"></a>
-<<<<<<< HEAD
 
 ### tileMap.createTooltipContainer() ⇒ <code>[TileMap](#TileMap)</code>
 creates an instance of ToolTip
@@ -2152,21 +2102,6 @@ bind all events
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
-=======
-
-### tileMap.createTooltipContainer() ⇒ <code>[TileMap](#TileMap)</code>
-creates an instance of ToolTip
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
-<a name="TileMap+bindEvents"></a>
-
-### tileMap.bindEvents() ⇒ <code>[TileMap](#TileMap)</code>
-bind all events
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 <a name="TileMap+initializeCanvas"></a>
 
 ### tileMap.initializeCanvas() ⇒ <code>[TileMap](#TileMap)</code>
@@ -2202,7 +2137,6 @@ Handles resizing of view
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
-<<<<<<< HEAD
 <a name="ToolTip"></a>
 
 ## ToolTip
@@ -2321,8 +2255,6 @@ precompiles all Handlebars templates
 
 **Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
 **Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
-=======
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 <a name="View"></a>
 
 ## View
@@ -2354,11 +2286,6 @@ precompiles all Handlebars templates
 <a name="new_View_new"></a>
 
 ### new View(viewport, currentView, bounds, center, initialCenter, data, $container, context, maxZoom, currentZoom, minZoom, $container, limitToBounds)
-<<<<<<< HEAD
-=======
-Constructor
-
->>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
 **Returns**: <code>[View](#View)</code> - instance of View for chaining  
 **Params**
 
