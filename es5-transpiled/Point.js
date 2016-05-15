@@ -98,14 +98,16 @@
 
         /**
          * substracts 2 points
-         * @param  {Point} point - the point to substract from this
+         * @param  {Point} point = new Point() - the point to substract from this
          * @return {Point} difference between this point and parameter point
          */
 
 
         _createClass(Point, [{
             key: "substract",
-            value: function substract(point) {
+            value: function substract() {
+                var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
+
                 this.x -= point.x;
                 this.y -= point.y;
                 return this;
@@ -113,13 +115,15 @@
 
             /**
              * adds 2 points
-             * @param  {Point} point - the point to add to this
+             * @param  {Point} point = new Point() - the point to add to this
              * @return {Point} addition of this point and parameter point
              */
 
         }, {
             key: "add",
-            value: function add(point) {
+            value: function add() {
+                var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
+
                 this.x += point.x;
                 this.y += point.y;
                 return this;
@@ -127,14 +131,15 @@
 
             /**
              * multiplicates a point with a given x and y
-             * @param  {number} x - factor to multiplicate x with
+             * @param  {number} x = 1 - factor to multiplicate x with
              * @param  {number} y - factor to multiplicate y with
              * @return {Point} Returns a new instance
              */
 
         }, {
             key: "multiply",
-            value: function multiply(x) {
+            value: function multiply() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
                 var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
                 this.x *= x;
@@ -144,14 +149,15 @@
 
             /**
              * divide a point with a given x and y
-             * @param  {number} x - factor to divide x with
+             * @param  {number} x = 1 - factor to divide x with
              * @param  {number} y - factor to divide y with
              * @return {Point} Returns a new instance
              */
 
         }, {
             key: "divide",
-            value: function divide(x) {
+            value: function divide() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
                 var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
                 this.x /= x;
@@ -173,26 +179,31 @@
 
             /**
              * Returns the distance from this Point to a specified Point
-             * @param  {Point} point - the specified point to be measured against this Point
+             * @param  {Point} point = new Point() - the specified point to be measured against this Point
              * @return {Point} the distance between this Point and specified point
              */
 
         }, {
             key: "distance",
-            value: function distance(point) {
+            value: function distance() {
+                var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
+
                 return this.clone.substract(point).length;
             }
 
             /**
              * translates a point by x and y
-             * @param  {number} x - value to move x
-             * @param  {number} y - value to move y
+             * @param  {number} x = 0 - value to move x
+             * @param  {number} y = x - value to move y
              * @return {Point} instance of Point
              */
 
         }, {
             key: "translate",
-            value: function translate(x, y) {
+            value: function translate() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+                var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
                 this.x += x;
                 this.y += y;
                 return this;
@@ -207,7 +218,10 @@
 
         }, {
             key: "position",
-            value: function position(x, y) {
+            value: function position() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+                var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
                 this.x = x;
                 this.y = y;
                 return this;

@@ -92,9 +92,7 @@
 
             _classCallCheck(this, Bounds);
 
-            if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) {
-                throw new Error(northWest + ' needs to be top-right corner and ' + southEast + ' bottom-left');
-            }
+            if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) throw new Error(northWest + ' needs to be top-right corner and ' + southEast + ' bottom-left');
             this.nw = northWest;
             this.so = southEast;
             return this;

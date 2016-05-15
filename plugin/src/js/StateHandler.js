@@ -34,9 +34,7 @@ export class StateHandler {
      */
     next() {
         this.lastState = this.current;
-        if (this.hasNext()) {
-            this.i++;
-        }
+        if (this.hasNext()) this.i++;
         return this;
     }
 
@@ -46,9 +44,7 @@ export class StateHandler {
      */
     previous() {
         this.lastState = this.current;
-        if (this.hasPrevious()) {
-            this.i--;
-        }
+        if (this.hasPrevious()) this.i--;
         return this;
     }
 
@@ -58,9 +54,7 @@ export class StateHandler {
      * @return {StateHandler} instance of StateHandler
      */
     changeTo(state) {
-        if (state >= 0 && state < this.length) {
-            this.i = state;
-        }
+        if (state >= 0 && state < this.length) this.i = state;
         return this;
     }
 
@@ -70,9 +64,10 @@ export class StateHandler {
      * @return {StateHandler} instance of StateHandler
      */
     changeToValue(prop, value) {
-        for (var i = 0; i < this.length; i++) {
-            if (this.states[i] && value === this.states[i][prop]) {
+        for (const [i, element] of this.states) {
+            if (value === element[prop]) {
                 this.i = i;
+                break;
             }
         }
         return this;

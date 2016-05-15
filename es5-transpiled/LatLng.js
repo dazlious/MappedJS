@@ -88,14 +88,16 @@
 
         /**
          * substract specified coord from this coordinate
-         * @param  {LatLng} coord - specified coordinate to substract from this coord
+         * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
          * @return {LatLng} the new calculated LatLng
          */
 
 
         _createClass(LatLng, [{
             key: "substract",
-            value: function substract(coord) {
+            value: function substract() {
+                var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+
                 this.lat -= coord.lat;
                 this.lng -= coord.lng;
                 return this;
@@ -103,13 +105,15 @@
 
             /**
              * add specified coord to this coordinate
-             * @param  {LatLng} coord - specified coordinate to add to this coord
+             * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
              * @return {LatLng} the new calculated LatLng
              */
 
         }, {
             key: "add",
-            value: function add(coord) {
+            value: function add() {
+                var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+
                 this.lat += coord.lat;
                 this.lng += coord.lng;
                 return this;
@@ -117,14 +121,15 @@
 
             /**
              * divides a latlng with a given factor
-             * @param  {number} factorLat - factor to divide lat with
+             * @param  {number} factorLat = 1 - factor to divide lat with
              * @param  {number} factorLng = factorLat - factor to divide lng with
              * @return {LatLng} Returns instance for chaining
              */
 
         }, {
             key: "divide",
-            value: function divide(factorLat) {
+            value: function divide() {
+                var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
                 var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
                 this.lat /= factorLat;
@@ -134,14 +139,15 @@
 
             /**
              * multiplicates a latlng with a given factor
-             * @param  {number} factorLat - factor to multiplicate lat with
+             * @param  {number} factorLat = 1 - factor to multiplicate lat with
              * @param  {number} factorLng = factorLat - factor to multiplicate lng with
              * @return {LatLng} Returns instance for chaining
              */
 
         }, {
             key: "multiply",
-            value: function multiply(factorLat) {
+            value: function multiply() {
+                var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
                 var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
                 this.lat *= factorLat;

@@ -72,9 +72,7 @@ export class Interact {
      * @return {Interact} new instance
      */
     constructor(settings = {}) {
-        this.settings = this.getDefaultSettings();
-        $.extend(true, this.settings, settings || {});
-
+        this.settings = Object.assign(this.getDefaultSettings(), settings);
         this.data = this.getDefaultData();
         if (this.settings.overwriteViewportSettings) this.handleViewport(this.settings.overwriteViewportSettings);
         this.init(this.settings.container).bindEvents();
@@ -101,7 +99,7 @@ export class Interact {
             stopPropagation: true,
             preventDefault: true,
             autoFireHold: false,
-            pinchBalanceTime: 50,
+            pinchBalanceTime: 500,
             callbacks: this.getDefaultCallbacks(),
             events: this.getDefaultEventNames()
         };
@@ -131,22 +129,23 @@ export class Interact {
      * @return {Object} eventnames
      */
     getDefaultEventNames() {
+        const isIE = Helper.isIE();
         return {
             start: {
-                touch: (Helper.isIE()) ? "MSPointerDown pointerdown" : "touchstart",
-                mouse: (Helper.isIE()) ? "MSPointerDown pointerdown" : "mousedown"
+                touch: (isIE) ? "MSPointerDown pointerdown" : "touchstart",
+                mouse: (isIE) ? "MSPointerDown pointerdown" : "mousedown"
             },
             move: {
-                touch: (Helper.isIE()) ? "MSPointerMove pointermove" : "touchmove",
-                mouse: (Helper.isIE()) ? "MSPointerMove pointermove" : "mousemove"
+                touch: (isIE) ? "MSPointerMove pointermove" : "touchmove",
+                mouse: (isIE) ? "MSPointerMove pointermove" : "mousemove"
             },
             end: {
-                touch: (Helper.isIE()) ? "MSPointerUp pointerup" : "touchend",
-                mouse: (Helper.isIE()) ? "MSPointerUp pointerup" : "mouseup"
+                touch: (isIE) ? "MSPointerUp pointerup" : "touchend",
+                mouse: (isIE) ? "MSPointerUp pointerup" : "mouseup"
             },
             leave: {
-                touch: (Helper.isIE()) ? "MSPointerLeave pointerleave" : "touchleave",
-                mouse: (Helper.isIE()) ? "MSPointerLeave pointerleave" : "mouseleave"
+                touch: (isIE) ? "MSPointerLeave pointerleave" : "touchleave",
+                mouse: (isIE) ? "MSPointerLeave pointerleave" : "mouseleave"
             },
             scroll: Helper.scrollEvent()
         };
@@ -296,11 +295,10 @@ export class Interact {
         event = event || window.event;
 
         const e = this.preHandle(event) || event.originalEvent;
-        this.data.delta = this.normalizeWheelDelta(event);
 
+        this.data.delta = this.normalizeWheelDelta(event);
         this.data.position.start = this.getRelativePosition(e);
         this.data.directions = this.getScrollDirection(e);
-
         this.data.zoom = (this.data.directions.indexOf("up") > -1) ? 1 : (this.data.directions.indexOf("down") > -1) ? -1 : 0;
 
         if (this.settings.callbacks.wheel) {

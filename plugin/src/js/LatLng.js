@@ -31,10 +31,10 @@ export class LatLng {
 
     /**
      * substract specified coord from this coordinate
-     * @param  {LatLng} coord - specified coordinate to substract from this coord
+     * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
      * @return {LatLng} the new calculated LatLng
      */
-    substract(coord) {
+    substract(coord = new LatLng()) {
         this.lat -= coord.lat;
         this.lng -= coord.lng;
         return this;
@@ -42,10 +42,10 @@ export class LatLng {
 
     /**
      * add specified coord to this coordinate
-     * @param  {LatLng} coord - specified coordinate to add to this coord
+     * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
      * @return {LatLng} the new calculated LatLng
      */
-    add(coord) {
+    add(coord = new LatLng()) {
         this.lat += coord.lat;
         this.lng += coord.lng;
         return this;
@@ -53,11 +53,11 @@ export class LatLng {
 
     /**
     * divides a latlng with a given factor
-    * @param  {number} factorLat - factor to divide lat with
+    * @param  {number} factorLat = 1 - factor to divide lat with
     * @param  {number} factorLng = factorLat - factor to divide lng with
      * @return {LatLng} Returns instance for chaining
      */
-    divide(factorLat, factorLng = factorLat) {
+    divide(factorLat = 1, factorLng = factorLat) {
         this.lat /= factorLat;
         this.lng /= factorLng;
         return this;
@@ -65,11 +65,11 @@ export class LatLng {
 
     /**
      * multiplicates a latlng with a given factor
-     * @param  {number} factorLat - factor to multiplicate lat with
+     * @param  {number} factorLat = 1 - factor to multiplicate lat with
      * @param  {number} factorLng = factorLat - factor to multiplicate lng with
      * @return {LatLng} Returns instance for chaining
      */
-    multiply(factorLat, factorLng = factorLat) {
+    multiply(factorLat = 1, factorLng = factorLat) {
         this.lat *= factorLat;
         this.lng *= factorLng;
         return this;

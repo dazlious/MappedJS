@@ -1,12 +1,9 @@
-import $ from 'jQuery';
+import {Helper} from './Helper.js';
 import {Point} from './Point.js';
 import {LatLng} from './LatLng.js';
 import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
-import {Marker} from './Marker.js';
-import {Helper} from './Helper.js';
-import {DataEnrichment} from './DataEnrichment.js';
 import {Publisher} from './Publisher.js';
 
 export class View {
@@ -35,10 +32,10 @@ export class View {
      * @return {array} all tiles that are currently visible
      */
     get visibleTiles() {
-        return this.tiles.filter(function(t) {
+        return this.tiles.filter((t) => {
             const newTile = t.clone.scale(this.zoomFactor, this.zoomFactor).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
             return this.viewport.intersects(newTile);
-        }, this);
+        });
     }
 
     /**
@@ -129,7 +126,7 @@ export class View {
             this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
             this.draw();
         }
-        window.requestAnimFrame(this.mainLoop.bind(this));
+        window.requestAnimFrame(() => this.mainLoop());
     }
 
     /**
@@ -187,9 +184,9 @@ export class View {
      * @return {number} delta of point to center of viewport
      */
     getDeltaXToCenter(pos) {
-        const diffToCenter = pos.clone.substract(this.viewport.center);
-        const distanceToCenter = (diffToCenter.x / this.viewport.center.x);
-        const delta = distanceToCenter * this.offsetToCenter;
+        const diffToCenter = pos.clone.substract(this.viewport.center),
+              distanceToCenter = (diffToCenter.x / this.viewport.center.x),
+              delta = distanceToCenter * this.offsetToCenter;
         return delta / this.distortionFactor;
     }
 
@@ -210,6 +207,7 @@ export class View {
         this.currentView.setSize(newSize.width, newSize.height);
 
         this.setLatLngToPosition(latlngPosition, pos);
+
         this.moveView(new Point());
 
         this.drawIsNeeded = true;
@@ -249,9 +247,9 @@ export class View {
      */
     moveView(pos, redo = true) {
 
-        const nw = this.convertLatLngToPoint(this.limitToBounds.nw);
-        const so = this.convertLatLngToPoint(this.limitToBounds.so);
-        const limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, so.x - nw.x, so.y - nw.y);
+        const nw = this.convertLatLngToPoint(this.limitToBounds.nw),
+              so = this.convertLatLngToPoint(this.limitToBounds.so),
+              limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, so.x - nw.x, so.y - nw.y);
 
         pos.divide(this.distortionFactor, 1);
         const equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
@@ -285,10 +283,9 @@ export class View {
 
         this.calculateNewCenter();
 
-        // could be more optimized
-        if (redo) {
-            this.moveView(new Point(), false);
-        }
+        // TODO: could be more optimized
+        if (redo) this.moveView(new Point(), false);
+
         return this;
     }
 
@@ -297,10 +294,9 @@ export class View {
      * @return {View} instance of View for chaining
      */
     draw() {
-        this.drawThumbnail();
-        this.repositionMarkerContainer();
-        this.drawVisibleTiles();
-        return this;
+        return this.drawThumbnail()
+            .repositionMarkerContainer()
+            .drawVisibleTiles();
     }
 
     /**
@@ -308,9 +304,7 @@ export class View {
      * @return {View} instance of View for chaining
      */
     drawVisibleTiles() {
-        Helper.forEach(this.visibleTiles, function(tile) {
-            tile.draw();
-        }.bind(this));
+        Helper.forEach(this.visibleTiles, (tile) => tile.draw());
         return this;
     }
 
@@ -330,16 +324,11 @@ export class View {
      */
     initializeTiles() {
         const currentLevel = this.data.tiles;
-        Helper.forEach(currentLevel, function(currentTileData) {
-            const currentTile = new Tile(currentTileData, this);
-            this.tiles.push(currentTile);
-        }.bind(this));
+        Helper.forEach(currentLevel, (currentTileData) => {
+            this.tiles.push(new Tile(currentTileData, this));
+        });
         return this;
     }
-
-
-
-
 
     /**
      * reposition marker container

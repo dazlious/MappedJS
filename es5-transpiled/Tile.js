@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './StateHandler.js', './Rectangle.js', './Helper.js'], factory);
+        define(['exports', './Helper.js', './StateHandler.js', './Rectangle.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./StateHandler.js'), require('./Rectangle.js'), require('./Helper.js'));
+        factory(exports, require('./Helper.js'), require('./StateHandler.js'), require('./Rectangle.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.StateHandler, global.Rectangle, global.Helper);
+        factory(mod.exports, global.Helper, global.StateHandler, global.Rectangle);
         global.Tile = mod.exports;
     }
-})(this, function(exports, _StateHandler, _Rectangle2, _Helper) {
+})(this, function(exports, _Helper, _StateHandler, _Rectangle2) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -114,11 +114,11 @@
 
         /**
          * Constructor
-         * @param  {string} path=null - path to image
-         * @param  {number} x=0 - position x of tile
-         * @param  {number} y=0 - position y of tile
-         * @param  {number} w=0 - tile width
-         * @param  {number} h=0 - tile height
+         * @param  {string} path = null - path to image
+         * @param  {number} x = 0 - position x of tile
+         * @param  {number} y = 0 - position y of tile
+         * @param  {number} w = 0 - tile width
+         * @param  {number} h = 0 - tile height
          * @param  {View} _instance = null - instance of parent View
          * @return {Tile} instance of Tile
          */
@@ -144,16 +144,14 @@
 
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
+            if (!path || typeof path !== "string" || path.length === 0) throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
+            else if (!_instance) throw new Error('Tile needs an instance');
+
             _this.state = new _StateHandler.StateHandler(STATES);
-            if (!path || typeof path !== "string" || path.length === 0) {
-                throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
-            } else if (!_instance) {
-                throw new Error('Tile needs an instance');
-            }
             _this.instance = _instance;
-            _this.markers = [];
             _this.context = _this.instance.context;
             _this.path = path;
+
             return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
 
@@ -166,19 +164,15 @@
         _createClass(Tile, [{
             key: 'initialize',
             value: function initialize() {
+                var _this2 = this;
+
                 this.state.next();
                 _Helper.Helper.loadImage(this.path, function(img) {
-                    this.img = img;
-                    this.state.next();
-                    this.draw();
-                }.bind(this));
-
+                    _this2.img = img;
+                    _this2.state.next();
+                    _this2.draw();
+                });
                 return this;
-            }
-        }, {
-            key: 'addMarker',
-            value: function addMarker(marker) {
-                this.markers.push(marker);
             }
 
             /**

@@ -1,19 +1,9 @@
 import $ from 'jQuery';
+import {Events} from './Events.js';
+import {Helper} from './Helper.js';
 import {Point} from './Point.js';
 import {Publisher} from './Publisher.js';
-import {StateHandler} from './StateHandler.js';
 import {DataEnrichment} from './DataEnrichment.js';
-import {ToolTip} from './ToolTip.js';
-
-/**
- * States of a marker
- * @type {Array}
- */
-const STATES = [
-    {value: 0, description: 'Loading'},
-    {value: 0, description: 'Initialized'},
-    {value: 1, description: 'Ready'}
-];
 
 export class Marker {
 
@@ -25,46 +15,41 @@ export class Marker {
      */
     constructor(data = DataEnrichment.DATA_MARKER, _instance = null) {
 
-        this.stateHandler = new StateHandler(STATES);
-
-        if(!_instance) {
-            throw new Error(`Tile needs an instance`);
-        }
+        if(!_instance) throw new Error(`Tile needs an instance`);
         this.instance = _instance;
 
         this.size = data.size;
+
         this.hover = data.hover;
-        if (this.hover) {
-            this.size.divide(2, 1);
-        }
+        if (this.hover) this.size.divide(2, 1);
+
         this.img = data.icon;
-        this.offset = data.offset;
-        this.offset.add(new Point(-(this.size.x/2), -this.size.y));
+        this.offset = data.offset.add(new Point(-(this.size.x/2), -this.size.y));
         this.latlng = data.latlng;
 
         this.content = data.content;
         this.position = this.instance.convertLatLngToPoint(this.latlng);
-
         this.$icon = this.addMarkerToDOM(this.instance.$markerContainer);
 
-        this.bindEvents();
-
-        this.positionMarker();
-
-        return this;
+        return this.bindEvents().positionMarker();
     }
 
     bindEvents() {
         this.eventManager = new Publisher();
-        this.$icon.on("touchstart mouseup", function() {
-            this.eventManager.publish(ToolTip.EVENT.OPEN, this.content);
-            this.eventManager.publish(Marker.EVENT.DEACTIVATE);
-            this.$icon.addClass("active");
-        }.bind(this));
 
-        this.eventManager.subscribe(Marker.EVENT.DEACTIVATE, function() {
+        const gesture = Helper.isTouch() ? "touchstart": "mousedown";
+
+        this.$icon.on(gesture, () => {
+            this.eventManager.publish(Events.ToolTip.OPEN, this.content);
+            this.eventManager.publish(Events.Marker.DEACTIVATE);
+            this.$icon.addClass("active");
+        });
+
+        this.eventManager.subscribe(Events.Marker.DEACTIVATE, () => {
             this.$icon.removeClass("active");
-        }.bind(this));
+        });
+
+        return this;
     }
 
     /**
@@ -84,7 +69,6 @@ export class Marker {
         if ($container) {
             icon.hide();
             $container.append(icon);
-            this.stateHandler.next();
         }
         return icon;
     }
@@ -99,14 +83,9 @@ export class Marker {
             this.$icon.css({
                 "left": `${this.position.x / this.instance.currentView.width * 100}%`,
                 "top": `${this.position.y / this.instance.currentView.height * 100}%`
-            });
-            this.$icon.show();
+            }).show();
         }
         return this;
     }
 
 }
-
-Marker.EVENT = {
-    DEACTIVATE: "deactivate-marker"
-};

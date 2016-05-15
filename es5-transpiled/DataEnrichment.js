@@ -33,16 +33,17 @@
          * @param  {Function} cb - callback function, when enrichment is done
          * @return {DataEnrichment} DataEnrichment object for chaining
          */
+
         marker: function marker(data) {
 
             var enrichedData = [];
 
             _Helper.Helper.forEach(data, function(entry) {
-                entry = _jQuery2.default.extend(true, DataEnrichment.DATA_MARKER, entry);
+                entry = Object.assign(DataEnrichment.DATA_MARKER, entry);
 
-                var offset = new _Point.Point(entry.offset.x, entry.offset.y);
-                var latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng);
-                var size = new _Point.Point(entry.size.width, entry.size.height);
+                var offset = new _Point.Point(entry.offset.x, entry.offset.y),
+                    latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng),
+                    size = new _Point.Point(entry.size.width, entry.size.height);
 
                 enrichedData.push({
                     offset: offset,
@@ -58,10 +59,9 @@
         },
         mapSettings: function mapSettings(data) {
 
-            var enrichedData = _jQuery2.default.extend(true, DataEnrichment.MAP_SETTINGS, data);
-
-            var bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1]));
-            var center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
+            var enrichedData = Object.assign(DataEnrichment.MAP_SETTINGS, data),
+                bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
+                center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
             if (!enrichedData.limitToBounds) {
                 enrichedData.limitToBounds = bounds;

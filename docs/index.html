@@ -63,9 +63,6 @@
 <h2 id="constants">Constants</h2>
 <dl>
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
-<dd><p>States of a marker</p>
-</dd>
-<dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a tile</p>
 </dd>
 </dl>
@@ -591,21 +588,21 @@
 <p>substract specified coord from this coordinate</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - the new calculated LatLng<br><strong>Params</strong></p>
 <ul>
-<li>coord <code><a href="#LatLng">LatLng</a></code> - specified coordinate to substract from this coord</li>
+<li>coord <code><a href="#LatLng">LatLng</a></code> - = new LatLng() - specified coordinate to substract from this coord</li>
 </ul>
 <p><a name="LatLng+add"></a></p>
 <h3 id="latlng-add-coord-code-latlng-latlng-code-">latLng.add(coord) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
 <p>add specified coord to this coordinate</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - the new calculated LatLng<br><strong>Params</strong></p>
 <ul>
-<li>coord <code><a href="#LatLng">LatLng</a></code> - specified coordinate to add to this coord</li>
+<li>coord <code><a href="#LatLng">LatLng</a></code> - = new LatLng() - specified coordinate to add to this coord</li>
 </ul>
 <p><a name="LatLng+divide"></a></p>
 <h3 id="latlng-divide-factorlat-factorlng-code-latlng-latlng-code-">latLng.divide(factorLat, factorLng) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
 <p>divides a latlng with a given factor</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - Returns instance for chaining<br><strong>Params</strong></p>
 <ul>
-<li>factorLat <code>number</code> - factor to divide lat with</li>
+<li>factorLat <code>number</code> <code> = 1</code> - = 1 - factor to divide lat with</li>
 <li>factorLng <code>number</code> - = factorLat - factor to divide lng with</li>
 </ul>
 <p><a name="LatLng+multiply"></a></p>
@@ -613,7 +610,7 @@
 <p>multiplicates a latlng with a given factor</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#LatLng">LatLng</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - Returns instance for chaining<br><strong>Params</strong></p>
 <ul>
-<li>factorLat <code>number</code> - factor to multiplicate lat with</li>
+<li>factorLat <code>number</code> <code> = 1</code> - = 1 - factor to multiplicate lat with</li>
 <li>factorLng <code>number</code> - = factorLat - factor to multiplicate lng with</li>
 </ul>
 <p><a name="LatLng+equals"></a></p>
@@ -805,21 +802,21 @@
 <p>substracts 2 points</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - difference between this point and parameter point<br><strong>Params</strong></p>
 <ul>
-<li>point <code><a href="#Point">Point</a></code> - the point to substract from this</li>
+<li>point <code><a href="#Point">Point</a></code> - = new Point() - the point to substract from this</li>
 </ul>
 <p><a name="Point+add"></a></p>
 <h3 id="point-add-point-code-point-point-code-">point.add(point) ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>adds 2 points</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - addition of this point and parameter point<br><strong>Params</strong></p>
 <ul>
-<li>point <code><a href="#Point">Point</a></code> - the point to add to this</li>
+<li>point <code><a href="#Point">Point</a></code> - = new Point() - the point to add to this</li>
 </ul>
 <p><a name="Point+multiply"></a></p>
 <h3 id="point-multiply-x-y-code-point-point-code-">point.multiply(x, y) ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>multiplicates a point with a given x and y</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - Returns a new instance<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - factor to multiplicate x with</li>
+<li>x <code>number</code> <code> = 1</code> - = 1 - factor to multiplicate x with</li>
 <li>y <code>number</code> - factor to multiplicate y with</li>
 </ul>
 <p><a name="Point+divide"></a></p>
@@ -827,7 +824,7 @@
 <p>divide a point with a given x and y</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - Returns a new instance<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - factor to divide x with</li>
+<li>x <code>number</code> <code> = 1</code> - = 1 - factor to divide x with</li>
 <li>y <code>number</code> - factor to divide y with</li>
 </ul>
 <p><a name="Point+equals"></a></p>
@@ -842,22 +839,22 @@
 <p>Returns the distance from this Point to a specified Point</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - the distance between this Point and specified point<br><strong>Params</strong></p>
 <ul>
-<li>point <code><a href="#Point">Point</a></code> - the specified point to be measured against this Point</li>
+<li>point <code><a href="#Point">Point</a></code> - = new Point() - the specified point to be measured against this Point</li>
 </ul>
 <p><a name="Point+translate"></a></p>
 <h3 id="point-translate-x-y-code-point-point-code-">point.translate(x, y) ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>translates a point by x and y</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - instance of Point<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - value to move x</li>
-<li>y <code>number</code> - value to move y</li>
+<li>x <code>number</code> <code> = 0</code> - = 0 - value to move x</li>
+<li>y <code>number</code> - = x - value to move y</li>
 </ul>
 <p><a name="Point+position"></a></p>
 <h3 id="point-position-x-y-code-point-point-code-">point.position(x, y) ⇒ <code><a href="#Point">Point</a></code></h3>
 <p>positions a point by x and y</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Point">Point</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - instance of Point<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - value to position x</li>
+<li>x <code>number</code> <code> = 0</code> - value to position x</li>
 <li>y <code>number</code> - value to position y</li>
 </ul>
 <p><a name="Point+toArray"></a></p>
@@ -1026,7 +1023,7 @@
 <p>Checks whether Rectangle intersects with specified Rectangle</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - true if containment is entirely<br><strong>Params</strong></p>
 <ul>
-<li>rect <code><a href="#Rectangle">Rectangle</a></code> - the specified rectangle to check against</li>
+<li>rect <code><a href="#Rectangle">Rectangle</a></code> - = new Rectangle() - the specified rectangle to check against</li>
 </ul>
 <p><a name="Rectangle+contains"></a></p>
 <h3 id="rectangle-contains-rectorpoint-code-boolean-code-">rectangle.contains(rectOrPoint) ⇒ <code>Boolean</code></h3>
@@ -1040,70 +1037,70 @@
 <p>Sets the center of this Rectangle to specified point</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - instance of Rectangle<br><strong>Params</strong></p>
 <ul>
-<li>point <code><a href="#Point">Point</a></code> - specified point to set center of rectangle to</li>
+<li>point <code><a href="#Point">Point</a></code> - = new Point() - specified point to set center of rectangle to</li>
 </ul>
 <p><a name="Rectangle+setCenterX"></a></p>
 <h3 id="rectangle-setcenterx-x-code-rectangle-rectangle-code-">rectangle.setCenterX(x) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>Sets the x-center of this Rectangle to specified x</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - instance of Rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - specified x coordinate to set x center of rectangle to</li>
+<li>x <code>number</code> <code> = 0</code> - = 0 - specified x coordinate to set x center of rectangle to</li>
 </ul>
 <p><a name="Rectangle+setCenterY"></a></p>
 <h3 id="rectangle-setcentery-y-code-rectangle-rectangle-code-">rectangle.setCenterY(y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>Sets the y-center of this Rectangle to specified y</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - instance of Rectangle<br><strong>Params</strong></p>
 <ul>
-<li>y <code>number</code> - specified y coordinate to set y center of rectangle to</li>
+<li>y <code>number</code> <code> = 0</code> - = 0 - specified y coordinate to set y center of rectangle to</li>
 </ul>
 <p><a name="Rectangle+containsPoint"></a></p>
 <h3 id="rectangle-containspoint-point-code-boolean-code-">rectangle.containsPoint(point) ⇒ <code>Boolean</code></h3>
 <p>Checks whether Rectangle entirely contains the Point</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - true if containment is entirely<br><strong>Params</strong></p>
 <ul>
-<li>point <code><a href="#Point">Point</a></code> - the specified point to check against</li>
+<li>point <code><a href="#Point">Point</a></code> - = new Point() - the specified point to check against</li>
 </ul>
 <p><a name="Rectangle+containsRect"></a></p>
 <h3 id="rectangle-containsrect-rect-code-boolean-code-">rectangle.containsRect(rect) ⇒ <code>Boolean</code></h3>
 <p>Checks whether Rectangle entirely contains the Rectangle</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code>Boolean</code> - true if containment is entirely<br><strong>Params</strong></p>
 <ul>
-<li>rect <code><a href="#Rectangle">Rectangle</a></code> - the specified rectangle to check against</li>
+<li>rect <code><a href="#Rectangle">Rectangle</a></code> - = new Rectangle() - the specified rectangle to check against</li>
 </ul>
 <p><a name="Rectangle+getDistortedRect"></a></p>
 <h3 id="rectangle-getdistortedrect-factor-code-rectangle-rectangle-code-">rectangle.getDistortedRect(factor) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>distorts rectangle by factor</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - a new instance of Rectangle<br><strong>Params</strong></p>
 <ul>
-<li>factor <code>number</code> - the specified factor of distortion</li>
+<li>factor <code>number</code> <code> = 1</code> - = 1 - the specified factor of distortion</li>
 </ul>
 <p><a name="Rectangle+getNormalRect"></a></p>
 <h3 id="rectangle-getnormalrect-factor-code-rectangle-rectangle-code-">rectangle.getNormalRect(factor) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>redistorts rectangle by factor</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - a new instance of Rectangle<br><strong>Params</strong></p>
 <ul>
-<li>factor <code>number</code> - the specified factor of distortion</li>
+<li>factor <code>number</code> <code> = 1</code> - = 1- the specified factor of distortion</li>
 </ul>
 <p><a name="Rectangle+scaleX"></a></p>
 <h3 id="rectangle-scalex-x-code-rectangle-rectangle-code-">rectangle.scaleX(x) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>scale x and width of rectangle</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - scaled Rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - factor to be applied to scale</li>
+<li>x <code>number</code> <code> = 1</code> - = 1 - factor to be applied to scale</li>
 </ul>
 <p><a name="Rectangle+scaleY"></a></p>
 <h3 id="rectangle-scaley-y-code-rectangle-rectangle-code-">rectangle.scaleY(y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>scale y and height of rectangle</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - new scaled Rectangle<br><strong>Params</strong></p>
 <ul>
-<li>y <code>number</code> - factor to be applied to scale</li>
+<li>y <code>number</code> <code> = 1</code> - = 1- factor to be applied to scale</li>
 </ul>
 <p><a name="Rectangle+scale"></a></p>
 <h3 id="rectangle-scale-x-y-code-rectangle-rectangle-code-">rectangle.scale(x, y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>scale x and y for width and height of rectangle</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - new scaled Rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - factor to be applied to scale</li>
+<li>x <code>number</code> <code> = 1</code> - = 1 - factor to be applied to scale</li>
 <li>y <code>number</code> - = x - factor to be applied to scale</li>
 </ul>
 <p><a name="Rectangle+translate"></a></p>
@@ -1111,44 +1108,44 @@
 <p>moves a rectangle by specified coords</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - specified x to be added to x position</li>
-<li>y <code>number</code> - specified y to be added to y position</li>
+<li>x <code>number</code> <code> = 0</code> - = 0 - specified x to be added to x position</li>
+<li>y <code>number</code> - = x - specified y to be added to y position</li>
 </ul>
 <p><a name="Rectangle+transform"></a></p>
 <h3 id="rectangle-transform-x-y-width-height-code-rectangle-rectangle-code-">rectangle.transform(x, y, width, height) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>transforms a rectangle by specified coords</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - specified x to be added to x position</li>
-<li>y <code>number</code> - specified y to be added to y position</li>
-<li>width <code>number</code> - specified width to be added to this width</li>
-<li>height <code>number</code> - specified height to be added to this height</li>
+<li>x <code>number</code> <code> = 0</code> - = 0 - specified x to be added to x position</li>
+<li>y <code>number</code> - = x - specified y to be added to y position</li>
+<li>width <code>number</code> <code> = 0</code> - = 0 - specified width to be added to this width</li>
+<li>height <code>number</code> <code> = 0</code> - = 0 - specified height to be added to this height</li>
 </ul>
 <p><a name="Rectangle+position"></a></p>
 <h3 id="rectangle-position-x-y-code-rectangle-rectangle-code-">rectangle.position(x, y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>changes the position a rectangle by specified coords</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - the new x position</li>
-<li>y <code>number</code> - he new y position</li>
+<li>x <code>number</code> <code> = 0</code> - = 0 - the new x position</li>
+<li>y <code>number</code> <code> = 0</code> - = 0 - he new y position</li>
 </ul>
 <p><a name="Rectangle+size"></a></p>
 <h3 id="rectangle-size-x-y-width-height-code-rectangle-rectangle-code-">rectangle.size(x, y, width, height) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>changes the size of a rectangle by specified params</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
 <ul>
-<li>x <code>number</code> - the new x position</li>
-<li>y <code>number</code> - the new y position</li>
-<li>width <code>number</code> - the new width</li>
-<li>height <code>number</code> - the new width</li>
+<li>x <code>number</code> <code> = 0</code> - = 0- the new x position</li>
+<li>y <code>number</code> - = x - the new y position</li>
+<li>width <code>number</code> <code> = 0</code> - = 0 - the new width</li>
+<li>height <code>number</code> <code> = 0</code> - = 0 - the new width</li>
 </ul>
 <p><a name="Rectangle+setSize"></a></p>
 <h3 id="rectangle-setsize-width-height-code-rectangle-rectangle-code-">rectangle.setSize(width, height) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>changes the size of a rectangle by specified params</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - Returns the altered rectangle<br><strong>Params</strong></p>
 <ul>
-<li>width <code>number</code> - the new width</li>
-<li>height <code>number</code> - the new width</li>
+<li>width <code>number</code> <code> = 0</code> - = 0 - the new width</li>
+<li>height <code>number</code> - = width - the new width</li>
 </ul>
 <p><a name="Rectangle+equals"></a></p>
 <h3 id="rectangle-equals-rectangle-code-boolean-code-">rectangle.equals(rectangle) ⇒ <code>Boolean</code></h3>
@@ -1237,11 +1234,11 @@
 <p>Constructor</p>
 <p><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile<br><strong>Params</strong></p>
 <ul>
-<li>path <code>string</code> <code> = null</code> - path to image</li>
-<li>x <code>number</code> <code> = 0</code> - position x of tile</li>
-<li>y <code>number</code> <code> = 0</code> - position y of tile</li>
-<li>w <code>number</code> <code> = 0</code> - tile width</li>
-<li>h <code>number</code> <code> = 0</code> - tile height</li>
+<li>path <code>string</code> - = null - path to image</li>
+<li>x <code>number</code> - = 0 - position x of tile</li>
+<li>y <code>number</code> - = 0 - position y of tile</li>
+<li>w <code>number</code> - = 0 - tile width</li>
+<li>h <code>number</code> - = 0 - tile height</li>
 <li>_instance <code><a href="#View">View</a></code> - = null - instance of parent View</li>
 </ul>
 <p><a name="Tile+initialize"></a></p>
@@ -1278,7 +1275,6 @@
 <li><a href="#TileMap+resize">.resize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resizeCanvas">.resizeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resizeView">.resizeView()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
-<li><a href="#TileMap+resizeViewAlternative">.resizeViewAlternative()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 </ul>
 </li>
 <li><em>static</em><ul>
@@ -1351,9 +1347,6 @@
 <p>resizes the canvas sizes</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+resizeView"></a></p>
 <h3 id="tilemap-resizeview-code-tilemap-tilemap-code-">tileMap.resizeView() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
-<p>Handles resizing of view</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+resizeViewAlternative"></a></p>
-<h3 id="tilemap-resizeviewalternative-code-tilemap-tilemap-code-">tileMap.resizeViewAlternative() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>Handles resizing of view</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap.IMG_DATA_NAME"></a></p>
 <h3 id="tilemap-img_data_name-code-string-code-">TileMap.IMG_DATA_NAME : <code>String</code></h3>
@@ -1496,9 +1489,6 @@
 <h2 id="instance-code-publisher-publisher-code-">instance : <code><a href="#Publisher">Publisher</a></code></h2>
 <p>singleton instance</p>
 <p><strong>Kind</strong>: global variable<br><a name="STATES"></a></p>
-<h2 id="states-code-array-code-">STATES : <code>Array</code></h2>
-<p>States of a marker</p>
-<p><strong>Kind</strong>: global constant<br><a name="STATES"></a></p>
 <h2 id="states-code-array-code-">STATES : <code>Array</code></h2>
 <p>States of a tile</p>
 <p><strong>Kind</strong>: global constant  </p>

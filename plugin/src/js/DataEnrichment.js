@@ -11,16 +11,16 @@ export var DataEnrichment = {
      * @param  {Function} cb - callback function, when enrichment is done
      * @return {DataEnrichment} DataEnrichment object for chaining
      */
-    marker: function(data) {
+    marker(data) {
 
         const enrichedData = [];
 
-        Helper.forEach(data, function(entry) {
-            entry = $.extend(true, DataEnrichment.DATA_MARKER, entry);
+        Helper.forEach(data, (entry) => {
+            entry = Object.assign(DataEnrichment.DATA_MARKER, entry);
 
-            const offset = new Point(entry.offset.x, entry.offset.y);
-            const latlng = new LatLng(entry.position.lat, entry.position.lng);
-            const size = new Point(entry.size.width, entry.size.height);
+            const offset = new Point(entry.offset.x, entry.offset.y),
+                  latlng = new LatLng(entry.position.lat, entry.position.lng),
+                  size = new Point(entry.size.width, entry.size.height);
 
             enrichedData.push({
                 offset: offset,
@@ -34,12 +34,11 @@ export var DataEnrichment = {
 
         return enrichedData;
     },
-    mapSettings: function(data) {
+    mapSettings(data) {
 
-        const enrichedData = $.extend(true, DataEnrichment.MAP_SETTINGS, data);
-
-        const bounds = new Bounds(new LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1]));
-        const center = new LatLng(enrichedData.center.lat, enrichedData.center.lng);
+        const enrichedData = Object.assign(DataEnrichment.MAP_SETTINGS, data),
+              bounds = new Bounds(new LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
+              center = new LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
         if (!enrichedData.limitToBounds) {
             enrichedData.limitToBounds = bounds;

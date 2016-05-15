@@ -1,11 +1,9 @@
 import $ from 'jQuery';
-import {View} from './View.js';
-import {LatLng} from './LatLng.js';
-import {Bounds} from './Bounds.js';
-import {Rectangle} from './Rectangle.js';
+import {Helper} from './Helper.js';
 import {Publisher} from './Publisher.js';
 import {StateHandler} from './StateHandler.js';
-import {Helper} from './Helper.js';
+import {Rectangle} from './Rectangle.js';
+import {View} from './View.js';
 import {Marker} from './Marker.js';
 import {DataEnrichment} from './DataEnrichment.js';
 import {ToolTip} from './ToolTip.js';
@@ -60,9 +58,7 @@ export class TileMap {
      * @return {TileMap} instance of TileMap
      */
     constructor({container, tilesData = {}, settings = {}}) {
-        if (!container) {
-            throw Error("You must define a container to initialize a TileMap");
-        }
+        if (!container) throw Error("You must define a container to initialize a TileMap");
         this.$container = container;
 
         this.imgData = tilesData[TileMap.IMG_DATA_NAME];
@@ -72,17 +68,18 @@ export class TileMap {
         this.levels = [];
         this.markers = [];
 
-        Helper.forEach(this.imgData, function(element, i) {
+        Helper.forEach(this.imgData, (element, i) => {
             const currentLevel = {
                 value: element,
                 description: i
             };
             this.levels.push(currentLevel);
-        }.bind(this));
+        });
 
         this.levelHandler = new StateHandler(this.levels);
         this.levelHandler.changeTo(this.settings.level);
         this.eventManager = new Publisher();
+
         this.initial = {
             bounds: settings.bounds,
             center: settings.center,
@@ -90,11 +87,7 @@ export class TileMap {
             zoom: settings.zoom
         };
 
-        this.appendMarkerContainerToDom();
-
-        this.initialize(settings.bounds, settings.center, this.currentLevelData);
-
-        return this;
+        return this.appendMarkerContainerToDom().initialize(settings.bounds, settings.center, this.currentLevelData);
     }
 
     /**
@@ -102,28 +95,26 @@ export class TileMap {
      * @return {TileMap} instance of TileMap
      */
     initialize(bounds, center, data) {
-        this.initializeCanvas();
-        this.bindEvents();
-        this.createViewFromData(bounds, center, data, this.settings.zoom);
+        this.initializeCanvas()
+            .bindEvents();
+
+        this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
         this.initializeMarkers(this.markerData);
-        if (this.markers.length !== 0) {
-            this.createTooltipContainer();
-        }
-        this.resizeCanvas();
-        return this;
+
+        if (this.markers.length !== 0) this.createTooltipContainer();
+
+        return this.resizeCanvas();
     }
 
     reset() {
         if (this.levelHandler.hasPrevious()) {
             this.levelHandler.changeTo(0);
-            this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
-        } else {
-            this.view.reset();
-        }
+            this.view = this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
+        } else this.view.reset();
     }
 
     createViewFromData(bounds, center, data, zoom) {
-        this.view = new View({
+        return new View({
             viewport: new Rectangle(this.left, this.top, this.width, this.height),
             mapView: new Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
             bounds: bounds,
@@ -158,10 +149,9 @@ export class TileMap {
     initializeMarkers(markerData) {
         if (markerData) {
             markerData = this.enrichMarkerData(markerData);
-            Helper.forEach(markerData, function(currentData) {
-                const m = new Marker(currentData, this.view);
-                this.markers.push(m);
-            }.bind(this));
+            Helper.forEach(markerData, (currentData) => {
+                this.markers.push(new Marker(currentData, this.view));
+            });
         }
         return this;
     }
@@ -189,30 +179,33 @@ export class TileMap {
 
     bindEvents() {
 
-        this.eventManager.subscribe("resize", function() {
-            this.resize();
-        }.bind(this));
+        this.eventManager.subscribe("resize", () => { this.resize(); });
 
-        this.eventManager.subscribe("next-level", function(argument_array) {
+        this.eventManager.subscribe("next-level", (argument_array) => {
             const center = argument_array[0],
-                  bounds = argument_array[1];
-            const lastLevel = this.levelHandler.current.description;
+                  bounds = argument_array[1],
+                  lastLevel = this.levelHandler.current.description;
+
             this.levelHandler.next();
-            if (lastLevel !== this.levelHandler.current.description) {
-                this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.min + 0.0000001);
-            }
-        }.bind(this));
 
-        this.eventManager.subscribe("previous-level", function(argument_array) {
+            if (lastLevel !== this.levelHandler.current.description) {
+                this.view = this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.min + 0.0000001);
+            }
+        });
+
+        this.eventManager.subscribe("previous-level", (argument_array) => {
             const center = argument_array[0],
-                  bounds = argument_array[1];
-            const lastLevel = this.levelHandler.current.description;
-            this.levelHandler.previous();
-            if (lastLevel !== this.levelHandler.current.description) {
-                this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.max - 0.0000001);
-            }
-        }.bind(this));
+                  bounds = argument_array[1],
+                  lastLevel = this.levelHandler.current.description;
 
+            this.levelHandler.previous();
+
+            if (lastLevel !== this.levelHandler.current.description) {
+                this.view = this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.max - 0.0000001);
+            }
+        });
+
+        return this;
     }
 
     /**
@@ -241,10 +234,9 @@ export class TileMap {
      * @return {TileMap} instance of TileMap for chaining
      */
     resize() {
-        this.resizeCanvas();
-        this.resizeView();
-        this.redraw();
-        return this;
+        return this.resizeCanvas()
+                   .resizeView()
+                   .redraw();
     }
 
     /**
@@ -266,15 +258,6 @@ export class TileMap {
         this.view.viewport.size(this.left, this.top, this.width, this.height);
         const delta = this.view.viewport.center.substract(oldViewport.center);
         this.view.mapView.translate(delta.x, delta.y);
-        return this;
-    }
-
-    /**
-     * Handles resizing of view
-     * @return {TileMap} instance of TileMap for chaining
-     */
-    resizeViewAlternative() {
-        this.view.viewport.size(this.left, this.top, this.width, this.height);
         return this;
     }
 

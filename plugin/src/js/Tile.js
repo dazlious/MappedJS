@@ -1,6 +1,6 @@
+import {Helper} from './Helper.js';
 import {StateHandler} from './StateHandler.js';
 import {Rectangle} from './Rectangle.js';
-import {Helper} from './Helper.js';
 
 /**
  * States of a tile
@@ -17,26 +17,25 @@ export class Tile extends Rectangle {
 
     /**
      * Constructor
-     * @param  {string} path=null - path to image
-     * @param  {number} x=0 - position x of tile
-     * @param  {number} y=0 - position y of tile
-     * @param  {number} w=0 - tile width
-     * @param  {number} h=0 - tile height
+     * @param  {string} path = null - path to image
+     * @param  {number} x = 0 - position x of tile
+     * @param  {number} y = 0 - position y of tile
+     * @param  {number} w = 0 - tile width
+     * @param  {number} h = 0 - tile height
      * @param  {View} _instance = null - instance of parent View
      * @return {Tile} instance of Tile
      */
     constructor({path, x = 0, y = 0, w = 0, h = 0} = {}, _instance = null) {
         super(x, y, w, h);
+
+        if (!path || typeof path !== "string" || path.length === 0) throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
+        else if(!_instance) throw new Error(`Tile needs an instance`);
+
         this.state = new StateHandler(STATES);
-        if (!path || typeof path !== "string" || path.length === 0) {
-            throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
-        } else if(!_instance) {
-            throw new Error(`Tile needs an instance`);
-        }
         this.instance = _instance;
-        this.markers = [];
         this.context = this.instance.context;
         this.path = path;
+
         return this;
     }
 
@@ -46,17 +45,12 @@ export class Tile extends Rectangle {
      */
     initialize() {
         this.state.next();
-        Helper.loadImage(this.path, function(img) {
+        Helper.loadImage(this.path, (img) => {
             this.img = img;
             this.state.next();
             this.draw();
-        }.bind(this));
-
+        });
         return this;
-    }
-
-    addMarker(marker) {
-        this.markers.push(marker);
     }
 
     /**

@@ -1,30 +1,22 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Marker.js', './Helper.js', './DataEnrichment.js', './Publisher.js'], factory);
+        define(['exports', './Helper.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Marker.js'), require('./Helper.js'), require('./DataEnrichment.js'), require('./Publisher.js'));
+        factory(exports, require('./Helper.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Marker, global.Helper, global.DataEnrichment, global.Publisher);
+        factory(mod.exports, global.Helper, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
         global.View = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Marker, _Helper, _DataEnrichment, _Publisher) {
+})(this, function(exports, _Helper, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
     exports.View = undefined;
-
-    var _jQuery2 = _interopRequireDefault(_jQuery);
-
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            default: obj
-        };
-    }
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -86,10 +78,12 @@
         }, {
             key: 'visibleTiles',
             get: function get() {
+                var _this = this;
+
                 return this.tiles.filter(function(t) {
-                    var newTile = t.clone.scale(this.zoomFactor, this.zoomFactor).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
-                    return this.viewport.intersects(newTile);
-                }, this);
+                    var newTile = t.clone.scale(_this.zoomFactor, _this.zoomFactor).getDistortedRect(_this.distortionFactor).translate(_this.currentView.x * _this.distortionFactor + _this.offsetToCenter, _this.currentView.y);
+                    return _this.viewport.intersects(newTile);
+                });
             }
 
             /**
@@ -199,12 +193,16 @@
         }, {
             key: 'mainLoop',
             value: function mainLoop() {
+                var _this2 = this;
+
                 if (this.drawIsNeeded) {
                     this.drawIsNeeded = false;
                     this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
                     this.draw();
                 }
-                window.requestAnimFrame(this.mainLoop.bind(this));
+                window.requestAnimFrame(function() {
+                    return _this2.mainLoop();
+                });
             }
 
             /**
@@ -277,9 +275,9 @@
         }, {
             key: 'getDeltaXToCenter',
             value: function getDeltaXToCenter(pos) {
-                var diffToCenter = pos.clone.substract(this.viewport.center);
-                var distanceToCenter = diffToCenter.x / this.viewport.center.x;
-                var delta = distanceToCenter * this.offsetToCenter;
+                var diffToCenter = pos.clone.substract(this.viewport.center),
+                    distanceToCenter = diffToCenter.x / this.viewport.center.x,
+                    delta = distanceToCenter * this.offsetToCenter;
                 return delta / this.distortionFactor;
             }
 
@@ -303,6 +301,7 @@
                 this.currentView.setSize(newSize.width, newSize.height);
 
                 this.setLatLngToPosition(latlngPosition, pos);
+
                 this.moveView(new _Point.Point());
 
                 this.drawIsNeeded = true;
@@ -353,9 +352,9 @@
                 var redo = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
 
-                var nw = this.convertLatLngToPoint(this.limitToBounds.nw);
-                var so = this.convertLatLngToPoint(this.limitToBounds.so);
-                var limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, so.x - nw.x, so.y - nw.y);
+                var nw = this.convertLatLngToPoint(this.limitToBounds.nw),
+                    so = this.convertLatLngToPoint(this.limitToBounds.so),
+                    limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, so.x - nw.x, so.y - nw.y);
 
                 pos.divide(this.distortionFactor, 1);
                 var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
@@ -389,10 +388,9 @@
 
                 this.calculateNewCenter();
 
-                // could be more optimized
-                if (redo) {
-                    this.moveView(new _Point.Point(), false);
-                }
+                // TODO: could be more optimized
+                if (redo) this.moveView(new _Point.Point(), false);
+
                 return this;
             }
 
@@ -404,10 +402,7 @@
         }, {
             key: 'draw',
             value: function draw() {
-                this.drawThumbnail();
-                this.repositionMarkerContainer();
-                this.drawVisibleTiles();
-                return this;
+                return this.drawThumbnail().repositionMarkerContainer().drawVisibleTiles();
             }
 
             /**
@@ -419,8 +414,8 @@
             key: 'drawVisibleTiles',
             value: function drawVisibleTiles() {
                 _Helper.Helper.forEach(this.visibleTiles, function(tile) {
-                    tile.draw();
-                }.bind(this));
+                    return tile.draw();
+                });
                 return this;
             }
 
@@ -445,11 +440,12 @@
         }, {
             key: 'initializeTiles',
             value: function initializeTiles() {
+                var _this3 = this;
+
                 var currentLevel = this.data.tiles;
                 _Helper.Helper.forEach(currentLevel, function(currentTileData) {
-                    var currentTile = new _Tile.Tile(currentTileData, this);
-                    this.tiles.push(currentTile);
-                }.bind(this));
+                    _this3.tiles.push(new _Tile.Tile(currentTileData, _this3));
+                });
                 return this;
             }
 

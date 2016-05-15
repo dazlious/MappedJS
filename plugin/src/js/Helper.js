@@ -1,29 +1,23 @@
-import $ from 'jQuery';
-import {Point} from './Point.js';
-
 export var Helper = {
-
     /**
      * request json-data from given file and calls callback on success
      * @param  {string} filename - path to file
      * @param  {Function} callback - function called when data is loaded successfully
      * @return {Helper} Helper object for chaining
      */
-    requestJSON: function(filename, callback) {
-        $.ajax({
-            type: "GET",
-            url: filename,
-            dataType: "json",
-            success: function(data) {
-                return callback(data);
-            },
-            error: function(response) {
-                if (response.status === 200) {
-                    throw new Error("The JSON submitted seems not valid");
+    requestJSON(filename, callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    if (callback) callback(JSON.parse(xhr.responseText));
+                } else {
+                    throw new Error("The JSON submitted seems not valid", xhr);
                 }
-                console.error("Error requesting file: ", response);
             }
-        });
+        };
+        xhr.open("GET", filename, true);
+        xhr.send();
         return this;
     },
     /**
@@ -31,12 +25,10 @@ export var Helper = {
      * @param {Function} cb - callback-function on success
      * @return {Helper} Helper object for chaining
      */
-    loadImage: function(path, cb) {
+    loadImage(path, cb) {
         const img = new Image();
         img.onload = function() {
-            if (cb && typeof cb === "function") {
-                cb(img);
-            }
+            if (cb && typeof cb === "function") cb(img);
         };
         img.src = path;
         return this;
@@ -47,11 +39,9 @@ export var Helper = {
      * @param  {Function} fn - callback for each object
      * @return {Helper} Helper object for chaining
      */
-    forEach: function(a, fn) {
+    forEach(a, fn) {
         for (const i in a) {
-            if (a[i] && typeof fn === "function") {
-                fn(a[i], i);
-            }
+            if (a[i] && typeof fn === "function") fn(a[i], i);
         }
         return this;
     },
@@ -63,11 +53,10 @@ export var Helper = {
      * @param  {number} d - duration
      * @return {number} quadratic value at specific time
      */
-    easeOutQuadratic: function (t, b, c, d) {
+    easeOutQuadratic(t, b, c, d) {
 	    t /= d;
         return c.clone.multiply(-1 * t * (t-2)).add(b);
     },
-
     /**
      * convert degree to radian
      * @param {number} degrees - specified degrees
@@ -97,7 +86,4 @@ export var Helper = {
      * @return {string} name of scroll event
      */
     scrollEvent: () => "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll"
-
-
-
 };

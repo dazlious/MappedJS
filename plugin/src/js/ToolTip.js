@@ -1,7 +1,7 @@
 import $ from 'jQuery';
 import Handlebars from 'Handlebars';
+import {Events} from './Events.js';
 import {Helper} from './Helper.js';
-import {Marker} from './Marker.js';
 import {Publisher} from './Publisher.js';
 
 export class ToolTip {
@@ -12,10 +12,9 @@ export class ToolTip {
 
     constructor({container, templates}) {
         this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
-        if (!(this.$container instanceof jQuery)) {
-            throw new Error("Container " + container + " not found");
-        }
-        this.$container.addClass(ToolTip.EVENT.CLOSE);
+        if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
+
+        this.$container.addClass(Events.ToolTip.CLOSE);
 
         this.$close = $(`<span class='close-button' />`);
         this.$content = $(`<div class='tooltip-content' />`);
@@ -30,14 +29,14 @@ export class ToolTip {
     }
 
     registerHandlebarHelpers() {
-        Handlebars.registerHelper('getRatio', function(w, h) {
-            return h/w * 100 + "%";
-        });
+        if (Handlebars) {
+            Handlebars.registerHelper('getRatio', (w, h) => (h/w * 100 + "%"));
+        }
     }
 
     initializeTemplates(templates) {
         this.templates = this.getDefaultTemplates();
-        $.extend(true, this.templates, templates);
+        Object.assign(this.templates, templates);
         this.loadedTemplates = 0;
         this.compileTemplates();
         return this;
@@ -54,13 +53,10 @@ export class ToolTip {
     }
 
     bindEvents() {
-        $(window).on("resize orientationchange", this.resizeHandler.bind(this));
-        this.eventManager.subscribe(ToolTip.EVENT.OPEN, this.open.bind(this));
-        this.eventManager.subscribe(ToolTip.EVENT.CLOSE, this.close.bind(this));
-        this.$close.on("click", function() {
-            this.close();
-        }.bind(this));
-
+        $(window).on("resize orientationchange", () => { this.resizeHandler(); });
+        this.eventManager.subscribe(Events.ToolTip.OPEN, this.open.bind(this));
+        this.eventManager.subscribe(Events.ToolTip.CLOSE, () => { this.close(); });
+        this.$close.on("click", () => { this.close(); });
     }
 
     resizeHandler() {
@@ -69,31 +65,29 @@ export class ToolTip {
 
     insertContent(content) {
         this.$content.html("");
-        Helper.forEach(content, function(data) {
+        Helper.forEach(content, (data) => {
             if (this.templates[data.type]) {
                 const html = this.templates[data.type](data.content);
                 this.$content.append(html);
             }
-        }.bind(this));
+        });
     }
 
     open(data) {
-        if (data) {
-            this.insertContent(data);
-        }
-        if (this.$container.hasClass(ToolTip.EVENT.CLOSE)) {
+        if (data) this.insertContent(data);
+        if (this.$container.hasClass(Events.ToolTip.CLOSE)) {
             this.setPosition();
-            this.$container.removeClass(ToolTip.EVENT.CLOSE).addClass(ToolTip.EVENT.OPEN);
+            this.$container.removeClass(Events.ToolTip.CLOSE).addClass(Events.ToolTip.OPEN);
             this.eventManager.publish("resize");
         }
         return this;
     }
 
     close() {
-        if (this.$container.hasClass(ToolTip.EVENT.OPEN)) {
-            this.eventManager.publish(Marker.EVENT.DEACTIVATE);
+        if (this.$container.hasClass(Events.ToolTip.OPEN)) {
+            this.eventManager.publish(Events.Marker.DEACTIVATE);
             this.setPosition();
-            this.$container.removeClass(ToolTip.EVENT.OPEN).addClass(ToolTip.EVENT.CLOSE);
+            this.$container.removeClass(Events.ToolTip.OPEN).addClass(Events.ToolTip.CLOSE);
             this.eventManager.publish("resize");
         }
         return this;
@@ -109,15 +103,13 @@ export class ToolTip {
     }
 
     compileTemplates() {
-        Helper.forEach(this.templates, function(template, type) {
-            this.getTemplateFromFile(template, function(compiledTemplate) {
+        Helper.forEach(this.templates, (template, type) => {
+            this.getTemplateFromFile(template, (compiledTemplate) => {
                 this.templates[type] = compiledTemplate;
                 this.loadedTemplates++;
-                if (this.allTemplatesLoaded) {
-                    this.initialize();
-                }
-            }.bind(this));
-        }.bind(this));
+                if (this.allTemplatesLoaded) this.initialize();
+            });
+        });
     }
 
     getTemplateFromFile(url, cb) {
@@ -131,8 +123,3 @@ export class ToolTip {
     }
 
 }
-
-ToolTip.EVENT = {
-    OPEN: "tooltip-open",
-    CLOSE: "tooltip-close"
-};

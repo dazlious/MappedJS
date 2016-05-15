@@ -99,10 +99,10 @@ export class Rectangle extends Point {
 
     /**
      * Checks whether Rectangle intersects with specified Rectangle
-     * @param  {Rectangle} rect - the specified rectangle to check against
+     * @param  {Rectangle} rect = new Rectangle() - the specified rectangle to check against
      * @return {Boolean} true if containment is entirely
      */
-    intersects(rect) {
+    intersects(rect = new Rectangle()) {
         return !(rect.left > this.right || rect.right < this.left || rect.top > this.bottom || rect.bottom < this.top);
     }
 
@@ -117,10 +117,10 @@ export class Rectangle extends Point {
 
     /**
      * Sets the center of this Rectangle to specified point
-     * @param  {Point} point - specified point to set center of rectangle to
+     * @param  {Point} point = new Point() - specified point to set center of rectangle to
      * @return {Rectangle} instance of Rectangle
      */
-    setCenter(point) {
+    setCenter(point = new Point()) {
         const difference = point.substract(this.center);
         this.translate(difference.x, difference.y);
         return this;
@@ -128,10 +128,10 @@ export class Rectangle extends Point {
 
     /**
      * Sets the x-center of this Rectangle to specified x
-     * @param  {number} x - specified x coordinate to set x center of rectangle to
+     * @param  {number} x = 0 - specified x coordinate to set x center of rectangle to
      * @return {Rectangle} instance of Rectangle
      */
-    setCenterX(x) {
+    setCenterX(x = 0) {
         const difference = x - this.center.x;
         this.translate(difference, 0);
         return this;
@@ -139,10 +139,10 @@ export class Rectangle extends Point {
 
     /**
      * Sets the y-center of this Rectangle to specified y
-     * @param  {number} y - specified y coordinate to set y center of rectangle to
+     * @param  {number} y = 0 - specified y coordinate to set y center of rectangle to
      * @return {Rectangle} instance of Rectangle
      */
-    setCenterY(y) {
+    setCenterY(y = 0) {
         const difference = y - this.center.y;
         this.translate(0, difference);
         return this;
@@ -151,46 +151,46 @@ export class Rectangle extends Point {
 
     /**
      * Checks whether Rectangle entirely contains the Point
-     * @param  {Point} point - the specified point to check against
+     * @param  {Point} point = new Point() - the specified point to check against
      * @return {Boolean} true if containment is entirely
      */
-    containsPoint(point) {
+    containsPoint(point = new Point()) {
         return (point instanceof Point) ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
     }
 
     /**
      * Checks whether Rectangle entirely contains the Rectangle
-     * @param  {Rectangle} rect - the specified rectangle to check against
+     * @param  {Rectangle} rect = new Rectangle() - the specified rectangle to check against
      * @return {Boolean} true if containment is entirely
      */
-    containsRect(rect) {
+    containsRect(rect = new Rectangle()) {
         return (rect instanceof Rectangle) ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
     }
 
     /**
      * distorts rectangle by factor
-     * @param  {number} factor - the specified factor of distortion
+     * @param  {number} factor = 1 - the specified factor of distortion
      * @return {Rectangle} a new instance of Rectangle
      */
-    getDistortedRect(factor) {
+    getDistortedRect(factor = 1) {
         return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
     }
 
     /**
      * redistorts rectangle by factor
-     * @param  {number} factor - the specified factor of distortion
+     * @param  {number} factor = 1- the specified factor of distortion
      * @return {Rectangle} a new instance of Rectangle
      */
-    getNormalRect(factor) {
+    getNormalRect(factor = 1) {
         return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1/factor);
     }
 
     /**
      * scale x and width of rectangle
-     * @param  {number} x - factor to be applied to scale
+     * @param  {number} x = 1 - factor to be applied to scale
      * @return {Rectangle} scaled Rectangle
      */
-    scaleX(x) {
+    scaleX(x = 1) {
         this.x *= x;
         this.width *= x;
         return this;
@@ -198,10 +198,10 @@ export class Rectangle extends Point {
 
     /**
      * scale y and height of rectangle
-     * @param  {number} y - factor to be applied to scale
+     * @param  {number} y = 1- factor to be applied to scale
      * @return {Rectangle} new scaled Rectangle
      */
-    scaleY(y) {
+    scaleY(y = 1) {
         this.y *= y;
         this.height *= y;
         return this;
@@ -209,38 +209,36 @@ export class Rectangle extends Point {
 
     /**
      * scale x and y for width and height of rectangle
-     * @param  {number} x - factor to be applied to scale
+     * @param  {number} x = 1 - factor to be applied to scale
      * @param  {number} y = x - factor to be applied to scale
      * @return {Rectangle} new scaled Rectangle
      */
-    scale(x, y = x) {
-        this.x *= x;
-        this.y *= y;
-        this.width *= x;
-        this.height *= y;
+    scale(x = 1, y = x) {
+        this.scaleX(x);
+        this.scaleY(y);
         return this;
     }
 
     /**
      * moves a rectangle by specified coords
-     * @param  {number} x - specified x to be added to x position
-     * @param  {number} y - specified y to be added to y position
+     * @param  {number} x = 0 - specified x to be added to x position
+     * @param  {number} y = x - specified y to be added to y position
      * @return {Rectangle} Returns the altered rectangle
      */
-    translate(x, y) {
+    translate(x = 0, y = x) {
         super.translate(x, y);
         return this;
     }
 
     /**
      * transforms a rectangle by specified coords
-     * @param  {number} x - specified x to be added to x position
-     * @param  {number} y - specified y to be added to y position
-     * @param  {number} width - specified width to be added to this width
-     * @param  {number} height - specified height to be added to this height
+     * @param  {number} x = 0 - specified x to be added to x position
+     * @param  {number} y = x - specified y to be added to y position
+     * @param  {number} width = 0 - specified width to be added to this width
+     * @param  {number} height = 0 - specified height to be added to this height
      * @return {Rectangle} Returns the altered rectangle
      */
-    transform(x, y, width, height) {
+    transform(x = 0, y = x, width = 0, height = 0) {
         this.translate(x, y);
         this.width += width;
         this.height += height;
@@ -249,24 +247,24 @@ export class Rectangle extends Point {
 
     /**
      * changes the position a rectangle by specified coords
-     * @param  {number} x - the new x position
-     * @param  {number} y - he new y position
+     * @param  {number} x = 0 - the new x position
+     * @param  {number} y = 0 - he new y position
      * @return {Rectangle} Returns the altered rectangle
      */
-    position(x, y) {
+    position(x = 0, y = 0) {
         super.position(x, y);
         return this;
     }
 
     /**
      * changes the size of a rectangle by specified params
-     * @param  {number} x - the new x position
-     * @param  {number} y - the new y position
-     * @param  {number} width - the new width
-     * @param  {number} height - the new width
+     * @param  {number} x = 0- the new x position
+     * @param  {number} y = x - the new y position
+     * @param  {number} width = 0 - the new width
+     * @param  {number} height = 0 - the new width
      * @return {Rectangle} Returns the altered rectangle
      */
-    size(x, y, width, height) {
+    size(x = 0, y = x, width = 0, height = 0) {
         this.position(x, y);
         this.width = width;
         this.height = height;
@@ -275,11 +273,11 @@ export class Rectangle extends Point {
 
     /**
      * changes the size of a rectangle by specified params
-     * @param  {number} width - the new width
-     * @param  {number} height - the new width
+     * @param  {number} width = 0 - the new width
+     * @param  {number} height = width - the new width
      * @return {Rectangle} Returns the altered rectangle
      */
-    setSize(width, height) {
+    setSize(width = 0, height = width) {
         this.width = width;
         this.height = height;
         return this;

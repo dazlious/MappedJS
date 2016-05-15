@@ -12,8 +12,7 @@ export class Publisher {
      */
     constructor() {
         if(!instance) {
-            this.subscribers = {
-            };
+            this.subscribers = {};
             instance = this;
         }
         return instance;
@@ -26,9 +25,7 @@ export class Publisher {
      * @return {Publisher} instance of Publisher
      */
     subscribe(type = "any", fn = function() {}) {
-        if (!this.subscribers[type]) {
-            this.subscribers[type] = [];
-        }
+        if (!this.subscribers[type]) this.subscribers[type] = [];
         this.subscribers[type].push(fn);
         return this;
     }
@@ -40,8 +37,7 @@ export class Publisher {
      * @return {Publisher} instance of Publisher
      */
     unsubscribe(type = "any", fn = function() {}) {
-        this.handle(Publisher.UNSUBSCRIBE, type, fn);
-        return this;
+        return this.handle(Publisher.UNSUBSCRIBE, type, fn);
     }
 
     /**
@@ -51,8 +47,7 @@ export class Publisher {
      * @return {Publisher} instance of Publisher
      */
     publish(type = "any", arg = []) {
-        this.handle(Publisher.PUBLISH, type, arg);
-        return this;
+        return this.handle(Publisher.PUBLISH, type, arg);
     }
 
     /**
@@ -64,13 +59,11 @@ export class Publisher {
      */
     handle(action, type, data) {
         const subs = (this.subscribers[type]) ? this.subscribers[type]: [];
-        for (let i = 0; i < subs.length; i++) {
+        for (const [i, fn] of subs.entries()) {
             if (action === Publisher.PUBLISH) {
-                subs[i](data);
+                fn(data);
             } else {
-                if (subs[i] === data) {
-                    subs.splice(i,1);
-                }
+                if (fn === data) subs.splice(i,1);
             }
         }
         return this;

@@ -39,9 +39,6 @@
 
 <dl>
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
-<dd><p>States of a marker</p>
-</dd>
-<dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a tile</p>
 </dd>
 </dl>
@@ -787,7 +784,7 @@ substract specified coord from this coordinate
 **Returns**: <code>[LatLng](#LatLng)</code> - the new calculated LatLng  
 **Params**
 
-- coord <code>[LatLng](#LatLng)</code> - specified coordinate to substract from this coord
+- coord <code>[LatLng](#LatLng)</code> - = new LatLng() - specified coordinate to substract from this coord
 
 <a name="LatLng+add"></a>
 
@@ -798,7 +795,7 @@ add specified coord to this coordinate
 **Returns**: <code>[LatLng](#LatLng)</code> - the new calculated LatLng  
 **Params**
 
-- coord <code>[LatLng](#LatLng)</code> - specified coordinate to add to this coord
+- coord <code>[LatLng](#LatLng)</code> - = new LatLng() - specified coordinate to add to this coord
 
 <a name="LatLng+divide"></a>
 
@@ -809,7 +806,7 @@ divides a latlng with a given factor
 **Returns**: <code>[LatLng](#LatLng)</code> - Returns instance for chaining  
 **Params**
 
-- factorLat <code>number</code> - factor to divide lat with
+- factorLat <code>number</code> <code> = 1</code> - = 1 - factor to divide lat with
 - factorLng <code>number</code> - = factorLat - factor to divide lng with
 
 <a name="LatLng+multiply"></a>
@@ -821,7 +818,7 @@ multiplicates a latlng with a given factor
 **Returns**: <code>[LatLng](#LatLng)</code> - Returns instance for chaining  
 **Params**
 
-- factorLat <code>number</code> - factor to multiplicate lat with
+- factorLat <code>number</code> <code> = 1</code> - = 1 - factor to multiplicate lat with
 - factorLng <code>number</code> - = factorLat - factor to multiplicate lng with
 
 <a name="LatLng+equals"></a>
@@ -1091,7 +1088,7 @@ substracts 2 points
 **Returns**: <code>[Point](#Point)</code> - difference between this point and parameter point  
 **Params**
 
-- point <code>[Point](#Point)</code> - the point to substract from this
+- point <code>[Point](#Point)</code> - = new Point() - the point to substract from this
 
 <a name="Point+add"></a>
 
@@ -1102,7 +1099,7 @@ adds 2 points
 **Returns**: <code>[Point](#Point)</code> - addition of this point and parameter point  
 **Params**
 
-- point <code>[Point](#Point)</code> - the point to add to this
+- point <code>[Point](#Point)</code> - = new Point() - the point to add to this
 
 <a name="Point+multiply"></a>
 
@@ -1113,7 +1110,7 @@ multiplicates a point with a given x and y
 **Returns**: <code>[Point](#Point)</code> - Returns a new instance  
 **Params**
 
-- x <code>number</code> - factor to multiplicate x with
+- x <code>number</code> <code> = 1</code> - = 1 - factor to multiplicate x with
 - y <code>number</code> - factor to multiplicate y with
 
 <a name="Point+divide"></a>
@@ -1125,7 +1122,7 @@ divide a point with a given x and y
 **Returns**: <code>[Point](#Point)</code> - Returns a new instance  
 **Params**
 
-- x <code>number</code> - factor to divide x with
+- x <code>number</code> <code> = 1</code> - = 1 - factor to divide x with
 - y <code>number</code> - factor to divide y with
 
 <a name="Point+equals"></a>
@@ -1148,7 +1145,7 @@ Returns the distance from this Point to a specified Point
 **Returns**: <code>[Point](#Point)</code> - the distance between this Point and specified point  
 **Params**
 
-- point <code>[Point](#Point)</code> - the specified point to be measured against this Point
+- point <code>[Point](#Point)</code> - = new Point() - the specified point to be measured against this Point
 
 <a name="Point+translate"></a>
 
@@ -1159,8 +1156,8 @@ translates a point by x and y
 **Returns**: <code>[Point](#Point)</code> - instance of Point  
 **Params**
 
-- x <code>number</code> - value to move x
-- y <code>number</code> - value to move y
+- x <code>number</code> <code> = 0</code> - = 0 - value to move x
+- y <code>number</code> - = x - value to move y
 
 <a name="Point+position"></a>
 
@@ -1171,7 +1168,7 @@ positions a point by x and y
 **Returns**: <code>[Point](#Point)</code> - instance of Point  
 **Params**
 
-- x <code>number</code> - value to position x
+- x <code>number</code> <code> = 0</code> - value to position x
 - y <code>number</code> - value to position y
 
 <a name="Point+toArray"></a>
@@ -1413,7 +1410,7 @@ Checks whether Rectangle intersects with specified Rectangle
 **Returns**: <code>Boolean</code> - true if containment is entirely  
 **Params**
 
-- rect <code>[Rectangle](#Rectangle)</code> - the specified rectangle to check against
+- rect <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - the specified rectangle to check against
 
 <a name="Rectangle+contains"></a>
 
@@ -1435,7 +1432,7 @@ Sets the center of this Rectangle to specified point
 **Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
 **Params**
 
-- point <code>[Point](#Point)</code> - specified point to set center of rectangle to
+- point <code>[Point](#Point)</code> - = new Point() - specified point to set center of rectangle to
 
 <a name="Rectangle+setCenterX"></a>
 
@@ -1446,7 +1443,7 @@ Sets the x-center of this Rectangle to specified x
 **Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
 **Params**
 
-- x <code>number</code> - specified x coordinate to set x center of rectangle to
+- x <code>number</code> <code> = 0</code> - = 0 - specified x coordinate to set x center of rectangle to
 
 <a name="Rectangle+setCenterY"></a>
 
@@ -1457,7 +1454,7 @@ Sets the y-center of this Rectangle to specified y
 **Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
 **Params**
 
-- y <code>number</code> - specified y coordinate to set y center of rectangle to
+- y <code>number</code> <code> = 0</code> - = 0 - specified y coordinate to set y center of rectangle to
 
 <a name="Rectangle+containsPoint"></a>
 
@@ -1468,7 +1465,7 @@ Checks whether Rectangle entirely contains the Point
 **Returns**: <code>Boolean</code> - true if containment is entirely  
 **Params**
 
-- point <code>[Point](#Point)</code> - the specified point to check against
+- point <code>[Point](#Point)</code> - = new Point() - the specified point to check against
 
 <a name="Rectangle+containsRect"></a>
 
@@ -1479,7 +1476,7 @@ Checks whether Rectangle entirely contains the Rectangle
 **Returns**: <code>Boolean</code> - true if containment is entirely  
 **Params**
 
-- rect <code>[Rectangle](#Rectangle)</code> - the specified rectangle to check against
+- rect <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - the specified rectangle to check against
 
 <a name="Rectangle+getDistortedRect"></a>
 
@@ -1490,7 +1487,7 @@ distorts rectangle by factor
 **Returns**: <code>[Rectangle](#Rectangle)</code> - a new instance of Rectangle  
 **Params**
 
-- factor <code>number</code> - the specified factor of distortion
+- factor <code>number</code> <code> = 1</code> - = 1 - the specified factor of distortion
 
 <a name="Rectangle+getNormalRect"></a>
 
@@ -1501,7 +1498,7 @@ redistorts rectangle by factor
 **Returns**: <code>[Rectangle](#Rectangle)</code> - a new instance of Rectangle  
 **Params**
 
-- factor <code>number</code> - the specified factor of distortion
+- factor <code>number</code> <code> = 1</code> - = 1- the specified factor of distortion
 
 <a name="Rectangle+scaleX"></a>
 
@@ -1512,7 +1509,7 @@ scale x and width of rectangle
 **Returns**: <code>[Rectangle](#Rectangle)</code> - scaled Rectangle  
 **Params**
 
-- x <code>number</code> - factor to be applied to scale
+- x <code>number</code> <code> = 1</code> - = 1 - factor to be applied to scale
 
 <a name="Rectangle+scaleY"></a>
 
@@ -1523,7 +1520,7 @@ scale y and height of rectangle
 **Returns**: <code>[Rectangle](#Rectangle)</code> - new scaled Rectangle  
 **Params**
 
-- y <code>number</code> - factor to be applied to scale
+- y <code>number</code> <code> = 1</code> - = 1- factor to be applied to scale
 
 <a name="Rectangle+scale"></a>
 
@@ -1534,7 +1531,7 @@ scale x and y for width and height of rectangle
 **Returns**: <code>[Rectangle](#Rectangle)</code> - new scaled Rectangle  
 **Params**
 
-- x <code>number</code> - factor to be applied to scale
+- x <code>number</code> <code> = 1</code> - = 1 - factor to be applied to scale
 - y <code>number</code> - = x - factor to be applied to scale
 
 <a name="Rectangle+translate"></a>
@@ -1546,8 +1543,8 @@ moves a rectangle by specified coords
 **Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
 **Params**
 
-- x <code>number</code> - specified x to be added to x position
-- y <code>number</code> - specified y to be added to y position
+- x <code>number</code> <code> = 0</code> - = 0 - specified x to be added to x position
+- y <code>number</code> - = x - specified y to be added to y position
 
 <a name="Rectangle+transform"></a>
 
@@ -1558,10 +1555,10 @@ transforms a rectangle by specified coords
 **Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
 **Params**
 
-- x <code>number</code> - specified x to be added to x position
-- y <code>number</code> - specified y to be added to y position
-- width <code>number</code> - specified width to be added to this width
-- height <code>number</code> - specified height to be added to this height
+- x <code>number</code> <code> = 0</code> - = 0 - specified x to be added to x position
+- y <code>number</code> - = x - specified y to be added to y position
+- width <code>number</code> <code> = 0</code> - = 0 - specified width to be added to this width
+- height <code>number</code> <code> = 0</code> - = 0 - specified height to be added to this height
 
 <a name="Rectangle+position"></a>
 
@@ -1572,8 +1569,8 @@ changes the position a rectangle by specified coords
 **Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
 **Params**
 
-- x <code>number</code> - the new x position
-- y <code>number</code> - he new y position
+- x <code>number</code> <code> = 0</code> - = 0 - the new x position
+- y <code>number</code> <code> = 0</code> - = 0 - he new y position
 
 <a name="Rectangle+size"></a>
 
@@ -1584,10 +1581,10 @@ changes the size of a rectangle by specified params
 **Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
 **Params**
 
-- x <code>number</code> - the new x position
-- y <code>number</code> - the new y position
-- width <code>number</code> - the new width
-- height <code>number</code> - the new width
+- x <code>number</code> <code> = 0</code> - = 0- the new x position
+- y <code>number</code> - = x - the new y position
+- width <code>number</code> <code> = 0</code> - = 0 - the new width
+- height <code>number</code> <code> = 0</code> - = 0 - the new width
 
 <a name="Rectangle+setSize"></a>
 
@@ -1598,8 +1595,8 @@ changes the size of a rectangle by specified params
 **Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
 **Params**
 
-- width <code>number</code> - the new width
-- height <code>number</code> - the new width
+- width <code>number</code> <code> = 0</code> - = 0 - the new width
+- height <code>number</code> - = width - the new width
 
 <a name="Rectangle+equals"></a>
 
@@ -1732,11 +1729,11 @@ Constructor
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile  
 **Params**
 
-- path <code>string</code> <code> = null</code> - path to image
-- x <code>number</code> <code> = 0</code> - position x of tile
-- y <code>number</code> <code> = 0</code> - position y of tile
-- w <code>number</code> <code> = 0</code> - tile width
-- h <code>number</code> <code> = 0</code> - tile height
+- path <code>string</code> - = null - path to image
+- x <code>number</code> - = 0 - position x of tile
+- y <code>number</code> - = 0 - position y of tile
+- w <code>number</code> - = 0 - tile width
+- h <code>number</code> - = 0 - tile height
 - _instance <code>[View](#View)</code> - = null - instance of parent View
 
 <a name="Tile+initialize"></a>
@@ -1786,7 +1783,6 @@ check if tiles are equal
         * [.resize()](#TileMap+resize) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resizeCanvas()](#TileMap+resizeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
         * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.resizeViewAlternative()](#TileMap+resizeViewAlternative) ⇒ <code>[TileMap](#TileMap)</code>
     * _static_
         * [.IMG_DATA_NAME](#TileMap.IMG_DATA_NAME) : <code>String</code>
         * [.MARKER_DATA_NAME](#TileMap.MARKER_DATA_NAME) : <code>String</code>
@@ -1909,13 +1905,6 @@ resizes the canvas sizes
 <a name="TileMap+resizeView"></a>
 
 ### tileMap.resizeView() ⇒ <code>[TileMap](#TileMap)</code>
-Handles resizing of view
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
-<a name="TileMap+resizeViewAlternative"></a>
-
-### tileMap.resizeViewAlternative() ⇒ <code>[TileMap](#TileMap)</code>
 Handles resizing of view
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
@@ -2145,12 +2134,6 @@ reposition marker container
 singleton instance
 
 **Kind**: global variable  
-<a name="STATES"></a>
-
-## STATES : <code>Array</code>
-States of a marker
-
-**Kind**: global constant  
 <a name="STATES"></a>
 
 ## STATES : <code>Array</code>

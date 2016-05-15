@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './View.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Publisher.js', './StateHandler.js', './Helper.js', './Marker.js', './DataEnrichment.js', './ToolTip.js'], factory);
+        define(['exports', 'jQuery', './Helper.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./View.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Helper.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'));
+        factory(exports, require('jQuery'), require('./Helper.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.View, global.LatLng, global.Bounds, global.Rectangle, global.Publisher, global.StateHandler, global.Helper, global.Marker, global.DataEnrichment, global.ToolTip);
+        factory(mod.exports, global.jQuery, global.Helper, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jQuery, _View, _LatLng, _Bounds, _Rectangle, _Publisher, _StateHandler, _Helper, _Marker, _DataEnrichment, _ToolTip) {
+})(this, function(exports, _jQuery, _Helper, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -117,6 +117,8 @@
         }]);
 
         function TileMap(_ref) {
+            var _this = this;
+
             var container = _ref.container;
             var _ref$tilesData = _ref.tilesData;
             var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
@@ -125,9 +127,7 @@
 
             _classCallCheck(this, TileMap);
 
-            if (!container) {
-                throw Error("You must define a container to initialize a TileMap");
-            }
+            if (!container) throw Error("You must define a container to initialize a TileMap");
             this.$container = container;
 
             this.imgData = tilesData[TileMap.IMG_DATA_NAME];
@@ -142,12 +142,13 @@
                     value: element,
                     description: i
                 };
-                this.levels.push(currentLevel);
-            }.bind(this));
+                _this.levels.push(currentLevel);
+            });
 
             this.levelHandler = new _StateHandler.StateHandler(this.levels);
             this.levelHandler.changeTo(this.settings.level);
             this.eventManager = new _Publisher.Publisher();
+
             this.initial = {
                 bounds: settings.bounds,
                 center: settings.center,
@@ -155,11 +156,7 @@
                 zoom: settings.zoom
             };
 
-            this.appendMarkerContainerToDom();
-
-            this.initialize(settings.bounds, settings.center, this.currentLevelData);
-
-            return this;
+            return this.appendMarkerContainerToDom().initialize(settings.bounds, settings.center, this.currentLevelData);
         }
 
         /**
@@ -171,30 +168,27 @@
         _createClass(TileMap, [{
             key: 'initialize',
             value: function initialize(bounds, center, data) {
-                this.initializeCanvas();
-                this.bindEvents();
-                this.createViewFromData(bounds, center, data, this.settings.zoom);
+                this.initializeCanvas().bindEvents();
+
+                this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
                 this.initializeMarkers(this.markerData);
-                if (this.markers.length !== 0) {
-                    this.createTooltipContainer();
-                }
-                this.resizeCanvas();
-                return this;
+
+                if (this.markers.length !== 0) this.createTooltipContainer();
+
+                return this.resizeCanvas();
             }
         }, {
             key: 'reset',
             value: function reset() {
                 if (this.levelHandler.hasPrevious()) {
                     this.levelHandler.changeTo(0);
-                    this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
-                } else {
-                    this.view.reset();
-                }
+                    this.view = this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
+                } else this.view.reset();
             }
         }, {
             key: 'createViewFromData',
             value: function createViewFromData(bounds, center, data, zoom) {
-                this.view = new _View.View({
+                return new _View.View({
                     viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
                     mapView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
                     bounds: bounds,
@@ -233,12 +227,13 @@
         }, {
             key: 'initializeMarkers',
             value: function initializeMarkers(markerData) {
+                var _this2 = this;
+
                 if (markerData) {
                     markerData = this.enrichMarkerData(markerData);
                     _Helper.Helper.forEach(markerData, function(currentData) {
-                        var m = new _Marker.Marker(currentData, this.view);
-                        this.markers.push(m);
-                    }.bind(this));
+                        _this2.markers.push(new _Marker.Marker(currentData, _this2.view));
+                    });
                 }
                 return this;
             }
@@ -270,30 +265,37 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
+                var _this3 = this;
 
                 this.eventManager.subscribe("resize", function() {
-                    this.resize();
-                }.bind(this));
+                    _this3.resize();
+                });
 
                 this.eventManager.subscribe("next-level", function(argument_array) {
                     var center = argument_array[0],
-                        bounds = argument_array[1];
-                    var lastLevel = this.levelHandler.current.description;
-                    this.levelHandler.next();
-                    if (lastLevel !== this.levelHandler.current.description) {
-                        this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.min + 0.0000001);
+                        bounds = argument_array[1],
+                        lastLevel = _this3.levelHandler.current.description;
+
+                    _this3.levelHandler.next();
+
+                    if (lastLevel !== _this3.levelHandler.current.description) {
+                        _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.min + 0.0000001);
                     }
-                }.bind(this));
+                });
 
                 this.eventManager.subscribe("previous-level", function(argument_array) {
                     var center = argument_array[0],
-                        bounds = argument_array[1];
-                    var lastLevel = this.levelHandler.current.description;
-                    this.levelHandler.previous();
-                    if (lastLevel !== this.levelHandler.current.description) {
-                        this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.max - 0.0000001);
+                        bounds = argument_array[1],
+                        lastLevel = _this3.levelHandler.current.description;
+
+                    _this3.levelHandler.previous();
+
+                    if (lastLevel !== _this3.levelHandler.current.description) {
+                        _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.max - 0.0000001);
                     }
-                }.bind(this));
+                });
+
+                return this;
             }
 
             /**
@@ -331,10 +333,7 @@
         }, {
             key: 'resize',
             value: function resize() {
-                this.resizeCanvas();
-                this.resizeView();
-                this.redraw();
-                return this;
+                return this.resizeCanvas().resizeView().redraw();
             }
 
             /**
@@ -362,18 +361,6 @@
                 this.view.viewport.size(this.left, this.top, this.width, this.height);
                 var delta = this.view.viewport.center.substract(oldViewport.center);
                 this.view.mapView.translate(delta.x, delta.y);
-                return this;
-            }
-
-            /**
-             * Handles resizing of view
-             * @return {TileMap} instance of TileMap for chaining
-             */
-
-        }, {
-            key: 'resizeViewAlternative',
-            value: function resizeViewAlternative() {
-                this.view.viewport.size(this.left, this.top, this.width, this.height);
                 return this;
             }
         }]);

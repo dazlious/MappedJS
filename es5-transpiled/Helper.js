@@ -1,56 +1,45 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js'], factory);
+        define(["exports"], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'));
+        factory(exports);
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point);
+        factory(mod.exports);
         global.Helper = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point) {
-    'use strict';
+})(this, function(exports) {
+    "use strict";
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
-    exports.Helper = undefined;
-
-    var _jQuery2 = _interopRequireDefault(_jQuery);
-
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            default: obj
-        };
-    }
-
     var Helper = exports.Helper = {
-
         /**
          * request json-data from given file and calls callback on success
          * @param  {string} filename - path to file
          * @param  {Function} callback - function called when data is loaded successfully
          * @return {Helper} Helper object for chaining
          */
+
         requestJSON: function requestJSON(filename, callback) {
-            _jQuery2.default.ajax({
-                type: "GET",
-                url: filename,
-                dataType: "json",
-                success: function success(data) {
-                    return callback(data);
-                },
-                error: function error(response) {
-                    if (response.status === 200) {
-                        throw new Error("The JSON submitted seems not valid");
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        if (callback) callback(JSON.parse(xhr.responseText));
+                    } else {
+                        throw new Error("The JSON submitted seems not valid", xhr);
                     }
-                    console.error("Error requesting file: ", response);
                 }
-            });
+            };
+            xhr.open("GET", filename, true);
+            xhr.send();
             return this;
         },
+
         /**
          * loads an image and calls callback on success
          * @param {Function} cb - callback-function on success
@@ -59,13 +48,12 @@
         loadImage: function loadImage(path, cb) {
             var img = new Image();
             img.onload = function() {
-                if (cb && typeof cb === "function") {
-                    cb(img);
-                }
+                if (cb && typeof cb === "function") cb(img);
             };
             img.src = path;
             return this;
         },
+
         /**
          * for each helper
          * @param  {Object[]} a - array to iterate over each value
@@ -74,12 +62,11 @@
          */
         forEach: function forEach(a, fn) {
             for (var i in a) {
-                if (a[i] && typeof fn === "function") {
-                    fn(a[i], i);
-                }
+                if (a[i] && typeof fn === "function") fn(a[i], i);
             }
             return this;
         },
+
         /**
          * formula for quadratic ease out
          * @param  {number} t - current time
@@ -132,6 +119,5 @@
         scrollEvent: function scrollEvent() {
             return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
         }
-
     };
 });

@@ -3,9 +3,7 @@ import {TileMap} from './TileMap.js';
 import {DataEnrichment} from './DataEnrichment.js';
 import {Helper} from './Helper.js';
 import {Interact} from './Interact.js';
-import {LatLng} from './LatLng.js';
 import {Point} from './Point.js';
-import {Publisher} from './Publisher.js';
 
 export class MappedJS {
 
@@ -20,16 +18,16 @@ export class MappedJS {
     constructor({container=".mjs", mapData={}, markerData={}, mapSettings={}, events={loaded:"mjs-loaded"}}) {
         this.initializeSettings(container, events, mapSettings);
 
-        this.initializeData(mapData, function(loadedMapData) {
+        this.initializeData(mapData, (loadedMapData) => {
             this.mapData = loadedMapData;
-            this.initializeData(markerData, function(loadedMarkerData) {
-                this.mapData = $.extend(true, this.mapData, loadedMarkerData);
+            this.initializeData(markerData, (loadedMarkerData) => {
+                this.mapData = Object.assign(this.mapData, loadedMarkerData);
                 this.initializeMap();
                 this.addControls();
                 this.bindEvents();
                 this.loadingFinished();
-            }.bind(this));
-        }.bind(this));
+            });
+        });
 
         this.momentum = null;
         this.keyTicks = 0;
@@ -56,9 +54,7 @@ export class MappedJS {
      */
     initializeSettings(container, events, settings) {
         this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
-        if (!(this.$container instanceof jQuery)) {
-            throw new Error("Container " + container + " not found");
-        }
+        if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
 
         this.$container.addClass("mappedJS");
         this.$content = $("<div class='map-content' />");
@@ -78,7 +74,7 @@ export class MappedJS {
      */
     initializeData(mapData, cb) {
         if (typeof mapData === "string") {
-            Helper.requestJSON(mapData, function(data) {
+            Helper.requestJSON(mapData, (data) => {
                 cb(data);
             });
         } else {
@@ -116,32 +112,32 @@ export class MappedJS {
             autoFireHold: 300,
             overwriteViewportSettings: true,
             callbacks: {
-                pan: function(data) {
+                pan: (data) => {
                     if ($(data.target).hasClass("control")) {
                         return false;
                     }
                     const change = data.last.position.clone.substract(data.position.move);
                     this.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
-                }.bind(this),
-                wheel: function(data) {
+                },
+                wheel: (data) => {
                     const factor = data.delta / 4;
                     this.zoom(factor, this.getAbsolutePosition(data.position.start));
-                }.bind(this),
-                pinch: function(data) {
+                },
+                pinch: (data) => {
                     this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
-                }.bind(this),
-                doubletap: function(data) {
+                },
+                doubletap: (data) => {
                     if (!$(data.target).hasClass("marker-container")) {
                         return false;
                     }
                     this.zoom(0.2, this.getAbsolutePosition(data.position.start));
-                }.bind(this),
-                flick: function(data) {
+                },
+                flick: (data) => {
                     const direction = new Point(data.directions[0], data.directions[1]),
                           velocity = direction.clone.divide(data.speed).multiply(20);
                     this.momentumAccerlation(velocity);
 
-                }.bind(this)
+                }
             }
         });
     }
@@ -239,14 +235,12 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     triggerMomentum(steps, timing, change) {
-        this.momentum = setTimeout(function() {
+        this.momentum = setTimeout(() => {
             steps--;
             const delta = Helper.easeOutQuadratic((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
             this.moveView(delta);
-            if (steps >= 0) {
-                this.triggerMomentum(steps, timing, change);
-            }
-        }.bind(this), timing);
+            if (steps >= 0) this.triggerMomentum(steps, timing, change);
+        }, timing);
         return this;
     }
 

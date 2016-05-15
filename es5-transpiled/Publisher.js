@@ -17,6 +17,44 @@
         value: true
     });
 
+    var _slicedToArray = function() {
+        function sliceIterator(arr, i) {
+            var _arr = [];
+            var _n = true;
+            var _d = false;
+            var _e = undefined;
+
+            try {
+                for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+                    _arr.push(_s.value);
+
+                    if (i && _arr.length === i) break;
+                }
+            } catch (err) {
+                _d = true;
+                _e = err;
+            } finally {
+                try {
+                    if (!_n && _i["return"]) _i["return"]();
+                } finally {
+                    if (_d) throw _e;
+                }
+            }
+
+            return _arr;
+        }
+
+        return function(arr, i) {
+            if (Array.isArray(arr)) {
+                return arr;
+            } else if (Symbol.iterator in Object(arr)) {
+                return sliceIterator(arr, i);
+            } else {
+                throw new TypeError("Invalid attempt to destructure non-iterable instance");
+            }
+        };
+    }();
+
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
             throw new TypeError("Cannot call a class as a function");
@@ -78,9 +116,7 @@
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
                 var fn = arguments.length <= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
-                if (!this.subscribers[type]) {
-                    this.subscribers[type] = [];
-                }
+                if (!this.subscribers[type]) this.subscribers[type] = [];
                 this.subscribers[type].push(fn);
                 return this;
             }
@@ -98,8 +134,7 @@
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
                 var fn = arguments.length <= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
-                this.handle(Publisher.UNSUBSCRIBE, type, fn);
-                return this;
+                return this.handle(Publisher.UNSUBSCRIBE, type, fn);
             }
 
             /**
@@ -115,8 +150,7 @@
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
                 var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
-                this.handle(Publisher.PUBLISH, type, arg);
-                return this;
+                return this.handle(Publisher.PUBLISH, type, arg);
             }
 
             /**
@@ -131,15 +165,38 @@
             key: "handle",
             value: function handle(action, type, data) {
                 var subs = this.subscribers[type] ? this.subscribers[type] : [];
-                for (var i = 0; i < subs.length; i++) {
-                    if (action === Publisher.PUBLISH) {
-                        subs[i](data);
-                    } else {
-                        if (subs[i] === data) {
-                            subs.splice(i, 1);
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = subs.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var _step$value = _slicedToArray(_step.value, 2);
+
+                        var i = _step$value[0];
+                        var fn = _step$value[1];
+
+                        if (action === Publisher.PUBLISH) {
+                            fn(data);
+                        } else {
+                            if (fn === data) subs.splice(i, 1);
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
                         }
                     }
                 }
+
                 return this;
             }
 
