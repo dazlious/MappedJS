@@ -91,7 +91,7 @@
             }
 
             /**
-             * Constructor
+             * @constructor
              * @param {Object} settings = {} - all the settings
              * @param {string|Object} settings.container = ".interact-container" - Container, either string, jQuery-object or dom-object
              * @param {Object} settings.timeTreshold = {} - settings for the timing tresholds

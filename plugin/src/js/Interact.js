@@ -3,6 +3,11 @@ import $ from 'jQuery';
 import {Point} from './Point.js';
 import {Helper} from './Helper.js';
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file implements interaction like panning, zooming, flicking and more, cross-browser and cross-device
+ * @copyright Michael Duve 2016
+ */
 export class Interact {
     /**
      * get time difference to last
@@ -29,7 +34,7 @@ export class Interact {
     }
 
     /**
-     * Constructor
+     * @constructor
      * @param {Object} settings = {} - all the settings
      * @param {string|Object} settings.container = ".interact-container" - Container, either string, jQuery-object or dom-object
      * @param {Object} settings.timeTreshold = {} - settings for the timing tresholds

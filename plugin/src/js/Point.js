@@ -1,3 +1,8 @@
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file represents a point with x and y value
+ * @copyright Michael Duve 2016
+ */
 export class Point {
 
     /**
@@ -25,10 +30,10 @@ export class Point {
     }
 
     /**
-     * Constructor
+     * @constructor
      * @param  {number} x = 0 - representation of x coordinate
      * @param  {number} y = 0 - representation of y coordinate
-     * @return {Point} new instance of point
+     * @return {Point} instance of Point for chaining
      */
     constructor(x = 0, y = 0) {
         this.x = x;
@@ -39,7 +44,7 @@ export class Point {
     /**
      * substracts 2 points
      * @param  {Point} point = new Point() - the point to substract from this
-     * @return {Point} difference between this point and parameter point
+     * @return {Point} instance of Point for chaining
      */
     substract(point = new Point()) {
         this.x -= point.x;
@@ -50,7 +55,7 @@ export class Point {
     /**
      * adds 2 points
      * @param  {Point} point = new Point() - the point to add to this
-     * @return {Point} addition of this point and parameter point
+     * @return {Point} instance of Point for chaining
      */
     add(point = new Point()) {
         this.x += point.x;
@@ -61,8 +66,8 @@ export class Point {
     /**
      * multiplicates a point with a given x and y
      * @param  {number} x = 1 - factor to multiplicate x with
-     * @param  {number} y - factor to multiplicate y with
-     * @return {Point} Returns a new instance
+     * @param  {number} y = x - factor to multiplicate y with
+     * @return {Point} instance of Point for chaining
      */
     multiply(x = 1, y = x) {
         this.x *= x;
@@ -73,8 +78,8 @@ export class Point {
     /**
      * divide a point with a given x and y
      * @param  {number} x = 1 - factor to divide x with
-     * @param  {number} y - factor to divide y with
-     * @return {Point} Returns a new instance
+     * @param  {number} y = x - factor to divide y with
+     * @return {Point} instance of Point for chaining
      */
     divide(x = 1, y = x) {
         this.x /= x;
@@ -104,7 +109,7 @@ export class Point {
      * translates a point by x and y
      * @param  {number} x = 0 - value to move x
      * @param  {number} y = x - value to move y
-     * @return {Point} instance of Point
+     * @return {Point} instance of Point for chaining
      */
     translate(x = 0, y = x) {
         this.x += x;
@@ -114,9 +119,9 @@ export class Point {
 
     /**
      * positions a point by x and y
-     * @param  {number} x - value to position x
-     * @param  {number} y - value to position y
-     * @return {Point} instance of Point
+     * @param  {number} x = 0 - value to position x
+     * @param  {number} y = x - value to position y
+     * @return {Point} instance of Point for chaining
      */
     position(x = 0, y = x) {
         this.x = x;

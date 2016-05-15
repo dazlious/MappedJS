@@ -53,7 +53,7 @@
     var Marker = exports.Marker = function() {
 
         /**
-         * Constructor
+         * @constructor
          * @param  {Object} data = DataEnrichment.DATA_MARKER - enriched data
          * @param  {View} _instance = parent instance - instance of parent view
          * @return {Marker} - instance of Marker for chaining
@@ -84,6 +84,12 @@
 
             return this.bindEvents().positionMarker();
         }
+
+        /**
+         * binds all events
+         * @return {Marker} instance of Marker for chaining
+         */
+
 
         _createClass(Marker, [{
             key: 'bindEvents',
@@ -133,7 +139,7 @@
 
             /**
              * set initial position of this marker
-             * @return {Marker} - instance of Marker for chaining
+             * @return {Marker} instance of Marker for chaining
              */
 
         }, {

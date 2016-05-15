@@ -5,17 +5,23 @@ import {Helper} from './Helper.js';
 import {Interact} from './Interact.js';
 import {Point} from './Point.js';
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file application initializes all instances and objects
+ * @copyright Michael Duve 2016
+ */
 export class MappedJS {
 
     /**
-     * Constructor
+     * @constructor
      * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
      * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
+     * @param  {string|Object} markerData={} - data of markers, can be json or path to file
      * @param  {Object} mapSettings={} - settings for map, must be json
      * @param  {Object} events={loaded: "mjs-loaded"} - List of events
      * @return {MappedJS} instance of MappedJS for chaining
      */
-    constructor({container=".mjs", mapData={}, markerData={}, mapSettings={}, events={loaded:"mjs-loaded"}}) {
+    constructor({container=".mjs", mapData={}, markerData={}, mapSettings={}, events={loaded:"mjs-loaded"}} = {}) {
         this.initializeSettings(container, events, mapSettings);
 
         this.initializeData(mapData, (loadedMapData) => {
@@ -35,6 +41,9 @@ export class MappedJS {
         return this;
     }
 
+    /**
+     * add controls (zoom, home) to DOM
+     */
     addControls() {
         if (this.mapSettings.controls) {
             this.$controls = $(`<div class="control-container ${this.mapSettings.controls.theme} ${this.mapSettings.controls.position}" />`);
@@ -50,9 +59,10 @@ export class MappedJS {
      * initializes the settings and handles errors
      * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
      * @param  {object} events - List of events
+     * @param  {object} settings - List of settings
      * @return {MappedJS} instance of MappedJS for chaining
      */
-    initializeSettings(container, events, settings) {
+    initializeSettings(container, events = {}, settings = {}) {
         this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
         if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
 
@@ -69,7 +79,7 @@ export class MappedJS {
     /**
      * initializes the data, asynchronous
      * @param  {Object} mapData - data of map tiles, can be json or path to file
-     * @param  {Function} cb - called, when data is received
+     * @param  {Helper~requestJSONCallback} cb - called, when data is received
      * @return {MappedJS} instance of MappedJS for chaining
      */
     initializeData(mapData, cb) {
@@ -105,6 +115,10 @@ export class MappedJS {
         return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
     }
 
+    /**
+     * initializes interaction
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     initializeInteractForMap() {
         this.tooltipState = false;
         this.interact = new Interact({
@@ -140,6 +154,7 @@ export class MappedJS {
                 }
             }
         });
+        return this;
     }
 
     /**
@@ -164,18 +179,38 @@ export class MappedJS {
         return this;
     }
 
+    /**
+     * resets map to initial state
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     resetToInitialState() {
         this.tileMap.reset();
+        return this;
     }
 
+    /**
+     * zooms into center of map
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     zoomInToCenter() {
         this.zoom(0.1, this.tileMap.view.viewport.center);
+        return this;
     }
 
+    /**
+     * zooms out of center of map
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     zoomOutToCenter() {
         this.zoom(-0.1, this.tileMap.view.viewport.center);
+        return this;
     }
 
+    /**
+     * Keypress handler
+     * @param  {object} e VanillaJS-Event-Object
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     keyPress(e) {
         switch(e.keyCode) {
             case 38: // up
@@ -205,11 +240,18 @@ export class MappedJS {
                 break;
         }
         this.tileMap.view.drawIsNeeded = true;
+        return this;
     }
 
+    /**
+     * handles the translation of the map by keypress
+     * @param  {Point} direction - x,y point where to translate to
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     handleMovementByKeys(direction) {
         this.keyTicks++;
         this.tileMap.view.moveView(direction.multiply(this.keyTicks));
+        return this;
     }
 
     keyRelease() {

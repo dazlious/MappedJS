@@ -1,3 +1,8 @@
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file State pattern
+ * @copyright Michael Duve 2016
+ */
 export class StateHandler {
 
     /**
@@ -17,9 +22,9 @@ export class StateHandler {
     }
 
     /**
-     * Constructor
+     * @constructor
      * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
-     * @return {StateHandler} instance of StateHandler
+     * @return {StateHandler} instance of StateHandler for chaining
      */
     constructor(states_array=[{value: 0, description: 'Default'}]) {
         this.states = states_array;
@@ -30,7 +35,7 @@ export class StateHandler {
 
     /**
      * get the next element
-     * @return {StateHandler} instance of StateHandler
+     * @return {StateHandler} instance of StateHandler for chaining
      */
     next() {
         this.lastState = this.current;
@@ -40,7 +45,7 @@ export class StateHandler {
 
     /**
      * get the previous element
-     * @return {StateHandler} instance of StateHandler
+     * @return {StateHandler} instance of StateHandler for chaining
      */
     previous() {
         this.lastState = this.current;
@@ -51,7 +56,7 @@ export class StateHandler {
     /**
      * change the state to specified state
      * @param {number} state - index of state in array
-     * @return {StateHandler} instance of StateHandler
+     * @return {StateHandler} instance of StateHandler for chaining
      */
     changeTo(state) {
         if (state >= 0 && state < this.length) this.i = state;
@@ -60,8 +65,9 @@ export class StateHandler {
 
     /**
      * change the state to specified value of specified property
-     * @param {number} state - index of state in array
-     * @return {StateHandler} instance of StateHandler
+     * @param {object} prop - specified property to be changed
+     * @param {object} value - specified value that should be changed to
+     * @return {StateHandler} instance of StateHandler for chaining
      */
     changeToValue(prop, value) {
         for (const [i, element] of this.states) {

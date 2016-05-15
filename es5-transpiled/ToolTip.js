@@ -61,9 +61,24 @@
     var ToolTip = exports.ToolTip = function() {
         _createClass(ToolTip, [{
             key: 'allTemplatesLoaded',
+
+
+            /**
+             * checks if all templates were loaded
+             * @return {boolean} wheter true if all templates were loaded or false
+             */
             get: function get() {
                 return this.loadedTemplates === Object.keys(this.templates).length;
             }
+
+            /**
+             *
+             * @constructor
+             * @param  {string|object} container - Container, either string, jQuery-object or dom-object
+             * @param  {object} templates - defined templates
+             * @return {ToolTip} instance of ToolTip for chaining
+             */
+
         }]);
 
         function ToolTip(_ref) {
@@ -88,6 +103,12 @@
             return this.setPosition().initializeTemplates(templates);
         }
 
+        /**
+         * register helpers for handlebars
+         * @return {ToolTip} instance of ToolTip for chaining
+         */
+
+
         _createClass(ToolTip, [{
             key: 'registerHandlebarHelpers',
             value: function registerHandlebarHelpers() {
@@ -96,16 +117,32 @@
                         return h / w * 100 + "%";
                     });
                 }
+                return this;
             }
+
+            /**
+             * initialize all templates
+             * @param  {object} templates = {} - all specified templates
+             * @return {ToolTip} instance of ToolTip for chaining
+             */
+
         }, {
             key: 'initializeTemplates',
-            value: function initializeTemplates(templates) {
-                this.templates = this.getDefaultTemplates();
-                Object.assign(this.templates, templates);
+            value: function initializeTemplates() {
+                var templates = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+                this.templates = Object.assign(this.getDefaultTemplates(), templates);
                 this.loadedTemplates = 0;
                 this.compileTemplates();
                 return this;
             }
+
+            /**
+             * // TODO: move to DataEnrichment
+             * returns paths to default templates
+             * @return {object} default templates
+             */
+
         }, {
             key: 'getDefaultTemplates',
             value: function getDefaultTemplates() {
@@ -117,6 +154,12 @@
                     iframe: "/plugin/src/hbs/iframe.hbs"
                 };
             }
+
+            /**
+             * bind all events
+             * @return {ToolTip} instance of ToolTip for chaining
+             */
+
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
@@ -132,16 +175,33 @@
                 this.$close.on("click", function() {
                     _this.close();
                 });
+                return this;
             }
+
+            /**
+             * on resize check if tooltip is bottom or left position
+             * @return {ToolTip} instance of ToolTip for chaining
+             */
+
         }, {
             key: 'resizeHandler',
             value: function resizeHandler() {
                 this.setPosition();
+                return this;
             }
+
+            /**
+             * inserts content to ToolTip instance container
+             * @param  {object} content = {} - content object
+             * @return {ToolTip} instance of ToolTip for chaining
+             */
+
         }, {
             key: 'insertContent',
-            value: function insertContent(content) {
+            value: function insertContent() {
                 var _this2 = this;
+
+                var content = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
                 this.$content.html("");
                 _Helper.Helper.forEach(content, function(data) {
@@ -150,7 +210,15 @@
                         _this2.$content.append(html);
                     }
                 });
+                return this;
             }
+
+            /**
+             * opens a tooltip
+             * @param  {object} data - content object
+             * @return {ToolTip} instance of ToolTip for chaining
+             */
+
         }, {
             key: 'open',
             value: function open(data) {
@@ -162,6 +230,12 @@
                 }
                 return this;
             }
+
+            /**
+             * closes a tooltip
+             * @return {ToolTip} instance of ToolTip for chaining
+             */
+
         }, {
             key: 'close',
             value: function close() {
@@ -173,6 +247,12 @@
                 }
                 return this;
             }
+
+            /**
+             * sets position of tooltip to left or bottom
+             * @return {ToolTip} instance of ToolTip for chaining
+             */
+
         }, {
             key: 'setPosition',
             value: function setPosition() {
@@ -183,6 +263,12 @@
                 }
                 return this;
             }
+
+            /**
+             * precompiles all Handlebars templates
+             * @return {ToolTip} instance of ToolTip for chaining
+             */
+
         }, {
             key: 'compileTemplates',
             value: function compileTemplates() {
@@ -192,21 +278,21 @@
                     _this3.getTemplateFromFile(template, function(compiledTemplate) {
                         _this3.templates[type] = compiledTemplate;
                         _this3.loadedTemplates++;
-                        if (_this3.allTemplatesLoaded) _this3.initialize();
+                        if (_this3.allTemplatesLoaded) _this3.$container.prepend(_this3.$popup);
                     });
                 });
+                return this;
             }
+
+            // TODO: move to Helper
+
         }, {
             key: 'getTemplateFromFile',
             value: function getTemplateFromFile(url, cb) {
                 _jQuery2.default.get(url, function(data) {
                     cb(_Handlebars2.default.compile(data));
                 }, 'html');
-            }
-        }, {
-            key: 'initialize',
-            value: function initialize() {
-                this.$container.prepend(this.$popup);
+                return this;
             }
         }]);
 

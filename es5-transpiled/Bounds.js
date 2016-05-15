@@ -49,36 +49,25 @@
 
             /**
              * get width of boundaries
-             * @return {number} width of boundaries
+             * @return {number} distance between east and west boundary
              */
             get: function get() {
-                return Math.abs(this.so.lng - this.nw.lng);
+                return Math.abs(this.se.lng - this.nw.lng);
             }
 
             /**
              * get height of boundaries
-             * @return {number} height of boundaries
+             * @return {number} distance between north and south boundary
              */
 
         }, {
             key: 'height',
             get: function get() {
-                return Math.abs(this.so.lat - this.nw.lat);
+                return Math.abs(this.se.lat - this.nw.lat);
             }
 
             /**
-             * get size
-             * @return {Point} calculated Size of boundaries
-             */
-
-        }, {
-            key: 'range',
-            get: function get() {
-                return this.nw.clone.substract(this.so);
-            }
-
-            /**
-             * Constructor
+             * @constructor
              * @param  {number} northWest = new LatLng() - representation of northWest boundary
              * @param  {number} southEast = new LatLng() - representation of southEast boundary
              * @return {Bounds} instance of Bounds for chaining
@@ -94,7 +83,7 @@
 
             if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) throw new Error(northWest + ' needs to be top-right corner and ' + southEast + ' bottom-left');
             this.nw = northWest;
-            this.so = southEast;
+            this.se = southEast;
             return this;
         }
 

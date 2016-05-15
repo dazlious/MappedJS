@@ -1,3 +1,14 @@
+## Modules
+
+<dl>
+<dt><a href="#module_DataEnrichment">DataEnrichment</a></dt>
+<dd><p>enriches delivered data with default values</p>
+</dd>
+<dt><a href="#module_Helper">Helper</a></dt>
+<dd><p>Helper for general purposes</p>
+</dd>
+</dl>
+
 ## Classes
 
 <dl>
@@ -23,6 +34,8 @@
 <dd></dd>
 <dt><a href="#TileMap">TileMap</a></dt>
 <dd></dd>
+<dt><a href="#ToolTip">ToolTip</a></dt>
+<dd></dd>
 <dt><a href="#View">View</a></dt>
 <dd></dd>
 </dl>
@@ -35,6 +48,14 @@
 </dd>
 </dl>
 
+## Objects
+
+<dl>
+<dt><a href="#Events">Events</a> : <code>object</code></dt>
+<dd><p>Helper for naming events</p>
+</dd>
+</dl>
+
 ## Constants
 
 <dl>
@@ -43,6 +64,147 @@
 </dd>
 </dl>
 
+<a name="module_DataEnrichment"></a>
+
+## DataEnrichment
+enriches delivered data with default values
+
+**Author:** Michael Duve <mduve@designmail.net>  
+**Copyright**: Michael Duve 2016  
+
+* [DataEnrichment](#module_DataEnrichment)
+    * [.marker(data)](#module_DataEnrichment.marker) ⇒ <code>object</code>
+    * [.mapSettings(data)](#module_DataEnrichment.mapSettings) ⇒ <code>object</code>
+
+<a name="module_DataEnrichment.marker"></a>
+
+### DataEnrichment.marker(data) ⇒ <code>object</code>
+enriches marker data with all needed data
+
+**Kind**: static method of <code>[DataEnrichment](#module_DataEnrichment)</code>  
+**Returns**: <code>object</code> - enriched marker data  
+**Params**
+
+- data <code>object</code> - specified data for marker
+
+<a name="module_DataEnrichment.mapSettings"></a>
+
+### DataEnrichment.mapSettings(data) ⇒ <code>object</code>
+enriches map data with all needed data
+
+**Kind**: static method of <code>[DataEnrichment](#module_DataEnrichment)</code>  
+**Returns**: <code>object</code> - enriched mapsettings data  
+**Params**
+
+- data <code>object</code> - specified data for mapsettings
+
+<a name="module_Helper"></a>
+
+## Helper
+Helper for general purposes
+
+**Author:** Michael Duve <mduve@designmail.net>  
+**Copyright**: Michael Duve 2016  
+
+* [Helper](#module_Helper)
+    * [.requestJSON(filename, callback)](#module_Helper.requestJSON) ⇒ <code>Helper</code>
+    * [.loadImage(cb)](#module_Helper.loadImage) ⇒ <code>Helper</code>
+    * [.forEach(a, cb)](#module_Helper.forEach) ⇒ <code>Helper</code>
+    * [.easeOutQuadratic(t, b, c, d)](#module_Helper.easeOutQuadratic) ⇒ <code>number</code>
+    * [.toRadians(degrees)](#module_Helper.toRadians) ⇒ <code>number</code>
+    * [.isMouse()](#module_Helper.isMouse) ⇒ <code>Boolean</code>
+    * [.isTouch()](#module_Helper.isTouch) ⇒ <code>Boolean</code>
+    * [.isIE()](#module_Helper.isIE) ⇒ <code>Boolean</code>
+    * [.scrollEvent()](#module_Helper.scrollEvent) ⇒ <code>string</code>
+
+<a name="module_Helper.requestJSON"></a>
+
+### Helper.requestJSON(filename, callback) ⇒ <code>Helper</code>
+request json-data from given file and calls callback on success
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>Helper</code> - Helper object for chaining  
+**Params**
+
+- filename <code>string</code> - path to file
+- callback <code>Helper~requestJSONCallback</code> - function called when data is loaded successfully
+
+<a name="module_Helper.loadImage"></a>
+
+### Helper.loadImage(cb) ⇒ <code>Helper</code>
+loads an image and calls callback on success
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>Helper</code> - Helper object for chaining  
+**Params**
+
+- cb <code>requestCallback</code> - callback-function on success
+
+<a name="module_Helper.forEach"></a>
+
+### Helper.forEach(a, cb) ⇒ <code>Helper</code>
+for each helper
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>Helper</code> - Helper object for chaining  
+**Params**
+
+- a <code>Array.&lt;Object&gt;</code> - array to iterate over each value
+- cb <code>requestCallback</code> - callback for each object
+
+<a name="module_Helper.easeOutQuadratic"></a>
+
+### Helper.easeOutQuadratic(t, b, c, d) ⇒ <code>number</code>
+formula for quadratic ease out
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>number</code> - quadratic value at specific time  
+**Params**
+
+- t <code>number</code> - current time
+- b <code>[Point](#Point)</code> - start value
+- c <code>[Point](#Point)</code> - total difference to start
+- d <code>number</code> - duration
+
+<a name="module_Helper.toRadians"></a>
+
+### Helper.toRadians(degrees) ⇒ <code>number</code>
+convert degree to radian
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>number</code> - converted radian  
+**Params**
+
+- degrees <code>number</code> - specified degrees
+
+<a name="module_Helper.isMouse"></a>
+
+### Helper.isMouse() ⇒ <code>Boolean</code>
+checks if mouse is possible
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>Boolean</code> - if true, mouse is possible  
+<a name="module_Helper.isTouch"></a>
+
+### Helper.isTouch() ⇒ <code>Boolean</code>
+checks if touch is possible
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>Boolean</code> - if true, touch is possible  
+<a name="module_Helper.isIE"></a>
+
+### Helper.isIE() ⇒ <code>Boolean</code>
+checks if IE is used
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>Boolean</code> - if true, IE is used  
+<a name="module_Helper.scrollEvent"></a>
+
+### Helper.scrollEvent() ⇒ <code>string</code>
+gets cross-browser scroll-event
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>string</code> - name of scroll event  
 <a name="Bounds"></a>
 
 ## Bounds
@@ -52,13 +214,10 @@
     * [new Bounds(northWest, southEast)](#new_Bounds_new)
     * [.width](#Bounds+width) ⇒ <code>number</code>
     * [.height](#Bounds+height) ⇒ <code>number</code>
-    * [.range](#Bounds+range) ⇒ <code>[Point](#Point)</code>
 
 <a name="new_Bounds_new"></a>
 
 ### new Bounds(northWest, southEast)
-Constructor
-
 **Returns**: <code>[Bounds](#Bounds)</code> - instance of Bounds for chaining  
 **Params**
 
@@ -71,21 +230,14 @@ Constructor
 get width of boundaries
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
-**Returns**: <code>number</code> - width of boundaries  
+**Returns**: <code>number</code> - distance between east and west boundary  
 <a name="Bounds+height"></a>
 
 ### bounds.height ⇒ <code>number</code>
 get height of boundaries
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
-**Returns**: <code>number</code> - height of boundaries  
-<a name="Bounds+range"></a>
-
-### bounds.range ⇒ <code>[Point](#Point)</code>
-get size
-
-**Kind**: instance property of <code>[Bounds](#Bounds)</code>  
-**Returns**: <code>[Point](#Point)</code> - calculated Size of boundaries  
+**Returns**: <code>number</code> - distance between north and south boundary  
 <a name="Interact"></a>
 
 ## Interact
@@ -150,8 +302,6 @@ get size
 <a name="new_Interact_new"></a>
 
 ### new Interact(settings)
-Constructor
-
 **Returns**: <code>[Interact](#Interact)</code> - new instance  
 **Params**
 
@@ -737,7 +887,7 @@ Get event helper, applies jQuery-event-fix too
 **Kind**: global class  
 
 * [LatLng](#LatLng)
-    * [new LatLng(lat, lng, isDistance)](#new_LatLng_new)
+    * [new LatLng(lat, lng)](#new_LatLng_new)
     * _instance_
         * [.length](#LatLng+length) ⇒ <code>number</code>
         * [.clone](#LatLng+clone) ⇒ <code>[LatLng](#LatLng)</code>
@@ -746,20 +896,18 @@ Get event helper, applies jQuery-event-fix too
         * [.divide(factorLat, factorLng)](#LatLng+divide) ⇒ <code>[LatLng](#LatLng)</code>
         * [.multiply(factorLat, factorLng)](#LatLng+multiply) ⇒ <code>[LatLng](#LatLng)</code>
         * [.equals(coord)](#LatLng+equals) ⇒ <code>Boolean</code>
+        * [.toString()](#LatLng+toString) ⇒ <code>string</code>
     * _static_
         * [.createFromLatLng(LatLng)](#LatLng.createFromLatLng) ⇒ <code>[LatLng](#LatLng)</code>
 
 <a name="new_LatLng_new"></a>
 
-### new LatLng(lat, lng, isDistance)
-Constructor
-
-**Returns**: <code>[LatLng](#LatLng)</code> - new instance of LatLng  
+### new LatLng(lat, lng)
+**Returns**: <code>[LatLng](#LatLng)</code> - instance of LatLng for chaining  
 **Params**
 
 - lat <code>number</code> <code> = 0</code> - = 0 - representation of latitude
 - lng <code>number</code> <code> = 0</code> - = 0 - representation of longitude
-- isDistance <code>Boolean</code> - = false - if LatLng should be checked against bounds
 
 <a name="LatLng+length"></a>
 
@@ -774,14 +922,14 @@ length of a latlng
 gets a clone of this latlng
 
 **Kind**: instance property of <code>[LatLng](#LatLng)</code>  
-**Returns**: <code>[LatLng](#LatLng)</code> - new instance equals this latlng  
+**Returns**: <code>[LatLng](#LatLng)</code> - create a copy  
 <a name="LatLng+substract"></a>
 
 ### latLng.substract(coord) ⇒ <code>[LatLng](#LatLng)</code>
 substract specified coord from this coordinate
 
 **Kind**: instance method of <code>[LatLng](#LatLng)</code>  
-**Returns**: <code>[LatLng](#LatLng)</code> - the new calculated LatLng  
+**Returns**: <code>[LatLng](#LatLng)</code> - instance of LatLng for chaining  
 **Params**
 
 - coord <code>[LatLng](#LatLng)</code> - = new LatLng() - specified coordinate to substract from this coord
@@ -792,7 +940,7 @@ substract specified coord from this coordinate
 add specified coord to this coordinate
 
 **Kind**: instance method of <code>[LatLng](#LatLng)</code>  
-**Returns**: <code>[LatLng](#LatLng)</code> - the new calculated LatLng  
+**Returns**: <code>[LatLng](#LatLng)</code> - instance of LatLng for chaining  
 **Params**
 
 - coord <code>[LatLng](#LatLng)</code> - = new LatLng() - specified coordinate to add to this coord
@@ -803,7 +951,7 @@ add specified coord to this coordinate
 divides a latlng with a given factor
 
 **Kind**: instance method of <code>[LatLng](#LatLng)</code>  
-**Returns**: <code>[LatLng](#LatLng)</code> - Returns instance for chaining  
+**Returns**: <code>[LatLng](#LatLng)</code> - instance of LatLng for chaining  
 **Params**
 
 - factorLat <code>number</code> <code> = 1</code> - = 1 - factor to divide lat with
@@ -815,7 +963,7 @@ divides a latlng with a given factor
 multiplicates a latlng with a given factor
 
 **Kind**: instance method of <code>[LatLng](#LatLng)</code>  
-**Returns**: <code>[LatLng](#LatLng)</code> - Returns instance for chaining  
+**Returns**: <code>[LatLng](#LatLng)</code> - instance of LatLng for chaining  
 **Params**
 
 - factorLat <code>number</code> <code> = 1</code> - = 1 - factor to multiplicate lat with
@@ -832,6 +980,13 @@ checks if specified coord equals this coord
 
 - coord <code>[LatLng](#LatLng)</code> - specified coord to check against
 
+<a name="LatLng+toString"></a>
+
+### latLng.toString() ⇒ <code>string</code>
+converts a LatLng to string
+
+**Kind**: instance method of <code>[LatLng](#LatLng)</code>  
+**Returns**: <code>string</code> - representing LatLng  
 <a name="LatLng.createFromLatLng"></a>
 
 ### LatLng.createFromLatLng(LatLng) ⇒ <code>[LatLng](#LatLng)</code>
@@ -849,12 +1004,19 @@ Creates a LatLng from specified LatLng
 **Kind**: global class  
 
 * [MappedJS](#MappedJS)
-    * [new MappedJS(container, mapData, mapSettings, events)](#new_MappedJS_new)
-    * [.initializeSettings(container, events)](#MappedJS+initializeSettings) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [new MappedJS(container, mapData, markerData, mapSettings, events)](#new_MappedJS_new)
+    * [.addControls()](#MappedJS+addControls)
+    * [.initializeSettings(container, events, settings)](#MappedJS+initializeSettings) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.initializeData(mapData, cb)](#MappedJS+initializeData) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.initializeMap()](#MappedJS+initializeMap) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.getAbsolutePosition(point)](#MappedJS+getAbsolutePosition) ⇒ <code>[Point](#Point)</code>
+    * [.initializeInteractForMap()](#MappedJS+initializeInteractForMap) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.bindEvents()](#MappedJS+bindEvents) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.resetToInitialState()](#MappedJS+resetToInitialState) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.zoomInToCenter()](#MappedJS+zoomInToCenter) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.zoomOutToCenter()](#MappedJS+zoomOutToCenter) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.keyPress(e)](#MappedJS+keyPress) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.handleMovementByKeys(direction)](#MappedJS+handleMovementByKeys) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.momentumAccerlation(velocity)](#MappedJS+momentumAccerlation) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.triggerMomentum(steps, timing, change)](#MappedJS+triggerMomentum) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.moveView(delta)](#MappedJS+moveView) ⇒ <code>[MappedJS](#MappedJS)</code>
@@ -864,20 +1026,25 @@ Creates a LatLng from specified LatLng
 
 <a name="new_MappedJS_new"></a>
 
-### new MappedJS(container, mapData, mapSettings, events)
-Constructor
-
+### new MappedJS(container, mapData, markerData, mapSettings, events)
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
 **Params**
 
 - container <code>string</code> | <code>Object</code> <code> = &quot;\&quot;.mjs\&quot;&quot;</code> - Container, either string, jQuery-object or dom-object
 - mapData <code>string</code> | <code>Object</code> <code> = &quot;{}&quot;</code> - data of map tiles, can be json or path to file
+- markerData <code>string</code> | <code>Object</code> <code> = &quot;{}&quot;</code> - data of markers, can be json or path to file
 - mapSettings <code>Object</code> <code> = {}</code> - settings for map, must be json
 - events <code>Object</code> <code> = {loaded:</code> - "mjs-loaded"} - List of events
 
+<a name="MappedJS+addControls"></a>
+
+### mappedJS.addControls()
+add controls (zoom, home) to DOM
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
 <a name="MappedJS+initializeSettings"></a>
 
-### mappedJS.initializeSettings(container, events) ⇒ <code>[MappedJS](#MappedJS)</code>
+### mappedJS.initializeSettings(container, events, settings) ⇒ <code>[MappedJS](#MappedJS)</code>
 initializes the settings and handles errors
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
@@ -886,6 +1053,7 @@ initializes the settings and handles errors
 
 - container <code>string</code> | <code>Object</code> - Container, either string, jQuery-object or dom-object
 - events <code>object</code> - List of events
+- settings <code>object</code> - List of settings
 
 <a name="MappedJS+initializeData"></a>
 
@@ -897,7 +1065,7 @@ initializes the data, asynchronous
 **Params**
 
 - mapData <code>Object</code> - data of map tiles, can be json or path to file
-- cb <code>function</code> - called, when data is received
+- cb <code>Helper~requestJSONCallback</code> - called, when data is received
 
 <a name="MappedJS+initializeMap"></a>
 
@@ -917,6 +1085,13 @@ get absolute position of a point
 
 - point <code>[Point](#Point)</code> - specified relative position
 
+<a name="MappedJS+initializeInteractForMap"></a>
+
+### mappedJS.initializeInteractForMap() ⇒ <code>[MappedJS](#MappedJS)</code>
+initializes interaction
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
 <a name="MappedJS+bindEvents"></a>
 
 ### mappedJS.bindEvents() ⇒ <code>[MappedJS](#MappedJS)</code>
@@ -924,6 +1099,49 @@ binds all events to handlers
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+<a name="MappedJS+resetToInitialState"></a>
+
+### mappedJS.resetToInitialState() ⇒ <code>[MappedJS](#MappedJS)</code>
+resets map to initial state
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+<a name="MappedJS+zoomInToCenter"></a>
+
+### mappedJS.zoomInToCenter() ⇒ <code>[MappedJS](#MappedJS)</code>
+zooms into center of map
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+<a name="MappedJS+zoomOutToCenter"></a>
+
+### mappedJS.zoomOutToCenter() ⇒ <code>[MappedJS](#MappedJS)</code>
+zooms out of center of map
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+<a name="MappedJS+keyPress"></a>
+
+### mappedJS.keyPress(e) ⇒ <code>[MappedJS](#MappedJS)</code>
+Keypress handler
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+**Params**
+
+- e <code>object</code> - VanillaJS-Event-Object
+
+<a name="MappedJS+handleMovementByKeys"></a>
+
+### mappedJS.handleMovementByKeys(direction) ⇒ <code>[MappedJS](#MappedJS)</code>
+handles the translation of the map by keypress
+
+**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+**Params**
+
+- direction <code>[Point](#Point)</code> - x,y point where to translate to
+
 <a name="MappedJS+momentumAccerlation"></a>
 
 ### mappedJS.momentumAccerlation(velocity) ⇒ <code>[MappedJS](#MappedJS)</code>
@@ -992,20 +1210,26 @@ called when loading and initialization is finished
 
 * [Marker](#Marker)
     * [new Marker(data, _instance)](#new_Marker_new)
+    * [.bindEvents()](#Marker+bindEvents) ⇒ <code>[Marker](#Marker)</code>
     * [.addMarkerToDOM($container)](#Marker+addMarkerToDOM) ⇒ <code>Object</code>
     * [.positionMarker()](#Marker+positionMarker) ⇒ <code>[Marker](#Marker)</code>
 
 <a name="new_Marker_new"></a>
 
 ### new Marker(data, _instance)
-Constructor
-
 **Returns**: <code>[Marker](#Marker)</code> - - instance of Marker for chaining  
 **Params**
 
 - data <code>Object</code> - = DataEnrichment.DATA_MARKER - enriched data
 - _instance <code>[View](#View)</code> <code> = </code> - = parent instance - instance of parent view
 
+<a name="Marker+bindEvents"></a>
+
+### marker.bindEvents() ⇒ <code>[Marker](#Marker)</code>
+binds all events
+
+**Kind**: instance method of <code>[Marker](#Marker)</code>  
+**Returns**: <code>[Marker](#Marker)</code> - instance of Marker for chaining  
 <a name="Marker+addMarkerToDOM"></a>
 
 ### marker.addMarkerToDOM($container) ⇒ <code>Object</code>
@@ -1023,7 +1247,7 @@ adds a marker to the DOM
 set initial position of this marker
 
 **Kind**: instance method of <code>[Marker](#Marker)</code>  
-**Returns**: <code>[Marker](#Marker)</code> - - instance of Marker for chaining  
+**Returns**: <code>[Marker](#Marker)</code> - instance of Marker for chaining  
 <a name="Point"></a>
 
 ## Point
@@ -1050,9 +1274,7 @@ set initial position of this marker
 <a name="new_Point_new"></a>
 
 ### new Point(x, y)
-Constructor
-
-**Returns**: <code>[Point](#Point)</code> - new instance of point  
+**Returns**: <code>[Point](#Point)</code> - instance of Point for chaining  
 **Params**
 
 - x <code>number</code> <code> = 0</code> - = 0 - representation of x coordinate
@@ -1085,7 +1307,7 @@ gets absolute Point
 substracts 2 points
 
 **Kind**: instance method of <code>[Point](#Point)</code>  
-**Returns**: <code>[Point](#Point)</code> - difference between this point and parameter point  
+**Returns**: <code>[Point](#Point)</code> - instance of Point for chaining  
 **Params**
 
 - point <code>[Point](#Point)</code> - = new Point() - the point to substract from this
@@ -1096,7 +1318,7 @@ substracts 2 points
 adds 2 points
 
 **Kind**: instance method of <code>[Point](#Point)</code>  
-**Returns**: <code>[Point](#Point)</code> - addition of this point and parameter point  
+**Returns**: <code>[Point](#Point)</code> - instance of Point for chaining  
 **Params**
 
 - point <code>[Point](#Point)</code> - = new Point() - the point to add to this
@@ -1107,11 +1329,11 @@ adds 2 points
 multiplicates a point with a given x and y
 
 **Kind**: instance method of <code>[Point](#Point)</code>  
-**Returns**: <code>[Point](#Point)</code> - Returns a new instance  
+**Returns**: <code>[Point](#Point)</code> - instance of Point for chaining  
 **Params**
 
 - x <code>number</code> <code> = 1</code> - = 1 - factor to multiplicate x with
-- y <code>number</code> - factor to multiplicate y with
+- y <code>number</code> - = x - factor to multiplicate y with
 
 <a name="Point+divide"></a>
 
@@ -1119,11 +1341,11 @@ multiplicates a point with a given x and y
 divide a point with a given x and y
 
 **Kind**: instance method of <code>[Point](#Point)</code>  
-**Returns**: <code>[Point](#Point)</code> - Returns a new instance  
+**Returns**: <code>[Point](#Point)</code> - instance of Point for chaining  
 **Params**
 
 - x <code>number</code> <code> = 1</code> - = 1 - factor to divide x with
-- y <code>number</code> - factor to divide y with
+- y <code>number</code> - = x - factor to divide y with
 
 <a name="Point+equals"></a>
 
@@ -1153,7 +1375,7 @@ Returns the distance from this Point to a specified Point
 translates a point by x and y
 
 **Kind**: instance method of <code>[Point](#Point)</code>  
-**Returns**: <code>[Point](#Point)</code> - instance of Point  
+**Returns**: <code>[Point](#Point)</code> - instance of Point for chaining  
 **Params**
 
 - x <code>number</code> <code> = 0</code> - = 0 - value to move x
@@ -1165,11 +1387,11 @@ translates a point by x and y
 positions a point by x and y
 
 **Kind**: instance method of <code>[Point](#Point)</code>  
-**Returns**: <code>[Point](#Point)</code> - instance of Point  
+**Returns**: <code>[Point](#Point)</code> - instance of Point for chaining  
 **Params**
 
-- x <code>number</code> <code> = 0</code> - value to position x
-- y <code>number</code> - value to position y
+- x <code>number</code> <code> = 0</code> - = 0 - value to position x
+- y <code>number</code> - = x - value to position y
 
 <a name="Point+toArray"></a>
 
@@ -1195,30 +1417,19 @@ Creates a Point from specified point
 **Kind**: global class  
 
 * [Publisher](#Publisher)
-    * [new Publisher()](#new_Publisher_new)
-    * _instance_
-        * [.subscribe(type, fn)](#Publisher+subscribe) ⇒ <code>[Publisher](#Publisher)</code>
-        * [.unsubscribe(type, fn)](#Publisher+unsubscribe) ⇒ <code>[Publisher](#Publisher)</code>
-        * [.publish(type, arg)](#Publisher+publish) ⇒ <code>[Publisher](#Publisher)</code>
-        * [.handle(action, type, a)](#Publisher+handle) ⇒ <code>[Publisher](#Publisher)</code>
-        * [.destroy()](#Publisher+destroy)
-    * _static_
-        * [.PUBLISH](#Publisher.PUBLISH) : <code>String</code>
-        * [.UNSUBSCRIBE](#Publisher.UNSUBSCRIBE) : <code>String</code>
+    * [.subscribe(type, fn)](#Publisher+subscribe) ⇒ <code>[Publisher](#Publisher)</code>
+    * [.unsubscribe(type, fn)](#Publisher+unsubscribe) ⇒ <code>[Publisher](#Publisher)</code>
+    * [.publish(type, arg)](#Publisher+publish) ⇒ <code>[Publisher](#Publisher)</code>
+    * [.handle(action, type, a)](#Publisher+handle) ⇒ <code>[Publisher](#Publisher)</code>
+    * [.destroy()](#Publisher+destroy)
 
-<a name="new_Publisher_new"></a>
-
-### new Publisher()
-Constructor
-
-**Returns**: <code>[Publisher](#Publisher)</code> - instance of Publisher  
 <a name="Publisher+subscribe"></a>
 
 ### publisher.subscribe(type, fn) ⇒ <code>[Publisher](#Publisher)</code>
 subscribe to a topic
 
 **Kind**: instance method of <code>[Publisher](#Publisher)</code>  
-**Returns**: <code>[Publisher](#Publisher)</code> - instance of Publisher  
+**Returns**: <code>[Publisher](#Publisher)</code> - instance of Publisher for chaining  
 **Params**
 
 - type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic
@@ -1230,7 +1441,7 @@ subscribe to a topic
 unsubscribe from a topic
 
 **Kind**: instance method of <code>[Publisher](#Publisher)</code>  
-**Returns**: <code>[Publisher](#Publisher)</code> - instance of Publisher  
+**Returns**: <code>[Publisher](#Publisher)</code> - instance of Publisher for chaining  
 **Params**
 
 - type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic
@@ -1242,7 +1453,7 @@ unsubscribe from a topic
 publish to a topic
 
 **Kind**: instance method of <code>[Publisher](#Publisher)</code>  
-**Returns**: <code>[Publisher](#Publisher)</code> - instance of Publisher  
+**Returns**: <code>[Publisher](#Publisher)</code> - instance of Publisher for chaining  
 **Params**
 
 - type <code>string</code> <code> = &quot;\&quot;any\&quot;&quot;</code> - a topic
@@ -1254,7 +1465,7 @@ publish to a topic
 handle subscribe to a topic
 
 **Kind**: instance method of <code>[Publisher](#Publisher)</code>  
-**Returns**: <code>[Publisher](#Publisher)</code> - instance of Publisher  
+**Returns**: <code>[Publisher](#Publisher)</code> - instance of Publisher for chaining  
 **Params**
 
 - action <code>string</code> - eventname
@@ -1267,18 +1478,6 @@ handle subscribe to a topic
 destroys singleton instance
 
 **Kind**: instance method of <code>[Publisher](#Publisher)</code>  
-<a name="Publisher.PUBLISH"></a>
-
-### Publisher.PUBLISH : <code>String</code>
-Eventname for publishing
-
-**Kind**: static property of <code>[Publisher](#Publisher)</code>  
-<a name="Publisher.UNSUBSCRIBE"></a>
-
-### Publisher.UNSUBSCRIBE : <code>String</code>
-Eventname for unsubscribing
-
-**Kind**: static property of <code>[Publisher](#Publisher)</code>  
 <a name="Rectangle"></a>
 
 ## Rectangle
@@ -1321,9 +1520,7 @@ Eventname for unsubscribing
 <a name="new_Rectangle_new"></a>
 
 ### new Rectangle(x, y, width, height)
-Constructor
-
-**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - x <code>number</code> <code> = 0</code> - x-position of specified rectangle
@@ -1429,7 +1626,7 @@ Checks whether Rectangle entirely contains the Rectangle or Point
 Sets the center of this Rectangle to specified point
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - point <code>[Point](#Point)</code> - = new Point() - specified point to set center of rectangle to
@@ -1440,7 +1637,7 @@ Sets the center of this Rectangle to specified point
 Sets the x-center of this Rectangle to specified x
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - x <code>number</code> <code> = 0</code> - = 0 - specified x coordinate to set x center of rectangle to
@@ -1451,7 +1648,7 @@ Sets the x-center of this Rectangle to specified x
 Sets the y-center of this Rectangle to specified y
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - y <code>number</code> <code> = 0</code> - = 0 - specified y coordinate to set y center of rectangle to
@@ -1484,7 +1681,7 @@ Checks whether Rectangle entirely contains the Rectangle
 distorts rectangle by factor
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - a new instance of Rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - a distorted Rectangle  
 **Params**
 
 - factor <code>number</code> <code> = 1</code> - = 1 - the specified factor of distortion
@@ -1495,7 +1692,7 @@ distorts rectangle by factor
 redistorts rectangle by factor
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - a new instance of Rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - an undistorted Rectangle  
 **Params**
 
 - factor <code>number</code> <code> = 1</code> - = 1- the specified factor of distortion
@@ -1506,7 +1703,7 @@ redistorts rectangle by factor
 scale x and width of rectangle
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - scaled Rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - x <code>number</code> <code> = 1</code> - = 1 - factor to be applied to scale
@@ -1517,7 +1714,7 @@ scale x and width of rectangle
 scale y and height of rectangle
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - new scaled Rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - y <code>number</code> <code> = 1</code> - = 1- factor to be applied to scale
@@ -1528,7 +1725,7 @@ scale y and height of rectangle
 scale x and y for width and height of rectangle
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - new scaled Rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - x <code>number</code> <code> = 1</code> - = 1 - factor to be applied to scale
@@ -1540,7 +1737,7 @@ scale x and y for width and height of rectangle
 moves a rectangle by specified coords
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - x <code>number</code> <code> = 0</code> - = 0 - specified x to be added to x position
@@ -1552,7 +1749,7 @@ moves a rectangle by specified coords
 transforms a rectangle by specified coords
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - x <code>number</code> <code> = 0</code> - = 0 - specified x to be added to x position
@@ -1566,7 +1763,7 @@ transforms a rectangle by specified coords
 changes the position a rectangle by specified coords
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - x <code>number</code> <code> = 0</code> - = 0 - the new x position
@@ -1578,7 +1775,7 @@ changes the position a rectangle by specified coords
 changes the size of a rectangle by specified params
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - x <code>number</code> <code> = 0</code> - = 0- the new x position
@@ -1592,7 +1789,7 @@ changes the size of a rectangle by specified params
 changes the size of a rectangle by specified params
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - Returns the altered rectangle  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
 **Params**
 
 - width <code>number</code> <code> = 0</code> - = 0 - the new width
@@ -1615,7 +1812,7 @@ check if rectangles are equal
 Creates a Rectangle from specified Rectangle
 
 **Kind**: static method of <code>[Rectangle](#Rectangle)</code>  
-**Returns**: <code>[Rectangle](#Rectangle)</code> - the point specified  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - a copy of specified rectangle  
 **Params**
 
 - rect <code>[Rectangle](#Rectangle)</code> - specified Rectangle
@@ -1632,16 +1829,14 @@ Creates a Rectangle from specified Rectangle
     * [.next()](#StateHandler+next) ⇒ <code>[StateHandler](#StateHandler)</code>
     * [.previous()](#StateHandler+previous) ⇒ <code>[StateHandler](#StateHandler)</code>
     * [.changeTo(state)](#StateHandler+changeTo) ⇒ <code>[StateHandler](#StateHandler)</code>
-    * [.changeToValue(state)](#StateHandler+changeToValue) ⇒ <code>[StateHandler](#StateHandler)</code>
+    * [.changeToValue(prop, value)](#StateHandler+changeToValue) ⇒ <code>[StateHandler](#StateHandler)</code>
     * [.hasNext()](#StateHandler+hasNext) ⇒ <code>Boolean</code>
     * [.hasPrevious()](#StateHandler+hasPrevious) ⇒ <code>Boolean</code>
 
 <a name="new_StateHandler_new"></a>
 
 ### new StateHandler(states_array)
-Constructor
-
-**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
+**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler for chaining  
 **Params**
 
 - states_array <code>Array</code> <code> = [{value:</code> - 0, description: 'Default'}] - [description]
@@ -1666,35 +1861,36 @@ get number of states
 get the next element
 
 **Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
-**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
+**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler for chaining  
 <a name="StateHandler+previous"></a>
 
 ### stateHandler.previous() ⇒ <code>[StateHandler](#StateHandler)</code>
 get the previous element
 
 **Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
-**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
+**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler for chaining  
 <a name="StateHandler+changeTo"></a>
 
 ### stateHandler.changeTo(state) ⇒ <code>[StateHandler](#StateHandler)</code>
 change the state to specified state
 
 **Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
-**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
+**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler for chaining  
 **Params**
 
 - state <code>number</code> - index of state in array
 
 <a name="StateHandler+changeToValue"></a>
 
-### stateHandler.changeToValue(state) ⇒ <code>[StateHandler](#StateHandler)</code>
+### stateHandler.changeToValue(prop, value) ⇒ <code>[StateHandler](#StateHandler)</code>
 change the state to specified value of specified property
 
 **Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
-**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler  
+**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler for chaining  
 **Params**
 
-- state <code>number</code> - index of state in array
+- prop <code>object</code> - specified property to be changed
+- value <code>object</code> - specified value that should be changed to
 
 <a name="StateHandler+hasNext"></a>
 
@@ -1724,9 +1920,7 @@ checks if there is a previous element
 <a name="new_Tile_new"></a>
 
 ### new Tile(path, x, y, w, h, _instance)
-Constructor
-
-**Returns**: <code>[Tile](#Tile)</code> - instance of Tile  
+**Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
 **Params**
 
 - path <code>string</code> - = null - path to image
@@ -1768,34 +1962,32 @@ check if tiles are equal
 
 * [TileMap](#TileMap)
     * [new TileMap(container, tilesData, settings)](#new_TileMap_new)
-    * _instance_
-        * [.left](#TileMap+left) ⇒ <code>number</code>
-        * [.top](#TileMap+top) ⇒ <code>number</code>
-        * [.width](#TileMap+width) ⇒ <code>number</code>
-        * [.height](#TileMap+height) ⇒ <code>number</code>
-        * [.currentLevelData](#TileMap+currentLevelData) ⇒ <code>Object</code>
-        * [.initialize()](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.enrichMarkerData(markerData)](#TileMap+enrichMarkerData) ⇒ <code>Object</code>
-        * [.initializeMarkers(markerData)](#TileMap+initializeMarkers) ⇒ <code>[View](#View)</code>
-        * [.appendMarkerContainerToDom($container)](#TileMap+appendMarkerContainerToDom) ⇒ <code>[View](#View)</code>
-        * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.redraw()](#TileMap+redraw) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.resize()](#TileMap+resize) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.resizeCanvas()](#TileMap+resizeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
-        * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
-    * _static_
-        * [.IMG_DATA_NAME](#TileMap.IMG_DATA_NAME) : <code>String</code>
-        * [.MARKER_DATA_NAME](#TileMap.MARKER_DATA_NAME) : <code>String</code>
+    * [.left](#TileMap+left) ⇒ <code>number</code>
+    * [.top](#TileMap+top) ⇒ <code>number</code>
+    * [.width](#TileMap+width) ⇒ <code>number</code>
+    * [.height](#TileMap+height) ⇒ <code>number</code>
+    * [.currentLevelData](#TileMap+currentLevelData) ⇒ <code>Object</code>
+    * [.initialize(bounds, center, data)](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.reset()](#TileMap+reset)
+    * [.createViewFromData(bounds, center, data, zoom)](#TileMap+createViewFromData) ⇒ <code>[View](#View)</code>
+    * [.enrichMarkerData(markerData)](#TileMap+enrichMarkerData) ⇒ <code>Object</code>
+    * [.initializeMarkers(markerData)](#TileMap+initializeMarkers) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.appendMarkerContainerToDom()](#TileMap+appendMarkerContainerToDom)
+    * [.createTooltipContainer()](#TileMap+createTooltipContainer) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.bindEvents()](#TileMap+bindEvents) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.redraw()](#TileMap+redraw) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.resize()](#TileMap+resize) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.resizeCanvas()](#TileMap+resizeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
 
 <a name="new_TileMap_new"></a>
 
 ### new TileMap(container, tilesData, settings)
-Constructor
-
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 **Params**
 
-- container <code>Object</code> - jQuery-object holding the container
+- container <code>Object</code> - = null - jQuery-object holding the container
 - tilesData <code>Object</code> <code> = {}</code> - json object representing data of TileMap
 - settings <code>Object</code> <code> = {}</code> - json object representing settings of TileMap
 
@@ -1836,11 +2028,37 @@ gets data of current zoom level
 **Returns**: <code>Object</code> - data for current level as json  
 <a name="TileMap+initialize"></a>
 
-### tileMap.initialize() ⇒ <code>[TileMap](#TileMap)</code>
+### tileMap.initialize(bounds, center, data) ⇒ <code>[TileMap](#TileMap)</code>
 initializes the TileMap
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
+**Params**
+
+- bounds <code>[Bounds](#Bounds)</code> - specified boundaries
+- center <code>[LatLng](#LatLng)</code> - specified center
+- data <code>object</code> - specified data
+
+<a name="TileMap+reset"></a>
+
+### tileMap.reset()
+resets view to initial state
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+<a name="TileMap+createViewFromData"></a>
+
+### tileMap.createViewFromData(bounds, center, data, zoom) ⇒ <code>[View](#View)</code>
+creates a View from specified parameters
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[View](#View)</code> - created View  
+**Params**
+
+- bounds <code>[Bounds](#Bounds)</code> - specified boundaries
+- center <code>[LatLng](#LatLng)</code> - specified center
+- data <code>object</code> - specified data
+- zoom <code>number</code> - initial zoom level
+
 <a name="TileMap+enrichMarkerData"></a>
 
 ### tileMap.enrichMarkerData(markerData) ⇒ <code>Object</code>
@@ -1854,33 +2072,43 @@ enrich marker data
 
 <a name="TileMap+initializeMarkers"></a>
 
-### tileMap.initializeMarkers(markerData) ⇒ <code>[View](#View)</code>
+### tileMap.initializeMarkers(markerData) ⇒ <code>[TileMap](#TileMap)</code>
 initializes all markers
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View for chaining  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 **Params**
 
 - markerData <code>Object</code> - data of all markers
 
 <a name="TileMap+appendMarkerContainerToDom"></a>
 
-### tileMap.appendMarkerContainerToDom($container) ⇒ <code>[View](#View)</code>
+### tileMap.appendMarkerContainerToDom()
 append marker container to DOM
+´     * @return {TileMap} instance of TileMap for chaining
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View for chaining  
-**Params**
+<a name="TileMap+createTooltipContainer"></a>
 
-- $container <code>Object</code> - jQuery-selector
+### tileMap.createTooltipContainer() ⇒ <code>[TileMap](#TileMap)</code>
+creates an instance of ToolTip
 
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
+<a name="TileMap+bindEvents"></a>
+
+### tileMap.bindEvents() ⇒ <code>[TileMap](#TileMap)</code>
+bind all events
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+initializeCanvas"></a>
 
 ### tileMap.initializeCanvas() ⇒ <code>[TileMap](#TileMap)</code>
 initializes the canvas, adds to DOM
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap  
+**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
 <a name="TileMap+redraw"></a>
 
 ### tileMap.redraw() ⇒ <code>[TileMap](#TileMap)</code>
@@ -1909,29 +2137,136 @@ Handles resizing of view
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
-<a name="TileMap.IMG_DATA_NAME"></a>
+<a name="ToolTip"></a>
 
-### TileMap.IMG_DATA_NAME : <code>String</code>
-name of image data in data.json
+## ToolTip
+**Kind**: global class  
 
-**Kind**: static property of <code>[TileMap](#TileMap)</code>  
-<a name="TileMap.MARKER_DATA_NAME"></a>
+* [ToolTip](#ToolTip)
+    * [new ToolTip(container, templates)](#new_ToolTip_new)
+    * [.allTemplatesLoaded](#ToolTip+allTemplatesLoaded) ⇒ <code>boolean</code>
+    * [.registerHandlebarHelpers()](#ToolTip+registerHandlebarHelpers) ⇒ <code>[ToolTip](#ToolTip)</code>
+    * [.initializeTemplates(templates)](#ToolTip+initializeTemplates) ⇒ <code>[ToolTip](#ToolTip)</code>
+    * [.getDefaultTemplates()](#ToolTip+getDefaultTemplates) ⇒ <code>object</code>
+    * [.bindEvents()](#ToolTip+bindEvents) ⇒ <code>[ToolTip](#ToolTip)</code>
+    * [.resizeHandler()](#ToolTip+resizeHandler) ⇒ <code>[ToolTip](#ToolTip)</code>
+    * [.insertContent(content)](#ToolTip+insertContent) ⇒ <code>[ToolTip](#ToolTip)</code>
+    * [.open(data)](#ToolTip+open) ⇒ <code>[ToolTip](#ToolTip)</code>
+    * [.close()](#ToolTip+close) ⇒ <code>[ToolTip](#ToolTip)</code>
+    * [.setPosition()](#ToolTip+setPosition) ⇒ <code>[ToolTip](#ToolTip)</code>
+    * [.compileTemplates()](#ToolTip+compileTemplates) ⇒ <code>[ToolTip](#ToolTip)</code>
 
-### TileMap.MARKER_DATA_NAME : <code>String</code>
-name of marker data in data.json
+<a name="new_ToolTip_new"></a>
 
-**Kind**: static property of <code>[TileMap](#TileMap)</code>  
+### new ToolTip(container, templates)
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
+**Params**
+
+- container <code>string</code> | <code>object</code> - Container, either string, jQuery-object or dom-object
+- templates <code>object</code> - defined templates
+
+<a name="ToolTip+allTemplatesLoaded"></a>
+
+### toolTip.allTemplatesLoaded ⇒ <code>boolean</code>
+checks if all templates were loaded
+
+**Kind**: instance property of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>boolean</code> - wheter true if all templates were loaded or false  
+<a name="ToolTip+registerHandlebarHelpers"></a>
+
+### toolTip.registerHandlebarHelpers() ⇒ <code>[ToolTip](#ToolTip)</code>
+register helpers for handlebars
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
+<a name="ToolTip+initializeTemplates"></a>
+
+### toolTip.initializeTemplates(templates) ⇒ <code>[ToolTip](#ToolTip)</code>
+initialize all templates
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
+**Params**
+
+- templates <code>object</code> - = {} - all specified templates
+
+<a name="ToolTip+getDefaultTemplates"></a>
+
+### toolTip.getDefaultTemplates() ⇒ <code>object</code>
+// TODO: move to DataEnrichment
+returns paths to default templates
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>object</code> - default templates  
+<a name="ToolTip+bindEvents"></a>
+
+### toolTip.bindEvents() ⇒ <code>[ToolTip](#ToolTip)</code>
+bind all events
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
+<a name="ToolTip+resizeHandler"></a>
+
+### toolTip.resizeHandler() ⇒ <code>[ToolTip](#ToolTip)</code>
+on resize check if tooltip is bottom or left position
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
+<a name="ToolTip+insertContent"></a>
+
+### toolTip.insertContent(content) ⇒ <code>[ToolTip](#ToolTip)</code>
+inserts content to ToolTip instance container
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
+**Params**
+
+- content <code>object</code> - = {} - content object
+
+<a name="ToolTip+open"></a>
+
+### toolTip.open(data) ⇒ <code>[ToolTip](#ToolTip)</code>
+opens a tooltip
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
+**Params**
+
+- data <code>object</code> - content object
+
+<a name="ToolTip+close"></a>
+
+### toolTip.close() ⇒ <code>[ToolTip](#ToolTip)</code>
+closes a tooltip
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
+<a name="ToolTip+setPosition"></a>
+
+### toolTip.setPosition() ⇒ <code>[ToolTip](#ToolTip)</code>
+sets position of tooltip to left or bottom
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
+<a name="ToolTip+compileTemplates"></a>
+
+### toolTip.compileTemplates() ⇒ <code>[ToolTip](#ToolTip)</code>
+precompiles all Handlebars templates
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
 <a name="View"></a>
 
 ## View
 **Kind**: global class  
 
 * [View](#View)
-    * [new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom)](#new_View_new)
+    * [new View(viewport, currentView, bounds, center, initialCenter, data, $container, context, maxZoom, currentZoom, minZoom, $container, limitToBounds)](#new_View_new)
     * [.distortionFactor](#View+distortionFactor) ⇒ <code>number</code>
     * [.offsetToCenter](#View+offsetToCenter)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
     * [.pixelPerLatLng](#View+pixelPerLatLng) ⇒ <code>[Point](#Point)</code>
+    * [.reset()](#View+reset)
     * [.mainLoop()](#View+mainLoop)
     * [.loadThumb()](#View+loadThumb) ⇒ <code>[View](#View)</code>
     * [.convertPointToLatLng(point)](#View+convertPointToLatLng) ⇒ <code>[LatLng](#LatLng)</code>
@@ -1950,22 +2285,23 @@ name of marker data in data.json
 
 <a name="new_View_new"></a>
 
-### new View(viewport, mapView, bounds, center, data, markerData, $container, context, maxZoom, minZoom)
-Constructor
-
+### new View(viewport, currentView, bounds, center, initialCenter, data, $container, context, maxZoom, currentZoom, minZoom, $container, limitToBounds)
 **Returns**: <code>[View](#View)</code> - instance of View for chaining  
 **Params**
 
 - viewport <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - current representation of viewport
-- mapView <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - current representation of map
+- currentView <code>[Rectangle](#Rectangle)</code> - = new Rectangle() - current representation of map
 - bounds <code>[Bounds](#Bounds)</code> - = new Bounds() - current bounds of map
 - center <code>[LatLng](#LatLng)</code> - = new LatLng() - current center of map
+- initialCenter <code>[LatLng](#LatLng)</code> - = new LatLng() - initial center of view
 - data <code>Object</code> - = {} - tile data of current map
-- markerData <code>Object</code> - = {} - marker data of current map
 - $container <code>Object</code> - = null - parent container for markers
 - context <code>Object</code> - = null - canvas context for drawing
 - maxZoom <code>number</code> - = 1.5 - maximal zoom of view
+- currentZoom <code>number</code> - = 1 - initial zoom of view
 - minZoom <code>number</code> - = 0.8 - minimal zoom of view
+- $container <code>object</code> - = null - jQuery-selector of container class
+- limitToBounds <code>number</code> - where to limit panning
 
 <a name="View+distortionFactor"></a>
 
@@ -1994,6 +2330,12 @@ how many pixels per lat and lng
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>[Point](#Point)</code> - pixels per lat/lng  
+<a name="View+reset"></a>
+
+### view.reset()
+resets current View to its initial position
+
+**Kind**: instance method of <code>[View](#View)</code>  
 <a name="View+mainLoop"></a>
 
 ### view.mainLoop()
@@ -2134,6 +2476,65 @@ reposition marker container
 singleton instance
 
 **Kind**: global variable  
+<a name="Events"></a>
+
+## Events : <code>object</code>
+Helper for naming events
+
+**Kind**: global namespace  
+**Author:** Michael Duve <mduve@designmail.net>  
+**Copyright**: Michael Duve 2016  
+
+* [Events](#Events) : <code>object</code>
+    * [.ToolTip](#Events.ToolTip) : <code>Object</code>
+    * [.Marker](#Events.Marker) : <code>Object</code>
+    * [.Publisher](#Events.Publisher) : <code>Object</code>
+    * [.TileMap](#Events.TileMap) : <code>Object</code>
+
+<a name="Events.ToolTip"></a>
+
+### Events.ToolTip : <code>Object</code>
+Eventnames for ToolTip class
+
+**Kind**: static property of <code>[Events](#Events)</code>  
+**Properties**
+
+- OPEN <code>object</code> - when a tooltip should be openend  
+- CLOSE <code>object</code> - when a tooltip should be closed  
+
+<a name="Events.Marker"></a>
+
+### Events.Marker : <code>Object</code>
+Eventnames for Marker class
+
+**Kind**: static property of <code>[Events](#Events)</code>  
+**Properties**
+
+- DEACTIVATE <code>object</code> - when a Marker should be in deactived state  
+
+<a name="Events.Publisher"></a>
+
+### Events.Publisher : <code>Object</code>
+Eventnames for Publisher class
+
+**Kind**: static property of <code>[Events](#Events)</code>  
+**Properties**
+
+- PUBLISH <code>object</code> - notifies all subscribers  
+- SUBSCRIBE <code>object</code> - subscribes to a topic  
+- UNSUBSCRIBE <code>object</code> - unsubscribes from a topic  
+
+<a name="Events.TileMap"></a>
+
+### Events.TileMap : <code>Object</code>
+Eventnames for TileMap class
+
+**Kind**: static property of <code>[Events](#Events)</code>  
+**Properties**
+
+- IMG_DATA_NAME <code>object</code> - notifies all subscribers  
+- MARKER_DATA_NAME <code>object</code> - subscribes to a topic  
+
 <a name="STATES"></a>
 
 ## STATES : <code>Array</code>

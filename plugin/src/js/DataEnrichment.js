@@ -1,15 +1,22 @@
 import $ from 'jQuery';
+import {Helper} from './Helper.js';
 import {Point} from './Point.js';
 import {LatLng} from './LatLng.js';
 import {Bounds} from './Bounds.js';
-import {Helper} from './Helper.js';
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file enriches delivered data with default values
+ * @copyright Michael Duve 2016
+ * @module DataEnrichment
+ */
 export var DataEnrichment = {
     /**
      * enriches marker data with all needed data
+     * @function
+     * @memberof module:DataEnrichment
      * @param  {object} data - specified data for marker
-     * @param  {Function} cb - callback function, when enrichment is done
-     * @return {DataEnrichment} DataEnrichment object for chaining
+     * @return {object} enriched marker data
      */
     marker(data) {
 
@@ -34,6 +41,13 @@ export var DataEnrichment = {
 
         return enrichedData;
     },
+    /**
+     * enriches map data with all needed data
+     * @function
+     * @memberof module:DataEnrichment
+     * @param  {object} data - specified data for mapsettings
+     * @return {object} enriched mapsettings data
+     */
     mapSettings(data) {
 
         const enrichedData = Object.assign(DataEnrichment.MAP_SETTINGS, data),
@@ -74,7 +88,10 @@ DataEnrichment.DATA_MARKER = {
     },
     content: []
 };
-
+/**
+ * Default initial values for a Map
+ * @type {Object}
+ */
 DataEnrichment.MAP_SETTINGS = {
     level: 0,
     center: {"lat": 0, "lng": 0},

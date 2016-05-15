@@ -1,5 +1,11 @@
 import {Point} from './Point.js';
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file represents a rectangle with a point as position, width and height
+ * @extends Point
+ * @copyright Michael Duve 2016
+ */
 export class Rectangle extends Point {
 
     /**
@@ -83,12 +89,12 @@ export class Rectangle extends Point {
     }
 
     /**
-     * Constructor
+     * @constructor
      * @param  {number} x=0 - x-position of specified rectangle
      * @param  {number} y=0 - y-position of specified rectangle
      * @param  {number} width=0 - width of specified rectangle
      * @param  {number} height=0 - height of specified rectangle
-     * @return {Rectangle} instance of Rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     constructor(x=0, y=0, width=0, height=0) {
         super(x, y);
@@ -118,7 +124,7 @@ export class Rectangle extends Point {
     /**
      * Sets the center of this Rectangle to specified point
      * @param  {Point} point = new Point() - specified point to set center of rectangle to
-     * @return {Rectangle} instance of Rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     setCenter(point = new Point()) {
         const difference = point.substract(this.center);
@@ -129,7 +135,7 @@ export class Rectangle extends Point {
     /**
      * Sets the x-center of this Rectangle to specified x
      * @param  {number} x = 0 - specified x coordinate to set x center of rectangle to
-     * @return {Rectangle} instance of Rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     setCenterX(x = 0) {
         const difference = x - this.center.x;
@@ -140,7 +146,7 @@ export class Rectangle extends Point {
     /**
      * Sets the y-center of this Rectangle to specified y
      * @param  {number} y = 0 - specified y coordinate to set y center of rectangle to
-     * @return {Rectangle} instance of Rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     setCenterY(y = 0) {
         const difference = y - this.center.y;
@@ -170,7 +176,7 @@ export class Rectangle extends Point {
     /**
      * distorts rectangle by factor
      * @param  {number} factor = 1 - the specified factor of distortion
-     * @return {Rectangle} a new instance of Rectangle
+     * @return {Rectangle} a distorted Rectangle
      */
     getDistortedRect(factor = 1) {
         return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
@@ -179,7 +185,7 @@ export class Rectangle extends Point {
     /**
      * redistorts rectangle by factor
      * @param  {number} factor = 1- the specified factor of distortion
-     * @return {Rectangle} a new instance of Rectangle
+     * @return {Rectangle} an undistorted Rectangle
      */
     getNormalRect(factor = 1) {
         return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1/factor);
@@ -188,7 +194,7 @@ export class Rectangle extends Point {
     /**
      * scale x and width of rectangle
      * @param  {number} x = 1 - factor to be applied to scale
-     * @return {Rectangle} scaled Rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     scaleX(x = 1) {
         this.x *= x;
@@ -199,7 +205,7 @@ export class Rectangle extends Point {
     /**
      * scale y and height of rectangle
      * @param  {number} y = 1- factor to be applied to scale
-     * @return {Rectangle} new scaled Rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     scaleY(y = 1) {
         this.y *= y;
@@ -211,7 +217,7 @@ export class Rectangle extends Point {
      * scale x and y for width and height of rectangle
      * @param  {number} x = 1 - factor to be applied to scale
      * @param  {number} y = x - factor to be applied to scale
-     * @return {Rectangle} new scaled Rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     scale(x = 1, y = x) {
         this.scaleX(x);
@@ -223,7 +229,7 @@ export class Rectangle extends Point {
      * moves a rectangle by specified coords
      * @param  {number} x = 0 - specified x to be added to x position
      * @param  {number} y = x - specified y to be added to y position
-     * @return {Rectangle} Returns the altered rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     translate(x = 0, y = x) {
         super.translate(x, y);
@@ -236,7 +242,7 @@ export class Rectangle extends Point {
      * @param  {number} y = x - specified y to be added to y position
      * @param  {number} width = 0 - specified width to be added to this width
      * @param  {number} height = 0 - specified height to be added to this height
-     * @return {Rectangle} Returns the altered rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     transform(x = 0, y = x, width = 0, height = 0) {
         this.translate(x, y);
@@ -249,7 +255,7 @@ export class Rectangle extends Point {
      * changes the position a rectangle by specified coords
      * @param  {number} x = 0 - the new x position
      * @param  {number} y = 0 - he new y position
-     * @return {Rectangle} Returns the altered rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     position(x = 0, y = 0) {
         super.position(x, y);
@@ -262,7 +268,7 @@ export class Rectangle extends Point {
      * @param  {number} y = x - the new y position
      * @param  {number} width = 0 - the new width
      * @param  {number} height = 0 - the new width
-     * @return {Rectangle} Returns the altered rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     size(x = 0, y = x, width = 0, height = 0) {
         this.position(x, y);
@@ -275,7 +281,7 @@ export class Rectangle extends Point {
      * changes the size of a rectangle by specified params
      * @param  {number} width = 0 - the new width
      * @param  {number} height = width - the new width
-     * @return {Rectangle} Returns the altered rectangle
+     * @return {Rectangle} instance of Rectangle for chaining
      */
     setSize(width = 0, height = width) {
         this.width = width;
@@ -297,6 +303,6 @@ export class Rectangle extends Point {
 /**
  * Creates a Rectangle from specified Rectangle
  * @param  {Rectangle} rect - specified Rectangle
- * @return {Rectangle} the point specified
+ * @return {Rectangle} a copy of specified rectangle
  */
 Rectangle.createFromRectangle = (rect) => new Rectangle(rect.x, rect.y, rect.width, rect.height);

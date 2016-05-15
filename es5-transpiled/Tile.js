@@ -109,24 +109,32 @@
         description: 'Drawn'
     }];
 
+    /**
+     * @author Michael Duve <mduve@designmail.net>
+     * @file Represents a part of the background map
+     * @extends Rectangle
+     * @copyright Michael Duve 2016
+     */
+
     var Tile = exports.Tile = function(_Rectangle) {
         _inherits(Tile, _Rectangle);
 
         /**
-         * Constructor
+         * @constructor
          * @param  {string} path = null - path to image
          * @param  {number} x = 0 - position x of tile
          * @param  {number} y = 0 - position y of tile
          * @param  {number} w = 0 - tile width
          * @param  {number} h = 0 - tile height
          * @param  {View} _instance = null - instance of parent View
-         * @return {Tile} instance of Tile
+         * @return {Tile} instance of Tile for chaining
          */
 
         function Tile() {
             var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var path = _ref.path;
+            var _ref$path = _ref.path;
+            var path = _ref$path === undefined ? null : _ref$path;
             var _ref$x = _ref.x;
             var x = _ref$x === undefined ? 0 : _ref$x;
             var _ref$y = _ref.y;

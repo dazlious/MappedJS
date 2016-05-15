@@ -1,21 +1,22 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(["exports"], factory);
+        define(["exports", "./Events.js"], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports);
+        factory(exports, require("./Events.js"));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports);
+        factory(mod.exports, global.Events);
         global.Publisher = mod.exports;
     }
-})(this, function(exports) {
+})(this, function(exports, _Events) {
     "use strict";
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
+    exports.Publisher = undefined;
 
     var _slicedToArray = function() {
         function sliceIterator(arr, i) {
@@ -85,11 +86,17 @@
      */
     var instance = null;
 
+    /**
+     * @author Michael Duve <mduve@designmail.net>
+     * @file Publish/Subscribe pattern
+     * @copyright Michael Duve 2016
+     */
+
     var Publisher = exports.Publisher = function() {
 
         /**
-         * Constructor
-         * @return {Publisher} instance of Publisher
+         * @constructor
+         * @return {Publisher} singleton instance of Publisher for chaining
          */
 
         function Publisher() {
@@ -106,7 +113,7 @@
          * subscribe to a topic
          * @param  {string} type="any" - a topic
          * @param  {Function} fn=function(){} - a function to callback
-         * @return {Publisher} instance of Publisher
+         * @return {Publisher} instance of Publisher for chaining
          */
 
 
@@ -125,7 +132,7 @@
              * unsubscribe from a topic
              * @param  {string} type="any" - a topic
              * @param  {Function} fn=function(){} - a function to callback
-             * @return {Publisher} instance of Publisher
+             * @return {Publisher} instance of Publisher for chaining
              */
 
         }, {
@@ -134,14 +141,14 @@
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
                 var fn = arguments.length <= 1 || arguments[1] === undefined ? function() {} : arguments[1];
 
-                return this.handle(Publisher.UNSUBSCRIBE, type, fn);
+                return this.handle(_Events.Events.Publisher.UNSUBSCRIBE, type, fn);
             }
 
             /**
              * publish to a topic
              * @param  {string} type="any" - a topic
              * @param  {Function} arg=[] - list of parameters
-             * @return {Publisher} instance of Publisher
+             * @return {Publisher} instance of Publisher for chaining
              */
 
         }, {
@@ -150,7 +157,7 @@
                 var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
                 var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
-                return this.handle(Publisher.PUBLISH, type, arg);
+                return this.handle(_Events.Events.Publisher.PUBLISH, type, arg);
             }
 
             /**
@@ -158,7 +165,7 @@
              * @param  {string} action - eventname
              * @param  {string} type="any" - a topic
              * @param  {Object} a function to callback or arguments
-             * @return {Publisher} instance of Publisher
+             * @return {Publisher} instance of Publisher for chaining
              */
 
         }, {
@@ -176,7 +183,7 @@
                         var i = _step$value[0];
                         var fn = _step$value[1];
 
-                        if (action === Publisher.PUBLISH) {
+                        if (action === _Events.Events.Publisher.PUBLISH) {
                             fn(data);
                         } else {
                             if (fn === data) subs.splice(i, 1);
@@ -213,16 +220,4 @@
 
         return Publisher;
     }();
-
-    /**
-     * Eventname for publishing
-     * @type {String}
-     */
-    Publisher.PUBLISH = "publish";
-
-    /**
-     * Eventname for unsubscribing
-     * @type {String}
-     */
-    Publisher.UNSUBSCRIBE = "unsubscribe";
 });

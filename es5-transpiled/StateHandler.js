@@ -104,9 +104,9 @@
             }
 
             /**
-             * Constructor
+             * @constructor
              * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
-             * @return {StateHandler} instance of StateHandler
+             * @return {StateHandler} instance of StateHandler for chaining
              */
 
         }]);
@@ -127,7 +127,7 @@
 
         /**
          * get the next element
-         * @return {StateHandler} instance of StateHandler
+         * @return {StateHandler} instance of StateHandler for chaining
          */
 
 
@@ -141,7 +141,7 @@
 
             /**
              * get the previous element
-             * @return {StateHandler} instance of StateHandler
+             * @return {StateHandler} instance of StateHandler for chaining
              */
 
         }, {
@@ -155,7 +155,7 @@
             /**
              * change the state to specified state
              * @param {number} state - index of state in array
-             * @return {StateHandler} instance of StateHandler
+             * @return {StateHandler} instance of StateHandler for chaining
              */
 
         }, {
@@ -167,8 +167,9 @@
 
             /**
              * change the state to specified value of specified property
-             * @param {number} state - index of state in array
-             * @return {StateHandler} instance of StateHandler
+             * @param {object} prop - specified property to be changed
+             * @param {object} value - specified value that should be changed to
+             * @return {StateHandler} instance of StateHandler for chaining
              */
 
         }, {

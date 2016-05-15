@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Helper.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js'], factory);
+        define(['exports', 'jQuery', './Helper.js', './Events.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Helper.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'));
+        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Helper, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip);
+        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jQuery, _Helper, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip) {
+})(this, function(exports, _jQuery, _Helper, _Events, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -107,11 +107,12 @@
                 return this.levelHandler.current.value;
             }
 
-            /** Constructor
-             * @param  {Object} container - jQuery-object holding the container
+            /**
+             * @constructor
+             * @param  {Object} container = null - jQuery-object holding the container
              * @param  {Object} tilesData={} - json object representing data of TileMap
              * @param  {Object} settings={} - json object representing settings of TileMap
-             * @return {TileMap} instance of TileMap
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }]);
@@ -119,7 +120,8 @@
         function TileMap(_ref) {
             var _this = this;
 
-            var container = _ref.container;
+            var _ref$container = _ref.container;
+            var container = _ref$container === undefined ? null : _ref$container;
             var _ref$tilesData = _ref.tilesData;
             var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
             var _ref$settings = _ref.settings;
@@ -130,8 +132,8 @@
             if (!container) throw Error("You must define a container to initialize a TileMap");
             this.$container = container;
 
-            this.imgData = tilesData[TileMap.IMG_DATA_NAME];
-            this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
+            this.imgData = tilesData[_Events.Events.TileMap.IMG_DATA_NAME];
+            this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
             this.settings = settings;
 
             this.levels = [];
@@ -161,7 +163,10 @@
 
         /**
          * initializes the TileMap
-         * @return {TileMap} instance of TileMap
+         * @param {Bounds} bounds - specified boundaries
+         * @param {LatLng} center - specified center
+         * @param {object} data - specified data
+         * @return {TileMap} instance of TileMap for chaining
          */
 
 
@@ -177,6 +182,11 @@
 
                 return this.resizeCanvas();
             }
+
+            /**
+             * resets view to initial state
+             */
+
         }, {
             key: 'reset',
             value: function reset() {
@@ -185,12 +195,22 @@
                     this.view = this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
                 } else this.view.reset();
             }
+
+            /**
+             * creates a View from specified parameters
+             * @param  {Bounds} bounds - specified boundaries
+             * @param  {LatLng} center - specified center
+             * @param  {object} data - specified data
+             * @param  {number} zoom - initial zoom level
+             * @return {View} created View
+             */
+
         }, {
             key: 'createViewFromData',
             value: function createViewFromData(bounds, center, data, zoom) {
                 return new _View.View({
                     viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
-                    mapView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
+                    currentView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
                     bounds: bounds,
                     center: center,
                     initialCenter: this.initial.center,
@@ -221,7 +241,7 @@
             /**
              * initializes all markers
              * @param  {Object} markerData - data of all markers
-             * @return {View} instance of View for chaining
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {
@@ -240,8 +260,7 @@
 
             /**
              * append marker container to DOM
-             * @param  {Object} $container - jQuery-selector
-             * @return {View} instance of View for chaining
+            ´     * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {
@@ -251,6 +270,12 @@
                 this.$container.append(this.$markerContainer);
                 return this;
             }
+
+            /**
+             * creates an instance of ToolTip
+             * @return {TileMap} instance of TileMap for chaining
+             */
+
         }, {
             key: 'createTooltipContainer',
             value: function createTooltipContainer() {
@@ -262,6 +287,12 @@
                 });
                 return this;
             }
+
+            /**
+             * bind all events
+             * @return {TileMap} instance of TileMap for chaining
+             */
+
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
@@ -300,7 +331,7 @@
 
             /**
              * initializes the canvas, adds to DOM
-             * @return {TileMap} instance of TileMap
+             * @return {TileMap} instance of TileMap for chaining
              */
 
         }, {
@@ -360,23 +391,11 @@
                 var oldViewport = this.view.viewport.clone;
                 this.view.viewport.size(this.left, this.top, this.width, this.height);
                 var delta = this.view.viewport.center.substract(oldViewport.center);
-                this.view.mapView.translate(delta.x, delta.y);
+                this.view.currentView.translate(delta.x, delta.y);
                 return this;
             }
         }]);
 
         return TileMap;
     }();
-
-    /**
-     * name of image data in data.json
-     * @type {String}
-     */
-    TileMap.IMG_DATA_NAME = "img_data";
-
-    /**
-     * name of marker data in data.json
-     * @type {String}
-     */
-    TileMap.MARKER_DATA_NAME = "marker";
 });
