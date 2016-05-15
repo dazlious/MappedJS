@@ -98,7 +98,7 @@
 
                 this.eventManager = new _Publisher.Publisher();
 
-                var gesture = _Helper.Helper.isTouch() ? "touchstart" : "mousedown";
+                var gesture = _Helper.Helper.isTouch() ? _Events.Events.Handling.TOUCHSTART : _Events.Events.Handling.CLICK;
 
                 this.$icon.on(gesture, function() {
                     _this.eventManager.publish(_Events.Events.ToolTip.OPEN, _this.content);
