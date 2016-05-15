@@ -56,7 +56,7 @@
 
             /**
              * gets a clone of this latlng
-             * @return {LatLng} new instance equals this latlng
+             * @return {LatLng} create a copy
              */
 
         }, {
@@ -69,8 +69,7 @@
              * Constructor
              * @param  {number} lat = 0 - representation of latitude
              * @param  {number} lng = 0 - representation of longitude
-             * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
-             * @return {LatLng} new instance of LatLng
+             * @return {LatLng} instance of LatLng for chaining
              */
 
         }]);
@@ -89,7 +88,7 @@
         /**
          * substract specified coord from this coordinate
          * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
-         * @return {LatLng} the new calculated LatLng
+         * @return {LatLng} instance of LatLng for chaining
          */
 
 
@@ -106,7 +105,7 @@
             /**
              * add specified coord to this coordinate
              * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
-             * @return {LatLng} the new calculated LatLng
+             * @return {LatLng} instance of LatLng for chaining
              */
 
         }, {
@@ -123,7 +122,7 @@
              * divides a latlng with a given factor
              * @param  {number} factorLat = 1 - factor to divide lat with
              * @param  {number} factorLng = factorLat - factor to divide lng with
-             * @return {LatLng} Returns instance for chaining
+             * @return {LatLng} instance of LatLng for chaining
              */
 
         }, {
@@ -141,7 +140,7 @@
              * multiplicates a latlng with a given factor
              * @param  {number} factorLat = 1 - factor to multiplicate lat with
              * @param  {number} factorLng = factorLat - factor to multiplicate lng with
-             * @return {LatLng} Returns instance for chaining
+             * @return {LatLng} instance of LatLng for chaining
              */
 
         }, {
@@ -166,6 +165,12 @@
             value: function equals(coord) {
                 return this.lat === coord.lat && this.lng === coord.lng;
             }
+
+            /**
+             * converts a LatLng to string
+             * @return {string} representing LatLng
+             */
+
         }, {
             key: "toString",
             value: function toString() {

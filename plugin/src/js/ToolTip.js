@@ -4,6 +4,11 @@ import {Events} from './Events.js';
 import {Helper} from './Helper.js';
 import {Publisher} from './Publisher.js';
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file represents an overlay showing detailed contents
+ * @copyright Michael Duve 2016
+ */
 export class ToolTip {
 
     get allTemplatesLoaded() {

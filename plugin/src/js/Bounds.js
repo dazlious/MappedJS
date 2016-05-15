@@ -1,29 +1,26 @@
 import {LatLng} from './LatLng.js';
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file represents boundaries of a geographic coordinate system
+ * @copyright Michael Duve 2016
+ */
 export class Bounds {
 
     /**
      * get width of boundaries
-     * @return {number} width of boundaries
+     * @return {number} distance between east and west boundary
      */
     get width() {
-        return Math.abs(this.so.lng - this.nw.lng);
+        return Math.abs(this.se.lng - this.nw.lng);
     }
 
     /**
      * get height of boundaries
-     * @return {number} height of boundaries
+     * @return {number} distance between north and south boundary
      */
     get height() {
-        return Math.abs(this.so.lat - this.nw.lat);
-    }
-
-    /**
-     * get size
-     * @return {Point} calculated Size of boundaries
-     */
-    get range() {
-        return this.nw.clone.substract(this.so);
+        return Math.abs(this.se.lat - this.nw.lat);
     }
 
     /**
@@ -35,7 +32,7 @@ export class Bounds {
     constructor(northWest = new LatLng(), southEast = new LatLng()) {
         if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) throw new Error(`${northWest} needs to be top-right corner and ${southEast} bottom-left`);
         this.nw = northWest;
-        this.so = southEast;
+        this.se = southEast;
         return this;
     }
 

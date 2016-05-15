@@ -3,6 +3,11 @@ import $ from 'jQuery';
 import {Point} from './Point.js';
 import {Helper} from './Helper.js';
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file implements interaction like panning, zooming, flicking and more, cross-browser and cross-device
+ * @copyright Michael Duve 2016
+ */
 export class Interact {
     /**
      * get time difference to last

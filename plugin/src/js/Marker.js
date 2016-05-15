@@ -5,6 +5,11 @@ import {Point} from './Point.js';
 import {Publisher} from './Publisher.js';
 import {DataEnrichment} from './DataEnrichment.js';
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file represents a marker with an image, a position and content
+ * @copyright Michael Duve 2016
+ */
 export class Marker {
 
     /**
@@ -34,6 +39,10 @@ export class Marker {
         return this.bindEvents().positionMarker();
     }
 
+    /**
+     * binds all events
+     * @return {Marker} instance of Marker for chaining
+     */
     bindEvents() {
         this.eventManager = new Publisher();
 
@@ -75,7 +84,7 @@ export class Marker {
 
     /**
      * set initial position of this marker
-     * @return {Marker} - instance of Marker for chaining
+     * @return {Marker} instance of Marker for chaining
      */
     positionMarker() {
         this.position = this.instance.convertLatLngToPoint(this.latlng);

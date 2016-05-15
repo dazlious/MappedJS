@@ -62,13 +62,16 @@
          * Constructor
          * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
          * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
+         * @param  {string|Object} markerData={} - data of markers, can be json or path to file
          * @param  {Object} mapSettings={} - settings for map, must be json
          * @param  {Object} events={loaded: "mjs-loaded"} - List of events
          * @return {MappedJS} instance of MappedJS for chaining
          */
 
-        function MappedJS(_ref) {
+        function MappedJS() {
             var _this = this;
+
+            var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
             var _ref$container = _ref.container;
             var container = _ref$container === undefined ? ".mjs" : _ref$container;
@@ -104,6 +107,11 @@
             return this;
         }
 
+        /**
+         * add controls (zoom, home) to DOM
+         */
+
+
         _createClass(MappedJS, [{
             key: 'addControls',
             value: function addControls() {
@@ -121,12 +129,16 @@
              * initializes the settings and handles errors
              * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
              * @param  {object} events - List of events
+             * @param  {object} settings - List of settings
              * @return {MappedJS} instance of MappedJS for chaining
              */
 
         }, {
             key: 'initializeSettings',
-            value: function initializeSettings(container, events, settings) {
+            value: function initializeSettings(container) {
+                var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+                var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
                 this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
                 if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
 
@@ -143,7 +155,7 @@
             /**
              * initializes the data, asynchronous
              * @param  {Object} mapData - data of map tiles, can be json or path to file
-             * @param  {Function} cb - called, when data is received
+             * @param  {Helper~requestJSONCallback} cb - called, when data is received
              * @return {MappedJS} instance of MappedJS for chaining
              */
 
@@ -187,6 +199,12 @@
             value: function getAbsolutePosition(point) {
                 return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
             }
+
+            /**
+             * initializes interaction
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'initializeInteractForMap',
             value: function initializeInteractForMap() {
@@ -225,6 +243,7 @@
                         }
                     }
                 });
+                return this;
             }
 
             /**
@@ -251,21 +270,49 @@
 
                 return this;
             }
+
+            /**
+             * resets map to initial state
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'resetToInitialState',
             value: function resetToInitialState() {
                 this.tileMap.reset();
+                return this;
             }
+
+            /**
+             * zooms into center of map
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'zoomInToCenter',
             value: function zoomInToCenter() {
                 this.zoom(0.1, this.tileMap.view.viewport.center);
+                return this;
             }
+
+            /**
+             * zooms out of center of map
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'zoomOutToCenter',
             value: function zoomOutToCenter() {
                 this.zoom(-0.1, this.tileMap.view.viewport.center);
+                return this;
             }
+
+            /**
+             * Keypress handler
+             * @param  {object} e VanillaJS-Event-Object
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'keyPress',
             value: function keyPress(e) {
@@ -304,12 +351,21 @@
                         break;
                 }
                 this.tileMap.view.drawIsNeeded = true;
+                return this;
             }
+
+            /**
+             * handles the translation of the map by keypress
+             * @param  {Point} direction - x,y point where to translate to
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
         }, {
             key: 'handleMovementByKeys',
             value: function handleMovementByKeys(direction) {
                 this.keyTicks++;
                 this.tileMap.view.moveView(direction.multiply(this.keyTicks));
+                return this;
             }
         }, {
             key: 'keyRelease',

@@ -1,5 +1,6 @@
 import $ from 'jQuery';
 import {Helper} from './Helper.js';
+import {Events} from './Events.js';
 import {Publisher} from './Publisher.js';
 import {StateHandler} from './StateHandler.js';
 import {Rectangle} from './Rectangle.js';
@@ -8,6 +9,11 @@ import {Marker} from './Marker.js';
 import {DataEnrichment} from './DataEnrichment.js';
 import {ToolTip} from './ToolTip.js';
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file Represents a map with its different levels of zooms and markers
+ * @copyright Michael Duve 2016
+ */
 export class TileMap {
 
     /**
@@ -52,17 +58,17 @@ export class TileMap {
 
 
     /** Constructor
-     * @param  {Object} container - jQuery-object holding the container
+     * @param  {Object} container = null - jQuery-object holding the container
      * @param  {Object} tilesData={} - json object representing data of TileMap
      * @param  {Object} settings={} - json object representing settings of TileMap
-     * @return {TileMap} instance of TileMap
+     * @return {TileMap} instance of TileMap for chaining
      */
-    constructor({container, tilesData = {}, settings = {}}) {
+    constructor({container = null, tilesData = {}, settings = {}}) {
         if (!container) throw Error("You must define a container to initialize a TileMap");
         this.$container = container;
 
-        this.imgData = tilesData[TileMap.IMG_DATA_NAME];
-        this.markerData = tilesData[TileMap.MARKER_DATA_NAME];
+        this.imgData = tilesData[Events.TileMap.IMG_DATA_NAME];
+        this.markerData = tilesData[Events.TileMap.MARKER_DATA_NAME];
         this.settings = settings;
 
         this.levels = [];
@@ -92,7 +98,10 @@ export class TileMap {
 
     /**
      * initializes the TileMap
-     * @return {TileMap} instance of TileMap
+     * @param {Bounds} bounds - specified boundaries
+     * @param {LatLng} center - specified center
+     * @param {object} data - specified data
+     * @return {TileMap} instance of TileMap for chaining
      */
     initialize(bounds, center, data) {
         this.initializeCanvas()
@@ -106,6 +115,9 @@ export class TileMap {
         return this.resizeCanvas();
     }
 
+    /**
+     * resets view to initial state
+     */
     reset() {
         if (this.levelHandler.hasPrevious()) {
             this.levelHandler.changeTo(0);
@@ -113,10 +125,18 @@ export class TileMap {
         } else this.view.reset();
     }
 
+    /**
+     * creates a View from specified parameters
+     * @param  {Bounds} bounds - specified boundaries
+     * @param  {LatLng} center - specified center
+     * @param  {object} data - specified data
+     * @param  {number} zoom - initial zoom level
+     * @return {View} created View
+     */
     createViewFromData(bounds, center, data, zoom) {
         return new View({
             viewport: new Rectangle(this.left, this.top, this.width, this.height),
-            mapView: new Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
+            currentView: new Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
             bounds: bounds,
             center: center,
             initialCenter: this.initial.center,
@@ -144,7 +164,7 @@ export class TileMap {
     /**
      * initializes all markers
      * @param  {Object} markerData - data of all markers
-     * @return {View} instance of View for chaining
+     * @return {TileMap} instance of TileMap for chaining
      */
     initializeMarkers(markerData) {
         if (markerData) {
@@ -158,8 +178,7 @@ export class TileMap {
 
     /**
      * append marker container to DOM
-     * @param  {Object} $container - jQuery-selector
-     * @return {View} instance of View for chaining
+´     * @return {TileMap} instance of TileMap for chaining
      */
     appendMarkerContainerToDom() {
         this.$markerContainer = $("<div class='marker-container' />");
@@ -167,6 +186,10 @@ export class TileMap {
         return this;
     }
 
+    /**
+     * creates an instance of ToolTip
+     * @return {TileMap} instance of TileMap for chaining
+     */
     createTooltipContainer() {
         this.tooltip = new ToolTip({
             container: $(this.$container.parent()),
@@ -177,6 +200,10 @@ export class TileMap {
         return this;
     }
 
+    /**
+     * bind all events
+     * @return {TileMap} instance of TileMap for chaining
+     */
     bindEvents() {
 
         this.eventManager.subscribe("resize", () => { this.resize(); });
@@ -210,7 +237,7 @@ export class TileMap {
 
     /**
      * initializes the canvas, adds to DOM
-     * @return {TileMap} instance of TileMap
+     * @return {TileMap} instance of TileMap for chaining
      */
     initializeCanvas() {
         this.$canvas = $("<canvas class='mjs-canvas' />");
@@ -257,20 +284,8 @@ export class TileMap {
         const oldViewport = this.view.viewport.clone;
         this.view.viewport.size(this.left, this.top, this.width, this.height);
         const delta = this.view.viewport.center.substract(oldViewport.center);
-        this.view.mapView.translate(delta.x, delta.y);
+        this.view.currentView.translate(delta.x, delta.y);
         return this;
     }
 
 }
-
-/**
- * name of image data in data.json
- * @type {String}
- */
-TileMap.IMG_DATA_NAME = "img_data";
-
-/**
- * name of marker data in data.json
- * @type {String}
- */
-TileMap.MARKER_DATA_NAME = "marker";

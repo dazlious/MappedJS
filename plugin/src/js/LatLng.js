@@ -1,3 +1,8 @@
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file represents latitude and longitude coordinates in a geographic coordinate system
+ * @copyright Michael Duve 2016
+ */
 export class LatLng {
 
     /**
@@ -10,7 +15,7 @@ export class LatLng {
 
     /**
      * gets a clone of this latlng
-     * @return {LatLng} new instance equals this latlng
+     * @return {LatLng} create a copy
      */
     get clone() {
         return LatLng.createFromLatLng(this);
@@ -20,8 +25,7 @@ export class LatLng {
      * Constructor
      * @param  {number} lat = 0 - representation of latitude
      * @param  {number} lng = 0 - representation of longitude
-     * @param  {Boolean} isDistance = false - if LatLng should be checked against bounds
-     * @return {LatLng} new instance of LatLng
+     * @return {LatLng} instance of LatLng for chaining
      */
     constructor(lat = 0, lng = 0) {
         this.lat = lat;
@@ -32,7 +36,7 @@ export class LatLng {
     /**
      * substract specified coord from this coordinate
      * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
-     * @return {LatLng} the new calculated LatLng
+     * @return {LatLng} instance of LatLng for chaining
      */
     substract(coord = new LatLng()) {
         this.lat -= coord.lat;
@@ -43,7 +47,7 @@ export class LatLng {
     /**
      * add specified coord to this coordinate
      * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
-     * @return {LatLng} the new calculated LatLng
+     * @return {LatLng} instance of LatLng for chaining
      */
     add(coord = new LatLng()) {
         this.lat += coord.lat;
@@ -55,8 +59,8 @@ export class LatLng {
     * divides a latlng with a given factor
     * @param  {number} factorLat = 1 - factor to divide lat with
     * @param  {number} factorLng = factorLat - factor to divide lng with
-     * @return {LatLng} Returns instance for chaining
-     */
+    * @return {LatLng} instance of LatLng for chaining
+    */
     divide(factorLat = 1, factorLng = factorLat) {
         this.lat /= factorLat;
         this.lng /= factorLng;
@@ -67,7 +71,7 @@ export class LatLng {
      * multiplicates a latlng with a given factor
      * @param  {number} factorLat = 1 - factor to multiplicate lat with
      * @param  {number} factorLng = factorLat - factor to multiplicate lng with
-     * @return {LatLng} Returns instance for chaining
+     * @return {LatLng} instance of LatLng for chaining
      */
     multiply(factorLat = 1, factorLng = factorLat) {
         this.lat *= factorLat;
@@ -84,6 +88,10 @@ export class LatLng {
         return this.lat === coord.lat && this.lng === coord.lng;
     }
 
+    /**
+     * converts a LatLng to string
+     * @return {string} representing LatLng
+     */
     toString() {
         return `(${this.lat}, ${this.lng})`;
     }

@@ -13,6 +13,12 @@ const STATES = [
     {value: 3, description: 'Drawn'}
 ];
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file Represents a part of the background map
+ * @extends Rectangle
+ * @copyright Michael Duve 2016
+ */
 export class Tile extends Rectangle {
 
     /**
@@ -23,9 +29,9 @@ export class Tile extends Rectangle {
      * @param  {number} w = 0 - tile width
      * @param  {number} h = 0 - tile height
      * @param  {View} _instance = null - instance of parent View
-     * @return {Tile} instance of Tile
+     * @return {Tile} instance of Tile for chaining
      */
-    constructor({path, x = 0, y = 0, w = 0, h = 0} = {}, _instance = null) {
+    constructor({path = null, x = 0, y = 0, w = 0, h = 0} = {}, _instance = null) {
         super(x, y, w, h);
 
         if (!path || typeof path !== "string" || path.length === 0) throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);

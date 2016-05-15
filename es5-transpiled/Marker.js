@@ -85,6 +85,12 @@
             return this.bindEvents().positionMarker();
         }
 
+        /**
+         * binds all events
+         * @return {Marker} instance of Marker for chaining
+         */
+
+
         _createClass(Marker, [{
             key: 'bindEvents',
             value: function bindEvents() {
@@ -133,7 +139,7 @@
 
             /**
              * set initial position of this marker
-             * @return {Marker} - instance of Marker for chaining
+             * @return {Marker} instance of Marker for chaining
              */
 
         }, {

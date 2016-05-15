@@ -6,6 +6,11 @@ import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
 import {Publisher} from './Publisher.js';
 
+/**
+ * @author Michael Duve <mduve@designmail.net>
+ * @file represents a level of zoom
+ * @copyright Michael Duve 2016
+ */
 export class View {
 
     /**
@@ -21,10 +26,6 @@ export class View {
      */
     get offsetToCenter() {
         return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
-    }
-
-    get currentView() {
-        return this.mapView;
     }
 
     /**
@@ -49,20 +50,23 @@ export class View {
     /**
      * Constructor
      * @param  {Rectangle} viewport = new Rectangle() - current representation of viewport
-     * @param  {Rectangle} mapView = new Rectangle() - current representation of map
+     * @param  {Rectangle} currentView = new Rectangle() - current representation of map
      * @param  {Bounds} bounds = new Bounds() - current bounds of map
      * @param  {LatLng} center = new LatLng() - current center of map
+     * @param  {LatLng} initialCenter = new LatLng() - initial center of view
      * @param  {Object} data = {} - tile data of current map
-     * @param  {Object} markerData = {} - marker data of current map
      * @param  {Object} $container = null - parent container for markers
      * @param  {Object} context = null - canvas context for drawing
      * @param  {number} maxZoom = 1.5 - maximal zoom of view
+     * @param  {number} currentZoom = 1 - initial zoom of view
      * @param  {number} minZoom = 0.8 - minimal zoom of view
+     * @param  {object} $container = null - jQuery-selector of container class
+     * @param  {number} limitToBounds - where to limit panning
      * @return {View} instance of View for chaining
      */
     constructor({
         viewport = new Rectangle(),
-        mapView = new Rectangle(),
+        currentView = new Rectangle(),
         bounds = new Bounds(),
         center = new LatLng(),
         initialCenter = new LatLng(),
@@ -73,22 +77,21 @@ export class View {
         currentZoom = 1,
         minZoom = 0.8,
         $markerContainer = null,
-        limitToBounds = bounds
-        }) {
-
+        limitToBounds
+    }) {
 
         this.$markerContainer = $markerContainer;
-        this.mapView = mapView;
-        this.originalMapView = mapView.clone;
+        this.currentView = currentView;
+        this.originalMapView = currentView.clone;
         this.viewport = viewport;
         this.bounds = bounds;
         this.center = center;
         this.zoomFactor = currentZoom;
         this.maxZoom = maxZoom;
         this.minZoom = minZoom;
-        this.origin = new Point(0,0);
+        this.origin = new Point();
         this.eventManager = new Publisher();
-        this.limitToBounds = limitToBounds;
+        this.limitToBounds = limitToBounds || bounds;
 
         const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
         this.currentView.position(newCenter.x, newCenter.y);
@@ -111,6 +114,9 @@ export class View {
         return this;
     }
 
+    /**
+     * resets current View to its initial position
+     */
     reset() {
         this.setLatLngToPosition(this.initial.position, this.viewport.center);
         const delta = this.initial.zoom - this.zoomFactor;
@@ -122,9 +128,9 @@ export class View {
      */
     mainLoop() {
         if (this.drawIsNeeded) {
-            this.drawIsNeeded = false;
             this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
             this.draw();
+            this.drawIsNeeded = false;
         }
         window.requestAnimFrame(() => this.mainLoop());
     }
@@ -134,10 +140,10 @@ export class View {
      * @return {View} instance of View for chaining
      */
     loadThumb() {
-        Helper.loadImage(this.data.thumb, function(img) {
+        Helper.loadImage(this.data.thumb, (img) => {
             this.thumb = img;
             window.requestAnimFrame(this.mainLoop.bind(this));
-        }.bind(this));
+        });
         return this;
     }
 
@@ -248,8 +254,8 @@ export class View {
     moveView(pos, redo = true) {
 
         const nw = this.convertLatLngToPoint(this.limitToBounds.nw),
-              so = this.convertLatLngToPoint(this.limitToBounds.so),
-              limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, so.x - nw.x, so.y - nw.y);
+              se = this.convertLatLngToPoint(this.limitToBounds.se),
+              limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
 
         pos.divide(this.distortionFactor, 1);
         const equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
