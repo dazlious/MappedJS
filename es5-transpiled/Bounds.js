@@ -67,7 +67,11 @@
             }
 
             /**
+<<<<<<< HEAD
              * @constructor
+=======
+             * Constructor
+>>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
              * @param  {number} northWest = new LatLng() - representation of northWest boundary
              * @param  {number} southEast = new LatLng() - representation of southEast boundary
              * @return {Bounds} instance of Bounds for chaining

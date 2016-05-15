@@ -14,7 +14,11 @@ let instance = null;
 export class Publisher {
 
     /**
+<<<<<<< HEAD
      * @constructor
+=======
+     * Constructor
+>>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
      * @return {Publisher} singleton instance of Publisher for chaining
      */
     constructor() {

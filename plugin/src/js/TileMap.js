@@ -57,8 +57,12 @@ export class TileMap {
     }
 
 
+<<<<<<< HEAD
     /**
      * @constructor
+=======
+    /** Constructor
+>>>>>>> cef61a4e7f38825fcdfe66914b46cc3a03472a68
      * @param  {Object} container = null - jQuery-object holding the container
      * @param  {Object} tilesData={} - json object representing data of TileMap
      * @param  {Object} settings={} - json object representing settings of TileMap
