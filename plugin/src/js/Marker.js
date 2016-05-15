@@ -46,7 +46,7 @@ export class Marker {
     bindEvents() {
         this.eventManager = new Publisher();
 
-        const gesture = Helper.isTouch() ? "touchstart": "mousedown";
+        const gesture = Helper.isTouch() ? Events.Handling.TOUCHSTART: Events.Handling.CLICK;
 
         this.$icon.on(gesture, () => {
             this.eventManager.publish(Events.ToolTip.OPEN, this.content);

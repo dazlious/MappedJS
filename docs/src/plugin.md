@@ -138,7 +138,7 @@ loads an image and calls callback on success
 **Returns**: <code>Helper</code> - Helper object for chaining  
 **Params**
 
-- cb <code>requestCallback</code> - callback-function on success
+- cb <code>Helper~loadImageCallback</code> - callback-function on success
 
 <a name="module_Helper.forEach"></a>
 
@@ -150,7 +150,7 @@ for each helper
 **Params**
 
 - a <code>Array.&lt;Object&gt;</code> - array to iterate over each value
-- cb <code>requestCallback</code> - callback for each object
+- cb <code>Helper~forEachCallback</code> - callback for each object
 
 <a name="module_Helper.easeOutQuadratic"></a>
 
@@ -2490,6 +2490,7 @@ Helper for naming events
     * [.Marker](#Events.Marker) : <code>Object</code>
     * [.Publisher](#Events.Publisher) : <code>Object</code>
     * [.TileMap](#Events.TileMap) : <code>Object</code>
+    * [.Handling](#Events.Handling) : <code>Object</code>
 
 <a name="Events.ToolTip"></a>
 
@@ -2534,6 +2535,23 @@ Eventnames for TileMap class
 
 - IMG_DATA_NAME <code>object</code> - notifies all subscribers  
 - MARKER_DATA_NAME <code>object</code> - subscribes to a topic  
+- NEXT_LEVEL <code>object</code> - next level of view  
+- PREVIOUS_LEVEL <code>object</code> - previous level of view  
+- RESIZE <code>object</code> - resize of view needed  
+
+<a name="Events.Handling"></a>
+
+### Events.Handling : <code>Object</code>
+Eventnames for Handling in all classes
+
+**Kind**: static property of <code>[Events](#Events)</code>  
+**Properties**
+
+- RESIZE <code>object</code> - resize of window happened needed  
+- CLICK <code>object</code> - click occured  
+- TOUCHSTART <code>object</code> - Touch started  
+- KEYDOWN <code>object</code> - key pressed  
+- KEYUP <code>object</code> - key released  
 
 <a name="STATES"></a>
 

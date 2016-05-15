@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './TileMap.js', './DataEnrichment.js', './Helper.js', './Interact.js', './Point.js'], factory);
+        define(['exports', 'jQuery', './Helper.js', './Events.js', './TileMap.js', './DataEnrichment.js', './Interact.js', './Point.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Helper.js'), require('./Interact.js'), require('./Point.js'));
+        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Interact.js'), require('./Point.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.TileMap, global.DataEnrichment, global.Helper, global.Interact, global.Point);
+        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.TileMap, global.DataEnrichment, global.Interact, global.Point);
         global.Main = mod.exports;
     }
-})(this, function(exports, _jQuery, _TileMap, _DataEnrichment, _Helper, _Interact, _Point) {
+})(this, function(exports, _jQuery, _Helper, _Events, _TileMap, _DataEnrichment, _Interact, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -257,12 +257,12 @@
 
                 this.initializeInteractForMap();
 
-                (0, _jQuery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
+                (0, _jQuery2.default)(window).on(_Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
 
-                (0, _jQuery2.default)(document).on("keydown", this.keyPress.bind(this));
-                (0, _jQuery2.default)(document).on("keyup", this.keyRelease.bind(this));
+                (0, _jQuery2.default)(document).on(_Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
+                (0, _jQuery2.default)(document).on(_Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
 
-                var gesture = _Helper.Helper.isTouch() ? "touchstart" : "mousedown";
+                var gesture = _Helper.Helper.isTouch() ? _Events.Events.Handling.TOUCHSTART : _Events.Events.Handling.CLICK;
 
                 this.$zoomIn.on(gesture, this.zoomInToCenter.bind(this));
                 this.$zoomOut.on(gesture, this.zoomOutToCenter.bind(this));

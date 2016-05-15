@@ -52,7 +52,7 @@
          * loads an image and calls callback on success
          * @function
          * @memberof module:Helper
-         * @param {requestCallback} cb - callback-function on success
+         * @param {Helper~loadImageCallback} cb - callback-function on success
          * @return {Helper} Helper object for chaining
          */
         loadImage: function loadImage(path, cb) {
@@ -69,7 +69,7 @@
          * @function
          * @memberof module:Helper
          * @param  {Object[]} a - array to iterate over each value
-         * @param  {requestCallback} cb - callback for each object
+         * @param  {Helper~forEachCallback} cb - callback for each object
          * @return {Helper} Helper object for chaining
          */
         forEach: function forEach(a, cb) {

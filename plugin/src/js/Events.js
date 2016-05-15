@@ -44,9 +44,33 @@ export var Events = {
      * @memberof Events
      * @property {object} IMG_DATA_NAME - notifies all subscribers
      * @property {object} MARKER_DATA_NAME - subscribes to a topic
+     * @property {object} NEXT_LEVEL - next level of view
+     * @property {object} PREVIOUS_LEVEL - previous level of view
+     * @property {object} RESIZE - resize of view needed
      */
     TileMap: {
         IMG_DATA_NAME: "img_data",
-        MARKER_DATA_NAME: "marker"
+        MARKER_DATA_NAME: "marker",
+        NEXT_LEVEL: "next-level",
+        PREVIOUS_LEVEL: "previous-level",
+        RESIZE: "resize"
+    },
+    /**
+     * Eventnames for Handling in all classes
+     * @type {Object}
+     * @memberof Events
+     * @property {object} RESIZE - resize of window happened needed
+     * @property {object} CLICK - click occured
+     * @property {object} TOUCHSTART - Touch started
+     * @property {object} KEYDOWN - key pressed
+     * @property {object} KEYUP - key released
+
+     */
+    Handling: {
+        RESIZE: "resize orientationchange",
+        CLICK: "click",
+        TOUCHSTART: "touchstart",
+        KEYDOWN: "keydown",
+        KEYUP: "keyup"
     }
 };

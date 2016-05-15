@@ -69,11 +69,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jQuery2 = _interopRequireDefault(_jQuery);
 
-	var _TileMap = __webpack_require__(2);
+	var _Helper = __webpack_require__(2);
+
+	var _Events = __webpack_require__(3);
+
+	var _TileMap = __webpack_require__(4);
 
 	var _DataEnrichment = __webpack_require__(14);
-
-	var _Helper = __webpack_require__(3);
 
 	var _Interact = __webpack_require__(17);
 
@@ -288,12 +290,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.initializeInteractForMap();
 
-	            (0, _jQuery2.default)(window).on("resize orientationchange", this.resizeHandler.bind(this));
+	            (0, _jQuery2.default)(window).on(_Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
 
-	            (0, _jQuery2.default)(document).on("keydown", this.keyPress.bind(this));
-	            (0, _jQuery2.default)(document).on("keyup", this.keyRelease.bind(this));
+	            (0, _jQuery2.default)(document).on(_Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
+	            (0, _jQuery2.default)(document).on(_Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
 
-	            var gesture = _Helper.Helper.isTouch() ? "touchstart" : "mousedown";
+	            var gesture = _Helper.Helper.isTouch() ? _Events.Events.Handling.TOUCHSTART : _Events.Events.Handling.CLICK;
 
 	            this.$zoomIn.on(gesture, this.zoomInToCenter.bind(this));
 	            this.$zoomOut.on(gesture, this.zoomOutToCenter.bind(this));
@@ -507,6 +509,229 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 2 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/**
+	 * @author Michael Duve <mduve@designmail.net>
+	 * @file Helper for general purposes
+	 * @copyright Michael Duve 2016
+	 * @module Helper
+	 */
+	var Helper = exports.Helper = {
+	    /**
+	     * request json-data from given file and calls callback on success
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {string} filename - path to file
+	     * @param  {Helper~requestJSONCallback} callback - function called when data is loaded successfully
+	     * @return {Helper} Helper object for chaining
+	     */
+
+	    requestJSON: function requestJSON(filename, callback) {
+	        var xhr = new XMLHttpRequest();
+	        xhr.onreadystatechange = function () {
+	            if (xhr.readyState === XMLHttpRequest.DONE) {
+	                if (xhr.status === 200) {
+	                    if (callback) callback(JSON.parse(xhr.responseText));
+	                } else {
+	                    throw new Error("The JSON submitted seems not valid", xhr);
+	                }
+	            }
+	        };
+	        xhr.open("GET", filename, true);
+	        xhr.send();
+	        return this;
+	    },
+
+	    /**
+	     * loads an image and calls callback on success
+	     * @function
+	     * @memberof module:Helper
+	     * @param {Helper~loadImageCallback} cb - callback-function on success
+	     * @return {Helper} Helper object for chaining
+	     */
+	    loadImage: function loadImage(path, cb) {
+	        var img = new Image();
+	        img.onload = function () {
+	            if (cb && typeof cb === "function") cb(img);
+	        };
+	        img.src = path;
+	        return this;
+	    },
+
+	    /**
+	     * for each helper
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {Object[]} a - array to iterate over each value
+	     * @param  {Helper~forEachCallback} cb - callback for each object
+	     * @return {Helper} Helper object for chaining
+	     */
+	    forEach: function forEach(a, cb) {
+	        for (var i in a) {
+	            if (a[i] && typeof cb === "function") cb(a[i], i);
+	        }
+	        return this;
+	    },
+
+	    /**
+	     * formula for quadratic ease out
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {number} t - current time
+	     * @param  {Point} b - start value
+	     * @param  {Point} c - total difference to start
+	     * @param  {number} d - duration
+	     * @return {number} quadratic value at specific time
+	     */
+	    easeOutQuadratic: function easeOutQuadratic(t, b, c, d) {
+	        t /= d;
+	        return c.clone.multiply(-1 * t * (t - 2)).add(b);
+	    },
+
+	    /**
+	     * convert degree to radian
+	     * @function
+	     * @memberof module:Helper
+	     * @param {number} degrees - specified degrees
+	     * @return {number} converted radian
+	     */
+	    toRadians: function toRadians(degrees) {
+	        return degrees * Math.PI / 180;
+	    },
+	    /**
+	     * checks if mouse is possible
+	     * @function
+	     * @memberof module:Helper
+	     * @return {Boolean} if true, mouse is possible
+	     */
+	    isMouse: function isMouse() {
+	        return 'onmousedown' in window;
+	    },
+
+	    /**
+	     * checks if touch is possible
+	     * @function
+	     * @memberof module:Helper
+	     * @return {Boolean} if true, touch is possible
+	     */
+	    isTouch: function isTouch() {
+	        return 'ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+	    },
+
+	    /**
+	     * checks if IE is used
+	     * @function
+	     * @memberof module:Helper
+	     * @return {Boolean} if true, IE is used
+	     */
+	    isIE: function isIE() {
+	        return navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+	    },
+
+	    /**
+	     * gets cross-browser scroll-event
+	     * @function
+	     * @memberof module:Helper
+	     * @return {string} name of scroll event
+	     */
+	    scrollEvent: function scrollEvent() {
+	        return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
+	    }
+		};
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/**
+	 * @author Michael Duve <mduve@designmail.net>
+	 * @file Helper for naming events
+	 * @copyright Michael Duve 2016
+	 * @namespace Events
+	*/
+	var Events = exports.Events = {
+	  /**
+	   * Eventnames for ToolTip class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} OPEN - when a tooltip should be openend
+	   * @property {object} CLOSE - when a tooltip should be closed
+	   */
+	  ToolTip: {
+	    OPEN: "tooltip-open",
+	    CLOSE: "tooltip-close"
+	  },
+	  /**
+	   * Eventnames for Marker class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} DEACTIVATE - when a Marker should be in deactived state
+	   */
+	  Marker: {
+	    DEACTIVATE: "deactivate-marker"
+	  },
+	  /**
+	   * Eventnames for Publisher class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} PUBLISH - notifies all subscribers
+	   * @property {object} SUBSCRIBE - subscribes to a topic
+	   * @property {object} UNSUBSCRIBE - unsubscribes from a topic
+	   */
+	  Publisher: {
+	    PUBLISH: "publish",
+	    SUBSCRIBE: "subscribe",
+	    UNSUBSCRIBE: "unsubscribe"
+	  },
+	  /**
+	   * Eventnames for TileMap class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} IMG_DATA_NAME - notifies all subscribers
+	   * @property {object} MARKER_DATA_NAME - subscribes to a topic
+	   * @property {object} NEXT_LEVEL - next level of view
+	   * @property {object} PREVIOUS_LEVEL - previous level of view
+	   * @property {object} RESIZE - resize of view needed
+	   */
+	  TileMap: {
+	    IMG_DATA_NAME: "img_data",
+	    MARKER_DATA_NAME: "marker",
+	    NEXT_LEVEL: "next-level",
+	    PREVIOUS_LEVEL: "previous-level",
+	    RESIZE: "resize"
+	  },
+	  /**
+	   * Eventnames for Handling in all classes
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} RESIZE - resize of window happened needed
+	   * @property {object} CLICK - click occured
+	   * @property {object} TOUCHSTART - Touch started
+	   * @property {object} KEYDOWN - key pressed
+	   * @property {object} KEYUP - key released
+	    */
+	  Handling: {
+	    RESIZE: "resize orientationchange",
+	    CLICK: "click",
+	    TOUCHSTART: "touchstart",
+	    KEYDOWN: "keydown",
+	    KEYUP: "keyup"
+	  }
+		};
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -522,9 +747,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jQuery2 = _interopRequireDefault(_jQuery);
 
-	var _Helper = __webpack_require__(3);
+	var _Helper = __webpack_require__(2);
 
-	var _Events = __webpack_require__(4);
+	var _Events = __webpack_require__(3);
 
 	var _Publisher = __webpack_require__(5);
 
@@ -754,6 +979,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _Helper.Helper.forEach(markerData, function (currentData) {
 	                    _this2.markers.push(new _Marker.Marker(currentData, _this2.view));
 	                });
+	                this.markers = this.markers.sort(function (a, b) {
+	                    return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
+	                });
+	                _Helper.Helper.forEach(this.markers, function (marker, i) {
+	                    marker.$icon.css("z-index", i);
+	                });
 	            }
 	            return this;
 	        }
@@ -798,11 +1029,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function bindEvents() {
 	            var _this3 = this;
 
-	            this.eventManager.subscribe("resize", function () {
+	            this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function () {
 	                _this3.resize();
 	            });
 
-	            this.eventManager.subscribe("next-level", function (argument_array) {
+	            this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function (argument_array) {
 	                var center = argument_array[0],
 	                    bounds = argument_array[1],
 	                    lastLevel = _this3.levelHandler.current.description;
@@ -814,7 +1045,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            });
 
-	            this.eventManager.subscribe("previous-level", function (argument_array) {
+	            this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function (argument_array) {
 	                var center = argument_array[0],
 	                    bounds = argument_array[1],
 	                    lastLevel = _this3.levelHandler.current.description;
@@ -900,206 +1131,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	/**
-	 * @author Michael Duve <mduve@designmail.net>
-	 * @file Helper for general purposes
-	 * @copyright Michael Duve 2016
-	 * @module Helper
-	 */
-	var Helper = exports.Helper = {
-	    /**
-	     * request json-data from given file and calls callback on success
-	     * @function
-	     * @memberof module:Helper
-	     * @param  {string} filename - path to file
-	     * @param  {Helper~requestJSONCallback} callback - function called when data is loaded successfully
-	     * @return {Helper} Helper object for chaining
-	     */
-
-	    requestJSON: function requestJSON(filename, callback) {
-	        var xhr = new XMLHttpRequest();
-	        xhr.onreadystatechange = function () {
-	            if (xhr.readyState === XMLHttpRequest.DONE) {
-	                if (xhr.status === 200) {
-	                    if (callback) callback(JSON.parse(xhr.responseText));
-	                } else {
-	                    throw new Error("The JSON submitted seems not valid", xhr);
-	                }
-	            }
-	        };
-	        xhr.open("GET", filename, true);
-	        xhr.send();
-	        return this;
-	    },
-
-	    /**
-	     * loads an image and calls callback on success
-	     * @function
-	     * @memberof module:Helper
-	     * @param {requestCallback} cb - callback-function on success
-	     * @return {Helper} Helper object for chaining
-	     */
-	    loadImage: function loadImage(path, cb) {
-	        var img = new Image();
-	        img.onload = function () {
-	            if (cb && typeof cb === "function") cb(img);
-	        };
-	        img.src = path;
-	        return this;
-	    },
-
-	    /**
-	     * for each helper
-	     * @function
-	     * @memberof module:Helper
-	     * @param  {Object[]} a - array to iterate over each value
-	     * @param  {requestCallback} cb - callback for each object
-	     * @return {Helper} Helper object for chaining
-	     */
-	    forEach: function forEach(a, cb) {
-	        for (var i in a) {
-	            if (a[i] && typeof cb === "function") cb(a[i], i);
-	        }
-	        return this;
-	    },
-
-	    /**
-	     * formula for quadratic ease out
-	     * @function
-	     * @memberof module:Helper
-	     * @param  {number} t - current time
-	     * @param  {Point} b - start value
-	     * @param  {Point} c - total difference to start
-	     * @param  {number} d - duration
-	     * @return {number} quadratic value at specific time
-	     */
-	    easeOutQuadratic: function easeOutQuadratic(t, b, c, d) {
-	        t /= d;
-	        return c.clone.multiply(-1 * t * (t - 2)).add(b);
-	    },
-
-	    /**
-	     * convert degree to radian
-	     * @function
-	     * @memberof module:Helper
-	     * @param {number} degrees - specified degrees
-	     * @return {number} converted radian
-	     */
-	    toRadians: function toRadians(degrees) {
-	        return degrees * Math.PI / 180;
-	    },
-	    /**
-	     * checks if mouse is possible
-	     * @function
-	     * @memberof module:Helper
-	     * @return {Boolean} if true, mouse is possible
-	     */
-	    isMouse: function isMouse() {
-	        return 'onmousedown' in window;
-	    },
-
-	    /**
-	     * checks if touch is possible
-	     * @function
-	     * @memberof module:Helper
-	     * @return {Boolean} if true, touch is possible
-	     */
-	    isTouch: function isTouch() {
-	        return 'ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-	    },
-
-	    /**
-	     * checks if IE is used
-	     * @function
-	     * @memberof module:Helper
-	     * @return {Boolean} if true, IE is used
-	     */
-	    isIE: function isIE() {
-	        return navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
-	    },
-
-	    /**
-	     * gets cross-browser scroll-event
-	     * @function
-	     * @memberof module:Helper
-	     * @return {string} name of scroll event
-	     */
-	    scrollEvent: function scrollEvent() {
-	        return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
-	    }
-		};
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	/**
-	 * @author Michael Duve <mduve@designmail.net>
-	 * @file Helper for naming events
-	 * @copyright Michael Duve 2016
-	 * @namespace Events
-	*/
-	var Events = exports.Events = {
-	  /**
-	   * Eventnames for ToolTip class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} OPEN - when a tooltip should be openend
-	   * @property {object} CLOSE - when a tooltip should be closed
-	   */
-	  ToolTip: {
-	    OPEN: "tooltip-open",
-	    CLOSE: "tooltip-close"
-	  },
-	  /**
-	   * Eventnames for Marker class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} DEACTIVATE - when a Marker should be in deactived state
-	   */
-	  Marker: {
-	    DEACTIVATE: "deactivate-marker"
-	  },
-	  /**
-	   * Eventnames for Publisher class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} PUBLISH - notifies all subscribers
-	   * @property {object} SUBSCRIBE - subscribes to a topic
-	   * @property {object} UNSUBSCRIBE - unsubscribes from a topic
-	   */
-	  Publisher: {
-	    PUBLISH: "publish",
-	    SUBSCRIBE: "subscribe",
-	    UNSUBSCRIBE: "unsubscribe"
-	  },
-	  /**
-	   * Eventnames for TileMap class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} IMG_DATA_NAME - notifies all subscribers
-	   * @property {object} MARKER_DATA_NAME - subscribes to a topic
-	   */
-	  TileMap: {
-	    IMG_DATA_NAME: "img_data",
-	    MARKER_DATA_NAME: "marker"
-	  }
-		};
-
-/***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1114,7 +1145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _Events = __webpack_require__(4);
+	var _Events = __webpack_require__(3);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2158,7 +2189,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _Helper = __webpack_require__(3);
+	var _Helper = __webpack_require__(2);
+
+	var _Events = __webpack_require__(3);
 
 	var _Point = __webpack_require__(8);
 
@@ -2337,12 +2370,50 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            if (this.drawIsNeeded) {
 	                this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
+	                this.checkBoundaries();
 	                this.draw();
 	                this.drawIsNeeded = false;
 	            }
 	            window.requestAnimFrame(function () {
 	                return _this2.mainLoop();
 	            });
+	        }
+	    }, {
+	        key: 'checkBoundaries',
+	        value: function checkBoundaries() {
+	            var nw = this.convertLatLngToPoint(this.limitToBounds.nw),
+	                se = this.convertLatLngToPoint(this.limitToBounds.se),
+	                limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
+
+	            var offset = new _Point.Point();
+	            var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+	            if (!equalizedMap.containsRect(this.viewport)) {
+	                if (equalizedMap.width >= this.viewport.width) {
+	                    if (equalizedMap.left - this.viewport.left > 0) {
+	                        offset.x -= equalizedMap.left - this.viewport.left;
+	                    }
+	                    if (equalizedMap.right - this.viewport.right < 0) {
+	                        offset.x -= equalizedMap.right - this.viewport.right;
+	                    }
+	                } else {
+	                    this.currentView.setCenterX(this.viewport.center.x);
+	                    offset.x = 0;
+	                }
+
+	                if (equalizedMap.height >= this.viewport.height) {
+	                    if (equalizedMap.top - this.viewport.top > 0) {
+	                        offset.y -= equalizedMap.top - this.viewport.top;
+	                    }
+	                    if (equalizedMap.bottom - this.viewport.bottom < 0) {
+	                        offset.y -= equalizedMap.bottom - this.viewport.bottom;
+	                    }
+	                } else {
+	                    this.currentView.setCenterY(this.viewport.center.y);
+	                    offset.y = 0;
+	                }
+	            }
+	            offset.multiply(1 / this.distortionFactor, 1);
+	            this.currentView.translate(offset.x, offset.y);
 	        }
 
 	        /**
@@ -2443,16 +2514,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.currentView.setSize(newSize.width, newSize.height);
 
 	            this.setLatLngToPosition(latlngPosition, pos);
-
 	            this.moveView(new _Point.Point());
 
-	            this.drawIsNeeded = true;
-
 	            if (this.zoomFactor >= this.maxZoom) {
-	                this.eventManager.publish("next-level", [this.center, this.bounds]);
+	                this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL, [this.center, this.bounds]);
 	            } else if (this.zoomFactor <= this.minZoom) {
-	                this.eventManager.publish("previous-level", [this.center, this.bounds]);
+	                this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL, [this.center, this.bounds]);
 	            }
+	            this.drawIsNeeded = true;
 
 	            return this;
 	        }
@@ -2491,48 +2560,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'moveView',
 	        value: function moveView(pos) {
-	            var redo = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
-
-	            var nw = this.convertLatLngToPoint(this.limitToBounds.nw),
-	                se = this.convertLatLngToPoint(this.limitToBounds.se),
-	                limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
-
-	            pos.divide(this.distortionFactor, 1);
-	            var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
-	            if (!equalizedMap.containsRect(this.viewport)) {
-	                if (equalizedMap.width >= this.viewport.width) {
-	                    if (equalizedMap.left - this.viewport.left > 0) {
-	                        pos.x -= equalizedMap.left - this.viewport.left;
-	                    }
-	                    if (equalizedMap.right - this.viewport.right < 0) {
-	                        pos.x -= equalizedMap.right - this.viewport.right;
-	                    }
-	                } else {
-	                    this.currentView.setCenterX(this.viewport.center.x);
-	                    pos.x = 0;
-	                }
-
-	                if (equalizedMap.height >= this.viewport.height) {
-	                    if (equalizedMap.top - this.viewport.top > 0) {
-	                        pos.y -= equalizedMap.top - this.viewport.top;
-	                    }
-	                    if (equalizedMap.bottom - this.viewport.bottom < 0) {
-	                        pos.y -= equalizedMap.bottom - this.viewport.bottom;
-	                    }
-	                } else {
-	                    this.currentView.setCenterY(this.viewport.center.y);
-	                    pos.y = 0;
-	                }
-	            }
-
-	            this.currentView.translate(pos.x, pos.y);
-
+	            this.currentView.translate(0, pos.y);
 	            this.calculateNewCenter();
-
-	            // TODO: could be more optimized
-	            if (redo) this.moveView(new _Point.Point(), false);
-
+	            this.currentView.translate(pos.x * (1 / this.distortionFactor), 0);
 	            return this;
 	        }
 
@@ -2884,7 +2914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _Helper = __webpack_require__(3);
+	var _Helper = __webpack_require__(2);
 
 	var _StateHandler = __webpack_require__(6);
 
@@ -3030,9 +3060,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jQuery2 = _interopRequireDefault(_jQuery);
 
-	var _Events = __webpack_require__(4);
+	var _Events = __webpack_require__(3);
 
-	var _Helper = __webpack_require__(3);
+	var _Helper = __webpack_require__(2);
 
 	var _Point = __webpack_require__(8);
 
@@ -3098,7 +3128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.eventManager = new _Publisher.Publisher();
 
-	            var gesture = _Helper.Helper.isTouch() ? "touchstart" : "mousedown";
+	            var gesture = _Helper.Helper.isTouch() ? _Events.Events.Handling.TOUCHSTART : _Events.Events.Handling.CLICK;
 
 	            this.$icon.on(gesture, function () {
 	                _this.eventManager.publish(_Events.Events.ToolTip.OPEN, _this.content);
@@ -3174,7 +3204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jQuery2 = _interopRequireDefault(_jQuery);
 
-	var _Helper = __webpack_require__(3);
+	var _Helper = __webpack_require__(2);
 
 	var _Point = __webpack_require__(8);
 
@@ -3312,9 +3342,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Handlebars2 = _interopRequireDefault(_Handlebars);
 
-	var _Events = __webpack_require__(4);
+	var _Events = __webpack_require__(3);
 
-	var _Helper = __webpack_require__(3);
+	var _Helper = __webpack_require__(2);
 
 	var _Publisher = __webpack_require__(5);
 
@@ -3435,14 +3465,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function bindEvents() {
 	            var _this = this;
 
-	            (0, _jQuery2.default)(window).on("resize orientationchange", function () {
+	            (0, _jQuery2.default)(window).on(_Events.Events.Handling.RESIZE, function () {
 	                _this.resizeHandler();
 	            });
 	            this.eventManager.subscribe(_Events.Events.ToolTip.OPEN, this.open.bind(this));
 	            this.eventManager.subscribe(_Events.Events.ToolTip.CLOSE, function () {
 	                _this.close();
 	            });
-	            this.$close.on("click", function () {
+	            this.$close.on(_Events.Events.Handling.CLICK, function () {
 	                _this.close();
 	            });
 	            return this;
@@ -3496,7 +3526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (this.$container.hasClass(_Events.Events.ToolTip.CLOSE)) {
 	                this.setPosition();
 	                this.$container.removeClass(_Events.Events.ToolTip.CLOSE).addClass(_Events.Events.ToolTip.OPEN);
-	                this.eventManager.publish("resize");
+	                this.eventManager.publish(_Events.Events.TileMap.RESIZE);
 	            }
 	            return this;
 	        }
@@ -3513,7 +3543,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
 	                this.setPosition();
 	                this.$container.removeClass(_Events.Events.ToolTip.OPEN).addClass(_Events.Events.ToolTip.CLOSE);
-	                this.eventManager.publish("resize");
+	                this.eventManager.publish(_Events.Events.TileMap.RESIZE);
 	            }
 	            return this;
 	        }
@@ -3597,7 +3627,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(8);
 
-	var _Helper = __webpack_require__(3);
+	var _Helper = __webpack_require__(2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

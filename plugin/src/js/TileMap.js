@@ -172,6 +172,10 @@ export class TileMap {
             Helper.forEach(markerData, (currentData) => {
                 this.markers.push(new Marker(currentData, this.view));
             });
+            this.markers = this.markers.sort((a, b) => ((b.latlng.lat - a.latlng.lat !== 0) ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng));
+            Helper.forEach(this.markers, (marker, i) => {
+                marker.$icon.css("z-index", i);
+            });
         }
         return this;
     }
@@ -206,9 +210,9 @@ export class TileMap {
      */
     bindEvents() {
 
-        this.eventManager.subscribe("resize", () => { this.resize(); });
+        this.eventManager.subscribe(Events.TileMap.RESIZE, () => { this.resize(); });
 
-        this.eventManager.subscribe("next-level", (argument_array) => {
+        this.eventManager.subscribe(Events.TileMap.NEXT_LEVEL, (argument_array) => {
             const center = argument_array[0],
                   bounds = argument_array[1],
                   lastLevel = this.levelHandler.current.description;
@@ -220,7 +224,7 @@ export class TileMap {
             }
         });
 
-        this.eventManager.subscribe("previous-level", (argument_array) => {
+        this.eventManager.subscribe(Events.TileMap.PREVIOUS_LEVEL, (argument_array) => {
             const center = argument_array[0],
                   bounds = argument_array[1],
                   lastLevel = this.levelHandler.current.description;

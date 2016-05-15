@@ -254,6 +254,12 @@
                     _Helper.Helper.forEach(markerData, function(currentData) {
                         _this2.markers.push(new _Marker.Marker(currentData, _this2.view));
                     });
+                    this.markers = this.markers.sort(function(a, b) {
+                        return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
+                    });
+                    _Helper.Helper.forEach(this.markers, function(marker, i) {
+                        marker.$icon.css("z-index", i);
+                    });
                 }
                 return this;
             }
@@ -298,11 +304,11 @@
             value: function bindEvents() {
                 var _this3 = this;
 
-                this.eventManager.subscribe("resize", function() {
+                this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function() {
                     _this3.resize();
                 });
 
-                this.eventManager.subscribe("next-level", function(argument_array) {
+                this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function(argument_array) {
                     var center = argument_array[0],
                         bounds = argument_array[1],
                         lastLevel = _this3.levelHandler.current.description;
@@ -314,7 +320,7 @@
                     }
                 });
 
-                this.eventManager.subscribe("previous-level", function(argument_array) {
+                this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function(argument_array) {
                     var center = argument_array[0],
                         bounds = argument_array[1],
                         lastLevel = _this3.levelHandler.current.description;

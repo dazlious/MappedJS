@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Helper.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js'], factory);
+        define(['exports', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Helper.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'));
+        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Helper, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
+        factory(mod.exports, global.Helper, global.Events, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher);
         global.View = mod.exports;
     }
-})(this, function(exports, _Helper, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher) {
+})(this, function(exports, _Helper, _Events, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -199,12 +199,50 @@
 
                 if (this.drawIsNeeded) {
                     this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
+                    this.checkBoundaries();
                     this.draw();
                     this.drawIsNeeded = false;
                 }
                 window.requestAnimFrame(function() {
                     return _this2.mainLoop();
                 });
+            }
+        }, {
+            key: 'checkBoundaries',
+            value: function checkBoundaries() {
+                var nw = this.convertLatLngToPoint(this.limitToBounds.nw),
+                    se = this.convertLatLngToPoint(this.limitToBounds.se),
+                    limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
+
+                var offset = new _Point.Point();
+                var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+                if (!equalizedMap.containsRect(this.viewport)) {
+                    if (equalizedMap.width >= this.viewport.width) {
+                        if (equalizedMap.left - this.viewport.left > 0) {
+                            offset.x -= equalizedMap.left - this.viewport.left;
+                        }
+                        if (equalizedMap.right - this.viewport.right < 0) {
+                            offset.x -= equalizedMap.right - this.viewport.right;
+                        }
+                    } else {
+                        this.currentView.setCenterX(this.viewport.center.x);
+                        offset.x = 0;
+                    }
+
+                    if (equalizedMap.height >= this.viewport.height) {
+                        if (equalizedMap.top - this.viewport.top > 0) {
+                            offset.y -= equalizedMap.top - this.viewport.top;
+                        }
+                        if (equalizedMap.bottom - this.viewport.bottom < 0) {
+                            offset.y -= equalizedMap.bottom - this.viewport.bottom;
+                        }
+                    } else {
+                        this.currentView.setCenterY(this.viewport.center.y);
+                        offset.y = 0;
+                    }
+                }
+                offset.multiply(1 / this.distortionFactor, 1);
+                this.currentView.translate(offset.x, offset.y);
             }
 
             /**
@@ -305,16 +343,14 @@
                 this.currentView.setSize(newSize.width, newSize.height);
 
                 this.setLatLngToPosition(latlngPosition, pos);
-
                 this.moveView(new _Point.Point());
 
-                this.drawIsNeeded = true;
-
                 if (this.zoomFactor >= this.maxZoom) {
-                    this.eventManager.publish("next-level", [this.center, this.bounds]);
+                    this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL, [this.center, this.bounds]);
                 } else if (this.zoomFactor <= this.minZoom) {
-                    this.eventManager.publish("previous-level", [this.center, this.bounds]);
+                    this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL, [this.center, this.bounds]);
                 }
+                this.drawIsNeeded = true;
 
                 return this;
             }
@@ -353,48 +389,9 @@
         }, {
             key: 'moveView',
             value: function moveView(pos) {
-                var redo = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
-
-                var nw = this.convertLatLngToPoint(this.limitToBounds.nw),
-                    se = this.convertLatLngToPoint(this.limitToBounds.se),
-                    limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
-
-                pos.divide(this.distortionFactor, 1);
-                var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
-                if (!equalizedMap.containsRect(this.viewport)) {
-                    if (equalizedMap.width >= this.viewport.width) {
-                        if (equalizedMap.left - this.viewport.left > 0) {
-                            pos.x -= equalizedMap.left - this.viewport.left;
-                        }
-                        if (equalizedMap.right - this.viewport.right < 0) {
-                            pos.x -= equalizedMap.right - this.viewport.right;
-                        }
-                    } else {
-                        this.currentView.setCenterX(this.viewport.center.x);
-                        pos.x = 0;
-                    }
-
-                    if (equalizedMap.height >= this.viewport.height) {
-                        if (equalizedMap.top - this.viewport.top > 0) {
-                            pos.y -= equalizedMap.top - this.viewport.top;
-                        }
-                        if (equalizedMap.bottom - this.viewport.bottom < 0) {
-                            pos.y -= equalizedMap.bottom - this.viewport.bottom;
-                        }
-                    } else {
-                        this.currentView.setCenterY(this.viewport.center.y);
-                        pos.y = 0;
-                    }
-                }
-
-                this.currentView.translate(pos.x, pos.y);
-
+                this.currentView.translate(0, pos.y);
                 this.calculateNewCenter();
-
-                // TODO: could be more optimized
-                if (redo) this.moveView(new _Point.Point(), false);
-
+                this.currentView.translate(pos.x * (1 / this.distortionFactor), 0);
                 return this;
             }
 

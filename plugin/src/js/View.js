@@ -1,4 +1,5 @@
 import {Helper} from './Helper.js';
+import {Events} from './Events.js';
 import {Point} from './Point.js';
 import {LatLng} from './LatLng.js';
 import {Bounds} from './Bounds.js';
@@ -129,10 +130,47 @@ export class View {
     mainLoop() {
         if (this.drawIsNeeded) {
             this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
+            this.checkBoundaries();
             this.draw();
             this.drawIsNeeded = false;
         }
         window.requestAnimFrame(() => this.mainLoop());
+    }
+
+    checkBoundaries() {
+        const nw = this.convertLatLngToPoint(this.limitToBounds.nw),
+              se = this.convertLatLngToPoint(this.limitToBounds.se),
+              limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
+
+        const offset = new Point();
+        const equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+        if (!equalizedMap.containsRect(this.viewport)) {
+            if (equalizedMap.width >= this.viewport.width) {
+                if (equalizedMap.left - this.viewport.left > 0) {
+                    offset.x -= (equalizedMap.left - this.viewport.left);
+                }
+                if (equalizedMap.right - this.viewport.right < 0) {
+                    offset.x -= (equalizedMap.right - this.viewport.right);
+                }
+            } else {
+                this.currentView.setCenterX(this.viewport.center.x);
+                offset.x = 0;
+            }
+
+            if (equalizedMap.height >= this.viewport.height) {
+                if (equalizedMap.top - this.viewport.top > 0) {
+                    offset.y -= (equalizedMap.top - this.viewport.top);
+                }
+                if (equalizedMap.bottom - this.viewport.bottom < 0) {
+                    offset.y -= (equalizedMap.bottom - this.viewport.bottom);
+                }
+            } else {
+                this.currentView.setCenterY(this.viewport.center.y);
+                offset.y = 0;
+            }
+        }
+        offset.multiply(1/this.distortionFactor, 1);
+        this.currentView.translate(offset.x, offset.y);
     }
 
     /**
@@ -213,16 +251,14 @@ export class View {
         this.currentView.setSize(newSize.width, newSize.height);
 
         this.setLatLngToPosition(latlngPosition, pos);
-
         this.moveView(new Point());
 
-        this.drawIsNeeded = true;
-
         if (this.zoomFactor >= this.maxZoom) {
-            this.eventManager.publish("next-level", [this.center, this.bounds]);
+            this.eventManager.publish(Events.TileMap.NEXT_LEVEL, [this.center, this.bounds]);
         } else if (this.zoomFactor <= this.minZoom) {
-            this.eventManager.publish("previous-level", [this.center, this.bounds]);
+            this.eventManager.publish(Events.TileMap.PREVIOUS_LEVEL, [this.center, this.bounds]);
         }
+        this.drawIsNeeded = true;
 
         return this;
     }
@@ -251,47 +287,10 @@ export class View {
      * @param  {Point} pos - specified additional offset
      * @return {View} instance of View for chaining
      */
-    moveView(pos, redo = true) {
-
-        const nw = this.convertLatLngToPoint(this.limitToBounds.nw),
-              se = this.convertLatLngToPoint(this.limitToBounds.se),
-              limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
-
-        pos.divide(this.distortionFactor, 1);
-        const equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter + pos.x, pos.y);
-        if (!equalizedMap.containsRect(this.viewport)) {
-            if (equalizedMap.width >= this.viewport.width) {
-                if (equalizedMap.left - this.viewport.left > 0) {
-                    pos.x -= (equalizedMap.left - this.viewport.left);
-                }
-                if (equalizedMap.right - this.viewport.right < 0) {
-                    pos.x -= (equalizedMap.right - this.viewport.right);
-                }
-            } else {
-                this.currentView.setCenterX(this.viewport.center.x);
-                pos.x = 0;
-            }
-
-            if (equalizedMap.height >= this.viewport.height) {
-                if (equalizedMap.top - this.viewport.top > 0) {
-                    pos.y -= (equalizedMap.top - this.viewport.top);
-                }
-                if (equalizedMap.bottom - this.viewport.bottom < 0) {
-                    pos.y -= (equalizedMap.bottom - this.viewport.bottom);
-                }
-            } else {
-                this.currentView.setCenterY(this.viewport.center.y);
-                pos.y = 0;
-            }
-        }
-
-        this.currentView.translate(pos.x, pos.y);
-
+    moveView(pos) {
+        this.currentView.translate(0, pos.y);
         this.calculateNewCenter();
-
-        // TODO: could be more optimized
-        if (redo) this.moveView(new Point(), false);
-
+        this.currentView.translate(pos.x * (1/this.distortionFactor), 0);
         return this;
     }
 

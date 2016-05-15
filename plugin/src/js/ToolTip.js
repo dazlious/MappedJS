@@ -87,10 +87,10 @@ export class ToolTip {
      * @return {ToolTip} instance of ToolTip for chaining
      */
     bindEvents() {
-        $(window).on("resize orientationchange", () => { this.resizeHandler(); });
+        $(window).on(Events.Handling.RESIZE, () => { this.resizeHandler(); });
         this.eventManager.subscribe(Events.ToolTip.OPEN, this.open.bind(this));
         this.eventManager.subscribe(Events.ToolTip.CLOSE, () => { this.close(); });
-        this.$close.on("click", () => { this.close(); });
+        this.$close.on(Events.Handling.CLICK, () => { this.close(); });
         return this;
     }
 
@@ -129,7 +129,7 @@ export class ToolTip {
         if (this.$container.hasClass(Events.ToolTip.CLOSE)) {
             this.setPosition();
             this.$container.removeClass(Events.ToolTip.CLOSE).addClass(Events.ToolTip.OPEN);
-            this.eventManager.publish("resize");
+            this.eventManager.publish(Events.TileMap.RESIZE);
         }
         return this;
     }
@@ -143,7 +143,7 @@ export class ToolTip {
             this.eventManager.publish(Events.Marker.DEACTIVATE);
             this.setPosition();
             this.$container.removeClass(Events.ToolTip.OPEN).addClass(Events.ToolTip.CLOSE);
-            this.eventManager.publish("resize");
+            this.eventManager.publish(Events.TileMap.RESIZE);
         }
         return this;
     }

@@ -165,14 +165,14 @@
             value: function bindEvents() {
                 var _this = this;
 
-                (0, _jQuery2.default)(window).on("resize orientationchange", function() {
+                (0, _jQuery2.default)(window).on(_Events.Events.Handling.RESIZE, function() {
                     _this.resizeHandler();
                 });
                 this.eventManager.subscribe(_Events.Events.ToolTip.OPEN, this.open.bind(this));
                 this.eventManager.subscribe(_Events.Events.ToolTip.CLOSE, function() {
                     _this.close();
                 });
-                this.$close.on("click", function() {
+                this.$close.on(_Events.Events.Handling.CLICK, function() {
                     _this.close();
                 });
                 return this;
@@ -226,7 +226,7 @@
                 if (this.$container.hasClass(_Events.Events.ToolTip.CLOSE)) {
                     this.setPosition();
                     this.$container.removeClass(_Events.Events.ToolTip.CLOSE).addClass(_Events.Events.ToolTip.OPEN);
-                    this.eventManager.publish("resize");
+                    this.eventManager.publish(_Events.Events.TileMap.RESIZE);
                 }
                 return this;
             }
@@ -243,7 +243,7 @@
                     this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
                     this.setPosition();
                     this.$container.removeClass(_Events.Events.ToolTip.OPEN).addClass(_Events.Events.ToolTip.CLOSE);
-                    this.eventManager.publish("resize");
+                    this.eventManager.publish(_Events.Events.TileMap.RESIZE);
                 }
                 return this;
             }

@@ -1,7 +1,8 @@
 import $ from 'jQuery';
+import {Helper} from './Helper.js';
+import {Events} from './Events.js';
 import {TileMap} from './TileMap.js';
 import {DataEnrichment} from './DataEnrichment.js';
-import {Helper} from './Helper.js';
 import {Interact} from './Interact.js';
 import {Point} from './Point.js';
 
@@ -165,12 +166,12 @@ export class MappedJS {
 
         this.initializeInteractForMap();
 
-        $(window).on("resize orientationchange", this.resizeHandler.bind(this));
+        $(window).on(Events.Handling.RESIZE, this.resizeHandler.bind(this));
 
-        $(document).on("keydown", this.keyPress.bind(this));
-        $(document).on("keyup", this.keyRelease.bind(this));
+        $(document).on(Events.Handling.KEYDOWN, this.keyPress.bind(this));
+        $(document).on(Events.Handling.KEYUP, this.keyRelease.bind(this));
 
-        const gesture = Helper.isTouch() ? "touchstart": "mousedown";
+        const gesture = Helper.isTouch() ? Events.Handling.TOUCHSTART: Events.Handling.CLICK;
 
         this.$zoomIn.on(gesture, this.zoomInToCenter.bind(this));
         this.$zoomOut.on(gesture, this.zoomOutToCenter.bind(this));
