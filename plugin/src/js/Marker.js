@@ -2,6 +2,7 @@ import $ from 'jQuery';
 import {Events} from './Events.js';
 import {Helper} from './Helper.js';
 import {Point} from './Point.js';
+import {Rectangle} from './Rectangle.js';
 import {Publisher} from './Publisher.js';
 import {DataEnrichment} from './DataEnrichment.js';
 
@@ -11,6 +12,11 @@ import {DataEnrichment} from './DataEnrichment.js';
  * @copyright Michael Duve 2016
  */
 export class Marker {
+
+    get boundingBox() {
+        const bBox = this.icon.getBoundingClientRect();
+        return new Rectangle(bBox.left, bBox.top, bBox.width, bBox.height);
+    }
 
     /**
      * @constructor
@@ -23,6 +29,9 @@ export class Marker {
         if(!_instance) throw new Error(`Tile needs an instance`);
         this.instance = _instance;
 
+        this.id = Marker.count;
+        Marker.count++;
+
         this.size = data.size;
 
         this.hover = data.hover;
@@ -33,8 +42,8 @@ export class Marker {
         this.latlng = data.latlng;
 
         this.content = data.content;
-        this.position = this.instance.convertLatLngToPoint(this.latlng);
         this.$icon = this.addMarkerToDOM(this.instance.$markerContainer);
+        this.icon = this.$icon[0];
 
         return this.bindEvents().positionMarker();
     }
@@ -47,16 +56,17 @@ export class Marker {
         this.eventManager = new Publisher();
 
         const gesture = Helper.isTouch() ? Events.Handling.TOUCHSTART: Events.Handling.CLICK;
+        if (this.content.length) {
+            this.$icon.on(gesture, () => {
+                this.eventManager.publish(Events.ToolTip.OPEN, this.content);
+                this.eventManager.publish(Events.Marker.DEACTIVATE);
+                this.$icon.addClass("active");
+            });
 
-        this.$icon.on(gesture, () => {
-            this.eventManager.publish(Events.ToolTip.OPEN, this.content);
-            this.eventManager.publish(Events.Marker.DEACTIVATE);
-            this.$icon.addClass("active");
-        });
-
-        this.eventManager.subscribe(Events.Marker.DEACTIVATE, () => {
-            this.$icon.removeClass("active");
-        });
+            this.eventManager.subscribe(Events.Marker.DEACTIVATE, () => {
+                this.$icon.removeClass("active");
+            });
+        }
 
         return this;
     }
@@ -98,3 +108,5 @@ export class Marker {
     }
 
 }
+
+Marker.count = 0;

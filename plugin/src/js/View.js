@@ -6,6 +6,7 @@ import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
 import {Publisher} from './Publisher.js';
+import {MarkerClusterer} from './MarkerClusterer.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -300,8 +301,8 @@ export class View {
      */
     draw() {
         return this.drawThumbnail()
-            .repositionMarkerContainer()
-            .drawVisibleTiles();
+            .drawVisibleTiles()
+            .repositionMarkerContainer();
     }
 
     /**

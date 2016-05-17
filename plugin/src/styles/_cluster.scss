@@ -1,0 +1,21 @@
+$size: 32px;
+.cluster {
+    position: absolute;
+    width: $size;
+    height: $size;
+    border-radius: $size;
+    box-shadow: 0 0 2px 1px #000;
+    color: #fff;
+    z-index: 200;
+    text-align: center;
+    line-height: $size;
+    background: #db0000;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    background-position: center left;
+    &:hover,
+    &.active {
+        background-position: center right;
+    }
+}

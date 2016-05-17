@@ -8,6 +8,7 @@ import {View} from './View.js';
 import {Marker} from './Marker.js';
 import {DataEnrichment} from './DataEnrichment.js';
 import {ToolTip} from './ToolTip.js';
+import {MarkerClusterer} from './MarkerClusterer.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -72,7 +73,6 @@ export class TileMap {
         this.settings = settings;
 
         this.levels = [];
-        this.markers = [];
 
         Helper.forEach(this.imgData, (element, i) => {
             const currentLevel = {
@@ -106,12 +106,8 @@ export class TileMap {
     initialize(bounds, center, data) {
         this.initializeCanvas()
             .bindEvents();
-
         this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
         this.initializeMarkers(this.markerData);
-
-        if (this.markers.length !== 0) this.createTooltipContainer();
-
         return this.resizeCanvas();
     }
 
@@ -144,7 +140,6 @@ export class TileMap {
             maxZoom: (data.zoom) ? data.zoom.max : 1,
             currentZoom: zoom,
             minZoom: (data.zoom) ? data.zoom.min : 1,
-            markerData: this.markerData,
             $container: this.$container,
             $markerContainer: this.$markerContainer,
             context: this.canvasContext,
@@ -168,13 +163,22 @@ export class TileMap {
      */
     initializeMarkers(markerData) {
         if (markerData) {
+            let markers = [];
             markerData = this.enrichMarkerData(markerData);
             Helper.forEach(markerData, (currentData) => {
-                this.markers.push(new Marker(currentData, this.view));
+                markers.push(new Marker(currentData, this.view));
             });
-            this.markers = this.markers.sort((a, b) => ((b.latlng.lat - a.latlng.lat !== 0) ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng));
-            Helper.forEach(this.markers, (marker, i) => {
+            markers = markers.sort((a, b) => ((b.latlng.lat - a.latlng.lat !== 0) ? b.latlng.lat - a.latlng.lat : b.latlng.lat - a.latlng.lat));
+            Helper.forEach(markers, (marker, i) => {
                 marker.$icon.css("z-index", i);
+            });
+
+            if (markers.length !== 0) this.createTooltipContainer();
+
+            this.markerClusterer = new MarkerClusterer({
+                markers: markers,
+                view: this.view,
+                $container: this.$markerContainer
             });
         }
         return this;
@@ -221,6 +225,11 @@ export class TileMap {
 
             if (lastLevel !== this.levelHandler.current.description) {
                 this.view = this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.min + 0.0000001);
+                if (this.levelHandler.hasNext()) {
+                    if (this.markerClusterer) this.markerClusterer.view = this.view; this.markerClusterer.clusterize();
+                } else {
+                    if (this.markerClusterer) this.markerClusterer.deleteAllClusters();
+                }
             }
         });
 
@@ -233,6 +242,7 @@ export class TileMap {
 
             if (lastLevel !== this.levelHandler.current.description) {
                 this.view = this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.max - 0.0000001);
+                if (this.markerClusterer) this.markerClusterer.view = this.view; this.markerClusterer.clusterize();
             }
         });
 

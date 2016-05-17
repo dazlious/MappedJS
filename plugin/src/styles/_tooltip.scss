@@ -11,7 +11,7 @@ $icon-height: (7*$gutter);
     background: map-get($light-theme, popupBg);
     .close-button {
         position: absolute;
-        z-index: 300;
+        z-index: 1000;
         top: 5px;
         left: 10px;
         display: block;

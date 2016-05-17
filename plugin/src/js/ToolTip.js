@@ -170,7 +170,7 @@ export class ToolTip {
             this.getTemplateFromFile(template, (compiledTemplate) => {
                 this.templates[type] = compiledTemplate;
                 this.loadedTemplates++;
-                if (this.allTemplatesLoaded) this.$container.prepend(this.$popup);
+                if (this.allTemplatesLoaded) this.$container.append(this.$popup);
             });
         });
         return this;

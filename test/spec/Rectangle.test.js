@@ -146,9 +146,17 @@ describe('Rectangle', function() {
 
         rect1.setCenter(newCenter1);
         rect2.setCenter(newCenter2);
-        
+
         expect(rect1.center).toEqual(new Point.Point(110, 110));
         expect(rect2.center).toEqual(new Point.Point(-10, -10));
+
+    });
+
+    it("extend works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 200, 200),
+            rect2 = new Rectangle.Rectangle(-100, -100, 100, 100);
+        rect1.extend(rect2);
+        expect(rect1).toEqual(new Rectangle.Rectangle(-100, -100, 300, 300));
 
     });
 

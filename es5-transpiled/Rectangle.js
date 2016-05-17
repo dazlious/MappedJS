@@ -260,6 +260,16 @@
             value: function contains(rectOrPoint) {
                 return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
             }
+        }, {
+            key: 'extend',
+            value: function extend(rect) {
+                var left = Math.min(this.left, rect.left);
+                var right = Math.max(this.right, rect.right);
+                var top = Math.min(this.top, rect.top);
+                var bottom = Math.max(this.bottom, rect.bottom);
+                this.size(left, top, right - left, bottom - top);
+                return this;
+            }
 
             /**
              * Sets the center of this Rectangle to specified point

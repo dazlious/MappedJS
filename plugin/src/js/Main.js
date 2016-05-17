@@ -121,16 +121,13 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     initializeInteractForMap() {
-        this.tooltipState = false;
         this.interact = new Interact({
             container: this.$content,
             autoFireHold: 300,
             overwriteViewportSettings: true,
             callbacks: {
                 pan: (data) => {
-                    if ($(data.target).hasClass("control")) {
-                        return false;
-                    }
+                    if ($(data.target).hasClass("control")) return false;
                     const change = data.last.position.clone.substract(data.position.move);
                     this.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                 },
@@ -142,9 +139,7 @@ export class MappedJS {
                     this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
                 },
                 doubletap: (data) => {
-                    if (!$(data.target).hasClass("marker-container")) {
-                        return false;
-                    }
+                    if (!$(data.target).hasClass("marker-container")) return false;
                     this.zoom(0.2, this.getAbsolutePosition(data.position.start));
                 },
                 flick: (data) => {

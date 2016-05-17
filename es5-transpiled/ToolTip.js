@@ -278,7 +278,7 @@
                     _this3.getTemplateFromFile(template, function(compiledTemplate) {
                         _this3.templates[type] = compiledTemplate;
                         _this3.loadedTemplates++;
-                        if (_this3.allTemplatesLoaded) _this3.$container.prepend(_this3.$popup);
+                        if (_this3.allTemplatesLoaded) _this3.$container.append(_this3.$popup);
                     });
                 });
                 return this;

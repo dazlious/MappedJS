@@ -121,6 +121,15 @@ export class Rectangle extends Point {
         return (rectOrPoint instanceof Rectangle) ? this.containsRect(rectOrPoint) : (rectOrPoint instanceof Point) ? this.containsPoint(rectOrPoint) : false;
     }
 
+    extend(rect) {
+        const left = Math.min(this.left, rect.left);
+        const right = Math.max(this.right, rect.right);
+        const top = Math.min(this.top, rect.top);
+        const bottom = Math.max(this.bottom, rect.bottom);
+        this.size(left, top, right - left, bottom - top);
+        return this;
+    }
+
     /**
      * Sets the center of this Rectangle to specified point
      * @param  {Point} point = new Point() - specified point to set center of rectangle to
