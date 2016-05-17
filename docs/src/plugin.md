@@ -14,6 +14,8 @@
 <dl>
 <dt><a href="#Bounds">Bounds</a></dt>
 <dd></dd>
+<dt><a href="#Cluster">Cluster</a></dt>
+<dd></dd>
 <dt><a href="#Interact">Interact</a></dt>
 <dd></dd>
 <dt><a href="#LatLng">LatLng</a></dt>
@@ -21,6 +23,8 @@
 <dt><a href="#MappedJS">MappedJS</a></dt>
 <dd></dd>
 <dt><a href="#Marker">Marker</a></dt>
+<dd></dd>
+<dt><a href="#MarkerClusterer">MarkerClusterer</a></dt>
 <dd></dd>
 <dt><a href="#Point">Point</a></dt>
 <dd></dd>
@@ -238,6 +242,10 @@ get height of boundaries
 
 **Kind**: instance property of <code>[Bounds](#Bounds)</code>  
 **Returns**: <code>number</code> - distance between north and south boundary  
+<a name="Cluster"></a>
+
+## Cluster
+**Kind**: global class  
 <a name="Interact"></a>
 
 ## Interact
@@ -1248,6 +1256,10 @@ set initial position of this marker
 
 **Kind**: instance method of <code>[Marker](#Marker)</code>  
 **Returns**: <code>[Marker](#Marker)</code> - instance of Marker for chaining  
+<a name="MarkerClusterer"></a>
+
+## MarkerClusterer
+**Kind**: global class  
 <a name="Point"></a>
 
 ## Point

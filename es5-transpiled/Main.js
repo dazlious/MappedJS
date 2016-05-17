@@ -210,16 +210,13 @@
             value: function initializeInteractForMap() {
                 var _this2 = this;
 
-                this.tooltipState = false;
                 this.interact = new _Interact.Interact({
                     container: this.$content,
                     autoFireHold: 300,
                     overwriteViewportSettings: true,
                     callbacks: {
                         pan: function pan(data) {
-                            if ((0, _jQuery2.default)(data.target).hasClass("control")) {
-                                return false;
-                            }
+                            if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
                             var change = data.last.position.clone.substract(data.position.move);
                             _this2.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
                         },
@@ -231,9 +228,7 @@
                             _this2.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
                         },
                         doubletap: function doubletap(data) {
-                            if (!(0, _jQuery2.default)(data.target).hasClass("marker-container")) {
-                                return false;
-                            }
+                            if (!(0, _jQuery2.default)(data.target).hasClass("marker-container")) return false;
                             _this2.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
                         },
                         flick: function flick(data) {

@@ -1,33 +1,33 @@
 {
     "fileSize": {
-        "size": "14.42 KB",
-        "gzipSize": "2.14 KB"
+        "size": "14.97 KB",
+        "gzipSize": "2.22 KB"
     },
     "selectorSpecifity": {
         "max": 60,
-        "average": 34.339285714285715
+        "average": 33.94915254237288
     },
     "totals": {
-        "rules": 54,
-        "selectors": 56,
-        "declarations": 156,
-        "properties": 43,
+        "rules": 56,
+        "selectors": 59,
+        "declarations": 172,
+        "properties": 44,
         "vendorPrefixes": 10,
         "mediaQueries": 0,
         "importants": 0
     },
     "uniqueDeclarations": {
-        "width": 10,
-        "height": 11,
+        "width": 11,
+        "height": 12,
+        "color": 3,
         "background-color": 5,
-        "font-size": 10,
-        "color": 2
+        "font-size": 10
     },
     "selectors": {
         "type": 13,
-        "class": 56,
+        "class": 59,
         "id": 0,
-        "pseudoClass": 4,
+        "pseudoClass": 5,
         "pseudoElement": 0
     },
     "propertyResets": {
@@ -35,6 +35,7 @@
     },
     "uniqueValues": {
         "colors": {
+            "#fff": 1,
             "#888": 2
         },
         "backgroundColors": {
@@ -42,7 +43,8 @@
             "rgba(0, 0, 0, 0.8)": 1,
             "rgba(255, 255, 255, 0.5)": 1,
             "#fff": 1,
-            "white": 1
+            "white": 1,
+            "#db0000": 1
         },
         "fontSizes": [
             {
@@ -111,6 +113,9 @@
             20,
             30,
             30,
+            20,
+            30,
+            30,
             30,
             30,
             30,
@@ -164,7 +169,9 @@
             6,
             5,
             1,
+            14,
             1,
+            2,
             2,
             2,
             2,

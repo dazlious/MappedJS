@@ -89,6 +89,9 @@
             TOUCHSTART: "touchstart",
             KEYDOWN: "keydown",
             KEYUP: "keyup"
+        },
+        View: {
+            DRAW: "draw"
         }
     };
 });

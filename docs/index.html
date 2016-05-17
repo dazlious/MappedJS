@@ -39,6 +39,8 @@
 <dl>
 <dt><a href="#Bounds">Bounds</a></dt>
 <dd></dd>
+<dt><a href="#Cluster">Cluster</a></dt>
+<dd></dd>
 <dt><a href="#Interact">Interact</a></dt>
 <dd></dd>
 <dt><a href="#LatLng">LatLng</a></dt>
@@ -46,6 +48,8 @@
 <dt><a href="#MappedJS">MappedJS</a></dt>
 <dd></dd>
 <dt><a href="#Marker">Marker</a></dt>
+<dd></dd>
+<dt><a href="#MarkerClusterer">MarkerClusterer</a></dt>
 <dd></dd>
 <dt><a href="#Point">Point</a></dt>
 <dd></dd>
@@ -89,7 +93,7 @@
 <p><a name="module_DataEnrichment"></a></p>
 <h2 id="dataenrichment">DataEnrichment</h2>
 <p>enriches delivered data with default values</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#x6d;&#100;&#117;&#x76;&#101;&#x40;&#x64;&#x65;&#115;&#x69;&#103;&#x6e;&#109;&#97;&#x69;&#108;&#x2e;&#x6e;&#x65;&#x74;">&#x6d;&#100;&#117;&#x76;&#101;&#x40;&#x64;&#x65;&#115;&#x69;&#103;&#x6e;&#109;&#97;&#x69;&#108;&#x2e;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#x6d;&#x64;&#x75;&#118;&#101;&#x40;&#100;&#x65;&#115;&#x69;&#x67;&#x6e;&#x6d;&#97;&#x69;&#108;&#46;&#110;&#101;&#116;">&#x6d;&#x64;&#x75;&#118;&#101;&#x40;&#100;&#x65;&#115;&#x69;&#x67;&#x6e;&#x6d;&#97;&#x69;&#108;&#46;&#110;&#101;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_DataEnrichment">DataEnrichment</a><ul>
 <li><a href="#module_DataEnrichment.marker">.marker(data)</a> ⇒ <code>object</code></li>
@@ -114,7 +118,7 @@
 <p><a name="module_Helper"></a></p>
 <h2 id="helper">Helper</h2>
 <p>Helper for general purposes</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#x6d;&#x64;&#117;&#x76;&#101;&#64;&#100;&#101;&#x73;&#105;&#103;&#110;&#109;&#97;&#x69;&#108;&#x2e;&#110;&#x65;&#x74;">&#x6d;&#x64;&#117;&#x76;&#101;&#64;&#100;&#101;&#x73;&#105;&#103;&#110;&#109;&#97;&#x69;&#108;&#x2e;&#110;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x6d;&#100;&#117;&#x76;&#x65;&#64;&#x64;&#101;&#x73;&#105;&#x67;&#110;&#109;&#x61;&#x69;&#x6c;&#x2e;&#110;&#x65;&#116;">&#x6d;&#100;&#117;&#x76;&#x65;&#64;&#x64;&#101;&#x73;&#105;&#x67;&#110;&#109;&#x61;&#x69;&#x6c;&#x2e;&#110;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_Helper">Helper</a><ul>
 <li><a href="#module_Helper.requestJSON">.requestJSON(filename, callback)</a> ⇒ <code>Helper</code></li>
@@ -205,7 +209,9 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#Bounds">Bounds</a></code><br><strong>Returns</strong>: <code>number</code> - distance between east and west boundary<br><a name="Bounds+height"></a></p>
 <h3 id="bounds-height-code-number-code-">bounds.height ⇒ <code>number</code></h3>
 <p>get height of boundaries</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Bounds">Bounds</a></code><br><strong>Returns</strong>: <code>number</code> - distance between north and south boundary<br><a name="Interact"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Bounds">Bounds</a></code><br><strong>Returns</strong>: <code>number</code> - distance between north and south boundary<br><a name="Cluster"></a></p>
+<h2 id="cluster">Cluster</h2>
+<p><strong>Kind</strong>: global class<br><a name="Interact"></a></p>
 <h2 id="interact">Interact</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
@@ -902,7 +908,9 @@
 <p><a name="Marker+positionMarker"></a></p>
 <h3 id="marker-positionmarker-code-marker-marker-code-">marker.positionMarker() ⇒ <code><a href="#Marker">Marker</a></code></h3>
 <p>set initial position of this marker</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Marker">Marker</a></code><br><strong>Returns</strong>: <code><a href="#Marker">Marker</a></code> - instance of Marker for chaining<br><a name="Point"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Marker">Marker</a></code><br><strong>Returns</strong>: <code><a href="#Marker">Marker</a></code> - instance of Marker for chaining<br><a name="MarkerClusterer"></a></p>
+<h2 id="markerclusterer">MarkerClusterer</h2>
+<p><strong>Kind</strong>: global class<br><a name="Point"></a></p>
 <h2 id="point">Point</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
@@ -1710,7 +1718,7 @@ returns paths to default templates</p>
 <p><strong>Kind</strong>: global variable<br><a name="Events"></a></p>
 <h2 id="events-code-object-code-">Events : <code>object</code></h2>
 <p>Helper for naming events</p>
-<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#109;&#100;&#x75;&#118;&#x65;&#x40;&#x64;&#101;&#115;&#x69;&#103;&#x6e;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x6e;&#x65;&#x74;">&#109;&#100;&#x75;&#118;&#x65;&#x40;&#x64;&#101;&#115;&#x69;&#103;&#x6e;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#109;&#x64;&#117;&#x76;&#x65;&#x40;&#100;&#x65;&#115;&#105;&#103;&#110;&#x6d;&#x61;&#x69;&#108;&#x2e;&#110;&#x65;&#x74;">&#109;&#x64;&#117;&#x76;&#x65;&#x40;&#100;&#x65;&#115;&#105;&#103;&#110;&#x6d;&#x61;&#x69;&#108;&#x2e;&#110;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#Events">Events</a> : <code>object</code><ul>
 <li><a href="#Events.ToolTip">.ToolTip</a> : <code>Object</code></li>

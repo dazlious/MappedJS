@@ -7,7 +7,7 @@
 		exports["de"] = factory(require("jQuery"), require("Handlebars"));
 	else
 		root["de"] = factory(root["jQuery"], root["Handlebars"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_16__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_18__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -75,9 +75,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _TileMap = __webpack_require__(4);
 
-	var _DataEnrichment = __webpack_require__(14);
+	var _DataEnrichment = __webpack_require__(16);
 
-	var _Interact = __webpack_require__(17);
+	var _Interact = __webpack_require__(19);
 
 	var _Point = __webpack_require__(8);
 
@@ -243,16 +243,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function initializeInteractForMap() {
 	            var _this2 = this;
 
-	            this.tooltipState = false;
 	            this.interact = new _Interact.Interact({
 	                container: this.$content,
 	                autoFireHold: 300,
 	                overwriteViewportSettings: true,
 	                callbacks: {
 	                    pan: function pan(data) {
-	                        if ((0, _jQuery2.default)(data.target).hasClass("control")) {
-	                            return false;
-	                        }
+	                        if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
 	                        var change = data.last.position.clone.substract(data.position.move);
 	                        _this2.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
 	                    },
@@ -264,9 +261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        _this2.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
 	                    },
 	                    doubletap: function doubletap(data) {
-	                        if (!(0, _jQuery2.default)(data.target).hasClass("marker-container")) {
-	                            return false;
-	                        }
+	                        if (!(0, _jQuery2.default)(data.target).hasClass("marker-container")) return false;
 	                        _this2.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
 	                    },
 	                    flick: function flick(data) {
@@ -652,7 +647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
@@ -661,73 +656,76 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @namespace Events
 	*/
 	var Events = exports.Events = {
-	  /**
-	   * Eventnames for ToolTip class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} OPEN - when a tooltip should be openend
-	   * @property {object} CLOSE - when a tooltip should be closed
-	   */
-	  ToolTip: {
-	    OPEN: "tooltip-open",
-	    CLOSE: "tooltip-close"
-	  },
-	  /**
-	   * Eventnames for Marker class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} DEACTIVATE - when a Marker should be in deactived state
-	   */
-	  Marker: {
-	    DEACTIVATE: "deactivate-marker"
-	  },
-	  /**
-	   * Eventnames for Publisher class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} PUBLISH - notifies all subscribers
-	   * @property {object} SUBSCRIBE - subscribes to a topic
-	   * @property {object} UNSUBSCRIBE - unsubscribes from a topic
-	   */
-	  Publisher: {
-	    PUBLISH: "publish",
-	    SUBSCRIBE: "subscribe",
-	    UNSUBSCRIBE: "unsubscribe"
-	  },
-	  /**
-	   * Eventnames for TileMap class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} IMG_DATA_NAME - notifies all subscribers
-	   * @property {object} MARKER_DATA_NAME - subscribes to a topic
-	   * @property {object} NEXT_LEVEL - next level of view
-	   * @property {object} PREVIOUS_LEVEL - previous level of view
-	   * @property {object} RESIZE - resize of view needed
-	   */
-	  TileMap: {
-	    IMG_DATA_NAME: "img_data",
-	    MARKER_DATA_NAME: "marker",
-	    NEXT_LEVEL: "next-level",
-	    PREVIOUS_LEVEL: "previous-level",
-	    RESIZE: "resize"
-	  },
-	  /**
-	   * Eventnames for Handling in all classes
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} RESIZE - resize of window happened needed
-	   * @property {object} CLICK - click occured
-	   * @property {object} TOUCHSTART - Touch started
-	   * @property {object} KEYDOWN - key pressed
-	   * @property {object} KEYUP - key released
-	    */
-	  Handling: {
-	    RESIZE: "resize orientationchange",
-	    CLICK: "click",
-	    TOUCHSTART: "touchstart",
-	    KEYDOWN: "keydown",
-	    KEYUP: "keyup"
-	  }
+	    /**
+	     * Eventnames for ToolTip class
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} OPEN - when a tooltip should be openend
+	     * @property {object} CLOSE - when a tooltip should be closed
+	     */
+	    ToolTip: {
+	        OPEN: "tooltip-open",
+	        CLOSE: "tooltip-close"
+	    },
+	    /**
+	     * Eventnames for Marker class
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} DEACTIVATE - when a Marker should be in deactived state
+	     */
+	    Marker: {
+	        DEACTIVATE: "deactivate-marker"
+	    },
+	    /**
+	     * Eventnames for Publisher class
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} PUBLISH - notifies all subscribers
+	     * @property {object} SUBSCRIBE - subscribes to a topic
+	     * @property {object} UNSUBSCRIBE - unsubscribes from a topic
+	     */
+	    Publisher: {
+	        PUBLISH: "publish",
+	        SUBSCRIBE: "subscribe",
+	        UNSUBSCRIBE: "unsubscribe"
+	    },
+	    /**
+	     * Eventnames for TileMap class
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} IMG_DATA_NAME - notifies all subscribers
+	     * @property {object} MARKER_DATA_NAME - subscribes to a topic
+	     * @property {object} NEXT_LEVEL - next level of view
+	     * @property {object} PREVIOUS_LEVEL - previous level of view
+	     * @property {object} RESIZE - resize of view needed
+	     */
+	    TileMap: {
+	        IMG_DATA_NAME: "img_data",
+	        MARKER_DATA_NAME: "marker",
+	        NEXT_LEVEL: "next-level",
+	        PREVIOUS_LEVEL: "previous-level",
+	        RESIZE: "resize"
+	    },
+	    /**
+	     * Eventnames for Handling in all classes
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} RESIZE - resize of window happened needed
+	     * @property {object} CLICK - click occured
+	     * @property {object} TOUCHSTART - Touch started
+	     * @property {object} KEYDOWN - key pressed
+	     * @property {object} KEYUP - key released
+	      */
+	    Handling: {
+	        RESIZE: "resize orientationchange",
+	        CLICK: "click",
+	        TOUCHSTART: "touchstart",
+	        KEYDOWN: "keydown",
+	        KEYUP: "keyup"
+	    },
+	    View: {
+	        DRAW: "draw"
+	    }
 		};
 
 /***/ },
@@ -759,11 +757,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _View = __webpack_require__(9);
 
-	var _Marker = __webpack_require__(13);
+	var _Marker = __webpack_require__(15);
 
-	var _DataEnrichment = __webpack_require__(14);
+	var _DataEnrichment = __webpack_require__(16);
 
-	var _ToolTip = __webpack_require__(15);
+	var _ToolTip = __webpack_require__(17);
+
+	var _MarkerClusterer = __webpack_require__(13);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -862,7 +862,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.settings = settings;
 
 	        this.levels = [];
-	        this.markers = [];
 
 	        _Helper.Helper.forEach(this.imgData, function (element, i) {
 	            var currentLevel = {
@@ -899,12 +898,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'initialize',
 	        value: function initialize(bounds, center, data) {
 	            this.initializeCanvas().bindEvents();
-
 	            this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
 	            this.initializeMarkers(this.markerData);
-
-	            if (this.markers.length !== 0) this.createTooltipContainer();
-
 	            return this.resizeCanvas();
 	        }
 
@@ -943,7 +938,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                maxZoom: data.zoom ? data.zoom.max : 1,
 	                currentZoom: zoom,
 	                minZoom: data.zoom ? data.zoom.min : 1,
-	                markerData: this.markerData,
 	                $container: this.$container,
 	                $markerContainer: this.$markerContainer,
 	                context: this.canvasContext,
@@ -975,16 +969,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var _this2 = this;
 
 	            if (markerData) {
-	                markerData = this.enrichMarkerData(markerData);
-	                _Helper.Helper.forEach(markerData, function (currentData) {
-	                    _this2.markers.push(new _Marker.Marker(currentData, _this2.view));
-	                });
-	                this.markers = this.markers.sort(function (a, b) {
-	                    return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
-	                });
-	                _Helper.Helper.forEach(this.markers, function (marker, i) {
-	                    marker.$icon.css("z-index", i);
-	                });
+	                (function () {
+	                    var markers = [];
+	                    markerData = _this2.enrichMarkerData(markerData);
+	                    _Helper.Helper.forEach(markerData, function (currentData) {
+	                        markers.push(new _Marker.Marker(currentData, _this2.view));
+	                    });
+	                    markers = markers.sort(function (a, b) {
+	                        return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lat - a.latlng.lat;
+	                    });
+	                    _Helper.Helper.forEach(markers, function (marker, i) {
+	                        marker.$icon.css("z-index", i);
+	                    });
+
+	                    if (markers.length !== 0) _this2.createTooltipContainer();
+
+	                    _this2.markerClusterer = new _MarkerClusterer.MarkerClusterer({
+	                        markers: markers,
+	                        view: _this2.view,
+	                        $container: _this2.$markerContainer
+	                    });
+	                })();
 	            }
 	            return this;
 	        }
@@ -1042,6 +1047,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                if (lastLevel !== _this3.levelHandler.current.description) {
 	                    _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.min + 0.0000001);
+	                    if (_this3.levelHandler.hasNext()) {
+	                        if (_this3.markerClusterer) _this3.markerClusterer.view = _this3.view;_this3.markerClusterer.clusterize();
+	                    } else {
+	                        if (_this3.markerClusterer) _this3.markerClusterer.deleteAllClusters();
+	                    }
 	                }
 	            });
 
@@ -1054,6 +1064,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                if (lastLevel !== _this3.levelHandler.current.description) {
 	                    _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.max - 0.0000001);
+	                    if (_this3.markerClusterer) _this3.markerClusterer.view = _this3.view;_this3.markerClusterer.clusterize();
 	                }
 	            });
 
@@ -1664,6 +1675,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function contains(rectOrPoint) {
 	      return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
 	    }
+	  }, {
+	    key: 'extend',
+	    value: function extend(rect) {
+	      var left = Math.min(this.left, rect.left);
+	      var right = Math.max(this.right, rect.right);
+	      var top = Math.min(this.top, rect.top);
+	      var bottom = Math.max(this.bottom, rect.bottom);
+	      this.size(left, top, right - left, bottom - top);
+	      return this;
+	    }
 
 	    /**
 	     * Sets the center of this Rectangle to specified point
@@ -2205,6 +2226,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Publisher = __webpack_require__(5);
 
+	var _MarkerClusterer = __webpack_require__(13);
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
@@ -2574,7 +2597,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'draw',
 	        value: function draw() {
-	            return this.drawThumbnail().repositionMarkerContainer().drawVisibleTiles();
+	            return this.drawThumbnail().drawVisibleTiles().repositionMarkerContainer();
 	        }
 
 	        /**
@@ -3052,6 +3075,451 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.MarkerClusterer = undefined;
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Cluster = __webpack_require__(14);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * @author Michael Duve <mduve@designmail.net>
+	 * @file represents a class which helps clustering overlapping markers
+	 * @copyright Michael Duve 2016
+	 */
+
+	var MarkerClusterer = exports.MarkerClusterer = function () {
+	    /**
+	     * @constructor
+	     * @return {MarkerClusterer} instance of MarkerClusterer for chaining
+	     */
+
+	    function MarkerClusterer(_ref) {
+	        var _ref$markers = _ref.markers;
+	        var markers = _ref$markers === undefined ? [] : _ref$markers;
+	        var _ref$$container = _ref.$container;
+	        var $container = _ref$$container === undefined ? null : _ref$$container;
+	        var _ref$view = _ref.view;
+	        var view = _ref$view === undefined ? null : _ref$view;
+
+	        _classCallCheck(this, MarkerClusterer);
+
+	        this.markers = markers;
+	        this.$container = $container;
+	        this.view = view;
+	        this.clusters = [];
+	        this.clusterize();
+	        return this;
+	    }
+
+	    _createClass(MarkerClusterer, [{
+	        key: 'clusterize',
+	        value: function clusterize() {
+	            this.deleteAllClusters();
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+
+	            try {
+	                for (var _iterator = this.markers.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var _step$value = _slicedToArray(_step.value, 2);
+
+	                    var i = _step$value[0];
+	                    var marker = _step$value[1];
+
+	                    var hits = [];
+	                    var _iteratorNormalCompletion3 = true;
+	                    var _didIteratorError3 = false;
+	                    var _iteratorError3 = undefined;
+
+	                    try {
+	                        for (var _iterator3 = this.clusters.entries()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                            var _step3$value = _slicedToArray(_step3.value, 2);
+
+	                            var j = _step3$value[0];
+	                            var cluster = _step3$value[1];
+
+	                            if (marker.boundingBox.intersects(cluster.boundingBox)) {
+	                                hits.push(cluster);
+	                            }
+	                        }
+	                    } catch (err) {
+	                        _didIteratorError3 = true;
+	                        _iteratorError3 = err;
+	                    } finally {
+	                        try {
+	                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                                _iterator3.return();
+	                            }
+	                        } finally {
+	                            if (_didIteratorError3) {
+	                                throw _iteratorError3;
+	                            }
+	                        }
+	                    }
+
+	                    if (!hits.length) {
+	                        var newCluster = this.createCluster(marker);
+	                        this.clusters.push(newCluster);
+	                    } else {
+	                        var nearestCluster = this.findNearestHit(marker, hits);
+	                        nearestCluster.addMarker(marker);
+	                    }
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+
+	            var _iteratorNormalCompletion2 = true;
+	            var _didIteratorError2 = false;
+	            var _iteratorError2 = undefined;
+
+	            try {
+	                for (var _iterator2 = this.clusters.entries()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    var _step2$value = _slicedToArray(_step2.value, 2);
+
+	                    var i = _step2$value[0];
+	                    var cluster = _step2$value[1];
+
+	                    cluster.init();
+	                }
+	            } catch (err) {
+	                _didIteratorError2 = true;
+	                _iteratorError2 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                        _iterator2.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError2) {
+	                        throw _iteratorError2;
+	                    }
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'findNearestHit',
+	        value: function findNearestHit(marker, hits) {
+	            var lastDistance = void 0,
+	                minimalHit = void 0;
+	            var _iteratorNormalCompletion4 = true;
+	            var _didIteratorError4 = false;
+	            var _iteratorError4 = undefined;
+
+	            try {
+	                for (var _iterator4 = hits.entries()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                    var _step4$value = _slicedToArray(_step4.value, 2);
+
+	                    var i = _step4$value[0];
+	                    var hit = _step4$value[1];
+
+	                    if (!lastDistance) {
+	                        lastDistance = this.getDistance(marker, hit);
+	                        minimalHit = hit;
+	                    } else {
+	                        var currentDistance = this.getDistance(marker, hit);
+	                        if (currentDistance < lastDistance) {
+	                            lastDistance = currentDistance;
+	                            minimalHit = hit;
+	                        }
+	                    }
+	                }
+	            } catch (err) {
+	                _didIteratorError4 = true;
+	                _iteratorError4 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	                        _iterator4.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError4) {
+	                        throw _iteratorError4;
+	                    }
+	                }
+	            }
+
+	            return minimalHit;
+	        }
+	    }, {
+	        key: 'getDistance',
+	        value: function getDistance(marker, cluster) {
+	            return marker.boundingBox.center.distance(cluster.boundingBox.center);
+	        }
+	    }, {
+	        key: 'createCluster',
+	        value: function createCluster(marker) {
+	            var newCluster = new _Cluster.Cluster({
+	                $container: this.$container,
+	                view: this.view
+	            });
+	            newCluster.addMarker(marker);
+	            return newCluster;
+	        }
+	    }, {
+	        key: 'deleteAllClusters',
+	        value: function deleteAllClusters() {
+	            var _iteratorNormalCompletion5 = true;
+	            var _didIteratorError5 = false;
+	            var _iteratorError5 = undefined;
+
+	            try {
+	                for (var _iterator5 = this.clusters.entries()[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	                    var _step5$value = _slicedToArray(_step5.value, 2);
+
+	                    var i = _step5$value[0];
+	                    var cluster = _step5$value[1];
+
+	                    cluster.removeFromDOM();
+	                }
+	            } catch (err) {
+	                _didIteratorError5 = true;
+	                _iteratorError5 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
+	                        _iterator5.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError5) {
+	                        throw _iteratorError5;
+	                    }
+	                }
+	            }
+
+	            this.clusters = [];
+	        }
+	    }]);
+
+	    return MarkerClusterer;
+	}();
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Cluster = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _jQuery = __webpack_require__(1);
+
+	var _jQuery2 = _interopRequireDefault(_jQuery);
+
+	var _Point = __webpack_require__(8);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * @author Michael Duve <mduve@designmail.net>
+	 * @file represents a cluster of markers
+	 * @copyright Michael Duve 2016
+	 */
+
+	var Cluster = exports.Cluster = function () {
+	    /**
+	     * @constructor
+	     * @return {Cluster} instance of Cluster for chaining
+	     */
+
+	    function Cluster(_ref) {
+	        var _ref$$container = _ref.$container;
+	        var $container = _ref$$container === undefined ? null : _ref$$container;
+	        var _ref$view = _ref.view;
+	        var view = _ref$view === undefined ? null : _ref$view;
+
+	        _classCallCheck(this, Cluster);
+
+	        this.markers = [];
+	        this.$container = $container;
+	        this.view = view;
+	        return this;
+	    }
+
+	    _createClass(Cluster, [{
+	        key: 'init',
+	        value: function init() {
+	            if (this.markers.length === 1) {
+	                this.markers[0].$icon.show();
+	            } else {
+	                this.createClusterMarker();
+	            }
+	        }
+	    }, {
+	        key: 'createClusterMarker',
+	        value: function createClusterMarker() {
+	            var p = void 0;
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+
+	            try {
+	                for (var _iterator = this.markers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var marker = _step.value;
+
+	                    marker.$icon.hide();
+	                    var currentPos = new _Point.Point(parseFloat(marker.icon.style.left), parseFloat(marker.icon.style.top));
+	                    p = !p ? currentPos : p.add(currentPos);
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+
+	            p.divide(this.markers.length);
+
+	            this.$cluster = (0, _jQuery2.default)("<div class='cluster'>" + this.markers.length + "</div>").css({
+	                "left": p.x + '%',
+	                "top": p.y + '%',
+	                "margin-left": '-16px',
+	                "margin-top": '-16px'
+	            });
+	            this.$container.append(this.$cluster);
+	            this.bindEvents();
+	        }
+	    }, {
+	        key: 'bindEvents',
+	        value: function bindEvents() {
+	            var _this = this;
+
+	            this.$cluster.on("mouseenter", function () {
+	                var _iteratorNormalCompletion2 = true;
+	                var _didIteratorError2 = false;
+	                var _iteratorError2 = undefined;
+
+	                try {
+	                    for (var _iterator2 = _this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                        var marker = _step2.value;
+
+	                        marker.$icon.fadeIn(500);
+	                    }
+	                } catch (err) {
+	                    _didIteratorError2 = true;
+	                    _iteratorError2 = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                            _iterator2.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError2) {
+	                            throw _iteratorError2;
+	                        }
+	                    }
+	                }
+	            });
+
+	            this.$cluster.on("mouseleave", function () {
+	                var _iteratorNormalCompletion3 = true;
+	                var _didIteratorError3 = false;
+	                var _iteratorError3 = undefined;
+
+	                try {
+	                    for (var _iterator3 = _this.markers[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                        var marker = _step3.value;
+
+	                        marker.$icon.fadeOut(500);
+	                    }
+	                } catch (err) {
+	                    _didIteratorError3 = true;
+	                    _iteratorError3 = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                            _iterator3.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError3) {
+	                            throw _iteratorError3;
+	                        }
+	                    }
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'addMarker',
+	        value: function addMarker(marker) {
+	            this.markers.push(marker);
+	            this.boundingBox = !this.boundingBox ? marker.boundingBox : this.boundingBox.extend(marker.boundingBox);
+	        }
+	    }, {
+	        key: 'removeFromDOM',
+	        value: function removeFromDOM() {
+	            if (this.markers.length > 1) {
+	                var _iteratorNormalCompletion4 = true;
+	                var _didIteratorError4 = false;
+	                var _iteratorError4 = undefined;
+
+	                try {
+	                    for (var _iterator4 = this.markers[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                        var marker = _step4.value;
+
+	                        marker.$icon.show();
+	                    }
+	                } catch (err) {
+	                    _didIteratorError4 = true;
+	                    _iteratorError4 = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	                            _iterator4.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError4) {
+	                            throw _iteratorError4;
+	                        }
+	                    }
+	                }
+
+	                this.$cluster.remove();
+	            }
+	        }
+	    }]);
+
+	    return Cluster;
+	}();
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.Marker = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -3066,9 +3534,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(8);
 
+	var _Rectangle = __webpack_require__(7);
+
 	var _Publisher = __webpack_require__(5);
 
-	var _DataEnrichment = __webpack_require__(14);
+	var _DataEnrichment = __webpack_require__(16);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3081,13 +3551,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var Marker = exports.Marker = function () {
+	    _createClass(Marker, [{
+	        key: 'boundingBox',
+	        get: function get() {
+	            var bBox = this.icon.getBoundingClientRect();
+	            return new _Rectangle.Rectangle(bBox.left, bBox.top, bBox.width, bBox.height);
+	        }
 
-	    /**
-	     * @constructor
-	     * @param  {Object} data = DataEnrichment.DATA_MARKER - enriched data
-	     * @param  {View} _instance = parent instance - instance of parent view
-	     * @return {Marker} - instance of Marker for chaining
-	     */
+	        /**
+	         * @constructor
+	         * @param  {Object} data = DataEnrichment.DATA_MARKER - enriched data
+	         * @param  {View} _instance = parent instance - instance of parent view
+	         * @return {Marker} - instance of Marker for chaining
+	         */
+
+	    }]);
 
 	    function Marker() {
 	        var data = arguments.length <= 0 || arguments[0] === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : arguments[0];
@@ -3099,6 +3577,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!_instance) throw new Error('Tile needs an instance');
 	        this.instance = _instance;
 
+	        this.id = Marker.count;
+	        Marker.count++;
+
 	        this.size = data.size;
 
 	        this.hover = data.hover;
@@ -3109,8 +3590,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.latlng = data.latlng;
 
 	        this.content = data.content;
-	        this.position = this.instance.convertLatLngToPoint(this.latlng);
 	        this.$icon = this.addMarkerToDOM(this.instance.$markerContainer);
+	        this.icon = this.$icon[0];
 
 	        return this.bindEvents().positionMarker();
 	    }
@@ -3129,16 +3610,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.eventManager = new _Publisher.Publisher();
 
 	            var gesture = _Helper.Helper.isTouch() ? _Events.Events.Handling.TOUCHSTART : _Events.Events.Handling.CLICK;
+	            if (this.content.length) {
+	                this.$icon.on(gesture, function () {
+	                    _this.eventManager.publish(_Events.Events.ToolTip.OPEN, _this.content);
+	                    _this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
+	                    _this.$icon.addClass("active");
+	                });
 
-	            this.$icon.on(gesture, function () {
-	                _this.eventManager.publish(_Events.Events.ToolTip.OPEN, _this.content);
-	                _this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
-	                _this.$icon.addClass("active");
-	            });
-
-	            this.eventManager.subscribe(_Events.Events.Marker.DEACTIVATE, function () {
-	                _this.$icon.removeClass("active");
-	            });
+	                this.eventManager.subscribe(_Events.Events.Marker.DEACTIVATE, function () {
+	                    _this.$icon.removeClass("active");
+	                });
+	            }
 
 	            return this;
 	        }
@@ -3189,8 +3671,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return Marker;
 	}();
 
+		Marker.count = 0;
+
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3320,7 +3804,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		};
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3338,7 +3822,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jQuery2 = _interopRequireDefault(_jQuery);
 
-	var _Handlebars = __webpack_require__(16);
+	var _Handlebars = __webpack_require__(18);
 
 	var _Handlebars2 = _interopRequireDefault(_Handlebars);
 
@@ -3578,7 +4062,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _this3.getTemplateFromFile(template, function (compiledTemplate) {
 	                    _this3.templates[type] = compiledTemplate;
 	                    _this3.loadedTemplates++;
-	                    if (_this3.allTemplatesLoaded) _this3.$container.prepend(_this3.$popup);
+	                    if (_this3.allTemplatesLoaded) _this3.$container.append(_this3.$popup);
 	                });
 	            });
 	            return this;
@@ -3600,13 +4084,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_16__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_18__;
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

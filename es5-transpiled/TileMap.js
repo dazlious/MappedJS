@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Helper.js', './Events.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js'], factory);
+        define(['exports', 'jQuery', './Helper.js', './Events.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js', './MarkerClusterer.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'));
+        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'), require('./MarkerClusterer.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip);
+        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip, global.MarkerClusterer);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jQuery, _Helper, _Events, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip) {
+})(this, function(exports, _jQuery, _Helper, _Events, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip, _MarkerClusterer) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -137,7 +137,6 @@
             this.settings = settings;
 
             this.levels = [];
-            this.markers = [];
 
             _Helper.Helper.forEach(this.imgData, function(element, i) {
                 var currentLevel = {
@@ -174,12 +173,8 @@
             key: 'initialize',
             value: function initialize(bounds, center, data) {
                 this.initializeCanvas().bindEvents();
-
                 this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
                 this.initializeMarkers(this.markerData);
-
-                if (this.markers.length !== 0) this.createTooltipContainer();
-
                 return this.resizeCanvas();
             }
 
@@ -218,7 +213,6 @@
                     maxZoom: data.zoom ? data.zoom.max : 1,
                     currentZoom: zoom,
                     minZoom: data.zoom ? data.zoom.min : 1,
-                    markerData: this.markerData,
                     $container: this.$container,
                     $markerContainer: this.$markerContainer,
                     context: this.canvasContext,
@@ -250,16 +244,27 @@
                 var _this2 = this;
 
                 if (markerData) {
-                    markerData = this.enrichMarkerData(markerData);
-                    _Helper.Helper.forEach(markerData, function(currentData) {
-                        _this2.markers.push(new _Marker.Marker(currentData, _this2.view));
-                    });
-                    this.markers = this.markers.sort(function(a, b) {
-                        return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
-                    });
-                    _Helper.Helper.forEach(this.markers, function(marker, i) {
-                        marker.$icon.css("z-index", i);
-                    });
+                    (function() {
+                        var markers = [];
+                        markerData = _this2.enrichMarkerData(markerData);
+                        _Helper.Helper.forEach(markerData, function(currentData) {
+                            markers.push(new _Marker.Marker(currentData, _this2.view));
+                        });
+                        markers = markers.sort(function(a, b) {
+                            return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lat - a.latlng.lat;
+                        });
+                        _Helper.Helper.forEach(markers, function(marker, i) {
+                            marker.$icon.css("z-index", i);
+                        });
+
+                        if (markers.length !== 0) _this2.createTooltipContainer();
+
+                        _this2.markerClusterer = new _MarkerClusterer.MarkerClusterer({
+                            markers: markers,
+                            view: _this2.view,
+                            $container: _this2.$markerContainer
+                        });
+                    })();
                 }
                 return this;
             }
@@ -317,6 +322,12 @@
 
                     if (lastLevel !== _this3.levelHandler.current.description) {
                         _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.min + 0.0000001);
+                        if (_this3.levelHandler.hasNext()) {
+                            if (_this3.markerClusterer) _this3.markerClusterer.view = _this3.view;
+                            _this3.markerClusterer.clusterize();
+                        } else {
+                            if (_this3.markerClusterer) _this3.markerClusterer.deleteAllClusters();
+                        }
                     }
                 });
 
@@ -329,6 +340,8 @@
 
                     if (lastLevel !== _this3.levelHandler.current.description) {
                         _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.max - 0.0000001);
+                        if (_this3.markerClusterer) _this3.markerClusterer.view = _this3.view;
+                        _this3.markerClusterer.clusterize();
                     }
                 });
 
