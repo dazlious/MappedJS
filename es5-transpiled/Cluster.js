@@ -120,21 +120,11 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
+                var _this = this;
 
-                this.$cluster.on(_Events.Events.Handling.CLICK, function() {});
-                /*
-                        this.$cluster.on("mouseenter", () => {
-                            for (const marker of this.markers) {
-                                marker.$icon.fadeIn(500);
-                            }
-                        });
-                
-                        this.$cluster.on("mouseleave", () => {
-                            for (const marker of this.markers) {
-                                marker.$icon.fadeOut(500);
-                            }
-                        });
-                */
+                this.$cluster.on(_Events.Events.Handling.CLICK, function() {
+                    _this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, _this.boundingBox);
+                });
             }
         }, {
             key: 'addMarker',

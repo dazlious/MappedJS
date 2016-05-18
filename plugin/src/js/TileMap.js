@@ -216,6 +216,11 @@ export class TileMap {
 
         this.eventManager.subscribe(Events.TileMap.RESIZE, () => { this.resize(); });
 
+        this.eventManager.subscribe(Events.TileMap.ZOOM_TO_BOUNDS, (bounds) => {
+            const zoomIncrease = Math.min(this.view.viewport.width / bounds.width, this.view.viewport.height / bounds.height);
+            this.zoom(zoomIncrease, bounds.center);
+        });
+
         this.eventManager.subscribe(Events.TileMap.NEXT_LEVEL, (argument_array) => {
             const center = argument_array[0],
                   bounds = argument_array[1],

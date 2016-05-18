@@ -15,7 +15,7 @@ export class Marker {
 
     get boundingBox() {
         const bBox = this.icon.getBoundingClientRect();
-        return new Rectangle(bBox.left, bBox.top, bBox.width, bBox.height);
+        return new Rectangle(bBox.left, bBox.top, bBox.width, bBox.height).scaleCenter(1.2);
     }
 
     /**

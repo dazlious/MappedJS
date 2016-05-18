@@ -55,7 +55,7 @@
             key: 'boundingBox',
             get: function get() {
                 var bBox = this.icon.getBoundingClientRect();
-                return new _Rectangle.Rectangle(bBox.left, bBox.top, bBox.width, bBox.height);
+                return new _Rectangle.Rectangle(bBox.left, bBox.top, bBox.width, bBox.height).scaleCenter(1.2);
             }
 
             /**

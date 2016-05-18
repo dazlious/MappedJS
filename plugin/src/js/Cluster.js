@@ -46,23 +46,9 @@ export class Cluster {
     }
 
     bindEvents() {
-
         this.$cluster.on(Events.Handling.CLICK, () => {
-
+            this.eventManager.publish(Events.TileMap.ZOOM_TO_BOUNDS, this.boundingBox);
         });
-/*
-        this.$cluster.on("mouseenter", () => {
-            for (const marker of this.markers) {
-                marker.$icon.fadeIn(500);
-            }
-        });
-
-        this.$cluster.on("mouseleave", () => {
-            for (const marker of this.markers) {
-                marker.$icon.fadeOut(500);
-            }
-        });
-*/
     }
 
     addMarker(marker) {
