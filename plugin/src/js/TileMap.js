@@ -202,7 +202,7 @@ export class TileMap {
         this.tooltip = new ToolTip({
             container: $(this.$container.parent()),
             templates: {
-                image: "../../src/hbs/image.hbs"
+                image: "../../hbs/image.hbs"
             }
         });
         return this;
