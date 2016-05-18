@@ -93,7 +93,7 @@
 <p><a name="module_DataEnrichment"></a></p>
 <h2 id="dataenrichment">DataEnrichment</h2>
 <p>enriches delivered data with default values</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#x6d;&#x64;&#x75;&#118;&#101;&#x40;&#100;&#x65;&#115;&#x69;&#x67;&#x6e;&#x6d;&#97;&#x69;&#108;&#46;&#110;&#101;&#116;">&#x6d;&#x64;&#x75;&#118;&#101;&#x40;&#100;&#x65;&#115;&#x69;&#x67;&#x6e;&#x6d;&#97;&#x69;&#108;&#46;&#110;&#101;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x6d;&#x64;&#117;&#x76;&#101;&#64;&#x64;&#101;&#x73;&#105;&#103;&#110;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x6e;&#101;&#116;">&#x6d;&#x64;&#117;&#x76;&#101;&#64;&#x64;&#101;&#x73;&#105;&#103;&#110;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x6e;&#101;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_DataEnrichment">DataEnrichment</a><ul>
 <li><a href="#module_DataEnrichment.marker">.marker(data)</a> ⇒ <code>object</code></li>
@@ -118,7 +118,7 @@
 <p><a name="module_Helper"></a></p>
 <h2 id="helper">Helper</h2>
 <p>Helper for general purposes</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x6d;&#100;&#117;&#x76;&#x65;&#64;&#x64;&#101;&#x73;&#105;&#x67;&#110;&#109;&#x61;&#x69;&#x6c;&#x2e;&#110;&#x65;&#116;">&#x6d;&#100;&#117;&#x76;&#x65;&#64;&#x64;&#101;&#x73;&#105;&#x67;&#110;&#109;&#x61;&#x69;&#x6c;&#x2e;&#110;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#109;&#100;&#117;&#x76;&#x65;&#x40;&#x64;&#x65;&#x73;&#x69;&#103;&#110;&#x6d;&#97;&#105;&#108;&#46;&#x6e;&#x65;&#x74;">&#109;&#100;&#117;&#x76;&#x65;&#x40;&#x64;&#x65;&#x73;&#x69;&#103;&#110;&#x6d;&#97;&#105;&#108;&#46;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_Helper">Helper</a><ul>
 <li><a href="#module_Helper.requestJSON">.requestJSON(filename, callback)</a> ⇒ <code>Helper</code></li>
@@ -763,8 +763,6 @@
 <li><a href="#MappedJS+handleMovementByKeys">.handleMovementByKeys(direction)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+momentumAccerlation">.momentumAccerlation(velocity)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+triggerMomentum">.triggerMomentum(steps, timing, change)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+moveView">.moveView(delta)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+zoom">.zoom(factor, position)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+resizeHandler">.resizeHandler()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+loadingFinished">.loadingFinished()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 </ul>
@@ -854,21 +852,6 @@
 <li>steps <code>number</code> - current step (decreasing)</li>
 <li>timing <code>number</code> - time for step</li>
 <li>change <code><a href="#Point">Point</a></code> - distance</li>
-</ul>
-<p><a name="MappedJS+moveView"></a></p>
-<h3 id="mappedjs-moveview-delta-code-mappedjs-mappedjs-code-">mappedJS.moveView(delta) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>move by delta momentum</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
-<ul>
-<li>delta <code><a href="#Point">Point</a></code> - delta of x/y</li>
-</ul>
-<p><a name="MappedJS+zoom"></a></p>
-<h3 id="mappedjs-zoom-factor-position-code-mappedjs-mappedjs-code-">mappedJS.zoom(factor, position) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>handles zoom by factor and position</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
-<ul>
-<li>factor <code>number</code> - difference in zoom scale</li>
-<li>position <code><a href="#Point">Point</a></code> - position to zoom to</li>
 </ul>
 <p><a name="MappedJS+resizeHandler"></a></p>
 <h3 id="mappedjs-resizehandler-code-mappedjs-mappedjs-code-">mappedJS.resizeHandler() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
@@ -1102,6 +1085,7 @@
 <li><a href="#Rectangle+scaleX">.scaleX(x)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+scaleY">.scaleY(y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+scale">.scale(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
+<li><a href="#Rectangle+scaleCenter">.scaleCenter(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+translate">.translate(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+transform">.transform(x, y, width, height)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
 <li><a href="#Rectangle+position">.position(x, y)</a> ⇒ <code><a href="#Rectangle">Rectangle</a></code></li>
@@ -1235,6 +1219,14 @@
 </ul>
 <p><a name="Rectangle+scale"></a></p>
 <h3 id="rectangle-scale-x-y-code-rectangle-rectangle-code-">rectangle.scale(x, y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
+<p>scale x and y for width and height of rectangle</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - instance of Rectangle for chaining<br><strong>Params</strong></p>
+<ul>
+<li>x <code>number</code> <code> = 1</code> - = 1 - factor to be applied to scale</li>
+<li>y <code>number</code> - = x - factor to be applied to scale</li>
+</ul>
+<p><a name="Rectangle+scaleCenter"></a></p>
+<h3 id="rectangle-scalecenter-x-y-code-rectangle-rectangle-code-">rectangle.scaleCenter(x, y) ⇒ <code><a href="#Rectangle">Rectangle</a></code></h3>
 <p>scale x and y for width and height of rectangle</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Rectangle">Rectangle</a></code><br><strong>Returns</strong>: <code><a href="#Rectangle">Rectangle</a></code> - instance of Rectangle for chaining<br><strong>Params</strong></p>
 <ul>
@@ -1413,6 +1405,8 @@
 <li><a href="#TileMap+initializeCanvas">.initializeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+redraw">.redraw()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resize">.resize()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+moveView">.moveView(delta)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
+<li><a href="#TileMap+zoom">.zoom(factor, position)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#TileMap+resizeCanvas">.resizeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resizeView">.resizeView()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 </ul>
@@ -1496,7 +1490,22 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+resize"></a></p>
 <h3 id="tilemap-resize-code-tilemap-tilemap-code-">tileMap.resize() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>Handles resizing of TileMap</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+resizeCanvas"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+moveView"></a></p>
+<h3 id="tilemap-moveview-delta-code-mappedjs-mappedjs-code-">tileMap.moveView(delta) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
+<p>move by delta momentum</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
+<ul>
+<li>delta <code><a href="#Point">Point</a></code> - delta of x/y</li>
+</ul>
+<p><a name="TileMap+zoom"></a></p>
+<h3 id="tilemap-zoom-factor-position-code-mappedjs-mappedjs-code-">tileMap.zoom(factor, position) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
+<p>handles zoom by factor and position</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
+<ul>
+<li>factor <code>number</code> - difference in zoom scale</li>
+<li>position <code><a href="#Point">Point</a></code> - position to zoom to</li>
+</ul>
+<p><a name="TileMap+resizeCanvas"></a></p>
 <h3 id="tilemap-resizecanvas-code-tilemap-tilemap-code-">tileMap.resizeCanvas() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>resizes the canvas sizes</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+resizeView"></a></p>
@@ -1718,7 +1727,7 @@ returns paths to default templates</p>
 <p><strong>Kind</strong>: global variable<br><a name="Events"></a></p>
 <h2 id="events-code-object-code-">Events : <code>object</code></h2>
 <p>Helper for naming events</p>
-<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#109;&#x64;&#117;&#x76;&#x65;&#x40;&#100;&#x65;&#115;&#105;&#103;&#110;&#x6d;&#x61;&#x69;&#108;&#x2e;&#110;&#x65;&#x74;">&#109;&#x64;&#117;&#x76;&#x65;&#x40;&#100;&#x65;&#115;&#105;&#103;&#110;&#x6d;&#x61;&#x69;&#108;&#x2e;&#110;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#109;&#x64;&#117;&#x76;&#x65;&#x40;&#x64;&#x65;&#x73;&#x69;&#x67;&#110;&#109;&#97;&#105;&#x6c;&#46;&#x6e;&#x65;&#x74;">&#109;&#x64;&#117;&#x76;&#x65;&#x40;&#x64;&#x65;&#x73;&#x69;&#x67;&#110;&#109;&#97;&#105;&#x6c;&#46;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#Events">Events</a> : <code>object</code><ul>
 <li><a href="#Events.ToolTip">.ToolTip</a> : <code>Object</code></li>

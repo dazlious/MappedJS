@@ -426,6 +426,25 @@
             }
 
             /**
+             * scale x and y for width and height of rectangle
+             * @param  {number} x = 1 - factor to be applied to scale
+             * @param  {number} y = x - factor to be applied to scale
+             * @return {Rectangle} instance of Rectangle for chaining
+             */
+
+        }, {
+            key: 'scaleCenter',
+            value: function scaleCenter() {
+                var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+                var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+                var oldCenter = this.clone.center;
+                this.scale(x, y);
+                this.setCenter(oldCenter);
+                return this;
+            }
+
+            /**
              * moves a rectangle by specified coords
              * @param  {number} x = 0 - specified x to be added to x position
              * @param  {number} y = x - specified y to be added to y position
