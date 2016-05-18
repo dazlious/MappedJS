@@ -260,7 +260,6 @@ export class View {
             this.eventManager.publish(Events.TileMap.PREVIOUS_LEVEL, [this.center, this.bounds]);
         }
         this.drawIsNeeded = true;
-
         return this;
     }
 

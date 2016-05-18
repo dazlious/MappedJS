@@ -1,4 +1,6 @@
 import $ from 'jQuery';
+import {Events} from './Events.js';
+import {Publisher} from './Publisher.js';
 import {Point} from './Point.js';
 
 /**
@@ -11,10 +13,10 @@ export class Cluster {
      * @constructor
      * @return {Cluster} instance of Cluster for chaining
      */
-    constructor({$container = null, view = null}) {
+    constructor({$container = null}) {
         this.markers = [];
         this.$container = $container;
-        this.view = view;
+        this.eventManager = new Publisher();
         return this;
     }
 
@@ -37,15 +39,18 @@ export class Cluster {
 
         this.$cluster = $("<div class='cluster'>"+this.markers.length+"</div>").css({
             "left": `${p.x}%`,
-            "top": `${p.y}%`,
-            "margin-left": `-16px`,
-            "margin-top": `-16px`
+            "top": `${p.y}%`
         });
         this.$container.append(this.$cluster);
         this.bindEvents();
     }
 
     bindEvents() {
+
+        this.$cluster.on(Events.Handling.CLICK, () => {
+
+        });
+/*
         this.$cluster.on("mouseenter", () => {
             for (const marker of this.markers) {
                 marker.$icon.fadeIn(500);
@@ -57,6 +62,7 @@ export class Cluster {
                 marker.$icon.fadeOut(500);
             }
         });
+*/
     }
 
     addMarker(marker) {

@@ -129,18 +129,18 @@ export class MappedJS {
                 pan: (data) => {
                     if ($(data.target).hasClass("control")) return false;
                     const change = data.last.position.clone.substract(data.position.move);
-                    this.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
+                    this.tileMap.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                 },
                 wheel: (data) => {
                     const factor = data.delta / 4;
-                    this.zoom(factor, this.getAbsolutePosition(data.position.start));
+                    this.tileMap.zoom(factor, this.getAbsolutePosition(data.position.start));
                 },
                 pinch: (data) => {
-                    this.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
+                    this.tileMap.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
                 },
                 doubletap: (data) => {
                     if (!$(data.target).hasClass("marker-container")) return false;
-                    this.zoom(0.2, this.getAbsolutePosition(data.position.start));
+                    this.tileMap.zoom(0.2, this.getAbsolutePosition(data.position.start));
                 },
                 flick: (data) => {
                     const direction = new Point(data.directions[0], data.directions[1]),
@@ -189,7 +189,7 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     zoomInToCenter() {
-        this.zoom(0.1, this.tileMap.view.viewport.center);
+        this.tileMap.zoom(0.1, this.tileMap.view.viewport.center);
         return this;
     }
 
@@ -198,7 +198,7 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     zoomOutToCenter() {
-        this.zoom(-0.1, this.tileMap.view.viewport.center);
+        this.tileMap.zoom(-0.1, this.tileMap.view.viewport.center);
         return this;
     }
 
@@ -246,7 +246,7 @@ export class MappedJS {
      */
     handleMovementByKeys(direction) {
         this.keyTicks++;
-        this.tileMap.view.moveView(direction.multiply(this.keyTicks));
+        this.tileMap.moveView(direction.multiply(this.keyTicks));
         return this;
     }
 
@@ -276,34 +276,9 @@ export class MappedJS {
         this.momentum = setTimeout(() => {
             steps--;
             const delta = Helper.easeOutQuadratic((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
-            this.moveView(delta);
+            this.tileMap.moveView(delta);
             if (steps >= 0) this.triggerMomentum(steps, timing, change);
         }, timing);
-        return this;
-    }
-
-    /**
-     * move by delta momentum
-     * @param  {Point} delta - delta of x/y
-     * @return {MappedJS} instance of MappedJS for chaining
-     */
-    moveView(delta) {
-        this.tileMap.view.moveView(delta);
-        this.tileMap.view.drawIsNeeded = true;
-        return this;
-    }
-
-    /**
-     * handles zoom by factor and position
-     * @param  {number} factor - difference in zoom scale
-     * @param  {Point} position - position to zoom to
-     * @return {MappedJS} instance of MappedJS for chaining
-     */
-    zoom(factor, position) {
-        if (factor !== 0) {
-            this.tileMap.view.zoom(factor, position);
-            this.tileMap.view.drawIsNeeded = true;
-        }
         return this;
     }
 

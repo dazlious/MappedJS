@@ -92,6 +92,11 @@
         },
         View: {
             DRAW: "draw"
+        },
+        MarkerClusterer: {
+            CLUSTERIZE: "clusterize",
+            UNCLUSTERIZE: "unclusterize"
+
         }
     };
 });

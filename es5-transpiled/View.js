@@ -351,7 +351,6 @@
                     this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL, [this.center, this.bounds]);
                 }
                 this.drawIsNeeded = true;
-
                 return this;
             }
 

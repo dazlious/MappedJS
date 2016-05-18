@@ -1,7 +1,7 @@
 {
     "fileSize": {
-        "size": "14.97 KB",
-        "gzipSize": "2.22 KB"
+        "size": "22.87 KB",
+        "gzipSize": "8.55 KB"
     },
     "selectorSpecifity": {
         "max": 60,
@@ -10,8 +10,8 @@
     "totals": {
         "rules": 56,
         "selectors": 59,
-        "declarations": 172,
-        "properties": 44,
+        "declarations": 175,
+        "properties": 45,
         "vendorPrefixes": 10,
         "mediaQueries": 0,
         "importants": 0
@@ -19,9 +19,9 @@
     "uniqueDeclarations": {
         "width": 11,
         "height": 12,
-        "color": 3,
-        "background-color": 5,
-        "font-size": 10
+        "color": 4,
+        "font-size": 11,
+        "background-color": 5
     },
     "selectors": {
         "type": 13,
@@ -35,7 +35,8 @@
     },
     "uniqueValues": {
         "colors": {
-            "#fff": 1,
+            "#555": 1,
+            "#333": 1,
             "#888": 2
         },
         "backgroundColors": {
@@ -43,8 +44,7 @@
             "rgba(0, 0, 0, 0.8)": 1,
             "rgba(255, 255, 255, 0.5)": 1,
             "#fff": 1,
-            "white": 1,
-            "#db0000": 1
+            "white": 1
         },
         "fontSizes": [
             {
@@ -82,6 +82,12 @@
                 "viewSizeStr": "",
                 "cssSize": "12px",
                 "amount": 2
+            },
+            {
+                "viewSizePx": "10",
+                "viewSizeStr": "",
+                "cssSize": "10px",
+                "amount": 1
             },
             {
                 "viewSizePx": 9.6,
@@ -169,8 +175,8 @@
             6,
             5,
             1,
-            14,
-            1,
+            15,
+            3,
             2,
             2,
             2,

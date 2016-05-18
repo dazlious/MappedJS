@@ -73,6 +73,7 @@ export class TileMap {
         this.settings = settings;
 
         this.levels = [];
+        this.clusterHandlingTimeout = null;
 
         Helper.forEach(this.imgData, (element, i) => {
             const currentLevel = {
@@ -168,7 +169,7 @@ export class TileMap {
             Helper.forEach(markerData, (currentData) => {
                 markers.push(new Marker(currentData, this.view));
             });
-            markers = markers.sort((a, b) => ((b.latlng.lat - a.latlng.lat !== 0) ? b.latlng.lat - a.latlng.lat : b.latlng.lat - a.latlng.lat));
+            markers = markers.sort((a, b) => ((b.latlng.lat - a.latlng.lat !== 0) ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng));
             Helper.forEach(markers, (marker, i) => {
                 marker.$icon.css("z-index", i);
             });
@@ -177,7 +178,6 @@ export class TileMap {
 
             this.markerClusterer = new MarkerClusterer({
                 markers: markers,
-                view: this.view,
                 $container: this.$markerContainer
             });
         }
@@ -225,11 +225,6 @@ export class TileMap {
 
             if (lastLevel !== this.levelHandler.current.description) {
                 this.view = this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.min + 0.0000001);
-                if (this.levelHandler.hasNext()) {
-                    if (this.markerClusterer) this.markerClusterer.view = this.view; this.markerClusterer.clusterize();
-                } else {
-                    if (this.markerClusterer) this.markerClusterer.deleteAllClusters();
-                }
             }
         });
 
@@ -242,7 +237,6 @@ export class TileMap {
 
             if (lastLevel !== this.levelHandler.current.description) {
                 this.view = this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.max - 0.0000001);
-                if (this.markerClusterer) this.markerClusterer.view = this.view; this.markerClusterer.clusterize();
             }
         });
 
@@ -278,6 +272,45 @@ export class TileMap {
         return this.resizeCanvas()
                    .resizeView()
                    .redraw();
+    }
+
+    /**
+     * move by delta momentum
+     * @param  {Point} delta - delta of x/y
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
+    moveView(delta) {
+        this.view.moveView(delta);
+        this.view.drawIsNeeded = true;
+        return this;
+    }
+
+    /**
+     * handles zoom by factor and position
+     * @param  {number} factor - difference in zoom scale
+     * @param  {Point} position - position to zoom to
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
+    zoom(factor, position) {
+        if (factor !== 0) {
+            this.view.zoom(factor, position);
+            this.clusterHandler();
+            this.view.drawIsNeeded = true;
+        }
+        return this;
+    }
+
+    clusterHandler() {
+        if (this.clusterHandlingTimeout) {
+            this.clusterHandlingTimeout = clearTimeout(this.clusterHandlingTimeout);
+        }
+        this.clusterHandlingTimeout = setTimeout(() => {
+            if (this.levelHandler.hasNext()) {
+                this.eventManager.publish(Events.MarkerClusterer.CLUSTERIZE);
+            } else {
+                this.eventManager.publish(Events.MarkerClusterer.UNCLUSTERIZE);
+            }
+        }, 300);
     }
 
     /**

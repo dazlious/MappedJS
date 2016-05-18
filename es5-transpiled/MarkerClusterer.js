@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Cluster.js'], factory);
+        define(['exports', './Events.js', './Publisher.js', './Cluster.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Cluster.js'));
+        factory(exports, require('./Events.js'), require('./Publisher.js'), require('./Cluster.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Cluster);
+        factory(mod.exports, global.Events, global.Publisher, global.Cluster);
         global.MarkerClusterer = mod.exports;
     }
-})(this, function(exports, _Cluster) {
+})(this, function(exports, _Events, _Publisher, _Cluster) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -91,20 +91,31 @@
             var markers = _ref$markers === undefined ? [] : _ref$markers;
             var _ref$$container = _ref.$container;
             var $container = _ref$$container === undefined ? null : _ref$$container;
-            var _ref$view = _ref.view;
-            var view = _ref$view === undefined ? null : _ref$view;
 
             _classCallCheck(this, MarkerClusterer);
 
             this.markers = markers;
             this.$container = $container;
-            this.view = view;
             this.clusters = [];
+            this.eventManager = new _Publisher.Publisher();
+            this.bindEvents();
             this.clusterize();
             return this;
         }
 
         _createClass(MarkerClusterer, [{
+            key: 'bindEvents',
+            value: function bindEvents() {
+                var _this = this;
+
+                this.eventManager.subscribe(_Events.Events.MarkerClusterer.CLUSTERIZE, function() {
+                    _this.clusterize();
+                });
+                this.eventManager.subscribe(_Events.Events.MarkerClusterer.UNCLUSTERIZE, function() {
+                    _this.deleteAllClusters();
+                });
+            }
+        }, {
             key: 'clusterize',
             value: function clusterize() {
                 this.deleteAllClusters();
@@ -254,8 +265,7 @@
             key: 'createCluster',
             value: function createCluster(marker) {
                 var newCluster = new _Cluster.Cluster({
-                    $container: this.$container,
-                    view: this.view
+                    $container: this.$container
                 });
                 newCluster.addMarker(marker);
                 return newCluster;

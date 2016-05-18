@@ -137,6 +137,7 @@
             this.settings = settings;
 
             this.levels = [];
+            this.clusterHandlingTimeout = null;
 
             _Helper.Helper.forEach(this.imgData, function(element, i) {
                 var currentLevel = {
@@ -261,7 +262,6 @@
 
                         _this2.markerClusterer = new _MarkerClusterer.MarkerClusterer({
                             markers: markers,
-                            view: _this2.view,
                             $container: _this2.$markerContainer
                         });
                     })();
@@ -322,12 +322,6 @@
 
                     if (lastLevel !== _this3.levelHandler.current.description) {
                         _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.min + 0.0000001);
-                        if (_this3.levelHandler.hasNext()) {
-                            if (_this3.markerClusterer) _this3.markerClusterer.view = _this3.view;
-                            _this3.markerClusterer.clusterize();
-                        } else {
-                            if (_this3.markerClusterer) _this3.markerClusterer.deleteAllClusters();
-                        }
                     }
                 });
 
@@ -340,8 +334,6 @@
 
                     if (lastLevel !== _this3.levelHandler.current.description) {
                         _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.max - 0.0000001);
-                        if (_this3.markerClusterer) _this3.markerClusterer.view = _this3.view;
-                        _this3.markerClusterer.clusterize();
                     }
                 });
 
@@ -384,6 +376,54 @@
             key: 'resize',
             value: function resize() {
                 return this.resizeCanvas().resizeView().redraw();
+            }
+
+            /**
+             * move by delta momentum
+             * @param  {Point} delta - delta of x/y
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
+        }, {
+            key: 'moveView',
+            value: function moveView(delta) {
+                this.view.moveView(delta);
+                this.view.drawIsNeeded = true;
+                return this;
+            }
+
+            /**
+             * handles zoom by factor and position
+             * @param  {number} factor - difference in zoom scale
+             * @param  {Point} position - position to zoom to
+             * @return {MappedJS} instance of MappedJS for chaining
+             */
+
+        }, {
+            key: 'zoom',
+            value: function zoom(factor, position) {
+                if (factor !== 0) {
+                    this.view.zoom(factor, position);
+                    this.clusterHandler();
+                    this.view.drawIsNeeded = true;
+                }
+                return this;
+            }
+        }, {
+            key: 'clusterHandler',
+            value: function clusterHandler() {
+                var _this4 = this;
+
+                if (this.clusterHandlingTimeout) {
+                    this.clusterHandlingTimeout = clearTimeout(this.clusterHandlingTimeout);
+                }
+                this.clusterHandlingTimeout = setTimeout(function() {
+                    if (_this4.levelHandler.hasNext()) {
+                        _this4.eventManager.publish(_Events.Events.MarkerClusterer.CLUSTERIZE);
+                    } else {
+                        _this4.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
+                    }
+                }, 300);
             }
 
             /**

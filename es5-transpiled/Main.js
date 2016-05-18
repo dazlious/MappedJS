@@ -218,18 +218,18 @@
                         pan: function pan(data) {
                             if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
                             var change = data.last.position.clone.substract(data.position.move);
-                            _this2.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
+                            _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
                         },
                         wheel: function wheel(data) {
                             var factor = data.delta / 4;
-                            _this2.zoom(factor, _this2.getAbsolutePosition(data.position.start));
+                            _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.position.start));
                         },
                         pinch: function pinch(data) {
-                            _this2.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
+                            _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
                         },
                         doubletap: function doubletap(data) {
                             if (!(0, _jQuery2.default)(data.target).hasClass("marker-container")) return false;
-                            _this2.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
+                            _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
                         },
                         flick: function flick(data) {
                             var direction = new _Point.Point(data.directions[0], data.directions[1]),
@@ -286,7 +286,7 @@
         }, {
             key: 'zoomInToCenter',
             value: function zoomInToCenter() {
-                this.zoom(0.1, this.tileMap.view.viewport.center);
+                this.tileMap.zoom(0.1, this.tileMap.view.viewport.center);
                 return this;
             }
 
@@ -298,7 +298,7 @@
         }, {
             key: 'zoomOutToCenter',
             value: function zoomOutToCenter() {
-                this.zoom(-0.1, this.tileMap.view.viewport.center);
+                this.tileMap.zoom(-0.1, this.tileMap.view.viewport.center);
                 return this;
             }
 
@@ -359,7 +359,7 @@
             key: 'handleMovementByKeys',
             value: function handleMovementByKeys(direction) {
                 this.keyTicks++;
-                this.tileMap.view.moveView(direction.multiply(this.keyTicks));
+                this.tileMap.moveView(direction.multiply(this.keyTicks));
                 return this;
             }
         }, {
@@ -398,40 +398,9 @@
                 this.momentum = setTimeout(function() {
                     steps--;
                     var delta = _Helper.Helper.easeOutQuadratic((_this3.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * _this3.maxMomentumSteps);
-                    _this3.moveView(delta);
+                    _this3.tileMap.moveView(delta);
                     if (steps >= 0) _this3.triggerMomentum(steps, timing, change);
                 }, timing);
-                return this;
-            }
-
-            /**
-             * move by delta momentum
-             * @param  {Point} delta - delta of x/y
-             * @return {MappedJS} instance of MappedJS for chaining
-             */
-
-        }, {
-            key: 'moveView',
-            value: function moveView(delta) {
-                this.tileMap.view.moveView(delta);
-                this.tileMap.view.drawIsNeeded = true;
-                return this;
-            }
-
-            /**
-             * handles zoom by factor and position
-             * @param  {number} factor - difference in zoom scale
-             * @param  {Point} position - position to zoom to
-             * @return {MappedJS} instance of MappedJS for chaining
-             */
-
-        }, {
-            key: 'zoom',
-            value: function zoom(factor, position) {
-                if (factor !== 0) {
-                    this.tileMap.view.zoom(factor, position);
-                    this.tileMap.view.drawIsNeeded = true;
-                }
                 return this;
             }
 

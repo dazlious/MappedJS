@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Point.js'], factory);
+        define(['exports', 'jQuery', './Events.js', './Publisher.js', './Point.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Point.js'));
+        factory(exports, require('jQuery'), require('./Events.js'), require('./Publisher.js'), require('./Point.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Point);
+        factory(mod.exports, global.jQuery, global.Events, global.Publisher, global.Point);
         global.Cluster = mod.exports;
     }
-})(this, function(exports, _jQuery, _Point) {
+})(this, function(exports, _jQuery, _Events, _Publisher, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -59,14 +59,12 @@
         function Cluster(_ref) {
             var _ref$$container = _ref.$container;
             var $container = _ref$$container === undefined ? null : _ref$$container;
-            var _ref$view = _ref.view;
-            var view = _ref$view === undefined ? null : _ref$view;
 
             _classCallCheck(this, Cluster);
 
             this.markers = [];
             this.$container = $container;
-            this.view = view;
+            this.eventManager = new _Publisher.Publisher();
             return this;
         }
 
@@ -114,9 +112,7 @@
 
                 this.$cluster = (0, _jQuery2.default)("<div class='cluster'>" + this.markers.length + "</div>").css({
                     "left": p.x + '%',
-                    "top": p.y + '%',
-                    "margin-left": '-16px',
-                    "margin-top": '-16px'
+                    "top": p.y + '%'
                 });
                 this.$container.append(this.$cluster);
                 this.bindEvents();
@@ -124,18 +120,41 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
-                var _this = this;
 
-                this.$cluster.on("mouseenter", function() {
+                this.$cluster.on(_Events.Events.Handling.CLICK, function() {});
+                /*
+                        this.$cluster.on("mouseenter", () => {
+                            for (const marker of this.markers) {
+                                marker.$icon.fadeIn(500);
+                            }
+                        });
+                
+                        this.$cluster.on("mouseleave", () => {
+                            for (const marker of this.markers) {
+                                marker.$icon.fadeOut(500);
+                            }
+                        });
+                */
+            }
+        }, {
+            key: 'addMarker',
+            value: function addMarker(marker) {
+                this.markers.push(marker);
+                this.boundingBox = !this.boundingBox ? marker.boundingBox : this.boundingBox.extend(marker.boundingBox);
+            }
+        }, {
+            key: 'removeFromDOM',
+            value: function removeFromDOM() {
+                if (this.markers.length > 1) {
                     var _iteratorNormalCompletion2 = true;
                     var _didIteratorError2 = false;
                     var _iteratorError2 = undefined;
 
                     try {
-                        for (var _iterator2 = _this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        for (var _iterator2 = this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                             var marker = _step2.value;
 
-                            marker.$icon.fadeIn(500);
+                            marker.$icon.show();
                         }
                     } catch (err) {
                         _didIteratorError2 = true;
@@ -148,69 +167,6 @@
                         } finally {
                             if (_didIteratorError2) {
                                 throw _iteratorError2;
-                            }
-                        }
-                    }
-                });
-
-                this.$cluster.on("mouseleave", function() {
-                    var _iteratorNormalCompletion3 = true;
-                    var _didIteratorError3 = false;
-                    var _iteratorError3 = undefined;
-
-                    try {
-                        for (var _iterator3 = _this.markers[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                            var marker = _step3.value;
-
-                            marker.$icon.fadeOut(500);
-                        }
-                    } catch (err) {
-                        _didIteratorError3 = true;
-                        _iteratorError3 = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                                _iterator3.return();
-                            }
-                        } finally {
-                            if (_didIteratorError3) {
-                                throw _iteratorError3;
-                            }
-                        }
-                    }
-                });
-            }
-        }, {
-            key: 'addMarker',
-            value: function addMarker(marker) {
-                this.markers.push(marker);
-                this.boundingBox = !this.boundingBox ? marker.boundingBox : this.boundingBox.extend(marker.boundingBox);
-            }
-        }, {
-            key: 'removeFromDOM',
-            value: function removeFromDOM() {
-                if (this.markers.length > 1) {
-                    var _iteratorNormalCompletion4 = true;
-                    var _didIteratorError4 = false;
-                    var _iteratorError4 = undefined;
-
-                    try {
-                        for (var _iterator4 = this.markers[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                            var marker = _step4.value;
-
-                            marker.$icon.show();
-                        }
-                    } catch (err) {
-                        _didIteratorError4 = true;
-                        _iteratorError4 = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                                _iterator4.return();
-                            }
-                        } finally {
-                            if (_didIteratorError4) {
-                                throw _iteratorError4;
                             }
                         }
                     }

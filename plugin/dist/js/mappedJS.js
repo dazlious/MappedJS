@@ -251,18 +251,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    pan: function pan(data) {
 	                        if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
 	                        var change = data.last.position.clone.substract(data.position.move);
-	                        _this2.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
+	                        _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
 	                    },
 	                    wheel: function wheel(data) {
 	                        var factor = data.delta / 4;
-	                        _this2.zoom(factor, _this2.getAbsolutePosition(data.position.start));
+	                        _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.position.start));
 	                    },
 	                    pinch: function pinch(data) {
-	                        _this2.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
+	                        _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
 	                    },
 	                    doubletap: function doubletap(data) {
 	                        if (!(0, _jQuery2.default)(data.target).hasClass("marker-container")) return false;
-	                        _this2.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
+	                        _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
 	                    },
 	                    flick: function flick(data) {
 	                        var direction = new _Point.Point(data.directions[0], data.directions[1]),
@@ -319,7 +319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'zoomInToCenter',
 	        value: function zoomInToCenter() {
-	            this.zoom(0.1, this.tileMap.view.viewport.center);
+	            this.tileMap.zoom(0.1, this.tileMap.view.viewport.center);
 	            return this;
 	        }
 
@@ -331,7 +331,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'zoomOutToCenter',
 	        value: function zoomOutToCenter() {
-	            this.zoom(-0.1, this.tileMap.view.viewport.center);
+	            this.tileMap.zoom(-0.1, this.tileMap.view.viewport.center);
 	            return this;
 	        }
 
@@ -392,7 +392,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'handleMovementByKeys',
 	        value: function handleMovementByKeys(direction) {
 	            this.keyTicks++;
-	            this.tileMap.view.moveView(direction.multiply(this.keyTicks));
+	            this.tileMap.moveView(direction.multiply(this.keyTicks));
 	            return this;
 	        }
 	    }, {
@@ -431,40 +431,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.momentum = setTimeout(function () {
 	                steps--;
 	                var delta = _Helper.Helper.easeOutQuadratic((_this3.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * _this3.maxMomentumSteps);
-	                _this3.moveView(delta);
+	                _this3.tileMap.moveView(delta);
 	                if (steps >= 0) _this3.triggerMomentum(steps, timing, change);
 	            }, timing);
-	            return this;
-	        }
-
-	        /**
-	         * move by delta momentum
-	         * @param  {Point} delta - delta of x/y
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'moveView',
-	        value: function moveView(delta) {
-	            this.tileMap.view.moveView(delta);
-	            this.tileMap.view.drawIsNeeded = true;
-	            return this;
-	        }
-
-	        /**
-	         * handles zoom by factor and position
-	         * @param  {number} factor - difference in zoom scale
-	         * @param  {Point} position - position to zoom to
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'zoom',
-	        value: function zoom(factor, position) {
-	            if (factor !== 0) {
-	                this.tileMap.view.zoom(factor, position);
-	                this.tileMap.view.drawIsNeeded = true;
-	            }
 	            return this;
 	        }
 
@@ -725,6 +694,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    View: {
 	        DRAW: "draw"
+	    },
+	    MarkerClusterer: {
+	        CLUSTERIZE: "clusterize",
+	        UNCLUSTERIZE: "unclusterize"
+
 	    }
 		};
 
@@ -862,6 +836,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.settings = settings;
 
 	        this.levels = [];
+	        this.clusterHandlingTimeout = null;
 
 	        _Helper.Helper.forEach(this.imgData, function (element, i) {
 	            var currentLevel = {
@@ -976,7 +951,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        markers.push(new _Marker.Marker(currentData, _this2.view));
 	                    });
 	                    markers = markers.sort(function (a, b) {
-	                        return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lat - a.latlng.lat;
+	                        return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
 	                    });
 	                    _Helper.Helper.forEach(markers, function (marker, i) {
 	                        marker.$icon.css("z-index", i);
@@ -986,7 +961,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    _this2.markerClusterer = new _MarkerClusterer.MarkerClusterer({
 	                        markers: markers,
-	                        view: _this2.view,
 	                        $container: _this2.$markerContainer
 	                    });
 	                })();
@@ -1047,11 +1021,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                if (lastLevel !== _this3.levelHandler.current.description) {
 	                    _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.min + 0.0000001);
-	                    if (_this3.levelHandler.hasNext()) {
-	                        if (_this3.markerClusterer) _this3.markerClusterer.view = _this3.view;_this3.markerClusterer.clusterize();
-	                    } else {
-	                        if (_this3.markerClusterer) _this3.markerClusterer.deleteAllClusters();
-	                    }
 	                }
 	            });
 
@@ -1064,7 +1033,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                if (lastLevel !== _this3.levelHandler.current.description) {
 	                    _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.max - 0.0000001);
-	                    if (_this3.markerClusterer) _this3.markerClusterer.view = _this3.view;_this3.markerClusterer.clusterize();
 	                }
 	            });
 
@@ -1107,6 +1075,54 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'resize',
 	        value: function resize() {
 	            return this.resizeCanvas().resizeView().redraw();
+	        }
+
+	        /**
+	         * move by delta momentum
+	         * @param  {Point} delta - delta of x/y
+	         * @return {MappedJS} instance of MappedJS for chaining
+	         */
+
+	    }, {
+	        key: 'moveView',
+	        value: function moveView(delta) {
+	            this.view.moveView(delta);
+	            this.view.drawIsNeeded = true;
+	            return this;
+	        }
+
+	        /**
+	         * handles zoom by factor and position
+	         * @param  {number} factor - difference in zoom scale
+	         * @param  {Point} position - position to zoom to
+	         * @return {MappedJS} instance of MappedJS for chaining
+	         */
+
+	    }, {
+	        key: 'zoom',
+	        value: function zoom(factor, position) {
+	            if (factor !== 0) {
+	                this.view.zoom(factor, position);
+	                this.clusterHandler();
+	                this.view.drawIsNeeded = true;
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'clusterHandler',
+	        value: function clusterHandler() {
+	            var _this4 = this;
+
+	            if (this.clusterHandlingTimeout) {
+	                this.clusterHandlingTimeout = clearTimeout(this.clusterHandlingTimeout);
+	            }
+	            this.clusterHandlingTimeout = setTimeout(function () {
+	                if (_this4.levelHandler.hasNext()) {
+	                    _this4.eventManager.publish(_Events.Events.MarkerClusterer.CLUSTERIZE);
+	                } else {
+	                    _this4.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
+	                }
+	            }, 300);
 	        }
 
 	        /**
@@ -1841,6 +1857,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
+	     * scale x and y for width and height of rectangle
+	     * @param  {number} x = 1 - factor to be applied to scale
+	     * @param  {number} y = x - factor to be applied to scale
+	     * @return {Rectangle} instance of Rectangle for chaining
+	     */
+
+	  }, {
+	    key: 'scaleCenter',
+	    value: function scaleCenter() {
+	      var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	      var oldCenter = this.clone.center;
+	      this.scale(x, y);
+	      this.setCenter(oldCenter);
+	      return this;
+	    }
+
+	    /**
 	     * moves a rectangle by specified coords
 	     * @param  {number} x = 0 - specified x to be added to x position
 	     * @param  {number} y = x - specified y to be added to y position
@@ -2545,7 +2580,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL, [this.center, this.bounds]);
 	            }
 	            this.drawIsNeeded = true;
-
 	            return this;
 	        }
 
@@ -3081,6 +3115,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _Events = __webpack_require__(3);
+
+	var _Publisher = __webpack_require__(5);
+
 	var _Cluster = __webpack_require__(14);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3102,20 +3140,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var markers = _ref$markers === undefined ? [] : _ref$markers;
 	        var _ref$$container = _ref.$container;
 	        var $container = _ref$$container === undefined ? null : _ref$$container;
-	        var _ref$view = _ref.view;
-	        var view = _ref$view === undefined ? null : _ref$view;
 
 	        _classCallCheck(this, MarkerClusterer);
 
 	        this.markers = markers;
 	        this.$container = $container;
-	        this.view = view;
 	        this.clusters = [];
+	        this.eventManager = new _Publisher.Publisher();
+	        this.bindEvents();
 	        this.clusterize();
 	        return this;
 	    }
 
 	    _createClass(MarkerClusterer, [{
+	        key: 'bindEvents',
+	        value: function bindEvents() {
+	            var _this = this;
+
+	            this.eventManager.subscribe(_Events.Events.MarkerClusterer.CLUSTERIZE, function () {
+	                _this.clusterize();
+	            });
+	            this.eventManager.subscribe(_Events.Events.MarkerClusterer.UNCLUSTERIZE, function () {
+	                _this.deleteAllClusters();
+	            });
+	        }
+	    }, {
 	        key: 'clusterize',
 	        value: function clusterize() {
 	            this.deleteAllClusters();
@@ -3265,8 +3314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'createCluster',
 	        value: function createCluster(marker) {
 	            var newCluster = new _Cluster.Cluster({
-	                $container: this.$container,
-	                view: this.view
+	                $container: this.$container
 	            });
 	            newCluster.addMarker(marker);
 	            return newCluster;
@@ -3326,6 +3374,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jQuery2 = _interopRequireDefault(_jQuery);
 
+	var _Events = __webpack_require__(3);
+
+	var _Publisher = __webpack_require__(5);
+
 	var _Point = __webpack_require__(8);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -3347,14 +3399,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function Cluster(_ref) {
 	        var _ref$$container = _ref.$container;
 	        var $container = _ref$$container === undefined ? null : _ref$$container;
-	        var _ref$view = _ref.view;
-	        var view = _ref$view === undefined ? null : _ref$view;
 
 	        _classCallCheck(this, Cluster);
 
 	        this.markers = [];
 	        this.$container = $container;
-	        this.view = view;
+	        this.eventManager = new _Publisher.Publisher();
 	        return this;
 	    }
 
@@ -3402,9 +3452,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.$cluster = (0, _jQuery2.default)("<div class='cluster'>" + this.markers.length + "</div>").css({
 	                "left": p.x + '%',
-	                "top": p.y + '%',
-	                "margin-left": '-16px',
-	                "margin-top": '-16px'
+	                "top": p.y + '%'
 	            });
 	            this.$container.append(this.$cluster);
 	            this.bindEvents();
@@ -3412,18 +3460,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
-	            var _this = this;
 
-	            this.$cluster.on("mouseenter", function () {
+	            this.$cluster.on(_Events.Events.Handling.CLICK, function () {});
+	            /*
+	                    this.$cluster.on("mouseenter", () => {
+	                        for (const marker of this.markers) {
+	                            marker.$icon.fadeIn(500);
+	                        }
+	                    });
+	            
+	                    this.$cluster.on("mouseleave", () => {
+	                        for (const marker of this.markers) {
+	                            marker.$icon.fadeOut(500);
+	                        }
+	                    });
+	            */
+	        }
+	    }, {
+	        key: 'addMarker',
+	        value: function addMarker(marker) {
+	            this.markers.push(marker);
+	            this.boundingBox = !this.boundingBox ? marker.boundingBox : this.boundingBox.extend(marker.boundingBox);
+	        }
+	    }, {
+	        key: 'removeFromDOM',
+	        value: function removeFromDOM() {
+	            if (this.markers.length > 1) {
 	                var _iteratorNormalCompletion2 = true;
 	                var _didIteratorError2 = false;
 	                var _iteratorError2 = undefined;
 
 	                try {
-	                    for (var _iterator2 = _this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    for (var _iterator2 = this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	                        var marker = _step2.value;
 
-	                        marker.$icon.fadeIn(500);
+	                        marker.$icon.show();
 	                    }
 	                } catch (err) {
 	                    _didIteratorError2 = true;
@@ -3436,69 +3507,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    } finally {
 	                        if (_didIteratorError2) {
 	                            throw _iteratorError2;
-	                        }
-	                    }
-	                }
-	            });
-
-	            this.$cluster.on("mouseleave", function () {
-	                var _iteratorNormalCompletion3 = true;
-	                var _didIteratorError3 = false;
-	                var _iteratorError3 = undefined;
-
-	                try {
-	                    for (var _iterator3 = _this.markers[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	                        var marker = _step3.value;
-
-	                        marker.$icon.fadeOut(500);
-	                    }
-	                } catch (err) {
-	                    _didIteratorError3 = true;
-	                    _iteratorError3 = err;
-	                } finally {
-	                    try {
-	                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	                            _iterator3.return();
-	                        }
-	                    } finally {
-	                        if (_didIteratorError3) {
-	                            throw _iteratorError3;
-	                        }
-	                    }
-	                }
-	            });
-	        }
-	    }, {
-	        key: 'addMarker',
-	        value: function addMarker(marker) {
-	            this.markers.push(marker);
-	            this.boundingBox = !this.boundingBox ? marker.boundingBox : this.boundingBox.extend(marker.boundingBox);
-	        }
-	    }, {
-	        key: 'removeFromDOM',
-	        value: function removeFromDOM() {
-	            if (this.markers.length > 1) {
-	                var _iteratorNormalCompletion4 = true;
-	                var _didIteratorError4 = false;
-	                var _iteratorError4 = undefined;
-
-	                try {
-	                    for (var _iterator4 = this.markers[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-	                        var marker = _step4.value;
-
-	                        marker.$icon.show();
-	                    }
-	                } catch (err) {
-	                    _didIteratorError4 = true;
-	                    _iteratorError4 = err;
-	                } finally {
-	                    try {
-	                        if (!_iteratorNormalCompletion4 && _iterator4.return) {
-	                            _iterator4.return();
-	                        }
-	                    } finally {
-	                        if (_didIteratorError4) {
-	                            throw _iteratorError4;
 	                        }
 	                    }
 	                }

@@ -1,3 +1,5 @@
+import {Events} from './Events.js';
+import {Publisher} from './Publisher.js';
 import {Cluster} from './Cluster.js';
 
 /**
@@ -10,13 +12,23 @@ export class MarkerClusterer {
      * @constructor
      * @return {MarkerClusterer} instance of MarkerClusterer for chaining
      */
-    constructor({markers = [], $container = null, view = null}) {
+    constructor({markers = [], $container = null}) {
         this.markers = markers;
         this.$container = $container;
-        this.view = view;
         this.clusters = [];
+        this.eventManager = new Publisher();
+        this.bindEvents();
         this.clusterize();
         return this;
+    }
+
+    bindEvents() {
+        this.eventManager.subscribe(Events.MarkerClusterer.CLUSTERIZE, () => {
+            this.clusterize();
+        });
+        this.eventManager.subscribe(Events.MarkerClusterer.UNCLUSTERIZE, () => {
+            this.deleteAllClusters();
+        });
     }
 
     clusterize() {
@@ -65,8 +77,7 @@ export class MarkerClusterer {
 
     createCluster(marker) {
         const newCluster = new Cluster({
-            $container: this.$container,
-            view: this.view
+            $container: this.$container
         });
         newCluster.addMarker(marker);
         return newCluster;

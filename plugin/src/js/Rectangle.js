@@ -235,6 +235,19 @@ export class Rectangle extends Point {
     }
 
     /**
+     * scale x and y for width and height of rectangle
+     * @param  {number} x = 1 - factor to be applied to scale
+     * @param  {number} y = x - factor to be applied to scale
+     * @return {Rectangle} instance of Rectangle for chaining
+     */
+    scaleCenter(x = 1, y = x) {
+        const oldCenter = this.clone.center;
+        this.scale(x, y);
+        this.setCenter(oldCenter);
+        return this;
+    }
+
+    /**
      * moves a rectangle by specified coords
      * @param  {number} x = 0 - specified x to be added to x position
      * @param  {number} y = x - specified y to be added to y position

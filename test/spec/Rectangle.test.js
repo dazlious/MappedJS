@@ -160,4 +160,11 @@ describe('Rectangle', function() {
 
     });
 
+    it("scaleCenter works fine", function() {
+        var rect1 = new Rectangle.Rectangle(0, 0, 200, 200);
+        rect1.scaleCenter(5, 5);
+        expect(rect1.center).toEqual(new Point.Point(100, 100));
+
+    });
+
 });

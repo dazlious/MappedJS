@@ -1027,8 +1027,6 @@ Creates a LatLng from specified LatLng
     * [.handleMovementByKeys(direction)](#MappedJS+handleMovementByKeys) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.momentumAccerlation(velocity)](#MappedJS+momentumAccerlation) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.triggerMomentum(steps, timing, change)](#MappedJS+triggerMomentum) ⇒ <code>[MappedJS](#MappedJS)</code>
-    * [.moveView(delta)](#MappedJS+moveView) ⇒ <code>[MappedJS](#MappedJS)</code>
-    * [.zoom(factor, position)](#MappedJS+zoom) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.resizeHandler()](#MappedJS+resizeHandler) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.loadingFinished()](#MappedJS+loadingFinished) ⇒ <code>[MappedJS](#MappedJS)</code>
 
@@ -1173,29 +1171,6 @@ recursive momentum handler
 - steps <code>number</code> - current step (decreasing)
 - timing <code>number</code> - time for step
 - change <code>[Point](#Point)</code> - distance
-
-<a name="MappedJS+moveView"></a>
-
-### mappedJS.moveView(delta) ⇒ <code>[MappedJS](#MappedJS)</code>
-move by delta momentum
-
-**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
-**Params**
-
-- delta <code>[Point](#Point)</code> - delta of x/y
-
-<a name="MappedJS+zoom"></a>
-
-### mappedJS.zoom(factor, position) ⇒ <code>[MappedJS](#MappedJS)</code>
-handles zoom by factor and position
-
-**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
-**Params**
-
-- factor <code>number</code> - difference in zoom scale
-- position <code>[Point](#Point)</code> - position to zoom to
 
 <a name="MappedJS+resizeHandler"></a>
 
@@ -1520,6 +1495,7 @@ destroys singleton instance
         * [.scaleX(x)](#Rectangle+scaleX) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.scaleY(y)](#Rectangle+scaleY) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.scale(x, y)](#Rectangle+scale) ⇒ <code>[Rectangle](#Rectangle)</code>
+        * [.scaleCenter(x, y)](#Rectangle+scaleCenter) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.translate(x, y)](#Rectangle+translate) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.transform(x, y, width, height)](#Rectangle+transform) ⇒ <code>[Rectangle](#Rectangle)</code>
         * [.position(x, y)](#Rectangle+position) ⇒ <code>[Rectangle](#Rectangle)</code>
@@ -1734,6 +1710,18 @@ scale y and height of rectangle
 <a name="Rectangle+scale"></a>
 
 ### rectangle.scale(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
+scale x and y for width and height of rectangle
+
+**Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
+**Returns**: <code>[Rectangle](#Rectangle)</code> - instance of Rectangle for chaining  
+**Params**
+
+- x <code>number</code> <code> = 1</code> - = 1 - factor to be applied to scale
+- y <code>number</code> - = x - factor to be applied to scale
+
+<a name="Rectangle+scaleCenter"></a>
+
+### rectangle.scaleCenter(x, y) ⇒ <code>[Rectangle](#Rectangle)</code>
 scale x and y for width and height of rectangle
 
 **Kind**: instance method of <code>[Rectangle](#Rectangle)</code>  
@@ -1990,6 +1978,8 @@ check if tiles are equal
     * [.initializeCanvas()](#TileMap+initializeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
     * [.redraw()](#TileMap+redraw) ⇒ <code>[TileMap](#TileMap)</code>
     * [.resize()](#TileMap+resize) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.moveView(delta)](#TileMap+moveView) ⇒ <code>[MappedJS](#MappedJS)</code>
+    * [.zoom(factor, position)](#TileMap+zoom) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.resizeCanvas()](#TileMap+resizeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
     * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
 
@@ -2135,6 +2125,29 @@ Handles resizing of TileMap
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
+<a name="TileMap+moveView"></a>
+
+### tileMap.moveView(delta) ⇒ <code>[MappedJS](#MappedJS)</code>
+move by delta momentum
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+**Params**
+
+- delta <code>[Point](#Point)</code> - delta of x/y
+
+<a name="TileMap+zoom"></a>
+
+### tileMap.zoom(factor, position) ⇒ <code>[MappedJS](#MappedJS)</code>
+handles zoom by factor and position
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+**Params**
+
+- factor <code>number</code> - difference in zoom scale
+- position <code>[Point](#Point)</code> - position to zoom to
+
 <a name="TileMap+resizeCanvas"></a>
 
 ### tileMap.resizeCanvas() ⇒ <code>[TileMap](#TileMap)</code>
