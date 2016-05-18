@@ -2516,6 +2516,8 @@ Helper for naming events
     * [.Publisher](#Events.Publisher) : <code>Object</code>
     * [.TileMap](#Events.TileMap) : <code>Object</code>
     * [.Handling](#Events.Handling) : <code>Object</code>
+    * [.View](#Events.View) : <code>Object</code>
+    * [.MarkerClusterer](#Events.MarkerClusterer) : <code>Object</code>
 
 <a name="Events.ToolTip"></a>
 
@@ -2563,6 +2565,7 @@ Eventnames for TileMap class
 - NEXT_LEVEL <code>object</code> - next level of view  
 - PREVIOUS_LEVEL <code>object</code> - previous level of view  
 - RESIZE <code>object</code> - resize of view needed  
+- ZOOM_TO_BOUNDS <code>object</code> - zoom to bounds  
 
 <a name="Events.Handling"></a>
 
@@ -2577,6 +2580,27 @@ Eventnames for Handling in all classes
 - TOUCHSTART <code>object</code> - Touch started  
 - KEYDOWN <code>object</code> - key pressed  
 - KEYUP <code>object</code> - key released  
+
+<a name="Events.View"></a>
+
+### Events.View : <code>Object</code>
+Eventnames for View class
+
+**Kind**: static property of <code>[Events](#Events)</code>  
+**Properties**
+
+- DRAW <code>object</code> - draw is needed  
+
+<a name="Events.MarkerClusterer"></a>
+
+### Events.MarkerClusterer : <code>Object</code>
+Eventnames for MarkerClusterer class
+
+**Kind**: static property of <code>[Events](#Events)</code>  
+**Properties**
+
+- CLUSTERIZE <code>object</code> - create cluster  
+- UNCLUSTERIZE <code>object</code> - destroy cluster  
 
 <a name="STATES"></a>
 

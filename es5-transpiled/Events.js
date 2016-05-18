@@ -65,13 +65,15 @@
          * @property {object} NEXT_LEVEL - next level of view
          * @property {object} PREVIOUS_LEVEL - previous level of view
          * @property {object} RESIZE - resize of view needed
+         * @property {object} ZOOM_TO_BOUNDS - zoom to bounds
          */
         TileMap: {
             IMG_DATA_NAME: "img_data",
             MARKER_DATA_NAME: "marker",
             NEXT_LEVEL: "next-level",
             PREVIOUS_LEVEL: "previous-level",
-            RESIZE: "resize"
+            RESIZE: "resize",
+            ZOOM_TO_BOUNDS: "zoom-to-bounds"
         },
         /**
          * Eventnames for Handling in all classes
@@ -90,9 +92,22 @@
             KEYDOWN: "keydown",
             KEYUP: "keyup"
         },
+        /**
+         * Eventnames for View class
+         * @type {Object}
+         * @memberof Events
+         * @property {object} DRAW - draw is needed
+         */
         View: {
             DRAW: "draw"
         },
+        /**
+         * Eventnames for MarkerClusterer class
+         * @type {Object}
+         * @memberof Events
+         * @property {object} CLUSTERIZE - create cluster
+         * @property {object} UNCLUSTERIZE - destroy cluster
+         */
         MarkerClusterer: {
             CLUSTERIZE: "clusterize",
             UNCLUSTERIZE: "unclusterize"

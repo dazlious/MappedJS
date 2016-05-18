@@ -616,7 +616,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
@@ -625,81 +625,96 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @namespace Events
 	*/
 	var Events = exports.Events = {
-	    /**
-	     * Eventnames for ToolTip class
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} OPEN - when a tooltip should be openend
-	     * @property {object} CLOSE - when a tooltip should be closed
-	     */
-	    ToolTip: {
-	        OPEN: "tooltip-open",
-	        CLOSE: "tooltip-close"
-	    },
-	    /**
-	     * Eventnames for Marker class
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} DEACTIVATE - when a Marker should be in deactived state
-	     */
-	    Marker: {
-	        DEACTIVATE: "deactivate-marker"
-	    },
-	    /**
-	     * Eventnames for Publisher class
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} PUBLISH - notifies all subscribers
-	     * @property {object} SUBSCRIBE - subscribes to a topic
-	     * @property {object} UNSUBSCRIBE - unsubscribes from a topic
-	     */
-	    Publisher: {
-	        PUBLISH: "publish",
-	        SUBSCRIBE: "subscribe",
-	        UNSUBSCRIBE: "unsubscribe"
-	    },
-	    /**
-	     * Eventnames for TileMap class
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} IMG_DATA_NAME - notifies all subscribers
-	     * @property {object} MARKER_DATA_NAME - subscribes to a topic
-	     * @property {object} NEXT_LEVEL - next level of view
-	     * @property {object} PREVIOUS_LEVEL - previous level of view
-	     * @property {object} RESIZE - resize of view needed
-	     */
-	    TileMap: {
-	        IMG_DATA_NAME: "img_data",
-	        MARKER_DATA_NAME: "marker",
-	        NEXT_LEVEL: "next-level",
-	        PREVIOUS_LEVEL: "previous-level",
-	        RESIZE: "resize"
-	    },
-	    /**
-	     * Eventnames for Handling in all classes
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} RESIZE - resize of window happened needed
-	     * @property {object} CLICK - click occured
-	     * @property {object} TOUCHSTART - Touch started
-	     * @property {object} KEYDOWN - key pressed
-	     * @property {object} KEYUP - key released
-	      */
-	    Handling: {
-	        RESIZE: "resize orientationchange",
-	        CLICK: "click",
-	        TOUCHSTART: "touchstart",
-	        KEYDOWN: "keydown",
-	        KEYUP: "keyup"
-	    },
-	    View: {
-	        DRAW: "draw"
-	    },
-	    MarkerClusterer: {
-	        CLUSTERIZE: "clusterize",
-	        UNCLUSTERIZE: "unclusterize"
+	  /**
+	   * Eventnames for ToolTip class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} OPEN - when a tooltip should be openend
+	   * @property {object} CLOSE - when a tooltip should be closed
+	   */
+	  ToolTip: {
+	    OPEN: "tooltip-open",
+	    CLOSE: "tooltip-close"
+	  },
+	  /**
+	   * Eventnames for Marker class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} DEACTIVATE - when a Marker should be in deactived state
+	   */
+	  Marker: {
+	    DEACTIVATE: "deactivate-marker"
+	  },
+	  /**
+	   * Eventnames for Publisher class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} PUBLISH - notifies all subscribers
+	   * @property {object} SUBSCRIBE - subscribes to a topic
+	   * @property {object} UNSUBSCRIBE - unsubscribes from a topic
+	   */
+	  Publisher: {
+	    PUBLISH: "publish",
+	    SUBSCRIBE: "subscribe",
+	    UNSUBSCRIBE: "unsubscribe"
+	  },
+	  /**
+	   * Eventnames for TileMap class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} IMG_DATA_NAME - notifies all subscribers
+	   * @property {object} MARKER_DATA_NAME - subscribes to a topic
+	   * @property {object} NEXT_LEVEL - next level of view
+	   * @property {object} PREVIOUS_LEVEL - previous level of view
+	   * @property {object} RESIZE - resize of view needed
+	   * @property {object} ZOOM_TO_BOUNDS - zoom to bounds
+	   */
+	  TileMap: {
+	    IMG_DATA_NAME: "img_data",
+	    MARKER_DATA_NAME: "marker",
+	    NEXT_LEVEL: "next-level",
+	    PREVIOUS_LEVEL: "previous-level",
+	    RESIZE: "resize",
+	    ZOOM_TO_BOUNDS: "zoom-to-bounds"
+	  },
+	  /**
+	   * Eventnames for Handling in all classes
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} RESIZE - resize of window happened needed
+	   * @property {object} CLICK - click occured
+	   * @property {object} TOUCHSTART - Touch started
+	   * @property {object} KEYDOWN - key pressed
+	   * @property {object} KEYUP - key released
+	   */
+	  Handling: {
+	    RESIZE: "resize orientationchange",
+	    CLICK: "click",
+	    TOUCHSTART: "touchstart",
+	    KEYDOWN: "keydown",
+	    KEYUP: "keyup"
+	  },
+	  /**
+	  * Eventnames for View class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} DRAW - draw is needed
+	   */
+	  View: {
+	    DRAW: "draw"
+	  },
+	  /**
+	  * Eventnames for MarkerClusterer class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {object} CLUSTERIZE - create cluster
+	   * @property {object} UNCLUSTERIZE - destroy cluster
+	   */
+	  MarkerClusterer: {
+	    CLUSTERIZE: "clusterize",
+	    UNCLUSTERIZE: "unclusterize"
 
-	    }
+	  }
 		};
 
 /***/ },
@@ -1010,6 +1025,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function () {
 	                _this3.resize();
+	            });
+
+	            this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function (bounds) {
+	                var zoomIncrease = Math.min(_this3.view.viewport.width / bounds.width, _this3.view.viewport.height / bounds.height);
+	                _this3.zoom(zoomIncrease, bounds.center);
 	            });
 
 	            this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function (argument_array) {
@@ -3460,21 +3480,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
+	            var _this = this;
 
-	            this.$cluster.on(_Events.Events.Handling.CLICK, function () {});
-	            /*
-	                    this.$cluster.on("mouseenter", () => {
-	                        for (const marker of this.markers) {
-	                            marker.$icon.fadeIn(500);
-	                        }
-	                    });
-	            
-	                    this.$cluster.on("mouseleave", () => {
-	                        for (const marker of this.markers) {
-	                            marker.$icon.fadeOut(500);
-	                        }
-	                    });
-	            */
+	            this.$cluster.on(_Events.Events.Handling.CLICK, function () {
+	                _this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, _this.boundingBox);
+	            });
 	        }
 	    }, {
 	        key: 'addMarker',
@@ -3563,7 +3573,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'boundingBox',
 	        get: function get() {
 	            var bBox = this.icon.getBoundingClientRect();
-	            return new _Rectangle.Rectangle(bBox.left, bBox.top, bBox.width, bBox.height);
+	            return new _Rectangle.Rectangle(bBox.left, bBox.top, bBox.width, bBox.height).scaleCenter(1.2);
 	        }
 
 	        /**

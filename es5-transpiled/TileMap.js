@@ -313,6 +313,11 @@
                     _this3.resize();
                 });
 
+                this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function(bounds) {
+                    var zoomIncrease = Math.min(_this3.view.viewport.width / bounds.width, _this3.view.viewport.height / bounds.height);
+                    _this3.zoom(zoomIncrease, bounds.center);
+                });
+
                 this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function(argument_array) {
                     var center = argument_array[0],
                         bounds = argument_array[1],
