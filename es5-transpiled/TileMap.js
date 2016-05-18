@@ -252,7 +252,7 @@
                             markers.push(new _Marker.Marker(currentData, _this2.view));
                         });
                         markers = markers.sort(function(a, b) {
-                            return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lat - a.latlng.lat;
+                            return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
                         });
                         _Helper.Helper.forEach(markers, function(marker, i) {
                             marker.$icon.css("z-index", i);
@@ -293,7 +293,7 @@
                 this.tooltip = new _ToolTip.ToolTip({
                     container: (0, _jQuery2.default)(this.$container.parent()),
                     templates: {
-                        image: "../../src/hbs/image.hbs"
+                        image: "../../hbs/image.hbs"
                     }
                 });
                 return this;

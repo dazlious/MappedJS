@@ -74,11 +74,11 @@ export class ToolTip {
      */
     getDefaultTemplates() {
         return {
-            image: "/plugin/src/hbs/image.hbs",
-            text: "/plugin/src/hbs/text.hbs",
-            headline: "/plugin/src/hbs/headline.hbs",
-            crossheading: "/plugin/src/hbs/crossheading.hbs",
-            iframe: "/plugin/src/hbs/iframe.hbs"
+            image: "/plugin/hbs/image.hbs",
+            text: "/plugin/hbs/text.hbs",
+            headline: "/plugin/hbs/headline.hbs",
+            crossheading: "/plugin/hbs/crossheading.hbs",
+            iframe: "/plugin/hbs/iframe.hbs"
         };
     }
 
