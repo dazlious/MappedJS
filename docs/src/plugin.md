@@ -2578,6 +2578,9 @@ Eventnames for Handling in all classes
 - RESIZE <code>object</code> - resize of window happened needed  
 - CLICK <code>object</code> - click occured  
 - TOUCHSTART <code>object</code> - Touch started  
+- TOUCHEND <code>object</code> - Touch ended  
+- MOUSEDOWN <code>object</code> - Mouse started  
+- MOUSEUP <code>object</code> - Mouse ended  
 - KEYDOWN <code>object</code> - key pressed  
 - KEYUP <code>object</code> - key released  
 

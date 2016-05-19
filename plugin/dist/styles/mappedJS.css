@@ -8,15 +8,17 @@
 .mappedJS * {
 	-moz-box-sizing: border-box;
 	     box-sizing: border-box;
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
 }
 
-/* line 32, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
+/* line 34, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS canvas,
 .mappedJS img {
 	display: block;
 }
 
-/* line 36, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
+/* line 38, /Users/mduve/repository/MappedJS/plugin/src/styles/mappedJS.scss */
 .mappedJS .map-content {
 	position: absolute;
 	top: 0;
@@ -288,9 +290,10 @@
 	height: 100%;
 	padding: 36px 9px 9px;
 	overflow: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
-/* line 81, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 82, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS .tooltip-container .tooltip-content > * {
 	width: 100%;
 }
