@@ -46,7 +46,13 @@ export class Cluster {
     }
 
     bindEvents() {
-        this.$cluster.on(Events.Handling.CLICK, () => {
+        this.$cluster.on("touchstart", (e) => {
+            e.stopPropagation();
+        });
+        this.$cluster.on("touchend", (e) => {
+            e.stopPropagation();
+        });
+        this.$cluster.on(Events.Handling.CLICK, (e) => {
             this.eventManager.publish(Events.TileMap.ZOOM_TO_BOUNDS, this.boundingBox);
         });
     }

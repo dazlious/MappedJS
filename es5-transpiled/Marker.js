@@ -109,9 +109,17 @@
 
                 this.eventManager = new _Publisher.Publisher();
 
-                var gesture = _Helper.Helper.isTouch() ? _Events.Events.Handling.TOUCHSTART : _Events.Events.Handling.CLICK;
                 if (this.content.length) {
-                    this.$icon.on(gesture, function() {
+
+                    this.$icon.on("touchstart", function(e) {
+                        e.stopPropagation();
+                    });
+
+                    this.$icon.on("touchend", function(e) {
+                        e.stopPropagation();
+                    });
+
+                    this.$icon.on("click", function() {
                         _this.eventManager.publish(_Events.Events.ToolTip.OPEN, _this.content);
                         _this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
                         _this.$icon.addClass("active");

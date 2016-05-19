@@ -78,6 +78,7 @@ $icon-height: (7*$gutter);
         height: 100%;
         padding: (12*$gutter) (3*$gutter) (3*$gutter);
         overflow: auto;
+        -webkit-overflow-scrolling: touch;
         > * {
             width: 100%;
         }

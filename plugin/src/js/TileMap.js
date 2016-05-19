@@ -120,6 +120,7 @@ export class TileMap {
             this.levelHandler.changeTo(0);
             this.view = this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
         } else this.view.reset();
+        this.clusterHandler();
     }
 
     /**

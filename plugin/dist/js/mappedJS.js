@@ -684,6 +684,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @property {object} RESIZE - resize of window happened needed
 	   * @property {object} CLICK - click occured
 	   * @property {object} TOUCHSTART - Touch started
+	   * @property {object} TOUCHEND - Touch ended
+	   * @property {object} MOUSEDOWN - Mouse started
+	   * @property {object} MOUSEUP - Mouse ended
 	   * @property {object} KEYDOWN - key pressed
 	   * @property {object} KEYUP - key released
 	   */
@@ -691,6 +694,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    RESIZE: "resize orientationchange",
 	    CLICK: "click",
 	    TOUCHSTART: "touchstart",
+	    MOUSEDOWN: "mousedown",
+	    TOUCHEND: "touchend",
+	    MOUSEUP: "mouseup",
 	    KEYDOWN: "keydown",
 	    KEYUP: "keyup"
 	  },
@@ -904,6 +910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.levelHandler.changeTo(0);
 	                this.view = this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
 	            } else this.view.reset();
+	            this.clusterHandler();
 	        }
 
 	        /**
@@ -3482,7 +3489,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function bindEvents() {
 	            var _this = this;
 
-	            this.$cluster.on(_Events.Events.Handling.CLICK, function () {
+	            this.$cluster.on("touchstart", function (e) {
+	                e.stopPropagation();
+	            });
+	            this.$cluster.on("touchend", function (e) {
+	                e.stopPropagation();
+	            });
+	            this.$cluster.on(_Events.Events.Handling.CLICK, function (e) {
 	                _this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, _this.boundingBox);
 	            });
 	        }
@@ -3627,9 +3640,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.eventManager = new _Publisher.Publisher();
 
-	            var gesture = _Helper.Helper.isTouch() ? _Events.Events.Handling.TOUCHSTART : _Events.Events.Handling.CLICK;
 	            if (this.content.length) {
-	                this.$icon.on(gesture, function () {
+
+	                this.$icon.on("touchstart", function (e) {
+	                    e.stopPropagation();
+	                });
+
+	                this.$icon.on("touchend", function (e) {
+	                    e.stopPropagation();
+	                });
+
+	                this.$icon.on("click", function () {
 	                    _this.eventManager.publish(_Events.Events.ToolTip.OPEN, _this.content);
 	                    _this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
 	                    _this.$icon.addClass("active");

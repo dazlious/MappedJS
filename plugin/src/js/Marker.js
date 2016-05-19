@@ -55,9 +55,17 @@ export class Marker {
     bindEvents() {
         this.eventManager = new Publisher();
 
-        const gesture = Helper.isTouch() ? Events.Handling.TOUCHSTART: Events.Handling.CLICK;
         if (this.content.length) {
-            this.$icon.on(gesture, () => {
+
+            this.$icon.on("touchstart", (e) => {
+                e.stopPropagation();
+            });
+
+            this.$icon.on("touchend", (e) => {
+                e.stopPropagation();
+            });
+
+            this.$icon.on("click", () => {
                 this.eventManager.publish(Events.ToolTip.OPEN, this.content);
                 this.eventManager.publish(Events.Marker.DEACTIVATE);
                 this.$icon.addClass("active");

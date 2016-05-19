@@ -122,7 +122,13 @@
             value: function bindEvents() {
                 var _this = this;
 
-                this.$cluster.on(_Events.Events.Handling.CLICK, function() {
+                this.$cluster.on("touchstart", function(e) {
+                    e.stopPropagation();
+                });
+                this.$cluster.on("touchend", function(e) {
+                    e.stopPropagation();
+                });
+                this.$cluster.on(_Events.Events.Handling.CLICK, function(e) {
                     _this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, _this.boundingBox);
                 });
             }

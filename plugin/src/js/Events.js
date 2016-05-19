@@ -64,6 +64,9 @@ export var Events = {
      * @property {object} RESIZE - resize of window happened needed
      * @property {object} CLICK - click occured
      * @property {object} TOUCHSTART - Touch started
+     * @property {object} TOUCHEND - Touch ended
+     * @property {object} MOUSEDOWN - Mouse started
+     * @property {object} MOUSEUP - Mouse ended
      * @property {object} KEYDOWN - key pressed
      * @property {object} KEYUP - key released
      */
@@ -71,6 +74,9 @@ export var Events = {
         RESIZE: "resize orientationchange",
         CLICK: "click",
         TOUCHSTART: "touchstart",
+        MOUSEDOWN: "mousedown",
+        TOUCHEND: "touchend",
+        MOUSEUP: "mouseup",
         KEYDOWN: "keydown",
         KEYUP: "keyup"
     },
