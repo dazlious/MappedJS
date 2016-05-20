@@ -128,31 +128,11 @@
 
         }, {
             key: 'initializeTemplates',
-            value: function initializeTemplates() {
-                var templates = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-                this.templates = Object.assign(this.getDefaultTemplates(), templates);
+            value: function initializeTemplates(templates) {
+                this.templates = templates;
                 this.loadedTemplates = 0;
                 this.compileTemplates();
                 return this;
-            }
-
-            /**
-             * // TODO: move to DataEnrichment
-             * returns paths to default templates
-             * @return {object} default templates
-             */
-
-        }, {
-            key: 'getDefaultTemplates',
-            value: function getDefaultTemplates() {
-                return {
-                    image: "/plugin/hbs/image.hbs",
-                    text: "/plugin/hbs/text.hbs",
-                    headline: "/plugin/hbs/headline.hbs",
-                    crossheading: "/plugin/hbs/crossheading.hbs",
-                    iframe: "/plugin/hbs/iframe.hbs"
-                };
             }
 
             /**
@@ -275,23 +255,12 @@
                 var _this3 = this;
 
                 _Helper.Helper.forEach(this.templates, function(template, type) {
-                    _this3.getTemplateFromFile(template, function(compiledTemplate) {
-                        _this3.templates[type] = compiledTemplate;
+                    _Helper.Helper.getFile(template, function(html) {
+                        _this3.templates[type] = _Handlebars2.default.compile(html);
                         _this3.loadedTemplates++;
                         if (_this3.allTemplatesLoaded) _this3.$container.append(_this3.$popup);
                     });
                 });
-                return this;
-            }
-
-            // TODO: move to Helper
-
-        }, {
-            key: 'getTemplateFromFile',
-            value: function getTemplateFromFile(url, cb) {
-                _jQuery2.default.get(url, function(data) {
-                    cb(_Handlebars2.default.compile(data));
-                }, 'html');
                 return this;
             }
         }]);
