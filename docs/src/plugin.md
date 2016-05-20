@@ -2597,6 +2597,7 @@ Eventnames for View class
 **Properties**
 
 - DRAW <code>object</code> - draw is needed  
+- THUMB_LOADED <code>object</code> - thumbnail was loaded  
 
 <a name="Events.MarkerClusterer"></a>
 

@@ -136,6 +136,20 @@
             this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
             this.settings = settings;
 
+            this.stateHandler = new _StateHandler.StateHandler([{
+                value: 0,
+                description: "start"
+            }, {
+                value: 1,
+                description: "view-initialized"
+            }, {
+                value: 2,
+                description: "marker-initialized"
+            }, {
+                value: 3,
+                description: "tooltip-initialized"
+            }]);
+
             this.templates = _DataEnrichment.DataEnrichment.tooltip(this.settings.tooltip.templates);
 
             this.levels = [];
@@ -178,7 +192,7 @@
                 this.initializeCanvas().bindEvents();
                 this.views = this.initializeAllViews();
                 this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
-                this.initializeMarkers(this.markerData);
+                this.stateHandler.next();
                 return this.resizeCanvas();
             }
 
@@ -251,14 +265,14 @@
 
         }, {
             key: 'initializeMarkers',
-            value: function initializeMarkers(markerData) {
+            value: function initializeMarkers() {
                 var _this2 = this;
 
-                if (markerData) {
+                if (this.markerData) {
                     (function() {
                         var markers = [];
-                        markerData = _this2.enrichMarkerData(markerData);
-                        _Helper.Helper.forEach(markerData, function(currentData) {
+                        _this2.markerData = _this2.enrichMarkerData(_this2.markerData);
+                        _Helper.Helper.forEach(_this2.markerData, function(currentData) {
                             markers.push(new _Marker.Marker(currentData, _this2.view));
                         });
                         markers = markers.sort(function(a, b) {
@@ -276,6 +290,7 @@
                         });
                     })();
                 }
+                this.stateHandler.next();
                 return this;
             }
 
@@ -304,6 +319,7 @@
                     container: (0, _jQuery2.default)(this.$container.parent()),
                     templates: this.templates
                 });
+                this.stateHandler.next();
                 return this;
             }
 
@@ -319,6 +335,10 @@
 
                 this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function() {
                     _this3.resize();
+                });
+
+                this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function() {
+                    if (_this3.stateHandler.current.value < 2) _this3.initializeMarkers();
                 });
 
                 this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function(bounds) {

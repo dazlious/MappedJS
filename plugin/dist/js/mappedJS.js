@@ -720,9 +720,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @type {Object}
 	   * @memberof Events
 	   * @property {object} DRAW - draw is needed
+	   * @property {object} THUMB_LOADED - thumbnail was loaded
 	   */
 	  View: {
-	    DRAW: "draw"
+	    DRAW: "draw",
+	    THUMB_LOADED: "thumb-loaded"
 	  },
 	  /**
 	  * Eventnames for MarkerClusterer class
@@ -871,6 +873,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
 	        this.settings = settings;
 
+	        this.stateHandler = new _StateHandler.StateHandler([{ value: 0, description: "start" }, { value: 1, description: "view-initialized" }, { value: 2, description: "marker-initialized" }, { value: 3, description: "tooltip-initialized" }]);
+
 	        this.templates = _DataEnrichment.DataEnrichment.tooltip(this.settings.tooltip.templates);
 
 	        this.levels = [];
@@ -913,7 +917,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.initializeCanvas().bindEvents();
 	            this.views = this.initializeAllViews();
 	            this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
-	            this.initializeMarkers(this.markerData);
+	            this.stateHandler.next();
 	            return this.resizeCanvas();
 	        }
 
@@ -986,14 +990,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    }, {
 	        key: 'initializeMarkers',
-	        value: function initializeMarkers(markerData) {
+	        value: function initializeMarkers() {
 	            var _this2 = this;
 
-	            if (markerData) {
+	            if (this.markerData) {
 	                (function () {
 	                    var markers = [];
-	                    markerData = _this2.enrichMarkerData(markerData);
-	                    _Helper.Helper.forEach(markerData, function (currentData) {
+	                    _this2.markerData = _this2.enrichMarkerData(_this2.markerData);
+	                    _Helper.Helper.forEach(_this2.markerData, function (currentData) {
 	                        markers.push(new _Marker.Marker(currentData, _this2.view));
 	                    });
 	                    markers = markers.sort(function (a, b) {
@@ -1011,6 +1015,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    });
 	                })();
 	            }
+	            this.stateHandler.next();
 	            return this;
 	        }
 
@@ -1039,6 +1044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                container: (0, _jQuery2.default)(this.$container.parent()),
 	                templates: this.templates
 	            });
+	            this.stateHandler.next();
 	            return this;
 	        }
 
@@ -1054,6 +1060,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function () {
 	                _this3.resize();
+	            });
+
+	            this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function () {
+	                if (_this3.stateHandler.current.value < 2) _this3.initializeMarkers();
 	            });
 
 	            this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function (bounds) {
@@ -2310,6 +2320,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Publisher = __webpack_require__(5);
 
+	var _StateHandler = __webpack_require__(6);
+
 	var _MarkerClusterer = __webpack_require__(13);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2535,6 +2547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            _Helper.Helper.loadImage(this.data.thumb, function (img) {
 	                _this3.thumb = img;
+	                _this3.eventManager.publish(_Events.Events.View.THUMB_LOADED);
 	                window.requestAnimFrame(_this3.mainLoop.bind(_this3));
 	            });
 	            return this;
