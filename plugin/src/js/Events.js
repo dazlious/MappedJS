@@ -85,9 +85,11 @@ export var Events = {
      * @type {Object}
      * @memberof Events
      * @property {object} DRAW - draw is needed
+     * @property {object} THUMB_LOADED - thumbnail was loaded
      */
     View: {
         DRAW: "draw",
+        THUMB_LOADED: "thumb-loaded"
     },
     /**
     * Eventnames for MarkerClusterer class

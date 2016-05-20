@@ -6,6 +6,7 @@ import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
 import {Publisher} from './Publisher.js';
+import {StateHandler} from './StateHandler.js';
 import {MarkerClusterer} from './MarkerClusterer.js';
 
 /**
@@ -181,6 +182,7 @@ export class View {
     loadThumb() {
         Helper.loadImage(this.data.thumb, (img) => {
             this.thumb = img;
+            this.eventManager.publish(Events.View.THUMB_LOADED);
             window.requestAnimFrame(this.mainLoop.bind(this));
         });
         return this;

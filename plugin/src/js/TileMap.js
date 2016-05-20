@@ -72,6 +72,13 @@ export class TileMap {
         this.markerData = tilesData[Events.TileMap.MARKER_DATA_NAME];
         this.settings = settings;
 
+        this.stateHandler = new StateHandler([
+            {value: 0, description: "start"},
+            {value: 1, description: "view-initialized"},
+            {value: 2, description: "marker-initialized"},
+            {value: 3, description: "tooltip-initialized"}
+        ]);
+
         this.templates = DataEnrichment.tooltip(this.settings.tooltip.templates);
 
         this.levels = [];
@@ -111,7 +118,7 @@ export class TileMap {
             .bindEvents();
         this.views = this.initializeAllViews();
         this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
-        this.initializeMarkers(this.markerData);
+        this.stateHandler.next();
         return this.resizeCanvas();
     }
 
@@ -171,11 +178,11 @@ export class TileMap {
      * @param  {Object} markerData - data of all markers
      * @return {TileMap} instance of TileMap for chaining
      */
-    initializeMarkers(markerData) {
-        if (markerData) {
+    initializeMarkers() {
+        if (this.markerData) {
             let markers = [];
-            markerData = this.enrichMarkerData(markerData);
-            Helper.forEach(markerData, (currentData) => {
+            this.markerData = this.enrichMarkerData(this.markerData);
+            Helper.forEach(this.markerData, (currentData) => {
                 markers.push(new Marker(currentData, this.view));
             });
             markers = markers.sort((a, b) => ((b.latlng.lat - a.latlng.lat !== 0) ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng));
@@ -190,6 +197,7 @@ export class TileMap {
                 $container: this.$markerContainer
             });
         }
+        this.stateHandler.next();
         return this;
     }
 
@@ -212,6 +220,7 @@ export class TileMap {
             container: $(this.$container.parent()),
             templates: this.templates
         });
+        this.stateHandler.next();
         return this;
     }
 
@@ -222,6 +231,10 @@ export class TileMap {
     bindEvents() {
 
         this.eventManager.subscribe(Events.TileMap.RESIZE, () => { this.resize(); });
+
+        this.eventManager.subscribe(Events.View.THUMB_LOADED, () => {
+            if (this.stateHandler.current.value < 2) this.initializeMarkers();
+        });
 
         this.eventManager.subscribe(Events.TileMap.ZOOM_TO_BOUNDS, (bounds) => {
             const zoomIncrease = Math.min(this.view.viewport.width / bounds.width, this.view.viewport.height / bounds.height);
