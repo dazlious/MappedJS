@@ -1,31 +1,31 @@
 {
     "fileSize": {
-        "size": "22.97 KB",
-        "gzipSize": "8.60 KB"
+        "size": "23.86 KB",
+        "gzipSize": "8.84 KB"
     },
     "selectorSpecifity": {
         "max": 60,
-        "average": 33.94915254237288
+        "average": 34.05
     },
     "totals": {
-        "rules": 56,
-        "selectors": 59,
-        "declarations": 178,
-        "properties": 48,
-        "vendorPrefixes": 13,
+        "rules": 57,
+        "selectors": 60,
+        "declarations": 207,
+        "properties": 64,
+        "vendorPrefixes": 28,
         "mediaQueries": 0,
         "importants": 0
     },
     "uniqueDeclarations": {
         "width": 11,
-        "height": 12,
+        "height": 13,
         "color": 4,
         "font-size": 11,
         "background-color": 5
     },
     "selectors": {
         "type": 13,
-        "class": 59,
+        "class": 60,
         "id": 0,
         "pseudoClass": 5,
         "pseudoElement": 0
@@ -162,6 +162,7 @@
             41,
             41,
             31,
+            40,
             50,
             51,
             50,
@@ -209,9 +210,9 @@
             2,
             4,
             1,
-            1,
-            2,
-            2,
+            15,
+            11,
+            7,
             3,
             3,
             2,
@@ -220,6 +221,7 @@
             2,
             3,
             3,
+            1,
             6,
             7,
             2,
