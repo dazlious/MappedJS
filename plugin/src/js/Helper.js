@@ -14,18 +14,9 @@ export var Helper = {
      * @return {Helper} Helper object for chaining
      */
     requestJSON(filename, callback) {
-        const xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    if (callback) callback(JSON.parse(xhr.responseText));
-                } else {
-                    throw new Error("The JSON submitted seems not valid", xhr);
-                }
-            }
-        };
-        xhr.open("GET", filename, true);
-        xhr.send();
+        Helper.getFile(filename, (jsonFileData) => {
+            if (callback) callback(JSON.parse(jsonFileData));
+        });
         return this;
     },
     /**
@@ -41,6 +32,29 @@ export var Helper = {
             if (cb && typeof cb === "function") cb(img);
         };
         img.src = path;
+        return this;
+    },
+    /**
+     * request data from given file and calls callback on success
+     * @function
+     * @memberof module:Helper
+     * @param  {string} url - path to file
+     * @param  {Helper~getFileCallback} callback - function called when data is loaded successfully
+     * @return {Helper} Helper object for chaining
+     */
+    getFile(url, callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    if (callback) callback(xhr.responseText);
+                } else {
+                    throw new Error("The JSON submitted seems not valid", xhr);
+                }
+            }
+        };
+        xhr.open("GET", url, true);
+        xhr.send();
         return this;
     },
     /**

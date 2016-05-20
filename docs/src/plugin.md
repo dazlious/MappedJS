@@ -113,6 +113,7 @@ Helper for general purposes
 * [Helper](#module_Helper)
     * [.requestJSON(filename, callback)](#module_Helper.requestJSON) ⇒ <code>Helper</code>
     * [.loadImage(cb)](#module_Helper.loadImage) ⇒ <code>Helper</code>
+    * [.getFile(url, callback)](#module_Helper.getFile) ⇒ <code>Helper</code>
     * [.forEach(a, cb)](#module_Helper.forEach) ⇒ <code>Helper</code>
     * [.easeOutQuadratic(t, b, c, d)](#module_Helper.easeOutQuadratic) ⇒ <code>number</code>
     * [.toRadians(degrees)](#module_Helper.toRadians) ⇒ <code>number</code>
@@ -143,6 +144,18 @@ loads an image and calls callback on success
 **Params**
 
 - cb <code>Helper~loadImageCallback</code> - callback-function on success
+
+<a name="module_Helper.getFile"></a>
+
+### Helper.getFile(url, callback) ⇒ <code>Helper</code>
+request data from given file and calls callback on success
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>Helper</code> - Helper object for chaining  
+**Params**
+
+- url <code>string</code> - path to file
+- callback <code>Helper~getFileCallback</code> - function called when data is loaded successfully
 
 <a name="module_Helper.forEach"></a>
 
@@ -2172,7 +2185,6 @@ Handles resizing of view
     * [.allTemplatesLoaded](#ToolTip+allTemplatesLoaded) ⇒ <code>boolean</code>
     * [.registerHandlebarHelpers()](#ToolTip+registerHandlebarHelpers) ⇒ <code>[ToolTip](#ToolTip)</code>
     * [.initializeTemplates(templates)](#ToolTip+initializeTemplates) ⇒ <code>[ToolTip](#ToolTip)</code>
-    * [.getDefaultTemplates()](#ToolTip+getDefaultTemplates) ⇒ <code>object</code>
     * [.bindEvents()](#ToolTip+bindEvents) ⇒ <code>[ToolTip](#ToolTip)</code>
     * [.resizeHandler()](#ToolTip+resizeHandler) ⇒ <code>[ToolTip](#ToolTip)</code>
     * [.insertContent(content)](#ToolTip+insertContent) ⇒ <code>[ToolTip](#ToolTip)</code>
@@ -2215,14 +2227,6 @@ initialize all templates
 
 - templates <code>object</code> - = {} - all specified templates
 
-<a name="ToolTip+getDefaultTemplates"></a>
-
-### toolTip.getDefaultTemplates() ⇒ <code>object</code>
-// TODO: move to DataEnrichment
-returns paths to default templates
-
-**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
-**Returns**: <code>object</code> - default templates  
 <a name="ToolTip+bindEvents"></a>
 
 ### toolTip.bindEvents() ⇒ <code>[ToolTip](#ToolTip)</code>

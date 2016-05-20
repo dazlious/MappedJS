@@ -64,6 +64,9 @@ export var DataEnrichment = {
         enrichedData.center = center;
 
         return enrichedData;
+    },
+    tooltip(data) {
+        return Object.assign(data, DataEnrichment.TOOLTIP);
     }
 };
 
@@ -105,4 +108,11 @@ DataEnrichment.MAP_SETTINGS = {
         position: "bottom-right",
         theme: "dark"
     }
+};
+DataEnrichment.TOOLTIP = {
+    image: "/plugin/hbs/image.hbs",
+    text: "/plugin/hbs/text.hbs",
+    headline: "/plugin/hbs/headline.hbs",
+    crossheading: "/plugin/hbs/crossheading.hbs",
+    iframe: "/plugin/hbs/iframe.hbs"
 };

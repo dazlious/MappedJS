@@ -497,18 +497,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	    requestJSON: function requestJSON(filename, callback) {
-	        var xhr = new XMLHttpRequest();
-	        xhr.onreadystatechange = function () {
-	            if (xhr.readyState === XMLHttpRequest.DONE) {
-	                if (xhr.status === 200) {
-	                    if (callback) callback(JSON.parse(xhr.responseText));
-	                } else {
-	                    throw new Error("The JSON submitted seems not valid", xhr);
-	                }
-	            }
-	        };
-	        xhr.open("GET", filename, true);
-	        xhr.send();
+	        Helper.getFile(filename, function (jsonFileData) {
+	            if (callback) callback(JSON.parse(jsonFileData));
+	        });
 	        return this;
 	    },
 
@@ -525,6 +516,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (cb && typeof cb === "function") cb(img);
 	        };
 	        img.src = path;
+	        return this;
+	    },
+
+	    /**
+	     * request data from given file and calls callback on success
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {string} url - path to file
+	     * @param  {Helper~getFileCallback} callback - function called when data is loaded successfully
+	     * @return {Helper} Helper object for chaining
+	     */
+	    getFile: function getFile(url, callback) {
+	        var xhr = new XMLHttpRequest();
+	        xhr.onreadystatechange = function () {
+	            if (xhr.readyState === XMLHttpRequest.DONE) {
+	                if (xhr.status === 200) {
+	                    if (callback) callback(xhr.responseText);
+	                } else {
+	                    throw new Error("The JSON submitted seems not valid", xhr);
+	                }
+	            }
+	        };
+	        xhr.open("GET", url, true);
+	        xhr.send();
 	        return this;
 	    },
 
@@ -856,6 +871,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
 	        this.settings = settings;
 
+	        this.templates = _DataEnrichment.DataEnrichment.tooltip(this.settings.tooltip.templates);
+
 	        this.levels = [];
 	        this.clusterHandlingTimeout = null;
 
@@ -894,10 +911,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'initialize',
 	        value: function initialize(bounds, center, data) {
 	            this.initializeCanvas().bindEvents();
+	            this.views = this.initializeAllViews();
 	            this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
 	            this.initializeMarkers(this.markerData);
 	            return this.resizeCanvas();
 	        }
+
+	        // TODO
+
+	    }, {
+	        key: 'initializeAllViews',
+	        value: function initializeAllViews() {}
 
 	        /**
 	         * resets view to initial state
@@ -1013,9 +1037,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function createTooltipContainer() {
 	            this.tooltip = new _ToolTip.ToolTip({
 	                container: (0, _jQuery2.default)(this.$container.parent()),
-	                templates: {
-	                    image: "../../hbs/image.hbs"
-	                }
+	                templates: this.templates
 	            });
 	            return this;
 	        }
@@ -3495,7 +3517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.$cluster.on("touchend", function (e) {
 	                e.stopPropagation();
 	            });
-	            this.$cluster.on(_Events.Events.Handling.CLICK, function (e) {
+	            this.$cluster.on(_Events.Events.Handling.CLICK, function () {
 	                _this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, _this.boundingBox);
 	            });
 	        }
@@ -3799,6 +3821,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        enrichedData.center = center;
 
 	        return enrichedData;
+	    },
+	    tooltip: function tooltip(data) {
+	        return Object.assign(data, DataEnrichment.TOOLTIP);
 	    }
 	};
 
@@ -3840,6 +3865,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        position: "bottom-right",
 	        theme: "dark"
 	    }
+	};
+	DataEnrichment.TOOLTIP = {
+	    image: "/plugin/hbs/image.hbs",
+	    text: "/plugin/hbs/text.hbs",
+	    headline: "/plugin/hbs/headline.hbs",
+	    crossheading: "/plugin/hbs/crossheading.hbs",
+	    iframe: "/plugin/hbs/iframe.hbs"
 		};
 
 /***/ },
@@ -3951,31 +3983,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    }, {
 	        key: 'initializeTemplates',
-	        value: function initializeTemplates() {
-	            var templates = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	            this.templates = Object.assign(this.getDefaultTemplates(), templates);
+	        value: function initializeTemplates(templates) {
+	            this.templates = templates;
 	            this.loadedTemplates = 0;
 	            this.compileTemplates();
 	            return this;
-	        }
-
-	        /**
-	         * // TODO: move to DataEnrichment
-	         * returns paths to default templates
-	         * @return {object} default templates
-	         */
-
-	    }, {
-	        key: 'getDefaultTemplates',
-	        value: function getDefaultTemplates() {
-	            return {
-	                image: "/plugin/hbs/image.hbs",
-	                text: "/plugin/hbs/text.hbs",
-	                headline: "/plugin/hbs/headline.hbs",
-	                crossheading: "/plugin/hbs/crossheading.hbs",
-	                iframe: "/plugin/hbs/iframe.hbs"
-	            };
 	        }
 
 	        /**
@@ -4098,23 +4110,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var _this3 = this;
 
 	            _Helper.Helper.forEach(this.templates, function (template, type) {
-	                _this3.getTemplateFromFile(template, function (compiledTemplate) {
-	                    _this3.templates[type] = compiledTemplate;
+	                _Helper.Helper.getFile(template, function (html) {
+	                    _this3.templates[type] = _Handlebars2.default.compile(html);
 	                    _this3.loadedTemplates++;
 	                    if (_this3.allTemplatesLoaded) _this3.$container.append(_this3.$popup);
 	                });
 	            });
-	            return this;
-	        }
-
-	        // TODO: move to Helper
-
-	    }, {
-	        key: 'getTemplateFromFile',
-	        value: function getTemplateFromFile(url, cb) {
-	            _jQuery2.default.get(url, function (data) {
-	                cb(_Handlebars2.default.compile(data));
-	            }, 'html');
 	            return this;
 	        }
 	    }]);

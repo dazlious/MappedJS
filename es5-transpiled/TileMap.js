@@ -136,6 +136,8 @@
             this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
             this.settings = settings;
 
+            this.templates = _DataEnrichment.DataEnrichment.tooltip(this.settings.tooltip.templates);
+
             this.levels = [];
             this.clusterHandlingTimeout = null;
 
@@ -174,10 +176,17 @@
             key: 'initialize',
             value: function initialize(bounds, center, data) {
                 this.initializeCanvas().bindEvents();
+                this.views = this.initializeAllViews();
                 this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
                 this.initializeMarkers(this.markerData);
                 return this.resizeCanvas();
             }
+
+            // TODO
+
+        }, {
+            key: 'initializeAllViews',
+            value: function initializeAllViews() {}
 
             /**
              * resets view to initial state
@@ -293,9 +302,7 @@
             value: function createTooltipContainer() {
                 this.tooltip = new _ToolTip.ToolTip({
                     container: (0, _jQuery2.default)(this.$container.parent()),
-                    templates: {
-                        image: "../../hbs/image.hbs"
-                    }
+                    templates: this.templates
                 });
                 return this;
             }

@@ -72,6 +72,8 @@ export class TileMap {
         this.markerData = tilesData[Events.TileMap.MARKER_DATA_NAME];
         this.settings = settings;
 
+        this.templates = DataEnrichment.tooltip(this.settings.tooltip.templates);
+
         this.levels = [];
         this.clusterHandlingTimeout = null;
 
@@ -107,9 +109,15 @@ export class TileMap {
     initialize(bounds, center, data) {
         this.initializeCanvas()
             .bindEvents();
+        this.views = this.initializeAllViews();
         this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
         this.initializeMarkers(this.markerData);
         return this.resizeCanvas();
+    }
+
+    // TODO
+    initializeAllViews() {
+
     }
 
     /**
@@ -202,9 +210,7 @@ export class TileMap {
     createTooltipContainer() {
         this.tooltip = new ToolTip({
             container: $(this.$container.parent()),
-            templates: {
-                image: "../../hbs/image.hbs"
-            }
+            templates: this.templates
         });
         return this;
     }

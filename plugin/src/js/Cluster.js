@@ -52,7 +52,7 @@ export class Cluster {
         this.$cluster.on("touchend", (e) => {
             e.stopPropagation();
         });
-        this.$cluster.on(Events.Handling.CLICK, (e) => {
+        this.$cluster.on(Events.Handling.CLICK, () => {
             this.eventManager.publish(Events.TileMap.ZOOM_TO_BOUNDS, this.boundingBox);
         });
     }

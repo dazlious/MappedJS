@@ -128,7 +128,7 @@
                 this.$cluster.on("touchend", function(e) {
                     e.stopPropagation();
                 });
-                this.$cluster.on(_Events.Events.Handling.CLICK, function(e) {
+                this.$cluster.on(_Events.Events.Handling.CLICK, function() {
                     _this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, _this.boundingBox);
                 });
             }

@@ -60,26 +60,11 @@ export class ToolTip {
      * @param  {object} templates = {} - all specified templates
      * @return {ToolTip} instance of ToolTip for chaining
      */
-    initializeTemplates(templates = {}) {
-        this.templates = Object.assign(this.getDefaultTemplates(), templates);
+    initializeTemplates(templates) {
+        this.templates = templates;
         this.loadedTemplates = 0;
         this.compileTemplates();
         return this;
-    }
-
-    /**
-     * // TODO: move to DataEnrichment
-     * returns paths to default templates
-     * @return {object} default templates
-     */
-    getDefaultTemplates() {
-        return {
-            image: "/plugin/hbs/image.hbs",
-            text: "/plugin/hbs/text.hbs",
-            headline: "/plugin/hbs/headline.hbs",
-            crossheading: "/plugin/hbs/crossheading.hbs",
-            iframe: "/plugin/hbs/iframe.hbs"
-        };
     }
 
     /**
@@ -167,20 +152,12 @@ export class ToolTip {
      */
     compileTemplates() {
         Helper.forEach(this.templates, (template, type) => {
-            this.getTemplateFromFile(template, (compiledTemplate) => {
-                this.templates[type] = compiledTemplate;
+            Helper.getFile(template, (html) => {
+                this.templates[type] = Handlebars.compile(html);
                 this.loadedTemplates++;
                 if (this.allTemplatesLoaded) this.$container.append(this.$popup);
             });
         });
-        return this;
-    }
-
-    // TODO: move to Helper
-    getTemplateFromFile(url, cb) {
-        $.get(url, function (data) {
-            cb(Handlebars.compile(data));
-        }, 'html');
         return this;
     }
 
