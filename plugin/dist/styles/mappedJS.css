@@ -291,6 +291,7 @@
 	padding: 36px 9px 9px;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
+	/* http://codepen.io/maddesigns/pen/ZWdQjM */
 }
 
 /* line 82, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
@@ -298,24 +299,52 @@
 	width: 100%;
 }
 
-/* line 1, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
+/* line 2, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
 .mappedJS .tooltip-container .tooltip-content .mjs-image {
 	margin: 18px 0 36px 0;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	   -moz-box-orient: vertical;
+	   -moz-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	height: auto;
+	max-height: 100%;
 }
 
-/* line 3, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
+/* line 8, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
 .mappedJS .tooltip-container .tooltip-content .mjs-image img {
-	display: block;
+	max-height: 100%;
 	max-width: 100%;
+	margin: 0 auto;
+	min-height: 0;
+	-webkit-box-flex: 0;
+	-webkit-flex: 0 1 auto;
+	   -moz-box-flex: 0;
+	    -ms-flex: 0 1 auto;
+	        flex: 0 1 auto;
+	-o-object-fit: contain;
+	   object-fit: contain;
 }
 
-/* line 7, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
+/* line 16, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
 .mappedJS .tooltip-container .tooltip-content .mjs-image figcaption {
-	margin-top: 6px;
+	-webkit-box-flex: 1;
+	-webkit-flex: 1 0 auto;
+	   -moz-box-flex: 1;
+	    -ms-flex: 1 0 auto;
+	        flex: 1 0 auto;
+	margin: 6px auto 0 auto;
 	font-size: 12px;
 }
 
-/* line 10, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
+/* line 20, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_image.scss */
 .mappedJS .tooltip-container .tooltip-content .mjs-image figcaption .credit {
 	display: block;
 	font-size: 85%;
@@ -367,7 +396,12 @@
 	font-size: 110%;
 }
 
-/* line 2, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
+/* line 1, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
+.mappedJS .tooltip-container .tooltip-content .mjs-iframe {
+	margin: 0 auto;
+}
+
+/* line 3, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
 .mappedJS .tooltip-container .tooltip-content .mjs-iframe .embed-content {
 	position: relative;
 	display: block;
@@ -377,7 +411,7 @@
 	overflow: hidden;
 }
 
-/* line 9, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
+/* line 10, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
 .mappedJS .tooltip-container .tooltip-content .mjs-iframe .embed-content iframe {
 	position: absolute;
 	top: 0;
@@ -388,13 +422,13 @@
 	border: 0;
 }
 
-/* line 19, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
+/* line 20, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
 .mappedJS .tooltip-container .tooltip-content .mjs-iframe .caption {
 	margin-top: 6px 0 36px 0;
 	font-size: 12px;
 }
 
-/* line 22, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
+/* line 23, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip_iframe.scss */
 .mappedJS .tooltip-container .tooltip-content .mjs-iframe .caption .credit {
 	display: block;
 	font-size: 85%;
