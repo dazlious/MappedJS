@@ -93,7 +93,7 @@
 <p><a name="module_DataEnrichment"></a></p>
 <h2 id="dataenrichment">DataEnrichment</h2>
 <p>enriches delivered data with default values</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x6d;&#x64;&#x75;&#x76;&#101;&#x40;&#x64;&#x65;&#115;&#x69;&#x67;&#x6e;&#109;&#x61;&#105;&#108;&#x2e;&#x6e;&#x65;&#x74;">&#x6d;&#x64;&#x75;&#x76;&#101;&#x40;&#x64;&#x65;&#115;&#x69;&#x67;&#x6e;&#109;&#x61;&#105;&#108;&#x2e;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#109;&#100;&#117;&#x76;&#101;&#64;&#100;&#x65;&#115;&#105;&#103;&#110;&#x6d;&#97;&#105;&#108;&#x2e;&#x6e;&#101;&#116;">&#109;&#100;&#117;&#x76;&#101;&#64;&#100;&#x65;&#115;&#105;&#103;&#110;&#x6d;&#97;&#105;&#108;&#x2e;&#x6e;&#101;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_DataEnrichment">DataEnrichment</a><ul>
 <li><a href="#module_DataEnrichment.marker">.marker(data)</a> ⇒ <code>object</code></li>
@@ -118,14 +118,14 @@
 <p><a name="module_Helper"></a></p>
 <h2 id="helper">Helper</h2>
 <p>Helper for general purposes</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#x6d;&#x64;&#117;&#x76;&#x65;&#64;&#100;&#x65;&#115;&#x69;&#x67;&#x6e;&#x6d;&#97;&#105;&#108;&#46;&#x6e;&#x65;&#x74;">&#x6d;&#x64;&#117;&#x76;&#x65;&#64;&#100;&#x65;&#115;&#x69;&#x67;&#x6e;&#x6d;&#97;&#105;&#108;&#46;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#109;&#100;&#117;&#x76;&#101;&#x40;&#100;&#x65;&#x73;&#105;&#103;&#110;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#110;&#x65;&#116;">&#109;&#100;&#117;&#x76;&#101;&#x40;&#100;&#x65;&#x73;&#105;&#103;&#110;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#110;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_Helper">Helper</a><ul>
 <li><a href="#module_Helper.requestJSON">.requestJSON(filename, callback)</a> ⇒ <code>Helper</code></li>
 <li><a href="#module_Helper.loadImage">.loadImage(cb)</a> ⇒ <code>Helper</code></li>
 <li><a href="#module_Helper.getFile">.getFile(url, callback)</a> ⇒ <code>Helper</code></li>
 <li><a href="#module_Helper.forEach">.forEach(a, cb)</a> ⇒ <code>Helper</code></li>
-<li><a href="#module_Helper.easeOutQuadratic">.easeOutQuadratic(t, b, c, d)</a> ⇒ <code>number</code></li>
+<li><a href="#module_Helper.linearEase">.linearEase(t, b, c, d)</a> ⇒ <code>number</code></li>
 <li><a href="#module_Helper.toRadians">.toRadians(degrees)</a> ⇒ <code>number</code></li>
 <li><a href="#module_Helper.isMouse">.isMouse()</a> ⇒ <code>Boolean</code></li>
 <li><a href="#module_Helper.isTouch">.isTouch()</a> ⇒ <code>Boolean</code></li>
@@ -165,10 +165,10 @@
 <li>a <code>Array.&lt;Object&gt;</code> - array to iterate over each value</li>
 <li>cb <code>Helper~forEachCallback</code> - callback for each object</li>
 </ul>
-<p><a name="module_Helper.easeOutQuadratic"></a></p>
-<h3 id="helper-easeoutquadratic-t-b-c-d-code-number-code-">Helper.easeOutQuadratic(t, b, c, d) ⇒ <code>number</code></h3>
-<p>formula for quadratic ease out</p>
-<p><strong>Kind</strong>: static method of <code><a href="#module_Helper">Helper</a></code><br><strong>Returns</strong>: <code>number</code> - quadratic value at specific time<br><strong>Params</strong></p>
+<p><a name="module_Helper.linearEase"></a></p>
+<h3 id="helper-linearease-t-b-c-d-code-number-code-">Helper.linearEase(t, b, c, d) ⇒ <code>number</code></h3>
+<p>formula for linear easing</p>
+<p><strong>Kind</strong>: static method of <code><a href="#module_Helper">Helper</a></code><br><strong>Returns</strong>: <code>number</code> - linear value at specific time<br><strong>Params</strong></p>
 <ul>
 <li>t <code>number</code> - current time</li>
 <li>b <code><a href="#Point">Point</a></code> - start value</li>
@@ -1721,7 +1721,7 @@
 <p><strong>Kind</strong>: global variable<br><a name="Events"></a></p>
 <h2 id="events-code-object-code-">Events : <code>object</code></h2>
 <p>Helper for naming events</p>
-<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x6d;&#100;&#x75;&#118;&#101;&#x40;&#x64;&#101;&#115;&#x69;&#103;&#x6e;&#x6d;&#97;&#x69;&#108;&#46;&#110;&#x65;&#x74;">&#x6d;&#100;&#x75;&#118;&#101;&#x40;&#x64;&#101;&#115;&#x69;&#103;&#x6e;&#x6d;&#97;&#x69;&#108;&#46;&#110;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x6d;&#x64;&#117;&#118;&#101;&#x40;&#x64;&#101;&#x73;&#x69;&#x67;&#110;&#109;&#x61;&#105;&#x6c;&#46;&#x6e;&#x65;&#116;">&#x6d;&#x64;&#117;&#118;&#101;&#x40;&#x64;&#101;&#x73;&#x69;&#x67;&#110;&#109;&#x61;&#105;&#x6c;&#46;&#x6e;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#Events">Events</a> : <code>object</code><ul>
 <li><a href="#Events.ToolTip">.ToolTip</a> : <code>Object</code></li>
