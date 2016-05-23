@@ -6,7 +6,6 @@ import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
 import {Publisher} from './Publisher.js';
-import {StateHandler} from './StateHandler.js';
 import {MarkerClusterer} from './MarkerClusterer.js';
 
 /**
@@ -79,11 +78,9 @@ export class View {
         maxZoom = 1.5,
         currentZoom = 1,
         minZoom = 0.8,
-        $markerContainer = null,
         limitToBounds
     }) {
 
-        this.$markerContainer = $markerContainer;
         this.currentView = currentView;
         this.originalMapView = currentView.clone;
         this.viewport = viewport;
@@ -95,6 +92,7 @@ export class View {
         this.origin = new Point();
         this.eventManager = new Publisher();
         this.limitToBounds = limitToBounds || bounds;
+        this.isInitialized = false;
 
         const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
         this.currentView.position(newCenter.x, newCenter.y);
@@ -108,12 +106,12 @@ export class View {
             zoom: this.zoomFactor
         };
 
-        this.drawIsNeeded = true;
+        return this.zoom(0, this.viewport.center).loadThumb();
+    }
 
-        this.initializeTiles().loadThumb();
-
-        this.zoom(0, this.viewport.center);
-
+    init() {
+        this.initializeTiles();
+        this.isInitialized = true;
         return this;
     }
 
@@ -124,19 +122,6 @@ export class View {
         this.setLatLngToPosition(this.initial.position, this.viewport.center);
         const delta = this.initial.zoom - this.zoomFactor;
         this.zoom(delta, this.viewport.center);
-    }
-
-    /**
-     * main draw call
-     */
-    mainLoop() {
-        if (this.drawIsNeeded) {
-            this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
-            this.checkBoundaries();
-            this.draw();
-            this.drawIsNeeded = false;
-        }
-        window.requestAnimFrame(() => this.mainLoop());
     }
 
     checkBoundaries() {
@@ -183,7 +168,6 @@ export class View {
         Helper.loadImage(this.data.thumb, (img) => {
             this.thumb = img;
             this.eventManager.publish(Events.View.THUMB_LOADED);
-            window.requestAnimFrame(this.mainLoop.bind(this));
         });
         return this;
     }
@@ -257,11 +241,11 @@ export class View {
         this.moveView(new Point());
 
         if (this.zoomFactor >= this.maxZoom) {
-            this.eventManager.publish(Events.TileMap.NEXT_LEVEL, [this.center, this.bounds]);
+            this.eventManager.publish(Events.TileMap.NEXT_LEVEL);
         } else if (this.zoomFactor <= this.minZoom) {
-            this.eventManager.publish(Events.TileMap.PREVIOUS_LEVEL, [this.center, this.bounds]);
+            this.eventManager.publish(Events.TileMap.PREVIOUS_LEVEL);
         }
-        this.drawIsNeeded = true;
+
         return this;
     }
 
@@ -302,8 +286,7 @@ export class View {
      */
     draw() {
         return this.drawThumbnail()
-            .drawVisibleTiles()
-            .repositionMarkerContainer();
+            .drawVisibleTiles();
     }
 
     /**
@@ -320,8 +303,10 @@ export class View {
      * @return {View} instance of View for chaining
      */
     drawThumbnail() {
-        const rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
-        this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
+        if (this.thumb) {
+            const rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+            this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
+        }
         return this;
     }
 
@@ -337,34 +322,6 @@ export class View {
         return this;
     }
 
-    /**
-     * reposition marker container
-     * @return {View} instance of View for chaining
-     */
-    repositionMarkerContainer() {
-        if (this.$markerContainer) {
-            const newSize = this.currentView.getDistortedRect(this.distortionFactor);
-            this.$markerContainer.css({
-               "width": `${newSize.width}px`,
-               "height": `${newSize.height}px`,
-               "left": `${newSize.left + this.offsetToCenter}px`,
-               "top": `${newSize.top}px`
-            });
-        }
-        return this;
-    }
+
 
 }
-
-/**
- * request animation frame browser polyfill
- * @return {Function} supported requestAnimationFrame-function
- */
-window.requestAnimFrame = (function(){
-  return window.requestAnimationFrame       ||
-         window.webkitRequestAnimationFrame ||
-         window.mozRequestAnimationFrame    ||
-         function( callback ){
-             window.setTimeout(callback, 1000 / 60);
-         };
-})();

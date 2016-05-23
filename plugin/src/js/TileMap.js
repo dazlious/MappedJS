@@ -57,6 +57,10 @@ export class TileMap {
         return this.levelHandler.current.value;
     }
 
+    get view() {
+        return this.levelHandler.current.instance;
+    }
+
     /**
      * @constructor
      * @param  {Object} container = null - jQuery-object holding the container
@@ -84,18 +88,6 @@ export class TileMap {
         this.levels = [];
         this.clusterHandlingTimeout = null;
 
-        Helper.forEach(this.imgData, (element, i) => {
-            const currentLevel = {
-                value: element,
-                description: i
-            };
-            this.levels.push(currentLevel);
-        });
-
-        this.levelHandler = new StateHandler(this.levels);
-        this.levelHandler.changeTo(this.settings.level);
-        this.eventManager = new Publisher();
-
         this.initial = {
             bounds: settings.bounds,
             center: settings.center,
@@ -103,38 +95,46 @@ export class TileMap {
             zoom: settings.zoom
         };
 
-        return this.appendMarkerContainerToDom().initialize(settings.bounds, settings.center, this.currentLevelData);
-    }
+        this.initializeCanvas();
 
-    /**
-     * initializes the TileMap
-     * @param {Bounds} bounds - specified boundaries
-     * @param {LatLng} center - specified center
-     * @param {object} data - specified data
-     * @return {TileMap} instance of TileMap for chaining
-     */
-    initialize(bounds, center, data) {
-        this.initializeCanvas()
-            .bindEvents();
-        this.views = this.initializeAllViews();
-        this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
+        Helper.forEach(this.imgData, (element, i) => {
+            const currentLevel = {
+                value: element,
+                description: i,
+                instance: this.createViewFromData(settings.bounds, settings.center, element, settings.zoom)
+            };
+            this.levels.push(currentLevel);
+        });
+
+        this.levelHandler = new StateHandler(this.levels);
+        this.levelHandler.changeTo(this.settings.level);
+        this.view.init();
+
+        this.eventManager = new Publisher();
+
+        this.drawIsNeeded = false;
+
+        this.appendMarkerContainerToDom();
+
+        this.bindEvents();
         this.stateHandler.next();
-        return this.resizeCanvas();
-    }
+        this.resizeCanvas();
 
-    // TODO
-    initializeAllViews() {
+        window.requestAnimFrame(this.mainLoop.bind(this));
 
+        return this;
     }
 
     /**
      * resets view to initial state
      */
     reset() {
-        if (this.levelHandler.hasPrevious()) {
-            this.levelHandler.changeTo(0);
-            this.view = this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
-        } else this.view.reset();
+        if (this.levelHandler.current.description !== this.settings.level) {
+            this.levelHandler.changeTo(this.settings.level);
+
+        }
+        this.view.reset();
+        this.redraw();
         this.clusterHandler();
     }
 
@@ -158,10 +158,26 @@ export class TileMap {
             currentZoom: zoom,
             minZoom: (data.zoom) ? data.zoom.min : 1,
             $container: this.$container,
-            $markerContainer: this.$markerContainer,
             context: this.canvasContext,
             limitToBounds: this.settings.limitToBounds
         });
+    }
+
+    /**
+     * reposition marker container
+     * @return {View} instance of View for chaining
+     */
+    repositionMarkerContainer() {
+        if (this.$markerContainer) {
+            const newSize = this.view.currentView.getDistortedRect(this.view.distortionFactor);
+            this.$markerContainer.css({
+               "width": `${newSize.width}px`,
+               "height": `${newSize.height}px`,
+               "left": `${newSize.left + this.view.offsetToCenter}px`,
+               "top": `${newSize.top}px`
+            });
+        }
+        return this;
     }
 
     /**
@@ -183,7 +199,7 @@ export class TileMap {
             let markers = [];
             this.markerData = this.enrichMarkerData(this.markerData);
             Helper.forEach(this.markerData, (currentData) => {
-                markers.push(new Marker(currentData, this.view));
+                markers.push(new Marker(currentData, this));
             });
             markers = markers.sort((a, b) => ((b.latlng.lat - a.latlng.lat !== 0) ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng));
             Helper.forEach(markers, (marker, i) => {
@@ -233,6 +249,7 @@ export class TileMap {
         this.eventManager.subscribe(Events.TileMap.RESIZE, () => { this.resize(); });
 
         this.eventManager.subscribe(Events.View.THUMB_LOADED, () => {
+            this.redraw();
             if (this.stateHandler.current.value < 2) this.initializeMarkers();
         });
 
@@ -241,31 +258,47 @@ export class TileMap {
             this.zoom(zoomIncrease, bounds.center);
         });
 
-        this.eventManager.subscribe(Events.TileMap.NEXT_LEVEL, (argument_array) => {
-            const center = argument_array[0],
-                  bounds = argument_array[1],
-                  lastLevel = this.levelHandler.current.description;
+        this.eventManager.subscribe(Events.TileMap.NEXT_LEVEL, () => {
+            const lastLevel = this.levelHandler.current.description,
+                  lastCenter = this.view.currentView.center;
 
-            this.levelHandler.next();
+            this.changelevel(1);
 
             if (lastLevel !== this.levelHandler.current.description) {
-                this.view = this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.min + 0.0000001);
+                this.setViewToOldView(lastCenter, 0.000000000000001, this.view.minZoom);
             }
         });
 
-        this.eventManager.subscribe(Events.TileMap.PREVIOUS_LEVEL, (argument_array) => {
-            const center = argument_array[0],
-                  bounds = argument_array[1],
-                  lastLevel = this.levelHandler.current.description;
+        this.eventManager.subscribe(Events.TileMap.PREVIOUS_LEVEL, () => {
+            const lastLevel = this.levelHandler.current.description,
+                  lastCenter = this.view.currentView.center;
 
-            this.levelHandler.previous();
+            this.changelevel(-1);
 
             if (lastLevel !== this.levelHandler.current.description) {
-                this.view = this.createViewFromData(bounds, center.multiply(-1), this.currentLevelData, this.currentLevelData.zoom.max - 0.0000001);
+                this.setViewToOldView(lastCenter, -0.000000000000001, this.view.maxZoom);
             }
         });
 
         return this;
+    }
+
+    setViewToOldView(center, zoomDiff, zoom) {
+        this.view.zoomFactor = zoom;
+        this.view.zoom(zoomDiff, this.view.viewport.center);
+        this.view.currentView.setCenter(center);
+        this.drawIsNeeded = true;
+    }
+
+    changelevel(direction) {
+        if (direction < 0) {
+            this.levelHandler.previous();
+        } else {
+            this.levelHandler.next();
+        }
+        if (!this.view.isInitialized) {
+            this.view.init();
+        }
     }
 
     /**
@@ -285,7 +318,7 @@ export class TileMap {
      * @return {TileMap} instance of TileMap for chaining
      */
     redraw() {
-        this.view.drawIsNeeded = true;
+        this.drawIsNeeded = true;
         return this;
     }
 
@@ -306,7 +339,7 @@ export class TileMap {
      */
     moveView(delta) {
         this.view.moveView(delta);
-        this.view.drawIsNeeded = true;
+        this.redraw();
         return this;
     }
 
@@ -320,7 +353,7 @@ export class TileMap {
         if (factor !== 0) {
             this.view.zoom(factor, position);
             this.clusterHandler();
-            this.view.drawIsNeeded = true;
+            this.redraw();
         }
         return this;
     }
@@ -335,7 +368,7 @@ export class TileMap {
             } else {
                 this.eventManager.publish(Events.MarkerClusterer.UNCLUSTERIZE);
             }
-        }, 300);
+        }, 150);
     }
 
     /**
@@ -360,4 +393,31 @@ export class TileMap {
         return this;
     }
 
+    /**
+     * main draw call
+     */
+    mainLoop() {
+        if (this.drawIsNeeded) {
+            this.canvasContext.clearRect(0, 0, this.width, this.height);
+            this.view.checkBoundaries();
+            this.view.draw();
+            this.repositionMarkerContainer();
+            this.drawIsNeeded = false;
+        }
+        window.requestAnimFrame(() => this.mainLoop());
+    }
+
 }
+
+/**
+ * request animation frame browser polyfill
+ * @return {Function} supported requestAnimationFrame-function
+ */
+window.requestAnimFrame = (function(){
+  return window.requestAnimationFrame       ||
+         window.webkitRequestAnimationFrame ||
+         window.mozRequestAnimationFrame    ||
+         function( callback ){
+             window.setTimeout(callback, 1000 / 60);
+         };
+})();

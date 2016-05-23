@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './StateHandler.js', './MarkerClusterer.js'], factory);
+        define(['exports', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './MarkerClusterer.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./MarkerClusterer.js'));
+        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./MarkerClusterer.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Helper, global.Events, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.StateHandler, global.MarkerClusterer);
+        factory(mod.exports, global.Helper, global.Events, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.MarkerClusterer);
         global.View = mod.exports;
     }
-})(this, function(exports, _Helper, _Events, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher, _StateHandler, _MarkerClusterer) {
+})(this, function(exports, _Helper, _Events, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher, _MarkerClusterer) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -135,13 +135,10 @@
             var currentZoom = _ref$currentZoom === undefined ? 1 : _ref$currentZoom;
             var _ref$minZoom = _ref.minZoom;
             var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
-            var _ref$$markerContainer = _ref.$markerContainer;
-            var $markerContainer = _ref$$markerContainer === undefined ? null : _ref$$markerContainer;
             var limitToBounds = _ref.limitToBounds;
 
             _classCallCheck(this, View);
 
-            this.$markerContainer = $markerContainer;
             this.currentView = currentView;
             this.originalMapView = currentView.clone;
             this.viewport = viewport;
@@ -153,6 +150,7 @@
             this.origin = new _Point.Point();
             this.eventManager = new _Publisher.Publisher();
             this.limitToBounds = limitToBounds || bounds;
+            this.isInitialized = false;
 
             var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
             this.currentView.position(newCenter.x, newCenter.y);
@@ -166,46 +164,27 @@
                 zoom: this.zoomFactor
             };
 
-            this.drawIsNeeded = true;
-
-            this.initializeTiles().loadThumb();
-
-            this.zoom(0, this.viewport.center);
-
-            return this;
+            return this.zoom(0, this.viewport.center).loadThumb();
         }
 
-        /**
-         * resets current View to its initial position
-         */
-
-
         _createClass(View, [{
+            key: 'init',
+            value: function init() {
+                this.initializeTiles();
+                this.isInitialized = true;
+                return this;
+            }
+
+            /**
+             * resets current View to its initial position
+             */
+
+        }, {
             key: 'reset',
             value: function reset() {
                 this.setLatLngToPosition(this.initial.position, this.viewport.center);
                 var delta = this.initial.zoom - this.zoomFactor;
                 this.zoom(delta, this.viewport.center);
-            }
-
-            /**
-             * main draw call
-             */
-
-        }, {
-            key: 'mainLoop',
-            value: function mainLoop() {
-                var _this2 = this;
-
-                if (this.drawIsNeeded) {
-                    this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
-                    this.checkBoundaries();
-                    this.draw();
-                    this.drawIsNeeded = false;
-                }
-                window.requestAnimFrame(function() {
-                    return _this2.mainLoop();
-                });
             }
         }, {
             key: 'checkBoundaries',
@@ -253,12 +232,11 @@
         }, {
             key: 'loadThumb',
             value: function loadThumb() {
-                var _this3 = this;
+                var _this2 = this;
 
                 _Helper.Helper.loadImage(this.data.thumb, function(img) {
-                    _this3.thumb = img;
-                    _this3.eventManager.publish(_Events.Events.View.THUMB_LOADED);
-                    window.requestAnimFrame(_this3.mainLoop.bind(_this3));
+                    _this2.thumb = img;
+                    _this2.eventManager.publish(_Events.Events.View.THUMB_LOADED);
                 });
                 return this;
             }
@@ -347,11 +325,11 @@
                 this.moveView(new _Point.Point());
 
                 if (this.zoomFactor >= this.maxZoom) {
-                    this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL, [this.center, this.bounds]);
+                    this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
                 } else if (this.zoomFactor <= this.minZoom) {
-                    this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL, [this.center, this.bounds]);
+                    this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
                 }
-                this.drawIsNeeded = true;
+
                 return this;
             }
 
@@ -403,7 +381,7 @@
         }, {
             key: 'draw',
             value: function draw() {
-                return this.drawThumbnail().drawVisibleTiles().repositionMarkerContainer();
+                return this.drawThumbnail().drawVisibleTiles();
             }
 
             /**
@@ -428,8 +406,10 @@
         }, {
             key: 'drawThumbnail',
             value: function drawThumbnail() {
-                var rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
-                this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
+                if (this.thumb) {
+                    var rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+                    this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
+                }
                 return this;
             }
 
@@ -441,46 +421,16 @@
         }, {
             key: 'initializeTiles',
             value: function initializeTiles() {
-                var _this4 = this;
+                var _this3 = this;
 
                 var currentLevel = this.data.tiles;
                 _Helper.Helper.forEach(currentLevel, function(currentTileData) {
-                    _this4.tiles.push(new _Tile.Tile(currentTileData, _this4));
+                    _this3.tiles.push(new _Tile.Tile(currentTileData, _this3));
                 });
-                return this;
-            }
-
-            /**
-             * reposition marker container
-             * @return {View} instance of View for chaining
-             */
-
-        }, {
-            key: 'repositionMarkerContainer',
-            value: function repositionMarkerContainer() {
-                if (this.$markerContainer) {
-                    var newSize = this.currentView.getDistortedRect(this.distortionFactor);
-                    this.$markerContainer.css({
-                        "width": newSize.width + 'px',
-                        "height": newSize.height + 'px',
-                        "left": newSize.left + this.offsetToCenter + 'px',
-                        "top": newSize.top + 'px'
-                    });
-                }
                 return this;
             }
         }]);
 
         return View;
-    }();
-
-    /**
-     * request animation frame browser polyfill
-     * @return {Function} supported requestAnimationFrame-function
-     */
-    window.requestAnimFrame = function() {
-        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function(callback) {
-            window.setTimeout(callback, 1000 / 60);
-        };
     }();
 });
