@@ -155,7 +155,9 @@
                 description: "tooltip-initialized"
             }]);
 
-            this.templates = _DataEnrichment.DataEnrichment.tooltip(this.settings.tooltip.templates);
+            if (this.settings.tooltip && this.settings.tooltip.templates) {
+                this.templates = _DataEnrichment.DataEnrichment.tooltip(this.settings.tooltip.templates);
+            }
 
             this.levels = [];
             this.clusterHandlingTimeout = null;

@@ -115,7 +115,7 @@ Helper for general purposes
     * [.loadImage(cb)](#module_Helper.loadImage) ⇒ <code>Helper</code>
     * [.getFile(url, callback)](#module_Helper.getFile) ⇒ <code>Helper</code>
     * [.forEach(a, cb)](#module_Helper.forEach) ⇒ <code>Helper</code>
-    * [.easeOutQuadratic(t, b, c, d)](#module_Helper.easeOutQuadratic) ⇒ <code>number</code>
+    * [.linearEase(t, b, c, d)](#module_Helper.linearEase) ⇒ <code>number</code>
     * [.toRadians(degrees)](#module_Helper.toRadians) ⇒ <code>number</code>
     * [.isMouse()](#module_Helper.isMouse) ⇒ <code>Boolean</code>
     * [.isTouch()](#module_Helper.isTouch) ⇒ <code>Boolean</code>
@@ -169,13 +169,13 @@ for each helper
 - a <code>Array.&lt;Object&gt;</code> - array to iterate over each value
 - cb <code>Helper~forEachCallback</code> - callback for each object
 
-<a name="module_Helper.easeOutQuadratic"></a>
+<a name="module_Helper.linearEase"></a>
 
-### Helper.easeOutQuadratic(t, b, c, d) ⇒ <code>number</code>
-formula for quadratic ease out
+### Helper.linearEase(t, b, c, d) ⇒ <code>number</code>
+formula for linear easing
 
 **Kind**: static method of <code>[Helper](#module_Helper)</code>  
-**Returns**: <code>number</code> - quadratic value at specific time  
+**Returns**: <code>number</code> - linear value at specific time  
 **Params**
 
 - t <code>number</code> - current time

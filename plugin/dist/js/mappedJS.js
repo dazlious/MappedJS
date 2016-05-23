@@ -251,7 +251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    pan: function pan(data) {
 	                        if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
 	                        var change = data.last.position.clone.substract(data.position.move);
-	                        _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
+	                        _this2.move(_this2.getAbsolutePosition(change).multiply(-1, -1));
 	                    },
 	                    wheel: function wheel(data) {
 	                        var factor = data.delta / 4;
@@ -266,7 +266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    },
 	                    flick: function flick(data) {
 	                        var direction = new _Point.Point(data.directions[0], data.directions[1]),
-	                            velocity = direction.clone.divide(data.speed).multiply(20);
+	                            velocity = direction.clone.divide(data.speed).multiply(10);
 	                        _this2.momentumAccerlation(velocity);
 	                    }
 	                }
@@ -319,7 +319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'zoomInToCenter',
 	        value: function zoomInToCenter() {
-	            this.tileMap.zoom(0.1, this.tileMap.view.viewport.center);
+	            this.tileMap.zoom(0.2, this.tileMap.view.viewport.center);
 	            return this;
 	        }
 
@@ -331,7 +331,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'zoomOutToCenter',
 	        value: function zoomOutToCenter() {
-	            this.tileMap.zoom(-0.1, this.tileMap.view.viewport.center);
+	            this.tileMap.zoom(-0.2, this.tileMap.view.viewport.center);
 	            return this;
 	        }
 
@@ -392,8 +392,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'handleMovementByKeys',
 	        value: function handleMovementByKeys(direction) {
 	            this.keyTicks++;
-	            this.tileMap.moveView(direction.multiply(this.keyTicks));
+	            this.move(direction.multiply(this.keyTicks));
 	            return this;
+	        }
+	    }, {
+	        key: 'move',
+	        value: function move(delta) {
+	            if (this.momentum) this.momentum = clearTimeout(this.momentum);
+	            this.tileMap.moveView(delta);
 	        }
 	    }, {
 	        key: 'keyRelease',
@@ -410,8 +416,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'momentumAccerlation',
 	        value: function momentumAccerlation(velocity) {
-	            this.maxMomentumSteps = 30;
-	            this.triggerMomentum(this.maxMomentumSteps, 10, velocity.multiply(-1));
+	            this.maxMomentumSteps = 90;
+	            if (this.momentum) this.momentum = clearTimeout(this.momentum);
+	            this.triggerMomentum(this.maxMomentumSteps, 1 / 60, velocity.multiply(-1));
 	            return this;
 	        }
 
@@ -430,8 +437,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.momentum = setTimeout(function () {
 	                steps--;
-	                var delta = _Helper.Helper.easeOutQuadratic((_this3.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * _this3.maxMomentumSteps);
-	                _this3.tileMap.moveView(delta);
+	                var delta = _Helper.Helper.linearEase((_this3.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * _this3.maxMomentumSteps);
+	                _this3.move(delta);
 	                if (steps >= 0) _this3.triggerMomentum(steps, timing, change);
 	            }, timing);
 	            return this;
@@ -559,18 +566,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    /**
-	     * formula for quadratic ease out
+	     * formula for linear easing
 	     * @function
 	     * @memberof module:Helper
 	     * @param  {number} t - current time
 	     * @param  {Point} b - start value
 	     * @param  {Point} c - total difference to start
 	     * @param  {number} d - duration
-	     * @return {number} quadratic value at specific time
+	     * @return {number} linear value at specific time
 	     */
-	    easeOutQuadratic: function easeOutQuadratic(t, b, c, d) {
-	        t /= d;
-	        return c.clone.multiply(-1 * t * (t - 2)).add(b);
+	    linearEase: function linearEase(t, b, c, d) {
+	        return c.clone.multiply(t).divide(d).add(b);
 	    },
 
 	    /**
@@ -880,7 +886,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.stateHandler = new _StateHandler.StateHandler([{ value: 0, description: "start" }, { value: 1, description: "view-initialized" }, { value: 2, description: "marker-initialized" }, { value: 3, description: "tooltip-initialized" }]);
 
-	        this.templates = _DataEnrichment.DataEnrichment.tooltip(this.settings.tooltip.templates);
+	        if (this.settings.tooltip && this.settings.tooltip.templates) {
+	            this.templates = _DataEnrichment.DataEnrichment.tooltip(this.settings.tooltip.templates);
+	        }
 
 	        this.levels = [];
 	        this.clusterHandlingTimeout = null;

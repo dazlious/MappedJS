@@ -129,7 +129,7 @@ export class MappedJS {
                 pan: (data) => {
                     if ($(data.target).hasClass("control")) return false;
                     const change = data.last.position.clone.substract(data.position.move);
-                    this.tileMap.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
+                    this.move(this.getAbsolutePosition(change).multiply(-1, -1));
                 },
                 wheel: (data) => {
                     const factor = data.delta / 4;
@@ -144,7 +144,7 @@ export class MappedJS {
                 },
                 flick: (data) => {
                     const direction = new Point(data.directions[0], data.directions[1]),
-                          velocity = direction.clone.divide(data.speed).multiply(20);
+                          velocity = direction.clone.divide(data.speed).multiply(10);
                     this.momentumAccerlation(velocity);
 
                 }
@@ -189,7 +189,7 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     zoomInToCenter() {
-        this.tileMap.zoom(0.1, this.tileMap.view.viewport.center);
+        this.tileMap.zoom(0.2, this.tileMap.view.viewport.center);
         return this;
     }
 
@@ -198,7 +198,7 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     zoomOutToCenter() {
-        this.tileMap.zoom(-0.1, this.tileMap.view.viewport.center);
+        this.tileMap.zoom(-0.2, this.tileMap.view.viewport.center);
         return this;
     }
 
@@ -246,8 +246,13 @@ export class MappedJS {
      */
     handleMovementByKeys(direction) {
         this.keyTicks++;
-        this.tileMap.moveView(direction.multiply(this.keyTicks));
+        this.move(direction.multiply(this.keyTicks));
         return this;
+    }
+
+    move(delta) {
+        if (this.momentum) this.momentum = clearTimeout(this.momentum);
+        this.tileMap.moveView(delta);
     }
 
     keyRelease() {
@@ -260,8 +265,9 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     momentumAccerlation(velocity) {
-        this.maxMomentumSteps = 30;
-        this.triggerMomentum(this.maxMomentumSteps, 10, velocity.multiply(-1));
+        this.maxMomentumSteps = 90;
+        if (this.momentum) this.momentum = clearTimeout(this.momentum);
+        this.triggerMomentum(this.maxMomentumSteps, 1/60, velocity.multiply(-1));
         return this;
     }
 
@@ -275,8 +281,8 @@ export class MappedJS {
     triggerMomentum(steps, timing, change) {
         this.momentum = setTimeout(() => {
             steps--;
-            const delta = Helper.easeOutQuadratic((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
-            this.tileMap.moveView(delta);
+            const delta = Helper.linearEase((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
+            this.move(delta);
             if (steps >= 0) this.triggerMomentum(steps, timing, change);
         }, timing);
         return this;

@@ -83,7 +83,9 @@ export class TileMap {
             {value: 3, description: "tooltip-initialized"}
         ]);
 
-        this.templates = DataEnrichment.tooltip(this.settings.tooltip.templates);
+        if (this.settings.tooltip && this.settings.tooltip.templates) {
+            this.templates = DataEnrichment.tooltip(this.settings.tooltip.templates);
+        }
 
         this.levels = [];
         this.clusterHandlingTimeout = null;
