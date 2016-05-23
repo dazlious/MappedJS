@@ -371,8 +371,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    // minus numpad
 	                    this.zoomOutToCenter();
 	                    break;
-	                case 72:
-	                    // home
+	                case 72: // h
+	                case 27:
+	                    // esc
 	                    this.resetToInitialState();
 	                    break;
 	                default:
