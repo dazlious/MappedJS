@@ -93,7 +93,7 @@
 <p><a name="module_DataEnrichment"></a></p>
 <h2 id="dataenrichment">DataEnrichment</h2>
 <p>enriches delivered data with default values</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x6d;&#100;&#117;&#x76;&#x65;&#64;&#100;&#x65;&#x73;&#x69;&#x67;&#110;&#x6d;&#97;&#105;&#x6c;&#46;&#x6e;&#x65;&#116;">&#x6d;&#100;&#117;&#x76;&#x65;&#64;&#100;&#x65;&#x73;&#x69;&#x67;&#110;&#x6d;&#97;&#105;&#x6c;&#46;&#x6e;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x6d;&#x64;&#x75;&#x76;&#101;&#x40;&#x64;&#x65;&#115;&#x69;&#x67;&#x6e;&#109;&#x61;&#105;&#108;&#x2e;&#x6e;&#x65;&#x74;">&#x6d;&#x64;&#x75;&#x76;&#101;&#x40;&#x64;&#x65;&#115;&#x69;&#x67;&#x6e;&#109;&#x61;&#105;&#108;&#x2e;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_DataEnrichment">DataEnrichment</a><ul>
 <li><a href="#module_DataEnrichment.marker">.marker(data)</a> ⇒ <code>object</code></li>
@@ -118,7 +118,7 @@
 <p><a name="module_Helper"></a></p>
 <h2 id="helper">Helper</h2>
 <p>Helper for general purposes</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#x6d;&#100;&#117;&#118;&#x65;&#x40;&#x64;&#101;&#115;&#x69;&#103;&#x6e;&#x6d;&#x61;&#x69;&#108;&#46;&#110;&#101;&#x74;">&#x6d;&#100;&#117;&#118;&#x65;&#x40;&#x64;&#101;&#115;&#x69;&#103;&#x6e;&#x6d;&#x61;&#x69;&#108;&#46;&#110;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#x6d;&#x64;&#117;&#x76;&#x65;&#64;&#100;&#x65;&#115;&#x69;&#x67;&#x6e;&#x6d;&#97;&#105;&#108;&#46;&#x6e;&#x65;&#x74;">&#x6d;&#x64;&#117;&#x76;&#x65;&#64;&#100;&#x65;&#115;&#x69;&#x67;&#x6e;&#x6d;&#97;&#105;&#108;&#46;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_Helper">Helper</a><ul>
 <li><a href="#module_Helper.requestJSON">.requestJSON(filename, callback)</a> ⇒ <code>Helper</code></li>
@@ -1403,9 +1403,9 @@
 <li><a href="#TileMap+width">.width</a> ⇒ <code>number</code></li>
 <li><a href="#TileMap+height">.height</a> ⇒ <code>number</code></li>
 <li><a href="#TileMap+currentLevelData">.currentLevelData</a> ⇒ <code>Object</code></li>
-<li><a href="#TileMap+initialize">.initialize(bounds, center, data)</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+reset">.reset()</a></li>
 <li><a href="#TileMap+createViewFromData">.createViewFromData(bounds, center, data, zoom)</a> ⇒ <code><a href="#View">View</a></code></li>
+<li><a href="#TileMap+repositionMarkerContainer">.repositionMarkerContainer()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#TileMap+enrichMarkerData">.enrichMarkerData(markerData)</a> ⇒ <code>Object</code></li>
 <li><a href="#TileMap+initializeMarkers">.initializeMarkers(markerData)</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+appendMarkerContainerToDom">.appendMarkerContainerToDom()</a></li>
@@ -1418,6 +1418,7 @@
 <li><a href="#TileMap+zoom">.zoom(factor, position)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#TileMap+resizeCanvas">.resizeCanvas()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
 <li><a href="#TileMap+resizeView">.resizeView()</a> ⇒ <code><a href="#TileMap">TileMap</a></code></li>
+<li><a href="#TileMap+mainLoop">.mainLoop()</a></li>
 </ul>
 </li>
 </ul>
@@ -1444,16 +1445,7 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>number</code> - - height of container<br><a name="TileMap+currentLevelData"></a></p>
 <h3 id="tilemap-currentleveldata-code-object-code-">tileMap.currentLevelData ⇒ <code>Object</code></h3>
 <p>gets data of current zoom level</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>Object</code> - data for current level as json<br><a name="TileMap+initialize"></a></p>
-<h3 id="tilemap-initialize-bounds-center-data-code-tilemap-tilemap-code-">tileMap.initialize(bounds, center, data) ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
-<p>initializes the TileMap</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><strong>Params</strong></p>
-<ul>
-<li>bounds <code><a href="#Bounds">Bounds</a></code> - specified boundaries</li>
-<li>center <code><a href="#LatLng">LatLng</a></code> - specified center</li>
-<li>data <code>object</code> - specified data</li>
-</ul>
-<p><a name="TileMap+reset"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>Object</code> - data for current level as json<br><a name="TileMap+reset"></a></p>
 <h3 id="tilemap-reset-">tileMap.reset()</h3>
 <p>resets view to initial state</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><a name="TileMap+createViewFromData"></a></p>
@@ -1466,7 +1458,10 @@
 <li>data <code>object</code> - specified data</li>
 <li>zoom <code>number</code> - initial zoom level</li>
 </ul>
-<p><a name="TileMap+enrichMarkerData"></a></p>
+<p><a name="TileMap+repositionMarkerContainer"></a></p>
+<h3 id="tilemap-repositionmarkercontainer-code-view-view-code-">tileMap.repositionMarkerContainer() ⇒ <code><a href="#View">View</a></code></h3>
+<p>reposition marker container</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="TileMap+enrichMarkerData"></a></p>
 <h3 id="tilemap-enrichmarkerdata-markerdata-code-object-code-">tileMap.enrichMarkerData(markerData) ⇒ <code>Object</code></h3>
 <p>enrich marker data</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code>Object</code> - enriched marker data<br><strong>Params</strong></p>
@@ -1520,7 +1515,10 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+resizeView"></a></p>
 <h3 id="tilemap-resizeview-code-tilemap-tilemap-code-">tileMap.resizeView() ⇒ <code><a href="#TileMap">TileMap</a></code></h3>
 <p>Handles resizing of view</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="ToolTip"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+mainLoop"></a></p>
+<h3 id="tilemap-mainloop-">tileMap.mainLoop()</h3>
+<p>main draw call</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><a name="ToolTip"></a></p>
 <h2 id="tooltip">ToolTip</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
@@ -1599,7 +1597,6 @@
 <li><a href="#View+visibleTiles">.visibleTiles</a> ⇒ <code>array</code></li>
 <li><a href="#View+pixelPerLatLng">.pixelPerLatLng</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#View+reset">.reset()</a></li>
-<li><a href="#View+mainLoop">.mainLoop()</a></li>
 <li><a href="#View+loadThumb">.loadThumb()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+convertPointToLatLng">.convertPointToLatLng(point)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
 <li><a href="#View+setLatLngToPosition">.setLatLngToPosition(latlng, position)</a> ⇒ <code><a href="#View">View</a></code></li>
@@ -1613,7 +1610,6 @@
 <li><a href="#View+drawVisibleTiles">.drawVisibleTiles()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+drawThumbnail">.drawThumbnail()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+initializeTiles">.initializeTiles()</a> ⇒ <code><a href="#View">View</a></code></li>
-<li><a href="#View+repositionMarkerContainer">.repositionMarkerContainer()</a> ⇒ <code><a href="#View">View</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1650,9 +1646,6 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - pixels per lat/lng<br><a name="View+reset"></a></p>
 <h3 id="view-reset-">view.reset()</h3>
 <p>resets current View to its initial position</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><a name="View+mainLoop"></a></p>
-<h3 id="view-mainloop-">view.mainLoop()</h3>
-<p>main draw call</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><a name="View+loadThumb"></a></p>
 <h3 id="view-loadthumb-code-view-view-code-">view.loadThumb() ⇒ <code><a href="#View">View</a></code></h3>
 <p>loads thumbnail of view</p>
@@ -1722,16 +1715,13 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="View+initializeTiles"></a></p>
 <h3 id="view-initializetiles-code-view-view-code-">view.initializeTiles() ⇒ <code><a href="#View">View</a></code></h3>
 <p>initializes tiles</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="View+repositionMarkerContainer"></a></p>
-<h3 id="view-repositionmarkercontainer-code-view-view-code-">view.repositionMarkerContainer() ⇒ <code><a href="#View">View</a></code></h3>
-<p>reposition marker container</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="instance"></a></p>
 <h2 id="instance-code-publisher-publisher-code-">instance : <code><a href="#Publisher">Publisher</a></code></h2>
 <p>singleton instance</p>
 <p><strong>Kind</strong>: global variable<br><a name="Events"></a></p>
 <h2 id="events-code-object-code-">Events : <code>object</code></h2>
 <p>Helper for naming events</p>
-<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#58;&#109;&#x64;&#117;&#x76;&#101;&#x40;&#100;&#x65;&#x73;&#105;&#103;&#110;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x6e;&#101;&#x74;">&#109;&#x64;&#117;&#x76;&#101;&#x40;&#100;&#x65;&#x73;&#105;&#103;&#110;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x6e;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x6d;&#100;&#x75;&#118;&#101;&#x40;&#x64;&#101;&#115;&#x69;&#103;&#x6e;&#x6d;&#97;&#x69;&#108;&#46;&#110;&#x65;&#x74;">&#x6d;&#100;&#x75;&#118;&#101;&#x40;&#x64;&#101;&#115;&#x69;&#103;&#x6e;&#x6d;&#97;&#x69;&#108;&#46;&#110;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#Events">Events</a> : <code>object</code><ul>
 <li><a href="#Events.ToolTip">.ToolTip</a> : <code>Object</code></li>

@@ -165,11 +165,11 @@
         }, {
             key: 'positionMarker',
             value: function positionMarker() {
-                this.position = this.instance.convertLatLngToPoint(this.latlng);
+                this.position = this.instance.view.convertLatLngToPoint(this.latlng);
                 if (this.$icon) {
                     this.$icon.css({
-                        "left": this.position.x / this.instance.currentView.width * 100 + '%',
-                        "top": this.position.y / this.instance.currentView.height * 100 + '%'
+                        "left": this.position.x / this.instance.view.currentView.width * 100 + '%',
+                        "top": this.position.y / this.instance.view.currentView.height * 100 + '%'
                     }).show();
                 }
                 return this;

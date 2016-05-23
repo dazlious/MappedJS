@@ -843,6 +843,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	            return this.levelHandler.current.value;
 	        }
+	    }, {
+	        key: 'view',
+	        get: function get() {
+	            return this.levelHandler.current.instance;
+	        }
 
 	        /**
 	         * @constructor
@@ -880,18 +885,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.levels = [];
 	        this.clusterHandlingTimeout = null;
 
-	        _Helper.Helper.forEach(this.imgData, function (element, i) {
-	            var currentLevel = {
-	                value: element,
-	                description: i
-	            };
-	            _this.levels.push(currentLevel);
-	        });
-
-	        this.levelHandler = new _StateHandler.StateHandler(this.levels);
-	        this.levelHandler.changeTo(this.settings.level);
-	        this.eventManager = new _Publisher.Publisher();
-
 	        this.initial = {
 	            bounds: settings.bounds,
 	            center: settings.center,
@@ -899,45 +892,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	            zoom: settings.zoom
 	        };
 
-	        return this.appendMarkerContainerToDom().initialize(settings.bounds, settings.center, this.currentLevelData);
+	        this.initializeCanvas();
+
+	        _Helper.Helper.forEach(this.imgData, function (element, i) {
+	            var currentLevel = {
+	                value: element,
+	                description: i,
+	                instance: _this.createViewFromData(settings.bounds, settings.center, element, settings.zoom)
+	            };
+	            _this.levels.push(currentLevel);
+	        });
+
+	        this.levelHandler = new _StateHandler.StateHandler(this.levels);
+	        this.levelHandler.changeTo(this.settings.level);
+	        this.view.init();
+
+	        this.eventManager = new _Publisher.Publisher();
+
+	        this.drawIsNeeded = false;
+
+	        this.appendMarkerContainerToDom();
+
+	        this.bindEvents();
+	        this.stateHandler.next();
+	        this.resizeCanvas();
+
+	        window.requestAnimFrame(this.mainLoop.bind(this));
+
+	        return this;
 	    }
 
 	    /**
-	     * initializes the TileMap
-	     * @param {Bounds} bounds - specified boundaries
-	     * @param {LatLng} center - specified center
-	     * @param {object} data - specified data
-	     * @return {TileMap} instance of TileMap for chaining
+	     * resets view to initial state
 	     */
 
 
 	    _createClass(TileMap, [{
-	        key: 'initialize',
-	        value: function initialize(bounds, center, data) {
-	            this.initializeCanvas().bindEvents();
-	            this.views = this.initializeAllViews();
-	            this.view = this.createViewFromData(bounds, center, data, this.settings.zoom);
-	            this.stateHandler.next();
-	            return this.resizeCanvas();
-	        }
-
-	        // TODO
-
-	    }, {
-	        key: 'initializeAllViews',
-	        value: function initializeAllViews() {}
-
-	        /**
-	         * resets view to initial state
-	         */
-
-	    }, {
 	        key: 'reset',
 	        value: function reset() {
-	            if (this.levelHandler.hasPrevious()) {
-	                this.levelHandler.changeTo(0);
-	                this.view = this.createViewFromData(this.initial.bounds, this.initial.center, this.currentLevelData, this.initial.zoom);
-	            } else this.view.reset();
+	            if (this.levelHandler.current.description !== this.settings.level) {
+	                this.levelHandler.changeTo(this.settings.level);
+	            }
+	            this.view.reset();
+	            this.redraw();
 	            this.clusterHandler();
 	        }
 
@@ -964,10 +961,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	                currentZoom: zoom,
 	                minZoom: data.zoom ? data.zoom.min : 1,
 	                $container: this.$container,
-	                $markerContainer: this.$markerContainer,
 	                context: this.canvasContext,
 	                limitToBounds: this.settings.limitToBounds
 	            });
+	        }
+
+	        /**
+	         * reposition marker container
+	         * @return {View} instance of View for chaining
+	         */
+
+	    }, {
+	        key: 'repositionMarkerContainer',
+	        value: function repositionMarkerContainer() {
+	            if (this.$markerContainer) {
+	                var newSize = this.view.currentView.getDistortedRect(this.view.distortionFactor);
+	                this.$markerContainer.css({
+	                    "width": newSize.width + 'px',
+	                    "height": newSize.height + 'px',
+	                    "left": newSize.left + this.view.offsetToCenter + 'px',
+	                    "top": newSize.top + 'px'
+	                });
+	            }
+	            return this;
 	        }
 
 	        /**
@@ -998,7 +1014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    var markers = [];
 	                    _this2.markerData = _this2.enrichMarkerData(_this2.markerData);
 	                    _Helper.Helper.forEach(_this2.markerData, function (currentData) {
-	                        markers.push(new _Marker.Marker(currentData, _this2.view));
+	                        markers.push(new _Marker.Marker(currentData, _this2));
 	                    });
 	                    markers = markers.sort(function (a, b) {
 	                        return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
@@ -1063,6 +1079,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 
 	            this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function () {
+	                _this3.redraw();
 	                if (_this3.stateHandler.current.value < 2) _this3.initializeMarkers();
 	            });
 
@@ -1071,31 +1088,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _this3.zoom(zoomIncrease, bounds.center);
 	            });
 
-	            this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function (argument_array) {
-	                var center = argument_array[0],
-	                    bounds = argument_array[1],
-	                    lastLevel = _this3.levelHandler.current.description;
+	            this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function () {
+	                var lastLevel = _this3.levelHandler.current.description,
+	                    lastCenter = _this3.view.currentView.center;
 
-	                _this3.levelHandler.next();
+	                _this3.changelevel(1);
 
 	                if (lastLevel !== _this3.levelHandler.current.description) {
-	                    _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.min + 0.0000001);
+	                    _this3.setViewToOldView(lastCenter, 0.000000000000001, _this3.view.minZoom);
 	                }
 	            });
 
-	            this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function (argument_array) {
-	                var center = argument_array[0],
-	                    bounds = argument_array[1],
-	                    lastLevel = _this3.levelHandler.current.description;
+	            this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function () {
+	                var lastLevel = _this3.levelHandler.current.description,
+	                    lastCenter = _this3.view.currentView.center;
 
-	                _this3.levelHandler.previous();
+	                _this3.changelevel(-1);
 
 	                if (lastLevel !== _this3.levelHandler.current.description) {
-	                    _this3.view = _this3.createViewFromData(bounds, center.multiply(-1), _this3.currentLevelData, _this3.currentLevelData.zoom.max - 0.0000001);
+	                    _this3.setViewToOldView(lastCenter, -0.000000000000001, _this3.view.maxZoom);
 	                }
 	            });
 
 	            return this;
+	        }
+	    }, {
+	        key: 'setViewToOldView',
+	        value: function setViewToOldView(center, zoomDiff, zoom) {
+	            this.view.zoomFactor = zoom;
+	            this.view.zoom(zoomDiff, this.view.viewport.center);
+	            this.view.currentView.setCenter(center);
+	            this.drawIsNeeded = true;
+	        }
+	    }, {
+	        key: 'changelevel',
+	        value: function changelevel(direction) {
+	            if (direction < 0) {
+	                this.levelHandler.previous();
+	            } else {
+	                this.levelHandler.next();
+	            }
+	            if (!this.view.isInitialized) {
+	                this.view.init();
+	            }
 	        }
 
 	        /**
@@ -1121,7 +1156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'redraw',
 	        value: function redraw() {
-	            this.view.drawIsNeeded = true;
+	            this.drawIsNeeded = true;
 	            return this;
 	        }
 
@@ -1146,7 +1181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'moveView',
 	        value: function moveView(delta) {
 	            this.view.moveView(delta);
-	            this.view.drawIsNeeded = true;
+	            this.redraw();
 	            return this;
 	        }
 
@@ -1163,7 +1198,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (factor !== 0) {
 	                this.view.zoom(factor, position);
 	                this.clusterHandler();
-	                this.view.drawIsNeeded = true;
+	                this.redraw();
 	            }
 	            return this;
 	        }
@@ -1181,7 +1216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } else {
 	                    _this4.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
 	                }
-	            }, 300);
+	            }, 150);
 	        }
 
 	        /**
@@ -1211,9 +1246,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.view.currentView.translate(delta.x, delta.y);
 	            return this;
 	        }
+
+	        /**
+	         * main draw call
+	         */
+
+	    }, {
+	        key: 'mainLoop',
+	        value: function mainLoop() {
+	            var _this5 = this;
+
+	            if (this.drawIsNeeded) {
+	                this.canvasContext.clearRect(0, 0, this.width, this.height);
+	                this.view.checkBoundaries();
+	                this.view.draw();
+	                this.repositionMarkerContainer();
+	                this.drawIsNeeded = false;
+	            }
+	            window.requestAnimFrame(function () {
+	                return _this5.mainLoop();
+	            });
+	        }
 	    }]);
 
 	    return TileMap;
+	}();
+
+	/**
+	 * request animation frame browser polyfill
+	 * @return {Function} supported requestAnimationFrame-function
+	 */
+
+
+	window.requestAnimFrame = function () {
+	    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
+	        window.setTimeout(callback, 1000 / 60);
+	    };
 	}();
 
 /***/ },
@@ -2320,8 +2388,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Publisher = __webpack_require__(5);
 
-	var _StateHandler = __webpack_require__(6);
-
 	var _MarkerClusterer = __webpack_require__(13);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2425,13 +2491,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var currentZoom = _ref$currentZoom === undefined ? 1 : _ref$currentZoom;
 	        var _ref$minZoom = _ref.minZoom;
 	        var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
-	        var _ref$$markerContainer = _ref.$markerContainer;
-	        var $markerContainer = _ref$$markerContainer === undefined ? null : _ref$$markerContainer;
 	        var limitToBounds = _ref.limitToBounds;
 
 	        _classCallCheck(this, View);
 
-	        this.$markerContainer = $markerContainer;
 	        this.currentView = currentView;
 	        this.originalMapView = currentView.clone;
 	        this.viewport = viewport;
@@ -2443,6 +2506,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.origin = new _Point.Point();
 	        this.eventManager = new _Publisher.Publisher();
 	        this.limitToBounds = limitToBounds || bounds;
+	        this.isInitialized = false;
 
 	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
 	        this.currentView.position(newCenter.x, newCenter.y);
@@ -2456,46 +2520,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	            zoom: this.zoomFactor
 	        };
 
-	        this.drawIsNeeded = true;
-
-	        this.initializeTiles().loadThumb();
-
-	        this.zoom(0, this.viewport.center);
-
-	        return this;
+	        return this.zoom(0, this.viewport.center).loadThumb();
 	    }
 
-	    /**
-	     * resets current View to its initial position
-	     */
-
-
 	    _createClass(View, [{
+	        key: 'init',
+	        value: function init() {
+	            this.initializeTiles();
+	            this.isInitialized = true;
+	            return this;
+	        }
+
+	        /**
+	         * resets current View to its initial position
+	         */
+
+	    }, {
 	        key: 'reset',
 	        value: function reset() {
 	            this.setLatLngToPosition(this.initial.position, this.viewport.center);
 	            var delta = this.initial.zoom - this.zoomFactor;
 	            this.zoom(delta, this.viewport.center);
-	        }
-
-	        /**
-	         * main draw call
-	         */
-
-	    }, {
-	        key: 'mainLoop',
-	        value: function mainLoop() {
-	            var _this2 = this;
-
-	            if (this.drawIsNeeded) {
-	                this.context.clearRect(0, 0, this.viewport.width, this.viewport.height);
-	                this.checkBoundaries();
-	                this.draw();
-	                this.drawIsNeeded = false;
-	            }
-	            window.requestAnimFrame(function () {
-	                return _this2.mainLoop();
-	            });
 	        }
 	    }, {
 	        key: 'checkBoundaries',
@@ -2543,12 +2588,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'loadThumb',
 	        value: function loadThumb() {
-	            var _this3 = this;
+	            var _this2 = this;
 
 	            _Helper.Helper.loadImage(this.data.thumb, function (img) {
-	                _this3.thumb = img;
-	                _this3.eventManager.publish(_Events.Events.View.THUMB_LOADED);
-	                window.requestAnimFrame(_this3.mainLoop.bind(_this3));
+	                _this2.thumb = img;
+	                _this2.eventManager.publish(_Events.Events.View.THUMB_LOADED);
 	            });
 	            return this;
 	        }
@@ -2637,11 +2681,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.moveView(new _Point.Point());
 
 	            if (this.zoomFactor >= this.maxZoom) {
-	                this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL, [this.center, this.bounds]);
+	                this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
 	            } else if (this.zoomFactor <= this.minZoom) {
-	                this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL, [this.center, this.bounds]);
+	                this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
 	            }
-	            this.drawIsNeeded = true;
+
 	            return this;
 	        }
 
@@ -2693,7 +2737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'draw',
 	        value: function draw() {
-	            return this.drawThumbnail().drawVisibleTiles().repositionMarkerContainer();
+	            return this.drawThumbnail().drawVisibleTiles();
 	        }
 
 	        /**
@@ -2718,8 +2762,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'drawThumbnail',
 	        value: function drawThumbnail() {
-	            var rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
-	            this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
+	            if (this.thumb) {
+	                var rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+	                this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
+	            }
 	            return this;
 	        }
 
@@ -2731,49 +2777,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'initializeTiles',
 	        value: function initializeTiles() {
-	            var _this4 = this;
+	            var _this3 = this;
 
 	            var currentLevel = this.data.tiles;
 	            _Helper.Helper.forEach(currentLevel, function (currentTileData) {
-	                _this4.tiles.push(new _Tile.Tile(currentTileData, _this4));
+	                _this3.tiles.push(new _Tile.Tile(currentTileData, _this3));
 	            });
-	            return this;
-	        }
-
-	        /**
-	         * reposition marker container
-	         * @return {View} instance of View for chaining
-	         */
-
-	    }, {
-	        key: 'repositionMarkerContainer',
-	        value: function repositionMarkerContainer() {
-	            if (this.$markerContainer) {
-	                var newSize = this.currentView.getDistortedRect(this.distortionFactor);
-	                this.$markerContainer.css({
-	                    "width": newSize.width + 'px',
-	                    "height": newSize.height + 'px',
-	                    "left": newSize.left + this.offsetToCenter + 'px',
-	                    "top": newSize.top + 'px'
-	                });
-	            }
 	            return this;
 	        }
 	    }]);
 
 	    return View;
-	}();
-
-	/**
-	 * request animation frame browser polyfill
-	 * @return {Function} supported requestAnimationFrame-function
-	 */
-
-
-	window.requestAnimFrame = function () {
-	    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-	        window.setTimeout(callback, 1000 / 60);
-	    };
 	}();
 
 /***/ },
@@ -3731,11 +3745,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'positionMarker',
 	        value: function positionMarker() {
-	            this.position = this.instance.convertLatLngToPoint(this.latlng);
+	            this.position = this.instance.view.convertLatLngToPoint(this.latlng);
 	            if (this.$icon) {
 	                this.$icon.css({
-	                    "left": this.position.x / this.instance.currentView.width * 100 + '%',
-	                    "top": this.position.y / this.instance.currentView.height * 100 + '%'
+	                    "left": this.position.x / this.instance.view.currentView.width * 100 + '%',
+	                    "top": this.position.y / this.instance.view.currentView.height * 100 + '%'
 	                }).show();
 	            }
 	            return this;

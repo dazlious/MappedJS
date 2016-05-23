@@ -1980,9 +1980,9 @@ check if tiles are equal
     * [.width](#TileMap+width) ⇒ <code>number</code>
     * [.height](#TileMap+height) ⇒ <code>number</code>
     * [.currentLevelData](#TileMap+currentLevelData) ⇒ <code>Object</code>
-    * [.initialize(bounds, center, data)](#TileMap+initialize) ⇒ <code>[TileMap](#TileMap)</code>
     * [.reset()](#TileMap+reset)
     * [.createViewFromData(bounds, center, data, zoom)](#TileMap+createViewFromData) ⇒ <code>[View](#View)</code>
+    * [.repositionMarkerContainer()](#TileMap+repositionMarkerContainer) ⇒ <code>[View](#View)</code>
     * [.enrichMarkerData(markerData)](#TileMap+enrichMarkerData) ⇒ <code>Object</code>
     * [.initializeMarkers(markerData)](#TileMap+initializeMarkers) ⇒ <code>[TileMap](#TileMap)</code>
     * [.appendMarkerContainerToDom()](#TileMap+appendMarkerContainerToDom)
@@ -1995,6 +1995,7 @@ check if tiles are equal
     * [.zoom(factor, position)](#TileMap+zoom) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.resizeCanvas()](#TileMap+resizeCanvas) ⇒ <code>[TileMap](#TileMap)</code>
     * [.resizeView()](#TileMap+resizeView) ⇒ <code>[TileMap](#TileMap)</code>
+    * [.mainLoop()](#TileMap+mainLoop)
 
 <a name="new_TileMap_new"></a>
 
@@ -2041,19 +2042,6 @@ gets data of current zoom level
 
 **Kind**: instance property of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>Object</code> - data for current level as json  
-<a name="TileMap+initialize"></a>
-
-### tileMap.initialize(bounds, center, data) ⇒ <code>[TileMap](#TileMap)</code>
-initializes the TileMap
-
-**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
-**Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
-**Params**
-
-- bounds <code>[Bounds](#Bounds)</code> - specified boundaries
-- center <code>[LatLng](#LatLng)</code> - specified center
-- data <code>object</code> - specified data
-
 <a name="TileMap+reset"></a>
 
 ### tileMap.reset()
@@ -2074,6 +2062,13 @@ creates a View from specified parameters
 - data <code>object</code> - specified data
 - zoom <code>number</code> - initial zoom level
 
+<a name="TileMap+repositionMarkerContainer"></a>
+
+### tileMap.repositionMarkerContainer() ⇒ <code>[View](#View)</code>
+reposition marker container
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
+**Returns**: <code>[View](#View)</code> - instance of View for chaining  
 <a name="TileMap+enrichMarkerData"></a>
 
 ### tileMap.enrichMarkerData(markerData) ⇒ <code>Object</code>
@@ -2175,6 +2170,12 @@ Handles resizing of view
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[TileMap](#TileMap)</code> - instance of TileMap for chaining  
+<a name="TileMap+mainLoop"></a>
+
+### tileMap.mainLoop()
+main draw call
+
+**Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 <a name="ToolTip"></a>
 
 ## ToolTip
@@ -2296,7 +2297,6 @@ precompiles all Handlebars templates
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
     * [.pixelPerLatLng](#View+pixelPerLatLng) ⇒ <code>[Point](#Point)</code>
     * [.reset()](#View+reset)
-    * [.mainLoop()](#View+mainLoop)
     * [.loadThumb()](#View+loadThumb) ⇒ <code>[View](#View)</code>
     * [.convertPointToLatLng(point)](#View+convertPointToLatLng) ⇒ <code>[LatLng](#LatLng)</code>
     * [.setLatLngToPosition(latlng, position)](#View+setLatLngToPosition) ⇒ <code>[View](#View)</code>
@@ -2310,7 +2310,6 @@ precompiles all Handlebars templates
     * [.drawVisibleTiles()](#View+drawVisibleTiles) ⇒ <code>[View](#View)</code>
     * [.drawThumbnail()](#View+drawThumbnail) ⇒ <code>[View](#View)</code>
     * [.initializeTiles()](#View+initializeTiles) ⇒ <code>[View](#View)</code>
-    * [.repositionMarkerContainer()](#View+repositionMarkerContainer) ⇒ <code>[View](#View)</code>
 
 <a name="new_View_new"></a>
 
@@ -2363,12 +2362,6 @@ how many pixels per lat and lng
 
 ### view.reset()
 resets current View to its initial position
-
-**Kind**: instance method of <code>[View](#View)</code>  
-<a name="View+mainLoop"></a>
-
-### view.mainLoop()
-main draw call
 
 **Kind**: instance method of <code>[View](#View)</code>  
 <a name="View+loadThumb"></a>
@@ -2489,13 +2482,6 @@ draws the thumbnail
 
 ### view.initializeTiles() ⇒ <code>[View](#View)</code>
 initializes tiles
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[View](#View)</code> - instance of View for chaining  
-<a name="View+repositionMarkerContainer"></a>
-
-### view.repositionMarkerContainer() ⇒ <code>[View](#View)</code>
-reposition marker container
 
 **Kind**: instance method of <code>[View](#View)</code>  
 **Returns**: <code>[View](#View)</code> - instance of View for chaining  
