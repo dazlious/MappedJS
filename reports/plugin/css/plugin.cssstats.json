@@ -1,31 +1,31 @@
 {
     "fileSize": {
-        "size": "23.86 KB",
-        "gzipSize": "8.84 KB"
+        "size": "22.65 KB",
+        "gzipSize": "8.62 KB"
     },
     "selectorSpecifity": {
-        "max": 60,
-        "average": 34.05
+        "max": 51,
+        "average": 33
     },
     "totals": {
-        "rules": 57,
-        "selectors": 60,
-        "declarations": 207,
-        "properties": 64,
-        "vendorPrefixes": 28,
+        "rules": 54,
+        "selectors": 57,
+        "declarations": 178,
+        "properties": 51,
+        "vendorPrefixes": 13,
         "mediaQueries": 0,
         "importants": 0
     },
     "uniqueDeclarations": {
-        "width": 11,
-        "height": 13,
-        "color": 4,
-        "font-size": 11,
+        "width": 12,
+        "height": 11,
+        "color": 3,
+        "font-size": 9,
         "background-color": 5
     },
     "selectors": {
-        "type": 13,
-        "class": 60,
+        "type": 11,
+        "class": 57,
         "id": 0,
         "pseudoClass": 5,
         "pseudoElement": 0
@@ -37,7 +37,7 @@
         "colors": {
             "#555": 1,
             "#333": 1,
-            "#888": 2
+            "#888": 1
         },
         "backgroundColors": {
             "rgba(0, 0, 0, 0.5)": 1,
@@ -75,13 +75,13 @@
                 "viewSizePx": 13.6,
                 "viewSizeStr": "",
                 "cssSize": "85%",
-                "amount": 2
+                "amount": 1
             },
             {
                 "viewSizePx": "12",
                 "viewSizeStr": "",
                 "cssSize": "12px",
-                "amount": 2
+                "amount": 1
             },
             {
                 "viewSizePx": "10",
@@ -142,19 +142,18 @@
             30,
             40,
             30,
-            40,
-            40,
-            40,
             30,
             40,
             40,
             40,
             30,
+            40,
             30,
+            30,
+            40,
+            50,
             40,
             41,
-            41,
-            51,
             31,
             31,
             31,
@@ -164,9 +163,7 @@
             31,
             40,
             50,
-            51,
-            50,
-            60
+            51
         ],
         "rulesetSize": [
             2,
@@ -201,18 +198,17 @@
             17,
             1,
             8,
-            2,
-            2,
-            2,
-            8,
-            1,
             1,
             2,
-            4,
-            1,
-            15,
-            11,
+            2,
+            2,
             7,
+            2,
+            5,
+            1,
+            3,
+            3,
+            3,
             3,
             3,
             2,
@@ -221,11 +217,9 @@
             2,
             3,
             3,
-            1,
+            2,
             6,
-            7,
-            2,
-            3
+            7
         ]
     }
 }

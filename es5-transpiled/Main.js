@@ -1,13 +1,13 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Helper.js', './Events.js', './TileMap.js', './DataEnrichment.js', './Interact.js', './Point.js'], factory);
+        define(['exports', 'jQuery', './Helper.js', './Events.js', './TileMap.js', './DataEnrichment.js', './Interact.js', './Point.js', 'babel-polyfill'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Interact.js'), require('./Point.js'));
+        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Interact.js'), require('./Point.js'), require('babel-polyfill'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.TileMap, global.DataEnrichment, global.Interact, global.Point);
+        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.TileMap, global.DataEnrichment, global.Interact, global.Point, global.babelPolyfill);
         global.Main = mod.exports;
     }
 })(this, function(exports, _jQuery, _Helper, _Events, _TileMap, _DataEnrichment, _Interact, _Point) {
