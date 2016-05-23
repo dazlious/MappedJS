@@ -6,21 +6,4 @@
         {{#if caption}}{{caption}}{{/if}}
         {{#if caption}}{{credit}}<span class="credit">{{credit}}</span>{{/if}}
     </span>
-    <script type="text/javascript">
-        (function() {
-            var allIframeContainer = document.getElementsByClassName("mjs-iframe"),
-                currentIFrame = allIframeContainer[allIframeContainer.length-1],
-                iframe = currentIFrame.getElementsByTagName("iframe")[0];
-
-            var fitIframe = function() {
-                var maxHeight = currentIFrame.parentNode.clientHeight,
-                    currentHeight = currentIFrame.clientHeight,
-                    delta = (maxHeight <= currentHeight) ? (maxHeight / currentHeight * 100) : 100;
-                currentIFrame.style.width = delta + "%";
-            };
-
-            iframe.onload = fitIframe;
-            window.addEventListener("resize", fitIframe, false);
-        }());
-    </script>
 </div>

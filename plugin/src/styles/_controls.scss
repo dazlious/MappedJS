@@ -4,7 +4,7 @@ $height: $width;
 
 .control-container {
     position: absolute;
-    z-index: 500;
+    z-index: 150;
     &.bottom-right {
         bottom: $gutter;
         right: $gutter;

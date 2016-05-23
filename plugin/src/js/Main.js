@@ -1,4 +1,5 @@
 import $ from 'jQuery';
+import "babel-polyfill";
 import {Helper} from './Helper.js';
 import {Events} from './Events.js';
 import {TileMap} from './TileMap.js';
