@@ -135,6 +135,8 @@
             var currentZoom = _ref$currentZoom === undefined ? 1 : _ref$currentZoom;
             var _ref$minZoom = _ref.minZoom;
             var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
+            var _ref$centerSmallMap = _ref.centerSmallMap;
+            var centerSmallMap = _ref$centerSmallMap === undefined ? false : _ref$centerSmallMap;
             var limitToBounds = _ref.limitToBounds;
 
             _classCallCheck(this, View);
@@ -151,7 +153,7 @@
             this.eventManager = new _Publisher.Publisher();
             this.limitToBounds = limitToBounds || bounds;
             this.isInitialized = false;
-
+            this.centerSmallMap = centerSmallMap;
             var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
             this.currentView.position(newCenter.x, newCenter.y);
 
@@ -196,32 +198,63 @@
                 var offset = new _Point.Point();
                 var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
                 if (!equalizedMap.containsRect(this.viewport)) {
-                    if (equalizedMap.width >= this.viewport.width) {
-                        if (equalizedMap.left - this.viewport.left > 0) {
-                            offset.x -= equalizedMap.left - this.viewport.left;
-                        }
-                        if (equalizedMap.right - this.viewport.right < 0) {
-                            offset.x -= equalizedMap.right - this.viewport.right;
-                        }
-                    } else {
-                        this.currentView.setCenterX(this.viewport.center.x);
-                        offset.x = 0;
-                    }
 
-                    if (equalizedMap.height >= this.viewport.height) {
-                        if (equalizedMap.top - this.viewport.top > 0) {
-                            offset.y -= equalizedMap.top - this.viewport.top;
-                        }
-                        if (equalizedMap.bottom - this.viewport.bottom < 0) {
-                            offset.y -= equalizedMap.bottom - this.viewport.bottom;
-                        }
-                    } else {
-                        this.currentView.setCenterY(this.viewport.center.y);
-                        offset.y = 0;
-                    }
+                    var distanceLeft = equalizedMap.left - this.viewport.left,
+                        distanceRight = equalizedMap.right - this.viewport.right,
+                        distanceTop = equalizedMap.top - this.viewport.top,
+                        distanceBottom = equalizedMap.bottom - this.viewport.bottom;
+
+                    offset.x = this.checkX(distanceLeft, distanceRight, equalizedMap.width, this.viewport.width);
+                    offset.y = this.checkX(distanceTop, distanceBottom, equalizedMap.height, this.viewport.height);
                 }
                 offset.multiply(1 / this.distortionFactor, 1);
                 this.currentView.translate(offset.x, offset.y);
+            }
+        }, {
+            key: 'checkX',
+            value: function checkX(left, right, mapWidth, viewWidth) {
+                var x = 0;
+                if (mapWidth >= viewWidth) {
+                    if (left > 0) {
+                        x -= left;
+                    } else if (right < 0) {
+                        x -= right;
+                    }
+                } else {
+                    if (!this.centerSmallMap) {
+                        if (left < 0 && right < 0) {
+                            x -= left;
+                        } else if (right > 0 && left > 0) {
+                            x -= right;
+                        }
+                    } else {
+                        this.currentView.setCenterX(this.viewport.center.x);
+                    }
+                }
+                return x;
+            }
+        }, {
+            key: 'checkY',
+            value: function checkY(top, bottom, mapHeight, viewHeight) {
+                var y = 0;
+                if (mapHeight >= viewHeight) {
+                    if (top > 0) {
+                        y -= top;
+                    } else if (bottom < 0) {
+                        y -= bottom;
+                    }
+                } else {
+                    if (!this.centerSmallMap) {
+                        if (top < 0 && bottom < 0) {
+                            y -= top;
+                        } else if (bottom > 0 && top > 0) {
+                            y -= bottom;
+                        }
+                    } else {
+                        this.currentView.setCenterX(this.viewport.center.x);
+                    }
+                }
+                return y;
             }
 
             /**

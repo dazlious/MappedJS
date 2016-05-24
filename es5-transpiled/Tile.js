@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Helper.js', './StateHandler.js', './Rectangle.js'], factory);
+        define(['exports', './Events.js', './Helper.js', './StateHandler.js', './Rectangle.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Helper.js'), require('./StateHandler.js'), require('./Rectangle.js'));
+        factory(exports, require('./Events.js'), require('./Helper.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Helper, global.StateHandler, global.Rectangle);
+        factory(mod.exports, global.Events, global.Helper, global.StateHandler, global.Rectangle, global.Publisher);
         global.Tile = mod.exports;
     }
-})(this, function(exports, _Helper, _StateHandler, _Rectangle2) {
+})(this, function(exports, _Events, _Helper, _StateHandler, _Rectangle2, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -23,24 +23,6 @@
             throw new TypeError("Cannot call a class as a function");
         }
     }
-
-    var _createClass = function() {
-        function defineProperties(target, props) {
-            for (var i = 0; i < props.length; i++) {
-                var descriptor = props[i];
-                descriptor.enumerable = descriptor.enumerable || false;
-                descriptor.configurable = true;
-                if ("value" in descriptor) descriptor.writable = true;
-                Object.defineProperty(target, descriptor.key, descriptor);
-            }
-        }
-
-        return function(Constructor, protoProps, staticProps) {
-            if (protoProps) defineProperties(Constructor.prototype, protoProps);
-            if (staticProps) defineProperties(Constructor, staticProps);
-            return Constructor;
-        };
-    }();
 
     function _possibleConstructorReturn(self, call) {
         if (!self) {
@@ -74,6 +56,24 @@
             return getter.call(receiver);
         }
     };
+
+    var _createClass = function() {
+        function defineProperties(target, props) {
+            for (var i = 0; i < props.length; i++) {
+                var descriptor = props[i];
+                descriptor.enumerable = descriptor.enumerable || false;
+                descriptor.configurable = true;
+                if ("value" in descriptor) descriptor.writable = true;
+                Object.defineProperty(target, descriptor.key, descriptor);
+            }
+        }
+
+        return function(Constructor, protoProps, staticProps) {
+            if (protoProps) defineProperties(Constructor.prototype, protoProps);
+            if (staticProps) defineProperties(Constructor, staticProps);
+            return Constructor;
+        };
+    }();
 
     function _inherits(subClass, superClass) {
         if (typeof superClass !== "function" && superClass !== null) {
@@ -119,16 +119,24 @@
     var Tile = exports.Tile = function(_Rectangle) {
         _inherits(Tile, _Rectangle);
 
-        /**
-         * @constructor
-         * @param  {string} path = null - path to image
-         * @param  {number} x = 0 - position x of tile
-         * @param  {number} y = 0 - position y of tile
-         * @param  {number} w = 0 - tile width
-         * @param  {number} h = 0 - tile height
-         * @param  {View} _instance = null - instance of parent View
-         * @return {Tile} instance of Tile for chaining
-         */
+        _createClass(Tile, [{
+            key: 'distortedTile',
+            get: function get() {
+                return this.clone.scale(this.instance.zoomFactor).translate(this.instance.currentView.x, this.instance.currentView.y).scaleX(this.instance.distortionFactor).translate(this.instance.offsetToCenter, 0);
+            }
+
+            /**
+             * @constructor
+             * @param  {string} path = null - path to image
+             * @param  {number} x = 0 - position x of tile
+             * @param  {number} y = 0 - position y of tile
+             * @param  {number} w = 0 - tile width
+             * @param  {number} h = 0 - tile height
+             * @param  {View} _instance = null - instance of parent View
+             * @return {Tile} instance of Tile for chaining
+             */
+
+        }]);
 
         function Tile() {
             var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -158,6 +166,7 @@
             _this.state = new _StateHandler.StateHandler(STATES);
             _this.instance = _instance;
             _this.context = _this.instance.context;
+            _this.eventManager = new _Publisher.Publisher();
             _this.path = path;
 
             return _ret = _this, _possibleConstructorReturn(_this, _ret);
@@ -178,7 +187,7 @@
                 _Helper.Helper.loadImage(this.path, function(img) {
                     _this2.img = img;
                     _this2.state.next();
-                    _this2.draw();
+                    _this2.eventManager.publish(_Events.Events.TileMap.DRAW);
                 });
                 return this;
             }
@@ -191,14 +200,9 @@
         }, {
             key: 'draw',
             value: function draw() {
-                var distortedTile = this.clone.scale(this.instance.zoomFactor).translate(this.instance.currentView.x, this.instance.currentView.y).scaleX(this.instance.distortionFactor).translate(this.instance.offsetToCenter, 0);
                 if (this.state.current.value >= 2) {
-                    if (!this.context) {
-                        console.error("context not specified", this);
-                        return false;
-                    }
                     this.state.next();
-                    this.context.drawImage(this.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+                    this.context.drawImage(this.img, this.distortedTile.x, this.distortedTile.y, this.distortedTile.width, this.distortedTile.height);
                 } else if (this.state.current.value === 0) {
                     this.initialize();
                 }

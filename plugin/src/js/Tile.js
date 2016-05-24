@@ -1,6 +1,8 @@
+import {Events} from './Events.js';
 import {Helper} from './Helper.js';
 import {StateHandler} from './StateHandler.js';
 import {Rectangle} from './Rectangle.js';
+import {Publisher} from './Publisher.js';
 
 /**
  * States of a tile
@@ -21,6 +23,13 @@ const STATES = [
  */
 export class Tile extends Rectangle {
 
+    get distortedTile() {
+        return this.clone.scale(this.instance.zoomFactor)
+                                        .translate(this.instance.currentView.x, this.instance.currentView.y)
+                                        .scaleX(this.instance.distortionFactor)
+                                        .translate(this.instance.offsetToCenter, 0);
+    }
+
     /**
      * @constructor
      * @param  {string} path = null - path to image
@@ -40,6 +49,7 @@ export class Tile extends Rectangle {
         this.state = new StateHandler(STATES);
         this.instance = _instance;
         this.context = this.instance.context;
+        this.eventManager = new Publisher();
         this.path = path;
 
         return this;
@@ -54,7 +64,7 @@ export class Tile extends Rectangle {
         Helper.loadImage(this.path, (img) => {
             this.img = img;
             this.state.next();
-            this.draw();
+            this.eventManager.publish(Events.TileMap.DRAW);
         });
         return this;
     }
@@ -64,17 +74,9 @@ export class Tile extends Rectangle {
      * @return {Tile} instance of Tile for chaining
      */
     draw() {
-        const distortedTile = this.clone.scale(this.instance.zoomFactor)
-                                        .translate(this.instance.currentView.x, this.instance.currentView.y)
-                                        .scaleX(this.instance.distortionFactor)
-                                        .translate(this.instance.offsetToCenter, 0);
         if (this.state.current.value >= 2) {
-            if (!this.context) {
-                console.error("context not specified", this);
-                return false;
-            }
             this.state.next();
-            this.context.drawImage(this.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+            this.context.drawImage(this.img, this.distortedTile.x, this.distortedTile.y, this.distortedTile.width, this.distortedTile.height);
         } else if (this.state.current.value === 0) {
             this.initialize();
         }

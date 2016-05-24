@@ -135,10 +135,7 @@ export class TileMap {
      * resets view to initial state
      */
     reset() {
-        if (this.levelHandler.current.description !== this.settings.level) {
-            this.levelHandler.changeTo(this.settings.level);
-
-        }
+        if (this.levelHandler.current.description !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
         this.view.reset();
         this.redraw();
         this.clusterHandler();
@@ -165,6 +162,7 @@ export class TileMap {
             minZoom: (data.zoom) ? data.zoom.min : 1,
             $container: this.$container,
             context: this.canvasContext,
+            centerSmallMap: this.settings.centerSmallMap,
             limitToBounds: this.settings.limitToBounds
         });
     }
@@ -253,6 +251,8 @@ export class TileMap {
     bindEvents() {
 
         this.eventManager.subscribe(Events.TileMap.RESIZE, () => { this.resize(); });
+
+        this.eventManager.subscribe(Events.TileMap.DRAW, () => { this.redraw(); });
 
         this.eventManager.subscribe(Events.View.THUMB_LOADED, () => {
             this.redraw();
@@ -408,14 +408,12 @@ export class TileMap {
         this.lastFrameMillisecs = currentMillisecs;
         this.deltaTiming = deltaMillisecs / this.bestDeltaTiming;
         // TODO
-        //console.log(this.deltaTiming);
         if (this.drawIsNeeded) {
             this.canvasContext.clearRect(0, 0, this.width, this.height);
             this.view.checkBoundaries();
             this.view.draw();
             this.repositionMarkerContainer();
             this.drawIsNeeded = false;
-
         }
         window.requestAnimFrame(() => this.mainLoop());
     }

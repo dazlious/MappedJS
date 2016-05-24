@@ -55,7 +55,8 @@ export var Events = {
         NEXT_LEVEL: "next-level",
         PREVIOUS_LEVEL: "previous-level",
         RESIZE: "resize",
-        ZOOM_TO_BOUNDS: "zoom-to-bounds"
+        ZOOM_TO_BOUNDS: "zoom-to-bounds",
+        DRAW: "draw"
     },
     /**
      * Eventnames for Handling in all classes
@@ -88,7 +89,6 @@ export var Events = {
      * @property {object} THUMB_LOADED - thumbnail was loaded
      */
     View: {
-        DRAW: "draw",
         THUMB_LOADED: "thumb-loaded"
     },
     /**

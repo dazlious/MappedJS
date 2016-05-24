@@ -5962,7 +5962,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    NEXT_LEVEL: "next-level",
 	    PREVIOUS_LEVEL: "previous-level",
 	    RESIZE: "resize",
-	    ZOOM_TO_BOUNDS: "zoom-to-bounds"
+	    ZOOM_TO_BOUNDS: "zoom-to-bounds",
+	    DRAW: "draw"
 	  },
 	  /**
 	   * Eventnames for Handling in all classes
@@ -5995,7 +5996,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @property {object} THUMB_LOADED - thumbnail was loaded
 	   */
 	  View: {
-	    DRAW: "draw",
 	    THUMB_LOADED: "thumb-loaded"
 	  },
 	  /**
@@ -6208,9 +6208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(TileMap, [{
 	        key: 'reset',
 	        value: function reset() {
-	            if (this.levelHandler.current.description !== this.settings.level) {
-	                this.levelHandler.changeTo(this.settings.level);
-	            }
+	            if (this.levelHandler.current.description !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
 	            this.view.reset();
 	            this.redraw();
 	            this.clusterHandler();
@@ -6240,6 +6238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                minZoom: data.zoom ? data.zoom.min : 1,
 	                $container: this.$container,
 	                context: this.canvasContext,
+	                centerSmallMap: this.settings.centerSmallMap,
 	                limitToBounds: this.settings.limitToBounds
 	            });
 	        }
@@ -6354,6 +6353,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function () {
 	                _this3.resize();
+	            });
+
+	            this.eventManager.subscribe(_Events.Events.TileMap.DRAW, function () {
+	                _this3.redraw();
 	            });
 
 	            this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function () {
@@ -6539,7 +6542,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.lastFrameMillisecs = currentMillisecs;
 	            this.deltaTiming = deltaMillisecs / this.bestDeltaTiming;
 	            // TODO
-	            //console.log(this.deltaTiming);
 	            if (this.drawIsNeeded) {
 	                this.canvasContext.clearRect(0, 0, this.width, this.height);
 	                this.view.checkBoundaries();
@@ -7775,6 +7777,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var currentZoom = _ref$currentZoom === undefined ? 1 : _ref$currentZoom;
 	        var _ref$minZoom = _ref.minZoom;
 	        var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
+	        var _ref$centerSmallMap = _ref.centerSmallMap;
+	        var centerSmallMap = _ref$centerSmallMap === undefined ? false : _ref$centerSmallMap;
 	        var limitToBounds = _ref.limitToBounds;
 
 	        _classCallCheck(this, View);
@@ -7791,7 +7795,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.eventManager = new _Publisher.Publisher();
 	        this.limitToBounds = limitToBounds || bounds;
 	        this.isInitialized = false;
-
+	        this.centerSmallMap = centerSmallMap;
 	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
 	        this.currentView.position(newCenter.x, newCenter.y);
 
@@ -7836,32 +7840,63 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var offset = new _Point.Point();
 	            var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
 	            if (!equalizedMap.containsRect(this.viewport)) {
-	                if (equalizedMap.width >= this.viewport.width) {
-	                    if (equalizedMap.left - this.viewport.left > 0) {
-	                        offset.x -= equalizedMap.left - this.viewport.left;
-	                    }
-	                    if (equalizedMap.right - this.viewport.right < 0) {
-	                        offset.x -= equalizedMap.right - this.viewport.right;
-	                    }
-	                } else {
-	                    this.currentView.setCenterX(this.viewport.center.x);
-	                    offset.x = 0;
-	                }
 
-	                if (equalizedMap.height >= this.viewport.height) {
-	                    if (equalizedMap.top - this.viewport.top > 0) {
-	                        offset.y -= equalizedMap.top - this.viewport.top;
-	                    }
-	                    if (equalizedMap.bottom - this.viewport.bottom < 0) {
-	                        offset.y -= equalizedMap.bottom - this.viewport.bottom;
-	                    }
-	                } else {
-	                    this.currentView.setCenterY(this.viewport.center.y);
-	                    offset.y = 0;
-	                }
+	                var distanceLeft = equalizedMap.left - this.viewport.left,
+	                    distanceRight = equalizedMap.right - this.viewport.right,
+	                    distanceTop = equalizedMap.top - this.viewport.top,
+	                    distanceBottom = equalizedMap.bottom - this.viewport.bottom;
+
+	                offset.x = this.checkX(distanceLeft, distanceRight, equalizedMap.width, this.viewport.width);
+	                offset.y = this.checkX(distanceTop, distanceBottom, equalizedMap.height, this.viewport.height);
 	            }
 	            offset.multiply(1 / this.distortionFactor, 1);
 	            this.currentView.translate(offset.x, offset.y);
+	        }
+	    }, {
+	        key: 'checkX',
+	        value: function checkX(left, right, mapWidth, viewWidth) {
+	            var x = 0;
+	            if (mapWidth >= viewWidth) {
+	                if (left > 0) {
+	                    x -= left;
+	                } else if (right < 0) {
+	                    x -= right;
+	                }
+	            } else {
+	                if (!this.centerSmallMap) {
+	                    if (left < 0 && right < 0) {
+	                        x -= left;
+	                    } else if (right > 0 && left > 0) {
+	                        x -= right;
+	                    }
+	                } else {
+	                    this.currentView.setCenterX(this.viewport.center.x);
+	                }
+	            }
+	            return x;
+	        }
+	    }, {
+	        key: 'checkY',
+	        value: function checkY(top, bottom, mapHeight, viewHeight) {
+	            var y = 0;
+	            if (mapHeight >= viewHeight) {
+	                if (top > 0) {
+	                    y -= top;
+	                } else if (bottom < 0) {
+	                    y -= bottom;
+	                }
+	            } else {
+	                if (!this.centerSmallMap) {
+	                    if (top < 0 && bottom < 0) {
+	                        y -= top;
+	                    } else if (bottom > 0 && top > 0) {
+	                        y -= bottom;
+	                    }
+	                } else {
+	                    this.currentView.setCenterX(this.viewport.center.x);
+	                }
+	            }
+	            return y;
 	        }
 
 	        /**
@@ -8327,15 +8362,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.Tile = undefined;
 
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	var _Events = __webpack_require__(193);
 
 	var _Helper = __webpack_require__(192);
 
 	var _StateHandler = __webpack_require__(196);
 
 	var _Rectangle2 = __webpack_require__(197);
+
+	var _Publisher = __webpack_require__(195);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8359,16 +8398,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Tile = exports.Tile = function (_Rectangle) {
 	    _inherits(Tile, _Rectangle);
 
-	    /**
-	     * @constructor
-	     * @param  {string} path = null - path to image
-	     * @param  {number} x = 0 - position x of tile
-	     * @param  {number} y = 0 - position y of tile
-	     * @param  {number} w = 0 - tile width
-	     * @param  {number} h = 0 - tile height
-	     * @param  {View} _instance = null - instance of parent View
-	     * @return {Tile} instance of Tile for chaining
-	     */
+	    _createClass(Tile, [{
+	        key: 'distortedTile',
+	        get: function get() {
+	            return this.clone.scale(this.instance.zoomFactor).translate(this.instance.currentView.x, this.instance.currentView.y).scaleX(this.instance.distortionFactor).translate(this.instance.offsetToCenter, 0);
+	        }
+
+	        /**
+	         * @constructor
+	         * @param  {string} path = null - path to image
+	         * @param  {number} x = 0 - position x of tile
+	         * @param  {number} y = 0 - position y of tile
+	         * @param  {number} w = 0 - tile width
+	         * @param  {number} h = 0 - tile height
+	         * @param  {View} _instance = null - instance of parent View
+	         * @return {Tile} instance of Tile for chaining
+	         */
+
+	    }]);
 
 	    function Tile() {
 	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -8397,6 +8444,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.state = new _StateHandler.StateHandler(STATES);
 	        _this.instance = _instance;
 	        _this.context = _this.instance.context;
+	        _this.eventManager = new _Publisher.Publisher();
 	        _this.path = path;
 
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
@@ -8417,7 +8465,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _Helper.Helper.loadImage(this.path, function (img) {
 	                _this2.img = img;
 	                _this2.state.next();
-	                _this2.draw();
+	                _this2.eventManager.publish(_Events.Events.TileMap.DRAW);
 	            });
 	            return this;
 	        }
@@ -8430,14 +8478,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'draw',
 	        value: function draw() {
-	            var distortedTile = this.clone.scale(this.instance.zoomFactor).translate(this.instance.currentView.x, this.instance.currentView.y).scaleX(this.instance.distortionFactor).translate(this.instance.offsetToCenter, 0);
 	            if (this.state.current.value >= 2) {
-	                if (!this.context) {
-	                    console.error("context not specified", this);
-	                    return false;
-	                }
 	                this.state.next();
-	                this.context.drawImage(this.img, distortedTile.x, distortedTile.y, distortedTile.width, distortedTile.height);
+	                this.context.drawImage(this.img, this.distortedTile.x, this.distortedTile.y, this.distortedTile.width, this.distortedTile.height);
 	            } else if (this.state.current.value === 0) {
 	                this.initialize();
 	            }
