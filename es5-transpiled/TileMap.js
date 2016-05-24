@@ -162,6 +162,10 @@
             this.levels = [];
             this.clusterHandlingTimeout = null;
 
+            this.lastFrameMillisecs = Date.now();
+            this.deltaTiming = 1.0;
+            this.bestDeltaTiming = 1000.0 / 60.0;
+
             this.initial = {
                 bounds: settings.bounds,
                 center: settings.center,
@@ -207,9 +211,7 @@
         _createClass(TileMap, [{
             key: 'reset',
             value: function reset() {
-                if (this.levelHandler.current.description !== this.settings.level) {
-                    this.levelHandler.changeTo(this.settings.level);
-                }
+                if (this.levelHandler.current.description !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
                 this.view.reset();
                 this.redraw();
                 this.clusterHandler();
@@ -239,6 +241,7 @@
                     minZoom: data.zoom ? data.zoom.min : 1,
                     $container: this.$container,
                     context: this.canvasContext,
+                    centerSmallMap: this.settings.centerSmallMap,
                     limitToBounds: this.settings.limitToBounds
                 });
             }
@@ -353,6 +356,10 @@
 
                 this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function() {
                     _this3.resize();
+                });
+
+                this.eventManager.subscribe(_Events.Events.TileMap.DRAW, function() {
+                    _this3.redraw();
                 });
 
                 this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function() {
@@ -533,6 +540,11 @@
             value: function mainLoop() {
                 var _this5 = this;
 
+                var currentMillisecs = Date.now();
+                var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
+                this.lastFrameMillisecs = currentMillisecs;
+                this.deltaTiming = deltaMillisecs / this.bestDeltaTiming;
+                // TODO
                 if (this.drawIsNeeded) {
                     this.canvasContext.clearRect(0, 0, this.width, this.height);
                     this.view.checkBoundaries();
