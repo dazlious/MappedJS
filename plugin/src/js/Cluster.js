@@ -46,15 +46,11 @@ export class Cluster {
     }
 
     bindEvents() {
-        this.$cluster.on("touchstart", (e) => {
-            e.stopPropagation();
-        });
-        this.$cluster.on("touchend", (e) => {
-            e.stopPropagation();
-        });
-        this.$cluster.on(Events.Handling.CLICK, () => {
-            this.eventManager.publish(Events.TileMap.ZOOM_TO_BOUNDS, this.boundingBox);
-        });
+        this.$cluster.data("mjs-action", this.action.bind(this));
+    }
+
+    action() {
+        this.eventManager.publish(Events.TileMap.ZOOM_TO_BOUNDS, this.boundingBox);
     }
 
     addMarker(marker) {

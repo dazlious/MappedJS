@@ -120,17 +120,12 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
-                var _this = this;
-
-                this.$cluster.on("touchstart", function(e) {
-                    e.stopPropagation();
-                });
-                this.$cluster.on("touchend", function(e) {
-                    e.stopPropagation();
-                });
-                this.$cluster.on(_Events.Events.Handling.CLICK, function() {
-                    _this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, _this.boundingBox);
-                });
+                this.$cluster.data("mjs-action", this.action.bind(this));
+            }
+        }, {
+            key: 'action',
+            value: function action() {
+                this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, this.boundingBox);
             }
         }, {
             key: 'addMarker',

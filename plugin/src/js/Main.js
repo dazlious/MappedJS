@@ -127,6 +127,10 @@ export class MappedJS {
             autoFireHold: 300,
             overwriteViewportSettings: true,
             callbacks: {
+                tap: (data) => {
+                    const action = $(data.target).data("mjs-action");
+                    if (action) action();
+                },
                 pan: (data) => {
                     if ($(data.target).hasClass("control")) return false;
                     const change = data.last.position.clone.substract(data.position.move);
@@ -140,7 +144,6 @@ export class MappedJS {
                     this.tileMap.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
                 },
                 doubletap: (data) => {
-                    if (!$(data.target).hasClass("marker-container")) return false;
                     this.tileMap.zoom(0.2, this.getAbsolutePosition(data.position.start));
                 },
                 flick: (data) => {
@@ -164,14 +167,13 @@ export class MappedJS {
 
         $(window).on(Events.Handling.RESIZE, this.resizeHandler.bind(this));
 
-        $(document).on(Events.Handling.KEYDOWN, this.keyPress.bind(this));
-        $(document).on(Events.Handling.KEYUP, this.keyRelease.bind(this));
+        const $document = $(document);
+        $document.on(Events.Handling.KEYDOWN, this.keyPress.bind(this));
+        $document.on(Events.Handling.KEYUP, this.keyRelease.bind(this));
 
-        const gesture = Helper.isTouch() ? Events.Handling.TOUCHSTART: Events.Handling.CLICK;
-
-        this.$zoomIn.on(gesture, this.zoomInToCenter.bind(this));
-        this.$zoomOut.on(gesture, this.zoomOutToCenter.bind(this));
-        this.$home.on(gesture, this.resetToInitialState.bind(this));
+        this.$zoomIn.data("mjs-action", this.zoomInToCenter.bind(this));
+        this.$zoomOut.data("mjs-action", this.zoomOutToCenter.bind(this));
+        this.$home.data("mjs-action", this.resetToInitialState.bind(this));
 
         return this;
     }

@@ -56,27 +56,19 @@ export class Marker {
         this.eventManager = new Publisher();
 
         if (this.content.length) {
-
-            this.$icon.on("touchstart", (e) => {
-                e.stopPropagation();
-            });
-
-            this.$icon.on("touchend", (e) => {
-                e.stopPropagation();
-            });
-
-            this.$icon.on("click", () => {
-                this.eventManager.publish(Events.ToolTip.OPEN, this.content);
-                this.eventManager.publish(Events.Marker.DEACTIVATE);
-                this.$icon.addClass("active");
-            });
-
+            this.$icon.data("mjs-action", this.action.bind(this));
             this.eventManager.subscribe(Events.Marker.DEACTIVATE, () => {
                 this.$icon.removeClass("active");
             });
         }
 
         return this;
+    }
+
+    action() {
+        this.eventManager.publish(Events.ToolTip.OPEN, this.content);
+        this.eventManager.publish(Events.Marker.DEACTIVATE);
+        this.$icon.addClass("active");
     }
 
     /**

@@ -250,6 +250,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                autoFireHold: 300,
 	                overwriteViewportSettings: true,
 	                callbacks: {
+	                    tap: function tap(data) {
+	                        var action = (0, _jQuery2.default)(data.target).data("mjs-action");
+	                        if (action) action();
+	                    },
 	                    pan: function pan(data) {
 	                        if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
 	                        var change = data.last.position.clone.substract(data.position.move);
@@ -263,7 +267,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
 	                    },
 	                    doubletap: function doubletap(data) {
-	                        if (!(0, _jQuery2.default)(data.target).hasClass("marker-container")) return false;
 	                        _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
 	                    },
 	                    flick: function flick(data) {
@@ -289,14 +292,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            (0, _jQuery2.default)(window).on(_Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
 
-	            (0, _jQuery2.default)(document).on(_Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
-	            (0, _jQuery2.default)(document).on(_Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
+	            var $document = (0, _jQuery2.default)(document);
+	            $document.on(_Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
+	            $document.on(_Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
 
-	            var gesture = _Helper.Helper.isTouch() ? _Events.Events.Handling.TOUCHSTART : _Events.Events.Handling.CLICK;
-
-	            this.$zoomIn.on(gesture, this.zoomInToCenter.bind(this));
-	            this.$zoomOut.on(gesture, this.zoomOutToCenter.bind(this));
-	            this.$home.on(gesture, this.resetToInitialState.bind(this));
+	            this.$zoomIn.data("mjs-action", this.zoomInToCenter.bind(this));
+	            this.$zoomOut.data("mjs-action", this.zoomOutToCenter.bind(this));
+	            this.$home.data("mjs-action", this.resetToInitialState.bind(this));
 
 	            return this;
 	        }
@@ -8863,17 +8865,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
-	            var _this = this;
-
-	            this.$cluster.on("touchstart", function (e) {
-	                e.stopPropagation();
-	            });
-	            this.$cluster.on("touchend", function (e) {
-	                e.stopPropagation();
-	            });
-	            this.$cluster.on(_Events.Events.Handling.CLICK, function () {
-	                _this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, _this.boundingBox);
-	            });
+	            this.$cluster.data("mjs-action", this.action.bind(this));
+	        }
+	    }, {
+	        key: 'action',
+	        value: function action() {
+	            this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, this.boundingBox);
 	        }
 	    }, {
 	        key: 'addMarker',
@@ -9017,27 +9014,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.eventManager = new _Publisher.Publisher();
 
 	            if (this.content.length) {
-
-	                this.$icon.on("touchstart", function (e) {
-	                    e.stopPropagation();
-	                });
-
-	                this.$icon.on("touchend", function (e) {
-	                    e.stopPropagation();
-	                });
-
-	                this.$icon.on("click", function () {
-	                    _this.eventManager.publish(_Events.Events.ToolTip.OPEN, _this.content);
-	                    _this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
-	                    _this.$icon.addClass("active");
-	                });
-
+	                this.$icon.data("mjs-action", this.action.bind(this));
 	                this.eventManager.subscribe(_Events.Events.Marker.DEACTIVATE, function () {
 	                    _this.$icon.removeClass("active");
 	                });
 	            }
 
 	            return this;
+	        }
+	    }, {
+	        key: 'action',
+	        value: function action() {
+	            this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
+	            this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
+	            this.$icon.addClass("active");
 	        }
 
 	        /**
