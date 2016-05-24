@@ -6159,6 +6159,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.levels = [];
 	        this.clusterHandlingTimeout = null;
 
+	        this.lastFrameMillisecs = Date.now();
+	        this.deltaTiming = 1.0;
+	        this.bestDeltaTiming = 1000.0 / 60.0;
+
 	        this.initial = {
 	            bounds: settings.bounds,
 	            center: settings.center,
@@ -6530,6 +6534,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function mainLoop() {
 	            var _this5 = this;
 
+	            var currentMillisecs = Date.now();
+	            var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
+	            this.lastFrameMillisecs = currentMillisecs;
+	            this.deltaTiming = deltaMillisecs / this.bestDeltaTiming;
+	            // TODO
+	            //console.log(this.deltaTiming);
 	            if (this.drawIsNeeded) {
 	                this.canvasContext.clearRect(0, 0, this.width, this.height);
 	                this.view.checkBoundaries();

@@ -90,6 +90,10 @@ export class TileMap {
         this.levels = [];
         this.clusterHandlingTimeout = null;
 
+        this.lastFrameMillisecs = Date.now();
+        this.deltaTiming = 1.0;
+        this.bestDeltaTiming = 1000.0 / 60.0;
+
         this.initial = {
             bounds: settings.bounds,
             center: settings.center,
@@ -399,12 +403,19 @@ export class TileMap {
      * main draw call
      */
     mainLoop() {
+        const currentMillisecs = Date.now();
+        const deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
+        this.lastFrameMillisecs = currentMillisecs;
+        this.deltaTiming = deltaMillisecs / this.bestDeltaTiming;
+        // TODO
+        //console.log(this.deltaTiming);
         if (this.drawIsNeeded) {
             this.canvasContext.clearRect(0, 0, this.width, this.height);
             this.view.checkBoundaries();
             this.view.draw();
             this.repositionMarkerContainer();
             this.drawIsNeeded = false;
+
         }
         window.requestAnimFrame(() => this.mainLoop());
     }
