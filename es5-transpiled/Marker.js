@@ -110,27 +110,20 @@
                 this.eventManager = new _Publisher.Publisher();
 
                 if (this.content.length) {
-
-                    this.$icon.on("touchstart", function(e) {
-                        e.stopPropagation();
-                    });
-
-                    this.$icon.on("touchend", function(e) {
-                        e.stopPropagation();
-                    });
-
-                    this.$icon.on("click", function() {
-                        _this.eventManager.publish(_Events.Events.ToolTip.OPEN, _this.content);
-                        _this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
-                        _this.$icon.addClass("active");
-                    });
-
+                    this.$icon.data("mjs-action", this.action.bind(this));
                     this.eventManager.subscribe(_Events.Events.Marker.DEACTIVATE, function() {
                         _this.$icon.removeClass("active");
                     });
                 }
 
                 return this;
+            }
+        }, {
+            key: 'action',
+            value: function action() {
+                this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
+                this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
+                this.$icon.addClass("active");
             }
 
             /**
