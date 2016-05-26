@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Helper.js', './Events.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js', './MarkerClusterer.js'], factory);
+        define(['exports', 'jQuery', './Helper.js', './Events.js', './Point.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js', './MarkerClusterer.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'), require('./MarkerClusterer.js'));
+        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'), require('./MarkerClusterer.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip, global.MarkerClusterer);
+        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.Point, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip, global.MarkerClusterer);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jQuery, _Helper, _Events, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip, _MarkerClusterer) {
+})(this, function(exports, _jQuery, _Helper, _Events, _Point, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip, _MarkerClusterer) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -166,6 +166,8 @@
             this.deltaTiming = 1.0;
             this.bestDeltaTiming = 1000.0 / 60.0;
 
+            this.velocity = new _Point.Point();
+
             this.initial = {
                 bounds: settings.bounds,
                 center: settings.center,
@@ -259,8 +261,7 @@
                     this.$markerContainer.css({
                         "width": newSize.width + 'px',
                         "height": newSize.height + 'px',
-                        "left": newSize.left + this.view.offsetToCenter + 'px',
-                        "top": newSize.top + 'px'
+                        "transform": 'translate3d(' + (newSize.left + this.view.offsetToCenter) + 'px, ' + newSize.top + 'px, 0px)'
                     });
                 }
                 return this;
@@ -456,7 +457,7 @@
             }
 
             /**
-             * move by delta momentum
+             * move view by delta
              * @param  {Point} delta - delta of x/y
              * @return {MappedJS} instance of MappedJS for chaining
              */
@@ -543,8 +544,10 @@
                 var currentMillisecs = Date.now();
                 var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
                 this.lastFrameMillisecs = currentMillisecs;
-                this.deltaTiming = deltaMillisecs / this.bestDeltaTiming;
-                // TODO
+                this.deltaTiming = _Helper.Helper.clamp(deltaMillisecs / this.bestDeltaTiming, 1, 4);
+
+                if (this.velocity.length >= 0.2) this.moveView(this.velocity.multiply(0.9).clone.multiply(this.deltaTiming));
+
                 if (this.drawIsNeeded) {
                     this.canvasContext.clearRect(0, 0, this.width, this.height);
                     this.view.checkBoundaries();
@@ -552,6 +555,7 @@
                     this.repositionMarkerContainer();
                     this.drawIsNeeded = false;
                 }
+
                 window.requestAnimFrame(function() {
                     return _this5.mainLoop();
                 });

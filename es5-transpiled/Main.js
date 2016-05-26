@@ -101,7 +101,6 @@
                 });
             });
 
-            this.momentum = null;
             this.keyTicks = 0;
 
             return this;
@@ -217,27 +216,30 @@
                     callbacks: {
                         tap: function tap(data) {
                             var action = (0, _jQuery2.default)(data.target).data("mjs-action");
+                            _this2.tileMap.velocity = new _Point.Point();
                             if (action) action();
                         },
                         pan: function pan(data) {
                             if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
                             var change = data.last.position.clone.substract(data.position.move);
-                            _this2.move(_this2.getAbsolutePosition(change).multiply(-1, -1));
+                            _this2.tileMap.velocity = new _Point.Point();
+                            _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
                         },
                         wheel: function wheel(data) {
                             var factor = data.delta / 4;
+                            _this2.tileMap.velocity = new _Point.Point();
                             _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.position.start));
                         },
                         pinch: function pinch(data) {
+                            _this2.tileMap.velocity = new _Point.Point();
                             _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
                         },
                         doubletap: function doubletap(data) {
+                            _this2.tileMap.velocity = new _Point.Point();
                             _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
                         },
                         flick: function flick(data) {
-                            var direction = new _Point.Point(data.directions[0], data.directions[1]),
-                                velocity = direction.clone.divide(data.speed).multiply(10);
-                            _this2.momentumAccerlation(velocity);
+                            _this2.tileMap.velocity = data.velocity.multiply(20);
                         }
                     }
                 });
@@ -366,52 +368,9 @@
                 return this;
             }
         }, {
-            key: 'move',
-            value: function move(delta) {
-                if (this.momentum) this.momentum = clearTimeout(this.momentum);
-                this.tileMap.moveView(delta);
-            }
-        }, {
             key: 'keyRelease',
             value: function keyRelease() {
                 this.keyTicks = 0;
-            }
-
-            /**
-             * momentum flicking
-             * @param  {number} velocity - speed
-             * @return {MappedJS} instance of MappedJS for chaining
-             */
-
-        }, {
-            key: 'momentumAccerlation',
-            value: function momentumAccerlation(velocity) {
-                this.maxMomentumSteps = 90;
-                if (this.momentum) this.momentum = clearTimeout(this.momentum);
-                this.triggerMomentum(this.maxMomentumSteps, 1 / 60, velocity.multiply(-1));
-                return this;
-            }
-
-            /**
-             * recursive momentum handler
-             * @param  {number} steps - current step (decreasing)
-             * @param  {number} timing - time for step
-             * @param  {Point} change - distance
-             * @return {MappedJS} instance of MappedJS for chaining
-             */
-
-        }, {
-            key: 'triggerMomentum',
-            value: function triggerMomentum(steps, timing, change) {
-                var _this3 = this;
-
-                this.momentum = setTimeout(function() {
-                    steps--;
-                    var delta = _Helper.Helper.linearEase((_this3.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * _this3.maxMomentumSteps);
-                    _this3.move(delta);
-                    if (steps >= 0) _this3.triggerMomentum(steps, timing, change);
-                }, timing);
-                return this;
             }
 
             /**

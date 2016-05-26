@@ -307,7 +307,6 @@ get height of boundaries
     * [.handleSwipeAndFlick()](#Interact+handleSwipeAndFlick) ⇒ <code>[Interact](#Interact)</code>
     * [.handleMultitouchEnd(e)](#Interact+handleMultitouchEnd) ⇒ <code>[Interact](#Interact)</code>
     * [.pinchBalance()](#Interact+pinchBalance) ⇒ <code>[Interact](#Interact)</code>
-    * [.calculateSpeed(distance, time)](#Interact+calculateSpeed) ⇒ <code>number</code>
     * [.getSwipeDirections(direction)](#Interact+getSwipeDirections) ⇒ <code>Array.&lt;string&gt;</code>
     * [.setTimeoutForEvent(callback, timeout, args, holdTimeout)](#Interact+setTimeoutForEvent) ⇒ <code>[Interact](#Interact)</code>
     * [.eventCallback(callback, args)](#Interact+eventCallback) ⇒ <code>[Interact](#Interact)</code>
@@ -761,18 +760,6 @@ balances pinching after release of finger
 
 **Kind**: instance method of <code>[Interact](#Interact)</code>  
 **Returns**: <code>[Interact](#Interact)</code> - instance of Interact for chaining  
-<a name="Interact+calculateSpeed"></a>
-
-### interact.calculateSpeed(distance, time) ⇒ <code>number</code>
-calculates the speed with specified distance and time
-
-**Kind**: instance method of <code>[Interact](#Interact)</code>  
-**Returns**: <code>number</code> - the calculated speed  
-**Params**
-
-- distance <code>number</code> - the specified distance
-- time <code>number</code> - the specified time elapsed
-
 <a name="Interact+getSwipeDirections"></a>
 
 ### interact.getSwipeDirections(direction) ⇒ <code>Array.&lt;string&gt;</code>
@@ -1038,8 +1025,6 @@ Creates a LatLng from specified LatLng
     * [.zoomOutToCenter()](#MappedJS+zoomOutToCenter) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.keyPress(e)](#MappedJS+keyPress) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.handleMovementByKeys(direction)](#MappedJS+handleMovementByKeys) ⇒ <code>[MappedJS](#MappedJS)</code>
-    * [.momentumAccerlation(velocity)](#MappedJS+momentumAccerlation) ⇒ <code>[MappedJS](#MappedJS)</code>
-    * [.triggerMomentum(steps, timing, change)](#MappedJS+triggerMomentum) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.resizeHandler()](#MappedJS+resizeHandler) ⇒ <code>[MappedJS](#MappedJS)</code>
     * [.loadingFinished()](#MappedJS+loadingFinished) ⇒ <code>[MappedJS](#MappedJS)</code>
 
@@ -1160,30 +1145,6 @@ handles the translation of the map by keypress
 **Params**
 
 - direction <code>[Point](#Point)</code> - x,y point where to translate to
-
-<a name="MappedJS+momentumAccerlation"></a>
-
-### mappedJS.momentumAccerlation(velocity) ⇒ <code>[MappedJS](#MappedJS)</code>
-momentum flicking
-
-**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
-**Params**
-
-- velocity <code>number</code> - speed
-
-<a name="MappedJS+triggerMomentum"></a>
-
-### mappedJS.triggerMomentum(steps, timing, change) ⇒ <code>[MappedJS](#MappedJS)</code>
-recursive momentum handler
-
-**Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
-**Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
-**Params**
-
-- steps <code>number</code> - current step (decreasing)
-- timing <code>number</code> - time for step
-- change <code>[Point](#Point)</code> - distance
 
 <a name="MappedJS+resizeHandler"></a>
 
@@ -2136,7 +2097,7 @@ Handles resizing of TileMap
 <a name="TileMap+moveView"></a>
 
 ### tileMap.moveView(delta) ⇒ <code>[MappedJS](#MappedJS)</code>
-move by delta momentum
+move view by delta
 
 **Kind**: instance method of <code>[TileMap](#TileMap)</code>  
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
