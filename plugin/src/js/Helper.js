@@ -19,6 +19,9 @@ export var Helper = {
         });
         return this;
     },
+    clamp(v, min, max) {
+        return Math.min(Math.max(v, min), max);
+    },
     /**
      * loads an image and calls callback on success
      * @function

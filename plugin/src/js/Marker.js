@@ -98,6 +98,8 @@ export class Marker {
      */
     positionMarker() {
         this.position = this.instance.view.convertLatLngToPoint(this.latlng);
+        const p = this.position.clone.divide(this.instance.view.currentView.width, this.instance.view.currentView.height).multiply(100);
+        console.log(p);
         if (this.$icon) {
             this.$icon.css({
                 "left": `${this.position.x / this.instance.view.currentView.width * 100}%`,

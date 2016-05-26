@@ -245,6 +245,8 @@
                     pointerArray: {},
                     multitouch: false,
                     distance: null,
+                    direction: new _Point.Point(),
+                    velocity: new _Point.Point(),
                     directions: [],
                     zoom: 0,
                     difference: null,
@@ -913,29 +915,22 @@
         }, {
             key: 'handleSwipeAndFlick',
             value: function handleSwipeAndFlick() {
-                var direction = this.data.position.end.clone.substract(this.data.last.position);
-
-                var vLDirection = direction.length,
-                    directionNormalized = direction.divide(vLDirection, vLDirection);
+                if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
+                    this.data.direction = this.data.position.end.clone.substract(this.data.last.position);
+                    this.data.velocity = this.data.direction.clone.multiply(this.timeToLastMove);
+                    this.data.distance = this.data.last.position.distance(this.data.position.end);
+                }
 
                 if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
                     var originalStart = this.getAbsolutePosition(this.data.position.start);
                     var originalEnd = this.getAbsolutePosition(this.data.position.end);
                     if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
-                        this.data.directions = this.getSwipeDirections(directionNormalized);
+                        this.data.directions = this.getSwipeDirections(this.data.direction);
                         this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
                     }
                 }
-
                 if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
-                    var distance = this.data.last.position.distance(this.data.position.end);
-                    this.data.distance = distance;
-                    var _direction = this.data.last.position.clone.substract(this.data.position.end);
-                    this.data.directions = [_direction.x, _direction.y];
-                    this.data.speed = this.calculateSpeed(distance, this.time);
-                    if (this.data.speed >= this.settings.speedThreshold) {
-                        this.eventCallback(this.settings.callbacks.flick, this.dataClone);
-                    }
+                    this.eventCallback(this.settings.callbacks.flick, this.dataClone);
                 }
 
                 return this;
@@ -989,19 +984,6 @@
                     }.bind(this), this.settings.pinchBalanceTime);
                 }
                 return this;
-            }
-
-            /**
-             * calculates the speed with specified distance and time
-             * @param  {number} distance - the specified distance
-             * @param  {number} time - the specified time elapsed
-             * @return {number} the calculated speed
-             */
-
-        }, {
-            key: 'calculateSpeed',
-            value: function calculateSpeed(distance, time) {
-                return distance / (time || 0.00001) * 100;
             }
 
             /**
@@ -1076,7 +1058,7 @@
             key: 'getAbsolutePosition',
             value: function getAbsolutePosition(point) {
                 var clientBounds = this.container.getBoundingClientRect();
-                return point.mult(clientBounds.width, clientBounds.height);
+                return point.multiply(clientBounds.width, clientBounds.height);
             }
 
             /**

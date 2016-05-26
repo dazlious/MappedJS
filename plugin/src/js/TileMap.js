@@ -1,6 +1,7 @@
 import $ from 'jQuery';
 import {Helper} from './Helper.js';
 import {Events} from './Events.js';
+import {Point} from './Point.js';
 import {Publisher} from './Publisher.js';
 import {StateHandler} from './StateHandler.js';
 import {Rectangle} from './Rectangle.js';
@@ -94,6 +95,8 @@ export class TileMap {
         this.deltaTiming = 1.0;
         this.bestDeltaTiming = 1000.0 / 60.0;
 
+        this.velocity = new Point();
+
         this.initial = {
             bounds: settings.bounds,
             center: settings.center,
@@ -177,8 +180,7 @@ export class TileMap {
             this.$markerContainer.css({
                "width": `${newSize.width}px`,
                "height": `${newSize.height}px`,
-               "left": `${newSize.left + this.view.offsetToCenter}px`,
-               "top": `${newSize.top}px`
+               "transform": `translate3d(${newSize.left + this.view.offsetToCenter}px, ${newSize.top}px, 0px)`
             });
         }
         return this;
@@ -339,7 +341,7 @@ export class TileMap {
     }
 
     /**
-     * move by delta momentum
+     * move view by delta
      * @param  {Point} delta - delta of x/y
      * @return {MappedJS} instance of MappedJS for chaining
      */
@@ -406,8 +408,10 @@ export class TileMap {
         const currentMillisecs = Date.now();
         const deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
         this.lastFrameMillisecs = currentMillisecs;
-        this.deltaTiming = deltaMillisecs / this.bestDeltaTiming;
-        // TODO
+        this.deltaTiming = Helper.clamp(deltaMillisecs / this.bestDeltaTiming, 1, 4);
+
+        if (this.velocity.length >= 0.2) this.moveView(this.velocity.multiply(0.9).clone.multiply(this.deltaTiming));
+
         if (this.drawIsNeeded) {
             this.canvasContext.clearRect(0, 0, this.width, this.height);
             this.view.checkBoundaries();
@@ -415,6 +419,8 @@ export class TileMap {
             this.repositionMarkerContainer();
             this.drawIsNeeded = false;
         }
+
+
         window.requestAnimFrame(() => this.mainLoop());
     }
 

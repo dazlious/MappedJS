@@ -93,7 +93,7 @@
 <p><a name="module_DataEnrichment"></a></p>
 <h2 id="dataenrichment">DataEnrichment</h2>
 <p>enriches delivered data with default values</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x6d;&#x64;&#x75;&#118;&#x65;&#x40;&#x64;&#x65;&#115;&#105;&#x67;&#110;&#109;&#97;&#x69;&#x6c;&#46;&#x6e;&#x65;&#116;">&#x6d;&#x64;&#x75;&#118;&#x65;&#x40;&#x64;&#x65;&#115;&#105;&#x67;&#110;&#109;&#97;&#x69;&#x6c;&#46;&#x6e;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x6d;&#100;&#x75;&#x76;&#x65;&#64;&#100;&#101;&#x73;&#105;&#103;&#110;&#109;&#x61;&#x69;&#108;&#x2e;&#x6e;&#101;&#x74;">&#x6d;&#100;&#x75;&#x76;&#x65;&#64;&#100;&#101;&#x73;&#105;&#103;&#110;&#109;&#x61;&#x69;&#108;&#x2e;&#x6e;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_DataEnrichment">DataEnrichment</a><ul>
 <li><a href="#module_DataEnrichment.marker">.marker(data)</a> ⇒ <code>object</code></li>
@@ -118,7 +118,7 @@
 <p><a name="module_Helper"></a></p>
 <h2 id="helper">Helper</h2>
 <p>Helper for general purposes</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x6d;&#100;&#x75;&#118;&#x65;&#x40;&#x64;&#101;&#115;&#105;&#103;&#110;&#x6d;&#97;&#x69;&#x6c;&#46;&#x6e;&#101;&#x74;">&#x6d;&#100;&#x75;&#118;&#x65;&#x40;&#x64;&#101;&#115;&#105;&#103;&#110;&#x6d;&#97;&#x69;&#x6c;&#46;&#x6e;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#x6d;&#x64;&#117;&#118;&#101;&#x40;&#100;&#x65;&#115;&#x69;&#x67;&#110;&#109;&#x61;&#x69;&#108;&#x2e;&#110;&#x65;&#116;">&#x6d;&#x64;&#117;&#118;&#101;&#x40;&#100;&#x65;&#115;&#x69;&#x67;&#110;&#109;&#x61;&#x69;&#108;&#x2e;&#110;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_Helper">Helper</a><ul>
 <li><a href="#module_Helper.requestJSON">.requestJSON(filename, callback)</a> ⇒ <code>Helper</code></li>
@@ -267,7 +267,6 @@
 <li><a href="#Interact+handleSwipeAndFlick">.handleSwipeAndFlick()</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
 <li><a href="#Interact+handleMultitouchEnd">.handleMultitouchEnd(e)</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
 <li><a href="#Interact+pinchBalance">.pinchBalance()</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
-<li><a href="#Interact+calculateSpeed">.calculateSpeed(distance, time)</a> ⇒ <code>number</code></li>
 <li><a href="#Interact+getSwipeDirections">.getSwipeDirections(direction)</a> ⇒ <code>Array.&lt;string&gt;</code></li>
 <li><a href="#Interact+setTimeoutForEvent">.setTimeoutForEvent(callback, timeout, args, holdTimeout)</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
 <li><a href="#Interact+eventCallback">.eventCallback(callback, args)</a> ⇒ <code><a href="#Interact">Interact</a></code></li>
@@ -575,15 +574,7 @@
 <p><a name="Interact+pinchBalance"></a></p>
 <h3 id="interact-pinchbalance-code-interact-interact-code-">interact.pinchBalance() ⇒ <code><a href="#Interact">Interact</a></code></h3>
 <p>balances pinching after release of finger</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - instance of Interact for chaining<br><a name="Interact+calculateSpeed"></a></p>
-<h3 id="interact-calculatespeed-distance-time-code-number-code-">interact.calculateSpeed(distance, time) ⇒ <code>number</code></h3>
-<p>calculates the speed with specified distance and time</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>number</code> - the calculated speed<br><strong>Params</strong></p>
-<ul>
-<li>distance <code>number</code> - the specified distance</li>
-<li>time <code>number</code> - the specified time elapsed</li>
-</ul>
-<p><a name="Interact+getSwipeDirections"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - instance of Interact for chaining<br><a name="Interact+getSwipeDirections"></a></p>
 <h3 id="interact-getswipedirections-direction-code-array-lt-string-gt-code-">interact.getSwipeDirections(direction) ⇒ <code>Array.&lt;string&gt;</code></h3>
 <p>Returns an array of strings, representing the directions</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Array.&lt;string&gt;</code> - returns an array representing the directions as strings<br><strong>Params</strong></p>
@@ -770,8 +761,6 @@
 <li><a href="#MappedJS+zoomOutToCenter">.zoomOutToCenter()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+keyPress">.keyPress(e)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+handleMovementByKeys">.handleMovementByKeys(direction)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+momentumAccerlation">.momentumAccerlation(velocity)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
-<li><a href="#MappedJS+triggerMomentum">.triggerMomentum(steps, timing, change)</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+resizeHandler">.resizeHandler()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 <li><a href="#MappedJS+loadingFinished">.loadingFinished()</a> ⇒ <code><a href="#MappedJS">MappedJS</a></code></li>
 </ul>
@@ -845,22 +834,6 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
 <ul>
 <li>direction <code><a href="#Point">Point</a></code> - x,y point where to translate to</li>
-</ul>
-<p><a name="MappedJS+momentumAccerlation"></a></p>
-<h3 id="mappedjs-momentumaccerlation-velocity-code-mappedjs-mappedjs-code-">mappedJS.momentumAccerlation(velocity) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>momentum flicking</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
-<ul>
-<li>velocity <code>number</code> - speed</li>
-</ul>
-<p><a name="MappedJS+triggerMomentum"></a></p>
-<h3 id="mappedjs-triggermomentum-steps-timing-change-code-mappedjs-mappedjs-code-">mappedJS.triggerMomentum(steps, timing, change) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>recursive momentum handler</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
-<ul>
-<li>steps <code>number</code> - current step (decreasing)</li>
-<li>timing <code>number</code> - time for step</li>
-<li>change <code><a href="#Point">Point</a></code> - distance</li>
 </ul>
 <p><a name="MappedJS+resizeHandler"></a></p>
 <h3 id="mappedjs-resizehandler-code-mappedjs-mappedjs-code-">mappedJS.resizeHandler() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
@@ -1496,7 +1469,7 @@
 <p>Handles resizing of TileMap</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#TileMap">TileMap</a></code> - instance of TileMap for chaining<br><a name="TileMap+moveView"></a></p>
 <h3 id="tilemap-moveview-delta-code-mappedjs-mappedjs-code-">tileMap.moveView(delta) ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
-<p>move by delta momentum</p>
+<p>move view by delta</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#TileMap">TileMap</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
 <ul>
 <li>delta <code><a href="#Point">Point</a></code> - delta of x/y</li>
@@ -1721,7 +1694,7 @@
 <p><strong>Kind</strong>: global variable<br><a name="Events"></a></p>
 <h2 id="events-code-object-code-">Events : <code>object</code></h2>
 <p>Helper for naming events</p>
-<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#x3a;&#109;&#x64;&#117;&#x76;&#x65;&#64;&#100;&#101;&#x73;&#105;&#103;&#x6e;&#x6d;&#97;&#105;&#108;&#46;&#x6e;&#x65;&#116;">&#109;&#x64;&#117;&#x76;&#x65;&#64;&#100;&#101;&#x73;&#105;&#103;&#x6e;&#x6d;&#97;&#105;&#108;&#46;&#x6e;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#x6d;&#100;&#x75;&#x76;&#101;&#x40;&#x64;&#x65;&#x73;&#105;&#103;&#x6e;&#109;&#x61;&#105;&#x6c;&#x2e;&#110;&#101;&#x74;">&#x6d;&#100;&#x75;&#x76;&#101;&#x40;&#x64;&#x65;&#x73;&#105;&#103;&#x6e;&#109;&#x61;&#105;&#x6c;&#x2e;&#110;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#Events">Events</a> : <code>object</code><ul>
 <li><a href="#Events.ToolTip">.ToolTip</a> : <code>Object</code></li>

@@ -37,7 +37,6 @@ export class MappedJS {
             });
         });
 
-        this.momentum = null;
         this.keyTicks = 0;
 
         return this;
@@ -129,28 +128,30 @@ export class MappedJS {
             callbacks: {
                 tap: (data) => {
                     const action = $(data.target).data("mjs-action");
+                    this.tileMap.velocity = new Point();
                     if (action) action();
                 },
                 pan: (data) => {
                     if ($(data.target).hasClass("control")) return false;
                     const change = data.last.position.clone.substract(data.position.move);
-                    this.move(this.getAbsolutePosition(change).multiply(-1, -1));
+                    this.tileMap.velocity = new Point();
+                    this.tileMap.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                 },
                 wheel: (data) => {
                     const factor = data.delta / 4;
+                    this.tileMap.velocity = new Point();
                     this.tileMap.zoom(factor, this.getAbsolutePosition(data.position.start));
                 },
                 pinch: (data) => {
+                    this.tileMap.velocity = new Point();
                     this.tileMap.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
                 },
                 doubletap: (data) => {
+                    this.tileMap.velocity = new Point();
                     this.tileMap.zoom(0.2, this.getAbsolutePosition(data.position.start));
                 },
                 flick: (data) => {
-                    const direction = new Point(data.directions[0], data.directions[1]),
-                          velocity = direction.clone.divide(data.speed).multiply(10);
-                    this.momentumAccerlation(velocity);
-
+                    this.tileMap.velocity = data.velocity.multiply(20);
                 }
             }
         });
@@ -254,42 +255,8 @@ export class MappedJS {
         return this;
     }
 
-    move(delta) {
-        if (this.momentum) this.momentum = clearTimeout(this.momentum);
-        this.tileMap.moveView(delta);
-    }
-
     keyRelease() {
         this.keyTicks = 0;
-    }
-
-    /**
-     * momentum flicking
-     * @param  {number} velocity - speed
-     * @return {MappedJS} instance of MappedJS for chaining
-     */
-    momentumAccerlation(velocity) {
-        this.maxMomentumSteps = 90;
-        if (this.momentum) this.momentum = clearTimeout(this.momentum);
-        this.triggerMomentum(this.maxMomentumSteps, 1/60, velocity.multiply(-1));
-        return this;
-    }
-
-    /**
-     * recursive momentum handler
-     * @param  {number} steps - current step (decreasing)
-     * @param  {number} timing - time for step
-     * @param  {Point} change - distance
-     * @return {MappedJS} instance of MappedJS for chaining
-     */
-    triggerMomentum(steps, timing, change) {
-        this.momentum = setTimeout(() => {
-            steps--;
-            const delta = Helper.linearEase((this.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * this.maxMomentumSteps);
-            this.move(delta);
-            if (steps >= 0) this.triggerMomentum(steps, timing, change);
-        }, timing);
-        return this;
     }
 
     /**

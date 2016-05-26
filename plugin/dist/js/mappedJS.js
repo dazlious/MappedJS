@@ -81,7 +81,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Interact = __webpack_require__(209);
 
-	var _Point = __webpack_require__(198);
+	var _Point = __webpack_require__(195);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -136,7 +136,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	        });
 
-	        this.momentum = null;
 	        this.keyTicks = 0;
 
 	        return this;
@@ -252,27 +251,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	                callbacks: {
 	                    tap: function tap(data) {
 	                        var action = (0, _jQuery2.default)(data.target).data("mjs-action");
+	                        _this2.tileMap.velocity = new _Point.Point();
 	                        if (action) action();
 	                    },
 	                    pan: function pan(data) {
 	                        if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
 	                        var change = data.last.position.clone.substract(data.position.move);
-	                        _this2.move(_this2.getAbsolutePosition(change).multiply(-1, -1));
+	                        _this2.tileMap.velocity = new _Point.Point();
+	                        _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
 	                    },
 	                    wheel: function wheel(data) {
 	                        var factor = data.delta / 4;
+	                        _this2.tileMap.velocity = new _Point.Point();
 	                        _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.position.start));
 	                    },
 	                    pinch: function pinch(data) {
+	                        _this2.tileMap.velocity = new _Point.Point();
 	                        _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
 	                    },
 	                    doubletap: function doubletap(data) {
+	                        _this2.tileMap.velocity = new _Point.Point();
 	                        _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
 	                    },
 	                    flick: function flick(data) {
-	                        var direction = new _Point.Point(data.directions[0], data.directions[1]),
-	                            velocity = direction.clone.divide(data.speed).multiply(10);
-	                        _this2.momentumAccerlation(velocity);
+	                        _this2.tileMap.velocity = data.velocity.multiply(20);
 	                    }
 	                }
 	            });
@@ -401,52 +403,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this;
 	        }
 	    }, {
-	        key: 'move',
-	        value: function move(delta) {
-	            if (this.momentum) this.momentum = clearTimeout(this.momentum);
-	            this.tileMap.moveView(delta);
-	        }
-	    }, {
 	        key: 'keyRelease',
 	        value: function keyRelease() {
 	            this.keyTicks = 0;
-	        }
-
-	        /**
-	         * momentum flicking
-	         * @param  {number} velocity - speed
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'momentumAccerlation',
-	        value: function momentumAccerlation(velocity) {
-	            this.maxMomentumSteps = 90;
-	            if (this.momentum) this.momentum = clearTimeout(this.momentum);
-	            this.triggerMomentum(this.maxMomentumSteps, 1 / 60, velocity.multiply(-1));
-	            return this;
-	        }
-
-	        /**
-	         * recursive momentum handler
-	         * @param  {number} steps - current step (decreasing)
-	         * @param  {number} timing - time for step
-	         * @param  {Point} change - distance
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'triggerMomentum',
-	        value: function triggerMomentum(steps, timing, change) {
-	            var _this3 = this;
-
-	            this.momentum = setTimeout(function () {
-	                steps--;
-	                var delta = _Helper.Helper.linearEase((_this3.maxMomentumSteps - steps) * timing, change, change.clone.multiply(-1), timing * _this3.maxMomentumSteps);
-	                _this3.move(delta);
-	                if (steps >= 0) _this3.triggerMomentum(steps, timing, change);
-	            }, timing);
-	            return this;
 	        }
 
 	        /**
@@ -5777,6 +5736,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        return this;
 	    },
+	    clamp: function clamp(v, min, max) {
+	        return Math.min(Math.max(v, min), max);
+	    },
 
 	    /**
 	     * loads an image and calls callback on success
@@ -6035,11 +5997,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _Publisher = __webpack_require__(195);
+	var _Point = __webpack_require__(195);
 
-	var _StateHandler = __webpack_require__(196);
+	var _Publisher = __webpack_require__(196);
 
-	var _Rectangle = __webpack_require__(197);
+	var _StateHandler = __webpack_require__(197);
+
+	var _Rectangle = __webpack_require__(198);
 
 	var _View = __webpack_require__(199);
 
@@ -6165,6 +6129,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.deltaTiming = 1.0;
 	        this.bestDeltaTiming = 1000.0 / 60.0;
 
+	        this.velocity = new _Point.Point();
+
 	        this.initial = {
 	            bounds: settings.bounds,
 	            center: settings.center,
@@ -6258,8 +6224,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.$markerContainer.css({
 	                    "width": newSize.width + 'px',
 	                    "height": newSize.height + 'px',
-	                    "left": newSize.left + this.view.offsetToCenter + 'px',
-	                    "top": newSize.top + 'px'
+	                    "transform": 'translate3d(' + (newSize.left + this.view.offsetToCenter) + 'px, ' + newSize.top + 'px, 0px)'
 	                });
 	            }
 	            return this;
@@ -6455,7 +6420,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * move by delta momentum
+	         * move view by delta
 	         * @param  {Point} delta - delta of x/y
 	         * @return {MappedJS} instance of MappedJS for chaining
 	         */
@@ -6542,8 +6507,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var currentMillisecs = Date.now();
 	            var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
 	            this.lastFrameMillisecs = currentMillisecs;
-	            this.deltaTiming = deltaMillisecs / this.bestDeltaTiming;
-	            // TODO
+	            this.deltaTiming = _Helper.Helper.clamp(deltaMillisecs / this.bestDeltaTiming, 1, 4);
+
+	            if (this.velocity.length >= 0.2) this.moveView(this.velocity.multiply(0.9).clone.multiply(this.deltaTiming));
+
 	            if (this.drawIsNeeded) {
 	                this.canvasContext.clearRect(0, 0, this.width, this.height);
 	                this.view.checkBoundaries();
@@ -6551,6 +6518,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.repositionMarkerContainer();
 	                this.drawIsNeeded = false;
 	            }
+
 	            window.requestAnimFrame(function () {
 	                return _this5.mainLoop();
 	            });
@@ -6574,6 +6542,238 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 195 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * @author Michael Duve <mduve@designmail.net>
+	 * @file represents a point with x and y value
+	 * @copyright Michael Duve 2016
+	 */
+
+	var Point = exports.Point = function () {
+	  _createClass(Point, [{
+	    key: "length",
+
+
+	    /**
+	     * length of a point
+	     * @return {number} length of a point
+	     */
+	    get: function get() {
+	      return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+	    }
+
+	    /**
+	     * gets a clone of this point
+	     * @return {Point} new instance equals this point
+	     */
+
+	  }, {
+	    key: "clone",
+	    get: function get() {
+	      return Point.createFromPoint(this);
+	    }
+
+	    /**
+	     * gets absolute Point
+	     * @return {Point} returns Point with absolute values
+	     */
+
+	  }, {
+	    key: "abs",
+	    get: function get() {
+	      return new Point(Math.abs(this.x), Math.abs(this.y));
+	    }
+
+	    /**
+	     * @constructor
+	     * @param  {number} x = 0 - representation of x coordinate
+	     * @param  {number} y = 0 - representation of y coordinate
+	     * @return {Point} instance of Point for chaining
+	     */
+
+	  }]);
+
+	  function Point() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	    _classCallCheck(this, Point);
+
+	    this.x = x;
+	    this.y = y;
+	    return this;
+	  }
+
+	  /**
+	   * substracts 2 points
+	   * @param  {Point} point = new Point() - the point to substract from this
+	   * @return {Point} instance of Point for chaining
+	   */
+
+
+	  _createClass(Point, [{
+	    key: "substract",
+	    value: function substract() {
+	      var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
+
+	      this.x -= point.x;
+	      this.y -= point.y;
+	      return this;
+	    }
+
+	    /**
+	     * adds 2 points
+	     * @param  {Point} point = new Point() - the point to add to this
+	     * @return {Point} instance of Point for chaining
+	     */
+
+	  }, {
+	    key: "add",
+	    value: function add() {
+	      var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
+
+	      this.x += point.x;
+	      this.y += point.y;
+	      return this;
+	    }
+
+	    /**
+	     * multiplicates a point with a given x and y
+	     * @param  {number} x = 1 - factor to multiplicate x with
+	     * @param  {number} y = x - factor to multiplicate y with
+	     * @return {Point} instance of Point for chaining
+	     */
+
+	  }, {
+	    key: "multiply",
+	    value: function multiply() {
+	      var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	      this.x *= x;
+	      this.y *= y;
+	      return this;
+	    }
+
+	    /**
+	     * divide a point with a given x and y
+	     * @param  {number} x = 1 - factor to divide x with
+	     * @param  {number} y = x - factor to divide y with
+	     * @return {Point} instance of Point for chaining
+	     */
+
+	  }, {
+	    key: "divide",
+	    value: function divide() {
+	      var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	      this.x /= x;
+	      this.y /= y;
+	      return this;
+	    }
+
+	    /**
+	     * check if points are equal
+	     * @param  {Point} point - the point to check against this
+	     * @return {Boolean} is true, if x and y are the same
+	     */
+
+	  }, {
+	    key: "equals",
+	    value: function equals(point) {
+	      return this.x === point.x && this.y === point.y;
+	    }
+
+	    /**
+	     * Returns the distance from this Point to a specified Point
+	     * @param  {Point} point = new Point() - the specified point to be measured against this Point
+	     * @return {Point} the distance between this Point and specified point
+	     */
+
+	  }, {
+	    key: "distance",
+	    value: function distance() {
+	      var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
+
+	      return this.clone.substract(point).length;
+	    }
+
+	    /**
+	     * translates a point by x and y
+	     * @param  {number} x = 0 - value to move x
+	     * @param  {number} y = x - value to move y
+	     * @return {Point} instance of Point for chaining
+	     */
+
+	  }, {
+	    key: "translate",
+	    value: function translate() {
+	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	      this.x += x;
+	      this.y += y;
+	      return this;
+	    }
+
+	    /**
+	     * positions a point by x and y
+	     * @param  {number} x = 0 - value to position x
+	     * @param  {number} y = x - value to position y
+	     * @return {Point} instance of Point for chaining
+	     */
+
+	  }, {
+	    key: "position",
+	    value: function position() {
+	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	      this.x = x;
+	      this.y = y;
+	      return this;
+	    }
+
+	    /**
+	     * translates a Point to an array
+	     * @return {Array} Returns Point as Array(x, y)
+	     */
+
+	  }, {
+	    key: "toArray",
+	    value: function toArray() {
+	      return [this.x, this.y];
+	    }
+	  }]);
+
+	  return Point;
+	}();
+
+	/**
+	 * Creates a Point from specified point
+	 * @param  {Point} point - specified point
+	 * @return {Point} the point specified
+	 */
+
+
+	Point.createFromPoint = function (point) {
+	  return new Point(point.x, point.y);
+		};
+
+/***/ },
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6733,7 +6933,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6908,7 +7108,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6922,7 +7122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _Point2 = __webpack_require__(198);
+	var _Point2 = __webpack_require__(195);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -7416,238 +7616,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		};
 
 /***/ },
-/* 198 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * @author Michael Duve <mduve@designmail.net>
-	 * @file represents a point with x and y value
-	 * @copyright Michael Duve 2016
-	 */
-
-	var Point = exports.Point = function () {
-	  _createClass(Point, [{
-	    key: "length",
-
-
-	    /**
-	     * length of a point
-	     * @return {number} length of a point
-	     */
-	    get: function get() {
-	      return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-	    }
-
-	    /**
-	     * gets a clone of this point
-	     * @return {Point} new instance equals this point
-	     */
-
-	  }, {
-	    key: "clone",
-	    get: function get() {
-	      return Point.createFromPoint(this);
-	    }
-
-	    /**
-	     * gets absolute Point
-	     * @return {Point} returns Point with absolute values
-	     */
-
-	  }, {
-	    key: "abs",
-	    get: function get() {
-	      return new Point(Math.abs(this.x), Math.abs(this.y));
-	    }
-
-	    /**
-	     * @constructor
-	     * @param  {number} x = 0 - representation of x coordinate
-	     * @param  {number} y = 0 - representation of y coordinate
-	     * @return {Point} instance of Point for chaining
-	     */
-
-	  }]);
-
-	  function Point() {
-	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-
-	    _classCallCheck(this, Point);
-
-	    this.x = x;
-	    this.y = y;
-	    return this;
-	  }
-
-	  /**
-	   * substracts 2 points
-	   * @param  {Point} point = new Point() - the point to substract from this
-	   * @return {Point} instance of Point for chaining
-	   */
-
-
-	  _createClass(Point, [{
-	    key: "substract",
-	    value: function substract() {
-	      var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
-
-	      this.x -= point.x;
-	      this.y -= point.y;
-	      return this;
-	    }
-
-	    /**
-	     * adds 2 points
-	     * @param  {Point} point = new Point() - the point to add to this
-	     * @return {Point} instance of Point for chaining
-	     */
-
-	  }, {
-	    key: "add",
-	    value: function add() {
-	      var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
-
-	      this.x += point.x;
-	      this.y += point.y;
-	      return this;
-	    }
-
-	    /**
-	     * multiplicates a point with a given x and y
-	     * @param  {number} x = 1 - factor to multiplicate x with
-	     * @param  {number} y = x - factor to multiplicate y with
-	     * @return {Point} instance of Point for chaining
-	     */
-
-	  }, {
-	    key: "multiply",
-	    value: function multiply() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-
-	      this.x *= x;
-	      this.y *= y;
-	      return this;
-	    }
-
-	    /**
-	     * divide a point with a given x and y
-	     * @param  {number} x = 1 - factor to divide x with
-	     * @param  {number} y = x - factor to divide y with
-	     * @return {Point} instance of Point for chaining
-	     */
-
-	  }, {
-	    key: "divide",
-	    value: function divide() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-
-	      this.x /= x;
-	      this.y /= y;
-	      return this;
-	    }
-
-	    /**
-	     * check if points are equal
-	     * @param  {Point} point - the point to check against this
-	     * @return {Boolean} is true, if x and y are the same
-	     */
-
-	  }, {
-	    key: "equals",
-	    value: function equals(point) {
-	      return this.x === point.x && this.y === point.y;
-	    }
-
-	    /**
-	     * Returns the distance from this Point to a specified Point
-	     * @param  {Point} point = new Point() - the specified point to be measured against this Point
-	     * @return {Point} the distance between this Point and specified point
-	     */
-
-	  }, {
-	    key: "distance",
-	    value: function distance() {
-	      var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
-
-	      return this.clone.substract(point).length;
-	    }
-
-	    /**
-	     * translates a point by x and y
-	     * @param  {number} x = 0 - value to move x
-	     * @param  {number} y = x - value to move y
-	     * @return {Point} instance of Point for chaining
-	     */
-
-	  }, {
-	    key: "translate",
-	    value: function translate() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-
-	      this.x += x;
-	      this.y += y;
-	      return this;
-	    }
-
-	    /**
-	     * positions a point by x and y
-	     * @param  {number} x = 0 - value to position x
-	     * @param  {number} y = x - value to position y
-	     * @return {Point} instance of Point for chaining
-	     */
-
-	  }, {
-	    key: "position",
-	    value: function position() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-
-	      this.x = x;
-	      this.y = y;
-	      return this;
-	    }
-
-	    /**
-	     * translates a Point to an array
-	     * @return {Array} Returns Point as Array(x, y)
-	     */
-
-	  }, {
-	    key: "toArray",
-	    value: function toArray() {
-	      return [this.x, this.y];
-	    }
-	  }]);
-
-	  return Point;
-	}();
-
-	/**
-	 * Creates a Point from specified point
-	 * @param  {Point} point - specified point
-	 * @return {Point} the point specified
-	 */
-
-
-	Point.createFromPoint = function (point) {
-	  return new Point(point.x, point.y);
-		};
-
-/***/ },
 /* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -7664,17 +7632,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _Point = __webpack_require__(198);
+	var _Point = __webpack_require__(195);
 
 	var _LatLng = __webpack_require__(200);
 
 	var _Bounds = __webpack_require__(201);
 
-	var _Rectangle = __webpack_require__(197);
+	var _Rectangle = __webpack_require__(198);
 
 	var _Tile = __webpack_require__(202);
 
-	var _Publisher = __webpack_require__(195);
+	var _Publisher = __webpack_require__(196);
 
 	var _MarkerClusterer = __webpack_require__(203);
 
@@ -8372,11 +8340,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
-	var _StateHandler = __webpack_require__(196);
+	var _StateHandler = __webpack_require__(197);
 
-	var _Rectangle2 = __webpack_require__(197);
+	var _Rectangle2 = __webpack_require__(198);
 
-	var _Publisher = __webpack_require__(195);
+	var _Publisher = __webpack_require__(196);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8522,7 +8490,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _Publisher = __webpack_require__(195);
+	var _Publisher = __webpack_require__(196);
 
 	var _Cluster = __webpack_require__(204);
 
@@ -8781,9 +8749,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _Publisher = __webpack_require__(195);
+	var _Publisher = __webpack_require__(196);
 
-	var _Point = __webpack_require__(198);
+	var _Point = __webpack_require__(195);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8936,11 +8904,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
-	var _Point = __webpack_require__(198);
+	var _Point = __webpack_require__(195);
 
-	var _Rectangle = __webpack_require__(197);
+	var _Rectangle = __webpack_require__(198);
 
-	var _Publisher = __webpack_require__(195);
+	var _Publisher = __webpack_require__(196);
 
 	var _DataEnrichment = __webpack_require__(206);
 
@@ -9063,6 +9031,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'positionMarker',
 	        value: function positionMarker() {
 	            this.position = this.instance.view.convertLatLngToPoint(this.latlng);
+	            var p = this.position.clone.divide(this.instance.view.currentView.width, this.instance.view.currentView.height).multiply(100);
+	            console.log(p);
 	            if (this.$icon) {
 	                this.$icon.css({
 	                    "left": this.position.x / this.instance.view.currentView.width * 100 + '%',
@@ -9095,7 +9065,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
-	var _Point = __webpack_require__(198);
+	var _Point = __webpack_require__(195);
 
 	var _LatLng = __webpack_require__(200);
 
@@ -9245,7 +9215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
-	var _Publisher = __webpack_require__(195);
+	var _Publisher = __webpack_require__(196);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9493,7 +9463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jQuery2 = _interopRequireDefault(_jQuery);
 
-	var _Point = __webpack_require__(198);
+	var _Point = __webpack_require__(195);
 
 	var _Helper = __webpack_require__(192);
 
@@ -9696,6 +9666,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                pointerArray: {},
 	                multitouch: false,
 	                distance: null,
+	                direction: new _Point.Point(),
+	                velocity: new _Point.Point(),
 	                directions: [],
 	                zoom: 0,
 	                difference: null,
@@ -10364,29 +10336,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handleSwipeAndFlick',
 	        value: function handleSwipeAndFlick() {
-	            var direction = this.data.position.end.clone.substract(this.data.last.position);
-
-	            var vLDirection = direction.length,
-	                directionNormalized = direction.divide(vLDirection, vLDirection);
+	            if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
+	                this.data.direction = this.data.position.end.clone.substract(this.data.last.position);
+	                this.data.velocity = this.data.direction.clone.multiply(this.timeToLastMove);
+	                this.data.distance = this.data.last.position.distance(this.data.position.end);
+	            }
 
 	            if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
 	                var originalStart = this.getAbsolutePosition(this.data.position.start);
 	                var originalEnd = this.getAbsolutePosition(this.data.position.end);
 	                if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
-	                    this.data.directions = this.getSwipeDirections(directionNormalized);
+	                    this.data.directions = this.getSwipeDirections(this.data.direction);
 	                    this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
 	                }
 	            }
-
 	            if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
-	                var distance = this.data.last.position.distance(this.data.position.end);
-	                this.data.distance = distance;
-	                var _direction = this.data.last.position.clone.substract(this.data.position.end);
-	                this.data.directions = [_direction.x, _direction.y];
-	                this.data.speed = this.calculateSpeed(distance, this.time);
-	                if (this.data.speed >= this.settings.speedThreshold) {
-	                    this.eventCallback(this.settings.callbacks.flick, this.dataClone);
-	                }
+	                this.eventCallback(this.settings.callbacks.flick, this.dataClone);
 	            }
 
 	            return this;
@@ -10440,19 +10405,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }.bind(this), this.settings.pinchBalanceTime);
 	            }
 	            return this;
-	        }
-
-	        /**
-	         * calculates the speed with specified distance and time
-	         * @param  {number} distance - the specified distance
-	         * @param  {number} time - the specified time elapsed
-	         * @return {number} the calculated speed
-	         */
-
-	    }, {
-	        key: 'calculateSpeed',
-	        value: function calculateSpeed(distance, time) {
-	            return distance / (time || 0.00001) * 100;
 	        }
 
 	        /**
@@ -10527,7 +10479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'getAbsolutePosition',
 	        value: function getAbsolutePosition(point) {
 	            var clientBounds = this.container.getBoundingClientRect();
-	            return point.mult(clientBounds.width, clientBounds.height);
+	            return point.multiply(clientBounds.width, clientBounds.height);
 	        }
 
 	        /**

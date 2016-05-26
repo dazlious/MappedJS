@@ -168,6 +168,8 @@ export class Interact {
             pointerArray: {},
             multitouch: false,
             distance: null,
+            direction: new Point(),
+            velocity: new Point(),
             directions: [],
             zoom: 0,
             difference: null,
@@ -744,29 +746,22 @@ export class Interact {
      * @return {Interact} instance of Interact for chaining
      */
     handleSwipeAndFlick() {
-        const direction = this.data.position.end.clone.substract(this.data.last.position);
-
-        const vLDirection = direction.length,
-              directionNormalized = direction.divide(vLDirection, vLDirection);
+        if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
+            this.data.direction = this.data.position.end.clone.substract(this.data.last.position);
+            this.data.velocity = this.data.direction.clone.multiply(this.timeToLastMove);
+            this.data.distance = this.data.last.position.distance(this.data.position.end);
+        }
 
         if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
             const originalStart = this.getAbsolutePosition(this.data.position.start);
             const originalEnd = this.getAbsolutePosition(this.data.position.end);
             if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
-                this.data.directions = this.getSwipeDirections(directionNormalized);
+                this.data.directions = this.getSwipeDirections(this.data.direction);
                 this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
             }
         }
-
         if (this.settings.callbacks.flick && (this.timeToLastMove <= this.settings.timeTreshold.flick)) {
-            const distance = this.data.last.position.distance(this.data.position.end);
-            this.data.distance = distance;
-            const direction = this.data.last.position.clone.substract(this.data.position.end);
-            this.data.directions = [direction.x, direction.y];
-            this.data.speed = this.calculateSpeed(distance, this.time);
-            if (this.data.speed >= this.settings.speedThreshold) {
-                this.eventCallback(this.settings.callbacks.flick, this.dataClone);
-            }
+            this.eventCallback(this.settings.callbacks.flick, this.dataClone);
         }
 
         return this;
@@ -814,16 +809,6 @@ export class Interact {
             }).bind(this), this.settings.pinchBalanceTime);
         }
         return this;
-    }
-
-    /**
-     * calculates the speed with specified distance and time
-     * @param  {number} distance - the specified distance
-     * @param  {number} time - the specified time elapsed
-     * @return {number} the calculated speed
-     */
-    calculateSpeed(distance, time) {
-        return (distance / (time || 0.00001)) * 100;
     }
 
     /**
@@ -883,7 +868,7 @@ export class Interact {
      */
     getAbsolutePosition(point) {
         const clientBounds = this.container.getBoundingClientRect();
-        return point.mult(clientBounds.width, clientBounds.height);
+        return point.multiply(clientBounds.width, clientBounds.height);
     }
 
     /**
