@@ -8983,7 +8983,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!_instance) throw new Error('Tile needs an instance');
 	        this.instance = _instance;
 
-	        this.id = id;
+	        this.eventID = id;
 
 	        this.id = Marker.count;
 	        Marker.count++;
@@ -9015,7 +9015,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function bindEvents() {
 	            var _this = this;
 
-	            this.eventManager = new _Publisher.Publisher(this.id);
+	            this.eventManager = new _Publisher.Publisher(this.eventID);
 
 	            if (this.content.length) {
 	                this.$icon.data("mjs-action", this.action.bind(this));
