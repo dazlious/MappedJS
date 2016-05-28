@@ -238,7 +238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'getAbsolutePosition',
 	        value: function getAbsolutePosition(point) {
-	            return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+	            return point.clone.multiply(this.tileMap.width, this.tileMap.height);
 	        }
 
 	        /**
@@ -6361,7 +6361,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _this3.changelevel(1);
 
 	                if (lastLevel !== _this3.levelHandler.current.description) {
-	                    _this3.setViewToOldView(lastCenter, 0.000000000000001, _this3.view.minZoom);
+	                    _this3.setViewToOldView(lastCenter, _this3.view.minZoom);
 	                }
 	            });
 
@@ -6372,7 +6372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _this3.changelevel(-1);
 
 	                if (lastLevel !== _this3.levelHandler.current.description) {
-	                    _this3.setViewToOldView(lastCenter, -0.000000000000001, _this3.view.maxZoom);
+	                    _this3.setViewToOldView(lastCenter, _this3.view.maxZoom);
 	                }
 	            });
 
@@ -6380,9 +6380,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }, {
 	        key: 'setViewToOldView',
-	        value: function setViewToOldView(center, zoomDiff, zoom) {
+	        value: function setViewToOldView(center, zoom) {
 	            this.view.zoomFactor = zoom;
-	            this.view.zoom(zoomDiff, this.view.viewport.center);
+	            this.view.zoom(0, this.view.viewport.center);
 	            this.view.currentView.setCenter(center);
 	            this.drawIsNeeded = true;
 	        }
@@ -7989,11 +7989,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.currentView.setSize(newSize.width, newSize.height);
 
 	            this.setLatLngToPosition(latlngPosition, pos);
-	            this.moveView(new _Point.Point());
 
-	            if (this.zoomFactor >= this.maxZoom) {
+	            if (this.zoomFactor >= this.maxZoom && factor > 0) {
 	                this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
-	            } else if (this.zoomFactor <= this.minZoom) {
+	            } else if (this.zoomFactor <= this.minZoom && factor < 0) {
 	                this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
 	            }
 
@@ -8983,7 +8982,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!_instance) throw new Error('Tile needs an instance');
 	        this.instance = _instance;
 
-	        this.id = id;
+	        this.eventID = id;
 
 	        this.id = Marker.count;
 	        Marker.count++;
@@ -9015,7 +9014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function bindEvents() {
 	            var _this = this;
 
-	            this.eventManager = new _Publisher.Publisher(this.id);
+	            this.eventManager = new _Publisher.Publisher(this.eventID);
 
 	            if (this.content.length) {
 	                this.$icon.data("mjs-action", this.action.bind(this));

@@ -29,7 +29,8 @@
                 height: 100%;
             }
             #map-1,
-            #map-2 {
+            #map-2,
+            #map-3 {
                 position: absolute;
                 top: 0;
                 width: 50%;
@@ -39,6 +40,12 @@
                 left: 0;
             }
             #map-2 {
+                right: 0;
+                height: 50%;
+            }
+            #map-3 {
+                top: 50%;
+                height: 50%;
                 right: 0;
             }
         </style>
@@ -53,6 +60,9 @@
 
         </div>
 
+        <div id="map-3" class="mjs">
+
+        </div>
 
         <script src="../../dist/js/mappedJS.js"></script>
         <script>
@@ -110,12 +120,42 @@
                 }
             });
 
+            var map3 = new de.MappedJS({
+                container: "#map-3",
+                mapData: "mapData.json",
+                markerData: "marker.json",
+                mapSettings: {
+                    "center": {
+                        "lat": 52.5215,
+                        "lng": 13.427
+                    },
+                    "bounds": {
+                        "northWest": [52.777, 12.916],
+                        "southEast": [52.266, 13.938]
+                    },
+                    "centerSmallMap": false,
+                    "level": 1,
+                    "zoom": 1,
+                    "tooltip": {
+                        "templates": {
+                            "image": "../../hbs/image.hbs"
+                        }
+                    }
+                },
+                events: {
+                    loaded: "mjs-loaded"
+                }
+            });
+
 
             $("#map-1").on("mjs-loaded", function() {
                 console.info("1", map1);
             });
             $("#map-2").on("mjs-loaded", function() {
                 console.info("2", map2);
+            });
+            $("#map-3").on("mjs-loaded", function() {
+                console.info("2", map3);
             });
         </script>
     </body>
