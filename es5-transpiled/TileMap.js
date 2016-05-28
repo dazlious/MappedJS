@@ -385,25 +385,10 @@
                 });
 
                 this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function() {
-                    var lastLevel = _this3.levelHandler.current.description,
-                        lastCenter = _this3.view.currentView.center;
-
                     _this3.changelevel(1);
-
-                    if (lastLevel !== _this3.levelHandler.current.description) {
-                        _this3.setViewToOldView(lastCenter, _this3.view.minZoom);
-                    }
                 });
-
                 this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function() {
-                    var lastLevel = _this3.levelHandler.current.description,
-                        lastCenter = _this3.view.currentView.center;
-
                     _this3.changelevel(-1);
-
-                    if (lastLevel !== _this3.levelHandler.current.description) {
-                        _this3.setViewToOldView(lastCenter, _this3.view.maxZoom);
-                    }
                 });
 
                 return this;
@@ -419,13 +404,21 @@
         }, {
             key: 'changelevel',
             value: function changelevel(direction) {
+                var lastLevel = this.levelHandler.current.description,
+                    lastCenter = this.view.currentView.center;
+                var extrema = void 0;
                 if (direction < 0) {
                     this.levelHandler.previous();
+                    extrema = this.view.maxZoom;
                 } else {
                     this.levelHandler.next();
+                    extrema = this.view.minZoom;
                 }
                 if (!this.view.isInitialized) {
                     this.view.init();
+                }
+                if (lastLevel !== this.levelHandler.current.description) {
+                    this.setViewToOldView(lastCenter, extrema);
                 }
             }
 
@@ -536,8 +529,13 @@
         }, {
             key: 'resizeView',
             value: function resizeView() {
+                var _this5 = this;
+
                 var oldViewport = this.view.viewport.clone;
                 this.view.viewport.size(this.left, this.top, this.width, this.height);
+                _Helper.Helper.forEach(this.levelHandler.states, function(view) {
+                    view.instance.viewport = new _Rectangle.Rectangle(_this5.left, _this5.top, _this5.width, _this5.height);
+                });
                 var delta = this.view.viewport.center.substract(oldViewport.center);
                 this.view.currentView.translate(delta.x, delta.y);
                 return this;
@@ -550,7 +548,7 @@
         }, {
             key: 'mainLoop',
             value: function mainLoop() {
-                var _this5 = this;
+                var _this6 = this;
 
                 var currentMillisecs = Date.now();
                 var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
@@ -568,7 +566,7 @@
                 }
 
                 window.requestAnimFrame(function() {
-                    return _this5.mainLoop();
+                    return _this6.mainLoop();
                 });
             }
         }]);
