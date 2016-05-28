@@ -125,6 +125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.initializeSettings(container, events, mapSettings);
 
+	        this.id = this.generateUniqueID();
 	        this.initializeData(mapData, function (loadedMapData) {
 	            _this.mapData = loadedMapData;
 	            _this.initializeData(markerData, function (loadedMarkerData) {
@@ -141,12 +142,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
-	    /**
-	     * add controls (zoom, home) to DOM
-	     */
-
-
 	    _createClass(MappedJS, [{
+	        key: 'generateUniqueID',
+	        value: function generateUniqueID() {
+	            return parseInt(Date.now() * (Math.random() * 10), 10);
+	        }
+
+	        /**
+	         * add controls (zoom, home) to DOM
+	         */
+
+	    }, {
 	        key: 'addControls',
 	        value: function addControls() {
 	            if (this.mapSettings.controls) {
@@ -217,6 +223,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.tileMap = new _TileMap.TileMap({
 	                container: this.$content,
 	                tilesData: this.mapData,
+	                id: this.id,
 	                settings: this.mapSettings
 	            });
 	            return this;
@@ -399,7 +406,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'handleMovementByKeys',
 	        value: function handleMovementByKeys(direction) {
 	            this.keyTicks++;
-	            this.move(direction.multiply(this.keyTicks));
+	            this.tileMap.moveView(direction.multiply(this.keyTicks));
 	            return this;
 	        }
 	    }, {
@@ -6035,7 +6042,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {number} - left offset of container
 	         */
 	        get: function get() {
-	            return this.$container.position().left - this.$container.offset().left;
+	            return 0;
 	        }
 
 	        /**
@@ -6046,7 +6053,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'top',
 	        get: function get() {
-	            return this.$container.position().top - this.$container.offset().top;
+	            return 0;
 	        }
 
 	        /**
@@ -6057,7 +6064,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'width',
 	        get: function get() {
-	            return this.$container.innerWidth();
+	            return this.container.getBoundingClientRect().width;
 	        }
 
 	        /**
@@ -6068,7 +6075,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'height',
 	        get: function get() {
-	            return this.$container.innerHeight();
+	            return this.container.getBoundingClientRect().height;
 	        }
 
 	        /**
@@ -6106,11 +6113,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
 	        var _ref$settings = _ref.settings;
 	        var settings = _ref$settings === undefined ? {} : _ref$settings;
+	        var id = _ref.id;
 
 	        _classCallCheck(this, TileMap);
 
 	        if (!container) throw Error("You must define a container to initialize a TileMap");
 	        this.$container = container;
+	        this.container = container[0];
+
+	        this.id = id;
 
 	        this.imgData = tilesData[_Events.Events.TileMap.IMG_DATA_NAME];
 	        this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
@@ -6153,7 +6164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.levelHandler.changeTo(this.settings.level);
 	        this.view.init();
 
-	        this.eventManager = new _Publisher.Publisher();
+	        this.eventManager = new _Publisher.Publisher(this.id);
 
 	        this.drawIsNeeded = false;
 
@@ -6206,6 +6217,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                minZoom: data.zoom ? data.zoom.min : 1,
 	                $container: this.$container,
 	                context: this.canvasContext,
+	                id: this.id,
 	                centerSmallMap: this.settings.centerSmallMap,
 	                limitToBounds: this.settings.limitToBounds
 	            });
@@ -6258,7 +6270,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    var markers = [];
 	                    _this2.markerData = _this2.enrichMarkerData(_this2.markerData);
 	                    _Helper.Helper.forEach(_this2.markerData, function (currentData) {
-	                        markers.push(new _Marker.Marker(currentData, _this2));
+	                        markers.push(new _Marker.Marker({
+	                            data: currentData,
+	                            _instance: _this2,
+	                            id: _this2.id
+	                        }));
 	                    });
 	                    markers = markers.sort(function (a, b) {
 	                        return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
@@ -6271,6 +6287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    _this2.markerClusterer = new _MarkerClusterer.MarkerClusterer({
 	                        markers: markers,
+	                        id: _this2.id,
 	                        $container: _this2.$markerContainer
 	                    });
 	                })();
@@ -6302,6 +6319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function createTooltipContainer() {
 	            this.tooltip = new _ToolTip.ToolTip({
 	                container: (0, _jQuery2.default)(this.$container.parent()),
+	                id: this.id,
 	                templates: this.templates
 	            });
 	            this.stateHandler.next();
@@ -6795,7 +6813,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * singleton instance
 	 * @type {Publisher}
 	 */
-	var instance = null;
+	var instances = {};
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
@@ -6811,13 +6829,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	    function Publisher() {
+	        var id = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
 	        _classCallCheck(this, Publisher);
 
-	        if (!instance) {
+	        if (!instances[id]) {
 	            this.subscribers = {};
-	            instance = this;
+	            this.id = id;
+	            instances[id] = this;
 	        }
-	        return instance;
+	        return instances[id];
 	    }
 
 	    /**
@@ -6925,7 +6946,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: "destroy",
 	        value: function destroy() {
-	            instance = null;
+	            instances[this.id] = null;
 	        }
 	    }]);
 
@@ -7750,6 +7771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _ref$centerSmallMap = _ref.centerSmallMap;
 	        var centerSmallMap = _ref$centerSmallMap === undefined ? false : _ref$centerSmallMap;
 	        var limitToBounds = _ref.limitToBounds;
+	        var id = _ref.id;
 
 	        _classCallCheck(this, View);
 
@@ -7762,13 +7784,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.maxZoom = maxZoom;
 	        this.minZoom = minZoom;
 	        this.origin = new _Point.Point();
-	        this.eventManager = new _Publisher.Publisher();
+	        this.id = id;
+	        this.eventManager = new _Publisher.Publisher(this.id);
 	        this.limitToBounds = limitToBounds || bounds;
 	        this.isInitialized = false;
 	        this.centerSmallMap = centerSmallMap;
 	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
 	        this.currentView.position(newCenter.x, newCenter.y);
-
 	        this.tiles = [];
 	        this.data = data;
 	        this.context = context;
@@ -8070,7 +8092,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var currentLevel = this.data.tiles;
 	            _Helper.Helper.forEach(currentLevel, function (currentTileData) {
-	                _this3.tiles.push(new _Tile.Tile(currentTileData, _this3));
+	                _this3.tiles.push(new _Tile.Tile(currentTileData, _this3, _this3.id));
 	            });
 	            return this;
 	        }
@@ -8401,20 +8423,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _ref$h = _ref.h;
 	        var h = _ref$h === undefined ? 0 : _ref$h;
 
+	        var _instance = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
 	        var _ret;
 
-	        var _instance = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	        var id = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
 
 	        _classCallCheck(this, Tile);
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
+	        _this.id = id;
 	        if (!path || typeof path !== "string" || path.length === 0) throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');else if (!_instance) throw new Error('Tile needs an instance');
 
 	        _this.state = new _StateHandler.StateHandler(STATES);
 	        _this.instance = _instance;
 	        _this.context = _this.instance.context;
-	        _this.eventManager = new _Publisher.Publisher();
+	        _this.eventManager = new _Publisher.Publisher(_this.id);
 	        _this.path = path;
 
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
@@ -8513,13 +8538,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var markers = _ref$markers === undefined ? [] : _ref$markers;
 	        var _ref$$container = _ref.$container;
 	        var $container = _ref$$container === undefined ? null : _ref$$container;
+	        var id = _ref.id;
 
 	        _classCallCheck(this, MarkerClusterer);
 
 	        this.markers = markers;
+	        this.id = id;
 	        this.$container = $container;
 	        this.clusters = [];
-	        this.eventManager = new _Publisher.Publisher();
+	        this.eventManager = new _Publisher.Publisher(this.id);
 	        this.bindEvents();
 	        this.clusterize();
 	        return this;
@@ -8687,7 +8714,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'createCluster',
 	        value: function createCluster(marker) {
 	            var newCluster = new _Cluster.Cluster({
-	                $container: this.$container
+	                $container: this.$container,
+	                id: this.id
 	            });
 	            newCluster.addMarker(marker);
 	            return newCluster;
@@ -8772,12 +8800,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function Cluster(_ref) {
 	        var _ref$$container = _ref.$container;
 	        var $container = _ref$$container === undefined ? null : _ref$$container;
+	        var id = _ref.id;
 
 	        _classCallCheck(this, Cluster);
 
 	        this.markers = [];
+	        this.id = id;
 	        this.$container = $container;
-	        this.eventManager = new _Publisher.Publisher();
+	        this.eventManager = new _Publisher.Publisher(this.id);
 	        return this;
 	    }
 
@@ -8939,15 +8969,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    }]);
 
-	    function Marker() {
-	        var data = arguments.length <= 0 || arguments[0] === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : arguments[0];
+	    function Marker(_ref) {
+	        var _ref$data = _ref.data;
+	        var data = _ref$data === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : _ref$data;
+	        var _ref$_instance = _ref._instance;
 
-	        var _instance = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	        var _instance = _ref$_instance === undefined ? null : _ref$_instance;
+
+	        var id = _ref.id;
 
 	        _classCallCheck(this, Marker);
 
 	        if (!_instance) throw new Error('Tile needs an instance');
 	        this.instance = _instance;
+
+	        this.id = id;
 
 	        this.id = Marker.count;
 	        Marker.count++;
@@ -8979,7 +9015,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function bindEvents() {
 	            var _this = this;
 
-	            this.eventManager = new _Publisher.Publisher();
+	            this.eventManager = new _Publisher.Publisher(this.id);
 
 	            if (this.content.length) {
 	                this.$icon.data("mjs-action", this.action.bind(this));
@@ -9032,11 +9068,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function positionMarker() {
 	            this.position = this.instance.view.convertLatLngToPoint(this.latlng);
 	            var p = this.position.clone.divide(this.instance.view.currentView.width, this.instance.view.currentView.height).multiply(100);
-	            console.log(p);
 	            if (this.$icon) {
 	                this.$icon.css({
-	                    "left": this.position.x / this.instance.view.currentView.width * 100 + '%',
-	                    "top": this.position.y / this.instance.view.currentView.height * 100 + '%'
+	                    "left": p.x + '%',
+	                    "top": p.y + '%'
 	                }).show();
 	            }
 	            return this;
@@ -9120,15 +9155,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {object} enriched mapsettings data
 	     */
 	    mapSettings: function mapSettings(data) {
-
-	        var enrichedData = Object.assign(DataEnrichment.MAP_SETTINGS, data),
+	        var enrichedData = Object.assign({}, DataEnrichment.MAP_SETTINGS, data),
 	            bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
 	            center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
 	        if (!enrichedData.limitToBounds) {
 	            enrichedData.limitToBounds = bounds;
 	        } else {
-	            enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
+	            if (!(enrichedData.limitToBounds instanceof _Bounds.Bounds)) {
+	                enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
+	            }
 	        }
 
 	        enrichedData.bounds = bounds;
@@ -9253,18 +9289,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function ToolTip(_ref) {
 	        var container = _ref.container;
 	        var templates = _ref.templates;
+	        var id = _ref.id;
 
 	        _classCallCheck(this, ToolTip);
 
 	        this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
 	        if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
-
+	        this.id = id;
 	        this.$container.addClass(_Events.Events.ToolTip.CLOSE);
 
 	        this.$close = (0, _jQuery2.default)('<span class=\'close-button\' />');
 	        this.$content = (0, _jQuery2.default)('<div class=\'tooltip-content\' />');
 	        this.$popup = (0, _jQuery2.default)('<div class=\'tooltip-container\' />').append(this.$close).append(this.$content);
-	        this.eventManager = new _Publisher.Publisher();
+	        this.eventManager = new _Publisher.Publisher(this.id);
 
 	        this.bindEvents();
 	        this.registerHandlebarHelpers();

@@ -138,6 +138,7 @@
             var _ref$centerSmallMap = _ref.centerSmallMap;
             var centerSmallMap = _ref$centerSmallMap === undefined ? false : _ref$centerSmallMap;
             var limitToBounds = _ref.limitToBounds;
+            var id = _ref.id;
 
             _classCallCheck(this, View);
 
@@ -150,13 +151,13 @@
             this.maxZoom = maxZoom;
             this.minZoom = minZoom;
             this.origin = new _Point.Point();
-            this.eventManager = new _Publisher.Publisher();
+            this.id = id;
+            this.eventManager = new _Publisher.Publisher(this.id);
             this.limitToBounds = limitToBounds || bounds;
             this.isInitialized = false;
             this.centerSmallMap = centerSmallMap;
             var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
             this.currentView.position(newCenter.x, newCenter.y);
-
             this.tiles = [];
             this.data = data;
             this.context = context;
@@ -458,7 +459,7 @@
 
                 var currentLevel = this.data.tiles;
                 _Helper.Helper.forEach(currentLevel, function(currentTileData) {
-                    _this3.tiles.push(new _Tile.Tile(currentTileData, _this3));
+                    _this3.tiles.push(new _Tile.Tile(currentTileData, _this3, _this3.id));
                 });
                 return this;
             }

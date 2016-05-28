@@ -69,13 +69,6 @@
 <dd></dd>
 </dl>
 
-<h2 id="members">Members</h2>
-<dl>
-<dt><a href="#instance">instance</a> : <code><a href="#Publisher">Publisher</a></code></dt>
-<dd><p>singleton instance</p>
-</dd>
-</dl>
-
 <h2 id="objects">Objects</h2>
 <dl>
 <dt><a href="#Events">Events</a> : <code>object</code></dt>
@@ -85,6 +78,9 @@
 
 <h2 id="constants">Constants</h2>
 <dl>
+<dt><a href="#instances">instances</a> : <code><a href="#Publisher">Publisher</a></code></dt>
+<dd><p>singleton instance</p>
+</dd>
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a tile</p>
 </dd>
@@ -93,7 +89,7 @@
 <p><a name="module_DataEnrichment"></a></p>
 <h2 id="dataenrichment">DataEnrichment</h2>
 <p>enriches delivered data with default values</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x6d;&#100;&#x75;&#x76;&#x65;&#64;&#100;&#101;&#x73;&#105;&#103;&#110;&#109;&#x61;&#x69;&#108;&#x2e;&#x6e;&#101;&#x74;">&#x6d;&#100;&#x75;&#x76;&#x65;&#64;&#100;&#101;&#x73;&#105;&#103;&#110;&#109;&#x61;&#x69;&#108;&#x2e;&#x6e;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#109;&#x64;&#117;&#118;&#101;&#64;&#x64;&#101;&#115;&#105;&#x67;&#x6e;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x6e;&#101;&#116;">&#109;&#x64;&#117;&#118;&#101;&#64;&#x64;&#101;&#115;&#105;&#x67;&#x6e;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x6e;&#101;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_DataEnrichment">DataEnrichment</a><ul>
 <li><a href="#module_DataEnrichment.marker">.marker(data)</a> ⇒ <code>object</code></li>
@@ -118,7 +114,7 @@
 <p><a name="module_Helper"></a></p>
 <h2 id="helper">Helper</h2>
 <p>Helper for general purposes</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#x6d;&#x64;&#117;&#118;&#101;&#x40;&#100;&#x65;&#115;&#x69;&#x67;&#110;&#109;&#x61;&#x69;&#108;&#x2e;&#110;&#x65;&#116;">&#x6d;&#x64;&#117;&#118;&#101;&#x40;&#100;&#x65;&#115;&#x69;&#x67;&#110;&#109;&#x61;&#x69;&#108;&#x2e;&#110;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#109;&#100;&#117;&#x76;&#x65;&#64;&#x64;&#101;&#115;&#x69;&#103;&#x6e;&#109;&#x61;&#x69;&#x6c;&#46;&#x6e;&#x65;&#116;">&#109;&#100;&#117;&#x76;&#x65;&#64;&#x64;&#101;&#115;&#x69;&#103;&#x6e;&#109;&#x61;&#x69;&#x6c;&#46;&#x6e;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_Helper">Helper</a><ul>
 <li><a href="#module_Helper.requestJSON">.requestJSON(filename, callback)</a> ⇒ <code>Helper</code></li>
@@ -858,7 +854,7 @@
 <p><strong>Returns</strong>: <code><a href="#Marker">Marker</a></code> - - instance of Marker for chaining<br><strong>Params</strong></p>
 <ul>
 <li>data <code>Object</code> - = DataEnrichment.DATA_MARKER - enriched data</li>
-<li>_instance <code><a href="#View">View</a></code> <code> = </code> - = parent instance - instance of parent view</li>
+<li>_instance <code><a href="#View">View</a></code> - = parent instance - instance of parent view</li>
 </ul>
 <p><a name="Marker+bindEvents"></a></p>
 <h3 id="marker-bindevents-code-marker-marker-code-">marker.bindEvents() ⇒ <code><a href="#Marker">Marker</a></code></h3>
@@ -1688,13 +1684,10 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="View+initializeTiles"></a></p>
 <h3 id="view-initializetiles-code-view-view-code-">view.initializeTiles() ⇒ <code><a href="#View">View</a></code></h3>
 <p>initializes tiles</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="instance"></a></p>
-<h2 id="instance-code-publisher-publisher-code-">instance : <code><a href="#Publisher">Publisher</a></code></h2>
-<p>singleton instance</p>
-<p><strong>Kind</strong>: global variable<br><a name="Events"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="Events"></a></p>
 <h2 id="events-code-object-code-">Events : <code>object</code></h2>
 <p>Helper for naming events</p>
-<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#x6d;&#100;&#x75;&#x76;&#101;&#x40;&#x64;&#x65;&#x73;&#105;&#103;&#x6e;&#109;&#x61;&#105;&#x6c;&#x2e;&#110;&#101;&#x74;">&#x6d;&#100;&#x75;&#x76;&#101;&#x40;&#x64;&#x65;&#x73;&#105;&#103;&#x6e;&#109;&#x61;&#105;&#x6c;&#x2e;&#110;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#x6d;&#100;&#117;&#x76;&#101;&#64;&#x64;&#101;&#115;&#105;&#x67;&#x6e;&#109;&#x61;&#x69;&#108;&#x2e;&#x6e;&#101;&#x74;">&#x6d;&#100;&#117;&#x76;&#101;&#64;&#x64;&#101;&#115;&#105;&#x67;&#x6e;&#109;&#x61;&#x69;&#108;&#x2e;&#x6e;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#Events">Events</a> : <code>object</code><ul>
 <li><a href="#Events.ToolTip">.ToolTip</a> : <code>Object</code></li>
@@ -1773,7 +1766,10 @@
 <li>CLUSTERIZE <code>object</code> - create cluster  </li>
 <li>UNCLUSTERIZE <code>object</code> - destroy cluster  </li>
 </ul>
-<p><a name="STATES"></a></p>
+<p><a name="instances"></a></p>
+<h2 id="instances-code-publisher-publisher-code-">instances : <code><a href="#Publisher">Publisher</a></code></h2>
+<p>singleton instance</p>
+<p><strong>Kind</strong>: global constant<br><a name="STATES"></a></p>
 <h2 id="states-code-array-code-">STATES : <code>Array</code></h2>
 <p>States of a tile</p>
 <p><strong>Kind</strong>: global constant  </p>
