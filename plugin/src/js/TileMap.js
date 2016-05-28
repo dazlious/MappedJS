@@ -276,27 +276,8 @@ export class TileMap {
             this.zoom(zoomIncrease, bounds.center);
         });
 
-        this.eventManager.subscribe(Events.TileMap.NEXT_LEVEL, () => {
-            const lastLevel = this.levelHandler.current.description,
-                  lastCenter = this.view.currentView.center;
-
-            this.changelevel(1);
-
-            if (lastLevel !== this.levelHandler.current.description) {
-                this.setViewToOldView(lastCenter, this.view.minZoom);
-            }
-        });
-
-        this.eventManager.subscribe(Events.TileMap.PREVIOUS_LEVEL, () => {
-            const lastLevel = this.levelHandler.current.description,
-                  lastCenter = this.view.currentView.center;
-
-            this.changelevel(-1);
-
-            if (lastLevel !== this.levelHandler.current.description) {
-                this.setViewToOldView(lastCenter, this.view.maxZoom);
-            }
-        });
+        this.eventManager.subscribe(Events.TileMap.NEXT_LEVEL, () => { this.changelevel(1); });
+        this.eventManager.subscribe(Events.TileMap.PREVIOUS_LEVEL, () => { this.changelevel(-1); });
 
         return this;
     }
@@ -309,13 +290,21 @@ export class TileMap {
     }
 
     changelevel(direction) {
+        const lastLevel = this.levelHandler.current.description,
+              lastCenter = this.view.currentView.center;
+        let extrema;
         if (direction < 0) {
             this.levelHandler.previous();
+            extrema = this.view.maxZoom;
         } else {
             this.levelHandler.next();
+            extrema = this.view.minZoom;
         }
         if (!this.view.isInitialized) {
             this.view.init();
+        }
+        if (lastLevel !== this.levelHandler.current.description) {
+            this.setViewToOldView(lastCenter, extrema);
         }
     }
 
@@ -406,6 +395,9 @@ export class TileMap {
     resizeView() {
         const oldViewport = this.view.viewport.clone;
         this.view.viewport.size(this.left, this.top, this.width, this.height);
+        Helper.forEach(this.levelHandler.states, (view) => {
+            view.instance.viewport = new Rectangle(this.left, this.top, this.width, this.height);
+        });
         const delta = this.view.viewport.center.substract(oldViewport.center);
         this.view.currentView.translate(delta.x, delta.y);
         return this;
