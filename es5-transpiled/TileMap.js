@@ -391,7 +391,7 @@
                     _this3.changelevel(1);
 
                     if (lastLevel !== _this3.levelHandler.current.description) {
-                        _this3.setViewToOldView(lastCenter, 0.000000000000001, _this3.view.minZoom);
+                        _this3.setViewToOldView(lastCenter, _this3.view.minZoom);
                     }
                 });
 
@@ -402,7 +402,7 @@
                     _this3.changelevel(-1);
 
                     if (lastLevel !== _this3.levelHandler.current.description) {
-                        _this3.setViewToOldView(lastCenter, -0.000000000000001, _this3.view.maxZoom);
+                        _this3.setViewToOldView(lastCenter, _this3.view.maxZoom);
                     }
                 });
 
@@ -410,9 +410,9 @@
             }
         }, {
             key: 'setViewToOldView',
-            value: function setViewToOldView(center, zoomDiff, zoom) {
+            value: function setViewToOldView(center, zoom) {
                 this.view.zoomFactor = zoom;
-                this.view.zoom(zoomDiff, this.view.viewport.center);
+                this.view.zoom(0, this.view.viewport.center);
                 this.view.currentView.setCenter(center);
                 this.drawIsNeeded = true;
             }

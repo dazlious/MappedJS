@@ -203,7 +203,7 @@
         }, {
             key: 'getAbsolutePosition',
             value: function getAbsolutePosition(point) {
-                return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+                return point.clone.multiply(this.tileMap.width, this.tileMap.height);
             }
 
             /**

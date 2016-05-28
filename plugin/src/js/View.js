@@ -269,11 +269,10 @@ export class View {
         this.currentView.setSize(newSize.width, newSize.height);
 
         this.setLatLngToPosition(latlngPosition, pos);
-        this.moveView(new Point());
 
-        if (this.zoomFactor >= this.maxZoom) {
+        if (this.zoomFactor >= this.maxZoom && factor > 0) {
             this.eventManager.publish(Events.TileMap.NEXT_LEVEL);
-        } else if (this.zoomFactor <= this.minZoom) {
+        } else if (this.zoomFactor <= this.minZoom && factor < 0) {
             this.eventManager.publish(Events.TileMap.PREVIOUS_LEVEL);
         }
 

@@ -1,5 +1,5 @@
 projectKey=de.mappedJS
 serverUrl=http://localhost:9000
 dashboardUrl=http://localhost:9000/dashboard/index/de.mappedJS
-ceTaskId=AVT42TJ8rmzPpR8Vg_Tt
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AVT42TJ8rmzPpR8Vg_Tt
+ceTaskId=AVT5FmukrmzPpR8Vg_Tx
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AVT5FmukrmzPpR8Vg_Tx

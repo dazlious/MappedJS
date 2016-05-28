@@ -283,7 +283,7 @@ export class TileMap {
             this.changelevel(1);
 
             if (lastLevel !== this.levelHandler.current.description) {
-                this.setViewToOldView(lastCenter, 0.000000000000001, this.view.minZoom);
+                this.setViewToOldView(lastCenter, this.view.minZoom);
             }
         });
 
@@ -294,16 +294,16 @@ export class TileMap {
             this.changelevel(-1);
 
             if (lastLevel !== this.levelHandler.current.description) {
-                this.setViewToOldView(lastCenter, -0.000000000000001, this.view.maxZoom);
+                this.setViewToOldView(lastCenter, this.view.maxZoom);
             }
         });
 
         return this;
     }
 
-    setViewToOldView(center, zoomDiff, zoom) {
+    setViewToOldView(center, zoom) {
         this.view.zoomFactor = zoom;
-        this.view.zoom(zoomDiff, this.view.viewport.center);
+        this.view.zoom(0, this.view.viewport.center);
         this.view.currentView.setCenter(center);
         this.drawIsNeeded = true;
     }

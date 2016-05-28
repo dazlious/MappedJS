@@ -119,7 +119,7 @@ export class MappedJS {
      * @return {Point} absolute position to viewport
      */
     getAbsolutePosition(point) {
-        return point.clone.multiply(this.tileMap.view.viewport.width, this.tileMap.view.viewport.height);
+        return point.clone.multiply(this.tileMap.width, this.tileMap.height);
     }
 
     /**
