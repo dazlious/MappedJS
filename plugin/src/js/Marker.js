@@ -15,7 +15,8 @@ export class Marker {
 
     get boundingBox() {
         const bBox = this.icon.getBoundingClientRect();
-        return new Rectangle(bBox.left, bBox.top, bBox.width, bBox.height).scaleCenter(1.2);
+        const parentBBox = this.instance.container.getBoundingClientRect();
+        return new Rectangle(bBox.left - parentBBox.left, bBox.top - parentBBox.top, bBox.width, bBox.height).scaleCenter(1.2);
     }
 
     /**
@@ -28,7 +29,6 @@ export class Marker {
 
         if(!_instance) throw new Error(`Tile needs an instance`);
         this.instance = _instance;
-
         this.eventID = id;
 
         this.id = Marker.count;
