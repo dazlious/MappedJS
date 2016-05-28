@@ -12,11 +12,12 @@ export class MarkerClusterer {
      * @constructor
      * @return {MarkerClusterer} instance of MarkerClusterer for chaining
      */
-    constructor({markers = [], $container = null}) {
+    constructor({markers = [], $container = null, id}) {
         this.markers = markers;
+        this.id = id;
         this.$container = $container;
         this.clusters = [];
-        this.eventManager = new Publisher();
+        this.eventManager = new Publisher(this.id);
         this.bindEvents();
         this.clusterize();
         return this;
@@ -77,7 +78,8 @@ export class MarkerClusterer {
 
     createCluster(marker) {
         const newCluster = new Cluster({
-            $container: this.$container
+            $container: this.$container,
+            id: this.id
         });
         newCluster.addMarker(marker);
         return newCluster;

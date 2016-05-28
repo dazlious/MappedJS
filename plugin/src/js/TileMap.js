@@ -23,7 +23,7 @@ export class TileMap {
      * @return {number} - left offset of container
      */
     get left() {
-        return this.$container.position().left - this.$container.offset().left;
+        return 0;
     }
 
     /**
@@ -31,7 +31,7 @@ export class TileMap {
      * @return {number} - top offset of container
      */
     get top() {
-        return this.$container.position().top - this.$container.offset().top;
+        return 0;
     }
 
     /**
@@ -39,7 +39,7 @@ export class TileMap {
      * @return {number} - width of container
      */
     get width() {
-        return this.$container.innerWidth();
+        return this.container.getBoundingClientRect().width;
     }
 
     /**
@@ -47,7 +47,7 @@ export class TileMap {
      * @return {number} - height of container
      */
     get height() {
-        return this.$container.innerHeight();
+        return this.container.getBoundingClientRect().height;
     }
 
     /**
@@ -69,9 +69,12 @@ export class TileMap {
      * @param  {Object} settings={} - json object representing settings of TileMap
      * @return {TileMap} instance of TileMap for chaining
      */
-    constructor({container = null, tilesData = {}, settings = {}}) {
+    constructor({container = null, tilesData = {}, settings = {}, id}) {
         if (!container) throw Error("You must define a container to initialize a TileMap");
         this.$container = container;
+        this.container = container[0];
+
+        this.id = id;
 
         this.imgData = tilesData[Events.TileMap.IMG_DATA_NAME];
         this.markerData = tilesData[Events.TileMap.MARKER_DATA_NAME];
@@ -119,7 +122,7 @@ export class TileMap {
         this.levelHandler.changeTo(this.settings.level);
         this.view.init();
 
-        this.eventManager = new Publisher();
+        this.eventManager = new Publisher(this.id);
 
         this.drawIsNeeded = false;
 
@@ -165,6 +168,7 @@ export class TileMap {
             minZoom: (data.zoom) ? data.zoom.min : 1,
             $container: this.$container,
             context: this.canvasContext,
+            id: this.id,
             centerSmallMap: this.settings.centerSmallMap,
             limitToBounds: this.settings.limitToBounds
         });
@@ -205,7 +209,11 @@ export class TileMap {
             let markers = [];
             this.markerData = this.enrichMarkerData(this.markerData);
             Helper.forEach(this.markerData, (currentData) => {
-                markers.push(new Marker(currentData, this));
+                markers.push(new Marker({
+                    data: currentData,
+                    _instance: this,
+                    id: this.id
+                }));
             });
             markers = markers.sort((a, b) => ((b.latlng.lat - a.latlng.lat !== 0) ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng));
             Helper.forEach(markers, (marker, i) => {
@@ -216,6 +224,7 @@ export class TileMap {
 
             this.markerClusterer = new MarkerClusterer({
                 markers: markers,
+                id: this.id,
                 $container: this.$markerContainer
             });
         }
@@ -240,6 +249,7 @@ export class TileMap {
     createTooltipContainer() {
         this.tooltip = new ToolTip({
             container: $(this.$container.parent()),
+            id: this.id,
             templates: this.templates
         });
         this.stateHandler.next();

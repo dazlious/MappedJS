@@ -152,21 +152,24 @@
             var _ref$h = _ref.h;
             var h = _ref$h === undefined ? 0 : _ref$h;
 
+            var _instance = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
             var _ret;
 
-            var _instance = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+            var id = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
 
             _classCallCheck(this, Tile);
 
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
+            _this.id = id;
             if (!path || typeof path !== "string" || path.length === 0) throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
             else if (!_instance) throw new Error('Tile needs an instance');
 
             _this.state = new _StateHandler.StateHandler(STATES);
             _this.instance = _instance;
             _this.context = _this.instance.context;
-            _this.eventManager = new _Publisher.Publisher();
+            _this.eventManager = new _Publisher.Publisher(_this.id);
             _this.path = path;
 
             return _ret = _this, _possibleConstructorReturn(_this, _ret);

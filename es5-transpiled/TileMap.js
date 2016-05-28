@@ -60,7 +60,7 @@
              * @return {number} - left offset of container
              */
             get: function get() {
-                return this.$container.position().left - this.$container.offset().left;
+                return 0;
             }
 
             /**
@@ -71,7 +71,7 @@
         }, {
             key: 'top',
             get: function get() {
-                return this.$container.position().top - this.$container.offset().top;
+                return 0;
             }
 
             /**
@@ -82,7 +82,7 @@
         }, {
             key: 'width',
             get: function get() {
-                return this.$container.innerWidth();
+                return this.container.getBoundingClientRect().width;
             }
 
             /**
@@ -93,7 +93,7 @@
         }, {
             key: 'height',
             get: function get() {
-                return this.$container.innerHeight();
+                return this.container.getBoundingClientRect().height;
             }
 
             /**
@@ -131,11 +131,15 @@
             var tilesData = _ref$tilesData === undefined ? {} : _ref$tilesData;
             var _ref$settings = _ref.settings;
             var settings = _ref$settings === undefined ? {} : _ref$settings;
+            var id = _ref.id;
 
             _classCallCheck(this, TileMap);
 
             if (!container) throw Error("You must define a container to initialize a TileMap");
             this.$container = container;
+            this.container = container[0];
+
+            this.id = id;
 
             this.imgData = tilesData[_Events.Events.TileMap.IMG_DATA_NAME];
             this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
@@ -190,7 +194,7 @@
             this.levelHandler.changeTo(this.settings.level);
             this.view.init();
 
-            this.eventManager = new _Publisher.Publisher();
+            this.eventManager = new _Publisher.Publisher(this.id);
 
             this.drawIsNeeded = false;
 
@@ -243,6 +247,7 @@
                     minZoom: data.zoom ? data.zoom.min : 1,
                     $container: this.$container,
                     context: this.canvasContext,
+                    id: this.id,
                     centerSmallMap: this.settings.centerSmallMap,
                     limitToBounds: this.settings.limitToBounds
                 });
@@ -295,7 +300,11 @@
                         var markers = [];
                         _this2.markerData = _this2.enrichMarkerData(_this2.markerData);
                         _Helper.Helper.forEach(_this2.markerData, function(currentData) {
-                            markers.push(new _Marker.Marker(currentData, _this2));
+                            markers.push(new _Marker.Marker({
+                                data: currentData,
+                                _instance: _this2,
+                                id: _this2.id
+                            }));
                         });
                         markers = markers.sort(function(a, b) {
                             return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
@@ -308,6 +317,7 @@
 
                         _this2.markerClusterer = new _MarkerClusterer.MarkerClusterer({
                             markers: markers,
+                            id: _this2.id,
                             $container: _this2.$markerContainer
                         });
                     })();
@@ -339,6 +349,7 @@
             value: function createTooltipContainer() {
                 this.tooltip = new _ToolTip.ToolTip({
                     container: (0, _jQuery2.default)(this.$container.parent()),
+                    id: this.id,
                     templates: this.templates
                 });
                 this.stateHandler.next();

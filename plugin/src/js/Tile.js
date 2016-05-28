@@ -40,16 +40,16 @@ export class Tile extends Rectangle {
      * @param  {View} _instance = null - instance of parent View
      * @return {Tile} instance of Tile for chaining
      */
-    constructor({path = null, x = 0, y = 0, w = 0, h = 0} = {}, _instance = null) {
+    constructor({path = null, x = 0, y = 0, w = 0, h = 0} = {}, _instance = null, id = undefined) {
         super(x, y, w, h);
-
+        this.id = id;
         if (!path || typeof path !== "string" || path.length === 0) throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
         else if(!_instance) throw new Error(`Tile needs an instance`);
 
         this.state = new StateHandler(STATES);
         this.instance = _instance;
         this.context = this.instance.context;
-        this.eventManager = new Publisher();
+        this.eventManager = new Publisher(this.id);
         this.path = path;
 
         return this;

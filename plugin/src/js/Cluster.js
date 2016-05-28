@@ -13,10 +13,11 @@ export class Cluster {
      * @constructor
      * @return {Cluster} instance of Cluster for chaining
      */
-    constructor({$container = null}) {
+    constructor({$container = null, id}) {
         this.markers = [];
+        this.id = id;
         this.$container = $container;
-        this.eventManager = new Publisher();
+        this.eventManager = new Publisher(this.id);
         return this;
     }
 

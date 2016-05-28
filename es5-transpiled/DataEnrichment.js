@@ -73,15 +73,16 @@
          * @return {object} enriched mapsettings data
          */
         mapSettings: function mapSettings(data) {
-
-            var enrichedData = Object.assign(DataEnrichment.MAP_SETTINGS, data),
+            var enrichedData = Object.assign({}, DataEnrichment.MAP_SETTINGS, data),
                 bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
                 center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
             if (!enrichedData.limitToBounds) {
                 enrichedData.limitToBounds = bounds;
             } else {
-                enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
+                if (!(enrichedData.limitToBounds instanceof _Bounds.Bounds)) {
+                    enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
+                }
             }
 
             enrichedData.bounds = bounds;

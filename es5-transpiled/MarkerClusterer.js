@@ -91,13 +91,15 @@
             var markers = _ref$markers === undefined ? [] : _ref$markers;
             var _ref$$container = _ref.$container;
             var $container = _ref$$container === undefined ? null : _ref$$container;
+            var id = _ref.id;
 
             _classCallCheck(this, MarkerClusterer);
 
             this.markers = markers;
+            this.id = id;
             this.$container = $container;
             this.clusters = [];
-            this.eventManager = new _Publisher.Publisher();
+            this.eventManager = new _Publisher.Publisher(this.id);
             this.bindEvents();
             this.clusterize();
             return this;
@@ -265,7 +267,8 @@
             key: 'createCluster',
             value: function createCluster(marker) {
                 var newCluster = new _Cluster.Cluster({
-                    $container: this.$container
+                    $container: this.$container,
+                    id: this.id
                 });
                 newCluster.addMarker(marker);
                 return newCluster;

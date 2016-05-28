@@ -59,12 +59,14 @@
         function Cluster(_ref) {
             var _ref$$container = _ref.$container;
             var $container = _ref$$container === undefined ? null : _ref$$container;
+            var id = _ref.id;
 
             _classCallCheck(this, Cluster);
 
             this.markers = [];
+            this.id = id;
             this.$container = $container;
-            this.eventManager = new _Publisher.Publisher();
+            this.eventManager = new _Publisher.Publisher(this.id);
             return this;
         }
 

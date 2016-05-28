@@ -26,17 +26,17 @@ export class ToolTip {
      * @param  {object} templates - defined templates
      * @return {ToolTip} instance of ToolTip for chaining
      */
-    constructor({container, templates}) {
+    constructor({container, templates, id}) {
         this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
         if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
-
+        this.id = id;
         this.$container.addClass(Events.ToolTip.CLOSE);
 
         this.$close = $(`<span class='close-button' />`);
         this.$content = $(`<div class='tooltip-content' />`);
         this.$popup = $(`<div class='tooltip-container' />`).append(this.$close)
                                                             .append(this.$content);
-        this.eventManager = new Publisher();
+        this.eventManager = new Publisher(this.id);
 
         this.bindEvents();
         this.registerHandlebarHelpers();

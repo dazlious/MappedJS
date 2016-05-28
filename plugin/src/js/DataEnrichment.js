@@ -49,15 +49,16 @@ export var DataEnrichment = {
      * @return {object} enriched mapsettings data
      */
     mapSettings(data) {
-
-        const enrichedData = Object.assign(DataEnrichment.MAP_SETTINGS, data),
+        const enrichedData = Object.assign({}, DataEnrichment.MAP_SETTINGS, data),
               bounds = new Bounds(new LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
               center = new LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
         if (!enrichedData.limitToBounds) {
             enrichedData.limitToBounds = bounds;
         } else {
-            enrichedData.limitToBounds =  new Bounds(new LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
+            if (!(enrichedData.limitToBounds instanceof Bounds)) {
+                enrichedData.limitToBounds =  new Bounds(new LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
+            }
         }
 
         enrichedData.bounds = bounds;

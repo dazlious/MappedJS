@@ -84,7 +84,7 @@
      * singleton instance
      * @type {Publisher}
      */
-    var instance = null;
+    var instances = {};
 
     /**
      * @author Michael Duve <mduve@designmail.net>
@@ -100,13 +100,16 @@
          */
 
         function Publisher() {
+            var id = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
             _classCallCheck(this, Publisher);
 
-            if (!instance) {
+            if (!instances[id]) {
                 this.subscribers = {};
-                instance = this;
+                this.id = id;
+                instances[id] = this;
             }
-            return instance;
+            return instances[id];
         }
 
         /**
@@ -214,7 +217,7 @@
         }, {
             key: "destroy",
             value: function destroy() {
-                instance = null;
+                instances[this.id] = null;
             }
         }]);
 

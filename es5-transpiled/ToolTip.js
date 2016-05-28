@@ -84,18 +84,19 @@
         function ToolTip(_ref) {
             var container = _ref.container;
             var templates = _ref.templates;
+            var id = _ref.id;
 
             _classCallCheck(this, ToolTip);
 
             this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
             if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
-
+            this.id = id;
             this.$container.addClass(_Events.Events.ToolTip.CLOSE);
 
             this.$close = (0, _jQuery2.default)('<span class=\'close-button\' />');
             this.$content = (0, _jQuery2.default)('<div class=\'tooltip-content\' />');
             this.$popup = (0, _jQuery2.default)('<div class=\'tooltip-container\' />').append(this.$close).append(this.$content);
-            this.eventManager = new _Publisher.Publisher();
+            this.eventManager = new _Publisher.Publisher(this.id);
 
             this.bindEvents();
             this.registerHandlebarHelpers();

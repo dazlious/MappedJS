@@ -67,15 +67,21 @@
 
         }]);
 
-        function Marker() {
-            var data = arguments.length <= 0 || arguments[0] === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : arguments[0];
+        function Marker(_ref) {
+            var _ref$data = _ref.data;
+            var data = _ref$data === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : _ref$data;
+            var _ref$_instance = _ref._instance;
 
-            var _instance = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+            var _instance = _ref$_instance === undefined ? null : _ref$_instance;
+
+            var id = _ref.id;
 
             _classCallCheck(this, Marker);
 
             if (!_instance) throw new Error('Tile needs an instance');
             this.instance = _instance;
+
+            this.id = id;
 
             this.id = Marker.count;
             Marker.count++;
@@ -107,7 +113,7 @@
             value: function bindEvents() {
                 var _this = this;
 
-                this.eventManager = new _Publisher.Publisher();
+                this.eventManager = new _Publisher.Publisher(this.id);
 
                 if (this.content.length) {
                     this.$icon.data("mjs-action", this.action.bind(this));
@@ -160,11 +166,10 @@
             value: function positionMarker() {
                 this.position = this.instance.view.convertLatLngToPoint(this.latlng);
                 var p = this.position.clone.divide(this.instance.view.currentView.width, this.instance.view.currentView.height).multiply(100);
-                console.log(p);
                 if (this.$icon) {
                     this.$icon.css({
-                        "left": this.position.x / this.instance.view.currentView.width * 100 + '%',
-                        "top": this.position.y / this.instance.view.currentView.height * 100 + '%'
+                        "left": p.x + '%',
+                        "top": p.y + '%'
                     }).show();
                 }
                 return this;

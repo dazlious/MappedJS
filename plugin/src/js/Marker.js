@@ -24,10 +24,12 @@ export class Marker {
      * @param  {View} _instance = parent instance - instance of parent view
      * @return {Marker} - instance of Marker for chaining
      */
-    constructor(data = DataEnrichment.DATA_MARKER, _instance = null) {
+    constructor({data = DataEnrichment.DATA_MARKER, _instance = null, id}) {
 
         if(!_instance) throw new Error(`Tile needs an instance`);
         this.instance = _instance;
+
+        this.id = id;
 
         this.id = Marker.count;
         Marker.count++;
@@ -53,7 +55,7 @@ export class Marker {
      * @return {Marker} instance of Marker for chaining
      */
     bindEvents() {
-        this.eventManager = new Publisher();
+        this.eventManager = new Publisher(this.id);
 
         if (this.content.length) {
             this.$icon.data("mjs-action", this.action.bind(this));
@@ -99,11 +101,10 @@ export class Marker {
     positionMarker() {
         this.position = this.instance.view.convertLatLngToPoint(this.latlng);
         const p = this.position.clone.divide(this.instance.view.currentView.width, this.instance.view.currentView.height).multiply(100);
-        console.log(p);
         if (this.$icon) {
             this.$icon.css({
-                "left": `${this.position.x / this.instance.view.currentView.width * 100}%`,
-                "top": `${this.position.y / this.instance.view.currentView.height * 100}%`
+                "left": `${p.x}%`,
+                "top": `${p.y}%`
             }).show();
         }
         return this;

@@ -4,7 +4,9 @@ import {Events} from './Events.js';
  * singleton instance
  * @type {Publisher}
  */
-let instance = null;
+const instances = {
+
+};
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -17,12 +19,13 @@ export class Publisher {
      * @constructor
      * @return {Publisher} singleton instance of Publisher for chaining
      */
-    constructor() {
-        if(!instance) {
+    constructor(id = 0) {
+        if(!instances[id]) {
             this.subscribers = {};
-            instance = this;
+            this.id = id;
+            instances[id] = this;
         }
-        return instance;
+        return instances[id];
     }
 
     /**
@@ -80,7 +83,7 @@ export class Publisher {
      * destroys singleton instance
      */
     destroy() {
-        instance = null;
+        instances[this.id] = null;
     }
 
 }

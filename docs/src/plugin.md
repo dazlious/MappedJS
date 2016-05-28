@@ -44,14 +44,6 @@
 <dd></dd>
 </dl>
 
-## Members
-
-<dl>
-<dt><a href="#instance">instance</a> : <code><a href="#Publisher">Publisher</a></code></dt>
-<dd><p>singleton instance</p>
-</dd>
-</dl>
-
 ## Objects
 
 <dl>
@@ -63,6 +55,9 @@
 ## Constants
 
 <dl>
+<dt><a href="#instances">instances</a> : <code><a href="#Publisher">Publisher</a></code></dt>
+<dd><p>singleton instance</p>
+</dd>
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a tile</p>
 </dd>
@@ -1178,7 +1173,7 @@ called when loading and initialization is finished
 **Params**
 
 - data <code>Object</code> - = DataEnrichment.DATA_MARKER - enriched data
-- _instance <code>[View](#View)</code> <code> = </code> - = parent instance - instance of parent view
+- _instance <code>[View](#View)</code> - = parent instance - instance of parent view
 
 <a name="Marker+bindEvents"></a>
 
@@ -2446,12 +2441,6 @@ initializes tiles
 
 **Kind**: instance method of <code>[View](#View)</code>  
 **Returns**: <code>[View](#View)</code> - instance of View for chaining  
-<a name="instance"></a>
-
-## instance : <code>[Publisher](#Publisher)</code>
-singleton instance
-
-**Kind**: global variable  
 <a name="Events"></a>
 
 ## Events : <code>object</code>
@@ -2557,6 +2546,12 @@ Eventnames for MarkerClusterer class
 - CLUSTERIZE <code>object</code> - create cluster  
 - UNCLUSTERIZE <code>object</code> - destroy cluster  
 
+<a name="instances"></a>
+
+## instances : <code>[Publisher](#Publisher)</code>
+singleton instance
+
+**Kind**: global constant  
 <a name="STATES"></a>
 
 ## STATES : <code>Array</code>

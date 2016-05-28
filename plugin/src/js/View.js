@@ -79,7 +79,8 @@ export class View {
         currentZoom = 1,
         minZoom = 0.8,
         centerSmallMap = false,
-        limitToBounds
+        limitToBounds,
+        id
     }) {
 
         this.currentView = currentView;
@@ -91,13 +92,13 @@ export class View {
         this.maxZoom = maxZoom;
         this.minZoom = minZoom;
         this.origin = new Point();
-        this.eventManager = new Publisher();
+        this.id = id;
+        this.eventManager = new Publisher(this.id);
         this.limitToBounds = limitToBounds || bounds;
         this.isInitialized = false;
         this.centerSmallMap = centerSmallMap;
         const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
         this.currentView.position(newCenter.x, newCenter.y);
-
         this.tiles = [];
         this.data = data;
         this.context = context;
@@ -347,7 +348,7 @@ export class View {
     initializeTiles() {
         const currentLevel = this.data.tiles;
         Helper.forEach(currentLevel, (currentTileData) => {
-            this.tiles.push(new Tile(currentTileData, this));
+            this.tiles.push(new Tile(currentTileData, this, this.id));
         });
         return this;
     }

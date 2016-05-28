@@ -90,6 +90,7 @@
 
             this.initializeSettings(container, events, mapSettings);
 
+            this.id = this.generateUniqueID();
             this.initializeData(mapData, function(loadedMapData) {
                 _this.mapData = loadedMapData;
                 _this.initializeData(markerData, function(loadedMarkerData) {
@@ -106,12 +107,17 @@
             return this;
         }
 
-        /**
-         * add controls (zoom, home) to DOM
-         */
-
-
         _createClass(MappedJS, [{
+            key: 'generateUniqueID',
+            value: function generateUniqueID() {
+                return parseInt(Date.now() * (Math.random() * 10), 10);
+            }
+
+            /**
+             * add controls (zoom, home) to DOM
+             */
+
+        }, {
             key: 'addControls',
             value: function addControls() {
                 if (this.mapSettings.controls) {
@@ -182,6 +188,7 @@
                 this.tileMap = new _TileMap.TileMap({
                     container: this.$content,
                     tilesData: this.mapData,
+                    id: this.id,
                     settings: this.mapSettings
                 });
                 return this;
@@ -364,7 +371,7 @@
             key: 'handleMovementByKeys',
             value: function handleMovementByKeys(direction) {
                 this.keyTicks++;
-                this.move(direction.multiply(this.keyTicks));
+                this.tileMap.moveView(direction.multiply(this.keyTicks));
                 return this;
             }
         }, {

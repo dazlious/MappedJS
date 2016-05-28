@@ -26,6 +26,7 @@ export class MappedJS {
     constructor({container=".mjs", mapData={}, markerData={}, mapSettings={}, events={loaded:"mjs-loaded"}} = {}) {
         this.initializeSettings(container, events, mapSettings);
 
+        this.id = this.generateUniqueID();
         this.initializeData(mapData, (loadedMapData) => {
             this.mapData = loadedMapData;
             this.initializeData(markerData, (loadedMarkerData) => {
@@ -40,6 +41,10 @@ export class MappedJS {
         this.keyTicks = 0;
 
         return this;
+    }
+
+    generateUniqueID() {
+        return parseInt(Date.now() * (Math.random() * 10), 10);
     }
 
     /**
@@ -102,6 +107,7 @@ export class MappedJS {
         this.tileMap = new TileMap({
             container: this.$content,
             tilesData: this.mapData,
+            id: this.id,
             settings: this.mapSettings
         });
         return this;
@@ -251,7 +257,7 @@ export class MappedJS {
      */
     handleMovementByKeys(direction) {
         this.keyTicks++;
-        this.move(direction.multiply(this.keyTicks));
+        this.tileMap.moveView(direction.multiply(this.keyTicks));
         return this;
     }
 
