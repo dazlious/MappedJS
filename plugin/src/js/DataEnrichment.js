@@ -23,7 +23,7 @@ export var DataEnrichment = {
         const enrichedData = [];
 
         Helper.forEach(data, (entry) => {
-            entry = Object.assign(DataEnrichment.DATA_MARKER, entry);
+            entry = Object.assign({}, DataEnrichment.DATA_MARKER, entry);
 
             const offset = new Point(entry.offset.x, entry.offset.y),
                   latlng = new LatLng(entry.position.lat, entry.position.lng),
@@ -37,6 +37,23 @@ export var DataEnrichment = {
                 icon: entry.icon,
                 content: entry.content
             });
+        });
+
+        return enrichedData;
+    },
+    label(data) {
+        const enrichedData = [];
+
+        Helper.forEach(data, (entry) => {
+            entry = Object.assign({}, DataEnrichment.DATA_LABEL, entry);
+
+            if (entry.text) entry.text = Object.assign({}, DataEnrichment.DATA_LABEL_TEXT, entry.text);
+            if (entry.icon) entry.icon = Object.assign({}, DataEnrichment.DATA_LABEL_ICON, entry.icon);
+
+            entry.position = new LatLng(entry.position[0], entry.position[1]);
+            if (entry.text) entry.text.offset = new Point(entry.text.offset[0], entry.text.offset[1]);
+
+            enrichedData.push(entry);
         });
 
         return enrichedData;
@@ -67,7 +84,7 @@ export var DataEnrichment = {
         return enrichedData;
     },
     tooltip(data) {
-        return Object.assign(data, DataEnrichment.TOOLTIP);
+        return Object.assign({}, DataEnrichment.TOOLTIP, data);
     }
 };
 
@@ -108,6 +125,30 @@ DataEnrichment.MAP_SETTINGS = {
         home: false,
         position: "bottom-right",
         theme: "dark"
+    }
+};
+DataEnrichment.DATA_LABEL = {
+    "position": [0, 0]
+};
+DataEnrichment.DATA_LABEL_TEXT = {
+    "content": "",
+    "color": "#333333",
+    "shadow": {
+        "color": "#f7f7f7",
+        "blur": 2
+    },
+    "offset": [0, 0],
+    "align": "center",
+    "baseline": "hanging",
+    "font": "10pt Arial"
+};
+DataEnrichment.DATA_LABEL_ICON = {
+    "type": "circle",
+    "size": 2,
+    "color": "#333333",
+    "shadow": {
+        "color": "#f7f7f7",
+        "blur": 2
     }
 };
 DataEnrichment.TOOLTIP = {

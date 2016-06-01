@@ -18,6 +18,8 @@
 <dd></dd>
 <dt><a href="#Interact">Interact</a></dt>
 <dd></dd>
+<dt><a href="#Label">Label</a></dt>
+<dd></dd>
 <dt><a href="#LatLng">LatLng</a></dt>
 <dd></dd>
 <dt><a href="#MappedJS">MappedJS</a></dt>
@@ -884,6 +886,10 @@ Get event helper, applies jQuery-event-fix too
 
 - e <code>Object</code> - event object
 
+<a name="Label"></a>
+
+## Label
+**Kind**: global class  
 <a name="LatLng"></a>
 
 ## LatLng

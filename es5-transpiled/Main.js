@@ -79,6 +79,8 @@
             var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
             var _ref$markerData = _ref.markerData;
             var markerData = _ref$markerData === undefined ? {} : _ref$markerData;
+            var _ref$labelData = _ref.labelData;
+            var labelData = _ref$labelData === undefined ? {} : _ref$labelData;
             var _ref$mapSettings = _ref.mapSettings;
             var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
             var _ref$events = _ref.events;
@@ -95,10 +97,13 @@
                 _this.mapData = loadedMapData;
                 _this.initializeData(markerData, function(loadedMarkerData) {
                     _this.mapData = Object.assign(_this.mapData, loadedMarkerData);
-                    _this.initializeMap();
-                    _this.addControls();
-                    _this.bindEvents();
-                    _this.loadingFinished();
+                    _this.initializeData(labelData, function(loadedLabelData) {
+                        _this.mapData = Object.assign(_this.mapData, loadedLabelData);
+                        _this.initializeMap();
+                        _this.addControls();
+                        _this.bindEvents();
+                        _this.loadingFinished();
+                    });
                 });
             });
 

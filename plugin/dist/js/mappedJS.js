@@ -79,7 +79,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _DataEnrichment = __webpack_require__(206);
 
-	var _Interact = __webpack_require__(209);
+	var _Interact = __webpack_require__(210);
 
 	var _Point = __webpack_require__(195);
 
@@ -116,6 +116,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var mapData = _ref$mapData === undefined ? {} : _ref$mapData;
 	        var _ref$markerData = _ref.markerData;
 	        var markerData = _ref$markerData === undefined ? {} : _ref$markerData;
+	        var _ref$labelData = _ref.labelData;
+	        var labelData = _ref$labelData === undefined ? {} : _ref$labelData;
 	        var _ref$mapSettings = _ref.mapSettings;
 	        var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
 	        var _ref$events = _ref.events;
@@ -130,10 +132,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this.mapData = loadedMapData;
 	            _this.initializeData(markerData, function (loadedMarkerData) {
 	                _this.mapData = Object.assign(_this.mapData, loadedMarkerData);
-	                _this.initializeMap();
-	                _this.addControls();
-	                _this.bindEvents();
-	                _this.loadingFinished();
+	                _this.initializeData(labelData, function (loadedLabelData) {
+	                    _this.mapData = Object.assign(_this.mapData, loadedLabelData);
+	                    _this.initializeMap();
+	                    _this.addControls();
+	                    _this.bindEvents();
+	                    _this.loadingFinished();
+	                });
 	            });
 	        });
 
@@ -5930,6 +5935,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  TileMap: {
 	    IMG_DATA_NAME: "img_data",
 	    MARKER_DATA_NAME: "marker",
+	    LABEL_DATA_NAME: "labels",
 	    NEXT_LEVEL: "next-level",
 	    PREVIOUS_LEVEL: "previous-level",
 	    RESIZE: "resize",
@@ -6006,19 +6012,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(195);
 
-	var _Publisher = __webpack_require__(196);
+	var _LatLng = __webpack_require__(196);
 
-	var _StateHandler = __webpack_require__(197);
+	var _Publisher = __webpack_require__(197);
 
-	var _Rectangle = __webpack_require__(198);
+	var _StateHandler = __webpack_require__(198);
 
-	var _View = __webpack_require__(199);
+	var _Rectangle = __webpack_require__(199);
+
+	var _View = __webpack_require__(200);
 
 	var _Marker = __webpack_require__(205);
 
 	var _DataEnrichment = __webpack_require__(206);
 
 	var _ToolTip = __webpack_require__(207);
+
+	var _Label = __webpack_require__(209);
 
 	var _MarkerClusterer = __webpack_require__(203);
 
@@ -6077,6 +6087,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	            return this.container.getBoundingClientRect().height;
 	        }
+	    }, {
+	        key: 'pixelPerLatLng',
+	        get: function get() {
+	            this.levelHandler.current.instance.pixelPerLatLng();
+	        }
 
 	        /**
 	         * gets data of current zoom level
@@ -6125,6 +6140,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.imgData = tilesData[_Events.Events.TileMap.IMG_DATA_NAME];
 	        this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
+	        this.labelData = tilesData[_Events.Events.TileMap.LABEL_DATA_NAME];
+
 	        this.settings = settings;
 
 	        this.stateHandler = new _StateHandler.StateHandler([{ value: 0, description: "start" }, { value: 1, description: "view-initialized" }, { value: 2, description: "marker-initialized" }, { value: 3, description: "tooltip-initialized" }]);
@@ -6169,6 +6186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.drawIsNeeded = false;
 
 	        this.appendMarkerContainerToDom();
+	        this.initializeLabels();
 
 	        this.bindEvents();
 	        this.stateHandler.next();
@@ -6191,6 +6209,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.view.reset();
 	            this.redraw();
 	            this.clusterHandler();
+	        }
+	    }, {
+	        key: 'initializeLabels',
+	        value: function initializeLabels() {
+	            var _this2 = this;
+
+	            this.labelData = this.enrichLabelData(this.labelData);
+	            this.labels = [];
+	            _Helper.Helper.forEach(this.labelData, function (label) {
+	                var currentLabel = new _Label.Label({
+	                    context: _this2.canvasContext,
+	                    instance: _this2,
+	                    settings: label
+	                });
+	                _this2.labels.push(currentLabel);
+	            });
 	        }
 
 	        /**
@@ -6253,6 +6287,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function enrichMarkerData(markerData) {
 	            return _DataEnrichment.DataEnrichment.marker(markerData);
 	        }
+	    }, {
+	        key: 'enrichLabelData',
+	        value: function enrichLabelData(labelData) {
+	            return _DataEnrichment.DataEnrichment.label(labelData);
+	        }
 
 	        /**
 	         * initializes all markers
@@ -6263,17 +6302,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'initializeMarkers',
 	        value: function initializeMarkers() {
-	            var _this2 = this;
+	            var _this3 = this;
 
 	            if (this.markerData) {
 	                (function () {
 	                    var markers = [];
-	                    _this2.markerData = _this2.enrichMarkerData(_this2.markerData);
-	                    _Helper.Helper.forEach(_this2.markerData, function (currentData) {
+	                    _this3.markerData = _this3.enrichMarkerData(_this3.markerData);
+	                    _Helper.Helper.forEach(_this3.markerData, function (currentData) {
 	                        markers.push(new _Marker.Marker({
 	                            data: currentData,
-	                            _instance: _this2,
-	                            id: _this2.id
+	                            _instance: _this3,
+	                            id: _this3.id
 	                        }));
 	                    });
 	                    markers = markers.sort(function (a, b) {
@@ -6283,12 +6322,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        marker.$icon.css("z-index", i);
 	                    });
 
-	                    if (markers.length !== 0) _this2.createTooltipContainer();
+	                    if (markers.length !== 0) _this3.createTooltipContainer();
 
-	                    _this2.markerClusterer = new _MarkerClusterer.MarkerClusterer({
+	                    _this3.markerClusterer = new _MarkerClusterer.MarkerClusterer({
 	                        markers: markers,
-	                        id: _this2.id,
-	                        $container: _this2.$markerContainer
+	                        id: _this3.id,
+	                        $container: _this3.$markerContainer
 	                    });
 	                })();
 	            }
@@ -6334,31 +6373,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindEvents',
 	        value: function bindEvents() {
-	            var _this3 = this;
+	            var _this4 = this;
 
 	            this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function () {
-	                _this3.resize();
+	                _this4.resize();
 	            });
 
 	            this.eventManager.subscribe(_Events.Events.TileMap.DRAW, function () {
-	                _this3.redraw();
+	                _this4.redraw();
 	            });
 
 	            this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function () {
-	                _this3.redraw();
-	                if (_this3.stateHandler.current.value < 2) _this3.initializeMarkers();
+	                _this4.redraw();
+	                if (_this4.stateHandler.current.value < 2) _this4.initializeMarkers();
 	            });
 
 	            this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function (bounds) {
-	                var zoomIncrease = Math.min(_this3.view.viewport.width / bounds.width, _this3.view.viewport.height / bounds.height);
-	                _this3.zoom(zoomIncrease, bounds.center);
+	                var zoomIncrease = Math.min(_this4.view.viewport.width / bounds.width, _this4.view.viewport.height / bounds.height);
+	                _this4.zoom(zoomIncrease, bounds.center);
 	            });
 
 	            this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function () {
-	                _this3.changelevel(1);
+	                _this4.changelevel(1);
 	            });
 	            this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function () {
-	                _this3.changelevel(-1);
+	                _this4.changelevel(-1);
 	            });
 
 	            return this;
@@ -6464,16 +6503,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'clusterHandler',
 	        value: function clusterHandler() {
-	            var _this4 = this;
+	            var _this5 = this;
 
 	            if (this.clusterHandlingTimeout) {
 	                this.clusterHandlingTimeout = clearTimeout(this.clusterHandlingTimeout);
 	            }
 	            this.clusterHandlingTimeout = setTimeout(function () {
-	                if (_this4.levelHandler.hasNext()) {
-	                    _this4.eventManager.publish(_Events.Events.MarkerClusterer.CLUSTERIZE);
+	                if (_this5.levelHandler.hasNext()) {
+	                    _this5.eventManager.publish(_Events.Events.MarkerClusterer.CLUSTERIZE);
 	                } else {
-	                    _this4.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
+	                    _this5.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
 	                }
 	            }, 150);
 	        }
@@ -6486,8 +6525,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resizeCanvas',
 	        value: function resizeCanvas() {
-	            this.canvasContext.canvas.width = this.width;
-	            this.canvasContext.canvas.height = this.height;
+	            this.canvas.width = this.width;
+	            this.canvas.height = this.height;
 	            return this;
 	        }
 
@@ -6499,12 +6538,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resizeView',
 	        value: function resizeView() {
-	            var _this5 = this;
+	            var _this6 = this;
 
 	            var oldViewport = this.view.viewport.clone;
 	            this.view.viewport.size(this.left, this.top, this.width, this.height);
 	            _Helper.Helper.forEach(this.levelHandler.states, function (view) {
-	                view.instance.viewport = new _Rectangle.Rectangle(_this5.left, _this5.top, _this5.width, _this5.height);
+	                view.instance.viewport = new _Rectangle.Rectangle(_this6.left, _this6.top, _this6.width, _this6.height);
 	            });
 	            var delta = this.view.viewport.center.substract(oldViewport.center);
 	            this.view.currentView.translate(delta.x, delta.y);
@@ -6518,7 +6557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'mainLoop',
 	        value: function mainLoop() {
-	            var _this6 = this;
+	            var _this7 = this;
 
 	            var currentMillisecs = Date.now();
 	            var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
@@ -6531,13 +6570,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.canvasContext.clearRect(0, 0, this.width, this.height);
 	                this.view.checkBoundaries();
 	                this.view.draw();
+	                this.drawLabels();
 	                this.repositionMarkerContainer();
 	                this.drawIsNeeded = false;
 	            }
 
 	            window.requestAnimFrame(function () {
-	                return _this6.mainLoop();
+	                return _this7.mainLoop();
 	            });
+	        }
+	    }, {
+	        key: 'drawLabels',
+	        value: function drawLabels() {
+	            _Helper.Helper.forEach(this.labels, function (label) {
+	                return label.draw();
+	            });
+	            return this;
 	        }
 	    }]);
 
@@ -6790,6 +6838,177 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 196 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * @author Michael Duve <mduve@designmail.net>
+	 * @file represents latitude and longitude coordinates in a geographic coordinate system
+	 * @copyright Michael Duve 2016
+	 */
+
+	var LatLng = exports.LatLng = function () {
+	  _createClass(LatLng, [{
+	    key: "length",
+
+
+	    /**
+	     * length of a latlng
+	     * @return {number} length of a latlng
+	     */
+	    get: function get() {
+	      return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
+	    }
+
+	    /**
+	     * gets a clone of this latlng
+	     * @return {LatLng} create a copy
+	     */
+
+	  }, {
+	    key: "clone",
+	    get: function get() {
+	      return LatLng.createFromLatLng(this);
+	    }
+
+	    /**
+	     * @constructor
+	     * @param  {number} lat = 0 - representation of latitude
+	     * @param  {number} lng = 0 - representation of longitude
+	     * @return {LatLng} instance of LatLng for chaining
+	     */
+
+	  }]);
+
+	  function LatLng() {
+	    var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	    _classCallCheck(this, LatLng);
+
+	    this.lat = lat;
+	    this.lng = lng;
+	    return this;
+	  }
+
+	  /**
+	   * substract specified coord from this coordinate
+	   * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
+	   * @return {LatLng} instance of LatLng for chaining
+	   */
+
+
+	  _createClass(LatLng, [{
+	    key: "substract",
+	    value: function substract() {
+	      var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+
+	      this.lat -= coord.lat;
+	      this.lng -= coord.lng;
+	      return this;
+	    }
+
+	    /**
+	     * add specified coord to this coordinate
+	     * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
+	     * @return {LatLng} instance of LatLng for chaining
+	     */
+
+	  }, {
+	    key: "add",
+	    value: function add() {
+	      var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+
+	      this.lat += coord.lat;
+	      this.lng += coord.lng;
+	      return this;
+	    }
+
+	    /**
+	    * divides a latlng with a given factor
+	    * @param  {number} factorLat = 1 - factor to divide lat with
+	    * @param  {number} factorLng = factorLat - factor to divide lng with
+	    * @return {LatLng} instance of LatLng for chaining
+	    */
+
+	  }, {
+	    key: "divide",
+	    value: function divide() {
+	      var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+
+	      this.lat /= factorLat;
+	      this.lng /= factorLng;
+	      return this;
+	    }
+
+	    /**
+	     * multiplicates a latlng with a given factor
+	     * @param  {number} factorLat = 1 - factor to multiplicate lat with
+	     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
+	     * @return {LatLng} instance of LatLng for chaining
+	     */
+
+	  }, {
+	    key: "multiply",
+	    value: function multiply() {
+	      var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+
+	      this.lat *= factorLat;
+	      this.lng *= factorLng;
+	      return this;
+	    }
+
+	    /**
+	     * checks if specified coord equals this coord
+	     * @param  {LatLng} coord - specified coord to check against
+	     * @return {Boolean} Returns if specified coord equals this coord
+	     */
+
+	  }, {
+	    key: "equals",
+	    value: function equals(coord) {
+	      return this.lat === coord.lat && this.lng === coord.lng;
+	    }
+
+	    /**
+	     * converts a LatLng to string
+	     * @return {string} representing LatLng
+	     */
+
+	  }, {
+	    key: "toString",
+	    value: function toString() {
+	      return "(" + this.lat + ", " + this.lng + ")";
+	    }
+	  }]);
+
+	  return LatLng;
+	}();
+
+	/**
+	 * Creates a LatLng from specified LatLng
+	 * @param  {LatLng} LatLng - specified LatLng
+	 * @return {LatLng} the LatLng specified
+	 */
+
+
+	LatLng.createFromLatLng = function (latlng) {
+	  return new LatLng(latlng.lat, latlng.lng);
+		};
+
+/***/ },
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6952,7 +7171,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -7127,7 +7346,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7635,7 +7854,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		};
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7653,15 +7872,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(195);
 
-	var _LatLng = __webpack_require__(200);
+	var _LatLng = __webpack_require__(196);
 
 	var _Bounds = __webpack_require__(201);
 
-	var _Rectangle = __webpack_require__(198);
+	var _Rectangle = __webpack_require__(199);
 
 	var _Tile = __webpack_require__(202);
 
-	var _Publisher = __webpack_require__(196);
+	var _Publisher = __webpack_require__(197);
 
 	var _MarkerClusterer = __webpack_require__(203);
 
@@ -8099,177 +8318,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 200 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * @author Michael Duve <mduve@designmail.net>
-	 * @file represents latitude and longitude coordinates in a geographic coordinate system
-	 * @copyright Michael Duve 2016
-	 */
-
-	var LatLng = exports.LatLng = function () {
-	  _createClass(LatLng, [{
-	    key: "length",
-
-
-	    /**
-	     * length of a latlng
-	     * @return {number} length of a latlng
-	     */
-	    get: function get() {
-	      return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
-	    }
-
-	    /**
-	     * gets a clone of this latlng
-	     * @return {LatLng} create a copy
-	     */
-
-	  }, {
-	    key: "clone",
-	    get: function get() {
-	      return LatLng.createFromLatLng(this);
-	    }
-
-	    /**
-	     * @constructor
-	     * @param  {number} lat = 0 - representation of latitude
-	     * @param  {number} lng = 0 - representation of longitude
-	     * @return {LatLng} instance of LatLng for chaining
-	     */
-
-	  }]);
-
-	  function LatLng() {
-	    var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-
-	    _classCallCheck(this, LatLng);
-
-	    this.lat = lat;
-	    this.lng = lng;
-	    return this;
-	  }
-
-	  /**
-	   * substract specified coord from this coordinate
-	   * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
-	   * @return {LatLng} instance of LatLng for chaining
-	   */
-
-
-	  _createClass(LatLng, [{
-	    key: "substract",
-	    value: function substract() {
-	      var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
-
-	      this.lat -= coord.lat;
-	      this.lng -= coord.lng;
-	      return this;
-	    }
-
-	    /**
-	     * add specified coord to this coordinate
-	     * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
-	     * @return {LatLng} instance of LatLng for chaining
-	     */
-
-	  }, {
-	    key: "add",
-	    value: function add() {
-	      var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
-
-	      this.lat += coord.lat;
-	      this.lng += coord.lng;
-	      return this;
-	    }
-
-	    /**
-	    * divides a latlng with a given factor
-	    * @param  {number} factorLat = 1 - factor to divide lat with
-	    * @param  {number} factorLng = factorLat - factor to divide lng with
-	    * @return {LatLng} instance of LatLng for chaining
-	    */
-
-	  }, {
-	    key: "divide",
-	    value: function divide() {
-	      var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
-
-	      this.lat /= factorLat;
-	      this.lng /= factorLng;
-	      return this;
-	    }
-
-	    /**
-	     * multiplicates a latlng with a given factor
-	     * @param  {number} factorLat = 1 - factor to multiplicate lat with
-	     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
-	     * @return {LatLng} instance of LatLng for chaining
-	     */
-
-	  }, {
-	    key: "multiply",
-	    value: function multiply() {
-	      var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
-
-	      this.lat *= factorLat;
-	      this.lng *= factorLng;
-	      return this;
-	    }
-
-	    /**
-	     * checks if specified coord equals this coord
-	     * @param  {LatLng} coord - specified coord to check against
-	     * @return {Boolean} Returns if specified coord equals this coord
-	     */
-
-	  }, {
-	    key: "equals",
-	    value: function equals(coord) {
-	      return this.lat === coord.lat && this.lng === coord.lng;
-	    }
-
-	    /**
-	     * converts a LatLng to string
-	     * @return {string} representing LatLng
-	     */
-
-	  }, {
-	    key: "toString",
-	    value: function toString() {
-	      return "(" + this.lat + ", " + this.lng + ")";
-	    }
-	  }]);
-
-	  return LatLng;
-	}();
-
-	/**
-	 * Creates a LatLng from specified LatLng
-	 * @param  {LatLng} LatLng - specified LatLng
-	 * @return {LatLng} the LatLng specified
-	 */
-
-
-	LatLng.createFromLatLng = function (latlng) {
-	  return new LatLng(latlng.lat, latlng.lng);
-		};
-
-/***/ },
 /* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -8282,7 +8330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _LatLng = __webpack_require__(200);
+	var _LatLng = __webpack_require__(196);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8359,11 +8407,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
-	var _StateHandler = __webpack_require__(197);
+	var _StateHandler = __webpack_require__(198);
 
-	var _Rectangle2 = __webpack_require__(198);
+	var _Rectangle2 = __webpack_require__(199);
 
-	var _Publisher = __webpack_require__(196);
+	var _Publisher = __webpack_require__(197);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8512,7 +8560,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _Publisher = __webpack_require__(196);
+	var _Publisher = __webpack_require__(197);
 
 	var _Cluster = __webpack_require__(204);
 
@@ -8774,7 +8822,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _Publisher = __webpack_require__(196);
+	var _Publisher = __webpack_require__(197);
 
 	var _Point = __webpack_require__(195);
 
@@ -8933,9 +8981,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(195);
 
-	var _Rectangle = __webpack_require__(198);
+	var _Rectangle = __webpack_require__(199);
 
-	var _Publisher = __webpack_require__(196);
+	var _Publisher = __webpack_require__(197);
 
 	var _DataEnrichment = __webpack_require__(206);
 
@@ -9099,7 +9147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(195);
 
-	var _LatLng = __webpack_require__(200);
+	var _LatLng = __webpack_require__(196);
 
 	var _Bounds = __webpack_require__(201);
 
@@ -9125,7 +9173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var enrichedData = [];
 
 	        _Helper.Helper.forEach(data, function (entry) {
-	            entry = Object.assign(DataEnrichment.DATA_MARKER, entry);
+	            entry = Object.assign({}, DataEnrichment.DATA_MARKER, entry);
 
 	            var offset = new _Point.Point(entry.offset.x, entry.offset.y),
 	                latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng),
@@ -9139,6 +9187,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	                icon: entry.icon,
 	                content: entry.content
 	            });
+	        });
+
+	        return enrichedData;
+	    },
+	    label: function label(data) {
+	        var enrichedData = [];
+
+	        _Helper.Helper.forEach(data, function (entry) {
+	            entry = Object.assign({}, DataEnrichment.DATA_LABEL, entry);
+
+	            if (entry.text) entry.text = Object.assign({}, DataEnrichment.DATA_LABEL_TEXT, entry.text);
+	            if (entry.icon) entry.icon = Object.assign({}, DataEnrichment.DATA_LABEL_ICON, entry.icon);
+
+	            entry.position = new _LatLng.LatLng(entry.position[0], entry.position[1]);
+	            if (entry.text) entry.text.offset = new _Point.Point(entry.text.offset[0], entry.text.offset[1]);
+
+	            enrichedData.push(entry);
 	        });
 
 	        return enrichedData;
@@ -9170,7 +9235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return enrichedData;
 	    },
 	    tooltip: function tooltip(data) {
-	        return Object.assign(data, DataEnrichment.TOOLTIP);
+	        return Object.assign({}, DataEnrichment.TOOLTIP, data);
 	    }
 	};
 
@@ -9213,6 +9278,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	        theme: "dark"
 	    }
 	};
+	DataEnrichment.DATA_LABEL = {
+	    "position": [0, 0]
+	};
+	DataEnrichment.DATA_LABEL_TEXT = {
+	    "content": "",
+	    "color": "#333333",
+	    "shadow": {
+	        "color": "#f7f7f7",
+	        "blur": 2
+	    },
+	    "offset": [0, 0],
+	    "align": "center",
+	    "baseline": "hanging",
+	    "font": "10pt Arial"
+	};
+	DataEnrichment.DATA_LABEL_ICON = {
+	    "type": "circle",
+	    "size": 2,
+	    "color": "#333333",
+	    "shadow": {
+	        "color": "#f7f7f7",
+	        "blur": 2
+	    }
+	};
 	DataEnrichment.TOOLTIP = {
 	    image: "/plugin/hbs/image.hbs",
 	    text: "/plugin/hbs/text.hbs",
@@ -9248,7 +9337,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
-	var _Publisher = __webpack_require__(196);
+	var _Publisher = __webpack_require__(197);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9479,6 +9568,108 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 209 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Label = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Events = __webpack_require__(193);
+
+	var _Helper = __webpack_require__(192);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * @author Michael Duve <mduve@designmail.net>
+	 * @file shows an icon and/or a text at given position
+	 * @copyright Michael Duve 2016
+	 */
+
+	var Label = exports.Label = function () {
+	    _createClass(Label, [{
+	        key: 'position',
+	        get: function get() {
+	            return this.instance.view.convertLatLngToPoint(this.latlng).translate(this.instance.view.currentView.x, this.instance.view.currentView.y).multiply(this.instance.view.distortionFactor, 1).translate(this.instance.view.offsetToCenter, 0);
+	        }
+
+	        /**
+	         * @constructor
+	         * @return {Label} instance of Label for chaining
+	         */
+
+	    }]);
+
+	    function Label(_ref) {
+	        var settings = _ref.settings;
+	        var instance = _ref.instance;
+	        var context = _ref.context;
+
+	        _classCallCheck(this, Label);
+
+	        this.instance = instance;
+	        this.context = context;
+
+	        this.latlng = settings.position;
+	        this.text = settings.text;
+	        this.icon = settings.icon;
+
+	        return this;
+	    }
+
+	    _createClass(Label, [{
+	        key: 'initialize',
+	        value: function initialize() {
+
+	            return this;
+	        }
+	    }, {
+	        key: 'draw',
+	        value: function draw() {
+	            var pos = this.position;
+	            var textPos = pos.clone.add(this.text.offset);
+
+	            this.context.beginPath();
+
+	            if (this.text) this.drawText(textPos);
+	            if (this.icon) this.drawIcon(pos);
+
+	            this.context.closePath();
+
+	            return this;
+	        }
+	    }, {
+	        key: 'drawText',
+	        value: function drawText(pos) {
+	            this.context.shadowColor = this.text.shadow.color;
+	            this.context.shadowBlur = this.text.shadow.blur;
+	            this.context.textAlign = this.text.align;
+	            this.context.textBaseline = this.text.baseline;
+	            this.context.font = this.text.font;
+	            this.context.fillText(this.text.content, pos.x, pos.y);
+	        }
+	    }, {
+	        key: 'drawIcon',
+	        value: function drawIcon(pos) {
+	            this.context.shadowColor = this.icon.shadow.color;
+	            this.context.shadowBlur = this.icon.shadow.blur;
+	            this.context.fillStyle = this.icon.color;
+	            if (this.icon.type === "circle") this.context.arc(pos.x, pos.y, this.icon.size, 0, 2 * Math.PI, false);
+	            if (this.icon.type === "square") this.context.rect(pos.x, pos.y, this.icon.size, this.icon.size);
+	            this.context.fill();
+	        }
+	    }]);
+
+	    return Label;
+	}();
+
+/***/ },
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

@@ -1,0 +1,52 @@
+{
+    "labels": [
+        {
+            "position": [52.522230, 13.393174],
+            "text": {
+                "content": "Spree",
+                "color": "#333333",
+                "shadow": {
+                    "color": "#f7f7f7",
+                    "blur": 2
+                },
+                "offset": [0, 5],
+                "align": "center",
+                "baseline": "hanging",
+                "font": "10pt Arial"
+            },
+            "icon": {
+                "type": "circle",
+                "size": 2,
+                "color": "#333333",
+                "shadow": {
+                    "color": "#f7f7f7",
+                    "blur": 2
+                }
+            }
+        },
+        {
+            "position": [52.502142, 13.341315],
+            "text": {
+                "content": "KaDeWe",
+                "color": "#333333",
+                "shadow": {
+                    "color": "#f7f7f7",
+                    "blur": 2
+                },
+                "offset": [0, 5],
+                "align": "center",
+                "baseline": "hanging",
+                "font": "10pt Arial"
+            },
+            "icon": {
+                "type": "circle",
+                "size": 2,
+                "color": "#333333",
+                "shadow": {
+                    "color": "#f7f7f7",
+                    "blur": 2
+                }
+            }
+        }
+    ]
+}

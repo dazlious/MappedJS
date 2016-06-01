@@ -52,6 +52,7 @@ export var Events = {
     TileMap: {
         IMG_DATA_NAME: "img_data",
         MARKER_DATA_NAME: "marker",
+        LABEL_DATA_NAME: "labels",
         NEXT_LEVEL: "next-level",
         PREVIOUS_LEVEL: "previous-level",
         RESIZE: "resize",

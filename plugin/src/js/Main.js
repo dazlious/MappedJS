@@ -23,7 +23,7 @@ export class MappedJS {
      * @param  {Object} events={loaded: "mjs-loaded"} - List of events
      * @return {MappedJS} instance of MappedJS for chaining
      */
-    constructor({container=".mjs", mapData={}, markerData={}, mapSettings={}, events={loaded:"mjs-loaded"}} = {}) {
+    constructor({container=".mjs", mapData={}, markerData={}, labelData={}, mapSettings={}, events={loaded:"mjs-loaded"}} = {}) {
         this.initializeSettings(container, events, mapSettings);
 
         this.id = this.generateUniqueID();
@@ -31,10 +31,13 @@ export class MappedJS {
             this.mapData = loadedMapData;
             this.initializeData(markerData, (loadedMarkerData) => {
                 this.mapData = Object.assign(this.mapData, loadedMarkerData);
-                this.initializeMap();
-                this.addControls();
-                this.bindEvents();
-                this.loadingFinished();
+                this.initializeData(labelData, (loadedLabelData) => {
+                    this.mapData = Object.assign(this.mapData, loadedLabelData);
+                    this.initializeMap();
+                    this.addControls();
+                    this.bindEvents();
+                    this.loadingFinished();
+                });
             });
         });
 

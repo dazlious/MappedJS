@@ -316,7 +316,7 @@ export class View {
      */
     draw() {
         return this.drawThumbnail()
-            .drawVisibleTiles();
+                   .drawVisibleTiles();
     }
 
     /**

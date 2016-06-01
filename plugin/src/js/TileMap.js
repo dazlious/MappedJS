@@ -2,6 +2,7 @@ import $ from 'jQuery';
 import {Helper} from './Helper.js';
 import {Events} from './Events.js';
 import {Point} from './Point.js';
+import {LatLng} from './LatLng.js';
 import {Publisher} from './Publisher.js';
 import {StateHandler} from './StateHandler.js';
 import {Rectangle} from './Rectangle.js';
@@ -9,6 +10,7 @@ import {View} from './View.js';
 import {Marker} from './Marker.js';
 import {DataEnrichment} from './DataEnrichment.js';
 import {ToolTip} from './ToolTip.js';
+import {Label} from './Label.js';
 import {MarkerClusterer} from './MarkerClusterer.js';
 
 /**
@@ -50,6 +52,10 @@ export class TileMap {
         return this.container.getBoundingClientRect().height;
     }
 
+    get pixelPerLatLng() {
+        this.levelHandler.current.instance.pixelPerLatLng();
+    }
+
     /**
      * gets data of current zoom level
      * @return {Object} data for current level as json
@@ -78,6 +84,8 @@ export class TileMap {
 
         this.imgData = tilesData[Events.TileMap.IMG_DATA_NAME];
         this.markerData = tilesData[Events.TileMap.MARKER_DATA_NAME];
+        this.labelData = tilesData[Events.TileMap.LABEL_DATA_NAME];
+
         this.settings = settings;
 
         this.stateHandler = new StateHandler([
@@ -127,6 +135,7 @@ export class TileMap {
         this.drawIsNeeded = false;
 
         this.appendMarkerContainerToDom();
+        this.initializeLabels();
 
         this.bindEvents();
         this.stateHandler.next();
@@ -145,6 +154,19 @@ export class TileMap {
         this.view.reset();
         this.redraw();
         this.clusterHandler();
+    }
+
+    initializeLabels() {
+        this.labelData = this.enrichLabelData(this.labelData);
+        this.labels = [];
+        Helper.forEach(this.labelData, (label) => {
+            const currentLabel = new Label({
+                context: this.canvasContext,
+                instance: this,
+                settings: label
+            });
+            this.labels.push(currentLabel);
+        });
     }
 
     /**
@@ -197,6 +219,10 @@ export class TileMap {
      */
     enrichMarkerData(markerData) {
         return DataEnrichment.marker(markerData);
+    }
+
+    enrichLabelData(labelData) {
+        return DataEnrichment.label(labelData);
     }
 
     /**
@@ -383,8 +409,8 @@ export class TileMap {
      * @return {TileMap} instance of TileMap for chaining
      */
     resizeCanvas() {
-        this.canvasContext.canvas.width = this.width;
-        this.canvasContext.canvas.height = this.height;
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
         return this;
     }
 
@@ -418,14 +444,18 @@ export class TileMap {
             this.canvasContext.clearRect(0, 0, this.width, this.height);
             this.view.checkBoundaries();
             this.view.draw();
+            this.drawLabels();
             this.repositionMarkerContainer();
             this.drawIsNeeded = false;
         }
 
-
         window.requestAnimFrame(() => this.mainLoop());
     }
 
+    drawLabels() {
+        Helper.forEach(this.labels, (label) => label.draw());
+        return this;
+    }
 }
 
 /**

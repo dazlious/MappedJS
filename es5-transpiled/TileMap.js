@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Helper.js', './Events.js', './Point.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js', './MarkerClusterer.js'], factory);
+        define(['exports', 'jQuery', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js', './Label.js', './MarkerClusterer.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'), require('./MarkerClusterer.js'));
+        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'), require('./Label.js'), require('./MarkerClusterer.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.Point, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip, global.MarkerClusterer);
+        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.Point, global.LatLng, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip, global.Label, global.MarkerClusterer);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jQuery, _Helper, _Events, _Point, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip, _MarkerClusterer) {
+})(this, function(exports, _jQuery, _Helper, _Events, _Point, _LatLng, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip, _Label, _MarkerClusterer) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -95,6 +95,11 @@
             get: function get() {
                 return this.container.getBoundingClientRect().height;
             }
+        }, {
+            key: 'pixelPerLatLng',
+            get: function get() {
+                this.levelHandler.current.instance.pixelPerLatLng();
+            }
 
             /**
              * gets data of current zoom level
@@ -143,6 +148,8 @@
 
             this.imgData = tilesData[_Events.Events.TileMap.IMG_DATA_NAME];
             this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
+            this.labelData = tilesData[_Events.Events.TileMap.LABEL_DATA_NAME];
+
             this.settings = settings;
 
             this.stateHandler = new _StateHandler.StateHandler([{
@@ -199,6 +206,7 @@
             this.drawIsNeeded = false;
 
             this.appendMarkerContainerToDom();
+            this.initializeLabels();
 
             this.bindEvents();
             this.stateHandler.next();
@@ -221,6 +229,22 @@
                 this.view.reset();
                 this.redraw();
                 this.clusterHandler();
+            }
+        }, {
+            key: 'initializeLabels',
+            value: function initializeLabels() {
+                var _this2 = this;
+
+                this.labelData = this.enrichLabelData(this.labelData);
+                this.labels = [];
+                _Helper.Helper.forEach(this.labelData, function(label) {
+                    var currentLabel = new _Label.Label({
+                        context: _this2.canvasContext,
+                        instance: _this2,
+                        settings: label
+                    });
+                    _this2.labels.push(currentLabel);
+                });
             }
 
             /**
@@ -283,6 +307,11 @@
             value: function enrichMarkerData(markerData) {
                 return _DataEnrichment.DataEnrichment.marker(markerData);
             }
+        }, {
+            key: 'enrichLabelData',
+            value: function enrichLabelData(labelData) {
+                return _DataEnrichment.DataEnrichment.label(labelData);
+            }
 
             /**
              * initializes all markers
@@ -293,17 +322,17 @@
         }, {
             key: 'initializeMarkers',
             value: function initializeMarkers() {
-                var _this2 = this;
+                var _this3 = this;
 
                 if (this.markerData) {
                     (function() {
                         var markers = [];
-                        _this2.markerData = _this2.enrichMarkerData(_this2.markerData);
-                        _Helper.Helper.forEach(_this2.markerData, function(currentData) {
+                        _this3.markerData = _this3.enrichMarkerData(_this3.markerData);
+                        _Helper.Helper.forEach(_this3.markerData, function(currentData) {
                             markers.push(new _Marker.Marker({
                                 data: currentData,
-                                _instance: _this2,
-                                id: _this2.id
+                                _instance: _this3,
+                                id: _this3.id
                             }));
                         });
                         markers = markers.sort(function(a, b) {
@@ -313,12 +342,12 @@
                             marker.$icon.css("z-index", i);
                         });
 
-                        if (markers.length !== 0) _this2.createTooltipContainer();
+                        if (markers.length !== 0) _this3.createTooltipContainer();
 
-                        _this2.markerClusterer = new _MarkerClusterer.MarkerClusterer({
+                        _this3.markerClusterer = new _MarkerClusterer.MarkerClusterer({
                             markers: markers,
-                            id: _this2.id,
-                            $container: _this2.$markerContainer
+                            id: _this3.id,
+                            $container: _this3.$markerContainer
                         });
                     })();
                 }
@@ -364,31 +393,31 @@
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
-                var _this3 = this;
+                var _this4 = this;
 
                 this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function() {
-                    _this3.resize();
+                    _this4.resize();
                 });
 
                 this.eventManager.subscribe(_Events.Events.TileMap.DRAW, function() {
-                    _this3.redraw();
+                    _this4.redraw();
                 });
 
                 this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function() {
-                    _this3.redraw();
-                    if (_this3.stateHandler.current.value < 2) _this3.initializeMarkers();
+                    _this4.redraw();
+                    if (_this4.stateHandler.current.value < 2) _this4.initializeMarkers();
                 });
 
                 this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function(bounds) {
-                    var zoomIncrease = Math.min(_this3.view.viewport.width / bounds.width, _this3.view.viewport.height / bounds.height);
-                    _this3.zoom(zoomIncrease, bounds.center);
+                    var zoomIncrease = Math.min(_this4.view.viewport.width / bounds.width, _this4.view.viewport.height / bounds.height);
+                    _this4.zoom(zoomIncrease, bounds.center);
                 });
 
                 this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function() {
-                    _this3.changelevel(1);
+                    _this4.changelevel(1);
                 });
                 this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function() {
-                    _this3.changelevel(-1);
+                    _this4.changelevel(-1);
                 });
 
                 return this;
@@ -494,16 +523,16 @@
         }, {
             key: 'clusterHandler',
             value: function clusterHandler() {
-                var _this4 = this;
+                var _this5 = this;
 
                 if (this.clusterHandlingTimeout) {
                     this.clusterHandlingTimeout = clearTimeout(this.clusterHandlingTimeout);
                 }
                 this.clusterHandlingTimeout = setTimeout(function() {
-                    if (_this4.levelHandler.hasNext()) {
-                        _this4.eventManager.publish(_Events.Events.MarkerClusterer.CLUSTERIZE);
+                    if (_this5.levelHandler.hasNext()) {
+                        _this5.eventManager.publish(_Events.Events.MarkerClusterer.CLUSTERIZE);
                     } else {
-                        _this4.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
+                        _this5.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
                     }
                 }, 150);
             }
@@ -516,8 +545,8 @@
         }, {
             key: 'resizeCanvas',
             value: function resizeCanvas() {
-                this.canvasContext.canvas.width = this.width;
-                this.canvasContext.canvas.height = this.height;
+                this.canvas.width = this.width;
+                this.canvas.height = this.height;
                 return this;
             }
 
@@ -529,12 +558,12 @@
         }, {
             key: 'resizeView',
             value: function resizeView() {
-                var _this5 = this;
+                var _this6 = this;
 
                 var oldViewport = this.view.viewport.clone;
                 this.view.viewport.size(this.left, this.top, this.width, this.height);
                 _Helper.Helper.forEach(this.levelHandler.states, function(view) {
-                    view.instance.viewport = new _Rectangle.Rectangle(_this5.left, _this5.top, _this5.width, _this5.height);
+                    view.instance.viewport = new _Rectangle.Rectangle(_this6.left, _this6.top, _this6.width, _this6.height);
                 });
                 var delta = this.view.viewport.center.substract(oldViewport.center);
                 this.view.currentView.translate(delta.x, delta.y);
@@ -548,7 +577,7 @@
         }, {
             key: 'mainLoop',
             value: function mainLoop() {
-                var _this6 = this;
+                var _this7 = this;
 
                 var currentMillisecs = Date.now();
                 var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
@@ -561,13 +590,22 @@
                     this.canvasContext.clearRect(0, 0, this.width, this.height);
                     this.view.checkBoundaries();
                     this.view.draw();
+                    this.drawLabels();
                     this.repositionMarkerContainer();
                     this.drawIsNeeded = false;
                 }
 
                 window.requestAnimFrame(function() {
-                    return _this6.mainLoop();
+                    return _this7.mainLoop();
                 });
+            }
+        }, {
+            key: 'drawLabels',
+            value: function drawLabels() {
+                _Helper.Helper.forEach(this.labels, function(label) {
+                    return label.draw();
+                });
+                return this;
             }
         }]);
 
