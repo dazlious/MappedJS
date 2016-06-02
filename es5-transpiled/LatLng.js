@@ -85,14 +85,21 @@
             return this;
         }
 
-        /**
-         * substract specified coord from this coordinate
-         * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
-         * @return {LatLng} instance of LatLng for chaining
-         */
-
-
         _createClass(LatLng, [{
+            key: "distance",
+            value: function distance() {
+                var latlng = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+
+                return this.clone.substract(latlng).length;
+            }
+
+            /**
+             * substract specified coord from this coordinate
+             * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
+             * @return {LatLng} instance of LatLng for chaining
+             */
+
+        }, {
             key: "substract",
             value: function substract() {
                 var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];

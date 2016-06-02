@@ -1,5 +1,6 @@
 import {Events} from './Events.js';
 import {Helper} from './Helper.js';
+import {LatLng} from './LatLng.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -9,10 +10,14 @@ import {Helper} from './Helper.js';
 export class Label {
 
     get position() {
-        return this.instance.view.convertLatLngToPoint(this.latlng)
+        return this.instance.view.convertLatLngToPoint(this.nearestPositionToCenter)
             .translate(this.instance.view.currentView.x, this.instance.view.currentView.y)
             .multiply(this.instance.view.distortionFactor, 1)
             .translate(this.instance.view.offsetToCenter, 0);
+    }
+
+    get nearestPositionToCenter() {
+        return (this.latlng instanceof LatLng) ? this.latlng : this.getNearestPositionToCenter();
     }
 
     /**
@@ -30,9 +35,12 @@ export class Label {
         return this;
     }
 
-    initialize() {
-
-        return this;
+    getNearestPositionToCenter() {
+        this.latlng = this.latlng.sort((a, b) => {
+            const center = this.instance.view.center.clone.multiply(-1);
+            return center.distance(a) - center.distance(b);
+        });
+        return this.latlng[0];
     }
 
     draw() {

@@ -6843,7 +6843,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -6857,143 +6857,150 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var LatLng = exports.LatLng = function () {
-	  _createClass(LatLng, [{
-	    key: "length",
+	    _createClass(LatLng, [{
+	        key: "length",
 
 
-	    /**
-	     * length of a latlng
-	     * @return {number} length of a latlng
-	     */
-	    get: function get() {
-	      return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
+	        /**
+	         * length of a latlng
+	         * @return {number} length of a latlng
+	         */
+	        get: function get() {
+	            return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
+	        }
+
+	        /**
+	         * gets a clone of this latlng
+	         * @return {LatLng} create a copy
+	         */
+
+	    }, {
+	        key: "clone",
+	        get: function get() {
+	            return LatLng.createFromLatLng(this);
+	        }
+
+	        /**
+	         * @constructor
+	         * @param  {number} lat = 0 - representation of latitude
+	         * @param  {number} lng = 0 - representation of longitude
+	         * @return {LatLng} instance of LatLng for chaining
+	         */
+
+	    }]);
+
+	    function LatLng() {
+	        var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	        _classCallCheck(this, LatLng);
+
+	        this.lat = lat;
+	        this.lng = lng;
+	        return this;
 	    }
 
-	    /**
-	     * gets a clone of this latlng
-	     * @return {LatLng} create a copy
-	     */
+	    _createClass(LatLng, [{
+	        key: "distance",
+	        value: function distance() {
+	            var latlng = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
 
-	  }, {
-	    key: "clone",
-	    get: function get() {
-	      return LatLng.createFromLatLng(this);
-	    }
+	            return this.clone.substract(latlng).length;
+	        }
 
-	    /**
-	     * @constructor
-	     * @param  {number} lat = 0 - representation of latitude
-	     * @param  {number} lng = 0 - representation of longitude
-	     * @return {LatLng} instance of LatLng for chaining
-	     */
+	        /**
+	         * substract specified coord from this coordinate
+	         * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
+	         * @return {LatLng} instance of LatLng for chaining
+	         */
 
-	  }]);
+	    }, {
+	        key: "substract",
+	        value: function substract() {
+	            var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
 
-	  function LatLng() {
-	    var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	            this.lat -= coord.lat;
+	            this.lng -= coord.lng;
+	            return this;
+	        }
 
-	    _classCallCheck(this, LatLng);
+	        /**
+	         * add specified coord to this coordinate
+	         * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
+	         * @return {LatLng} instance of LatLng for chaining
+	         */
 
-	    this.lat = lat;
-	    this.lng = lng;
-	    return this;
-	  }
+	    }, {
+	        key: "add",
+	        value: function add() {
+	            var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
 
-	  /**
-	   * substract specified coord from this coordinate
-	   * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
-	   * @return {LatLng} instance of LatLng for chaining
-	   */
+	            this.lat += coord.lat;
+	            this.lng += coord.lng;
+	            return this;
+	        }
 
+	        /**
+	        * divides a latlng with a given factor
+	        * @param  {number} factorLat = 1 - factor to divide lat with
+	        * @param  {number} factorLng = factorLat - factor to divide lng with
+	        * @return {LatLng} instance of LatLng for chaining
+	        */
 
-	  _createClass(LatLng, [{
-	    key: "substract",
-	    value: function substract() {
-	      var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+	    }, {
+	        key: "divide",
+	        value: function divide() {
+	            var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	            var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
-	      this.lat -= coord.lat;
-	      this.lng -= coord.lng;
-	      return this;
-	    }
+	            this.lat /= factorLat;
+	            this.lng /= factorLng;
+	            return this;
+	        }
 
-	    /**
-	     * add specified coord to this coordinate
-	     * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
-	     * @return {LatLng} instance of LatLng for chaining
-	     */
+	        /**
+	         * multiplicates a latlng with a given factor
+	         * @param  {number} factorLat = 1 - factor to multiplicate lat with
+	         * @param  {number} factorLng = factorLat - factor to multiplicate lng with
+	         * @return {LatLng} instance of LatLng for chaining
+	         */
 
-	  }, {
-	    key: "add",
-	    value: function add() {
-	      var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+	    }, {
+	        key: "multiply",
+	        value: function multiply() {
+	            var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	            var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
-	      this.lat += coord.lat;
-	      this.lng += coord.lng;
-	      return this;
-	    }
+	            this.lat *= factorLat;
+	            this.lng *= factorLng;
+	            return this;
+	        }
 
-	    /**
-	    * divides a latlng with a given factor
-	    * @param  {number} factorLat = 1 - factor to divide lat with
-	    * @param  {number} factorLng = factorLat - factor to divide lng with
-	    * @return {LatLng} instance of LatLng for chaining
-	    */
+	        /**
+	         * checks if specified coord equals this coord
+	         * @param  {LatLng} coord - specified coord to check against
+	         * @return {Boolean} Returns if specified coord equals this coord
+	         */
 
-	  }, {
-	    key: "divide",
-	    value: function divide() {
-	      var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+	    }, {
+	        key: "equals",
+	        value: function equals(coord) {
+	            return this.lat === coord.lat && this.lng === coord.lng;
+	        }
 
-	      this.lat /= factorLat;
-	      this.lng /= factorLng;
-	      return this;
-	    }
+	        /**
+	         * converts a LatLng to string
+	         * @return {string} representing LatLng
+	         */
 
-	    /**
-	     * multiplicates a latlng with a given factor
-	     * @param  {number} factorLat = 1 - factor to multiplicate lat with
-	     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
-	     * @return {LatLng} instance of LatLng for chaining
-	     */
+	    }, {
+	        key: "toString",
+	        value: function toString() {
+	            return "(" + this.lat + ", " + this.lng + ")";
+	        }
+	    }]);
 
-	  }, {
-	    key: "multiply",
-	    value: function multiply() {
-	      var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	      var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
-
-	      this.lat *= factorLat;
-	      this.lng *= factorLng;
-	      return this;
-	    }
-
-	    /**
-	     * checks if specified coord equals this coord
-	     * @param  {LatLng} coord - specified coord to check against
-	     * @return {Boolean} Returns if specified coord equals this coord
-	     */
-
-	  }, {
-	    key: "equals",
-	    value: function equals(coord) {
-	      return this.lat === coord.lat && this.lng === coord.lng;
-	    }
-
-	    /**
-	     * converts a LatLng to string
-	     * @return {string} representing LatLng
-	     */
-
-	  }, {
-	    key: "toString",
-	    value: function toString() {
-	      return "(" + this.lat + ", " + this.lng + ")";
-	    }
-	  }]);
-
-	  return LatLng;
+	    return LatLng;
 	}();
 
 	/**
@@ -7004,7 +7011,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	LatLng.createFromLatLng = function (latlng) {
-	  return new LatLng(latlng.lat, latlng.lng);
+	    return new LatLng(latlng.lat, latlng.lng);
 		};
 
 /***/ },
@@ -9200,7 +9207,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (entry.text) entry.text = Object.assign({}, DataEnrichment.DATA_LABEL_TEXT, entry.text);
 	            if (entry.icon) entry.icon = Object.assign({}, DataEnrichment.DATA_LABEL_ICON, entry.icon);
 
-	            entry.position = new _LatLng.LatLng(entry.position[0], entry.position[1]);
+	            if (typeof entry.position[0] === "number") {
+	                entry.position = new _LatLng.LatLng(entry.position[0], entry.position[1]);
+	            } else {
+	                _Helper.Helper.forEach(entry.position, function (pos, i) {
+	                    entry.position[i] = new _LatLng.LatLng(pos[0], pos[1]);
+	                });
+	            }
+
 	            if (entry.text) entry.text.offset = new _Point.Point(entry.text.offset[0], entry.text.offset[1]);
 
 	            enrichedData.push(entry);
@@ -9583,6 +9597,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
+	var _LatLng = __webpack_require__(196);
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
@@ -9595,7 +9611,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(Label, [{
 	        key: 'position',
 	        get: function get() {
-	            return this.instance.view.convertLatLngToPoint(this.latlng).translate(this.instance.view.currentView.x, this.instance.view.currentView.y).multiply(this.instance.view.distortionFactor, 1).translate(this.instance.view.offsetToCenter, 0);
+	            return this.instance.view.convertLatLngToPoint(this.nearestPositionToCenter).translate(this.instance.view.currentView.x, this.instance.view.currentView.y).multiply(this.instance.view.distortionFactor, 1).translate(this.instance.view.offsetToCenter, 0);
+	        }
+	    }, {
+	        key: 'nearestPositionToCenter',
+	        get: function get() {
+	            return this.latlng instanceof _LatLng.LatLng ? this.latlng : this.getNearestPositionToCenter();
 	        }
 
 	        /**
@@ -9623,10 +9644,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    _createClass(Label, [{
-	        key: 'initialize',
-	        value: function initialize() {
+	        key: 'getNearestPositionToCenter',
+	        value: function getNearestPositionToCenter() {
+	            var _this = this;
 
-	            return this;
+	            this.latlng = this.latlng.sort(function (a, b) {
+	                var center = _this.instance.view.center.clone.multiply(-1);
+	                return center.distance(a) - center.distance(b);
+	            });
+	            return this.latlng[0];
 	        }
 	    }, {
 	        key: 'draw',

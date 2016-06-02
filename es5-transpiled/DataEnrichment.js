@@ -73,7 +73,14 @@
                 if (entry.text) entry.text = Object.assign({}, DataEnrichment.DATA_LABEL_TEXT, entry.text);
                 if (entry.icon) entry.icon = Object.assign({}, DataEnrichment.DATA_LABEL_ICON, entry.icon);
 
-                entry.position = new _LatLng.LatLng(entry.position[0], entry.position[1]);
+                if (typeof entry.position[0] === "number") {
+                    entry.position = new _LatLng.LatLng(entry.position[0], entry.position[1]);
+                } else {
+                    _Helper.Helper.forEach(entry.position, function(pos, i) {
+                        entry.position[i] = new _LatLng.LatLng(pos[0], pos[1]);
+                    });
+                }
+
                 if (entry.text) entry.text.offset = new _Point.Point(entry.text.offset[0], entry.text.offset[1]);
 
                 enrichedData.push(entry);

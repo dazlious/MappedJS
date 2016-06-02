@@ -33,6 +33,10 @@ export class LatLng {
         return this;
     }
 
+    distance(latlng = new LatLng()) {
+        return this.clone.substract(latlng).length;
+    }
+
     /**
      * substract specified coord from this coordinate
      * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
