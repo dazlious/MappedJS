@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Events.js', './Helper.js'], factory);
+        define(['exports', './Events.js', './Helper.js', './LatLng.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Events.js'), require('./Helper.js'));
+        factory(exports, require('./Events.js'), require('./Helper.js'), require('./LatLng.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Events, global.Helper);
+        factory(mod.exports, global.Events, global.Helper, global.LatLng);
         global.Label = mod.exports;
     }
-})(this, function(exports, _Events, _Helper) {
+})(this, function(exports, _Events, _Helper, _LatLng) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -46,7 +46,12 @@
         _createClass(Label, [{
             key: 'position',
             get: function get() {
-                return this.instance.view.convertLatLngToPoint(this.latlng).translate(this.instance.view.currentView.x, this.instance.view.currentView.y).multiply(this.instance.view.distortionFactor, 1).translate(this.instance.view.offsetToCenter, 0);
+                return this.instance.view.convertLatLngToPoint(this.nearestPositionToCenter).translate(this.instance.view.currentView.x, this.instance.view.currentView.y).multiply(this.instance.view.distortionFactor, 1).translate(this.instance.view.offsetToCenter, 0);
+            }
+        }, {
+            key: 'nearestPositionToCenter',
+            get: function get() {
+                return this.latlng instanceof _LatLng.LatLng ? this.latlng : this.getNearestPositionToCenter();
             }
 
             /**
@@ -74,10 +79,15 @@
         }
 
         _createClass(Label, [{
-            key: 'initialize',
-            value: function initialize() {
+            key: 'getNearestPositionToCenter',
+            value: function getNearestPositionToCenter() {
+                var _this = this;
 
-                return this;
+                this.latlng = this.latlng.sort(function(a, b) {
+                    var center = _this.instance.view.center.clone.multiply(-1);
+                    return center.distance(a) - center.distance(b);
+                });
+                return this.latlng[0];
             }
         }, {
             key: 'draw',
