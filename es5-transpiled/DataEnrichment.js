@@ -82,6 +82,8 @@
                 }
 
                 if (entry.text) entry.text.offset = new _Point.Point(entry.text.offset[0], entry.text.offset[1]);
+                if (entry.icon) entry.icon.offset = new _Point.Point(entry.icon.offset[0], entry.icon.offset[1]);
+                if (entry.icon && typeof entry.icon.size !== "number") entry.icon.size = new _Point.Point(entry.icon.size[0], entry.icon.size[1]);
 
                 enrichedData.push(entry);
             });
@@ -180,6 +182,7 @@
         "type": "circle",
         "size": 2,
         "color": "#333333",
+        "offset": [0, 0],
         "shadow": {
             "color": "#f7f7f7",
             "blur": 2
