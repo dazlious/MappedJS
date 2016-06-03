@@ -32,6 +32,19 @@ export class Label {
         this.text = settings.text;
         this.icon = settings.icon;
 
+        if (this.icon && this.icon.type === "circle") this.drawIconType = this.drawCircleIcon(this.icon.size);
+        else if (this.icon && this.icon.type === "square") this.drawIconType = this.drawSquareIcon(this.icon.size);
+        else if (this.icon && this.icon.type === "image") {
+            this.drawIconType = () => {};
+            Helper.loadImage(this.icon.url, (img) => {
+                this.drawIconType = this.drawImageIcon(img, this.icon.size, this.icon.offset);
+            });
+
+        }
+
+
+        this.drawElements = this.decideWhatToDraw(this.text, this.icon);
+
         return this;
     }
 
@@ -48,13 +61,28 @@ export class Label {
         const textPos = pos.clone.add(this.text.offset);
 
         this.context.beginPath();
-
-        if (this.text) this.drawText(textPos);
-        if (this.icon) this.drawIcon(pos);
-
+        this.drawElements(pos, textPos);
         this.context.closePath();
 
         return this;
+    }
+
+    decideWhatToDraw(text, icon) {
+        if (text && icon) {
+            return (pos, textPos) => {
+                this.drawText(textPos);
+                this.drawIcon(pos);
+            };
+        } else if (icon) {
+            return (pos) => {
+                this.drawIcon(pos);
+            };
+        } else if (text) {
+            return (pos, textPos) => {
+                this.drawText(textPos);
+            };
+        }
+
     }
 
     drawText(pos) {
@@ -70,9 +98,26 @@ export class Label {
         this.context.shadowColor = this.icon.shadow.color;
         this.context.shadowBlur = this.icon.shadow.blur;
         this.context.fillStyle = this.icon.color;
-        if (this.icon.type === "circle") this.context.arc(pos.x, pos.y, this.icon.size, 0, 2 * Math.PI, false);
-        if (this.icon.type === "square") this.context.rect(pos.x, pos.y, this.icon.size, this.icon.size);
+        this.drawIconType(pos);
         this.context.fill();
+    }
+
+    drawCircleIcon(size) {
+        return (pos) => {
+            this.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
+        };
+    }
+
+    drawSquareIcon(size) {
+        return (pos) => {
+            this.context.rect(pos.x, pos.y, size, size);
+        };
+    }
+
+    drawImageIcon(image, size, offset) {
+        return (pos) => {
+            this.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
+        };
     }
 
 }

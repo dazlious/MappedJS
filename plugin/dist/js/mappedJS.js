@@ -9219,6 +9219,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            if (entry.text) entry.text.offset = new _Point.Point(entry.text.offset[0], entry.text.offset[1]);
+	            if (entry.icon) entry.icon.offset = new _Point.Point(entry.icon.offset[0], entry.icon.offset[1]);
+	            if (entry.icon && typeof entry.icon.size !== "number") entry.icon.size = new _Point.Point(entry.icon.size[0], entry.icon.size[1]);
 
 	            enrichedData.push(entry);
 	        });
@@ -9314,6 +9316,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    "type": "circle",
 	    "size": 2,
 	    "color": "#333333",
+	    "offset": [0, 0],
 	    "shadow": {
 	        "color": "#f7f7f7",
 	        "blur": 2
@@ -9630,6 +9633,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 
 	    function Label(_ref) {
+	        var _this = this;
+
 	        var settings = _ref.settings;
 	        var instance = _ref.instance;
 	        var context = _ref.context;
@@ -9643,16 +9648,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.text = settings.text;
 	        this.icon = settings.icon;
 
+	        if (this.icon && this.icon.type === "circle") this.drawIconType = this.drawCircleIcon(this.icon.size);else if (this.icon && this.icon.type === "square") this.drawIconType = this.drawSquareIcon(this.icon.size);else if (this.icon && this.icon.type === "image") {
+	            this.drawIconType = function () {};
+	            _Helper.Helper.loadImage(this.icon.url, function (img) {
+	                _this.drawIconType = _this.drawImageIcon(img, _this.icon.size, _this.icon.offset);
+	            });
+	        }
+
+	        this.drawElements = this.decideWhatToDraw(this.text, this.icon);
+
 	        return this;
 	    }
 
 	    _createClass(Label, [{
 	        key: 'getNearestPositionToCenter',
 	        value: function getNearestPositionToCenter() {
-	            var _this = this;
+	            var _this2 = this;
 
 	            this.latlng = this.latlng.sort(function (a, b) {
-	                var center = _this.instance.view.center.clone.multiply(-1);
+	                var center = _this2.instance.view.center.clone.multiply(-1);
 	                return center.distance(a) - center.distance(b);
 	            });
 	            return this.latlng[0];
@@ -9664,13 +9678,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var textPos = pos.clone.add(this.text.offset);
 
 	            this.context.beginPath();
-
-	            if (this.text) this.drawText(textPos);
-	            if (this.icon) this.drawIcon(pos);
-
+	            this.drawElements(pos, textPos);
 	            this.context.closePath();
 
 	            return this;
+	        }
+	    }, {
+	        key: 'decideWhatToDraw',
+	        value: function decideWhatToDraw(text, icon) {
+	            var _this3 = this;
+
+	            if (text && icon) {
+	                return function (pos, textPos) {
+	                    _this3.drawText(textPos);
+	                    _this3.drawIcon(pos);
+	                };
+	            } else if (icon) {
+	                return function (pos) {
+	                    _this3.drawIcon(pos);
+	                };
+	            } else if (text) {
+	                return function (pos, textPos) {
+	                    _this3.drawText(textPos);
+	                };
+	            }
 	        }
 	    }, {
 	        key: 'drawText',
@@ -9688,9 +9719,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.context.shadowColor = this.icon.shadow.color;
 	            this.context.shadowBlur = this.icon.shadow.blur;
 	            this.context.fillStyle = this.icon.color;
-	            if (this.icon.type === "circle") this.context.arc(pos.x, pos.y, this.icon.size, 0, 2 * Math.PI, false);
-	            if (this.icon.type === "square") this.context.rect(pos.x, pos.y, this.icon.size, this.icon.size);
+	            this.drawIconType(pos);
 	            this.context.fill();
+	        }
+	    }, {
+	        key: 'drawCircleIcon',
+	        value: function drawCircleIcon(size) {
+	            var _this4 = this;
+
+	            return function (pos) {
+	                _this4.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
+	            };
+	        }
+	    }, {
+	        key: 'drawSquareIcon',
+	        value: function drawSquareIcon(size) {
+	            var _this5 = this;
+
+	            return function (pos) {
+	                _this5.context.rect(pos.x, pos.y, size, size);
+	            };
+	        }
+	    }, {
+	        key: 'drawImageIcon',
+	        value: function drawImageIcon(image, size, offset) {
+	            var _this6 = this;
+
+	            return function (pos) {
+	                _this6.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
+	            };
 	        }
 	    }]);
 

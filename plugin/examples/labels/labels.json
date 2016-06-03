@@ -39,13 +39,34 @@
                 "font": "10pt Arial"
             },
             "icon": {
-                "type": "circle",
-                "size": 2,
+                "type": "square",
+                "size": 4,
                 "color": "#333333",
                 "shadow": {
                     "color": "#f7f7f7",
                     "blur": 2
                 }
+            }
+        },
+        {
+            "position": [52.455128, 13.280346],
+            "text": {
+                "content": "Thielpark",
+                "color": "#333333",
+                "shadow": {
+                    "color": "#f7f7f7",
+                    "blur": 2
+                },
+                "offset": [0, 5],
+                "align": "center",
+                "baseline": "hanging",
+                "font": "10pt Arial"
+            },
+            "icon": {
+                "type": "image",
+                "size": [16, 16],
+                "offset": [-8, -16],
+                "url": "img/bulb.png"
             }
         }
     ]
