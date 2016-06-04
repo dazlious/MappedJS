@@ -84,6 +84,7 @@ export class Marker {
             "height": `${this.size.y}px`,
             "margin-left": `${this.offset.x}px`,
             "margin-top": `${this.offset.y}px`,
+            "transform": `translateZ(0)`,
             "background-image": `url(${this.img})`,
             "background-size": `${(this.hover) ? this.size.x*2 : this.size.x}px ${this.size.y}px`
         });

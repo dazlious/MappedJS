@@ -8910,7 +8910,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.$cluster = (0, _jQuery2.default)("<div class='cluster'>" + this.markers.length + "</div>").css({
 	                "left": p.x + '%',
-	                "top": p.y + '%'
+	                "top": p.y + '%',
+	                "transform": 'translateZ(0)'
 	            });
 	            this.$container.append(this.$cluster);
 	            this.bindEvents();
@@ -9103,6 +9104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                "height": this.size.y + 'px',
 	                "margin-left": this.offset.x + 'px',
 	                "margin-top": this.offset.y + 'px',
+	                "transform": 'translateZ(0)',
 	                "background-image": 'url(' + this.img + ')',
 	                "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
 	            });
