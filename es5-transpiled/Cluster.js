@@ -114,7 +114,8 @@
 
                 this.$cluster = (0, _jQuery2.default)("<div class='cluster'>" + this.markers.length + "</div>").css({
                     "left": p.x + '%',
-                    "top": p.y + '%'
+                    "top": p.y + '%',
+                    "transform": 'translateZ(0)'
                 });
                 this.$container.append(this.$cluster);
                 this.bindEvents();
