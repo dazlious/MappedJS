@@ -298,8 +298,17 @@ export class TileMap {
         });
 
         this.eventManager.subscribe(Events.TileMap.ZOOM_TO_BOUNDS, (bounds) => {
-            const zoomIncrease = Math.min(this.view.viewport.width / bounds.width, this.view.viewport.height / bounds.height);
-            this.zoom(zoomIncrease, bounds.center);
+            let zoomIncrease = Math.min(this.view.viewport.width / bounds.width, this.view.viewport.height / bounds.height);
+            while (zoomIncrease > 0) {
+                const possibleZoomOnLevel = this.view.maxZoom - this.view.zoomFactor;
+                zoomIncrease -= possibleZoomOnLevel;
+                if (this.levelHandler.hasNext()) {
+                    this.changelevel(1);
+                } else {
+                    this.zoom(possibleZoomOnLevel, bounds.center);
+                    zoomIncrease = 0;
+                }
+            }
         });
 
         this.eventManager.subscribe(Events.TileMap.NEXT_LEVEL, () => { this.changelevel(1); });
