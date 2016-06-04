@@ -410,7 +410,16 @@
 
                 this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function(bounds) {
                     var zoomIncrease = Math.min(_this4.view.viewport.width / bounds.width, _this4.view.viewport.height / bounds.height);
-                    _this4.zoom(zoomIncrease, bounds.center);
+                    while (zoomIncrease > 0) {
+                        var possibleZoomOnLevel = _this4.view.maxZoom - _this4.view.zoomFactor;
+                        zoomIncrease -= possibleZoomOnLevel;
+                        if (_this4.levelHandler.hasNext()) {
+                            _this4.changelevel(1);
+                        } else {
+                            _this4.zoom(possibleZoomOnLevel, bounds.center);
+                            zoomIncrease = 0;
+                        }
+                    }
                 });
 
                 this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function() {
