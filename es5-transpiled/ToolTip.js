@@ -92,6 +92,7 @@
             if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
             this.id = id;
             this.$container.addClass(_Events.Events.ToolTip.CLOSE);
+            this.container = this.$container[0];
 
             this.$close = (0, _jQuery2.default)('<span class=\'close-button\' />');
             this.$content = (0, _jQuery2.default)('<div class=\'tooltip-content\' />');
@@ -238,9 +239,11 @@
             key: 'setPosition',
             value: function setPosition() {
                 if (this.$container.innerWidth() > this.$container.innerHeight()) {
-                    this.$container.addClass("left").removeClass("bottom");
+                    this.container.classList.add("left");
+                    this.container.classList.remove("bottom");
                 } else {
-                    this.$container.addClass("bottom").removeClass("left");
+                    this.container.classList.add("bottom");
+                    this.container.classList.remove("left");
                 }
                 return this;
             }

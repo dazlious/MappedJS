@@ -31,7 +31,8 @@ export class ToolTip {
         if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
         this.id = id;
         this.$container.addClass(Events.ToolTip.CLOSE);
-
+        this.container = this.$container[0];
+        
         this.$close = $(`<span class='close-button' />`);
         this.$content = $(`<div class='tooltip-content' />`);
         this.$popup = $(`<div class='tooltip-container' />`).append(this.$close)
@@ -139,9 +140,11 @@ export class ToolTip {
      */
     setPosition() {
         if (this.$container.innerWidth() > this.$container.innerHeight()) {
-            this.$container.addClass("left").removeClass("bottom");
+            this.container.classList.add("left");
+            this.container.classList.remove("bottom");
         } else {
-            this.$container.addClass("bottom").removeClass("left");
+            this.container.classList.add("bottom");
+            this.container.classList.remove("left");
         }
         return this;
     }

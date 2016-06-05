@@ -41,18 +41,14 @@ export class Label {
             });
 
         }
-
-
         this.drawElements = this.decideWhatToDraw(this.text, this.icon);
 
         return this;
     }
 
     getNearestPositionToCenter() {
-        this.latlng = this.latlng.sort((a, b) => {
-            const center = this.instance.view.center.clone.multiply(-1);
-            return center.distance(a) - center.distance(b);
-        });
+        const center = this.instance.view.center.clone.multiply(-1);
+        this.latlng = this.latlng.sort((a, b) => center.distance(a) - center.distance(b));
         return this.latlng[0];
     }
 
@@ -74,13 +70,9 @@ export class Label {
                 this.drawIcon(pos);
             };
         } else if (icon) {
-            return (pos) => {
-                this.drawIcon(pos);
-            };
+            return (pos) => this.drawIcon(pos);
         } else if (text) {
-            return (pos, textPos) => {
-                this.drawText(textPos);
-            };
+            return (pos, textPos) => this.drawText(textPos);
         }
 
     }
@@ -91,6 +83,7 @@ export class Label {
         this.context.textAlign = this.text.align;
         this.context.textBaseline = this.text.baseline;
         this.context.font = this.text.font;
+        this.context.fillStyle = this.text.color;
         this.context.fillText(this.text.content, pos.x, pos.y);
     }
 
@@ -103,21 +96,15 @@ export class Label {
     }
 
     drawCircleIcon(size) {
-        return (pos) => {
-            this.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
-        };
+        return (pos) => this.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
     }
 
     drawSquareIcon(size) {
-        return (pos) => {
-            this.context.rect(pos.x, pos.y, size, size);
-        };
+        return (pos) => this.context.rect(pos.x, pos.y, size, size);
     }
 
     drawImageIcon(image, size, offset) {
-        return (pos) => {
-            this.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
-        };
+        return (pos) => this.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
     }
 
 }

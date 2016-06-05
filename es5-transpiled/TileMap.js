@@ -324,7 +324,7 @@
             value: function initializeMarkers() {
                 var _this3 = this;
 
-                if (this.markerData) {
+                if (this.markerData && this.markerData.length) {
                     (function() {
                         var markers = [];
                         _this3.markerData = _this3.enrichMarkerData(_this3.markerData);
@@ -363,8 +363,10 @@
         }, {
             key: 'appendMarkerContainerToDom',
             value: function appendMarkerContainerToDom() {
-                this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
-                this.$container.append(this.$markerContainer);
+                if (this.markerData && this.markerData.length) {
+                    this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
+                    this.$container.append(this.$markerContainer);
+                }
                 return this;
             }
 

@@ -231,7 +231,7 @@ export class TileMap {
      * @return {TileMap} instance of TileMap for chaining
      */
     initializeMarkers() {
-        if (this.markerData) {
+        if (this.markerData && this.markerData.length) {
             let markers = [];
             this.markerData = this.enrichMarkerData(this.markerData);
             Helper.forEach(this.markerData, (currentData) => {
@@ -263,8 +263,10 @@ export class TileMap {
 ´     * @return {TileMap} instance of TileMap for chaining
      */
     appendMarkerContainerToDom() {
-        this.$markerContainer = $("<div class='marker-container' />");
-        this.$container.append(this.$markerContainer);
+        if (this.markerData && this.markerData.length) {
+            this.$markerContainer = $("<div class='marker-container' />");
+            this.$container.append(this.$markerContainer);
+        }
         return this;
     }
 
