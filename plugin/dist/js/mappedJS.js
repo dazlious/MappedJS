@@ -6307,7 +6307,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function initializeMarkers() {
 	            var _this3 = this;
 
-	            if (this.markerData) {
+	            if (this.markerData && this.markerData.length) {
 	                (function () {
 	                    var markers = [];
 	                    _this3.markerData = _this3.enrichMarkerData(_this3.markerData);
@@ -6346,8 +6346,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'appendMarkerContainerToDom',
 	        value: function appendMarkerContainerToDom() {
-	            this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
-	            this.$container.append(this.$markerContainer);
+	            if (this.markerData && this.markerData.length) {
+	                this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
+	                this.$container.append(this.$markerContainer);
+	            }
 	            return this;
 	        }
 
@@ -9414,6 +9416,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
 	        this.id = id;
 	        this.$container.addClass(_Events.Events.ToolTip.CLOSE);
+	        this.container = this.$container[0];
 
 	        this.$close = (0, _jQuery2.default)('<span class=\'close-button\' />');
 	        this.$content = (0, _jQuery2.default)('<div class=\'tooltip-content\' />');
@@ -9560,9 +9563,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'setPosition',
 	        value: function setPosition() {
 	            if (this.$container.innerWidth() > this.$container.innerHeight()) {
-	                this.$container.addClass("left").removeClass("bottom");
+	                this.container.classList.add("left");
+	                this.container.classList.remove("bottom");
 	            } else {
-	                this.$container.addClass("bottom").removeClass("left");
+	                this.container.classList.add("bottom");
+	                this.container.classList.remove("left");
 	            }
 	            return this;
 	        }
@@ -9665,7 +9670,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _this.drawIconType = _this.drawImageIcon(img, _this.icon.size, _this.icon.offset);
 	            });
 	        }
-
 	        this.drawElements = this.decideWhatToDraw(this.text, this.icon);
 
 	        return this;
@@ -9674,10 +9678,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(Label, [{
 	        key: 'getNearestPositionToCenter',
 	        value: function getNearestPositionToCenter() {
-	            var _this2 = this;
-
+	            var center = this.instance.view.center.clone.multiply(-1);
 	            this.latlng = this.latlng.sort(function (a, b) {
-	                var center = _this2.instance.view.center.clone.multiply(-1);
 	                return center.distance(a) - center.distance(b);
 	            });
 	            return this.latlng[0];
@@ -9697,20 +9699,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'decideWhatToDraw',
 	        value: function decideWhatToDraw(text, icon) {
-	            var _this3 = this;
+	            var _this2 = this;
 
 	            if (text && icon) {
 	                return function (pos, textPos) {
-	                    _this3.drawText(textPos);
-	                    _this3.drawIcon(pos);
+	                    _this2.drawText(textPos);
+	                    _this2.drawIcon(pos);
 	                };
 	            } else if (icon) {
 	                return function (pos) {
-	                    _this3.drawIcon(pos);
+	                    return _this2.drawIcon(pos);
 	                };
 	            } else if (text) {
 	                return function (pos, textPos) {
-	                    _this3.drawText(textPos);
+	                    return _this2.drawText(textPos);
 	                };
 	            }
 	        }
@@ -9722,6 +9724,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.context.textAlign = this.text.align;
 	            this.context.textBaseline = this.text.baseline;
 	            this.context.font = this.text.font;
+	            this.context.fillStyle = this.text.color;
 	            this.context.fillText(this.text.content, pos.x, pos.y);
 	        }
 	    }, {
@@ -9736,28 +9739,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'drawCircleIcon',
 	        value: function drawCircleIcon(size) {
-	            var _this4 = this;
+	            var _this3 = this;
 
 	            return function (pos) {
-	                _this4.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
+	                return _this3.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
 	            };
 	        }
 	    }, {
 	        key: 'drawSquareIcon',
 	        value: function drawSquareIcon(size) {
-	            var _this5 = this;
+	            var _this4 = this;
 
 	            return function (pos) {
-	                _this5.context.rect(pos.x, pos.y, size, size);
+	                return _this4.context.rect(pos.x, pos.y, size, size);
 	            };
 	        }
 	    }, {
 	        key: 'drawImageIcon',
 	        value: function drawImageIcon(image, size, offset) {
-	            var _this6 = this;
+	            var _this5 = this;
 
 	            return function (pos) {
-	                _this6.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
+	                return _this5.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
 	            };
 	        }
 	    }]);
