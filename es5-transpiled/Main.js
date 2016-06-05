@@ -231,6 +231,10 @@
                             _this2.tileMap.velocity = new _Point.Point();
                             if (action) action();
                         },
+                        doubletap: function doubletap(data) {
+                            _this2.tileMap.velocity = new _Point.Point();
+                            _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
+                        },
                         pan: function pan(data) {
                             if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
                             var change = data.last.position.clone.substract(data.position.move);
@@ -245,10 +249,6 @@
                         pinch: function pinch(data) {
                             _this2.tileMap.velocity = new _Point.Point();
                             _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
-                        },
-                        doubletap: function doubletap(data) {
-                            _this2.tileMap.velocity = new _Point.Point();
-                            _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
                         },
                         flick: function flick(data) {
                             _this2.tileMap.velocity = data.velocity.multiply(20);

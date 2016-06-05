@@ -266,6 +266,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        _this2.tileMap.velocity = new _Point.Point();
 	                        if (action) action();
 	                    },
+	                    doubletap: function doubletap(data) {
+	                        _this2.tileMap.velocity = new _Point.Point();
+	                        _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
+	                    },
 	                    pan: function pan(data) {
 	                        if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
 	                        var change = data.last.position.clone.substract(data.position.move);
@@ -280,10 +284,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    pinch: function pinch(data) {
 	                        _this2.tileMap.velocity = new _Point.Point();
 	                        _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
-	                    },
-	                    doubletap: function doubletap(data) {
-	                        _this2.tileMap.velocity = new _Point.Point();
-	                        _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
 	                    },
 	                    flick: function flick(data) {
 	                        _this2.tileMap.velocity = data.velocity.multiply(20);
@@ -5751,7 +5751,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        return this;
 	    },
-	    clamp: function clamp(v, min, max) {
+
+	    /**
+	     * clamps a value to specified min and max
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {number} v = 0 - specified value to clamp
+	     * @param  {number} min = v - minimum value to clamp to
+	     * @param  {number} max = v - maximum value to clamp to
+	     * @return {number} clamped value
+	     */
+	    clamp: function clamp() {
+	        var v = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var min = arguments.length <= 1 || arguments[1] === undefined ? v : arguments[1];
+	        var max = arguments.length <= 2 || arguments[2] === undefined ? v : arguments[2];
+
 	        return Math.min(Math.max(v, min), max);
 	    },
 
@@ -10216,15 +10230,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // mouse is used
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
 	                return _jQuery2.default.extend(true, data, this.handleSingletouchStart(e));
-	            }
-	            // if is pointerEvent
-	            if (this.isPointerEvent(e)) {
-	                return this.handlePointerEventStart(data, e);
-	            } // touch is used
-	            else {
-	                    // singletouch startet
-	                    return this.handleTouchEventStart(data, e);
-	                }
+	            } // if is pointerEvent
+	            else if (this.isPointerEvent(e)) {
+	                    return this.handlePointerEventStart(data, e);
+	                } // touch is used
+	                else {
+	                        // singletouch startet
+	                        return this.handleTouchEventStart(data, e);
+	                    }
 	        }
 
 	        /**
@@ -10393,12 +10406,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
 	                return _jQuery2.default.extend(true, data, this.handleSingletouchMove(e));
 	            } // if is pointerEvent
-	            if (this.isPointerEvent(e)) {
-	                return this.handlePointerEventMove(data, e);
-	            } // touch is used
-	            else {
-	                    return this.handleTouchEventMove(data, e);
-	                }
+	            else if (this.isPointerEvent(e)) {
+	                    return this.handlePointerEventMove(data, e);
+	                } // touch is used
+	                else {
+	                        return this.handleTouchEventMove(data, e);
+	                    }
 	        }
 
 	        /**
@@ -10560,17 +10573,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
 	                return _jQuery2.default.extend(true, data, this.handleSingletouchEnd(e));
 	            } // if is pointerEvent
-	            if (this.isPointerEvent(e)) {
-	                var end = this.handleSingletouchEnd(e);
-	                delete this.data.pointerArray[e.pointerId];
-	                return _jQuery2.default.extend(true, data, end);
-	            } // touch is used
-	            else {
-	                    // singletouch ended
-	                    if (e.length <= 1) {
-	                        return _jQuery2.default.extend(true, data, this.handleSingletouchEnd(e[0]));
+	            else if (this.isPointerEvent(e)) {
+	                    var end = this.handleSingletouchEnd(e);
+	                    delete this.data.pointerArray[e.pointerId];
+	                    return _jQuery2.default.extend(true, data, end);
+	                } // touch is used
+	                else {
+	                        // singletouch ended
+	                        if (e.length <= 1) {
+	                            return _jQuery2.default.extend(true, data, this.handleSingletouchEnd(e[0]));
+	                        }
 	                    }
-	                }
 	        }
 
 	        /**

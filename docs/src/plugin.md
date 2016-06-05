@@ -109,6 +109,7 @@ Helper for general purposes
 
 * [Helper](#module_Helper)
     * [.requestJSON(filename, callback)](#module_Helper.requestJSON) ⇒ <code>Helper</code>
+    * [.clamp(v, min, max)](#module_Helper.clamp) ⇒ <code>number</code>
     * [.loadImage(cb)](#module_Helper.loadImage) ⇒ <code>Helper</code>
     * [.getFile(url, callback)](#module_Helper.getFile) ⇒ <code>Helper</code>
     * [.forEach(a, cb)](#module_Helper.forEach) ⇒ <code>Helper</code>
@@ -130,6 +131,19 @@ request json-data from given file and calls callback on success
 
 - filename <code>string</code> - path to file
 - callback <code>Helper~requestJSONCallback</code> - function called when data is loaded successfully
+
+<a name="module_Helper.clamp"></a>
+
+### Helper.clamp(v, min, max) ⇒ <code>number</code>
+clamps a value to specified min and max
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>number</code> - clamped value  
+**Params**
+
+- v <code>number</code> - = 0 - specified value to clamp
+- min <code>number</code> - = v - minimum value to clamp to
+- max <code>number</code> - = v - maximum value to clamp to
 
 <a name="module_Helper.loadImage"></a>
 
