@@ -19,9 +19,18 @@ export var Helper = {
         });
         return this;
     },
-    clamp(v, min, max) {
+    /**
+     * clamps a value to specified min and max
+     * @function
+     * @memberof module:Helper
+     * @param  {number} v = 0 - specified value to clamp
+     * @param  {number} min = v - minimum value to clamp to
+     * @param  {number} max = v - maximum value to clamp to
+     * @return {number} clamped value
+     */
+    clamp(v = 0, min = v, max = v) {
         return Math.min(Math.max(v, min), max);
-    },
+    },    
     /**
      * loads an image and calls callback on success
      * @function

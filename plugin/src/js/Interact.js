@@ -366,9 +366,8 @@ export class Interact {
         // mouse is used
         if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
             return $.extend(true, data, this.handleSingletouchStart(e));
-        }
-        // if is pointerEvent
-        if (this.isPointerEvent(e)) {
+        } // if is pointerEvent
+        else if (this.isPointerEvent(e)) {
             return this.handlePointerEventStart(data, e);
         } // touch is used
         else { // singletouch startet
@@ -515,7 +514,7 @@ export class Interact {
         if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
             return $.extend(true, data, this.handleSingletouchMove(e));
         } // if is pointerEvent
-        if (this.isPointerEvent(e)) {
+        else if (this.isPointerEvent(e)) {
             return this.handlePointerEventMove(data, e);
         } // touch is used
         else {
@@ -657,7 +656,7 @@ export class Interact {
         if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
             return $.extend(true, data, this.handleSingletouchEnd(e));
         } // if is pointerEvent
-        if (this.isPointerEvent(e)) {
+        else if (this.isPointerEvent(e)) {
             const end = this.handleSingletouchEnd(e);
             delete this.data.pointerArray[e.pointerId];
             return $.extend(true, data, end);

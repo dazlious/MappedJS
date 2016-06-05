@@ -38,7 +38,21 @@
             });
             return this;
         },
-        clamp: function clamp(v, min, max) {
+
+        /**
+         * clamps a value to specified min and max
+         * @function
+         * @memberof module:Helper
+         * @param  {number} v = 0 - specified value to clamp
+         * @param  {number} min = v - minimum value to clamp to
+         * @param  {number} max = v - maximum value to clamp to
+         * @return {number} clamped value
+         */
+        clamp: function clamp() {
+            var v = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+            var min = arguments.length <= 1 || arguments[1] === undefined ? v : arguments[1];
+            var max = arguments.length <= 2 || arguments[2] === undefined ? v : arguments[2];
+
             return Math.min(Math.max(v, min), max);
         },
 

@@ -140,6 +140,10 @@ export class MappedJS {
                     this.tileMap.velocity = new Point();
                     if (action) action();
                 },
+                doubletap: (data) => {
+                    this.tileMap.velocity = new Point();
+                    this.tileMap.zoom(0.2, this.getAbsolutePosition(data.position.start));
+                },
                 pan: (data) => {
                     if ($(data.target).hasClass("control")) return false;
                     const change = data.last.position.clone.substract(data.position.move);
@@ -154,10 +158,6 @@ export class MappedJS {
                 pinch: (data) => {
                     this.tileMap.velocity = new Point();
                     this.tileMap.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
-                },
-                doubletap: (data) => {
-                    this.tileMap.velocity = new Point();
-                    this.tileMap.zoom(0.2, this.getAbsolutePosition(data.position.start));
                 },
                 flick: (data) => {
                     this.tileMap.velocity = data.velocity.multiply(20);
