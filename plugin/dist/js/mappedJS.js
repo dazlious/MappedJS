@@ -9587,10 +9587,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	DataEnrichment.DATA_LABEL_TEXT = {
 	    "content": "",
 	    "color": "#333333",
-	    "shadow": {
-	        "color": "#f7f7f7",
-	        "blur": 2
-	    },
 	    "offset": [0, 0],
 	    "align": "center",
 	    "baseline": "hanging",
@@ -9600,11 +9596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    "type": "circle",
 	    "size": 2,
 	    "color": "#333333",
-	    "offset": [0, 0],
-	    "shadow": {
-	        "color": "#f7f7f7",
-	        "blur": 2
-	    }
+	    "offset": [0, 0]
 	};
 	DataEnrichment.TOOLTIP = {
 	    image: "/plugin/hbs/image.hbs",
@@ -10014,8 +10006,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'drawText',
 	        value: function drawText(pos) {
-	            this.context.shadowColor = this.text.shadow.color;
-	            this.context.shadowBlur = this.text.shadow.blur;
 	            this.context.textAlign = this.text.align;
 	            this.context.textBaseline = this.text.baseline;
 	            this.context.font = this.text.font;
@@ -10025,8 +10015,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'drawIcon',
 	        value: function drawIcon(pos) {
-	            this.context.shadowColor = this.icon.shadow.color;
-	            this.context.shadowBlur = this.icon.shadow.blur;
 	            this.context.fillStyle = this.icon.color;
 	            this.drawIconType(pos);
 	            this.context.fill();

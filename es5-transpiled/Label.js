@@ -156,8 +156,6 @@
         }, {
             key: 'drawText',
             value: function drawText(pos) {
-                this.context.shadowColor = this.text.shadow.color;
-                this.context.shadowBlur = this.text.shadow.blur;
                 this.context.textAlign = this.text.align;
                 this.context.textBaseline = this.text.baseline;
                 this.context.font = this.text.font;
@@ -167,8 +165,6 @@
         }, {
             key: 'drawIcon',
             value: function drawIcon(pos) {
-                this.context.shadowColor = this.icon.shadow.color;
-                this.context.shadowBlur = this.icon.shadow.blur;
                 this.context.fillStyle = this.icon.color;
                 this.drawIconType(pos);
                 this.context.fill();

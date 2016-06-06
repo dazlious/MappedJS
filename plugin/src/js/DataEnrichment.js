@@ -142,10 +142,6 @@ DataEnrichment.DATA_LABEL = {
 DataEnrichment.DATA_LABEL_TEXT = {
     "content": "",
     "color": "#333333",
-    "shadow": {
-        "color": "#f7f7f7",
-        "blur": 2
-    },
     "offset": [0, 0],
     "align": "center",
     "baseline": "hanging",
@@ -155,11 +151,7 @@ DataEnrichment.DATA_LABEL_ICON = {
     "type": "circle",
     "size": 2,
     "color": "#333333",
-    "offset": [0, 0],
-    "shadow": {
-        "color": "#f7f7f7",
-        "blur": 2
-    }
+    "offset": [0, 0]
 };
 DataEnrichment.TOOLTIP = {
     image: "/plugin/hbs/image.hbs",
