@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Events.js', './Helper.js', './StateHandler.js', './Rectangle.js', './Publisher.js'], factory);
+        define(['exports', './Events.js', './Helper.js', './MapInformation.js', './StateHandler.js', './Rectangle.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Events.js'), require('./Helper.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./Publisher.js'));
+        factory(exports, require('./Events.js'), require('./Helper.js'), require('./MapInformation.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Events, global.Helper, global.StateHandler, global.Rectangle, global.Publisher);
+        factory(mod.exports, global.Events, global.Helper, global.MapInformation, global.StateHandler, global.Rectangle, global.Publisher);
         global.Tile = mod.exports;
     }
-})(this, function(exports, _Events, _Helper, _StateHandler, _Rectangle2, _Publisher) {
+})(this, function(exports, _Events, _Helper, _MapInformation, _StateHandler, _Rectangle2, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -122,7 +122,32 @@
         _createClass(Tile, [{
             key: 'distortedTile',
             get: function get() {
-                return this.clone.scale(this.instance.zoomFactor).translate(this.instance.currentView.x, this.instance.currentView.y).scaleX(this.instance.distortionFactor).translate(this.instance.offsetToCenter, 0);
+                return this.clone.scale(this.zoomFactor).translate(this.view.x, this.view.y).scaleX(this.distortionFactor).translate(this.offsetToCenter, 0);
+            }
+        }, {
+            key: 'zoomFactor',
+            get: function get() {
+                return this.info.get().zoomFactor;
+            }
+        }, {
+            key: 'view',
+            get: function get() {
+                return this.info.get().view;
+            }
+        }, {
+            key: 'distortionFactor',
+            get: function get() {
+                return this.info.get().distortionFactor;
+            }
+        }, {
+            key: 'offsetToCenter',
+            get: function get() {
+                return this.info.get().offsetToCenter;
+            }
+        }, {
+            key: 'center',
+            get: function get() {
+                return this.info.get().center;
             }
 
             /**
@@ -132,7 +157,6 @@
              * @param  {number} y = 0 - position y of tile
              * @param  {number} w = 0 - tile width
              * @param  {number} h = 0 - tile height
-             * @param  {View} _instance = null - instance of parent View
              * @return {Tile} instance of Tile for chaining
              */
 
@@ -151,8 +175,7 @@
             var w = _ref$w === undefined ? 0 : _ref$w;
             var _ref$h = _ref.h;
             var h = _ref$h === undefined ? 0 : _ref$h;
-
-            var _instance = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+            var context = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
             var _ret;
 
@@ -162,14 +185,15 @@
 
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
-            _this.id = id;
             if (!path || typeof path !== "string" || path.length === 0) throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
-            else if (!_instance) throw new Error('Tile needs an instance');
+
+            _this.id = id;
+            _this.info = new _MapInformation.MapInformation(_this.id);
+            _this.eventManager = new _Publisher.Publisher(_this.id);
 
             _this.state = new _StateHandler.StateHandler(STATES);
-            _this.instance = _instance;
-            _this.context = _this.instance.context;
-            _this.eventManager = new _Publisher.Publisher(_this.id);
+
+            _this.context = context;
             _this.path = path;
 
             return _ret = _this, _possibleConstructorReturn(_this, _ret);

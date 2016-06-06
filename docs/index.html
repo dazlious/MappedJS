@@ -49,6 +49,8 @@
 <dd></dd>
 <dt><a href="#MappedJS">MappedJS</a></dt>
 <dd></dd>
+<dt><a href="#MapInformation">MapInformation</a></dt>
+<dd></dd>
 <dt><a href="#Marker">Marker</a></dt>
 <dd></dd>
 <dt><a href="#MarkerClusterer">MarkerClusterer</a></dt>
@@ -80,9 +82,6 @@
 
 <h2 id="constants">Constants</h2>
 <dl>
-<dt><a href="#instances">instances</a> : <code><a href="#Publisher">Publisher</a></code></dt>
-<dd><p>singleton instance</p>
-</dd>
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a tile</p>
 </dd>
@@ -91,7 +90,7 @@
 <p><a name="module_DataEnrichment"></a></p>
 <h2 id="dataenrichment">DataEnrichment</h2>
 <p>enriches delivered data with default values</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#x6d;&#x64;&#117;&#118;&#x65;&#64;&#x64;&#x65;&#115;&#105;&#103;&#110;&#109;&#97;&#105;&#108;&#x2e;&#x6e;&#101;&#x74;">&#x6d;&#x64;&#117;&#118;&#x65;&#64;&#x64;&#x65;&#115;&#105;&#103;&#110;&#109;&#97;&#105;&#108;&#x2e;&#x6e;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#109;&#100;&#117;&#x76;&#x65;&#x40;&#100;&#101;&#115;&#x69;&#x67;&#x6e;&#x6d;&#x61;&#105;&#108;&#46;&#x6e;&#x65;&#x74;">&#109;&#100;&#117;&#x76;&#x65;&#x40;&#100;&#101;&#115;&#x69;&#x67;&#x6e;&#x6d;&#x61;&#105;&#108;&#46;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_DataEnrichment">DataEnrichment</a><ul>
 <li><a href="#module_DataEnrichment.marker">.marker(data)</a> ⇒ <code>object</code></li>
@@ -116,7 +115,7 @@
 <p><a name="module_Helper"></a></p>
 <h2 id="helper">Helper</h2>
 <p>Helper for general purposes</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x6d;&#100;&#x75;&#x76;&#101;&#x40;&#100;&#x65;&#x73;&#105;&#x67;&#x6e;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x6e;&#x65;&#x74;">&#x6d;&#100;&#x75;&#x76;&#101;&#x40;&#100;&#x65;&#x73;&#105;&#x67;&#x6e;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x6d;&#100;&#117;&#x76;&#101;&#x40;&#100;&#x65;&#115;&#105;&#103;&#110;&#x6d;&#97;&#105;&#x6c;&#46;&#x6e;&#x65;&#116;">&#x6d;&#100;&#117;&#x76;&#101;&#x40;&#100;&#x65;&#115;&#105;&#103;&#110;&#x6d;&#97;&#105;&#x6c;&#46;&#x6e;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_Helper">Helper</a><ul>
 <li><a href="#module_Helper.requestJSON">.requestJSON(filename, callback)</a> ⇒ <code>Helper</code></li>
@@ -851,7 +850,61 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><a name="MappedJS+loadingFinished"></a></p>
 <h3 id="mappedjs-loadingfinished-code-mappedjs-mappedjs-code-">mappedJS.loadingFinished() ⇒ <code><a href="#MappedJS">MappedJS</a></code></h3>
 <p>called when loading and initialization is finished</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><a name="Marker"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><a name="MapInformation"></a></p>
+<h2 id="mapinformation">MapInformation</h2>
+<p><strong>Kind</strong>: global class  </p>
+<ul>
+<li><a href="#MapInformation">MapInformation</a><ul>
+<li><em>instance</em><ul>
+<li><a href="#MapInformation+offsetToCenter">.offsetToCenter</a></li>
+<li><a href="#MapInformation+pixelPerLatLng">.pixelPerLatLng</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#MapInformation+convertPointToLatLng">.convertPointToLatLng(point)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
+<li><a href="#MapInformation+convertLatLngToPoint">.convertLatLngToPoint(latlng)</a> ⇒ <code><a href="#Point">Point</a></code></li>
+<li><a href="#MapInformation+getDistortionFactorForLatitude">.getDistortionFactorForLatitude(latlng)</a> ⇒ <code>number</code></li>
+<li><a href="#MapInformation+destroy">.destroy()</a></li>
+</ul>
+</li>
+<li><em>static</em><ul>
+<li><a href="#MapInformation.instances">.instances</a> : <code>Object</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="MapInformation+offsetToCenter"></a></p>
+<h3 id="mapinformation-offsettocenter">mapInformation.offsetToCenter</h3>
+<p>Returns the current distorted viewport</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#MapInformation">MapInformation</a></code><br><a name="MapInformation+pixelPerLatLng"></a></p>
+<h3 id="mapinformation-pixelperlatlng-code-point-point-code-">mapInformation.pixelPerLatLng ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>how many pixels per lat and lng</p>
+<p><strong>Kind</strong>: instance property of <code><a href="#MapInformation">MapInformation</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - pixels per lat/lng<br><a name="MapInformation+convertPointToLatLng"></a></p>
+<h3 id="mapinformation-convertpointtolatlng-point-code-latlng-latlng-code-">mapInformation.convertPointToLatLng(point) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
+<p>converts a Point to LatLng in view</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MapInformation">MapInformation</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - presentation of point in lat-lng system<br><strong>Params</strong></p>
+<ul>
+<li>point <code><a href="#Point">Point</a></code> - specified point to be converted</li>
+</ul>
+<p><a name="MapInformation+convertLatLngToPoint"></a></p>
+<h3 id="mapinformation-convertlatlngtopoint-latlng-code-point-point-code-">mapInformation.convertLatLngToPoint(latlng) ⇒ <code><a href="#Point">Point</a></code></h3>
+<p>converts a LatLng to Point in view</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MapInformation">MapInformation</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - presentation of point in pixel system<br><strong>Params</strong></p>
+<ul>
+<li>latlng <code><a href="#LatLng">LatLng</a></code> - specified latlng to be converted</li>
+</ul>
+<p><a name="MapInformation+getDistortionFactorForLatitude"></a></p>
+<h3 id="mapinformation-getdistortionfactorforlatitude-latlng-code-number-code-">mapInformation.getDistortionFactorForLatitude(latlng) ⇒ <code>number</code></h3>
+<p>get distortion factor for specified latitude</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MapInformation">MapInformation</a></code><br><strong>Returns</strong>: <code>number</code> - distortion factor<br><strong>Params</strong></p>
+<ul>
+<li>latlng <code><a href="#LatLng">LatLng</a></code> - lat/lng position</li>
+</ul>
+<p><a name="MapInformation+destroy"></a></p>
+<h3 id="mapinformation-destroy-">mapInformation.destroy()</h3>
+<p>destroys singleton instance</p>
+<p><strong>Kind</strong>: instance method of <code><a href="#MapInformation">MapInformation</a></code><br><a name="MapInformation.instances"></a></p>
+<h3 id="mapinformation-instances-code-object-code-">MapInformation.instances : <code>Object</code></h3>
+<p>singleton instance wrapper</p>
+<p><strong>Kind</strong>: static property of <code><a href="#MapInformation">MapInformation</a></code><br><a name="Marker"></a></p>
 <h2 id="marker">Marker</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
@@ -1004,11 +1057,18 @@
 <p><strong>Kind</strong>: global class  </p>
 <ul>
 <li><a href="#Publisher">Publisher</a><ul>
+<li><em>instance</em><ul>
 <li><a href="#Publisher+subscribe">.subscribe(type, fn)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
 <li><a href="#Publisher+unsubscribe">.unsubscribe(type, fn)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
 <li><a href="#Publisher+publish">.publish(type, arg)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
 <li><a href="#Publisher+handle">.handle(action, type, a)</a> ⇒ <code><a href="#Publisher">Publisher</a></code></li>
 <li><a href="#Publisher+destroy">.destroy()</a></li>
+</ul>
+</li>
+<li><em>static</em><ul>
+<li><a href="#Publisher.instances">.instances</a> : <code>Object</code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1048,7 +1108,10 @@
 <p><a name="Publisher+destroy"></a></p>
 <h3 id="publisher-destroy-">publisher.destroy()</h3>
 <p>destroys singleton instance</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><a name="Rectangle"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Publisher">Publisher</a></code><br><a name="Publisher.instances"></a></p>
+<h3 id="publisher-instances-code-object-code-">Publisher.instances : <code>Object</code></h3>
+<p>singleton instance wrapper</p>
+<p><strong>Kind</strong>: static property of <code><a href="#Publisher">Publisher</a></code><br><a name="Rectangle"></a></p>
 <h2 id="rectangle">Rectangle</h2>
 <p><strong>Kind</strong>: global class  </p>
 <ul>
@@ -1344,7 +1407,7 @@
 <p><strong>Kind</strong>: global class  </p>
 <ul>
 <li><a href="#Tile">Tile</a><ul>
-<li><a href="#new_Tile_new">new Tile(path, x, y, w, h, _instance)</a></li>
+<li><a href="#new_Tile_new">new Tile(path, x, y, w, h)</a></li>
 <li><a href="#Tile+initialize">.initialize()</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
 <li><a href="#Tile+draw">.draw()</a> ⇒ <code><a href="#Tile">Tile</a></code></li>
 <li><a href="#Tile+equals">.equals(tile)</a> ⇒ <code>Boolean</code></li>
@@ -1352,7 +1415,7 @@
 </li>
 </ul>
 <p><a name="new_Tile_new"></a></p>
-<h3 id="new-tile-path-x-y-w-h-_instance-">new Tile(path, x, y, w, h, _instance)</h3>
+<h3 id="new-tile-path-x-y-w-h-">new Tile(path, x, y, w, h)</h3>
 <p><strong>Returns</strong>: <code><a href="#Tile">Tile</a></code> - instance of Tile for chaining<br><strong>Params</strong></p>
 <ul>
 <li>path <code>string</code> - = null - path to image</li>
@@ -1360,7 +1423,6 @@
 <li>y <code>number</code> - = 0 - position y of tile</li>
 <li>w <code>number</code> - = 0 - tile width</li>
 <li>h <code>number</code> - = 0 - tile height</li>
-<li>_instance <code><a href="#View">View</a></code> - = null - instance of parent View</li>
 </ul>
 <p><a name="Tile+initialize"></a></p>
 <h3 id="tile-initialize-code-tile-tile-code-">tile.initialize() ⇒ <code><a href="#Tile">Tile</a></code></h3>
@@ -1578,15 +1640,11 @@
 <li><a href="#View+distortionFactor">.distortionFactor</a> ⇒ <code>number</code></li>
 <li><a href="#View+offsetToCenter">.offsetToCenter</a></li>
 <li><a href="#View+visibleTiles">.visibleTiles</a> ⇒ <code>array</code></li>
-<li><a href="#View+pixelPerLatLng">.pixelPerLatLng</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#View+reset">.reset()</a></li>
 <li><a href="#View+loadThumb">.loadThumb()</a> ⇒ <code><a href="#View">View</a></code></li>
-<li><a href="#View+convertPointToLatLng">.convertPointToLatLng(point)</a> ⇒ <code><a href="#LatLng">LatLng</a></code></li>
 <li><a href="#View+setLatLngToPosition">.setLatLngToPosition(latlng, position)</a> ⇒ <code><a href="#View">View</a></code></li>
-<li><a href="#View+convertLatLngToPoint">.convertLatLngToPoint(latlng)</a> ⇒ <code><a href="#Point">Point</a></code></li>
 <li><a href="#View+getDeltaXToCenter">.getDeltaXToCenter(pos)</a> ⇒ <code>number</code></li>
 <li><a href="#View+zoom">.zoom(factor, pos)</a> ⇒ <code><a href="#View">View</a></code></li>
-<li><a href="#View+getDistortionFactorForLatitude">.getDistortionFactorForLatitude(latlng)</a> ⇒ <code>number</code></li>
 <li><a href="#View+calculateNewCenter">.calculateNewCenter()</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+moveView">.moveView(pos)</a> ⇒ <code><a href="#View">View</a></code></li>
 <li><a href="#View+draw">.draw()</a> ⇒ <code><a href="#View">View</a></code></li>
@@ -1623,36 +1681,19 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><a name="View+visibleTiles"></a></p>
 <h3 id="view-visibletiles-code-array-code-">view.visibleTiles ⇒ <code>array</code></h3>
 <p>get all visible tiles</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>array</code> - all tiles that are currently visible<br><a name="View+pixelPerLatLng"></a></p>
-<h3 id="view-pixelperlatlng-code-point-point-code-">view.pixelPerLatLng ⇒ <code><a href="#Point">Point</a></code></h3>
-<p>how many pixels per lat and lng</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - pixels per lat/lng<br><a name="View+reset"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>array</code> - all tiles that are currently visible<br><a name="View+reset"></a></p>
 <h3 id="view-reset-">view.reset()</h3>
 <p>resets current View to its initial position</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><a name="View+loadThumb"></a></p>
 <h3 id="view-loadthumb-code-view-view-code-">view.loadThumb() ⇒ <code><a href="#View">View</a></code></h3>
 <p>loads thumbnail of view</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="View+convertPointToLatLng"></a></p>
-<h3 id="view-convertpointtolatlng-point-code-latlng-latlng-code-">view.convertPointToLatLng(point) ⇒ <code><a href="#LatLng">LatLng</a></code></h3>
-<p>converts a Point to LatLng in view</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#LatLng">LatLng</a></code> - presentation of point in lat-lng system<br><strong>Params</strong></p>
-<ul>
-<li>point <code><a href="#Point">Point</a></code> - specified point to be converted</li>
-</ul>
-<p><a name="View+setLatLngToPosition"></a></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="View+setLatLngToPosition"></a></p>
 <h3 id="view-setlatlngtoposition-latlng-position-code-view-view-code-">view.setLatLngToPosition(latlng, position) ⇒ <code><a href="#View">View</a></code></h3>
 <p>set specified lat/lng to position x/y</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><strong>Params</strong></p>
 <ul>
 <li>latlng <code><a href="#LatLng">LatLng</a></code> - specified latlng to be set Point to</li>
 <li>position <code><a href="#Point">Point</a></code> - specified position to set LatLng to</li>
-</ul>
-<p><a name="View+convertLatLngToPoint"></a></p>
-<h3 id="view-convertlatlngtopoint-latlng-code-point-point-code-">view.convertLatLngToPoint(latlng) ⇒ <code><a href="#Point">Point</a></code></h3>
-<p>converts a LatLng to Point in view</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#Point">Point</a></code> - presentation of point in pixel system<br><strong>Params</strong></p>
-<ul>
-<li>latlng <code><a href="#LatLng">LatLng</a></code> - specified latlng to be converted</li>
 </ul>
 <p><a name="View+getDeltaXToCenter"></a></p>
 <h3 id="view-getdeltaxtocenter-pos-code-number-code-">view.getDeltaXToCenter(pos) ⇒ <code>number</code></h3>
@@ -1668,13 +1709,6 @@
 <ul>
 <li>factor <code>number</code> - increase/decrease factor</li>
 <li>pos <code><a href="#Point">Point</a></code> - Position to zoom to</li>
-</ul>
-<p><a name="View+getDistortionFactorForLatitude"></a></p>
-<h3 id="view-getdistortionfactorforlatitude-latlng-code-number-code-">view.getDistortionFactorForLatitude(latlng) ⇒ <code>number</code></h3>
-<p>get distortion factor for specified latitude</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code>number</code> - distortion factor<br><strong>Params</strong></p>
-<ul>
-<li>latlng <code><a href="#LatLng">LatLng</a></code> - lat/lng position</li>
 </ul>
 <p><a name="View+calculateNewCenter"></a></p>
 <h3 id="view-calculatenewcenter-code-view-view-code-">view.calculateNewCenter() ⇒ <code><a href="#View">View</a></code></h3>
@@ -1701,7 +1735,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="Events"></a></p>
 <h2 id="events-code-object-code-">Events : <code>object</code></h2>
 <p>Helper for naming events</p>
-<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#109;&#x64;&#117;&#x76;&#101;&#x40;&#100;&#101;&#x73;&#x69;&#x67;&#110;&#109;&#x61;&#105;&#x6c;&#46;&#x6e;&#x65;&#116;">&#109;&#x64;&#117;&#x76;&#101;&#x40;&#100;&#101;&#x73;&#x69;&#x67;&#110;&#109;&#x61;&#105;&#x6c;&#46;&#x6e;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#109;&#100;&#117;&#x76;&#x65;&#64;&#100;&#101;&#x73;&#105;&#x67;&#110;&#109;&#x61;&#x69;&#108;&#46;&#110;&#101;&#x74;">&#109;&#100;&#117;&#x76;&#x65;&#64;&#100;&#101;&#x73;&#105;&#x67;&#110;&#109;&#x61;&#x69;&#108;&#46;&#110;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#Events">Events</a> : <code>object</code><ul>
 <li><a href="#Events.ToolTip">.ToolTip</a> : <code>Object</code></li>
@@ -1780,10 +1814,7 @@
 <li>CLUSTERIZE <code>object</code> - create cluster  </li>
 <li>UNCLUSTERIZE <code>object</code> - destroy cluster  </li>
 </ul>
-<p><a name="instances"></a></p>
-<h2 id="instances-code-publisher-publisher-code-">instances : <code><a href="#Publisher">Publisher</a></code></h2>
-<p>singleton instance</p>
-<p><strong>Kind</strong>: global constant<br><a name="STATES"></a></p>
+<p><a name="STATES"></a></p>
 <h2 id="states-code-array-code-">STATES : <code>Array</code></h2>
 <p>States of a tile</p>
 <p><strong>Kind</strong>: global constant  </p>

@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Events.js', './Helper.js', './LatLng.js'], factory);
+        define(['exports', './Events.js', './Helper.js', './LatLng.js', './MapInformation.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Events.js'), require('./Helper.js'), require('./LatLng.js'));
+        factory(exports, require('./Events.js'), require('./Helper.js'), require('./LatLng.js'), require('./MapInformation.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Events, global.Helper, global.LatLng);
+        factory(mod.exports, global.Events, global.Helper, global.LatLng, global.MapInformation);
         global.Label = mod.exports;
     }
-})(this, function(exports, _Events, _Helper, _LatLng) {
+})(this, function(exports, _Events, _Helper, _LatLng, _MapInformation) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -46,12 +46,32 @@
         _createClass(Label, [{
             key: 'position',
             get: function get() {
-                return this.instance.view.convertLatLngToPoint(this.nearestPositionToCenter).translate(this.instance.view.currentView.x, this.instance.view.currentView.y).multiply(this.instance.view.distortionFactor, 1).translate(this.instance.view.offsetToCenter, 0);
+                return this.info.convertLatLngToPoint(this.nearestPositionToCenter).translate(this.view.x, this.view.y).multiply(this.distortionFactor, 1).translate(this.offsetToCenter, 0);
             }
         }, {
             key: 'nearestPositionToCenter',
             get: function get() {
                 return this.latlng instanceof _LatLng.LatLng ? this.latlng : this.getNearestPositionToCenter();
+            }
+        }, {
+            key: 'view',
+            get: function get() {
+                return this.info.get().view;
+            }
+        }, {
+            key: 'distortionFactor',
+            get: function get() {
+                return this.info.get().distortionFactor;
+            }
+        }, {
+            key: 'offsetToCenter',
+            get: function get() {
+                return this.info.get().offsetToCenter;
+            }
+        }, {
+            key: 'center',
+            get: function get() {
+                return this.info.get().center;
             }
 
             /**
@@ -65,12 +85,14 @@
             var _this = this;
 
             var settings = _ref.settings;
-            var instance = _ref.instance;
             var context = _ref.context;
+            var id = _ref.id;
 
             _classCallCheck(this, Label);
 
-            this.instance = instance;
+            this.id = id;
+            this.info = new _MapInformation.MapInformation(this.id);
+
             this.context = context;
 
             this.latlng = settings.position;
@@ -93,7 +115,7 @@
         _createClass(Label, [{
             key: 'getNearestPositionToCenter',
             value: function getNearestPositionToCenter() {
-                var center = this.instance.view.center.clone.multiply(-1);
+                var center = this.center.clone.multiply(-1);
                 this.latlng = this.latlng.sort(function(a, b) {
                     return center.distance(a) - center.distance(b);
                 });

@@ -24,6 +24,8 @@
 <dd></dd>
 <dt><a href="#MappedJS">MappedJS</a></dt>
 <dd></dd>
+<dt><a href="#MapInformation">MapInformation</a></dt>
+<dd></dd>
 <dt><a href="#Marker">Marker</a></dt>
 <dd></dd>
 <dt><a href="#MarkerClusterer">MarkerClusterer</a></dt>
@@ -57,9 +59,6 @@
 ## Constants
 
 <dl>
-<dt><a href="#instances">instances</a> : <code><a href="#Publisher">Publisher</a></code></dt>
-<dd><p>singleton instance</p>
-</dd>
 <dt><a href="#STATES">STATES</a> : <code>Array</code></dt>
 <dd><p>States of a tile</p>
 </dd>
@@ -1175,6 +1174,80 @@ called when loading and initialization is finished
 
 **Kind**: instance method of <code>[MappedJS](#MappedJS)</code>  
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
+<a name="MapInformation"></a>
+
+## MapInformation
+**Kind**: global class  
+
+* [MapInformation](#MapInformation)
+    * _instance_
+        * [.offsetToCenter](#MapInformation+offsetToCenter)
+        * [.pixelPerLatLng](#MapInformation+pixelPerLatLng) ⇒ <code>[Point](#Point)</code>
+        * [.convertPointToLatLng(point)](#MapInformation+convertPointToLatLng) ⇒ <code>[LatLng](#LatLng)</code>
+        * [.convertLatLngToPoint(latlng)](#MapInformation+convertLatLngToPoint) ⇒ <code>[Point](#Point)</code>
+        * [.getDistortionFactorForLatitude(latlng)](#MapInformation+getDistortionFactorForLatitude) ⇒ <code>number</code>
+        * [.destroy()](#MapInformation+destroy)
+    * _static_
+        * [.instances](#MapInformation.instances) : <code>Object</code>
+
+<a name="MapInformation+offsetToCenter"></a>
+
+### mapInformation.offsetToCenter
+Returns the current distorted viewport
+
+**Kind**: instance property of <code>[MapInformation](#MapInformation)</code>  
+<a name="MapInformation+pixelPerLatLng"></a>
+
+### mapInformation.pixelPerLatLng ⇒ <code>[Point](#Point)</code>
+how many pixels per lat and lng
+
+**Kind**: instance property of <code>[MapInformation](#MapInformation)</code>  
+**Returns**: <code>[Point](#Point)</code> - pixels per lat/lng  
+<a name="MapInformation+convertPointToLatLng"></a>
+
+### mapInformation.convertPointToLatLng(point) ⇒ <code>[LatLng](#LatLng)</code>
+converts a Point to LatLng in view
+
+**Kind**: instance method of <code>[MapInformation](#MapInformation)</code>  
+**Returns**: <code>[LatLng](#LatLng)</code> - presentation of point in lat-lng system  
+**Params**
+
+- point <code>[Point](#Point)</code> - specified point to be converted
+
+<a name="MapInformation+convertLatLngToPoint"></a>
+
+### mapInformation.convertLatLngToPoint(latlng) ⇒ <code>[Point](#Point)</code>
+converts a LatLng to Point in view
+
+**Kind**: instance method of <code>[MapInformation](#MapInformation)</code>  
+**Returns**: <code>[Point](#Point)</code> - presentation of point in pixel system  
+**Params**
+
+- latlng <code>[LatLng](#LatLng)</code> - specified latlng to be converted
+
+<a name="MapInformation+getDistortionFactorForLatitude"></a>
+
+### mapInformation.getDistortionFactorForLatitude(latlng) ⇒ <code>number</code>
+get distortion factor for specified latitude
+
+**Kind**: instance method of <code>[MapInformation](#MapInformation)</code>  
+**Returns**: <code>number</code> - distortion factor  
+**Params**
+
+- latlng <code>[LatLng](#LatLng)</code> - lat/lng position
+
+<a name="MapInformation+destroy"></a>
+
+### mapInformation.destroy()
+destroys singleton instance
+
+**Kind**: instance method of <code>[MapInformation](#MapInformation)</code>  
+<a name="MapInformation.instances"></a>
+
+### MapInformation.instances : <code>Object</code>
+singleton instance wrapper
+
+**Kind**: static property of <code>[MapInformation](#MapInformation)</code>  
 <a name="Marker"></a>
 
 ## Marker
@@ -1393,11 +1466,14 @@ Creates a Point from specified point
 **Kind**: global class  
 
 * [Publisher](#Publisher)
-    * [.subscribe(type, fn)](#Publisher+subscribe) ⇒ <code>[Publisher](#Publisher)</code>
-    * [.unsubscribe(type, fn)](#Publisher+unsubscribe) ⇒ <code>[Publisher](#Publisher)</code>
-    * [.publish(type, arg)](#Publisher+publish) ⇒ <code>[Publisher](#Publisher)</code>
-    * [.handle(action, type, a)](#Publisher+handle) ⇒ <code>[Publisher](#Publisher)</code>
-    * [.destroy()](#Publisher+destroy)
+    * _instance_
+        * [.subscribe(type, fn)](#Publisher+subscribe) ⇒ <code>[Publisher](#Publisher)</code>
+        * [.unsubscribe(type, fn)](#Publisher+unsubscribe) ⇒ <code>[Publisher](#Publisher)</code>
+        * [.publish(type, arg)](#Publisher+publish) ⇒ <code>[Publisher](#Publisher)</code>
+        * [.handle(action, type, a)](#Publisher+handle) ⇒ <code>[Publisher](#Publisher)</code>
+        * [.destroy()](#Publisher+destroy)
+    * _static_
+        * [.instances](#Publisher.instances) : <code>Object</code>
 
 <a name="Publisher+subscribe"></a>
 
@@ -1454,6 +1530,12 @@ handle subscribe to a topic
 destroys singleton instance
 
 **Kind**: instance method of <code>[Publisher](#Publisher)</code>  
+<a name="Publisher.instances"></a>
+
+### Publisher.instances : <code>Object</code>
+singleton instance wrapper
+
+**Kind**: static property of <code>[Publisher](#Publisher)</code>  
 <a name="Rectangle"></a>
 
 ## Rectangle
@@ -1901,14 +1983,14 @@ checks if there is a previous element
 **Kind**: global class  
 
 * [Tile](#Tile)
-    * [new Tile(path, x, y, w, h, _instance)](#new_Tile_new)
+    * [new Tile(path, x, y, w, h)](#new_Tile_new)
     * [.initialize()](#Tile+initialize) ⇒ <code>[Tile](#Tile)</code>
     * [.draw()](#Tile+draw) ⇒ <code>[Tile](#Tile)</code>
     * [.equals(tile)](#Tile+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Tile_new"></a>
 
-### new Tile(path, x, y, w, h, _instance)
+### new Tile(path, x, y, w, h)
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
 **Params**
 
@@ -1917,7 +1999,6 @@ checks if there is a previous element
 - y <code>number</code> - = 0 - position y of tile
 - w <code>number</code> - = 0 - tile width
 - h <code>number</code> - = 0 - tile height
-- _instance <code>[View](#View)</code> - = null - instance of parent View
 
 <a name="Tile+initialize"></a>
 
@@ -2271,15 +2352,11 @@ precompiles all Handlebars templates
     * [.distortionFactor](#View+distortionFactor) ⇒ <code>number</code>
     * [.offsetToCenter](#View+offsetToCenter)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
-    * [.pixelPerLatLng](#View+pixelPerLatLng) ⇒ <code>[Point](#Point)</code>
     * [.reset()](#View+reset)
     * [.loadThumb()](#View+loadThumb) ⇒ <code>[View](#View)</code>
-    * [.convertPointToLatLng(point)](#View+convertPointToLatLng) ⇒ <code>[LatLng](#LatLng)</code>
     * [.setLatLngToPosition(latlng, position)](#View+setLatLngToPosition) ⇒ <code>[View](#View)</code>
-    * [.convertLatLngToPoint(latlng)](#View+convertLatLngToPoint) ⇒ <code>[Point](#Point)</code>
     * [.getDeltaXToCenter(pos)](#View+getDeltaXToCenter) ⇒ <code>number</code>
     * [.zoom(factor, pos)](#View+zoom) ⇒ <code>[View](#View)</code>
-    * [.getDistortionFactorForLatitude(latlng)](#View+getDistortionFactorForLatitude) ⇒ <code>number</code>
     * [.calculateNewCenter()](#View+calculateNewCenter) ⇒ <code>[View](#View)</code>
     * [.moveView(pos)](#View+moveView) ⇒ <code>[View](#View)</code>
     * [.draw()](#View+draw) ⇒ <code>[View](#View)</code>
@@ -2327,13 +2404,6 @@ get all visible tiles
 
 **Kind**: instance property of <code>[View](#View)</code>  
 **Returns**: <code>array</code> - all tiles that are currently visible  
-<a name="View+pixelPerLatLng"></a>
-
-### view.pixelPerLatLng ⇒ <code>[Point](#Point)</code>
-how many pixels per lat and lng
-
-**Kind**: instance property of <code>[View](#View)</code>  
-**Returns**: <code>[Point](#Point)</code> - pixels per lat/lng  
 <a name="View+reset"></a>
 
 ### view.reset()
@@ -2347,17 +2417,6 @@ loads thumbnail of view
 
 **Kind**: instance method of <code>[View](#View)</code>  
 **Returns**: <code>[View](#View)</code> - instance of View for chaining  
-<a name="View+convertPointToLatLng"></a>
-
-### view.convertPointToLatLng(point) ⇒ <code>[LatLng](#LatLng)</code>
-converts a Point to LatLng in view
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[LatLng](#LatLng)</code> - presentation of point in lat-lng system  
-**Params**
-
-- point <code>[Point](#Point)</code> - specified point to be converted
-
 <a name="View+setLatLngToPosition"></a>
 
 ### view.setLatLngToPosition(latlng, position) ⇒ <code>[View](#View)</code>
@@ -2369,17 +2428,6 @@ set specified lat/lng to position x/y
 
 - latlng <code>[LatLng](#LatLng)</code> - specified latlng to be set Point to
 - position <code>[Point](#Point)</code> - specified position to set LatLng to
-
-<a name="View+convertLatLngToPoint"></a>
-
-### view.convertLatLngToPoint(latlng) ⇒ <code>[Point](#Point)</code>
-converts a LatLng to Point in view
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>[Point](#Point)</code> - presentation of point in pixel system  
-**Params**
-
-- latlng <code>[LatLng](#LatLng)</code> - specified latlng to be converted
 
 <a name="View+getDeltaXToCenter"></a>
 
@@ -2403,17 +2451,6 @@ zooming handler
 
 - factor <code>number</code> - increase/decrease factor
 - pos <code>[Point](#Point)</code> - Position to zoom to
-
-<a name="View+getDistortionFactorForLatitude"></a>
-
-### view.getDistortionFactorForLatitude(latlng) ⇒ <code>number</code>
-get distortion factor for specified latitude
-
-**Kind**: instance method of <code>[View](#View)</code>  
-**Returns**: <code>number</code> - distortion factor  
-**Params**
-
-- latlng <code>[LatLng](#LatLng)</code> - lat/lng position
 
 <a name="View+calculateNewCenter"></a>
 
@@ -2566,12 +2603,6 @@ Eventnames for MarkerClusterer class
 - CLUSTERIZE <code>object</code> - create cluster  
 - UNCLUSTERIZE <code>object</code> - destroy cluster  
 
-<a name="instances"></a>
-
-## instances : <code>[Publisher](#Publisher)</code>
-singleton instance
-
-**Kind**: global constant  
 <a name="STATES"></a>
 
 ## STATES : <code>Array</code>

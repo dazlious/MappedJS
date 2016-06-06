@@ -121,6 +121,9 @@
             CLUSTERIZE: "clusterize",
             UNCLUSTERIZE: "unclusterize"
 
+        },
+        MapInformation: {
+            UPDATE: "information-update"
         }
     };
 });
