@@ -7,6 +7,7 @@ import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
 import {Publisher} from './Publisher.js';
 import {MarkerClusterer} from './MarkerClusterer.js';
+import {MapInformation} from './MapInformation.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -20,14 +21,34 @@ export class View {
      * @return {number} returns current distortionFactor of latitude
      */
     get distortionFactor() {
-        return this.getDistortionFactorForLatitude(this.center);
+        return this.info.get().distortionFactor;
+    }
+
+    get center() {
+        return this.info.get().center;
+    }
+
+    get viewport() {
+        return this.info.get().viewport;
+    }
+
+    get currentView() {
+        return this.info.get().view;
+    }
+
+    get bounds() {
+        return this.info.get().bounds;
     }
 
     /**
      * Returns the current distorted viewport
      */
     get offsetToCenter() {
-        return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
+        return this.info.get().offsetToCenter;
+    }
+
+    get zoomFactor() {
+        return this.info.get().zoomFactor;
     }
 
     /**
@@ -36,17 +57,9 @@ export class View {
      */
     get visibleTiles() {
         return this.tiles.filter((t) => {
-            const newTile = t.clone.scale(this.zoomFactor, this.zoomFactor).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
+            const newTile = t.clone.scale(this.zoomFactor).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
             return this.viewport.intersects(newTile);
         });
-    }
-
-    /**
-     * how many pixels per lat and lng
-     * @return {Point} pixels per lat/lng
-     */
-    get pixelPerLatLng() {
-        return new Point(this.currentView.width / this.bounds.width, this.currentView.height / this.bounds.height);
     }
 
     /**
@@ -67,7 +80,6 @@ export class View {
      * @return {View} instance of View for chaining
      */
     constructor({
-        viewport = new Rectangle(),
         currentView = new Rectangle(),
         bounds = new Bounds(),
         center = new LatLng(),
@@ -83,35 +95,49 @@ export class View {
         id
     }) {
 
-        this.currentView = currentView;
-        this.originalMapView = currentView.clone;
-        this.viewport = viewport;
-        this.bounds = bounds;
-        this.center = center;
-        this.zoomFactor = currentZoom;
-        this.maxZoom = maxZoom;
-        this.minZoom = minZoom;
-        this.origin = new Point();
         this.id = id;
         this.eventManager = new Publisher(this.id);
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            center: center,
+            view: currentView,
+            bounds: bounds,
+            zoomFactor: currentZoom
+        });
+
+        this.maxZoom = maxZoom;
+        this.minZoom = minZoom;
         this.limitToBounds = limitToBounds || bounds;
         this.isInitialized = false;
         this.centerSmallMap = centerSmallMap;
-        const newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
-        this.currentView.position(newCenter.x, newCenter.y);
+
+        this.info = new MapInformation(this.id);
+
+        const newCenter = this.viewport.center.substract(this.info.convertLatLngToPoint(center));
+        this.currentView.position(newCenter.x + this.offsetToCenter, newCenter.y);
+
+        this.originalMapView = currentView.clone;
+
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            view: this.currentView
+        });
+
         this.tiles = [];
         this.data = data;
         this.context = context;
 
         this.initial = {
             position: initialCenter,
-            zoom: this.zoomFactor
+            zoom: currentZoom
         };
 
         return this.zoom(0, this.viewport.center).loadThumb();
     }
 
     init() {
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            view: this.originalMapView.clone
+        });
+        this.currentView.translate(0 - this.offsetToCenter, 0);
         this.initializeTiles();
         this.isInitialized = true;
         return this;
@@ -127,8 +153,8 @@ export class View {
     }
 
     checkBoundaries() {
-        const nw = this.convertLatLngToPoint(this.limitToBounds.nw),
-              se = this.convertLatLngToPoint(this.limitToBounds.se),
+        const nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
+              se = this.info.convertLatLngToPoint(this.limitToBounds.se),
               limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
 
         const offset = new Point();
@@ -145,6 +171,9 @@ export class View {
         }
         offset.multiply(1/this.distortionFactor, 1);
         this.currentView.translate(offset.x, offset.y);
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            view: this.currentView
+        });
     }
 
     checkX(left, right, mapWidth, viewWidth) {
@@ -164,6 +193,9 @@ export class View {
                 }
             } else {
                 this.currentView.setCenterX(this.viewport.center.x);
+                this.eventManager.publish(Events.MapInformation.UPDATE, {
+                    view: this.currentView
+                });
             }
         }
         return x;
@@ -186,6 +218,9 @@ export class View {
                 }
             } else {
                 this.currentView.setCenterX(this.viewport.center.x);
+                this.eventManager.publish(Events.MapInformation.UPDATE, {
+                    view: this.currentView
+                });
             }
         }
         return y;
@@ -204,16 +239,6 @@ export class View {
     }
 
     /**
-     * converts a Point to LatLng in view
-     * @param  {Point} point - specified point to be converted
-     * @return {LatLng} presentation of point in lat-lng system
-     */
-    convertPointToLatLng(point) {
-        point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
-        return new LatLng(this.bounds.nw.lat - point.y, point.x + this.bounds.nw.lng).multiply(-1);
-    }
-
-    /**
      * set specified lat/lng to position x/y
      * @param {LatLng} latlng - specified latlng to be set Point to
      * @param {Point} position - specified position to set LatLng to
@@ -221,23 +246,18 @@ export class View {
      */
     setLatLngToPosition(latlng, position) {
         const currentPosition = this.currentView.topLeft.substract(position).multiply(-1),
-              diff = currentPosition.substract(this.convertLatLngToPoint(latlng));
+              diff = currentPosition.substract(this.info.convertLatLngToPoint(latlng));
 
         this.currentView.translate(0, diff.y);
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            view: this.currentView
+        });
         this.calculateNewCenter();
         this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            view: this.currentView
+        });
         return this;
-    }
-
-    /**
-     * converts a LatLng to Point in view
-     * @param  {LatLng} latlng - specified latlng to be converted
-     * @return {Point} presentation of point in pixel system
-     */
-    convertLatLngToPoint(latlng) {
-        const relativePosition = this.bounds.nw.clone.substract(latlng);
-        relativePosition.multiply(this.pixelPerLatLng.y, this.pixelPerLatLng.x);
-        return new Point(relativePosition.lng, relativePosition.lat).abs;
     }
 
     /**
@@ -259,14 +279,19 @@ export class View {
      * @return {View} instance of View for chaining
      */
     zoom(factor, pos) {
-        this.zoomFactor = Math.max(Math.min(this.zoomFactor + factor, this.maxZoom), this.minZoom);
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            zoomFactor: Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
+        });
 
         const mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
         mapPosition.x += this.getDeltaXToCenter(pos);
-        const latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
+        const latlngPosition = this.info.convertPointToLatLng(mapPosition).multiply(-1);
 
         const newSize = this.originalMapView.clone.scale(this.zoomFactor);
         this.currentView.setSize(newSize.width, newSize.height);
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            view: this.currentView
+        });
 
         this.setLatLngToPosition(latlngPosition, pos);
 
@@ -280,21 +305,14 @@ export class View {
     }
 
     /**
-     * get distortion factor for specified latitude
-     * @param  {LatLng} latlng - lat/lng position
-     * @return {number} distortion factor
-     */
-    getDistortionFactorForLatitude(latlng) {
-         return (Math.cos(Helper.toRadians(latlng.lat)));
-    }
-
-    /**
      * update center position of view
      * @return {View} instance of View for chaining
      */
     calculateNewCenter() {
-        const newCenter = this.viewport.center.substract(this.currentView.topLeft);
-        this.center = this.convertPointToLatLng(newCenter);
+        const newCenter = this.info.convertPointToLatLng(this.viewport.center.substract(this.currentView.topLeft));
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            center: newCenter
+        });
         return this;
     }
 
@@ -305,8 +323,14 @@ export class View {
      */
     moveView(pos) {
         this.currentView.translate(0, pos.y);
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            view: this.currentView
+        });
         this.calculateNewCenter();
         this.currentView.translate(pos.x * (1/this.distortionFactor), 0);
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            view: this.currentView
+        });
         return this;
     }
 
@@ -347,11 +371,9 @@ export class View {
     initializeTiles() {
         const currentLevel = this.data.tiles;
         Helper.forEach(currentLevel, (currentTileData) => {
-            this.tiles.push(new Tile(currentTileData, this, this.id));
+            this.tiles.push(new Tile(currentTileData, this.context, this.id));
         });
         return this;
     }
-
-
 
 }

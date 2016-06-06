@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './MarkerClusterer.js'], factory);
+        define(['exports', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './MarkerClusterer.js', './MapInformation.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./MarkerClusterer.js'));
+        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./MarkerClusterer.js'), require('./MapInformation.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Helper, global.Events, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.MarkerClusterer);
+        factory(mod.exports, global.Helper, global.Events, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.MarkerClusterer, global.MapInformation);
         global.View = mod.exports;
     }
-})(this, function(exports, _Helper, _Events, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher, _MarkerClusterer) {
+})(this, function(exports, _Helper, _Events, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher, _MarkerClusterer, _MapInformation) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -52,7 +52,27 @@
              * @return {number} returns current distortionFactor of latitude
              */
             get: function get() {
-                return this.getDistortionFactorForLatitude(this.center);
+                return this.info.get().distortionFactor;
+            }
+        }, {
+            key: 'center',
+            get: function get() {
+                return this.info.get().center;
+            }
+        }, {
+            key: 'viewport',
+            get: function get() {
+                return this.info.get().viewport;
+            }
+        }, {
+            key: 'currentView',
+            get: function get() {
+                return this.info.get().view;
+            }
+        }, {
+            key: 'bounds',
+            get: function get() {
+                return this.info.get().bounds;
             }
 
             /**
@@ -62,7 +82,12 @@
         }, {
             key: 'offsetToCenter',
             get: function get() {
-                return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
+                return this.info.get().offsetToCenter;
+            }
+        }, {
+            key: 'zoomFactor',
+            get: function get() {
+                return this.info.get().zoomFactor;
             }
 
             /**
@@ -76,20 +101,9 @@
                 var _this = this;
 
                 return this.tiles.filter(function(t) {
-                    var newTile = t.clone.scale(_this.zoomFactor, _this.zoomFactor).getDistortedRect(_this.distortionFactor).translate(_this.currentView.x * _this.distortionFactor + _this.offsetToCenter, _this.currentView.y);
+                    var newTile = t.clone.scale(_this.zoomFactor).getDistortedRect(_this.distortionFactor).translate(_this.currentView.x * _this.distortionFactor + _this.offsetToCenter, _this.currentView.y);
                     return _this.viewport.intersects(newTile);
                 });
-            }
-
-            /**
-             * how many pixels per lat and lng
-             * @return {Point} pixels per lat/lng
-             */
-
-        }, {
-            key: 'pixelPerLatLng',
-            get: function get() {
-                return new _Point.Point(this.currentView.width / this.bounds.width, this.currentView.height / this.bounds.height);
             }
 
             /**
@@ -113,8 +127,6 @@
         }]);
 
         function View(_ref) {
-            var _ref$viewport = _ref.viewport;
-            var viewport = _ref$viewport === undefined ? new _Rectangle.Rectangle() : _ref$viewport;
             var _ref$currentView = _ref.currentView;
             var currentView = _ref$currentView === undefined ? new _Rectangle.Rectangle() : _ref$currentView;
             var _ref$bounds = _ref.bounds;
@@ -142,29 +154,39 @@
 
             _classCallCheck(this, View);
 
-            this.currentView = currentView;
-            this.originalMapView = currentView.clone;
-            this.viewport = viewport;
-            this.bounds = bounds;
-            this.center = center;
-            this.zoomFactor = currentZoom;
-            this.maxZoom = maxZoom;
-            this.minZoom = minZoom;
-            this.origin = new _Point.Point();
             this.id = id;
             this.eventManager = new _Publisher.Publisher(this.id);
+            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                center: center,
+                view: currentView,
+                bounds: bounds,
+                zoomFactor: currentZoom
+            });
+
+            this.maxZoom = maxZoom;
+            this.minZoom = minZoom;
             this.limitToBounds = limitToBounds || bounds;
             this.isInitialized = false;
             this.centerSmallMap = centerSmallMap;
-            var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
-            this.currentView.position(newCenter.x, newCenter.y);
+
+            this.info = new _MapInformation.MapInformation(this.id);
+
+            var newCenter = this.viewport.center.substract(this.info.convertLatLngToPoint(center));
+            this.currentView.position(newCenter.x + this.offsetToCenter, newCenter.y);
+
+            this.originalMapView = currentView.clone;
+
+            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                view: this.currentView
+            });
+
             this.tiles = [];
             this.data = data;
             this.context = context;
 
             this.initial = {
                 position: initialCenter,
-                zoom: this.zoomFactor
+                zoom: currentZoom
             };
 
             return this.zoom(0, this.viewport.center).loadThumb();
@@ -173,6 +195,10 @@
         _createClass(View, [{
             key: 'init',
             value: function init() {
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    view: this.originalMapView.clone
+                });
+                this.currentView.translate(0 - this.offsetToCenter, 0);
                 this.initializeTiles();
                 this.isInitialized = true;
                 return this;
@@ -192,8 +218,8 @@
         }, {
             key: 'checkBoundaries',
             value: function checkBoundaries() {
-                var nw = this.convertLatLngToPoint(this.limitToBounds.nw),
-                    se = this.convertLatLngToPoint(this.limitToBounds.se),
+                var nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
+                    se = this.info.convertLatLngToPoint(this.limitToBounds.se),
                     limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
 
                 var offset = new _Point.Point();
@@ -210,6 +236,9 @@
                 }
                 offset.multiply(1 / this.distortionFactor, 1);
                 this.currentView.translate(offset.x, offset.y);
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    view: this.currentView
+                });
             }
         }, {
             key: 'checkX',
@@ -230,6 +259,9 @@
                         }
                     } else {
                         this.currentView.setCenterX(this.viewport.center.x);
+                        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                            view: this.currentView
+                        });
                     }
                 }
                 return x;
@@ -253,6 +285,9 @@
                         }
                     } else {
                         this.currentView.setCenterX(this.viewport.center.x);
+                        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                            view: this.currentView
+                        });
                     }
                 }
                 return y;
@@ -276,19 +311,6 @@
             }
 
             /**
-             * converts a Point to LatLng in view
-             * @param  {Point} point - specified point to be converted
-             * @return {LatLng} presentation of point in lat-lng system
-             */
-
-        }, {
-            key: 'convertPointToLatLng',
-            value: function convertPointToLatLng(point) {
-                point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
-                return new _LatLng.LatLng(this.bounds.nw.lat - point.y, point.x + this.bounds.nw.lng).multiply(-1);
-            }
-
-            /**
              * set specified lat/lng to position x/y
              * @param {LatLng} latlng - specified latlng to be set Point to
              * @param {Point} position - specified position to set LatLng to
@@ -299,26 +321,18 @@
             key: 'setLatLngToPosition',
             value: function setLatLngToPosition(latlng, position) {
                 var currentPosition = this.currentView.topLeft.substract(position).multiply(-1),
-                    diff = currentPosition.substract(this.convertLatLngToPoint(latlng));
+                    diff = currentPosition.substract(this.info.convertLatLngToPoint(latlng));
 
                 this.currentView.translate(0, diff.y);
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    view: this.currentView
+                });
                 this.calculateNewCenter();
                 this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    view: this.currentView
+                });
                 return this;
-            }
-
-            /**
-             * converts a LatLng to Point in view
-             * @param  {LatLng} latlng - specified latlng to be converted
-             * @return {Point} presentation of point in pixel system
-             */
-
-        }, {
-            key: 'convertLatLngToPoint',
-            value: function convertLatLngToPoint(latlng) {
-                var relativePosition = this.bounds.nw.clone.substract(latlng);
-                relativePosition.multiply(this.pixelPerLatLng.y, this.pixelPerLatLng.x);
-                return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
             }
 
             /**
@@ -346,14 +360,19 @@
         }, {
             key: 'zoom',
             value: function zoom(factor, pos) {
-                this.zoomFactor = Math.max(Math.min(this.zoomFactor + factor, this.maxZoom), this.minZoom);
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    zoomFactor: _Helper.Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
+                });
 
                 var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
                 mapPosition.x += this.getDeltaXToCenter(pos);
-                var latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
+                var latlngPosition = this.info.convertPointToLatLng(mapPosition).multiply(-1);
 
                 var newSize = this.originalMapView.clone.scale(this.zoomFactor);
                 this.currentView.setSize(newSize.width, newSize.height);
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    view: this.currentView
+                });
 
                 this.setLatLngToPosition(latlngPosition, pos);
 
@@ -367,18 +386,6 @@
             }
 
             /**
-             * get distortion factor for specified latitude
-             * @param  {LatLng} latlng - lat/lng position
-             * @return {number} distortion factor
-             */
-
-        }, {
-            key: 'getDistortionFactorForLatitude',
-            value: function getDistortionFactorForLatitude(latlng) {
-                return Math.cos(_Helper.Helper.toRadians(latlng.lat));
-            }
-
-            /**
              * update center position of view
              * @return {View} instance of View for chaining
              */
@@ -386,8 +393,10 @@
         }, {
             key: 'calculateNewCenter',
             value: function calculateNewCenter() {
-                var newCenter = this.viewport.center.substract(this.currentView.topLeft);
-                this.center = this.convertPointToLatLng(newCenter);
+                var newCenter = this.info.convertPointToLatLng(this.viewport.center.substract(this.currentView.topLeft));
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    center: newCenter
+                });
                 return this;
             }
 
@@ -401,8 +410,14 @@
             key: 'moveView',
             value: function moveView(pos) {
                 this.currentView.translate(0, pos.y);
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    view: this.currentView
+                });
                 this.calculateNewCenter();
                 this.currentView.translate(pos.x * (1 / this.distortionFactor), 0);
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    view: this.currentView
+                });
                 return this;
             }
 
@@ -458,7 +473,7 @@
 
                 var currentLevel = this.data.tiles;
                 _Helper.Helper.forEach(currentLevel, function(currentTileData) {
-                    _this3.tiles.push(new _Tile.Tile(currentTileData, _this3, _this3.id));
+                    _this3.tiles.push(new _Tile.Tile(currentTileData, _this3.context, _this3.id));
                 });
                 return this;
             }

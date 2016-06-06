@@ -103,5 +103,8 @@ export var Events = {
         CLUSTERIZE: "clusterize",
         UNCLUSTERIZE: "unclusterize"
 
+    },
+    MapInformation: {
+        UPDATE: "information-update"
     }
 };

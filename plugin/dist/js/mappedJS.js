@@ -7,7 +7,7 @@
 		exports["de"] = factory(require("jQuery"), require("Handlebars"));
 	else
 		root["de"] = factory(root["jQuery"], root["Handlebars"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_208__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_209__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -75,13 +75,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _TileMap = __webpack_require__(194);
+	var _Publisher = __webpack_require__(194);
 
-	var _DataEnrichment = __webpack_require__(206);
+	var _TileMap = __webpack_require__(195);
 
-	var _Interact = __webpack_require__(210);
+	var _DataEnrichment = __webpack_require__(207);
 
-	var _Point = __webpack_require__(195);
+	var _Interact = __webpack_require__(211);
+
+	var _Point = __webpack_require__(196);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -128,6 +130,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.initializeSettings(container, events, mapSettings);
 
 	        this.id = this.generateUniqueID();
+
+	        this.eventManager = new _Publisher.Publisher(this.id);
 	        this.initializeData(mapData, function (loadedMapData) {
 	            _this.mapData = loadedMapData;
 	            _this.initializeData(markerData, function (loadedMarkerData) {
@@ -397,7 +401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                default:
 	                    break;
 	            }
-	            this.tileMap.view.drawIsNeeded = true;
+	            this.eventManager.publish(_Events.Events.TileMap.DRAW);
 	            return this;
 	        }
 
@@ -5896,7 +5900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
@@ -5905,109 +5909,277 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @namespace Events
 	*/
 	var Events = exports.Events = {
-	  /**
-	   * Eventnames for ToolTip class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} OPEN - when a tooltip should be openend
-	   * @property {object} CLOSE - when a tooltip should be closed
-	   */
-	  ToolTip: {
-	    OPEN: "tooltip-open",
-	    CLOSE: "tooltip-close"
-	  },
-	  /**
-	   * Eventnames for Marker class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} DEACTIVATE - when a Marker should be in deactived state
-	   */
-	  Marker: {
-	    DEACTIVATE: "deactivate-marker"
-	  },
-	  /**
-	   * Eventnames for Publisher class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} PUBLISH - notifies all subscribers
-	   * @property {object} SUBSCRIBE - subscribes to a topic
-	   * @property {object} UNSUBSCRIBE - unsubscribes from a topic
-	   */
-	  Publisher: {
-	    PUBLISH: "publish",
-	    SUBSCRIBE: "subscribe",
-	    UNSUBSCRIBE: "unsubscribe"
-	  },
-	  /**
-	   * Eventnames for TileMap class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} IMG_DATA_NAME - notifies all subscribers
-	   * @property {object} MARKER_DATA_NAME - subscribes to a topic
-	   * @property {object} NEXT_LEVEL - next level of view
-	   * @property {object} PREVIOUS_LEVEL - previous level of view
-	   * @property {object} RESIZE - resize of view needed
-	   * @property {object} ZOOM_TO_BOUNDS - zoom to bounds
-	   */
-	  TileMap: {
-	    IMG_DATA_NAME: "img_data",
-	    MARKER_DATA_NAME: "marker",
-	    LABEL_DATA_NAME: "labels",
-	    NEXT_LEVEL: "next-level",
-	    PREVIOUS_LEVEL: "previous-level",
-	    RESIZE: "resize",
-	    ZOOM_TO_BOUNDS: "zoom-to-bounds",
-	    DRAW: "draw"
-	  },
-	  /**
-	   * Eventnames for Handling in all classes
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} RESIZE - resize of window happened needed
-	   * @property {object} CLICK - click occured
-	   * @property {object} TOUCHSTART - Touch started
-	   * @property {object} TOUCHEND - Touch ended
-	   * @property {object} MOUSEDOWN - Mouse started
-	   * @property {object} MOUSEUP - Mouse ended
-	   * @property {object} KEYDOWN - key pressed
-	   * @property {object} KEYUP - key released
-	   */
-	  Handling: {
-	    RESIZE: "resize orientationchange",
-	    CLICK: "click",
-	    TOUCHSTART: "touchstart",
-	    MOUSEDOWN: "mousedown",
-	    TOUCHEND: "touchend",
-	    MOUSEUP: "mouseup",
-	    KEYDOWN: "keydown",
-	    KEYUP: "keyup"
-	  },
-	  /**
-	  * Eventnames for View class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} DRAW - draw is needed
-	   * @property {object} THUMB_LOADED - thumbnail was loaded
-	   */
-	  View: {
-	    THUMB_LOADED: "thumb-loaded"
-	  },
-	  /**
-	  * Eventnames for MarkerClusterer class
-	   * @type {Object}
-	   * @memberof Events
-	   * @property {object} CLUSTERIZE - create cluster
-	   * @property {object} UNCLUSTERIZE - destroy cluster
-	   */
-	  MarkerClusterer: {
-	    CLUSTERIZE: "clusterize",
-	    UNCLUSTERIZE: "unclusterize"
+	    /**
+	     * Eventnames for ToolTip class
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} OPEN - when a tooltip should be openend
+	     * @property {object} CLOSE - when a tooltip should be closed
+	     */
+	    ToolTip: {
+	        OPEN: "tooltip-open",
+	        CLOSE: "tooltip-close"
+	    },
+	    /**
+	     * Eventnames for Marker class
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} DEACTIVATE - when a Marker should be in deactived state
+	     */
+	    Marker: {
+	        DEACTIVATE: "deactivate-marker"
+	    },
+	    /**
+	     * Eventnames for Publisher class
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} PUBLISH - notifies all subscribers
+	     * @property {object} SUBSCRIBE - subscribes to a topic
+	     * @property {object} UNSUBSCRIBE - unsubscribes from a topic
+	     */
+	    Publisher: {
+	        PUBLISH: "publish",
+	        SUBSCRIBE: "subscribe",
+	        UNSUBSCRIBE: "unsubscribe"
+	    },
+	    /**
+	     * Eventnames for TileMap class
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} IMG_DATA_NAME - notifies all subscribers
+	     * @property {object} MARKER_DATA_NAME - subscribes to a topic
+	     * @property {object} NEXT_LEVEL - next level of view
+	     * @property {object} PREVIOUS_LEVEL - previous level of view
+	     * @property {object} RESIZE - resize of view needed
+	     * @property {object} ZOOM_TO_BOUNDS - zoom to bounds
+	     */
+	    TileMap: {
+	        IMG_DATA_NAME: "img_data",
+	        MARKER_DATA_NAME: "marker",
+	        LABEL_DATA_NAME: "labels",
+	        NEXT_LEVEL: "next-level",
+	        PREVIOUS_LEVEL: "previous-level",
+	        RESIZE: "resize",
+	        ZOOM_TO_BOUNDS: "zoom-to-bounds",
+	        DRAW: "draw"
+	    },
+	    /**
+	     * Eventnames for Handling in all classes
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} RESIZE - resize of window happened needed
+	     * @property {object} CLICK - click occured
+	     * @property {object} TOUCHSTART - Touch started
+	     * @property {object} TOUCHEND - Touch ended
+	     * @property {object} MOUSEDOWN - Mouse started
+	     * @property {object} MOUSEUP - Mouse ended
+	     * @property {object} KEYDOWN - key pressed
+	     * @property {object} KEYUP - key released
+	     */
+	    Handling: {
+	        RESIZE: "resize orientationchange",
+	        CLICK: "click",
+	        TOUCHSTART: "touchstart",
+	        MOUSEDOWN: "mousedown",
+	        TOUCHEND: "touchend",
+	        MOUSEUP: "mouseup",
+	        KEYDOWN: "keydown",
+	        KEYUP: "keyup"
+	    },
+	    /**
+	    * Eventnames for View class
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} DRAW - draw is needed
+	     * @property {object} THUMB_LOADED - thumbnail was loaded
+	     */
+	    View: {
+	        THUMB_LOADED: "thumb-loaded"
+	    },
+	    /**
+	    * Eventnames for MarkerClusterer class
+	     * @type {Object}
+	     * @memberof Events
+	     * @property {object} CLUSTERIZE - create cluster
+	     * @property {object} UNCLUSTERIZE - destroy cluster
+	     */
+	    MarkerClusterer: {
+	        CLUSTERIZE: "clusterize",
+	        UNCLUSTERIZE: "unclusterize"
 
-	  }
+	    },
+	    MapInformation: {
+	        UPDATE: "information-update"
+	    }
 		};
 
 /***/ },
 /* 194 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Publisher = undefined;
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Events = __webpack_require__(193);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * @author Michael Duve <mduve@designmail.net>
+	 * @file Publish/Subscribe pattern
+	 * @copyright Michael Duve 2016
+	 */
+
+	var Publisher = exports.Publisher = function () {
+
+	    /**
+	     * @constructor
+	     * @return {Publisher} singleton instance of Publisher for chaining
+	     */
+
+	    function Publisher() {
+	        var id = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+	        _classCallCheck(this, Publisher);
+
+	        if (!Publisher.instances[id]) {
+	            this.subscribers = {};
+	            this.id = id;
+	            Publisher.instances[id] = this;
+	        }
+	        return Publisher.instances[id];
+	    }
+
+	    /**
+	     * subscribe to a topic
+	     * @param  {string} type="any" - a topic
+	     * @param  {Function} fn=function(){} - a function to callback
+	     * @return {Publisher} instance of Publisher for chaining
+	     */
+
+
+	    _createClass(Publisher, [{
+	        key: "subscribe",
+	        value: function subscribe() {
+	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	            var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
+
+	            if (!this.subscribers[type]) this.subscribers[type] = [];
+	            this.subscribers[type].push(fn);
+	            return this;
+	        }
+
+	        /**
+	         * unsubscribe from a topic
+	         * @param  {string} type="any" - a topic
+	         * @param  {Function} fn=function(){} - a function to callback
+	         * @return {Publisher} instance of Publisher for chaining
+	         */
+
+	    }, {
+	        key: "unsubscribe",
+	        value: function unsubscribe() {
+	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	            var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
+
+	            return this.handle(_Events.Events.Publisher.UNSUBSCRIBE, type, fn);
+	        }
+
+	        /**
+	         * publish to a topic
+	         * @param  {string} type="any" - a topic
+	         * @param  {Function} arg=[] - list of parameters
+	         * @return {Publisher} instance of Publisher for chaining
+	         */
+
+	    }, {
+	        key: "publish",
+	        value: function publish() {
+	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	            var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+
+	            return this.handle(_Events.Events.Publisher.PUBLISH, type, arg);
+	        }
+
+	        /**
+	         * handle subscribe to a topic
+	         * @param  {string} action - eventname
+	         * @param  {string} type="any" - a topic
+	         * @param  {Object} a function to callback or arguments
+	         * @return {Publisher} instance of Publisher for chaining
+	         */
+
+	    }, {
+	        key: "handle",
+	        value: function handle(action, type, data) {
+	            var subs = this.subscribers[type] ? this.subscribers[type] : [];
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+
+	            try {
+	                for (var _iterator = subs.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var _step$value = _slicedToArray(_step.value, 2);
+
+	                    var i = _step$value[0];
+	                    var fn = _step$value[1];
+
+	                    if (action === _Events.Events.Publisher.PUBLISH) {
+	                        fn(data);
+	                    } else {
+	                        if (fn === data) subs.splice(i, 1);
+	                    }
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+
+	            return this;
+	        }
+
+	        /**
+	         * destroys singleton instance
+	         */
+
+	    }, {
+	        key: "destroy",
+	        value: function destroy() {
+	            Publisher.instances[this.id] = null;
+	        }
+	    }]);
+
+	    return Publisher;
+	}();
+
+	/**
+	 * singleton instance wrapper
+	 * @type {Object}
+	 */
+
+
+		Publisher.instances = {};
+
+/***/ },
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6027,11 +6199,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _Point = __webpack_require__(195);
+	var _Point = __webpack_require__(196);
 
-	var _LatLng = __webpack_require__(196);
+	var _LatLng = __webpack_require__(197);
 
-	var _Publisher = __webpack_require__(197);
+	var _Publisher = __webpack_require__(194);
 
 	var _StateHandler = __webpack_require__(198);
 
@@ -6039,15 +6211,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _View = __webpack_require__(200);
 
-	var _Marker = __webpack_require__(205);
+	var _Marker = __webpack_require__(206);
 
-	var _DataEnrichment = __webpack_require__(206);
+	var _DataEnrichment = __webpack_require__(207);
 
-	var _ToolTip = __webpack_require__(207);
+	var _ToolTip = __webpack_require__(208);
 
-	var _Label = __webpack_require__(209);
+	var _Label = __webpack_require__(210);
 
-	var _MarkerClusterer = __webpack_require__(203);
+	var _MarkerClusterer = __webpack_require__(204);
+
+	var _MapInformation = __webpack_require__(203);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6105,6 +6279,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this.container.getBoundingClientRect().height;
 	        }
 	    }, {
+	        key: 'viewport',
+	        get: function get() {
+	            return new _Rectangle.Rectangle(this.left, this.top, this.width, this.height);
+	        }
+	    }, {
 	        key: 'pixelPerLatLng',
 	        get: function get() {
 	            this.levelHandler.current.instance.pixelPerLatLng();
@@ -6155,6 +6334,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.id = id;
 
+	        this.info = new _MapInformation.MapInformation(this.id);
+	        this.eventManager = new _Publisher.Publisher(this.id);
+
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            viewport: this.viewport
+	        });
+
 	        this.imgData = tilesData[_Events.Events.TileMap.IMG_DATA_NAME];
 	        this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
 	        this.labelData = tilesData[_Events.Events.TileMap.LABEL_DATA_NAME];
@@ -6175,6 +6361,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.bestDeltaTiming = 1000.0 / 60.0;
 
 	        this.velocity = new _Point.Point();
+	        this.drawIsNeeded = false;
 
 	        this.initial = {
 	            bounds: settings.bounds,
@@ -6196,11 +6383,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.levelHandler = new _StateHandler.StateHandler(this.levels);
 	        this.levelHandler.changeTo(this.settings.level);
+
 	        this.view.init();
-
-	        this.eventManager = new _Publisher.Publisher(this.id);
-
-	        this.drawIsNeeded = false;
 
 	        this.appendMarkerContainerToDom();
 	        this.initializeLabels();
@@ -6237,7 +6421,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _Helper.Helper.forEach(this.labelData, function (label) {
 	                var currentLabel = new _Label.Label({
 	                    context: _this2.canvasContext,
-	                    instance: _this2,
+	                    id: _this2.id,
 	                    settings: label
 	                });
 	                _this2.labels.push(currentLabel);
@@ -6328,7 +6512,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    _Helper.Helper.forEach(_this3.markerData, function (currentData) {
 	                        markers.push(new _Marker.Marker({
 	                            data: currentData,
-	                            _instance: _this3,
+	                            container: _this3.markerContainer,
 	                            id: _this3.id
 	                        }));
 	                    });
@@ -6362,6 +6546,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function appendMarkerContainerToDom() {
 	            if (this.markerData && this.markerData.length) {
 	                this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
+	                this.markerContainer = this.$markerContainer[0];
 	                this.$container.append(this.$markerContainer);
 	            }
 	            return this;
@@ -6433,7 +6618,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'setViewToOldView',
 	        value: function setViewToOldView(center, zoom) {
-	            this.view.zoomFactor = zoom;
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                zoomFactor: zoom
+	            });
 	            this.view.zoom(0, this.view.viewport.center);
 	            this.view.currentView.setCenter(center);
 	            this.drawIsNeeded = true;
@@ -6566,15 +6753,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'resizeView',
 	        value: function resizeView() {
-	            var _this6 = this;
-
-	            var oldViewport = this.view.viewport.clone;
-	            this.view.viewport.size(this.left, this.top, this.width, this.height);
-	            _Helper.Helper.forEach(this.levelHandler.states, function (view) {
-	                view.instance.viewport = new _Rectangle.Rectangle(_this6.left, _this6.top, _this6.width, _this6.height);
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                viewport: this.viewport
 	            });
-	            var delta = this.view.viewport.center.substract(oldViewport.center);
-	            this.view.currentView.translate(delta.x, delta.y);
 	            return this;
 	        }
 
@@ -6585,7 +6766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'mainLoop',
 	        value: function mainLoop() {
-	            var _this7 = this;
+	            var _this6 = this;
 
 	            var currentMillisecs = Date.now();
 	            var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
@@ -6604,7 +6785,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            window.requestAnimFrame(function () {
-	                return _this7.mainLoop();
+	                return _this6.mainLoop();
 	            });
 	        }
 	    }, {
@@ -6633,7 +6814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -6865,7 +7046,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		};
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -7041,169 +7222,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	LatLng.createFromLatLng = function (latlng) {
 	    return new LatLng(latlng.lat, latlng.lng);
 		};
-
-/***/ },
-/* 197 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.Publisher = undefined;
-
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _Events = __webpack_require__(193);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * singleton instance
-	 * @type {Publisher}
-	 */
-	var instances = {};
-
-	/**
-	 * @author Michael Duve <mduve@designmail.net>
-	 * @file Publish/Subscribe pattern
-	 * @copyright Michael Duve 2016
-	 */
-
-	var Publisher = exports.Publisher = function () {
-
-	    /**
-	     * @constructor
-	     * @return {Publisher} singleton instance of Publisher for chaining
-	     */
-
-	    function Publisher() {
-	        var id = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
-	        _classCallCheck(this, Publisher);
-
-	        if (!instances[id]) {
-	            this.subscribers = {};
-	            this.id = id;
-	            instances[id] = this;
-	        }
-	        return instances[id];
-	    }
-
-	    /**
-	     * subscribe to a topic
-	     * @param  {string} type="any" - a topic
-	     * @param  {Function} fn=function(){} - a function to callback
-	     * @return {Publisher} instance of Publisher for chaining
-	     */
-
-
-	    _createClass(Publisher, [{
-	        key: "subscribe",
-	        value: function subscribe() {
-	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
-	            var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
-
-	            if (!this.subscribers[type]) this.subscribers[type] = [];
-	            this.subscribers[type].push(fn);
-	            return this;
-	        }
-
-	        /**
-	         * unsubscribe from a topic
-	         * @param  {string} type="any" - a topic
-	         * @param  {Function} fn=function(){} - a function to callback
-	         * @return {Publisher} instance of Publisher for chaining
-	         */
-
-	    }, {
-	        key: "unsubscribe",
-	        value: function unsubscribe() {
-	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
-	            var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
-
-	            return this.handle(_Events.Events.Publisher.UNSUBSCRIBE, type, fn);
-	        }
-
-	        /**
-	         * publish to a topic
-	         * @param  {string} type="any" - a topic
-	         * @param  {Function} arg=[] - list of parameters
-	         * @return {Publisher} instance of Publisher for chaining
-	         */
-
-	    }, {
-	        key: "publish",
-	        value: function publish() {
-	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
-	            var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
-
-	            return this.handle(_Events.Events.Publisher.PUBLISH, type, arg);
-	        }
-
-	        /**
-	         * handle subscribe to a topic
-	         * @param  {string} action - eventname
-	         * @param  {string} type="any" - a topic
-	         * @param  {Object} a function to callback or arguments
-	         * @return {Publisher} instance of Publisher for chaining
-	         */
-
-	    }, {
-	        key: "handle",
-	        value: function handle(action, type, data) {
-	            var subs = this.subscribers[type] ? this.subscribers[type] : [];
-	            var _iteratorNormalCompletion = true;
-	            var _didIteratorError = false;
-	            var _iteratorError = undefined;
-
-	            try {
-	                for (var _iterator = subs.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var _step$value = _slicedToArray(_step.value, 2);
-
-	                    var i = _step$value[0];
-	                    var fn = _step$value[1];
-
-	                    if (action === _Events.Events.Publisher.PUBLISH) {
-	                        fn(data);
-	                    } else {
-	                        if (fn === data) subs.splice(i, 1);
-	                    }
-	                }
-	            } catch (err) {
-	                _didIteratorError = true;
-	                _iteratorError = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion && _iterator.return) {
-	                        _iterator.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError) {
-	                        throw _iteratorError;
-	                    }
-	                }
-	            }
-
-	            return this;
-	        }
-
-	        /**
-	         * destroys singleton instance
-	         */
-
-	    }, {
-	        key: "destroy",
-	        value: function destroy() {
-	            instances[this.id] = null;
-	        }
-	    }]);
-
-	    return Publisher;
-	}();
 
 /***/ },
 /* 198 */
@@ -7395,7 +7413,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _Point2 = __webpack_require__(195);
+	var _Point2 = __webpack_require__(196);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -7905,9 +7923,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _Point = __webpack_require__(195);
+	var _Point = __webpack_require__(196);
 
-	var _LatLng = __webpack_require__(196);
+	var _LatLng = __webpack_require__(197);
 
 	var _Bounds = __webpack_require__(201);
 
@@ -7915,9 +7933,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Tile = __webpack_require__(202);
 
-	var _Publisher = __webpack_require__(197);
+	var _Publisher = __webpack_require__(194);
 
-	var _MarkerClusterer = __webpack_require__(203);
+	var _MarkerClusterer = __webpack_require__(204);
+
+	var _MapInformation = __webpack_require__(203);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -7937,7 +7957,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {number} returns current distortionFactor of latitude
 	         */
 	        get: function get() {
-	            return this.getDistortionFactorForLatitude(this.center);
+	            return this.info.get().distortionFactor;
+	        }
+	    }, {
+	        key: 'center',
+	        get: function get() {
+	            return this.info.get().center;
+	        }
+	    }, {
+	        key: 'viewport',
+	        get: function get() {
+	            return this.info.get().viewport;
+	        }
+	    }, {
+	        key: 'currentView',
+	        get: function get() {
+	            return this.info.get().view;
+	        }
+	    }, {
+	        key: 'bounds',
+	        get: function get() {
+	            return this.info.get().bounds;
 	        }
 
 	        /**
@@ -7947,7 +7987,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'offsetToCenter',
 	        get: function get() {
-	            return (this.viewport.width - this.viewport.width * this.distortionFactor) / 2;
+	            return this.info.get().offsetToCenter;
+	        }
+	    }, {
+	        key: 'zoomFactor',
+	        get: function get() {
+	            return this.info.get().zoomFactor;
 	        }
 
 	        /**
@@ -7961,20 +8006,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var _this = this;
 
 	            return this.tiles.filter(function (t) {
-	                var newTile = t.clone.scale(_this.zoomFactor, _this.zoomFactor).getDistortedRect(_this.distortionFactor).translate(_this.currentView.x * _this.distortionFactor + _this.offsetToCenter, _this.currentView.y);
+	                var newTile = t.clone.scale(_this.zoomFactor).getDistortedRect(_this.distortionFactor).translate(_this.currentView.x * _this.distortionFactor + _this.offsetToCenter, _this.currentView.y);
 	                return _this.viewport.intersects(newTile);
 	            });
-	        }
-
-	        /**
-	         * how many pixels per lat and lng
-	         * @return {Point} pixels per lat/lng
-	         */
-
-	    }, {
-	        key: 'pixelPerLatLng',
-	        get: function get() {
-	            return new _Point.Point(this.currentView.width / this.bounds.width, this.currentView.height / this.bounds.height);
 	        }
 
 	        /**
@@ -7998,8 +8032,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 
 	    function View(_ref) {
-	        var _ref$viewport = _ref.viewport;
-	        var viewport = _ref$viewport === undefined ? new _Rectangle.Rectangle() : _ref$viewport;
 	        var _ref$currentView = _ref.currentView;
 	        var currentView = _ref$currentView === undefined ? new _Rectangle.Rectangle() : _ref$currentView;
 	        var _ref$bounds = _ref.bounds;
@@ -8027,29 +8059,39 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, View);
 
-	        this.currentView = currentView;
-	        this.originalMapView = currentView.clone;
-	        this.viewport = viewport;
-	        this.bounds = bounds;
-	        this.center = center;
-	        this.zoomFactor = currentZoom;
-	        this.maxZoom = maxZoom;
-	        this.minZoom = minZoom;
-	        this.origin = new _Point.Point();
 	        this.id = id;
 	        this.eventManager = new _Publisher.Publisher(this.id);
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            center: center,
+	            view: currentView,
+	            bounds: bounds,
+	            zoomFactor: currentZoom
+	        });
+
+	        this.maxZoom = maxZoom;
+	        this.minZoom = minZoom;
 	        this.limitToBounds = limitToBounds || bounds;
 	        this.isInitialized = false;
 	        this.centerSmallMap = centerSmallMap;
-	        var newCenter = this.viewport.center.substract(this.convertLatLngToPoint(center));
-	        this.currentView.position(newCenter.x, newCenter.y);
+
+	        this.info = new _MapInformation.MapInformation(this.id);
+
+	        var newCenter = this.viewport.center.substract(this.info.convertLatLngToPoint(center));
+	        this.currentView.position(newCenter.x + this.offsetToCenter, newCenter.y);
+
+	        this.originalMapView = currentView.clone;
+
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            view: this.currentView
+	        });
+
 	        this.tiles = [];
 	        this.data = data;
 	        this.context = context;
 
 	        this.initial = {
 	            position: initialCenter,
-	            zoom: this.zoomFactor
+	            zoom: currentZoom
 	        };
 
 	        return this.zoom(0, this.viewport.center).loadThumb();
@@ -8058,6 +8100,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(View, [{
 	        key: 'init',
 	        value: function init() {
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                view: this.originalMapView.clone
+	            });
+	            this.currentView.translate(0 - this.offsetToCenter, 0);
 	            this.initializeTiles();
 	            this.isInitialized = true;
 	            return this;
@@ -8077,8 +8123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'checkBoundaries',
 	        value: function checkBoundaries() {
-	            var nw = this.convertLatLngToPoint(this.limitToBounds.nw),
-	                se = this.convertLatLngToPoint(this.limitToBounds.se),
+	            var nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
+	                se = this.info.convertLatLngToPoint(this.limitToBounds.se),
 	                limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
 
 	            var offset = new _Point.Point();
@@ -8095,6 +8141,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            offset.multiply(1 / this.distortionFactor, 1);
 	            this.currentView.translate(offset.x, offset.y);
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                view: this.currentView
+	            });
 	        }
 	    }, {
 	        key: 'checkX',
@@ -8115,6 +8164,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                } else {
 	                    this.currentView.setCenterX(this.viewport.center.x);
+	                    this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                        view: this.currentView
+	                    });
 	                }
 	            }
 	            return x;
@@ -8138,6 +8190,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                } else {
 	                    this.currentView.setCenterX(this.viewport.center.x);
+	                    this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                        view: this.currentView
+	                    });
 	                }
 	            }
 	            return y;
@@ -8161,19 +8216,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * converts a Point to LatLng in view
-	         * @param  {Point} point - specified point to be converted
-	         * @return {LatLng} presentation of point in lat-lng system
-	         */
-
-	    }, {
-	        key: 'convertPointToLatLng',
-	        value: function convertPointToLatLng(point) {
-	            point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
-	            return new _LatLng.LatLng(this.bounds.nw.lat - point.y, point.x + this.bounds.nw.lng).multiply(-1);
-	        }
-
-	        /**
 	         * set specified lat/lng to position x/y
 	         * @param {LatLng} latlng - specified latlng to be set Point to
 	         * @param {Point} position - specified position to set LatLng to
@@ -8184,26 +8226,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'setLatLngToPosition',
 	        value: function setLatLngToPosition(latlng, position) {
 	            var currentPosition = this.currentView.topLeft.substract(position).multiply(-1),
-	                diff = currentPosition.substract(this.convertLatLngToPoint(latlng));
+	                diff = currentPosition.substract(this.info.convertLatLngToPoint(latlng));
 
 	            this.currentView.translate(0, diff.y);
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                view: this.currentView
+	            });
 	            this.calculateNewCenter();
 	            this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                view: this.currentView
+	            });
 	            return this;
-	        }
-
-	        /**
-	         * converts a LatLng to Point in view
-	         * @param  {LatLng} latlng - specified latlng to be converted
-	         * @return {Point} presentation of point in pixel system
-	         */
-
-	    }, {
-	        key: 'convertLatLngToPoint',
-	        value: function convertLatLngToPoint(latlng) {
-	            var relativePosition = this.bounds.nw.clone.substract(latlng);
-	            relativePosition.multiply(this.pixelPerLatLng.y, this.pixelPerLatLng.x);
-	            return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
 	        }
 
 	        /**
@@ -8231,14 +8265,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'zoom',
 	        value: function zoom(factor, pos) {
-	            this.zoomFactor = Math.max(Math.min(this.zoomFactor + factor, this.maxZoom), this.minZoom);
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                zoomFactor: _Helper.Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
+	            });
 
 	            var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
 	            mapPosition.x += this.getDeltaXToCenter(pos);
-	            var latlngPosition = this.convertPointToLatLng(mapPosition).multiply(-1);
+	            var latlngPosition = this.info.convertPointToLatLng(mapPosition).multiply(-1);
 
 	            var newSize = this.originalMapView.clone.scale(this.zoomFactor);
 	            this.currentView.setSize(newSize.width, newSize.height);
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                view: this.currentView
+	            });
 
 	            this.setLatLngToPosition(latlngPosition, pos);
 
@@ -8252,18 +8291,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * get distortion factor for specified latitude
-	         * @param  {LatLng} latlng - lat/lng position
-	         * @return {number} distortion factor
-	         */
-
-	    }, {
-	        key: 'getDistortionFactorForLatitude',
-	        value: function getDistortionFactorForLatitude(latlng) {
-	            return Math.cos(_Helper.Helper.toRadians(latlng.lat));
-	        }
-
-	        /**
 	         * update center position of view
 	         * @return {View} instance of View for chaining
 	         */
@@ -8271,8 +8298,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'calculateNewCenter',
 	        value: function calculateNewCenter() {
-	            var newCenter = this.viewport.center.substract(this.currentView.topLeft);
-	            this.center = this.convertPointToLatLng(newCenter);
+	            var newCenter = this.info.convertPointToLatLng(this.viewport.center.substract(this.currentView.topLeft));
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                center: newCenter
+	            });
 	            return this;
 	        }
 
@@ -8286,8 +8315,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'moveView',
 	        value: function moveView(pos) {
 	            this.currentView.translate(0, pos.y);
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                view: this.currentView
+	            });
 	            this.calculateNewCenter();
 	            this.currentView.translate(pos.x * (1 / this.distortionFactor), 0);
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                view: this.currentView
+	            });
 	            return this;
 	        }
 
@@ -8343,7 +8378,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var currentLevel = this.data.tiles;
 	            _Helper.Helper.forEach(currentLevel, function (currentTileData) {
-	                _this3.tiles.push(new _Tile.Tile(currentTileData, _this3, _this3.id));
+	                _this3.tiles.push(new _Tile.Tile(currentTileData, _this3.context, _this3.id));
 	            });
 	            return this;
 	        }
@@ -8365,7 +8400,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _LatLng = __webpack_require__(196);
+	var _LatLng = __webpack_require__(197);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8442,11 +8477,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
+	var _MapInformation = __webpack_require__(203);
+
 	var _StateHandler = __webpack_require__(198);
 
 	var _Rectangle2 = __webpack_require__(199);
 
-	var _Publisher = __webpack_require__(197);
+	var _Publisher = __webpack_require__(194);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8473,7 +8510,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(Tile, [{
 	        key: 'distortedTile',
 	        get: function get() {
-	            return this.clone.scale(this.instance.zoomFactor).translate(this.instance.currentView.x, this.instance.currentView.y).scaleX(this.instance.distortionFactor).translate(this.instance.offsetToCenter, 0);
+	            return this.clone.scale(this.zoomFactor).translate(this.view.x, this.view.y).scaleX(this.distortionFactor).translate(this.offsetToCenter, 0);
+	        }
+	    }, {
+	        key: 'zoomFactor',
+	        get: function get() {
+	            return this.info.get().zoomFactor;
+	        }
+	    }, {
+	        key: 'view',
+	        get: function get() {
+	            return this.info.get().view;
+	        }
+	    }, {
+	        key: 'distortionFactor',
+	        get: function get() {
+	            return this.info.get().distortionFactor;
+	        }
+	    }, {
+	        key: 'offsetToCenter',
+	        get: function get() {
+	            return this.info.get().offsetToCenter;
+	        }
+	    }, {
+	        key: 'center',
+	        get: function get() {
+	            return this.info.get().center;
 	        }
 
 	        /**
@@ -8483,7 +8545,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {number} y = 0 - position y of tile
 	         * @param  {number} w = 0 - tile width
 	         * @param  {number} h = 0 - tile height
-	         * @param  {View} _instance = null - instance of parent View
 	         * @return {Tile} instance of Tile for chaining
 	         */
 
@@ -8502,8 +8563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var w = _ref$w === undefined ? 0 : _ref$w;
 	        var _ref$h = _ref.h;
 	        var h = _ref$h === undefined ? 0 : _ref$h;
-
-	        var _instance = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	        var context = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
 	        var _ret;
 
@@ -8513,13 +8573,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
 
+	        if (!path || typeof path !== "string" || path.length === 0) throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
+
 	        _this.id = id;
-	        if (!path || typeof path !== "string" || path.length === 0) throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');else if (!_instance) throw new Error('Tile needs an instance');
+	        _this.info = new _MapInformation.MapInformation(_this.id);
+	        _this.eventManager = new _Publisher.Publisher(_this.id);
 
 	        _this.state = new _StateHandler.StateHandler(STATES);
-	        _this.instance = _instance;
-	        _this.context = _this.instance.context;
-	        _this.eventManager = new _Publisher.Publisher(_this.id);
+
+	        _this.context = context;
 	        _this.path = path;
 
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
@@ -8587,6 +8649,197 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.MapInformation = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Events = __webpack_require__(193);
+
+	var _Helper = __webpack_require__(192);
+
+	var _Publisher = __webpack_require__(194);
+
+	var _LatLng = __webpack_require__(197);
+
+	var _Bounds = __webpack_require__(201);
+
+	var _Point = __webpack_require__(196);
+
+	var _Rectangle = __webpack_require__(199);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * @author Michael Duve <mduve@designmail.net>
+	 * @file
+	 * @copyright Michael Duve 2016
+	 */
+
+	var MapInformation = exports.MapInformation = function () {
+	    _createClass(MapInformation, [{
+	        key: 'offsetToCenter',
+
+
+	        /**
+	         * Returns the current distorted viewport
+	         */
+	        get: function get() {
+	            return (this.data.viewport.width - this.data.viewport.width * this.data.distortionFactor) / 2;
+	        }
+
+	        /**
+	         * how many pixels per lat and lng
+	         * @return {Point} pixels per lat/lng
+	         */
+
+	    }, {
+	        key: 'pixelPerLatLng',
+	        get: function get() {
+	            return new _Point.Point(this.data.view.width / this.data.bounds.width, this.data.view.height / this.data.bounds.height);
+	        }
+
+	        /**
+	         * @constructor
+	         * @return {MapInformation} singleton instance of MapInformation for chaining
+	         */
+
+	    }]);
+
+	    function MapInformation() {
+	        var id = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+	        _classCallCheck(this, MapInformation);
+
+	        if (!MapInformation.instances[id]) {
+	            this.id = id;
+	            this.data = {
+	                center: new _LatLng.LatLng(),
+	                view: new _Rectangle.Rectangle(),
+	                viewport: new _Rectangle.Rectangle(),
+	                distortionFactor: 1,
+	                offsetToCenter: 0,
+	                bounds: new _Bounds.Bounds(),
+	                zoomFactor: 0
+	            };
+	            this.data.offsetToCenter = this.offsetToCenter;
+	            this.eventManager = new _Publisher.Publisher(this.id);
+	            this.bindEvents();
+	            MapInformation.instances[id] = this;
+	        }
+	        return MapInformation.instances[id];
+	    }
+
+	    _createClass(MapInformation, [{
+	        key: 'get',
+	        value: function get() {
+	            return this.data;
+	        }
+	    }, {
+	        key: 'bindEvents',
+	        value: function bindEvents() {
+	            this.eventManager.subscribe(_Events.Events.MapInformation.UPDATE, this.update.bind(this));
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update() {
+	            var obj = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	            var oldData = this.data;
+	            this.data = Object.assign({}, this.data, obj);
+	            var centerUpdateDone = !oldData.center.equals(this.data.center) ? this.centerUpdated() : false;
+	            if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.viewportUpdated();
+	            this.eventManager.publish(_Events.Events.TileMap.DRAW);
+	        }
+
+	        /**
+	         * converts a Point to LatLng in view
+	         * @param  {Point} point - specified point to be converted
+	         * @return {LatLng} presentation of point in lat-lng system
+	         */
+
+	    }, {
+	        key: 'convertPointToLatLng',
+	        value: function convertPointToLatLng(point) {
+	            point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
+	            return new _LatLng.LatLng(this.data.bounds.nw.lat - point.y, point.x + this.data.bounds.nw.lng).multiply(-1);
+	        }
+
+	        /**
+	         * converts a LatLng to Point in view
+	         * @param  {LatLng} latlng - specified latlng to be converted
+	         * @return {Point} presentation of point in pixel system
+	         */
+
+	    }, {
+	        key: 'convertLatLngToPoint',
+	        value: function convertLatLngToPoint(latlng) {
+	            var relativePosition = this.data.bounds.nw.clone.substract(latlng);
+	            relativePosition.multiply(this.pixelPerLatLng.y, this.pixelPerLatLng.x);
+	            return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
+	        }
+	    }, {
+	        key: 'centerUpdated',
+	        value: function centerUpdated() {
+	            this.data.distortionFactor = this.getDistortionFactorForLatitude(this.data.center);
+	            this.data.offsetToCenter = this.offsetToCenter;
+	            return true;
+	        }
+	    }, {
+	        key: 'viewUpdated',
+	        value: function viewUpdated() {
+	            this.data.offsetToCenter = this.offsetToCenter;
+	            return true;
+	        }
+	    }, {
+	        key: 'viewportUpdated',
+	        value: function viewportUpdated() {
+	            this.data.offsetToCenter = this.offsetToCenter;
+	            return true;
+	        }
+
+	        /**
+	         * get distortion factor for specified latitude
+	         * @param  {LatLng} latlng - lat/lng position
+	         * @return {number} distortion factor
+	         */
+
+	    }, {
+	        key: 'getDistortionFactorForLatitude',
+	        value: function getDistortionFactorForLatitude(latlng) {
+	            return Math.cos(_Helper.Helper.toRadians(latlng.lat));
+	        }
+
+	        /**
+	         * destroys singleton instance
+	         */
+
+	    }, {
+	        key: 'destroy',
+	        value: function destroy() {
+	            MapInformation.instances[this.id] = null;
+	        }
+	    }]);
+
+	    return MapInformation;
+	}();
+
+	/**
+	 * singleton instance wrapper
+	 * @type {Object}
+	 */
+
+
+		MapInformation.instances = {};
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.MarkerClusterer = undefined;
 
 	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
@@ -8595,9 +8848,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _Publisher = __webpack_require__(197);
+	var _Publisher = __webpack_require__(194);
 
-	var _Cluster = __webpack_require__(204);
+	var _Cluster = __webpack_require__(205);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8839,7 +9092,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8857,9 +9110,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Events = __webpack_require__(193);
 
-	var _Publisher = __webpack_require__(197);
+	var _Publisher = __webpack_require__(194);
 
-	var _Point = __webpack_require__(195);
+	var _Point = __webpack_require__(196);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8995,7 +9248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9015,13 +9268,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
-	var _Point = __webpack_require__(195);
+	var _Point = __webpack_require__(196);
 
 	var _Rectangle = __webpack_require__(199);
 
-	var _Publisher = __webpack_require__(197);
+	var _Publisher = __webpack_require__(194);
 
-	var _DataEnrichment = __webpack_require__(206);
+	var _DataEnrichment = __webpack_require__(207);
+
+	var _MapInformation = __webpack_require__(203);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9038,8 +9293,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'boundingBox',
 	        get: function get() {
 	            var bBox = this.icon.getBoundingClientRect();
-	            var parentBBox = this.instance.container.getBoundingClientRect();
+	            var parentBBox = this.container.getBoundingClientRect();
 	            return new _Rectangle.Rectangle(bBox.left - parentBBox.left, bBox.top - parentBBox.top, bBox.width, bBox.height).scaleCenter(1.2);
+	        }
+	    }, {
+	        key: 'view',
+	        get: function get() {
+	            return this.info.get().view;
 	        }
 
 	        /**
@@ -9054,17 +9314,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function Marker(_ref) {
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : _ref$data;
-	        var _ref$_instance = _ref._instance;
-
-	        var _instance = _ref$_instance === undefined ? null : _ref$_instance;
-
+	        var container = _ref.container;
 	        var id = _ref.id;
 
 	        _classCallCheck(this, Marker);
 
-	        if (!_instance) throw new Error('Tile needs an instance');
-	        this.instance = _instance;
 	        this.eventID = id;
+	        this.info = new _MapInformation.MapInformation(this.eventID);
+	        this.container = container;
 
 	        this.id = Marker.count;
 	        Marker.count++;
@@ -9079,7 +9336,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.latlng = data.latlng;
 
 	        this.content = data.content;
-	        this.$icon = this.addMarkerToDOM(this.instance.$markerContainer);
+	        this.$icon = this.addMarkerToDOM(container);
 	        this.icon = this.$icon[0];
 
 	        return this.bindEvents().positionMarker();
@@ -9123,7 +9380,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    }, {
 	        key: 'addMarkerToDOM',
-	        value: function addMarkerToDOM($container) {
+	        value: function addMarkerToDOM(container) {
 	            var icon = (0, _jQuery2.default)("<div class='marker' />").css({
 	                "width": this.size.x + 'px',
 	                "height": this.size.y + 'px',
@@ -9133,9 +9390,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                "background-image": 'url(' + this.img + ')',
 	                "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
 	            });
-	            if ($container) {
+	            if (container) {
 	                icon.hide();
-	                $container.append(icon);
+	                container.appendChild(icon[0]);
 	            }
 	            return icon;
 	        }
@@ -9148,8 +9405,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'positionMarker',
 	        value: function positionMarker() {
-	            this.position = this.instance.view.convertLatLngToPoint(this.latlng);
-	            var p = this.position.clone.divide(this.instance.view.currentView.width, this.instance.view.currentView.height).multiply(100);
+	            this.position = this.info.convertLatLngToPoint(this.latlng);
+	            var p = this.position.clone.divide(this.view.width, this.view.height).multiply(100);
 	            if (this.$icon) {
 	                this.$icon.css({
 	                    "left": p.x + '%',
@@ -9166,7 +9423,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		Marker.count = 0;
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9182,9 +9439,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
-	var _Point = __webpack_require__(195);
+	var _Point = __webpack_require__(196);
 
-	var _LatLng = __webpack_require__(196);
+	var _LatLng = __webpack_require__(197);
 
 	var _Bounds = __webpack_require__(201);
 
@@ -9358,7 +9615,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		};
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9376,7 +9633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jQuery2 = _interopRequireDefault(_jQuery);
 
-	var _Handlebars = __webpack_require__(208);
+	var _Handlebars = __webpack_require__(209);
 
 	var _Handlebars2 = _interopRequireDefault(_Handlebars);
 
@@ -9384,7 +9641,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
-	var _Publisher = __webpack_require__(197);
+	var _Publisher = __webpack_require__(194);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9611,13 +9868,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_208__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_209__;
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9633,7 +9890,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Helper = __webpack_require__(192);
 
-	var _LatLng = __webpack_require__(196);
+	var _LatLng = __webpack_require__(197);
+
+	var _MapInformation = __webpack_require__(203);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -9647,12 +9906,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(Label, [{
 	        key: 'position',
 	        get: function get() {
-	            return this.instance.view.convertLatLngToPoint(this.nearestPositionToCenter).translate(this.instance.view.currentView.x, this.instance.view.currentView.y).multiply(this.instance.view.distortionFactor, 1).translate(this.instance.view.offsetToCenter, 0);
+	            return this.info.convertLatLngToPoint(this.nearestPositionToCenter).translate(this.view.x, this.view.y).multiply(this.distortionFactor, 1).translate(this.offsetToCenter, 0);
 	        }
 	    }, {
 	        key: 'nearestPositionToCenter',
 	        get: function get() {
 	            return this.latlng instanceof _LatLng.LatLng ? this.latlng : this.getNearestPositionToCenter();
+	        }
+	    }, {
+	        key: 'view',
+	        get: function get() {
+	            return this.info.get().view;
+	        }
+	    }, {
+	        key: 'distortionFactor',
+	        get: function get() {
+	            return this.info.get().distortionFactor;
+	        }
+	    }, {
+	        key: 'offsetToCenter',
+	        get: function get() {
+	            return this.info.get().offsetToCenter;
+	        }
+	    }, {
+	        key: 'center',
+	        get: function get() {
+	            return this.info.get().center;
 	        }
 
 	        /**
@@ -9666,12 +9945,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this = this;
 
 	        var settings = _ref.settings;
-	        var instance = _ref.instance;
 	        var context = _ref.context;
+	        var id = _ref.id;
 
 	        _classCallCheck(this, Label);
 
-	        this.instance = instance;
+	        this.id = id;
+	        this.info = new _MapInformation.MapInformation(this.id);
+
 	        this.context = context;
 
 	        this.latlng = settings.position;
@@ -9692,7 +9973,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(Label, [{
 	        key: 'getNearestPositionToCenter',
 	        value: function getNearestPositionToCenter() {
-	            var center = this.instance.view.center.clone.multiply(-1);
+	            var center = this.center.clone.multiply(-1);
 	            this.latlng = this.latlng.sort(function (a, b) {
 	                return center.distance(a) - center.distance(b);
 	            });
@@ -9783,7 +10064,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9802,7 +10083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jQuery2 = _interopRequireDefault(_jQuery);
 
-	var _Point = __webpack_require__(195);
+	var _Point = __webpack_require__(196);
 
 	var _Helper = __webpack_require__(192);
 

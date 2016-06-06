@@ -1,5 +1,6 @@
 import {Events} from './Events.js';
 import {Helper} from './Helper.js';
+import {MapInformation} from './MapInformation.js';
 import {StateHandler} from './StateHandler.js';
 import {Rectangle} from './Rectangle.js';
 import {Publisher} from './Publisher.js';
@@ -24,10 +25,30 @@ const STATES = [
 export class Tile extends Rectangle {
 
     get distortedTile() {
-        return this.clone.scale(this.instance.zoomFactor)
-                                        .translate(this.instance.currentView.x, this.instance.currentView.y)
-                                        .scaleX(this.instance.distortionFactor)
-                                        .translate(this.instance.offsetToCenter, 0);
+        return this.clone.scale(this.zoomFactor)
+                                        .translate(this.view.x, this.view.y)
+                                        .scaleX(this.distortionFactor)
+                                        .translate(this.offsetToCenter, 0);
+    }
+
+    get zoomFactor() {
+        return this.info.get().zoomFactor;
+    }
+
+    get view() {
+        return this.info.get().view;
+    }
+
+    get distortionFactor() {
+        return this.info.get().distortionFactor;
+    }
+
+    get offsetToCenter() {
+        return this.info.get().offsetToCenter;
+    }
+
+    get center() {
+        return this.info.get().center;
     }
 
     /**
@@ -37,19 +58,20 @@ export class Tile extends Rectangle {
      * @param  {number} y = 0 - position y of tile
      * @param  {number} w = 0 - tile width
      * @param  {number} h = 0 - tile height
-     * @param  {View} _instance = null - instance of parent View
      * @return {Tile} instance of Tile for chaining
      */
-    constructor({path = null, x = 0, y = 0, w = 0, h = 0} = {}, _instance = null, id = undefined) {
+    constructor({path = null, x = 0, y = 0, w = 0, h = 0} = {}, context = null, id = undefined) {
         super(x, y, w, h);
-        this.id = id;
+
         if (!path || typeof path !== "string" || path.length === 0) throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
-        else if(!_instance) throw new Error(`Tile needs an instance`);
+
+        this.id = id;
+        this.info = new MapInformation(this.id);
+        this.eventManager = new Publisher(this.id);
 
         this.state = new StateHandler(STATES);
-        this.instance = _instance;
-        this.context = this.instance.context;
-        this.eventManager = new Publisher(this.id);
+
+        this.context = context;
         this.path = path;
 
         return this;

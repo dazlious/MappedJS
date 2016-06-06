@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Helper.js', './Events.js', './TileMap.js', './DataEnrichment.js', './Interact.js', './Point.js', 'babel-polyfill'], factory);
+        define(['exports', 'jQuery', './Helper.js', './Events.js', './Publisher.js', './TileMap.js', './DataEnrichment.js', './Interact.js', './Point.js', 'babel-polyfill'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Interact.js'), require('./Point.js'), require('babel-polyfill'));
+        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./Publisher.js'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Interact.js'), require('./Point.js'), require('babel-polyfill'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.TileMap, global.DataEnrichment, global.Interact, global.Point, global.babelPolyfill);
+        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.Publisher, global.TileMap, global.DataEnrichment, global.Interact, global.Point, global.babelPolyfill);
         global.Main = mod.exports;
     }
-})(this, function(exports, _jQuery, _Helper, _Events, _TileMap, _DataEnrichment, _Interact, _Point) {
+})(this, function(exports, _jQuery, _Helper, _Events, _Publisher, _TileMap, _DataEnrichment, _Interact, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -93,6 +93,8 @@
             this.initializeSettings(container, events, mapSettings);
 
             this.id = this.generateUniqueID();
+
+            this.eventManager = new _Publisher.Publisher(this.id);
             this.initializeData(mapData, function(loadedMapData) {
                 _this.mapData = loadedMapData;
                 _this.initializeData(markerData, function(loadedMarkerData) {
@@ -362,7 +364,7 @@
                     default:
                         break;
                 }
-                this.tileMap.view.drawIsNeeded = true;
+                this.eventManager.publish(_Events.Events.TileMap.DRAW);
                 return this;
             }
 

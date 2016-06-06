@@ -1,14 +1,6 @@
 import {Events} from './Events.js';
 
 /**
- * singleton instance
- * @type {Publisher}
- */
-const instances = {
-
-};
-
-/**
  * @author Michael Duve <mduve@designmail.net>
  * @file Publish/Subscribe pattern
  * @copyright Michael Duve 2016
@@ -20,12 +12,12 @@ export class Publisher {
      * @return {Publisher} singleton instance of Publisher for chaining
      */
     constructor(id = 0) {
-        if(!instances[id]) {
+        if(!Publisher.instances[id]) {
             this.subscribers = {};
             this.id = id;
-            instances[id] = this;
+            Publisher.instances[id] = this;
         }
-        return instances[id];
+        return Publisher.instances[id];
     }
 
     /**
@@ -83,7 +75,15 @@ export class Publisher {
      * destroys singleton instance
      */
     destroy() {
-        instances[this.id] = null;
+        Publisher.instances[this.id] = null;
     }
 
 }
+
+/**
+ * singleton instance wrapper
+ * @type {Object}
+ */
+Publisher.instances = {
+
+};

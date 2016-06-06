@@ -1,6 +1,7 @@
 import {Events} from './Events.js';
 import {Helper} from './Helper.js';
 import {LatLng} from './LatLng.js';
+import {MapInformation} from './MapInformation.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -10,22 +11,40 @@ import {LatLng} from './LatLng.js';
 export class Label {
 
     get position() {
-        return this.instance.view.convertLatLngToPoint(this.nearestPositionToCenter)
-            .translate(this.instance.view.currentView.x, this.instance.view.currentView.y)
-            .multiply(this.instance.view.distortionFactor, 1)
-            .translate(this.instance.view.offsetToCenter, 0);
+        return this.info.convertLatLngToPoint(this.nearestPositionToCenter)
+            .translate(this.view.x, this.view.y)
+            .multiply(this.distortionFactor, 1)
+            .translate(this.offsetToCenter, 0);
     }
 
     get nearestPositionToCenter() {
         return (this.latlng instanceof LatLng) ? this.latlng : this.getNearestPositionToCenter();
     }
 
+    get view() {
+        return this.info.get().view;
+    }
+
+    get distortionFactor() {
+        return this.info.get().distortionFactor;
+    }
+
+    get offsetToCenter() {
+        return this.info.get().offsetToCenter;
+    }
+
+    get center() {
+        return this.info.get().center;
+    }
+
     /**
      * @constructor
      * @return {Label} instance of Label for chaining
      */
-    constructor({settings, instance, context}) {
-        this.instance = instance;
+    constructor({settings, context, id}) {
+        this.id = id;
+        this.info = new MapInformation(this.id);
+
         this.context = context;
 
         this.latlng = settings.position;
@@ -47,7 +66,7 @@ export class Label {
     }
 
     getNearestPositionToCenter() {
-        const center = this.instance.view.center.clone.multiply(-1);
+        const center = this.center.clone.multiply(-1);
         this.latlng = this.latlng.sort((a, b) => center.distance(a) - center.distance(b));
         return this.latlng[0];
     }

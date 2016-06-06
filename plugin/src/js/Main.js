@@ -2,6 +2,7 @@ import $ from 'jQuery';
 import "babel-polyfill";
 import {Helper} from './Helper.js';
 import {Events} from './Events.js';
+import {Publisher} from './Publisher.js';
 import {TileMap} from './TileMap.js';
 import {DataEnrichment} from './DataEnrichment.js';
 import {Interact} from './Interact.js';
@@ -27,6 +28,8 @@ export class MappedJS {
         this.initializeSettings(container, events, mapSettings);
 
         this.id = this.generateUniqueID();
+
+        this.eventManager = new Publisher(this.id);
         this.initializeData(mapData, (loadedMapData) => {
             this.mapData = loadedMapData;
             this.initializeData(markerData, (loadedMarkerData) => {
@@ -249,7 +252,7 @@ export class MappedJS {
             default:
                 break;
         }
-        this.tileMap.view.drawIsNeeded = true;
+        this.eventManager.publish(Events.TileMap.DRAW);
         return this;
     }
 

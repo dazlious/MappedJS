@@ -80,18 +80,6 @@
         };
     }();
 
-    /**
-     * singleton instance
-     * @type {Publisher}
-     */
-    var instances = {};
-
-    /**
-     * @author Michael Duve <mduve@designmail.net>
-     * @file Publish/Subscribe pattern
-     * @copyright Michael Duve 2016
-     */
-
     var Publisher = exports.Publisher = function() {
 
         /**
@@ -104,12 +92,12 @@
 
             _classCallCheck(this, Publisher);
 
-            if (!instances[id]) {
+            if (!Publisher.instances[id]) {
                 this.subscribers = {};
                 this.id = id;
-                instances[id] = this;
+                Publisher.instances[id] = this;
             }
-            return instances[id];
+            return Publisher.instances[id];
         }
 
         /**
@@ -217,10 +205,16 @@
         }, {
             key: "destroy",
             value: function destroy() {
-                instances[this.id] = null;
+                Publisher.instances[this.id] = null;
             }
         }]);
 
         return Publisher;
     }();
+
+    /**
+     * singleton instance wrapper
+     * @type {Object}
+     */
+    Publisher.instances = {};
 });

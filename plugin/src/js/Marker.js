@@ -5,6 +5,7 @@ import {Point} from './Point.js';
 import {Rectangle} from './Rectangle.js';
 import {Publisher} from './Publisher.js';
 import {DataEnrichment} from './DataEnrichment.js';
+import {MapInformation} from './MapInformation.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -15,8 +16,12 @@ export class Marker {
 
     get boundingBox() {
         const bBox = this.icon.getBoundingClientRect();
-        const parentBBox = this.instance.container.getBoundingClientRect();
+        const parentBBox = this.container.getBoundingClientRect();
         return new Rectangle(bBox.left - parentBBox.left, bBox.top - parentBBox.top, bBox.width, bBox.height).scaleCenter(1.2);
+    }
+
+    get view() {
+        return this.info.get().view;
     }
 
     /**
@@ -25,12 +30,12 @@ export class Marker {
      * @param  {View} _instance = parent instance - instance of parent view
      * @return {Marker} - instance of Marker for chaining
      */
-    constructor({data = DataEnrichment.DATA_MARKER, _instance = null, id}) {
+    constructor({data = DataEnrichment.DATA_MARKER, container, id}) {
 
-        if(!_instance) throw new Error(`Tile needs an instance`);
-        this.instance = _instance;
         this.eventID = id;
-
+        this.info = new MapInformation(this.eventID);
+        this.container = container;
+        
         this.id = Marker.count;
         Marker.count++;
 
@@ -44,7 +49,7 @@ export class Marker {
         this.latlng = data.latlng;
 
         this.content = data.content;
-        this.$icon = this.addMarkerToDOM(this.instance.$markerContainer);
+        this.$icon = this.addMarkerToDOM(container);
         this.icon = this.$icon[0];
 
         return this.bindEvents().positionMarker();
@@ -78,7 +83,7 @@ export class Marker {
      * @param {Object} $container - container to append to (jQuery selector)
      * @returns {Object} jQuery-selector of append markup
      */
-    addMarkerToDOM($container) {
+    addMarkerToDOM(container) {
         const icon = $("<div class='marker' />").css({
             "width": `${this.size.x}px`,
             "height": `${this.size.y}px`,
@@ -88,9 +93,9 @@ export class Marker {
             "background-image": `url(${this.img})`,
             "background-size": `${(this.hover) ? this.size.x*2 : this.size.x}px ${this.size.y}px`
         });
-        if ($container) {
+        if (container) {
             icon.hide();
-            $container.append(icon);
+            container.appendChild(icon[0]);
         }
         return icon;
     }
@@ -100,8 +105,8 @@ export class Marker {
      * @return {Marker} instance of Marker for chaining
      */
     positionMarker() {
-        this.position = this.instance.view.convertLatLngToPoint(this.latlng);
-        const p = this.position.clone.divide(this.instance.view.currentView.width, this.instance.view.currentView.height).multiply(100);
+        this.position = this.info.convertLatLngToPoint(this.latlng);
+        const p = this.position.clone.divide(this.view.width, this.view.height).multiply(100);
         if (this.$icon) {
             this.$icon.css({
                 "left": `${p.x}%`,

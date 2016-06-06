@@ -12,6 +12,7 @@ import {DataEnrichment} from './DataEnrichment.js';
 import {ToolTip} from './ToolTip.js';
 import {Label} from './Label.js';
 import {MarkerClusterer} from './MarkerClusterer.js';
+import {MapInformation} from './MapInformation.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -52,6 +53,10 @@ export class TileMap {
         return this.container.getBoundingClientRect().height;
     }
 
+    get viewport() {
+        return new Rectangle(this.left, this.top, this.width, this.height);
+    }
+
     get pixelPerLatLng() {
         this.levelHandler.current.instance.pixelPerLatLng();
     }
@@ -82,6 +87,13 @@ export class TileMap {
 
         this.id = id;
 
+        this.info = new MapInformation(this.id);
+        this.eventManager = new Publisher(this.id);
+
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            viewport: this.viewport
+        });
+
         this.imgData = tilesData[Events.TileMap.IMG_DATA_NAME];
         this.markerData = tilesData[Events.TileMap.MARKER_DATA_NAME];
         this.labelData = tilesData[Events.TileMap.LABEL_DATA_NAME];
@@ -107,6 +119,7 @@ export class TileMap {
         this.bestDeltaTiming = 1000.0 / 60.0;
 
         this.velocity = new Point();
+        this.drawIsNeeded = false;
 
         this.initial = {
             bounds: settings.bounds,
@@ -128,11 +141,8 @@ export class TileMap {
 
         this.levelHandler = new StateHandler(this.levels);
         this.levelHandler.changeTo(this.settings.level);
+
         this.view.init();
-
-        this.eventManager = new Publisher(this.id);
-
-        this.drawIsNeeded = false;
 
         this.appendMarkerContainerToDom();
         this.initializeLabels();
@@ -162,7 +172,7 @@ export class TileMap {
         Helper.forEach(this.labelData, (label) => {
             const currentLabel = new Label({
                 context: this.canvasContext,
-                instance: this,
+                id: this.id,
                 settings: label
             });
             this.labels.push(currentLabel);
@@ -237,7 +247,7 @@ export class TileMap {
             Helper.forEach(this.markerData, (currentData) => {
                 markers.push(new Marker({
                     data: currentData,
-                    _instance: this,
+                    container: this.markerContainer,
                     id: this.id
                 }));
             });
@@ -265,6 +275,7 @@ export class TileMap {
     appendMarkerContainerToDom() {
         if (this.markerData && this.markerData.length) {
             this.$markerContainer = $("<div class='marker-container' />");
+            this.markerContainer = this.$markerContainer[0];
             this.$container.append(this.$markerContainer);
         }
         return this;
@@ -320,7 +331,9 @@ export class TileMap {
     }
 
     setViewToOldView(center, zoom) {
-        this.view.zoomFactor = zoom;
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            zoomFactor: zoom
+        });
         this.view.zoom(0, this.view.viewport.center);
         this.view.currentView.setCenter(center);
         this.drawIsNeeded = true;
@@ -430,13 +443,9 @@ export class TileMap {
      * @return {TileMap} instance of TileMap for chaining
      */
     resizeView() {
-        const oldViewport = this.view.viewport.clone;
-        this.view.viewport.size(this.left, this.top, this.width, this.height);
-        Helper.forEach(this.levelHandler.states, (view) => {
-            view.instance.viewport = new Rectangle(this.left, this.top, this.width, this.height);
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            viewport: this.viewport
         });
-        const delta = this.view.viewport.center.substract(oldViewport.center);
-        this.view.currentView.translate(delta.x, delta.y);
         return this;
     }
 

@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Events.js', './Helper.js', './Point.js', './Rectangle.js', './Publisher.js', './DataEnrichment.js'], factory);
+        define(['exports', 'jQuery', './Events.js', './Helper.js', './Point.js', './Rectangle.js', './Publisher.js', './DataEnrichment.js', './MapInformation.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Events.js'), require('./Helper.js'), require('./Point.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./DataEnrichment.js'));
+        factory(exports, require('jQuery'), require('./Events.js'), require('./Helper.js'), require('./Point.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./DataEnrichment.js'), require('./MapInformation.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Events, global.Helper, global.Point, global.Rectangle, global.Publisher, global.DataEnrichment);
+        factory(mod.exports, global.jQuery, global.Events, global.Helper, global.Point, global.Rectangle, global.Publisher, global.DataEnrichment, global.MapInformation);
         global.Marker = mod.exports;
     }
-})(this, function(exports, _jQuery, _Events, _Helper, _Point, _Rectangle, _Publisher, _DataEnrichment) {
+})(this, function(exports, _jQuery, _Events, _Helper, _Point, _Rectangle, _Publisher, _DataEnrichment, _MapInformation) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -55,8 +55,13 @@
             key: 'boundingBox',
             get: function get() {
                 var bBox = this.icon.getBoundingClientRect();
-                var parentBBox = this.instance.container.getBoundingClientRect();
+                var parentBBox = this.container.getBoundingClientRect();
                 return new _Rectangle.Rectangle(bBox.left - parentBBox.left, bBox.top - parentBBox.top, bBox.width, bBox.height).scaleCenter(1.2);
+            }
+        }, {
+            key: 'view',
+            get: function get() {
+                return this.info.get().view;
             }
 
             /**
@@ -71,17 +76,14 @@
         function Marker(_ref) {
             var _ref$data = _ref.data;
             var data = _ref$data === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : _ref$data;
-            var _ref$_instance = _ref._instance;
-
-            var _instance = _ref$_instance === undefined ? null : _ref$_instance;
-
+            var container = _ref.container;
             var id = _ref.id;
 
             _classCallCheck(this, Marker);
 
-            if (!_instance) throw new Error('Tile needs an instance');
-            this.instance = _instance;
             this.eventID = id;
+            this.info = new _MapInformation.MapInformation(this.eventID);
+            this.container = container;
 
             this.id = Marker.count;
             Marker.count++;
@@ -96,7 +98,7 @@
             this.latlng = data.latlng;
 
             this.content = data.content;
-            this.$icon = this.addMarkerToDOM(this.instance.$markerContainer);
+            this.$icon = this.addMarkerToDOM(container);
             this.icon = this.$icon[0];
 
             return this.bindEvents().positionMarker();
@@ -140,7 +142,7 @@
 
         }, {
             key: 'addMarkerToDOM',
-            value: function addMarkerToDOM($container) {
+            value: function addMarkerToDOM(container) {
                 var icon = (0, _jQuery2.default)("<div class='marker' />").css({
                     "width": this.size.x + 'px',
                     "height": this.size.y + 'px',
@@ -150,9 +152,9 @@
                     "background-image": 'url(' + this.img + ')',
                     "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
                 });
-                if ($container) {
+                if (container) {
                     icon.hide();
-                    $container.append(icon);
+                    container.appendChild(icon[0]);
                 }
                 return icon;
             }
@@ -165,8 +167,8 @@
         }, {
             key: 'positionMarker',
             value: function positionMarker() {
-                this.position = this.instance.view.convertLatLngToPoint(this.latlng);
-                var p = this.position.clone.divide(this.instance.view.currentView.width, this.instance.view.currentView.height).multiply(100);
+                this.position = this.info.convertLatLngToPoint(this.latlng);
+                var p = this.position.clone.divide(this.view.width, this.view.height).multiply(100);
                 if (this.$icon) {
                     this.$icon.css({
                         "left": p.x + '%',
