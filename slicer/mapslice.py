@@ -95,7 +95,7 @@ def create_thumb(img, data, path, current_level):
     outfile = "map_thumb_"+str(current_level)+"." + settings.extension
     thumb_img = img
     thumb_img.thumbnail((settings.thumbSize, settings.thumbSize), Image.ANTIALIAS)
-    thumb_img.save(settings.output + outfile)
+    thumb_img.save(settings.output + outfile, optimize=True)
     data["thumb"] = path + outfile
 
 
@@ -189,7 +189,7 @@ def calculate_slices_normal(width, height, size, x_remainder, y_remainder, small
 
 def crop_save(image, box, x, y, current_level):
     cropped_img = image.crop(box)
-    cropped_img.save(settings.output + "map_"+str(current_level)+"_"+str(y)+"_"+str(x)+"."+settings.extension)
+    cropped_img.save(settings.output + "map_"+str(current_level)+"_"+str(y)+"_"+str(x)+"."+settings.extension, optimize=True)
 
 
 def open_image(file_name):
