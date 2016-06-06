@@ -5,10 +5,6 @@
             "text": {
                 "content": "Spree",
                 "color": "#333333",
-                "shadow": {
-                    "color": "#f7f7f7",
-                    "blur": 2
-                },
                 "offset": [0, 5],
                 "align": "center",
                 "baseline": "hanging",
@@ -17,11 +13,7 @@
             "icon": {
                 "type": "circle",
                 "size": 2,
-                "color": "#333333",
-                "shadow": {
-                    "color": "#f7f7f7",
-                    "blur": 2
-                }
+                "color": "#333333"
             }
         },
         {
@@ -29,10 +21,6 @@
             "text": {
                 "content": "KaDeWe",
                 "color": "#333333",
-                "shadow": {
-                    "color": "#f7f7f7",
-                    "blur": 2
-                },
                 "offset": [0, 5],
                 "align": "center",
                 "baseline": "hanging",
@@ -41,11 +29,7 @@
             "icon": {
                 "type": "square",
                 "size": 4,
-                "color": "#333333",
-                "shadow": {
-                    "color": "#f7f7f7",
-                    "blur": 2
-                }
+                "color": "#333333"
             }
         },
         {
@@ -53,10 +37,6 @@
             "text": {
                 "content": "Thielpark",
                 "color": "#333333",
-                "shadow": {
-                    "color": "#f7f7f7",
-                    "blur": 2
-                },
                 "offset": [0, 5],
                 "align": "center",
                 "baseline": "hanging",
