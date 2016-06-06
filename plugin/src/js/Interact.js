@@ -125,7 +125,8 @@ export class Interact {
             flick: null,
             zoom: null,
             wheel: null,
-            pinch: null
+            pinch: null,
+            move: null
         };
     }
 
@@ -582,7 +583,7 @@ export class Interact {
             position: {
                 move: pos
             },
-            distance: this.data.last.position.distance(pos),
+            distance: (this.data.last.position) ? this.data.last.position.distance(pos) : null,
             multitouch: false
         };
     }
@@ -593,8 +594,7 @@ export class Interact {
      * @return {Boolean} always returns false
      */
     moveHandler(event) {
-        // if touchstart event was not fired
-        if (!this.data.down || this.data.pinched) return false;
+        if (this.data.pinched) return false;
 
         const e = this.preHandle(event);
         this.data.time.last = event.timeStamp;
@@ -608,6 +608,9 @@ export class Interact {
         this.clearTimeouts(this.data.timeout.hold);
         this.data = $.extend(true, this.data, this.calculateMove(e));
 
+        this.eventCallback(this.settings.callbacks.move, this.dataClone);
+
+        if (!this.data.down) return false;
         if (this.data.multitouch) {
             this.handlePinchAndZoom();
         } else {

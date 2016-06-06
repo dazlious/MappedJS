@@ -254,6 +254,9 @@
                         },
                         flick: function flick(data) {
                             _this2.tileMap.velocity = data.velocity.multiply(20);
+                        },
+                        move: function move(data) {
+                            var pos = _this2.getAbsolutePosition(data.position.move);
                         }
                     }
                 });

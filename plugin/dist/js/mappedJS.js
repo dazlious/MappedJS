@@ -291,6 +291,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    },
 	                    flick: function flick(data) {
 	                        _this2.tileMap.velocity = data.velocity.multiply(20);
+	                    },
+	                    move: function move(data) {
+	                        var pos = _this2.getAbsolutePosition(data.position.move);
 	                    }
 	                }
 	            });
@@ -10225,7 +10228,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                flick: null,
 	                zoom: null,
 	                wheel: null,
-	                pinch: null
+	                pinch: null,
+	                move: null
 	            };
 	        }
 
@@ -10756,7 +10760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                position: {
 	                    move: pos
 	                },
-	                distance: this.data.last.position.distance(pos),
+	                distance: this.data.last.position ? this.data.last.position.distance(pos) : null,
 	                multitouch: false
 	            };
 	        }
@@ -10770,8 +10774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'moveHandler',
 	        value: function moveHandler(event) {
-	            // if touchstart event was not fired
-	            if (!this.data.down || this.data.pinched) return false;
+	            if (this.data.pinched) return false;
 
 	            var e = this.preHandle(event);
 	            this.data.time.last = event.timeStamp;
@@ -10785,6 +10788,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.clearTimeouts(this.data.timeout.hold);
 	            this.data = _jQuery2.default.extend(true, this.data, this.calculateMove(e));
 
+	            this.eventCallback(this.settings.callbacks.move, this.dataClone);
+
+	            if (!this.data.down) return false;
 	            if (this.data.multitouch) {
 	                this.handlePinchAndZoom();
 	            } else {
