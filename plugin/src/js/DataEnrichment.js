@@ -92,7 +92,7 @@ export var DataEnrichment = {
 
         return enrichedData;
     },
-    tooltip(data) {
+    tooltip(data = {}) {
         return Object.assign({}, DataEnrichment.TOOLTIP, data);
     }
 };

@@ -107,9 +107,8 @@ export class TileMap {
             {value: 3, description: "tooltip-initialized"}
         ]);
 
-        if (this.settings.tooltip && this.settings.tooltip.templates) {
-            this.templates = DataEnrichment.tooltip(this.settings.tooltip.templates);
-        }
+        this.templates = (this.settings.tooltip) ? this.settings.tooltip.templates : {};
+        this.templates = DataEnrichment.tooltip(this.templates);
 
         this.levels = [];
         this.clusterHandlingTimeout = null;
@@ -253,10 +252,8 @@ export class TileMap {
             });
             markers = markers.sort((a, b) => ((b.latlng.lat - a.latlng.lat !== 0) ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng));
             Helper.forEach(markers, (marker, i) => {
-                marker.$icon.css("z-index", i);
+                marker.icon.style.zIndex = i;
             });
-
-            if (markers.length !== 0) this.createTooltipContainer();
 
             this.markerClusterer = new MarkerClusterer({
                 markers: markers,
@@ -307,7 +304,10 @@ export class TileMap {
 
         this.eventManager.subscribe(Events.View.THUMB_LOADED, () => {
             this.redraw();
-            if (this.stateHandler.current.value < 2) this.initializeMarkers();
+            if (this.stateHandler.current.value < 2) {
+                this.initializeMarkers();
+                this.createTooltipContainer();
+            }
         });
 
         this.eventManager.subscribe(Events.TileMap.ZOOM_TO_BOUNDS, (bounds) => {

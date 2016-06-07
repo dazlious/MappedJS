@@ -198,7 +198,7 @@
 	height: 100%;
 	width: 100%;
 	z-index: 200;
-	background: rgba(255, 255, 255, 0.8);
+	background: #fff;
 }
 
 /* line 12, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */

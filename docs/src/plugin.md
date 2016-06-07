@@ -2349,8 +2349,6 @@ precompiles all Handlebars templates
 
 * [View](#View)
     * [new View(viewport, currentView, bounds, center, initialCenter, data, $container, context, maxZoom, currentZoom, minZoom, $container, limitToBounds)](#new_View_new)
-    * [.distortionFactor](#View+distortionFactor) ⇒ <code>number</code>
-    * [.offsetToCenter](#View+offsetToCenter)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
     * [.reset()](#View+reset)
     * [.loadThumb()](#View+loadThumb) ⇒ <code>[View](#View)</code>
@@ -2384,19 +2382,6 @@ precompiles all Handlebars templates
 - $container <code>object</code> - = null - jQuery-selector of container class
 - limitToBounds <code>number</code> - where to limit panning
 
-<a name="View+distortionFactor"></a>
-
-### view.distortionFactor ⇒ <code>number</code>
-Returns current distortionFactor
-
-**Kind**: instance property of <code>[View](#View)</code>  
-**Returns**: <code>number</code> - returns current distortionFactor of latitude  
-<a name="View+offsetToCenter"></a>
-
-### view.offsetToCenter
-Returns the current distorted viewport
-
-**Kind**: instance property of <code>[View](#View)</code>  
 <a name="View+visibleTiles"></a>
 
 ### view.visibleTiles ⇒ <code>array</code>

@@ -7,6 +7,7 @@ import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
 import {Publisher} from './Publisher.js';
 import {MarkerClusterer} from './MarkerClusterer.js';
+import {Drawable} from './Drawable.js';
 import {MapInformation} from './MapInformation.js';
 
 /**
@@ -14,41 +15,10 @@ import {MapInformation} from './MapInformation.js';
  * @file represents a level of zoom
  * @copyright Michael Duve 2016
  */
-export class View {
-
-    /**
-     * Returns current distortionFactor
-     * @return {number} returns current distortionFactor of latitude
-     */
-    get distortionFactor() {
-        return this.info.get().distortionFactor;
-    }
-
-    get center() {
-        return this.info.get().center;
-    }
-
-    get viewport() {
-        return this.info.get().viewport;
-    }
+export class View extends Drawable {
 
     get currentView() {
-        return this.info.get().view;
-    }
-
-    get bounds() {
-        return this.info.get().bounds;
-    }
-
-    /**
-     * Returns the current distorted viewport
-     */
-    get offsetToCenter() {
-        return this.info.get().offsetToCenter;
-    }
-
-    get zoomFactor() {
-        return this.info.get().zoomFactor;
+        return this.view;
     }
 
     /**
@@ -94,9 +64,8 @@ export class View {
         limitToBounds,
         id
     }) {
+        super({id: id});
 
-        this.id = id;
-        this.eventManager = new Publisher(this.id);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             center: center,
             view: currentView,
@@ -109,8 +78,6 @@ export class View {
         this.limitToBounds = limitToBounds || bounds;
         this.isInitialized = false;
         this.centerSmallMap = centerSmallMap;
-
-        this.info = new MapInformation(this.id);
 
         const newCenter = this.viewport.center.substract(this.info.convertLatLngToPoint(center));
         this.currentView.position(newCenter.x + this.offsetToCenter, newCenter.y);
@@ -152,13 +119,16 @@ export class View {
         this.zoom(delta, this.viewport.center);
     }
 
-    checkBoundaries() {
+    getDistortedView() {
         const nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
               se = this.info.convertLatLngToPoint(this.limitToBounds.se),
               limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
+        return limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+    }
 
+    checkBoundaries() {
         const offset = new Point();
-        const equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+        const equalizedMap = this.getDistortedView();
         if (!equalizedMap.containsRect(this.viewport)) {
 
             const distanceLeft = equalizedMap.left - this.viewport.left,
@@ -174,6 +144,18 @@ export class View {
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             view: this.currentView
         });
+
+        if (this.viewportIsSmallerThanView(equalizedMap)) {
+            const diffInHeight = (1 - (equalizedMap.height / this.viewport.height));
+            const diffInWidth = (1 - (equalizedMap.width / this.viewport.width));
+            const diff = Helper.clamp(Math.max(diffInHeight, diffInWidth), 0, Number.MAX_VALUE);
+            this.zoom(diff, this.viewport.center, true);
+            return false;
+        }
+    }
+
+    viewportIsSmallerThanView(view) {
+        return this.viewport.width > view.width || this.viewport.height > view.height;
     }
 
     checkX(left, right, mapWidth, viewWidth) {
@@ -278,7 +260,16 @@ export class View {
      * @param  {Point} pos - Position to zoom to
      * @return {View} instance of View for chaining
      */
-    zoom(factor, pos) {
+    zoom(factor, pos, automatic = false) {
+        const equalizedMap = this.getDistortedView();
+
+        if (factor < 0 && this.viewportIsSmallerThanView(equalizedMap) || factor < 0 && this.wasSmallerLastTime) {
+            this.wasSmallerLastTime = true;
+            return false;
+        } else if (!automatic) {
+            this.wasSmallerLastTime = false;
+        }
+
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             zoomFactor: Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
         });
@@ -297,7 +288,7 @@ export class View {
 
         if (this.zoomFactor >= this.maxZoom && factor > 0) {
             this.eventManager.publish(Events.TileMap.NEXT_LEVEL);
-        } else if (this.zoomFactor <= this.minZoom && factor < 0) {
+        } else if (this.zoomFactor <= this.minZoom && factor < 0 && !this.viewportIsSmallerThanView(equalizedMap)) {
             this.eventManager.publish(Events.TileMap.PREVIOUS_LEVEL);
         }
 

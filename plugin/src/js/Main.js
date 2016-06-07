@@ -164,9 +164,6 @@ export class MappedJS {
                 },
                 flick: (data) => {
                     this.tileMap.velocity = data.velocity.multiply(20);
-                },
-                move: (data) => {
-                    const pos = this.getAbsolutePosition(data.position.move);                    
                 }
             }
         });

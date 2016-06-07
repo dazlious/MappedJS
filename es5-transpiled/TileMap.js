@@ -178,9 +178,8 @@
                 description: "tooltip-initialized"
             }]);
 
-            if (this.settings.tooltip && this.settings.tooltip.templates) {
-                this.templates = _DataEnrichment.DataEnrichment.tooltip(this.settings.tooltip.templates);
-            }
+            this.templates = this.settings.tooltip ? this.settings.tooltip.templates : {};
+            this.templates = _DataEnrichment.DataEnrichment.tooltip(this.templates);
 
             this.levels = [];
             this.clusterHandlingTimeout = null;
@@ -349,10 +348,8 @@
                             return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
                         });
                         _Helper.Helper.forEach(markers, function(marker, i) {
-                            marker.$icon.css("z-index", i);
+                            marker.icon.style.zIndex = i;
                         });
-
-                        if (markers.length !== 0) _this3.createTooltipContainer();
 
                         _this3.markerClusterer = new _MarkerClusterer.MarkerClusterer({
                             markers: markers,
@@ -418,7 +415,10 @@
 
                 this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function() {
                     _this4.redraw();
-                    if (_this4.stateHandler.current.value < 2) _this4.initializeMarkers();
+                    if (_this4.stateHandler.current.value < 2) {
+                        _this4.initializeMarkers();
+                        _this4.createTooltipContainer();
+                    }
                 });
 
                 this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function(bounds) {

@@ -5,6 +5,7 @@ import {Point} from './Point.js';
 import {Rectangle} from './Rectangle.js';
 import {Publisher} from './Publisher.js';
 import {DataEnrichment} from './DataEnrichment.js';
+import {Drawable} from './Drawable.js';
 import {MapInformation} from './MapInformation.js';
 
 /**
@@ -12,16 +13,12 @@ import {MapInformation} from './MapInformation.js';
  * @file represents a marker with an image, a position and content
  * @copyright Michael Duve 2016
  */
-export class Marker {
+export class Marker extends Drawable {
 
     get boundingBox() {
         const bBox = this.icon.getBoundingClientRect();
         const parentBBox = this.container.getBoundingClientRect();
         return new Rectangle(bBox.left - parentBBox.left, bBox.top - parentBBox.top, bBox.width, bBox.height).scaleCenter(1.2);
-    }
-
-    get view() {
-        return this.info.get().view;
     }
 
     /**
@@ -31,12 +28,10 @@ export class Marker {
      * @return {Marker} - instance of Marker for chaining
      */
     constructor({data = DataEnrichment.DATA_MARKER, container, id}) {
-
-        this.eventID = id;
-        this.info = new MapInformation(this.eventID);
+        super({id: id});
         this.container = container;
-        
-        this.id = Marker.count;
+
+        this.markerID = Marker.count;
         Marker.count++;
 
         this.size = data.size;
@@ -60,15 +55,12 @@ export class Marker {
      * @return {Marker} instance of Marker for chaining
      */
     bindEvents() {
-        this.eventManager = new Publisher(this.eventID);
-
         if (this.content.length) {
             this.$icon.data("mjs-action", this.action.bind(this));
             this.eventManager.subscribe(Events.Marker.DEACTIVATE, () => {
                 this.$icon.removeClass("active");
             });
         }
-
         return this;
     }
 

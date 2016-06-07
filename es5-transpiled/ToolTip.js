@@ -83,7 +83,8 @@
 
         function ToolTip(_ref) {
             var container = _ref.container;
-            var templates = _ref.templates;
+            var _ref$templates = _ref.templates;
+            var templates = _ref$templates === undefined ? [] : _ref$templates;
             var id = _ref.id;
 
             _classCallCheck(this, ToolTip);
@@ -98,7 +99,6 @@
             this.$content = (0, _jQuery2.default)('<div class=\'tooltip-content\' />');
             this.$popup = (0, _jQuery2.default)('<div class=\'tooltip-container\' />').append(this.$close).append(this.$content);
             this.eventManager = new _Publisher.Publisher(this.id);
-
             this.bindEvents();
             this.registerHandlebarHelpers();
 

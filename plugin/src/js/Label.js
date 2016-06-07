@@ -1,14 +1,16 @@
 import {Events} from './Events.js';
 import {Helper} from './Helper.js';
+import {Drawable} from './Drawable.js';
 import {LatLng} from './LatLng.js';
-import {MapInformation} from './MapInformation.js';
+import {Point} from './Point.js';
+import {Rectangle} from './Rectangle.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
  * @file shows an icon and/or a text at given position
  * @copyright Michael Duve 2016
  */
-export class Label {
+export class Label extends Drawable {
 
     get position() {
         return this.info.convertLatLngToPoint(this.nearestPositionToCenter)
@@ -21,20 +23,13 @@ export class Label {
         return (this.latlng instanceof LatLng) ? this.latlng : this.getNearestPositionToCenter();
     }
 
-    get view() {
-        return this.info.get().view;
-    }
+    get boundingBox() {
+        const x = this.position.x + this.offset.x;
+        const y = this.position.y + this.offset.y;
+        const sizeX = this.icon.size.x || this.icon.size;
+        const sizeY = this.icon.size.y || this.icon.size;
 
-    get distortionFactor() {
-        return this.info.get().distortionFactor;
-    }
-
-    get offsetToCenter() {
-        return this.info.get().offsetToCenter;
-    }
-
-    get center() {
-        return this.info.get().center;
+        return new Rectangle(x, y, sizeX, sizeY).scaleCenter(2);
     }
 
     /**
@@ -42,15 +37,17 @@ export class Label {
      * @return {Label} instance of Label for chaining
      */
     constructor({settings, context, id}) {
+        super({id: id});
         this.id = id;
-        this.info = new MapInformation(this.id);
 
         this.context = context;
 
         this.latlng = settings.position;
         this.text = settings.text;
         this.icon = settings.icon;
-
+        this.content = settings.content;
+        this.offset = new Point();
+        
         if (this.icon && this.icon.type === "circle") this.drawIconType = this.drawCircleIcon(this.icon.size);
         else if (this.icon && this.icon.type === "square") this.drawIconType = this.drawSquareIcon(this.icon.size);
         else if (this.icon && this.icon.type === "image") {
@@ -69,6 +66,10 @@ export class Label {
         const center = this.center.clone.multiply(-1);
         this.latlng = this.latlng.sort((a, b) => center.distance(a) - center.distance(b));
         return this.latlng[0];
+    }
+
+    openToolTip() {
+        this.eventManager.publish(Events.ToolTip.OPEN, this.content);
     }
 
     draw() {
@@ -119,7 +120,12 @@ export class Label {
     }
 
     drawImageIcon(image, size, offset) {
+        this.offset = offset;
         return (pos) => this.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
+    }
+
+    hit(point) {
+        return this.boundingBox.containsPoint(point);
     }
 
 }
