@@ -19,6 +19,17 @@ export var Helper = {
         });
         return this;
     },
+    show(elem) {
+        elem.style.display = "";
+    },
+    hide(elem) {
+        elem.style.display = "none";
+    },
+    css(elem, css) {
+        for (let property in css) {
+            elem.style[property] = css[property];
+        }
+    },
     /**
      * clamps a value to specified min and max
      * @function
@@ -30,7 +41,7 @@ export var Helper = {
      */
     clamp(v = 0, min = v, max = v) {
         return Math.min(Math.max(v, min), max);
-    },    
+    },
     /**
      * loads an image and calls callback on success
      * @function

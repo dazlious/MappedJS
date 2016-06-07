@@ -1,4 +1,3 @@
-import $ from 'jQuery';
 import Handlebars from 'Handlebars';
 import {Events} from './Events.js';
 import {Helper} from './Helper.js';
@@ -22,21 +21,27 @@ export class ToolTip {
     /**
      *
      * @constructor
-     * @param  {string|object} container - Container, either string, jQuery-object or dom-object
+     * @param  {string|object} container - Container, either string or dom-object
      * @param  {object} templates - defined templates
      * @return {ToolTip} instance of ToolTip for chaining
      */
     constructor({container, templates = [], id}) {
-        this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
-        if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
+        this.container = container;
         this.id = id;
-        this.$container.addClass(Events.ToolTip.CLOSE);
-        this.container = this.$container[0];
+        this.container.classList.add(Events.ToolTip.CLOSE);
 
-        this.$close = $(`<span class='close-button' />`);
-        this.$content = $(`<div class='tooltip-content' />`);
-        this.$popup = $(`<div class='tooltip-container' />`).append(this.$close)
-                                                            .append(this.$content);
+        this.close = document.createElement("div");
+        this.close.classList.add("close-button");
+
+        this.content = document.createElement("div");
+        this.content.classList.add("tooltip-content");
+
+        this.popup = document.createElement("div");
+        this.popup.classList.add("tooltip-container");
+
+        this.popup.appendChild(this.close);
+        this.popup.appendChild(this.content);
+
         this.eventManager = new Publisher(this.id);
         this.bindEvents();
         this.registerHandlebarHelpers();
@@ -72,10 +77,12 @@ export class ToolTip {
      * @return {ToolTip} instance of ToolTip for chaining
      */
     bindEvents() {
-        $(window).on(Events.Handling.RESIZE, () => { this.resizeHandler(); });
+        window.addEventListener("resize", this.resizeHandler.bind(this), false);
+        window.addEventListener("orientationchange", this.resizeHandler.bind(this), false);
+
         this.eventManager.subscribe(Events.ToolTip.OPEN, this.open.bind(this));
-        this.eventManager.subscribe(Events.ToolTip.CLOSE, () => { this.close(); });
-        this.$close.on(Events.Handling.CLICK, () => { this.close(); });
+        this.eventManager.subscribe(Events.ToolTip.CLOSE, () => { this.closeTooltip(); });
+        this.close.addEventListener(Events.Handling.CLICK, () => { this.closeTooltip(); }, false);
         return this;
     }
 
@@ -94,11 +101,11 @@ export class ToolTip {
      * @return {ToolTip} instance of ToolTip for chaining
      */
     insertContent(content = {}) {
-        this.$content.html("");
+        this.content.innerHTML = "";
         Helper.forEach(content, (data) => {
             if (this.templates[data.type]) {
                 const html = this.templates[data.type](data.content);
-                this.$content.append(html);
+                this.content.innerHTML += html;
             }
         });
         return this;
@@ -111,9 +118,10 @@ export class ToolTip {
      */
     open(data) {
         if (data) this.insertContent(data);
-        if (this.$container.hasClass(Events.ToolTip.CLOSE)) {
+        if (this.container.classList.contains(Events.ToolTip.CLOSE)) {
             this.setPosition();
-            this.$container.removeClass(Events.ToolTip.CLOSE).addClass(Events.ToolTip.OPEN);
+            this.container.classList.remove(Events.ToolTip.CLOSE);
+            this.container.classList.add(Events.ToolTip.OPEN);
             this.eventManager.publish(Events.TileMap.RESIZE);
         }
         return this;
@@ -123,11 +131,12 @@ export class ToolTip {
      * closes a tooltip
      * @return {ToolTip} instance of ToolTip for chaining
      */
-    close() {
-        if (this.$container.hasClass(Events.ToolTip.OPEN)) {
+    closeTooltip() {
+        if (this.container.classList.contains(Events.ToolTip.OPEN)) {
             this.eventManager.publish(Events.Marker.DEACTIVATE);
             this.setPosition();
-            this.$container.removeClass(Events.ToolTip.OPEN).addClass(Events.ToolTip.CLOSE);
+            this.container.classList.remove(Events.ToolTip.OPEN);
+            this.container.classList.add(Events.ToolTip.CLOSE);
             this.eventManager.publish(Events.TileMap.RESIZE);
         }
         return this;
@@ -138,7 +147,7 @@ export class ToolTip {
      * @return {ToolTip} instance of ToolTip for chaining
      */
     setPosition() {
-        if (this.$container.innerWidth() > this.$container.innerHeight()) {
+        if (this.container.clientWidth > this.container.clientHeight) {
             this.container.classList.add("left");
             this.container.classList.remove("bottom");
         } else {
@@ -157,7 +166,7 @@ export class ToolTip {
             Helper.getFile(template, (html) => {
                 this.templates[type] = Handlebars.compile(html);
                 this.loadedTemplates++;
-                if (this.allTemplatesLoaded) this.$container.append(this.$popup);
+                if (this.allTemplatesLoaded) this.container.appendChild(this.popup);
             });
         });
         return this;

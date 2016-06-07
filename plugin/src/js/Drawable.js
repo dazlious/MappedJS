@@ -1,5 +1,3 @@
-import {Events} from './Events.js';
-import {Helper} from './Helper.js';
 import {Publisher} from './Publisher.js';
 import {MapInformation} from './MapInformation.js';
 

@@ -1,4 +1,3 @@
-import $ from 'jQuery';
 import "babel-polyfill";
 import {Helper} from './Helper.js';
 import {Events} from './Events.js';
@@ -17,7 +16,7 @@ export class MappedJS {
 
     /**
      * @constructor
-     * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
+     * @param  {string|Object} container=".mjs" - Container, either string or dom-object
      * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
      * @param  {string|Object} markerData={} - data of markers, can be json or path to file
      * @param  {Object} mapSettings={} - settings for map, must be json
@@ -58,29 +57,34 @@ export class MappedJS {
      */
     addControls() {
         if (this.mapSettings.controls) {
-            this.$controls = $(`<div class="control-container ${this.mapSettings.controls.theme} ${this.mapSettings.controls.position}" />`);
-            this.$zoomIn = $("<div class='control zoom-in' />");
-            this.$zoomOut = $("<div class='control zoom-out' />");
-            this.$home = $("<div class='control home' />");
-            this.$controls.append(this.$home).append(this.$zoomIn).append(this.$zoomOut);
-            this.$content.append(this.$controls);
+            this.controls = document.createElement("div");
+            this.controls.classList.add("control-container", this.mapSettings.controls.theme, this.mapSettings.controls.position);
+            this.zoomIn = document.createElement("div");
+            this.zoomIn.classList.add("control", "zoom-in");
+            this.zoomOut = document.createElement("div");
+            this.zoomOut.classList.add("control", "zoom-out");
+            this.home = document.createElement("div");
+            this.home.classList.add("control", "home");
+            this.controls.appendChild(this.home);
+            this.controls.appendChild(this.zoomIn);
+            this.controls.appendChild(this.zoomOut);
+            this.content.appendChild(this.controls);
         }
     }
 
     /**
      * initializes the settings and handles errors
-     * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
+     * @param  {string|Object} container - Container, either string or dom-object
      * @param  {object} events - List of events
      * @param  {object} settings - List of settings
      * @return {MappedJS} instance of MappedJS for chaining
      */
     initializeSettings(container, events = {}, settings = {}) {
-        this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
-        if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
-
-        this.$container.addClass("mappedJS");
-        this.$content = $("<div class='map-content' />");
-        this.$container.append(this.$content);
+        this.container = (typeof container === "string") ? document.querySelectorAll(container)[0] : container;
+        this.container.classList.add("mappedJS");
+        this.content = document.createElement("div");
+        this.content.classList.add("map-content");
+        this.container.appendChild(this.content);
 
         this.mapSettings = DataEnrichment.mapSettings(settings);
         this.events = events;
@@ -111,7 +115,7 @@ export class MappedJS {
      */
     initializeMap() {
         this.tileMap = new TileMap({
-            container: this.$content,
+            container: this.content,
             tilesData: this.mapData,
             id: this.id,
             settings: this.mapSettings
@@ -134,21 +138,21 @@ export class MappedJS {
      */
     initializeInteractForMap() {
         this.interact = new Interact({
-            container: this.$content,
+            container: this.content,
             autoFireHold: 300,
             overwriteViewportSettings: true,
             callbacks: {
                 tap: (data) => {
-                    const action = $(data.target).data("mjs-action");
                     this.tileMap.velocity = new Point();
-                    if (action) action();
+                    const id = data.target.getAttribute("data-id");
+                    if (id) this.eventManager.publish(id);
                 },
                 doubletap: (data) => {
                     this.tileMap.velocity = new Point();
                     this.tileMap.zoom(0.2, this.getAbsolutePosition(data.position.start));
                 },
                 pan: (data) => {
-                    if ($(data.target).hasClass("control")) return false;
+                    if (data.target.classList.contains("control")) return false;
                     const change = data.last.position.clone.substract(data.position.move);
                     this.tileMap.velocity = new Point();
                     this.tileMap.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
@@ -178,15 +182,20 @@ export class MappedJS {
 
         this.initializeInteractForMap();
 
-        $(window).on(Events.Handling.RESIZE, this.resizeHandler.bind(this));
+        window.addEventListener("resize", this.resizeHandler.bind(this), false);
+        window.addEventListener("orientationchange", this.resizeHandler.bind(this), false);
 
-        const $document = $(document);
-        $document.on(Events.Handling.KEYDOWN, this.keyPress.bind(this));
-        $document.on(Events.Handling.KEYUP, this.keyRelease.bind(this));
+        document.addEventListener(Events.Handling.KEYDOWN, this.keyPress.bind(this), false);
+        document.addEventListener(Events.Handling.KEYUP, this.keyRelease.bind(this), false);
 
-        this.$zoomIn.data("mjs-action", this.zoomInToCenter.bind(this));
-        this.$zoomOut.data("mjs-action", this.zoomOutToCenter.bind(this));
-        this.$home.data("mjs-action", this.resetToInitialState.bind(this));
+        this.zoomIn.setAttribute("data-id", "zoom-button-plus");
+        this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
+
+        this.zoomOut.setAttribute("data-id", "zoom-button-minus");
+        this.eventManager.subscribe("zoom-button-minus", this.zoomOutToCenter.bind(this));
+
+        this.home.setAttribute("data-id", "home-button");
+        this.eventManager.subscribe("home-button", this.resetToInitialState.bind(this));
 
         return this;
     }
@@ -285,7 +294,6 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     loadingFinished() {
-        this.$container.trigger(this.events.loaded);
         return this;
     }
 

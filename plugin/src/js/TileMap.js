@@ -1,8 +1,6 @@
-import $ from 'jQuery';
 import {Helper} from './Helper.js';
 import {Events} from './Events.js';
 import {Point} from './Point.js';
-import {LatLng} from './LatLng.js';
 import {Publisher} from './Publisher.js';
 import {StateHandler} from './StateHandler.js';
 import {Rectangle} from './Rectangle.js';
@@ -82,8 +80,7 @@ export class TileMap {
      */
     constructor({container = null, tilesData = {}, settings = {}, id}) {
         if (!container) throw Error("You must define a container to initialize a TileMap");
-        this.$container = container;
-        this.container = container[0];
+        this.container = container;
 
         this.id = id;
 
@@ -197,7 +194,6 @@ export class TileMap {
             maxZoom: (data.zoom) ? data.zoom.max : 1,
             currentZoom: zoom,
             minZoom: (data.zoom) ? data.zoom.min : 1,
-            $container: this.$container,
             context: this.canvasContext,
             id: this.id,
             centerSmallMap: this.settings.centerSmallMap,
@@ -210,9 +206,9 @@ export class TileMap {
      * @return {View} instance of View for chaining
      */
     repositionMarkerContainer() {
-        if (this.$markerContainer) {
+        if (this.markerContainer) {
             const newSize = this.view.currentView.getDistortedRect(this.view.distortionFactor);
-            this.$markerContainer.css({
+            Helper.css(this.markerContainer, {
                "width": `${newSize.width}px`,
                "height": `${newSize.height}px`,
                "transform": `translate3d(${newSize.left + this.view.offsetToCenter}px, ${newSize.top}px, 0px)`
@@ -258,7 +254,7 @@ export class TileMap {
             this.markerClusterer = new MarkerClusterer({
                 markers: markers,
                 id: this.id,
-                $container: this.$markerContainer
+                container: this.markerContainer
             });
         }
         this.stateHandler.next();
@@ -271,9 +267,9 @@ export class TileMap {
      */
     appendMarkerContainerToDom() {
         if (this.markerData && this.markerData.length) {
-            this.$markerContainer = $("<div class='marker-container' />");
-            this.markerContainer = this.$markerContainer[0];
-            this.$container.append(this.$markerContainer);
+            this.markerContainer = document.createElement("div");
+            this.markerContainer.classList.add("marker-container");
+            this.container.appendChild(this.markerContainer);
         }
         return this;
     }
@@ -284,7 +280,7 @@ export class TileMap {
      */
     createTooltipContainer() {
         this.tooltip = new ToolTip({
-            container: $(this.$container.parent()),
+            container: this.container.parentNode,
             id: this.id,
             templates: this.templates
         });
@@ -363,9 +359,9 @@ export class TileMap {
      * @return {TileMap} instance of TileMap for chaining
      */
     initializeCanvas() {
-        this.$canvas = $("<canvas class='mjs-canvas' />");
-        this.canvas = this.$canvas[0];
-        this.$container.append(this.$canvas);
+        this.canvas = document.createElement("canvas");
+        this.canvas.classList.add("mjs-canvas");
+        this.container.appendChild(this.canvas);
         this.canvasContext = this.canvas.getContext("2d");
         return this;
     }

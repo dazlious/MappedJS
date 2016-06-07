@@ -90,7 +90,7 @@
 <p><a name="module_DataEnrichment"></a></p>
 <h2 id="dataenrichment">DataEnrichment</h2>
 <p>enriches delivered data with default values</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x6d;&#100;&#117;&#118;&#x65;&#x40;&#100;&#101;&#115;&#x69;&#103;&#x6e;&#109;&#97;&#x69;&#108;&#x2e;&#110;&#101;&#x74;">&#x6d;&#100;&#117;&#118;&#x65;&#x40;&#100;&#101;&#115;&#x69;&#103;&#x6e;&#109;&#97;&#x69;&#108;&#x2e;&#110;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#109;&#100;&#117;&#x76;&#x65;&#x40;&#x64;&#101;&#115;&#x69;&#x67;&#x6e;&#109;&#x61;&#x69;&#x6c;&#x2e;&#110;&#101;&#x74;">&#109;&#100;&#117;&#x76;&#x65;&#x40;&#x64;&#101;&#115;&#x69;&#x67;&#x6e;&#109;&#x61;&#x69;&#x6c;&#x2e;&#110;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_DataEnrichment">DataEnrichment</a><ul>
 <li><a href="#module_DataEnrichment.marker">.marker(data)</a> ⇒ <code>object</code></li>
@@ -115,7 +115,7 @@
 <p><a name="module_Helper"></a></p>
 <h2 id="helper">Helper</h2>
 <p>Helper for general purposes</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x6d;&#x64;&#x75;&#118;&#x65;&#64;&#100;&#101;&#x73;&#x69;&#x67;&#x6e;&#x6d;&#97;&#x69;&#108;&#46;&#110;&#101;&#x74;">&#x6d;&#x64;&#x75;&#118;&#x65;&#64;&#100;&#101;&#x73;&#x69;&#x67;&#x6e;&#x6d;&#97;&#x69;&#108;&#46;&#110;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#x6d;&#x64;&#117;&#118;&#101;&#x40;&#x64;&#101;&#x73;&#105;&#103;&#x6e;&#109;&#x61;&#105;&#x6c;&#46;&#x6e;&#101;&#x74;">&#x6d;&#x64;&#117;&#118;&#101;&#x40;&#x64;&#101;&#x73;&#105;&#103;&#x6e;&#109;&#x61;&#105;&#x6c;&#46;&#x6e;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_Helper">Helper</a><ul>
 <li><a href="#module_Helper.requestJSON">.requestJSON(filename, callback)</a> ⇒ <code>Helper</code></li>
@@ -779,7 +779,7 @@
 <h3 id="new-mappedjs-container-mapdata-markerdata-mapsettings-events-">new MappedJS(container, mapData, markerData, mapSettings, events)</h3>
 <p><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
 <ul>
-<li>container <code>string</code> | <code>Object</code> <code> = &quot;\&quot;.mjs\&quot;&quot;</code> - Container, either string, jQuery-object or dom-object</li>
+<li>container <code>string</code> | <code>Object</code> <code> = &quot;\&quot;.mjs\&quot;&quot;</code> - Container, either string or dom-object</li>
 <li>mapData <code>string</code> | <code>Object</code> <code> = &quot;{}&quot;</code> - data of map tiles, can be json or path to file</li>
 <li>markerData <code>string</code> | <code>Object</code> <code> = &quot;{}&quot;</code> - data of markers, can be json or path to file</li>
 <li>mapSettings <code>Object</code> <code> = {}</code> - settings for map, must be json</li>
@@ -793,7 +793,7 @@
 <p>initializes the settings and handles errors</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#MappedJS">MappedJS</a></code><br><strong>Returns</strong>: <code><a href="#MappedJS">MappedJS</a></code> - instance of MappedJS for chaining<br><strong>Params</strong></p>
 <ul>
-<li>container <code>string</code> | <code>Object</code> - Container, either string, jQuery-object or dom-object</li>
+<li>container <code>string</code> | <code>Object</code> - Container, either string or dom-object</li>
 <li>events <code>object</code> - List of events</li>
 <li>settings <code>object</code> - List of settings</li>
 </ul>
@@ -911,7 +911,7 @@
 <li><a href="#Marker">Marker</a><ul>
 <li><a href="#new_Marker_new">new Marker(data, _instance)</a></li>
 <li><a href="#Marker+bindEvents">.bindEvents()</a> ⇒ <code><a href="#Marker">Marker</a></code></li>
-<li><a href="#Marker+addMarkerToDOM">.addMarkerToDOM($container)</a> ⇒ <code>Object</code></li>
+<li><a href="#Marker+addMarkerToDOM">.addMarkerToDOM(container)</a> ⇒ <code>Object</code></li>
 <li><a href="#Marker+positionMarker">.positionMarker()</a> ⇒ <code><a href="#Marker">Marker</a></code></li>
 </ul>
 </li>
@@ -927,11 +927,11 @@
 <h3 id="marker-bindevents-code-marker-marker-code-">marker.bindEvents() ⇒ <code><a href="#Marker">Marker</a></code></h3>
 <p>binds all events</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Marker">Marker</a></code><br><strong>Returns</strong>: <code><a href="#Marker">Marker</a></code> - instance of Marker for chaining<br><a name="Marker+addMarkerToDOM"></a></p>
-<h3 id="marker-addmarkertodom-container-code-object-code-">marker.addMarkerToDOM($container) ⇒ <code>Object</code></h3>
+<h3 id="marker-addmarkertodom-container-code-object-code-">marker.addMarkerToDOM(container) ⇒ <code>Object</code></h3>
 <p>adds a marker to the DOM</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Marker">Marker</a></code><br><strong>Returns</strong>: <code>Object</code> - jQuery-selector of append markup<br><strong>Params</strong></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Marker">Marker</a></code><br><strong>Returns</strong>: <code>Object</code> - DOM-selector of append markup<br><strong>Params</strong></p>
 <ul>
-<li>$container <code>Object</code> - container to append to (jQuery selector)</li>
+<li>container <code>Object</code> - container to append to</li>
 </ul>
 <p><a name="Marker+positionMarker"></a></p>
 <h3 id="marker-positionmarker-code-marker-marker-code-">marker.positionMarker() ⇒ <code><a href="#Marker">Marker</a></code></h3>
@@ -1576,7 +1576,7 @@
 <li><a href="#ToolTip+resizeHandler">.resizeHandler()</a> ⇒ <code><a href="#ToolTip">ToolTip</a></code></li>
 <li><a href="#ToolTip+insertContent">.insertContent(content)</a> ⇒ <code><a href="#ToolTip">ToolTip</a></code></li>
 <li><a href="#ToolTip+open">.open(data)</a> ⇒ <code><a href="#ToolTip">ToolTip</a></code></li>
-<li><a href="#ToolTip+close">.close()</a> ⇒ <code><a href="#ToolTip">ToolTip</a></code></li>
+<li><a href="#ToolTip+closeTooltip">.closeTooltip()</a> ⇒ <code><a href="#ToolTip">ToolTip</a></code></li>
 <li><a href="#ToolTip+setPosition">.setPosition()</a> ⇒ <code><a href="#ToolTip">ToolTip</a></code></li>
 <li><a href="#ToolTip+compileTemplates">.compileTemplates()</a> ⇒ <code><a href="#ToolTip">ToolTip</a></code></li>
 </ul>
@@ -1586,7 +1586,7 @@
 <h3 id="new-tooltip-container-templates-">new ToolTip(container, templates)</h3>
 <p><strong>Returns</strong>: <code><a href="#ToolTip">ToolTip</a></code> - instance of ToolTip for chaining<br><strong>Params</strong></p>
 <ul>
-<li>container <code>string</code> | <code>object</code> - Container, either string, jQuery-object or dom-object</li>
+<li>container <code>string</code> | <code>object</code> - Container, either string or dom-object</li>
 <li>templates <code>object</code> - defined templates</li>
 </ul>
 <p><a name="ToolTip+allTemplatesLoaded"></a></p>
@@ -1622,8 +1622,8 @@
 <ul>
 <li>data <code>object</code> - content object</li>
 </ul>
-<p><a name="ToolTip+close"></a></p>
-<h3 id="tooltip-close-code-tooltip-tooltip-code-">toolTip.close() ⇒ <code><a href="#ToolTip">ToolTip</a></code></h3>
+<p><a name="ToolTip+closeTooltip"></a></p>
+<h3 id="tooltip-closetooltip-code-tooltip-tooltip-code-">toolTip.closeTooltip() ⇒ <code><a href="#ToolTip">ToolTip</a></code></h3>
 <p>closes a tooltip</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#ToolTip">ToolTip</a></code><br><strong>Returns</strong>: <code><a href="#ToolTip">ToolTip</a></code> - instance of ToolTip for chaining<br><a name="ToolTip+setPosition"></a></p>
 <h3 id="tooltip-setposition-code-tooltip-tooltip-code-">toolTip.setPosition() ⇒ <code><a href="#ToolTip">ToolTip</a></code></h3>
@@ -1636,7 +1636,7 @@
 <p><strong>Kind</strong>: global class  </p>
 <ul>
 <li><a href="#View">View</a><ul>
-<li><a href="#new_View_new">new View(viewport, currentView, bounds, center, initialCenter, data, $container, context, maxZoom, currentZoom, minZoom, $container, limitToBounds)</a></li>
+<li><a href="#new_View_new">new View(viewport, currentView, bounds, center, initialCenter, data, context, maxZoom, currentZoom, minZoom, limitToBounds)</a></li>
 <li><a href="#View+visibleTiles">.visibleTiles</a> ⇒ <code>array</code></li>
 <li><a href="#View+reset">.reset()</a></li>
 <li><a href="#View+loadThumb">.loadThumb()</a> ⇒ <code><a href="#View">View</a></code></li>
@@ -1653,7 +1653,7 @@
 </li>
 </ul>
 <p><a name="new_View_new"></a></p>
-<h3 id="new-view-viewport-currentview-bounds-center-initialcenter-data-container-context-maxzoom-currentzoom-minzoom-container-limittobounds-">new View(viewport, currentView, bounds, center, initialCenter, data, $container, context, maxZoom, currentZoom, minZoom, $container, limitToBounds)</h3>
+<h3 id="new-view-viewport-currentview-bounds-center-initialcenter-data-context-maxzoom-currentzoom-minzoom-limittobounds-">new View(viewport, currentView, bounds, center, initialCenter, data, context, maxZoom, currentZoom, minZoom, limitToBounds)</h3>
 <p><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><strong>Params</strong></p>
 <ul>
 <li>viewport <code><a href="#Rectangle">Rectangle</a></code> - = new Rectangle() - current representation of viewport</li>
@@ -1662,12 +1662,10 @@
 <li>center <code><a href="#LatLng">LatLng</a></code> - = new LatLng() - current center of map</li>
 <li>initialCenter <code><a href="#LatLng">LatLng</a></code> - = new LatLng() - initial center of view</li>
 <li>data <code>Object</code> - = {} - tile data of current map</li>
-<li>$container <code>Object</code> - = null - parent container for markers</li>
 <li>context <code>Object</code> - = null - canvas context for drawing</li>
 <li>maxZoom <code>number</code> - = 1.5 - maximal zoom of view</li>
 <li>currentZoom <code>number</code> - = 1 - initial zoom of view</li>
 <li>minZoom <code>number</code> - = 0.8 - minimal zoom of view</li>
-<li>$container <code>object</code> - = null - jQuery-selector of container class</li>
 <li>limitToBounds <code>number</code> - where to limit panning</li>
 </ul>
 <p><a name="View+visibleTiles"></a></p>
@@ -1727,7 +1725,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="Events"></a></p>
 <h2 id="events-code-object-code-">Events : <code>object</code></h2>
 <p>Helper for naming events</p>
-<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#109;&#100;&#x75;&#x76;&#x65;&#64;&#x64;&#101;&#x73;&#105;&#x67;&#110;&#109;&#x61;&#105;&#108;&#x2e;&#110;&#x65;&#x74;">&#109;&#100;&#x75;&#x76;&#x65;&#64;&#x64;&#101;&#x73;&#105;&#x67;&#110;&#109;&#x61;&#105;&#108;&#x2e;&#110;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#109;&#100;&#117;&#118;&#x65;&#64;&#100;&#x65;&#115;&#x69;&#103;&#x6e;&#x6d;&#x61;&#x69;&#108;&#46;&#x6e;&#x65;&#x74;">&#109;&#100;&#117;&#118;&#x65;&#64;&#100;&#x65;&#115;&#x69;&#103;&#x6e;&#x6d;&#x61;&#x69;&#108;&#46;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#Events">Events</a> : <code>object</code><ul>
 <li><a href="#Events.ToolTip">.ToolTip</a> : <code>Object</code></li>

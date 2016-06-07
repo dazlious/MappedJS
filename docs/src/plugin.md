@@ -1048,7 +1048,7 @@ Creates a LatLng from specified LatLng
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
 **Params**
 
-- container <code>string</code> | <code>Object</code> <code> = &quot;\&quot;.mjs\&quot;&quot;</code> - Container, either string, jQuery-object or dom-object
+- container <code>string</code> | <code>Object</code> <code> = &quot;\&quot;.mjs\&quot;&quot;</code> - Container, either string or dom-object
 - mapData <code>string</code> | <code>Object</code> <code> = &quot;{}&quot;</code> - data of map tiles, can be json or path to file
 - markerData <code>string</code> | <code>Object</code> <code> = &quot;{}&quot;</code> - data of markers, can be json or path to file
 - mapSettings <code>Object</code> <code> = {}</code> - settings for map, must be json
@@ -1069,7 +1069,7 @@ initializes the settings and handles errors
 **Returns**: <code>[MappedJS](#MappedJS)</code> - instance of MappedJS for chaining  
 **Params**
 
-- container <code>string</code> | <code>Object</code> - Container, either string, jQuery-object or dom-object
+- container <code>string</code> | <code>Object</code> - Container, either string or dom-object
 - events <code>object</code> - List of events
 - settings <code>object</code> - List of settings
 
@@ -1256,7 +1256,7 @@ singleton instance wrapper
 * [Marker](#Marker)
     * [new Marker(data, _instance)](#new_Marker_new)
     * [.bindEvents()](#Marker+bindEvents) ⇒ <code>[Marker](#Marker)</code>
-    * [.addMarkerToDOM($container)](#Marker+addMarkerToDOM) ⇒ <code>Object</code>
+    * [.addMarkerToDOM(container)](#Marker+addMarkerToDOM) ⇒ <code>Object</code>
     * [.positionMarker()](#Marker+positionMarker) ⇒ <code>[Marker](#Marker)</code>
 
 <a name="new_Marker_new"></a>
@@ -1277,14 +1277,14 @@ binds all events
 **Returns**: <code>[Marker](#Marker)</code> - instance of Marker for chaining  
 <a name="Marker+addMarkerToDOM"></a>
 
-### marker.addMarkerToDOM($container) ⇒ <code>Object</code>
+### marker.addMarkerToDOM(container) ⇒ <code>Object</code>
 adds a marker to the DOM
 
 **Kind**: instance method of <code>[Marker](#Marker)</code>  
-**Returns**: <code>Object</code> - jQuery-selector of append markup  
+**Returns**: <code>Object</code> - DOM-selector of append markup  
 **Params**
 
-- $container <code>Object</code> - container to append to (jQuery selector)
+- container <code>Object</code> - container to append to
 
 <a name="Marker+positionMarker"></a>
 
@@ -2247,7 +2247,7 @@ main draw call
     * [.resizeHandler()](#ToolTip+resizeHandler) ⇒ <code>[ToolTip](#ToolTip)</code>
     * [.insertContent(content)](#ToolTip+insertContent) ⇒ <code>[ToolTip](#ToolTip)</code>
     * [.open(data)](#ToolTip+open) ⇒ <code>[ToolTip](#ToolTip)</code>
-    * [.close()](#ToolTip+close) ⇒ <code>[ToolTip](#ToolTip)</code>
+    * [.closeTooltip()](#ToolTip+closeTooltip) ⇒ <code>[ToolTip](#ToolTip)</code>
     * [.setPosition()](#ToolTip+setPosition) ⇒ <code>[ToolTip](#ToolTip)</code>
     * [.compileTemplates()](#ToolTip+compileTemplates) ⇒ <code>[ToolTip](#ToolTip)</code>
 
@@ -2257,7 +2257,7 @@ main draw call
 **Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
 **Params**
 
-- container <code>string</code> | <code>object</code> - Container, either string, jQuery-object or dom-object
+- container <code>string</code> | <code>object</code> - Container, either string or dom-object
 - templates <code>object</code> - defined templates
 
 <a name="ToolTip+allTemplatesLoaded"></a>
@@ -2321,9 +2321,9 @@ opens a tooltip
 
 - data <code>object</code> - content object
 
-<a name="ToolTip+close"></a>
+<a name="ToolTip+closeTooltip"></a>
 
-### toolTip.close() ⇒ <code>[ToolTip](#ToolTip)</code>
+### toolTip.closeTooltip() ⇒ <code>[ToolTip](#ToolTip)</code>
 closes a tooltip
 
 **Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
@@ -2348,7 +2348,7 @@ precompiles all Handlebars templates
 **Kind**: global class  
 
 * [View](#View)
-    * [new View(viewport, currentView, bounds, center, initialCenter, data, $container, context, maxZoom, currentZoom, minZoom, $container, limitToBounds)](#new_View_new)
+    * [new View(viewport, currentView, bounds, center, initialCenter, data, context, maxZoom, currentZoom, minZoom, limitToBounds)](#new_View_new)
     * [.visibleTiles](#View+visibleTiles) ⇒ <code>array</code>
     * [.reset()](#View+reset)
     * [.loadThumb()](#View+loadThumb) ⇒ <code>[View](#View)</code>
@@ -2364,7 +2364,7 @@ precompiles all Handlebars templates
 
 <a name="new_View_new"></a>
 
-### new View(viewport, currentView, bounds, center, initialCenter, data, $container, context, maxZoom, currentZoom, minZoom, $container, limitToBounds)
+### new View(viewport, currentView, bounds, center, initialCenter, data, context, maxZoom, currentZoom, minZoom, limitToBounds)
 **Returns**: <code>[View](#View)</code> - instance of View for chaining  
 **Params**
 
@@ -2374,12 +2374,10 @@ precompiles all Handlebars templates
 - center <code>[LatLng](#LatLng)</code> - = new LatLng() - current center of map
 - initialCenter <code>[LatLng](#LatLng)</code> - = new LatLng() - initial center of view
 - data <code>Object</code> - = {} - tile data of current map
-- $container <code>Object</code> - = null - parent container for markers
 - context <code>Object</code> - = null - canvas context for drawing
 - maxZoom <code>number</code> - = 1.5 - maximal zoom of view
 - currentZoom <code>number</code> - = 1 - initial zoom of view
 - minZoom <code>number</code> - = 0.8 - minimal zoom of view
-- $container <code>object</code> - = null - jQuery-selector of container class
 - limitToBounds <code>number</code> - where to limit panning
 
 <a name="View+visibleTiles"></a>

@@ -1,9 +1,7 @@
-import $ from 'jQuery';
 import {Events} from './Events.js';
-import {Publisher} from './Publisher.js';
+import {Helper} from './Helper.js';
 import {Point} from './Point.js';
 import {Drawable} from './Drawable.js';
-
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -15,16 +13,18 @@ export class Cluster extends Drawable {
      * @constructor
      * @return {Cluster} instance of Cluster for chaining
      */
-    constructor({$container = null, id}) {
+    constructor({container = null, id}) {
         super({id: id});
+        this.uniqueID = Cluster.count;
+        Cluster.count++;
         this.markers = [];
-        this.$container = $container;
+        this.container = container;
         return this;
     }
 
     init() {
         if (this.markers.length === 1) {
-            this.markers[0].$icon.show();
+            Helper.show(this.markers[0].icon);
         } else {
             this.createClusterMarker();
         }
@@ -33,23 +33,31 @@ export class Cluster extends Drawable {
     createClusterMarker() {
         let p;
         for (const marker of this.markers) {
-            marker.$icon.hide();
+            Helper.hide(marker.icon);
             const currentPos = new Point(parseFloat(marker.icon.style.left), parseFloat(marker.icon.style.top));
             p = (!p) ? currentPos : p.add(currentPos);
         }
         p.divide(this.markers.length);
 
-        this.$cluster = $("<div class='cluster'>"+this.markers.length+"</div>").css({
+        this.cluster = document.createElement("div");
+        this.cluster.innerHTML = this.markers.length;
+        this.cluster.classList.add("cluster");
+        Helper.css(this.cluster, {
             "left": `${p.x}%`,
             "top": `${p.y}%`,
-            "transform": `translateZ(0)`
+            "transform": "translateZ(0)"
         });
-        this.$container.append(this.$cluster);
+        this.cluster.setAttribute("data-id", `cluster-${this.uniqueID}`);
+        this.container.appendChild(this.cluster);
         this.bindEvents();
     }
 
     bindEvents() {
-        this.$cluster.data("mjs-action", this.action.bind(this));
+        this.eventManager.subscribe(`cluster-${this.uniqueID}`, this.action.bind(this));
+    }
+
+    unbindEvents() {
+        this.eventManager.unsubscribe(`cluster-${this.uniqueID}`, this.action.bind(this));
     }
 
     action() {
@@ -64,10 +72,13 @@ export class Cluster extends Drawable {
     removeFromDOM() {
         if (this.markers.length > 1) {
             for (const marker of this.markers) {
-                marker.$icon.show();
+                Helper.show(marker.icon);
             }
-            this.$cluster.remove();
+            this.cluster.parentNode.removeChild(this.cluster);
         }
+        this.unbindEvents();
     }
 
 }
+
+Cluster.count = 0;

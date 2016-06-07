@@ -5,10 +5,7 @@ import {LatLng} from './LatLng.js';
 import {Bounds} from './Bounds.js';
 import {Rectangle} from './Rectangle.js';
 import {Tile} from './Tile.js';
-import {Publisher} from './Publisher.js';
-import {MarkerClusterer} from './MarkerClusterer.js';
 import {Drawable} from './Drawable.js';
-import {MapInformation} from './MapInformation.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -40,12 +37,10 @@ export class View extends Drawable {
      * @param  {LatLng} center = new LatLng() - current center of map
      * @param  {LatLng} initialCenter = new LatLng() - initial center of view
      * @param  {Object} data = {} - tile data of current map
-     * @param  {Object} $container = null - parent container for markers
      * @param  {Object} context = null - canvas context for drawing
      * @param  {number} maxZoom = 1.5 - maximal zoom of view
      * @param  {number} currentZoom = 1 - initial zoom of view
      * @param  {number} minZoom = 0.8 - minimal zoom of view
-     * @param  {object} $container = null - jQuery-selector of container class
      * @param  {number} limitToBounds - where to limit panning
      * @return {View} instance of View for chaining
      */
@@ -55,7 +50,6 @@ export class View extends Drawable {
         center = new LatLng(),
         initialCenter = new LatLng(),
         data = {},
-        $container = null,
         context = null,
         maxZoom = 1.5,
         currentZoom = 1,

@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Events.js', './Helper.js', './Publisher.js', './MapInformation.js'], factory);
+        define(['exports', './Publisher.js', './MapInformation.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Events.js'), require('./Helper.js'), require('./Publisher.js'), require('./MapInformation.js'));
+        factory(exports, require('./Publisher.js'), require('./MapInformation.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Events, global.Helper, global.Publisher, global.MapInformation);
+        factory(mod.exports, global.Publisher, global.MapInformation);
         global.Drawable = mod.exports;
     }
-})(this, function(exports, _Events, _Helper, _Publisher, _MapInformation) {
+})(this, function(exports, _Publisher, _MapInformation) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {

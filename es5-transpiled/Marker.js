@@ -1,30 +1,22 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Events.js', './Helper.js', './Point.js', './Rectangle.js', './Publisher.js', './DataEnrichment.js', './Drawable.js', './MapInformation.js'], factory);
+        define(['exports', './Events.js', './Helper.js', './Point.js', './Rectangle.js', './DataEnrichment.js', './Drawable.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Events.js'), require('./Helper.js'), require('./Point.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./DataEnrichment.js'), require('./Drawable.js'), require('./MapInformation.js'));
+        factory(exports, require('./Events.js'), require('./Helper.js'), require('./Point.js'), require('./Rectangle.js'), require('./DataEnrichment.js'), require('./Drawable.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Events, global.Helper, global.Point, global.Rectangle, global.Publisher, global.DataEnrichment, global.Drawable, global.MapInformation);
+        factory(mod.exports, global.Events, global.Helper, global.Point, global.Rectangle, global.DataEnrichment, global.Drawable);
         global.Marker = mod.exports;
     }
-})(this, function(exports, _jQuery, _Events, _Helper, _Point, _Rectangle, _Publisher, _DataEnrichment, _Drawable2, _MapInformation) {
+})(this, function(exports, _Events, _Helper, _Point, _Rectangle, _DataEnrichment, _Drawable2) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
     exports.Marker = undefined;
-
-    var _jQuery2 = _interopRequireDefault(_jQuery);
-
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            default: obj
-        };
-    }
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -110,7 +102,7 @@
 
             _this.container = container;
 
-            _this.markerID = Marker.count;
+            _this.uniqueID = Marker.count;
             Marker.count++;
 
             _this.size = data.size;
@@ -123,8 +115,7 @@
             _this.latlng = data.latlng;
 
             _this.content = data.content;
-            _this.$icon = _this.addMarkerToDOM(container);
-            _this.icon = _this.$icon[0];
+            _this.icon = _this.addMarkerToDOM(container);
 
             return _ret = _this.bindEvents().positionMarker(), _possibleConstructorReturn(_this, _ret);
         }
@@ -141,9 +132,10 @@
                 var _this2 = this;
 
                 if (this.content.length) {
-                    this.$icon.data("mjs-action", this.action.bind(this));
+                    this.icon.setAttribute("data-id", 'marker-' + this.uniqueID);
+                    this.eventManager.subscribe('marker-' + this.uniqueID, this.action.bind(this));
                     this.eventManager.subscribe(_Events.Events.Marker.DEACTIVATE, function() {
-                        _this2.$icon.removeClass("active");
+                        _this2.icon.classList.remove("active");
                     });
                 }
                 return this;
@@ -153,19 +145,21 @@
             value: function action() {
                 this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
                 this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
-                this.$icon.addClass("active");
+                this.icon.classList.add("active");
             }
 
             /**
              * adds a marker to the DOM
-             * @param {Object} $container - container to append to (jQuery selector)
-             * @returns {Object} jQuery-selector of append markup
+             * @param {Object} container - container to append to
+             * @returns {Object} DOM-selector of append markup
              */
 
         }, {
             key: 'addMarkerToDOM',
             value: function addMarkerToDOM(container) {
-                var icon = (0, _jQuery2.default)("<div class='marker' />").css({
+                var icon = document.createElement("div");
+                icon.classList.add("marker");
+                _Helper.Helper.css(icon, {
                     "width": this.size.x + 'px',
                     "height": this.size.y + 'px',
                     "margin-left": this.offset.x + 'px',
@@ -175,8 +169,8 @@
                     "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
                 });
                 if (container) {
-                    icon.hide();
-                    container.appendChild(icon[0]);
+                    _Helper.Helper.hide(icon);
+                    container.appendChild(icon);
                 }
                 return icon;
             }
@@ -191,12 +185,11 @@
             value: function positionMarker() {
                 this.position = this.info.convertLatLngToPoint(this.latlng);
                 var p = this.position.clone.divide(this.view.width, this.view.height).multiply(100);
-                if (this.$icon) {
-                    this.$icon.css({
-                        "left": p.x + '%',
-                        "top": p.y + '%'
-                    }).show();
-                }
+                _Helper.Helper.css(this.icon, {
+                    "left": p.x + '%',
+                    "top": p.y + '%'
+                });
+                _Helper.Helper.show(this.icon);
                 return this;
             }
         }]);

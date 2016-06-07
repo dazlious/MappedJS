@@ -38,6 +38,17 @@
             });
             return this;
         },
+        show: function show(elem) {
+            elem.style.display = "";
+        },
+        hide: function hide(elem) {
+            elem.style.display = "none";
+        },
+        css: function css(elem, _css) {
+            for (var property in _css) {
+                elem.style[property] = _css[property];
+            }
+        },
 
         /**
          * clamps a value to specified min and max

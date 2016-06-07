@@ -1,24 +1,22 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', 'Handlebars', './Events.js', './Helper.js', './Publisher.js'], factory);
+        define(['exports', 'Handlebars', './Events.js', './Helper.js', './Publisher.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('Handlebars'), require('./Events.js'), require('./Helper.js'), require('./Publisher.js'));
+        factory(exports, require('Handlebars'), require('./Events.js'), require('./Helper.js'), require('./Publisher.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Handlebars, global.Events, global.Helper, global.Publisher);
+        factory(mod.exports, global.Handlebars, global.Events, global.Helper, global.Publisher);
         global.ToolTip = mod.exports;
     }
-})(this, function(exports, _jQuery, _Handlebars, _Events, _Helper, _Publisher) {
+})(this, function(exports, _Handlebars, _Events, _Helper, _Publisher) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
     exports.ToolTip = undefined;
-
-    var _jQuery2 = _interopRequireDefault(_jQuery);
 
     var _Handlebars2 = _interopRequireDefault(_Handlebars);
 
@@ -27,12 +25,6 @@
             default: obj
         };
     }
-
-    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) {
-        return typeof obj;
-    } : function(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
-    };
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -74,7 +66,7 @@
             /**
              *
              * @constructor
-             * @param  {string|object} container - Container, either string, jQuery-object or dom-object
+             * @param  {string|object} container - Container, either string or dom-object
              * @param  {object} templates - defined templates
              * @return {ToolTip} instance of ToolTip for chaining
              */
@@ -89,15 +81,22 @@
 
             _classCallCheck(this, ToolTip);
 
-            this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
-            if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
+            this.container = container;
             this.id = id;
-            this.$container.addClass(_Events.Events.ToolTip.CLOSE);
-            this.container = this.$container[0];
+            this.container.classList.add(_Events.Events.ToolTip.CLOSE);
 
-            this.$close = (0, _jQuery2.default)('<span class=\'close-button\' />');
-            this.$content = (0, _jQuery2.default)('<div class=\'tooltip-content\' />');
-            this.$popup = (0, _jQuery2.default)('<div class=\'tooltip-container\' />').append(this.$close).append(this.$content);
+            this.close = document.createElement("div");
+            this.close.classList.add("close-button");
+
+            this.content = document.createElement("div");
+            this.content.classList.add("tooltip-content");
+
+            this.popup = document.createElement("div");
+            this.popup.classList.add("tooltip-container");
+
+            this.popup.appendChild(this.close);
+            this.popup.appendChild(this.content);
+
             this.eventManager = new _Publisher.Publisher(this.id);
             this.bindEvents();
             this.registerHandlebarHelpers();
@@ -147,16 +146,16 @@
             value: function bindEvents() {
                 var _this = this;
 
-                (0, _jQuery2.default)(window).on(_Events.Events.Handling.RESIZE, function() {
-                    _this.resizeHandler();
-                });
+                window.addEventListener("resize", this.resizeHandler.bind(this), false);
+                window.addEventListener("orientationchange", this.resizeHandler.bind(this), false);
+
                 this.eventManager.subscribe(_Events.Events.ToolTip.OPEN, this.open.bind(this));
                 this.eventManager.subscribe(_Events.Events.ToolTip.CLOSE, function() {
-                    _this.close();
+                    _this.closeTooltip();
                 });
-                this.$close.on(_Events.Events.Handling.CLICK, function() {
-                    _this.close();
-                });
+                this.close.addEventListener(_Events.Events.Handling.CLICK, function() {
+                    _this.closeTooltip();
+                }, false);
                 return this;
             }
 
@@ -185,11 +184,11 @@
 
                 var content = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-                this.$content.html("");
+                this.content.innerHTML = "";
                 _Helper.Helper.forEach(content, function(data) {
                     if (_this2.templates[data.type]) {
                         var html = _this2.templates[data.type](data.content);
-                        _this2.$content.append(html);
+                        _this2.content.innerHTML += html;
                     }
                 });
                 return this;
@@ -205,9 +204,10 @@
             key: 'open',
             value: function open(data) {
                 if (data) this.insertContent(data);
-                if (this.$container.hasClass(_Events.Events.ToolTip.CLOSE)) {
+                if (this.container.classList.contains(_Events.Events.ToolTip.CLOSE)) {
                     this.setPosition();
-                    this.$container.removeClass(_Events.Events.ToolTip.CLOSE).addClass(_Events.Events.ToolTip.OPEN);
+                    this.container.classList.remove(_Events.Events.ToolTip.CLOSE);
+                    this.container.classList.add(_Events.Events.ToolTip.OPEN);
                     this.eventManager.publish(_Events.Events.TileMap.RESIZE);
                 }
                 return this;
@@ -219,12 +219,13 @@
              */
 
         }, {
-            key: 'close',
-            value: function close() {
-                if (this.$container.hasClass(_Events.Events.ToolTip.OPEN)) {
+            key: 'closeTooltip',
+            value: function closeTooltip() {
+                if (this.container.classList.contains(_Events.Events.ToolTip.OPEN)) {
                     this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
                     this.setPosition();
-                    this.$container.removeClass(_Events.Events.ToolTip.OPEN).addClass(_Events.Events.ToolTip.CLOSE);
+                    this.container.classList.remove(_Events.Events.ToolTip.OPEN);
+                    this.container.classList.add(_Events.Events.ToolTip.CLOSE);
                     this.eventManager.publish(_Events.Events.TileMap.RESIZE);
                 }
                 return this;
@@ -238,7 +239,7 @@
         }, {
             key: 'setPosition',
             value: function setPosition() {
-                if (this.$container.innerWidth() > this.$container.innerHeight()) {
+                if (this.container.clientWidth > this.container.clientHeight) {
                     this.container.classList.add("left");
                     this.container.classList.remove("bottom");
                 } else {
@@ -262,7 +263,7 @@
                     _Helper.Helper.getFile(template, function(html) {
                         _this3.templates[type] = _Handlebars2.default.compile(html);
                         _this3.loadedTemplates++;
-                        if (_this3.allTemplatesLoaded) _this3.$container.append(_this3.$popup);
+                        if (_this3.allTemplatesLoaded) _this3.container.appendChild(_this3.popup);
                     });
                 });
                 return this;

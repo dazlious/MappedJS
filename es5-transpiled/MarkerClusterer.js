@@ -18,44 +18,6 @@
     });
     exports.MarkerClusterer = undefined;
 
-    var _slicedToArray = function() {
-        function sliceIterator(arr, i) {
-            var _arr = [];
-            var _n = true;
-            var _d = false;
-            var _e = undefined;
-
-            try {
-                for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-                    _arr.push(_s.value);
-
-                    if (i && _arr.length === i) break;
-                }
-            } catch (err) {
-                _d = true;
-                _e = err;
-            } finally {
-                try {
-                    if (!_n && _i["return"]) _i["return"]();
-                } finally {
-                    if (_d) throw _e;
-                }
-            }
-
-            return _arr;
-        }
-
-        return function(arr, i) {
-            if (Array.isArray(arr)) {
-                return arr;
-            } else if (Symbol.iterator in Object(arr)) {
-                return sliceIterator(arr, i);
-            } else {
-                throw new TypeError("Invalid attempt to destructure non-iterable instance");
-            }
-        };
-    }();
-
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
             throw new TypeError("Cannot call a class as a function");
@@ -89,15 +51,15 @@
         function MarkerClusterer(_ref) {
             var _ref$markers = _ref.markers;
             var markers = _ref$markers === undefined ? [] : _ref$markers;
-            var _ref$$container = _ref.$container;
-            var $container = _ref$$container === undefined ? null : _ref$$container;
+            var _ref$container = _ref.container;
+            var container = _ref$container === undefined ? null : _ref$container;
             var id = _ref.id;
 
             _classCallCheck(this, MarkerClusterer);
 
             this.markers = markers;
             this.id = id;
-            this.$container = $container;
+            this.container = container;
             this.clusters = [];
             this.eventManager = new _Publisher.Publisher(this.id);
             this.bindEvents();
@@ -126,11 +88,8 @@
                 var _iteratorError = undefined;
 
                 try {
-                    for (var _iterator = this.markers.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var _step$value = _slicedToArray(_step.value, 2);
-
-                        var i = _step$value[0];
-                        var marker = _step$value[1];
+                    for (var _iterator = this.markers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var marker = _step.value;
 
                         var hits = [];
                         var _iteratorNormalCompletion3 = true;
@@ -138,11 +97,8 @@
                         var _iteratorError3 = undefined;
 
                         try {
-                            for (var _iterator3 = this.clusters.entries()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                                var _step3$value = _slicedToArray(_step3.value, 2);
-
-                                var j = _step3$value[0];
-                                var cluster = _step3$value[1];
+                            for (var _iterator3 = this.clusters[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                                var cluster = _step3.value;
 
                                 if (marker.boundingBox.intersects(cluster.boundingBox)) {
                                     hits.push(cluster);
@@ -191,13 +147,10 @@
                 var _iteratorError2 = undefined;
 
                 try {
-                    for (var _iterator2 = this.clusters.entries()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                        var _step2$value = _slicedToArray(_step2.value, 2);
+                    for (var _iterator2 = this.clusters[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        var _cluster = _step2.value;
 
-                        var i = _step2$value[0];
-                        var cluster = _step2$value[1];
-
-                        cluster.init();
+                        _cluster.init();
                     }
                 } catch (err) {
                     _didIteratorError2 = true;
@@ -224,11 +177,8 @@
                 var _iteratorError4 = undefined;
 
                 try {
-                    for (var _iterator4 = hits.entries()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                        var _step4$value = _slicedToArray(_step4.value, 2);
-
-                        var i = _step4$value[0];
-                        var hit = _step4$value[1];
+                    for (var _iterator4 = hits[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                        var hit = _step4.value;
 
                         if (!lastDistance) {
                             lastDistance = this.getDistance(marker, hit);
@@ -267,7 +217,7 @@
             key: 'createCluster',
             value: function createCluster(marker) {
                 var newCluster = new _Cluster.Cluster({
-                    $container: this.$container,
+                    container: this.container,
                     id: this.id
                 });
                 newCluster.addMarker(marker);
@@ -281,11 +231,8 @@
                 var _iteratorError5 = undefined;
 
                 try {
-                    for (var _iterator5 = this.clusters.entries()[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                        var _step5$value = _slicedToArray(_step5.value, 2);
-
-                        var i = _step5$value[0];
-                        var cluster = _step5$value[1];
+                    for (var _iterator5 = this.clusters[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                        var cluster = _step5.value;
 
                         cluster.removeFromDOM();
                     }
@@ -305,6 +252,7 @@
                 }
 
                 this.clusters = [];
+                _Cluster.Cluster.count = 0;
             }
         }]);
 

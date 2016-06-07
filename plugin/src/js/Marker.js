@@ -1,12 +1,9 @@
-import $ from 'jQuery';
 import {Events} from './Events.js';
 import {Helper} from './Helper.js';
 import {Point} from './Point.js';
 import {Rectangle} from './Rectangle.js';
-import {Publisher} from './Publisher.js';
 import {DataEnrichment} from './DataEnrichment.js';
 import {Drawable} from './Drawable.js';
-import {MapInformation} from './MapInformation.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -31,7 +28,7 @@ export class Marker extends Drawable {
         super({id: id});
         this.container = container;
 
-        this.markerID = Marker.count;
+        this.uniqueID = Marker.count;
         Marker.count++;
 
         this.size = data.size;
@@ -44,8 +41,7 @@ export class Marker extends Drawable {
         this.latlng = data.latlng;
 
         this.content = data.content;
-        this.$icon = this.addMarkerToDOM(container);
-        this.icon = this.$icon[0];
+        this.icon = this.addMarkerToDOM(container);
 
         return this.bindEvents().positionMarker();
     }
@@ -56,9 +52,10 @@ export class Marker extends Drawable {
      */
     bindEvents() {
         if (this.content.length) {
-            this.$icon.data("mjs-action", this.action.bind(this));
+            this.icon.setAttribute("data-id", `marker-${this.uniqueID}`);
+            this.eventManager.subscribe(`marker-${this.uniqueID}`, this.action.bind(this));
             this.eventManager.subscribe(Events.Marker.DEACTIVATE, () => {
-                this.$icon.removeClass("active");
+                this.icon.classList.remove("active");
             });
         }
         return this;
@@ -67,16 +64,18 @@ export class Marker extends Drawable {
     action() {
         this.eventManager.publish(Events.ToolTip.OPEN, this.content);
         this.eventManager.publish(Events.Marker.DEACTIVATE);
-        this.$icon.addClass("active");
+        this.icon.classList.add("active");
     }
 
     /**
      * adds a marker to the DOM
-     * @param {Object} $container - container to append to (jQuery selector)
-     * @returns {Object} jQuery-selector of append markup
+     * @param {Object} container - container to append to
+     * @returns {Object} DOM-selector of append markup
      */
     addMarkerToDOM(container) {
-        const icon = $("<div class='marker' />").css({
+        const icon = document.createElement("div");
+        icon.classList.add("marker");
+        Helper.css(icon, {
             "width": `${this.size.x}px`,
             "height": `${this.size.y}px`,
             "margin-left": `${this.offset.x}px`,
@@ -86,8 +85,8 @@ export class Marker extends Drawable {
             "background-size": `${(this.hover) ? this.size.x*2 : this.size.x}px ${this.size.y}px`
         });
         if (container) {
-            icon.hide();
-            container.appendChild(icon[0]);
+            Helper.hide(icon);
+            container.appendChild(icon);
         }
         return icon;
     }
@@ -99,12 +98,11 @@ export class Marker extends Drawable {
     positionMarker() {
         this.position = this.info.convertLatLngToPoint(this.latlng);
         const p = this.position.clone.divide(this.view.width, this.view.height).multiply(100);
-        if (this.$icon) {
-            this.$icon.css({
-                "left": `${p.x}%`,
-                "top": `${p.y}%`
-            }).show();
-        }
+        Helper.css(this.icon, {
+            "left": `${p.x}%`,
+            "top": `${p.y}%`
+        });
+        Helper.show(this.icon);
         return this;
     }
 

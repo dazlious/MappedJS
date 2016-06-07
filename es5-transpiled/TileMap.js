@@ -1,30 +1,22 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js', './Label.js', './MarkerClusterer.js', './MapInformation.js'], factory);
+        define(['exports', './Helper.js', './Events.js', './Point.js', './Publisher.js', './StateHandler.js', './Rectangle.js', './View.js', './Marker.js', './DataEnrichment.js', './ToolTip.js', './Label.js', './MarkerClusterer.js', './MapInformation.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'), require('./Label.js'), require('./MarkerClusterer.js'), require('./MapInformation.js'));
+        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./Publisher.js'), require('./StateHandler.js'), require('./Rectangle.js'), require('./View.js'), require('./Marker.js'), require('./DataEnrichment.js'), require('./ToolTip.js'), require('./Label.js'), require('./MarkerClusterer.js'), require('./MapInformation.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.Point, global.LatLng, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip, global.Label, global.MarkerClusterer, global.MapInformation);
+        factory(mod.exports, global.Helper, global.Events, global.Point, global.Publisher, global.StateHandler, global.Rectangle, global.View, global.Marker, global.DataEnrichment, global.ToolTip, global.Label, global.MarkerClusterer, global.MapInformation);
         global.TileMap = mod.exports;
     }
-})(this, function(exports, _jQuery, _Helper, _Events, _Point, _LatLng, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip, _Label, _MarkerClusterer, _MapInformation) {
+})(this, function(exports, _Helper, _Events, _Point, _Publisher, _StateHandler, _Rectangle, _View, _Marker, _DataEnrichment, _ToolTip, _Label, _MarkerClusterer, _MapInformation) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
     exports.TileMap = undefined;
-
-    var _jQuery2 = _interopRequireDefault(_jQuery);
-
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            default: obj
-        };
-    }
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -146,8 +138,7 @@
             _classCallCheck(this, TileMap);
 
             if (!container) throw Error("You must define a container to initialize a TileMap");
-            this.$container = container;
-            this.container = container[0];
+            this.container = container;
 
             this.id = id;
 
@@ -278,7 +269,6 @@
                     maxZoom: data.zoom ? data.zoom.max : 1,
                     currentZoom: zoom,
                     minZoom: data.zoom ? data.zoom.min : 1,
-                    $container: this.$container,
                     context: this.canvasContext,
                     id: this.id,
                     centerSmallMap: this.settings.centerSmallMap,
@@ -294,9 +284,9 @@
         }, {
             key: 'repositionMarkerContainer',
             value: function repositionMarkerContainer() {
-                if (this.$markerContainer) {
+                if (this.markerContainer) {
                     var newSize = this.view.currentView.getDistortedRect(this.view.distortionFactor);
-                    this.$markerContainer.css({
+                    _Helper.Helper.css(this.markerContainer, {
                         "width": newSize.width + 'px',
                         "height": newSize.height + 'px',
                         "transform": 'translate3d(' + (newSize.left + this.view.offsetToCenter) + 'px, ' + newSize.top + 'px, 0px)'
@@ -354,7 +344,7 @@
                         _this3.markerClusterer = new _MarkerClusterer.MarkerClusterer({
                             markers: markers,
                             id: _this3.id,
-                            $container: _this3.$markerContainer
+                            container: _this3.markerContainer
                         });
                     })();
                 }
@@ -371,9 +361,9 @@
             key: 'appendMarkerContainerToDom',
             value: function appendMarkerContainerToDom() {
                 if (this.markerData && this.markerData.length) {
-                    this.$markerContainer = (0, _jQuery2.default)("<div class='marker-container' />");
-                    this.markerContainer = this.$markerContainer[0];
-                    this.$container.append(this.$markerContainer);
+                    this.markerContainer = document.createElement("div");
+                    this.markerContainer.classList.add("marker-container");
+                    this.container.appendChild(this.markerContainer);
                 }
                 return this;
             }
@@ -387,7 +377,7 @@
             key: 'createTooltipContainer',
             value: function createTooltipContainer() {
                 this.tooltip = new _ToolTip.ToolTip({
-                    container: (0, _jQuery2.default)(this.$container.parent()),
+                    container: this.container.parentNode,
                     id: this.id,
                     templates: this.templates
                 });
@@ -483,9 +473,9 @@
         }, {
             key: 'initializeCanvas',
             value: function initializeCanvas() {
-                this.$canvas = (0, _jQuery2.default)("<canvas class='mjs-canvas' />");
-                this.canvas = this.$canvas[0];
-                this.$container.append(this.$canvas);
+                this.canvas = document.createElement("canvas");
+                this.canvas.classList.add("mjs-canvas");
+                this.container.appendChild(this.canvas);
                 this.canvasContext = this.canvas.getContext("2d");
                 return this;
             }

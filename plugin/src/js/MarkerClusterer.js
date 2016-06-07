@@ -12,10 +12,10 @@ export class MarkerClusterer {
      * @constructor
      * @return {MarkerClusterer} instance of MarkerClusterer for chaining
      */
-    constructor({markers = [], $container = null, id}) {
+    constructor({markers = [], container = null, id}) {
         this.markers = markers;
         this.id = id;
-        this.$container = $container;
+        this.container = container;
         this.clusters = [];
         this.eventManager = new Publisher(this.id);
         this.bindEvents();
@@ -34,9 +34,9 @@ export class MarkerClusterer {
 
     clusterize() {
         this.deleteAllClusters();
-        for (const [i, marker] of this.markers.entries()) {
+        for (const marker of this.markers) {
             const hits = [];
-            for (const [j, cluster] of this.clusters.entries()) {
+            for (const cluster of this.clusters) {
                 if (marker.boundingBox.intersects(cluster.boundingBox)) {
                     hits.push(cluster);
                 }
@@ -49,7 +49,7 @@ export class MarkerClusterer {
                 nearestCluster.addMarker(marker);
             }
         }
-        for (const [i, cluster] of this.clusters.entries()) {
+        for (const cluster of this.clusters) {
             cluster.init();
         }
     }
@@ -57,7 +57,7 @@ export class MarkerClusterer {
     findNearestHit(marker, hits) {
         let lastDistance,
             minimalHit;
-        for (const [i, hit] of hits.entries()) {
+        for (const hit of hits) {
             if (!lastDistance) {
                 lastDistance = this.getDistance(marker, hit);
                 minimalHit = hit;
@@ -78,7 +78,7 @@ export class MarkerClusterer {
 
     createCluster(marker) {
         const newCluster = new Cluster({
-            $container: this.$container,
+            container: this.container,
             id: this.id
         });
         newCluster.addMarker(marker);
@@ -86,10 +86,11 @@ export class MarkerClusterer {
     }
 
     deleteAllClusters() {
-        for (const [i, cluster] of this.clusters.entries()) {
+        for (const cluster of this.clusters) {
             cluster.removeFromDOM();
         }
         this.clusters = [];
+        Cluster.count = 0;
     }
 
 }

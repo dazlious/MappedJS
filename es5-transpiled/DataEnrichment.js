@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Helper.js', './Point.js', './LatLng.js', './Bounds.js'], factory);
+        define(['exports', './Helper.js', './Point.js', './LatLng.js', './Bounds.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Helper.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'));
+        factory(exports, require('./Helper.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Helper, global.Point, global.LatLng, global.Bounds);
+        factory(mod.exports, global.Helper, global.Point, global.LatLng, global.Bounds);
         global.DataEnrichment = mod.exports;
     }
-})(this, function(exports, _jQuery, _Helper, _Point, _LatLng, _Bounds) {
+})(this, function(exports, _Helper, _Point, _LatLng, _Bounds) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -18,13 +18,6 @@
     });
     exports.DataEnrichment = undefined;
 
-    var _jQuery2 = _interopRequireDefault(_jQuery);
-
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            default: obj
-        };
-    }
 
     /**
      * @author Michael Duve <mduve@designmail.net>

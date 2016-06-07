@@ -1,30 +1,22 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Events.js', './Publisher.js', './Point.js', './Drawable.js'], factory);
+        define(['exports', './Events.js', './Helper.js', './Point.js', './Drawable.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Events.js'), require('./Publisher.js'), require('./Point.js'), require('./Drawable.js'));
+        factory(exports, require('./Events.js'), require('./Helper.js'), require('./Point.js'), require('./Drawable.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Events, global.Publisher, global.Point, global.Drawable);
+        factory(mod.exports, global.Events, global.Helper, global.Point, global.Drawable);
         global.Cluster = mod.exports;
     }
-})(this, function(exports, _jQuery, _Events, _Publisher, _Point, _Drawable2) {
+})(this, function(exports, _Events, _Helper, _Point, _Drawable2) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
     exports.Cluster = undefined;
-
-    var _jQuery2 = _interopRequireDefault(_jQuery);
-
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            default: obj
-        };
-    }
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -85,8 +77,8 @@
         function Cluster(_ref) {
             var _ret;
 
-            var _ref$$container = _ref.$container;
-            var $container = _ref$$container === undefined ? null : _ref$$container;
+            var _ref$container = _ref.container;
+            var container = _ref$container === undefined ? null : _ref$container;
             var id = _ref.id;
 
             _classCallCheck(this, Cluster);
@@ -95,8 +87,10 @@
                 id: id
             }));
 
+            _this.uniqueID = Cluster.count;
+            Cluster.count++;
             _this.markers = [];
-            _this.$container = $container;
+            _this.container = container;
             return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
 
@@ -104,7 +98,7 @@
             key: 'init',
             value: function init() {
                 if (this.markers.length === 1) {
-                    this.markers[0].$icon.show();
+                    _Helper.Helper.show(this.markers[0].icon);
                 } else {
                     this.createClusterMarker();
                 }
@@ -121,7 +115,7 @@
                     for (var _iterator = this.markers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                         var marker = _step.value;
 
-                        marker.$icon.hide();
+                        _Helper.Helper.hide(marker.icon);
                         var currentPos = new _Point.Point(parseFloat(marker.icon.style.left), parseFloat(marker.icon.style.top));
                         p = !p ? currentPos : p.add(currentPos);
                     }
@@ -142,18 +136,27 @@
 
                 p.divide(this.markers.length);
 
-                this.$cluster = (0, _jQuery2.default)("<div class='cluster'>" + this.markers.length + "</div>").css({
+                this.cluster = document.createElement("div");
+                this.cluster.innerHTML = this.markers.length;
+                this.cluster.classList.add("cluster");
+                _Helper.Helper.css(this.cluster, {
                     "left": p.x + '%',
                     "top": p.y + '%',
-                    "transform": 'translateZ(0)'
+                    "transform": "translateZ(0)"
                 });
-                this.$container.append(this.$cluster);
+                this.cluster.setAttribute("data-id", 'cluster-' + this.uniqueID);
+                this.container.appendChild(this.cluster);
                 this.bindEvents();
             }
         }, {
             key: 'bindEvents',
             value: function bindEvents() {
-                this.$cluster.data("mjs-action", this.action.bind(this));
+                this.eventManager.subscribe('cluster-' + this.uniqueID, this.action.bind(this));
+            }
+        }, {
+            key: 'unbindEvents',
+            value: function unbindEvents() {
+                this.eventManager.unsubscribe('cluster-' + this.uniqueID, this.action.bind(this));
             }
         }, {
             key: 'action',
@@ -178,7 +181,7 @@
                         for (var _iterator2 = this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                             var marker = _step2.value;
 
-                            marker.$icon.show();
+                            _Helper.Helper.show(marker.icon);
                         }
                     } catch (err) {
                         _didIteratorError2 = true;
@@ -195,11 +198,14 @@
                         }
                     }
 
-                    this.$cluster.remove();
+                    this.cluster.parentNode.removeChild(this.cluster);
                 }
+                this.unbindEvents();
             }
         }]);
 
         return Cluster;
     }(_Drawable2.Drawable);
+
+    Cluster.count = 0;
 });
