@@ -1,6 +1,6 @@
 {
     "fileSize": {
-        "size": "22.65 KB",
+        "size": "22.63 KB",
         "gzipSize": "8.62 KB"
     },
     "selectorSpecifity": {
@@ -43,7 +43,7 @@
             "rgba(0, 0, 0, 0.5)": 1,
             "rgba(0, 0, 0, 0.8)": 1,
             "rgba(255, 255, 255, 0.5)": 1,
-            "#fff": 1,
+            "#fff": 2,
             "white": 1
         },
         "fontSizes": [

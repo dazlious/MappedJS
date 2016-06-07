@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Events.js', './Helper.js', './LatLng.js', './MapInformation.js'], factory);
+        define(['exports', './Events.js', './Helper.js', './Drawable.js', './LatLng.js', './Point.js', './Rectangle.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Events.js'), require('./Helper.js'), require('./LatLng.js'), require('./MapInformation.js'));
+        factory(exports, require('./Events.js'), require('./Helper.js'), require('./Drawable.js'), require('./LatLng.js'), require('./Point.js'), require('./Rectangle.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Events, global.Helper, global.LatLng, global.MapInformation);
+        factory(mod.exports, global.Events, global.Helper, global.Drawable, global.LatLng, global.Point, global.Rectangle);
         global.Label = mod.exports;
     }
-})(this, function(exports, _Events, _Helper, _LatLng, _MapInformation) {
+})(this, function(exports, _Events, _Helper, _Drawable2, _LatLng, _Point, _Rectangle) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -22,6 +22,14 @@
         if (!(instance instanceof Constructor)) {
             throw new TypeError("Cannot call a class as a function");
         }
+    }
+
+    function _possibleConstructorReturn(self, call) {
+        if (!self) {
+            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        }
+
+        return call && (typeof call === "object" || typeof call === "function") ? call : self;
     }
 
     var _createClass = function() {
@@ -42,7 +50,25 @@
         };
     }();
 
-    var Label = exports.Label = function() {
+    function _inherits(subClass, superClass) {
+        if (typeof superClass !== "function" && superClass !== null) {
+            throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+        }
+
+        subClass.prototype = Object.create(superClass && superClass.prototype, {
+            constructor: {
+                value: subClass,
+                enumerable: false,
+                writable: true,
+                configurable: true
+            }
+        });
+        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    }
+
+    var Label = exports.Label = function(_Drawable) {
+        _inherits(Label, _Drawable);
+
         _createClass(Label, [{
             key: 'position',
             get: function get() {
@@ -54,24 +80,14 @@
                 return this.latlng instanceof _LatLng.LatLng ? this.latlng : this.getNearestPositionToCenter();
             }
         }, {
-            key: 'view',
+            key: 'boundingBox',
             get: function get() {
-                return this.info.get().view;
-            }
-        }, {
-            key: 'distortionFactor',
-            get: function get() {
-                return this.info.get().distortionFactor;
-            }
-        }, {
-            key: 'offsetToCenter',
-            get: function get() {
-                return this.info.get().offsetToCenter;
-            }
-        }, {
-            key: 'center',
-            get: function get() {
-                return this.info.get().center;
+                var x = this.position.x + this.offset.x;
+                var y = this.position.y + this.offset.y;
+                var sizeX = this.icon.size.x || this.icon.size;
+                var sizeY = this.icon.size.y || this.icon.size;
+
+                return new _Rectangle.Rectangle(x, y, sizeX, sizeY).scaleCenter(2);
             }
 
             /**
@@ -82,7 +98,7 @@
         }]);
 
         function Label(_ref) {
-            var _this = this;
+            var _ret;
 
             var settings = _ref.settings;
             var context = _ref.context;
@@ -90,26 +106,31 @@
 
             _classCallCheck(this, Label);
 
-            this.id = id;
-            this.info = new _MapInformation.MapInformation(this.id);
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Label).call(this, {
+                id: id
+            }));
 
-            this.context = context;
+            _this.id = id;
 
-            this.latlng = settings.position;
-            this.text = settings.text;
-            this.icon = settings.icon;
+            _this.context = context;
 
-            if (this.icon && this.icon.type === "circle") this.drawIconType = this.drawCircleIcon(this.icon.size);
-            else if (this.icon && this.icon.type === "square") this.drawIconType = this.drawSquareIcon(this.icon.size);
-            else if (this.icon && this.icon.type === "image") {
-                this.drawIconType = function() {};
-                _Helper.Helper.loadImage(this.icon.url, function(img) {
+            _this.latlng = settings.position;
+            _this.text = settings.text;
+            _this.icon = settings.icon;
+            _this.content = settings.content;
+            _this.offset = new _Point.Point();
+
+            if (_this.icon && _this.icon.type === "circle") _this.drawIconType = _this.drawCircleIcon(_this.icon.size);
+            else if (_this.icon && _this.icon.type === "square") _this.drawIconType = _this.drawSquareIcon(_this.icon.size);
+            else if (_this.icon && _this.icon.type === "image") {
+                _this.drawIconType = function() {};
+                _Helper.Helper.loadImage(_this.icon.url, function(img) {
                     _this.drawIconType = _this.drawImageIcon(img, _this.icon.size, _this.icon.offset);
                 });
             }
-            this.drawElements = this.decideWhatToDraw(this.text, this.icon);
+            _this.drawElements = _this.decideWhatToDraw(_this.text, _this.icon);
 
-            return this;
+            return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
 
         _createClass(Label, [{
@@ -120,6 +141,11 @@
                     return center.distance(a) - center.distance(b);
                 });
                 return this.latlng[0];
+            }
+        }, {
+            key: 'openToolTip',
+            value: function openToolTip() {
+                this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
             }
         }, {
             key: 'draw',
@@ -192,12 +218,18 @@
             value: function drawImageIcon(image, size, offset) {
                 var _this5 = this;
 
+                this.offset = offset;
                 return function(pos) {
                     return _this5.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
                 };
             }
+        }, {
+            key: 'hit',
+            value: function hit(point) {
+                return this.boundingBox.containsPoint(point);
+            }
         }]);
 
         return Label;
-    }();
+    }(_Drawable2.Drawable);
 });

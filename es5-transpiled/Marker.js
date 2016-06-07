@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Events.js', './Helper.js', './Point.js', './Rectangle.js', './Publisher.js', './DataEnrichment.js', './MapInformation.js'], factory);
+        define(['exports', 'jQuery', './Events.js', './Helper.js', './Point.js', './Rectangle.js', './Publisher.js', './DataEnrichment.js', './Drawable.js', './MapInformation.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Events.js'), require('./Helper.js'), require('./Point.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./DataEnrichment.js'), require('./MapInformation.js'));
+        factory(exports, require('jQuery'), require('./Events.js'), require('./Helper.js'), require('./Point.js'), require('./Rectangle.js'), require('./Publisher.js'), require('./DataEnrichment.js'), require('./Drawable.js'), require('./MapInformation.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Events, global.Helper, global.Point, global.Rectangle, global.Publisher, global.DataEnrichment, global.MapInformation);
+        factory(mod.exports, global.jQuery, global.Events, global.Helper, global.Point, global.Rectangle, global.Publisher, global.DataEnrichment, global.Drawable, global.MapInformation);
         global.Marker = mod.exports;
     }
-})(this, function(exports, _jQuery, _Events, _Helper, _Point, _Rectangle, _Publisher, _DataEnrichment, _MapInformation) {
+})(this, function(exports, _jQuery, _Events, _Helper, _Point, _Rectangle, _Publisher, _DataEnrichment, _Drawable2, _MapInformation) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -32,6 +32,14 @@
         }
     }
 
+    function _possibleConstructorReturn(self, call) {
+        if (!self) {
+            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        }
+
+        return call && (typeof call === "object" || typeof call === "function") ? call : self;
+    }
+
     var _createClass = function() {
         function defineProperties(target, props) {
             for (var i = 0; i < props.length; i++) {
@@ -50,18 +58,31 @@
         };
     }();
 
-    var Marker = exports.Marker = function() {
+    function _inherits(subClass, superClass) {
+        if (typeof superClass !== "function" && superClass !== null) {
+            throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+        }
+
+        subClass.prototype = Object.create(superClass && superClass.prototype, {
+            constructor: {
+                value: subClass,
+                enumerable: false,
+                writable: true,
+                configurable: true
+            }
+        });
+        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    }
+
+    var Marker = exports.Marker = function(_Drawable) {
+        _inherits(Marker, _Drawable);
+
         _createClass(Marker, [{
             key: 'boundingBox',
             get: function get() {
                 var bBox = this.icon.getBoundingClientRect();
                 var parentBBox = this.container.getBoundingClientRect();
                 return new _Rectangle.Rectangle(bBox.left - parentBBox.left, bBox.top - parentBBox.top, bBox.width, bBox.height).scaleCenter(1.2);
-            }
-        }, {
-            key: 'view',
-            get: function get() {
-                return this.info.get().view;
             }
 
             /**
@@ -74,6 +95,8 @@
         }]);
 
         function Marker(_ref) {
+            var _ret;
+
             var _ref$data = _ref.data;
             var data = _ref$data === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : _ref$data;
             var container = _ref.container;
@@ -81,27 +104,29 @@
 
             _classCallCheck(this, Marker);
 
-            this.eventID = id;
-            this.info = new _MapInformation.MapInformation(this.eventID);
-            this.container = container;
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Marker).call(this, {
+                id: id
+            }));
 
-            this.id = Marker.count;
+            _this.container = container;
+
+            _this.markerID = Marker.count;
             Marker.count++;
 
-            this.size = data.size;
+            _this.size = data.size;
 
-            this.hover = data.hover;
-            if (this.hover) this.size.divide(2, 1);
+            _this.hover = data.hover;
+            if (_this.hover) _this.size.divide(2, 1);
 
-            this.img = data.icon;
-            this.offset = data.offset.add(new _Point.Point(-(this.size.x / 2), -this.size.y));
-            this.latlng = data.latlng;
+            _this.img = data.icon;
+            _this.offset = data.offset.add(new _Point.Point(-(_this.size.x / 2), -_this.size.y));
+            _this.latlng = data.latlng;
 
-            this.content = data.content;
-            this.$icon = this.addMarkerToDOM(container);
-            this.icon = this.$icon[0];
+            _this.content = data.content;
+            _this.$icon = _this.addMarkerToDOM(container);
+            _this.icon = _this.$icon[0];
 
-            return this.bindEvents().positionMarker();
+            return _ret = _this.bindEvents().positionMarker(), _possibleConstructorReturn(_this, _ret);
         }
 
         /**
@@ -113,17 +138,14 @@
         _createClass(Marker, [{
             key: 'bindEvents',
             value: function bindEvents() {
-                var _this = this;
-
-                this.eventManager = new _Publisher.Publisher(this.eventID);
+                var _this2 = this;
 
                 if (this.content.length) {
                     this.$icon.data("mjs-action", this.action.bind(this));
                     this.eventManager.subscribe(_Events.Events.Marker.DEACTIVATE, function() {
-                        _this.$icon.removeClass("active");
+                        _this2.$icon.removeClass("active");
                     });
                 }
-
                 return this;
             }
         }, {
@@ -180,7 +202,7 @@
         }]);
 
         return Marker;
-    }();
+    }(_Drawable2.Drawable);
 
     Marker.count = 0;
 });

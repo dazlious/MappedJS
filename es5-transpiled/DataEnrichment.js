@@ -116,7 +116,9 @@
 
             return enrichedData;
         },
-        tooltip: function tooltip(data) {
+        tooltip: function tooltip() {
+            var data = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
             return Object.assign({}, DataEnrichment.TOOLTIP, data);
         }
     };

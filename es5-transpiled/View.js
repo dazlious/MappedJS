@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './MarkerClusterer.js', './MapInformation.js'], factory);
+        define(['exports', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './MarkerClusterer.js', './Drawable.js', './MapInformation.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./MarkerClusterer.js'), require('./MapInformation.js'));
+        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./MarkerClusterer.js'), require('./Drawable.js'), require('./MapInformation.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Helper, global.Events, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.MarkerClusterer, global.MapInformation);
+        factory(mod.exports, global.Helper, global.Events, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.MarkerClusterer, global.Drawable, global.MapInformation);
         global.View = mod.exports;
     }
-})(this, function(exports, _Helper, _Events, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher, _MarkerClusterer, _MapInformation) {
+})(this, function(exports, _Helper, _Events, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher, _MarkerClusterer, _Drawable2, _MapInformation) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -22,6 +22,14 @@
         if (!(instance instanceof Constructor)) {
             throw new TypeError("Cannot call a class as a function");
         }
+    }
+
+    function _possibleConstructorReturn(self, call) {
+        if (!self) {
+            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        }
+
+        return call && (typeof call === "object" || typeof call === "function") ? call : self;
     }
 
     var _createClass = function() {
@@ -42,52 +50,29 @@
         };
     }();
 
-    var View = exports.View = function() {
+    function _inherits(subClass, superClass) {
+        if (typeof superClass !== "function" && superClass !== null) {
+            throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+        }
+
+        subClass.prototype = Object.create(superClass && superClass.prototype, {
+            constructor: {
+                value: subClass,
+                enumerable: false,
+                writable: true,
+                configurable: true
+            }
+        });
+        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    }
+
+    var View = exports.View = function(_Drawable) {
+        _inherits(View, _Drawable);
+
         _createClass(View, [{
-            key: 'distortionFactor',
-
-
-            /**
-             * Returns current distortionFactor
-             * @return {number} returns current distortionFactor of latitude
-             */
-            get: function get() {
-                return this.info.get().distortionFactor;
-            }
-        }, {
-            key: 'center',
-            get: function get() {
-                return this.info.get().center;
-            }
-        }, {
-            key: 'viewport',
-            get: function get() {
-                return this.info.get().viewport;
-            }
-        }, {
             key: 'currentView',
             get: function get() {
-                return this.info.get().view;
-            }
-        }, {
-            key: 'bounds',
-            get: function get() {
-                return this.info.get().bounds;
-            }
-
-            /**
-             * Returns the current distorted viewport
-             */
-
-        }, {
-            key: 'offsetToCenter',
-            get: function get() {
-                return this.info.get().offsetToCenter;
-            }
-        }, {
-            key: 'zoomFactor',
-            get: function get() {
-                return this.info.get().zoomFactor;
+                return this.view;
             }
 
             /**
@@ -98,11 +83,11 @@
         }, {
             key: 'visibleTiles',
             get: function get() {
-                var _this = this;
+                var _this2 = this;
 
                 return this.tiles.filter(function(t) {
-                    var newTile = t.clone.scale(_this.zoomFactor).getDistortedRect(_this.distortionFactor).translate(_this.currentView.x * _this.distortionFactor + _this.offsetToCenter, _this.currentView.y);
-                    return _this.viewport.intersects(newTile);
+                    var newTile = t.clone.scale(_this2.zoomFactor).getDistortedRect(_this2.distortionFactor).translate(_this2.currentView.x * _this2.distortionFactor + _this2.offsetToCenter, _this2.currentView.y);
+                    return _this2.viewport.intersects(newTile);
                 });
             }
 
@@ -127,6 +112,8 @@
         }]);
 
         function View(_ref) {
+            var _ret;
+
             var _ref$currentView = _ref.currentView;
             var currentView = _ref$currentView === undefined ? new _Rectangle.Rectangle() : _ref$currentView;
             var _ref$bounds = _ref.bounds;
@@ -154,42 +141,42 @@
 
             _classCallCheck(this, View);
 
-            this.id = id;
-            this.eventManager = new _Publisher.Publisher(this.id);
-            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(View).call(this, {
+                id: id
+            }));
+
+            _this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
                 center: center,
                 view: currentView,
                 bounds: bounds,
                 zoomFactor: currentZoom
             });
 
-            this.maxZoom = maxZoom;
-            this.minZoom = minZoom;
-            this.limitToBounds = limitToBounds || bounds;
-            this.isInitialized = false;
-            this.centerSmallMap = centerSmallMap;
+            _this.maxZoom = maxZoom;
+            _this.minZoom = minZoom;
+            _this.limitToBounds = limitToBounds || bounds;
+            _this.isInitialized = false;
+            _this.centerSmallMap = centerSmallMap;
 
-            this.info = new _MapInformation.MapInformation(this.id);
+            var newCenter = _this.viewport.center.substract(_this.info.convertLatLngToPoint(center));
+            _this.currentView.position(newCenter.x + _this.offsetToCenter, newCenter.y);
 
-            var newCenter = this.viewport.center.substract(this.info.convertLatLngToPoint(center));
-            this.currentView.position(newCenter.x + this.offsetToCenter, newCenter.y);
+            _this.originalMapView = currentView.clone;
 
-            this.originalMapView = currentView.clone;
-
-            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-                view: this.currentView
+            _this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                view: _this.currentView
             });
 
-            this.tiles = [];
-            this.data = data;
-            this.context = context;
+            _this.tiles = [];
+            _this.data = data;
+            _this.context = context;
 
-            this.initial = {
+            _this.initial = {
                 position: initialCenter,
                 zoom: currentZoom
             };
 
-            return this.zoom(0, this.viewport.center).loadThumb();
+            return _ret = _this.zoom(0, _this.viewport.center).loadThumb(), _possibleConstructorReturn(_this, _ret);
         }
 
         _createClass(View, [{
@@ -216,14 +203,18 @@
                 this.zoom(delta, this.viewport.center);
             }
         }, {
-            key: 'checkBoundaries',
-            value: function checkBoundaries() {
+            key: 'getDistortedView',
+            value: function getDistortedView() {
                 var nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
                     se = this.info.convertLatLngToPoint(this.limitToBounds.se),
                     limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
-
+                return limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+            }
+        }, {
+            key: 'checkBoundaries',
+            value: function checkBoundaries() {
                 var offset = new _Point.Point();
-                var equalizedMap = limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+                var equalizedMap = this.getDistortedView();
                 if (!equalizedMap.containsRect(this.viewport)) {
 
                     var distanceLeft = equalizedMap.left - this.viewport.left,
@@ -239,6 +230,19 @@
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
                     view: this.currentView
                 });
+
+                if (this.viewportIsSmallerThanView(equalizedMap)) {
+                    var diffInHeight = 1 - equalizedMap.height / this.viewport.height;
+                    var diffInWidth = 1 - equalizedMap.width / this.viewport.width;
+                    var diff = _Helper.Helper.clamp(Math.max(diffInHeight, diffInWidth), 0, Number.MAX_VALUE);
+                    this.zoom(diff, this.viewport.center, true);
+                    return false;
+                }
+            }
+        }, {
+            key: 'viewportIsSmallerThanView',
+            value: function viewportIsSmallerThanView(view) {
+                return this.viewport.width > view.width || this.viewport.height > view.height;
             }
         }, {
             key: 'checkX',
@@ -301,11 +305,11 @@
         }, {
             key: 'loadThumb',
             value: function loadThumb() {
-                var _this2 = this;
+                var _this3 = this;
 
                 _Helper.Helper.loadImage(this.data.thumb, function(img) {
-                    _this2.thumb = img;
-                    _this2.eventManager.publish(_Events.Events.View.THUMB_LOADED);
+                    _this3.thumb = img;
+                    _this3.eventManager.publish(_Events.Events.View.THUMB_LOADED);
                 });
                 return this;
             }
@@ -360,6 +364,18 @@
         }, {
             key: 'zoom',
             value: function zoom(factor, pos) {
+                var automatic = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+                var equalizedMap = this.getDistortedView();
+                var viewportIsSmaller = this.viewportIsSmallerThanView(equalizedMap);
+
+                if (factor < 0 && viewportIsSmaller || factor < 0 && this.wasSmallerLastTime) {
+                    this.wasSmallerLastTime = true;
+                    return false;
+                } else if (!automatic) {
+                    this.wasSmallerLastTime = false;
+                }
+
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
                     zoomFactor: _Helper.Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
                 });
@@ -375,14 +391,18 @@
                 });
 
                 this.setLatLngToPosition(latlngPosition, pos);
-
-                if (this.zoomFactor >= this.maxZoom && factor > 0) {
-                    this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
-                } else if (this.zoomFactor <= this.minZoom && factor < 0) {
-                    this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
-                }
+                this.changeZoomLevelIfNecessary(factor, viewportIsSmaller);
 
                 return this;
+            }
+        }, {
+            key: 'changeZoomLevelIfNecessary',
+            value: function changeZoomLevelIfNecessary(factor, viewportIsSmaller) {
+                if (this.zoomFactor >= this.maxZoom && factor > 0) {
+                    this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
+                } else if (this.zoomFactor <= this.minZoom && factor < 0 && !viewportIsSmaller) {
+                    this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
+                }
             }
 
             /**
@@ -469,16 +489,16 @@
         }, {
             key: 'initializeTiles',
             value: function initializeTiles() {
-                var _this3 = this;
+                var _this4 = this;
 
                 var currentLevel = this.data.tiles;
                 _Helper.Helper.forEach(currentLevel, function(currentTileData) {
-                    _this3.tiles.push(new _Tile.Tile(currentTileData, _this3.context, _this3.id));
+                    _this4.tiles.push(new _Tile.Tile(currentTileData, _this4.context, _this4.id));
                 });
                 return this;
             }
         }]);
 
         return View;
-    }();
+    }(_Drawable2.Drawable);
 });

@@ -196,7 +196,8 @@
                     flick: null,
                     zoom: null,
                     wheel: null,
-                    pinch: null
+                    pinch: null,
+                    move: null
                 };
             }
 
@@ -727,7 +728,7 @@
                     position: {
                         move: pos
                     },
-                    distance: this.data.last.position.distance(pos),
+                    distance: this.data.last.position ? this.data.last.position.distance(pos) : null,
                     multitouch: false
                 };
             }
@@ -741,8 +742,7 @@
         }, {
             key: 'moveHandler',
             value: function moveHandler(event) {
-                // if touchstart event was not fired
-                if (!this.data.down || this.data.pinched) return false;
+                if (this.data.pinched) return false;
 
                 var e = this.preHandle(event);
                 this.data.time.last = event.timeStamp;
@@ -756,6 +756,9 @@
                 this.clearTimeouts(this.data.timeout.hold);
                 this.data = _jQuery2.default.extend(true, this.data, this.calculateMove(e));
 
+                this.eventCallback(this.settings.callbacks.move, this.dataClone);
+
+                if (!this.data.down) return false;
                 if (this.data.multitouch) {
                     this.handlePinchAndZoom();
                 } else {

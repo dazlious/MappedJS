@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Events.js', './Publisher.js', './Point.js'], factory);
+        define(['exports', 'jQuery', './Events.js', './Publisher.js', './Point.js', './Drawable.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Events.js'), require('./Publisher.js'), require('./Point.js'));
+        factory(exports, require('jQuery'), require('./Events.js'), require('./Publisher.js'), require('./Point.js'), require('./Drawable.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Events, global.Publisher, global.Point);
+        factory(mod.exports, global.jQuery, global.Events, global.Publisher, global.Point, global.Drawable);
         global.Cluster = mod.exports;
     }
-})(this, function(exports, _jQuery, _Events, _Publisher, _Point) {
+})(this, function(exports, _jQuery, _Events, _Publisher, _Point, _Drawable2) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -50,24 +50,54 @@
         };
     }();
 
-    var Cluster = exports.Cluster = function() {
+    function _possibleConstructorReturn(self, call) {
+        if (!self) {
+            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        }
+
+        return call && (typeof call === "object" || typeof call === "function") ? call : self;
+    }
+
+    function _inherits(subClass, superClass) {
+        if (typeof superClass !== "function" && superClass !== null) {
+            throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+        }
+
+        subClass.prototype = Object.create(superClass && superClass.prototype, {
+            constructor: {
+                value: subClass,
+                enumerable: false,
+                writable: true,
+                configurable: true
+            }
+        });
+        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    }
+
+    var Cluster = exports.Cluster = function(_Drawable) {
+        _inherits(Cluster, _Drawable);
+
         /**
          * @constructor
          * @return {Cluster} instance of Cluster for chaining
          */
 
         function Cluster(_ref) {
+            var _ret;
+
             var _ref$$container = _ref.$container;
             var $container = _ref$$container === undefined ? null : _ref$$container;
             var id = _ref.id;
 
             _classCallCheck(this, Cluster);
 
-            this.markers = [];
-            this.id = id;
-            this.$container = $container;
-            this.eventManager = new _Publisher.Publisher(this.id);
-            return this;
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Cluster).call(this, {
+                id: id
+            }));
+
+            _this.markers = [];
+            _this.$container = $container;
+            return _ret = _this, _possibleConstructorReturn(_this, _ret);
         }
 
         _createClass(Cluster, [{
@@ -171,5 +201,5 @@
         }]);
 
         return Cluster;
-    }();
+    }(_Drawable2.Drawable);
 });
