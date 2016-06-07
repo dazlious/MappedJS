@@ -262,8 +262,9 @@ export class View extends Drawable {
      */
     zoom(factor, pos, automatic = false) {
         const equalizedMap = this.getDistortedView();
+        const viewportIsSmaller = this.viewportIsSmallerThanView(equalizedMap);
 
-        if (factor < 0 && this.viewportIsSmallerThanView(equalizedMap) || factor < 0 && this.wasSmallerLastTime) {
+        if ((factor < 0 && viewportIsSmaller) || (factor < 0 && this.wasSmallerLastTime)) {
             this.wasSmallerLastTime = true;
             return false;
         } else if (!automatic) {
@@ -285,14 +286,17 @@ export class View extends Drawable {
         });
 
         this.setLatLngToPosition(latlngPosition, pos);
-
-        if (this.zoomFactor >= this.maxZoom && factor > 0) {
-            this.eventManager.publish(Events.TileMap.NEXT_LEVEL);
-        } else if (this.zoomFactor <= this.minZoom && factor < 0 && !this.viewportIsSmallerThanView(equalizedMap)) {
-            this.eventManager.publish(Events.TileMap.PREVIOUS_LEVEL);
-        }
+        this.changeZoomLevelIfNecessary(factor, viewportIsSmaller);
 
         return this;
+    }
+
+    changeZoomLevelIfNecessary(factor, viewportIsSmaller) {
+        if (this.zoomFactor >= this.maxZoom && factor > 0) {
+            this.eventManager.publish(Events.TileMap.NEXT_LEVEL);
+        } else if (this.zoomFactor <= this.minZoom && factor < 0 && !viewportIsSmaller) {
+            this.eventManager.publish(Events.TileMap.PREVIOUS_LEVEL);
+        }
     }
 
     /**

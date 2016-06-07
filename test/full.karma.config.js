@@ -27,6 +27,7 @@ module.exports = function(config) {
             '../es5-transpiled/LatLng.js',
             '../es5-transpiled/Helper.js',
             '../es5-transpiled/DataEnrichment.js',
+            '../es5-transpiled/Drawable.js',
             '../es5-transpiled/**.js',
             'spec/**/*.test.js'
         ],

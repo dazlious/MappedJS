@@ -367,8 +367,9 @@
                 var automatic = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
                 var equalizedMap = this.getDistortedView();
+                var viewportIsSmaller = this.viewportIsSmallerThanView(equalizedMap);
 
-                if (factor < 0 && this.viewportIsSmallerThanView(equalizedMap) || factor < 0 && this.wasSmallerLastTime) {
+                if (factor < 0 && viewportIsSmaller || factor < 0 && this.wasSmallerLastTime) {
                     this.wasSmallerLastTime = true;
                     return false;
                 } else if (!automatic) {
@@ -390,14 +391,18 @@
                 });
 
                 this.setLatLngToPosition(latlngPosition, pos);
-
-                if (this.zoomFactor >= this.maxZoom && factor > 0) {
-                    this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
-                } else if (this.zoomFactor <= this.minZoom && factor < 0 && !this.viewportIsSmallerThanView(equalizedMap)) {
-                    this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
-                }
+                this.changeZoomLevelIfNecessary(factor, viewportIsSmaller);
 
                 return this;
+            }
+        }, {
+            key: 'changeZoomLevelIfNecessary',
+            value: function changeZoomLevelIfNecessary(factor, viewportIsSmaller) {
+                if (this.zoomFactor >= this.maxZoom && factor > 0) {
+                    this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
+                } else if (this.zoomFactor <= this.minZoom && factor < 0 && !viewportIsSmaller) {
+                    this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
+                }
             }
 
             /**

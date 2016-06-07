@@ -8252,8 +8252,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var automatic = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
 	            var equalizedMap = this.getDistortedView();
+	            var viewportIsSmaller = this.viewportIsSmallerThanView(equalizedMap);
 
-	            if (factor < 0 && this.viewportIsSmallerThanView(equalizedMap) || factor < 0 && this.wasSmallerLastTime) {
+	            if (factor < 0 && viewportIsSmaller || factor < 0 && this.wasSmallerLastTime) {
 	                this.wasSmallerLastTime = true;
 	                return false;
 	            } else if (!automatic) {
@@ -8275,14 +8276,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 
 	            this.setLatLngToPosition(latlngPosition, pos);
-
-	            if (this.zoomFactor >= this.maxZoom && factor > 0) {
-	                this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
-	            } else if (this.zoomFactor <= this.minZoom && factor < 0 && !this.viewportIsSmallerThanView(equalizedMap)) {
-	                this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
-	            }
+	            this.changeZoomLevelIfNecessary(factor, viewportIsSmaller);
 
 	            return this;
+	        }
+	    }, {
+	        key: 'changeZoomLevelIfNecessary',
+	        value: function changeZoomLevelIfNecessary(factor, viewportIsSmaller) {
+	            if (this.zoomFactor >= this.maxZoom && factor > 0) {
+	                this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
+	            } else if (this.zoomFactor <= this.minZoom && factor < 0 && !viewportIsSmaller) {
+	                this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
+	            }
 	        }
 
 	        /**
@@ -9109,9 +9114,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Point = __webpack_require__(196);
 
+	var _Drawable2 = __webpack_require__(206);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
@@ -9119,24 +9130,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @copyright Michael Duve 2016
 	 */
 
-	var Cluster = exports.Cluster = function () {
+	var Cluster = exports.Cluster = function (_Drawable) {
+	    _inherits(Cluster, _Drawable);
+
 	    /**
 	     * @constructor
 	     * @return {Cluster} instance of Cluster for chaining
 	     */
 
 	    function Cluster(_ref) {
+	        var _ret;
+
 	        var _ref$$container = _ref.$container;
 	        var $container = _ref$$container === undefined ? null : _ref$$container;
 	        var id = _ref.id;
 
 	        _classCallCheck(this, Cluster);
 
-	        this.markers = [];
-	        this.id = id;
-	        this.$container = $container;
-	        this.eventManager = new _Publisher.Publisher(this.id);
-	        return this;
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Cluster).call(this, { id: id }));
+
+	        _this.markers = [];
+	        _this.$container = $container;
+	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    _createClass(Cluster, [{
@@ -9240,7 +9255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 
 	    return Cluster;
-	}();
+	}(_Drawable2.Drawable);
 
 /***/ },
 /* 206 */

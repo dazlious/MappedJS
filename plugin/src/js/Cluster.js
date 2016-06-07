@@ -2,22 +2,23 @@ import $ from 'jQuery';
 import {Events} from './Events.js';
 import {Publisher} from './Publisher.js';
 import {Point} from './Point.js';
+import {Drawable} from './Drawable.js';
+
 
 /**
  * @author Michael Duve <mduve@designmail.net>
  * @file represents a cluster of markers
  * @copyright Michael Duve 2016
  */
-export class Cluster {
+export class Cluster extends Drawable {
     /**
      * @constructor
      * @return {Cluster} instance of Cluster for chaining
      */
     constructor({$container = null, id}) {
+        super({id: id});
         this.markers = [];
-        this.id = id;
         this.$container = $container;
-        this.eventManager = new Publisher(this.id);
         return this;
     }
 
