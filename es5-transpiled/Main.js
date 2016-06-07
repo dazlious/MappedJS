@@ -1,30 +1,22 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', 'jQuery', './Helper.js', './Events.js', './Publisher.js', './TileMap.js', './DataEnrichment.js', './Interact.js', './Point.js', 'babel-polyfill'], factory);
+        define(['exports', './Helper.js', './Events.js', './Publisher.js', './TileMap.js', './DataEnrichment.js', './Interact.js', './Point.js', 'babel-polyfill'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('jQuery'), require('./Helper.js'), require('./Events.js'), require('./Publisher.js'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Interact.js'), require('./Point.js'), require('babel-polyfill'));
+        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Publisher.js'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Interact.js'), require('./Point.js'), require('babel-polyfill'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.jQuery, global.Helper, global.Events, global.Publisher, global.TileMap, global.DataEnrichment, global.Interact, global.Point, global.babelPolyfill);
+        factory(mod.exports, global.Helper, global.Events, global.Publisher, global.TileMap, global.DataEnrichment, global.Interact, global.Point, global.babelPolyfill);
         global.Main = mod.exports;
     }
-})(this, function(exports, _jQuery, _Helper, _Events, _Publisher, _TileMap, _DataEnrichment, _Interact, _Point) {
+})(this, function(exports, _Helper, _Events, _Publisher, _TileMap, _DataEnrichment, _Interact, _Point) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
     exports.MappedJS = undefined;
-
-    var _jQuery2 = _interopRequireDefault(_jQuery);
-
-    function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : {
-            default: obj
-        };
-    }
 
     var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) {
         return typeof obj;
@@ -60,7 +52,7 @@
 
         /**
          * @constructor
-         * @param  {string|Object} container=".mjs" - Container, either string, jQuery-object or dom-object
+         * @param  {string|Object} container=".mjs" - Container, either string or dom-object
          * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
          * @param  {string|Object} markerData={} - data of markers, can be json or path to file
          * @param  {Object} mapSettings={} - settings for map, must be json
@@ -128,18 +120,24 @@
             key: 'addControls',
             value: function addControls() {
                 if (this.mapSettings.controls) {
-                    this.$controls = (0, _jQuery2.default)('<div class="control-container ' + this.mapSettings.controls.theme + ' ' + this.mapSettings.controls.position + '" />');
-                    this.$zoomIn = (0, _jQuery2.default)("<div class='control zoom-in' />");
-                    this.$zoomOut = (0, _jQuery2.default)("<div class='control zoom-out' />");
-                    this.$home = (0, _jQuery2.default)("<div class='control home' />");
-                    this.$controls.append(this.$home).append(this.$zoomIn).append(this.$zoomOut);
-                    this.$content.append(this.$controls);
+                    this.controls = document.createElement("div");
+                    this.controls.classList.add("control-container", this.mapSettings.controls.theme, this.mapSettings.controls.position);
+                    this.zoomIn = document.createElement("div");
+                    this.zoomIn.classList.add("control", "zoom-in");
+                    this.zoomOut = document.createElement("div");
+                    this.zoomOut.classList.add("control", "zoom-out");
+                    this.home = document.createElement("div");
+                    this.home.classList.add("control", "home");
+                    this.controls.appendChild(this.home);
+                    this.controls.appendChild(this.zoomIn);
+                    this.controls.appendChild(this.zoomOut);
+                    this.content.appendChild(this.controls);
                 }
             }
 
             /**
              * initializes the settings and handles errors
-             * @param  {string|Object} container - Container, either string, jQuery-object or dom-object
+             * @param  {string|Object} container - Container, either string or dom-object
              * @param  {object} events - List of events
              * @param  {object} settings - List of settings
              * @return {MappedJS} instance of MappedJS for chaining
@@ -151,12 +149,11 @@
                 var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
                 var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-                this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
-                if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
-
-                this.$container.addClass("mappedJS");
-                this.$content = (0, _jQuery2.default)("<div class='map-content' />");
-                this.$container.append(this.$content);
+                this.container = typeof container === "string" ? document.querySelectorAll(container)[0] : container;
+                this.container.classList.add("mappedJS");
+                this.content = document.createElement("div");
+                this.content.classList.add("map-content");
+                this.container.appendChild(this.content);
 
                 this.mapSettings = _DataEnrichment.DataEnrichment.mapSettings(settings);
                 this.events = events;
@@ -193,7 +190,7 @@
             key: 'initializeMap',
             value: function initializeMap() {
                 this.tileMap = new _TileMap.TileMap({
-                    container: this.$content,
+                    container: this.content,
                     tilesData: this.mapData,
                     id: this.id,
                     settings: this.mapSettings
@@ -224,21 +221,21 @@
                 var _this2 = this;
 
                 this.interact = new _Interact.Interact({
-                    container: this.$content,
+                    container: this.content,
                     autoFireHold: 300,
                     overwriteViewportSettings: true,
                     callbacks: {
                         tap: function tap(data) {
-                            var action = (0, _jQuery2.default)(data.target).data("mjs-action");
                             _this2.tileMap.velocity = new _Point.Point();
-                            if (action) action();
+                            var id = data.target.getAttribute("data-id");
+                            if (id) _this2.eventManager.publish(id);
                         },
                         doubletap: function doubletap(data) {
                             _this2.tileMap.velocity = new _Point.Point();
                             _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
                         },
                         pan: function pan(data) {
-                            if ((0, _jQuery2.default)(data.target).hasClass("control")) return false;
+                            if (data.target.classList.contains("control")) return false;
                             var change = data.last.position.clone.substract(data.position.move);
                             _this2.tileMap.velocity = new _Point.Point();
                             _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
@@ -271,15 +268,20 @@
 
                 this.initializeInteractForMap();
 
-                (0, _jQuery2.default)(window).on(_Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
+                window.addEventListener("resize", this.resizeHandler.bind(this), false);
+                window.addEventListener("orientationchange", this.resizeHandler.bind(this), false);
 
-                var $document = (0, _jQuery2.default)(document);
-                $document.on(_Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
-                $document.on(_Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
+                document.addEventListener(_Events.Events.Handling.KEYDOWN, this.keyPress.bind(this), false);
+                document.addEventListener(_Events.Events.Handling.KEYUP, this.keyRelease.bind(this), false);
 
-                this.$zoomIn.data("mjs-action", this.zoomInToCenter.bind(this));
-                this.$zoomOut.data("mjs-action", this.zoomOutToCenter.bind(this));
-                this.$home.data("mjs-action", this.resetToInitialState.bind(this));
+                this.zoomIn.setAttribute("data-id", "zoom-button-plus");
+                this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
+
+                this.zoomOut.setAttribute("data-id", "zoom-button-minus");
+                this.eventManager.subscribe("zoom-button-minus", this.zoomOutToCenter.bind(this));
+
+                this.home.setAttribute("data-id", "home-button");
+                this.eventManager.subscribe("home-button", this.resetToInitialState.bind(this));
 
                 return this;
             }
@@ -407,7 +409,6 @@
         }, {
             key: 'loadingFinished',
             value: function loadingFinished() {
-                this.$container.trigger(this.events.loaded);
                 return this;
             }
         }]);

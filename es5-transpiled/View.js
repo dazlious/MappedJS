@@ -1,16 +1,16 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Publisher.js', './MarkerClusterer.js', './Drawable.js', './MapInformation.js'], factory);
+        define(['exports', './Helper.js', './Events.js', './Point.js', './LatLng.js', './Bounds.js', './Rectangle.js', './Tile.js', './Drawable.js'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Publisher.js'), require('./MarkerClusterer.js'), require('./Drawable.js'), require('./MapInformation.js'));
+        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Point.js'), require('./LatLng.js'), require('./Bounds.js'), require('./Rectangle.js'), require('./Tile.js'), require('./Drawable.js'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Helper, global.Events, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Publisher, global.MarkerClusterer, global.Drawable, global.MapInformation);
+        factory(mod.exports, global.Helper, global.Events, global.Point, global.LatLng, global.Bounds, global.Rectangle, global.Tile, global.Drawable);
         global.View = mod.exports;
     }
-})(this, function(exports, _Helper, _Events, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Publisher, _MarkerClusterer, _Drawable2, _MapInformation) {
+})(this, function(exports, _Helper, _Events, _Point, _LatLng, _Bounds, _Rectangle, _Tile, _Drawable2) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -99,12 +99,10 @@
              * @param  {LatLng} center = new LatLng() - current center of map
              * @param  {LatLng} initialCenter = new LatLng() - initial center of view
              * @param  {Object} data = {} - tile data of current map
-             * @param  {Object} $container = null - parent container for markers
              * @param  {Object} context = null - canvas context for drawing
              * @param  {number} maxZoom = 1.5 - maximal zoom of view
              * @param  {number} currentZoom = 1 - initial zoom of view
              * @param  {number} minZoom = 0.8 - minimal zoom of view
-             * @param  {object} $container = null - jQuery-selector of container class
              * @param  {number} limitToBounds - where to limit panning
              * @return {View} instance of View for chaining
              */
@@ -124,8 +122,6 @@
             var initialCenter = _ref$initialCenter === undefined ? new _LatLng.LatLng() : _ref$initialCenter;
             var _ref$data = _ref.data;
             var data = _ref$data === undefined ? {} : _ref$data;
-            var _ref$$container = _ref.$container;
-            var $container = _ref$$container === undefined ? null : _ref$$container;
             var _ref$context = _ref.context;
             var context = _ref$context === undefined ? null : _ref$context;
             var _ref$maxZoom = _ref.maxZoom;
