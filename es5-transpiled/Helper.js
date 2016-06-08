@@ -38,6 +38,16 @@
             });
             return this;
         },
+        find: function find(elementString) {
+            var element = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+            return (element || document).querySelector(elementString);
+        },
+        findAll: function findAll(elementString) {
+            var element = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+            return (element || document).querySelectorAll(elementString);
+        },
         show: function show(elem) {
             elem.style.display = "";
         },
@@ -95,9 +105,8 @@
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200)
-                        if (callback) callback(xhr.responseText);
-                        else throw new Error("The JSON submitted seems not valid", xhr);
+                    if (xhr.status === 200 && callback) callback(xhr.responseText);
+                    else throw new Error("The JSON submitted seems not valid", xhr);
                 }
             };
             xhr.open("GET", url, true);

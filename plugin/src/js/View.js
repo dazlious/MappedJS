@@ -263,6 +263,8 @@ export class View extends Drawable {
             return false;
         } else if (!automatic) {
             this.wasSmallerLastTime = false;
+        } else if (automatic) {
+            this.wasSmallerLastTime = viewportIsSmaller;
         }
 
         this.eventManager.publish(Events.MapInformation.UPDATE, {

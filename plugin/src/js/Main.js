@@ -80,7 +80,7 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     initializeSettings(container, events = {}, settings = {}) {
-        this.container = (typeof container === "string") ? document.querySelectorAll(container)[0] : container;
+        this.container = (typeof container === "string") ? Helper.find(container) : container;
         this.container.classList.add("mappedJS");
         this.content = document.createElement("div");
         this.content.classList.add("map-content");

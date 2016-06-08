@@ -1,5 +1,4 @@
 /*global PointerEvent,MSPointerEvent*/
-import $ from 'jQuery';
 import {Point} from './Point.js';
 import {Helper} from './Helper.js';
 
@@ -26,17 +25,9 @@ export class Interact {
     }
 
     /**
-     * clones the data object
-     * @return {Object} data object
-     */
-    get dataClone() {
-        return $(this.data)[0];
-    }
-
-    /**
      * @constructor
      * @param {Object} settings = {} - all the settings
-     * @param {string|Object} settings.container = ".interact-container" - Container, either string, jQuery-object or dom-object
+     * @param {string|Object} settings.container = ".interact-container" - Container, either string or dom-object
      * @param {Object} settings.timeTreshold = {} - settings for the timing tresholds
      * @param {number} settings.timeTreshold.tap = 200 - timing treshold for tap
      * @param {number} settings.timeTreshold.hold = 500 - timing treshold for hold
@@ -80,7 +71,7 @@ export class Interact {
         this.settings = Object.assign(this.getDefaultSettings(), settings);
         this.data = this.getDefaultData();
         if (this.settings.overwriteViewportSettings) this.handleViewport(this.settings.overwriteViewportSettings);
-        this.init(this.settings.container).bindEvents();
+        this.init(this.settings.container);
     }
 
     /**
@@ -194,31 +185,30 @@ export class Interact {
      * @return {Interact} Returns this instance
      */
     handleViewport(viewport) {
-        if (typeof viewport !== "string") {
-            viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
-        }
-        const metaViewInHead = $("meta[name=viewport]").length,
-              $viewportMeta = (metaViewInHead !== 0) ? $("meta[name=viewport]") : $("head").append($("<meta name='viewport' />"));
-        $viewportMeta.attr("content", viewport);
+        if (typeof viewport !== "string") viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
+        const metaViewInHead = Helper.find("meta[name=viewport]");
+        const viewportMeta = (metaViewInHead) ? metaViewInHead : Helper.find("head").appendChild(document.createElement("head").setAttribute("name", "viewport"));
+        viewportMeta.setAttribute("content", viewport);
         return this;
     }
 
     /**
      * initializes class settings and bindings
-     * @param  {Object|string} container - Container, either string, jQuery-object or dom-object
+     * @param  {Object|string} container - Container, either string or dom-object
      * @return {Interact} Returns this instance
      */
     init(container) {
-        this.$container = (typeof container === "string") ? $(container) : ((typeof container === "object" && container instanceof jQuery) ? container : $(container));
-        if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
+        this.container = (typeof container === "string") ? Helper.find(container) : container;
         const css = {
             "-ms-touch-action": "none",
             "touch-action": "none",
             "-ms-content-zooming": "none"
         };
-        this.$container.css(css);
-        this.$container.find("> *").css(css);
-        this.container = this.$container[0];
+        Helper.css(this.container, css);
+        for (const child of this.container.childNodes) {
+            Helper.css(child, css);
+        }
+        this.bindEvents();
         return this;
     }
 
@@ -241,7 +231,7 @@ export class Interact {
      * @return {Interact} Returns this instance
      */
     bindIEEvents() {
-        this.$container.on(this.settings.events.scroll, this.scrollHandler.bind(this));
+        this.container.addEventListener(this.settings.events.scroll, this.scrollHandler.bind(this), false);
         this.bindTouchEvents();
         this.container.addEventListener("contextmenu", (e) => e.preventDefault(), false);
         return this;
@@ -252,11 +242,10 @@ export class Interact {
      * @return {Interact} Returns this instance
      */
     bindTouchEvents() {
-        this.$container
-            .on(this.settings.events.start.touch, this.startHandler.bind(this))
-            .on(this.settings.events.move.touch, this.moveHandler.bind(this))
-            .on(this.settings.events.end.touch, this.endHandler.bind(this))
-            .on(this.settings.events.leave.touch, this.endHandler.bind(this));
+        this.container.addEventListener(this.settings.events.start.touch, this.startHandler.bind(this), false);
+        this.container.addEventListener(this.settings.events.move.touch, this.moveHandler.bind(this), false);
+        this.container.addEventListener(this.settings.events.end.touch, this.endHandler.bind(this), false);
+        this.container.addEventListener(this.settings.events.leave.touch, this.endHandler.bind(this), false);
         return this;
     }
 
@@ -265,11 +254,11 @@ export class Interact {
      * @return {Interact} Returns this instance
      */
     bindMouseEvents() {
-        this.$container.on(this.settings.events.scroll, this.scrollHandler.bind(this))
-            .on(this.settings.events.start.mouse, this.startHandler.bind(this))
-            .on(this.settings.events.move.mouse, this.moveHandler.bind(this))
-            .on(this.settings.events.end.mouse, this.endHandler.bind(this))
-            .on(this.settings.events.leave.mouse, this.endHandler.bind(this));
+        this.container.addEventListener(this.settings.events.scroll, this.scrollHandler.bind(this), false);
+        this.container.addEventListener(this.settings.events.start.mouse, this.startHandler.bind(this), false);
+        this.container.addEventListener(this.settings.events.move.mouse, this.moveHandler.bind(this), false);
+        this.container.addEventListener(this.settings.events.end.mouse, this.endHandler.bind(this), false);
+        this.container.addEventListener(this.settings.events.leave.mouse, this.endHandler.bind(this), false);
         return this;
     }
 
@@ -293,7 +282,7 @@ export class Interact {
     scrollHandler(event) {
         event = event || window.event;
 
-        const e = this.preHandle(event) || event.originalEvent;
+        const e = this.preHandle(event) || event;
 
         this.data.delta = this.normalizeWheelDelta(event);
         this.data.positionStart = this.getRelativePosition(e);
@@ -301,10 +290,10 @@ export class Interact {
         this.data.zoom = (this.data.directions.indexOf("up") > -1) ? 1 : (this.data.directions.indexOf("down") > -1) ? -1 : 0;
 
         if (this.settings.callbacks.wheel) {
-            this.eventCallback(this.settings.callbacks.wheel, this.dataClone);
+            this.eventCallback(this.settings.callbacks.wheel, this.data);
         }
         if (this.settings.callbacks.zoom && (this.data.directions.indexOf("up") > -1 || this.data.directions.indexOf("down") > -1)) {
-            this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
+            this.eventCallback(this.settings.callbacks.zoom, this.data);
         }
         return false;
     }
@@ -316,7 +305,7 @@ export class Interact {
      * @return {number} normalized wheel delta
      */
     normalizeWheelDelta(e) {
-        const o = e.originalEvent,
+        const o = e.originalEvent || e,
             w = o.wheelDelta || (o.deltaY * -1) * 10,
             n = 225,
             n1 = n-1;
@@ -329,7 +318,7 @@ export class Interact {
         // Quadratic scale if |d| > 1
         d = d < 1 ? d < -1 ? (-Math.pow(d, 2) - n1) / n : d : (Math.pow(d, 2) + n1) / n;
         // Delta *should* not be greater than 2...
-        return Math.min(Math.max(d / 2, -1), 1);
+        return Helper.clamp(d / 2, -1, 1);
     }
 
     /**
@@ -355,7 +344,7 @@ export class Interact {
         };
         // mouse is used
         if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-            return $.extend(true, data, this.handleSingletouchStart(e));
+            return Object.assign({}, data, this.handleSingletouchStart(e));
         } // if is pointerEvent
         else if (this.isPointerEvent(e)) {
             return this.handlePointerEventStart(data, e);
@@ -374,7 +363,7 @@ export class Interact {
     handlePointerEventStart(data, e) {
         this.data.pointerArray[e.pointerId] = e;
         const getData = (Object.keys(this.data.pointerArray).length <= 1) ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
-        return $.extend(true, data, getData);
+        return Object.assign({}, data, getData);
     }
 
     /**
@@ -437,13 +426,13 @@ export class Interact {
             case null:
                 this.data.actionLast = "tap";
                 if (this.settings.autoFireHold) {
-                    this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, this.dataClone, true);
+                    this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, this.data, true);
                 }
                 break;
             case "tap":
                 this.data.actionLast = "doubletap";
                 if (this.settings.autoFireHold) {
-                    this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, this.dataClone, true);
+                    this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, this.data, true);
                 }
                 break;
             default:
@@ -464,7 +453,7 @@ export class Interact {
         const e = this.preHandle(event);
         this.data.timeStart = event.timeStamp;
         this.clearTimeouts(this.data.timeoutDefault);
-        this.data = $.extend(true, this.data, this.calculateStart(e));
+        this.data = Object.assign({}, this.data, this.calculateStart(e));
         this.takeActionStart(this.data.actionLast);
         return false;
     }
@@ -494,7 +483,7 @@ export class Interact {
         };
 
         if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-            return $.extend(true, data, this.handleSingletouchMove(e));
+            return Object.assign({}, data, this.handleSingletouchMove(e));
         } // if is pointerEvent
         else if (this.isPointerEvent(e)) {
             return this.handlePointerEventMove(data, e);
@@ -513,10 +502,10 @@ export class Interact {
     handlePointerEventMove(data, e) {
         this.data.pointerArray[e.pointerId] = e;
         if (Object.keys(this.data.pointerArray).length <= 1) {
-            return $.extend(true, data, this.handleSingletouchMove(e));
+            return Object.assign({}, data, this.handleSingletouchMove(e));
         } else {
             const pointerPos = this.getPointerArray();
-            return $.extend(true, data, this.handleMultitouchMove(pointerPos));
+            return Object.assign({}, data, this.handleMultitouchMove(pointerPos));
         }
     }
 
@@ -532,7 +521,7 @@ export class Interact {
 
     handleTouchEvent(data, e, fnSingle, fnMulti) {
         const getData = (e.length === 1) ? fnSingle(e[0]) : fnMulti(e);
-        return $.extend(true, data, getData);
+        return Object.assign({}, data, getData);
     }
 
     /**
@@ -583,12 +572,12 @@ export class Interact {
 
         this.clearTimeouts(this.data.timeoutDefault);
         this.clearTimeouts(this.data.timeoutHold);
-        this.data = $.extend(true, this.data, this.calculateMove(e));
+        this.data = Object.assign({}, this.data, this.calculateMove(e));
 
         if (this.data.multitouch) {
             this.handlePinchAndZoom();
         } else {
-            this.eventCallback(this.settings.callbacks.pan, this.dataClone);
+            this.eventCallback(this.settings.callbacks.pan, this.data);
         }
         return false;
     }
@@ -602,8 +591,8 @@ export class Interact {
 
         this.data.difference = this.data.distance - this.data.distanceLast;
         if (Math.abs(this.data.difference) >= 0.005) {
-            if (this.settings.callbacks.pinch) this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
-            if (this.settings.callbacks.zoom) this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
+            if (this.settings.callbacks.pinch) this.eventCallback(this.settings.callbacks.pinch, this.data);
+            if (this.settings.callbacks.zoom) this.eventCallback(this.settings.callbacks.zoom, this.data);
             this.data.distanceLast = this.data.distance;
         }
         return this;
@@ -629,17 +618,17 @@ export class Interact {
         };
 
         if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-            return $.extend(true, data, this.handleSingletouchEnd(e));
+            return Object.assign({}, data, this.handleSingletouchEnd(e));
         } // if is pointerEvent
         else if (this.isPointerEvent(e)) {
             const end = this.handleSingletouchEnd(e);
             delete this.data.pointerArray[e.pointerId];
-            return $.extend(true, data, end);
+            return Object.assign({}, data, end);
         } // touch is used
         else {
             // singletouch ended
             if (e.length <= 1) {
-                return $.extend(true, data,  this.handleSingletouchEnd(e[0]));
+                return Object.assign({}, data,  this.handleSingletouchEnd(e[0]));
             }
         }
     }
@@ -664,16 +653,16 @@ export class Interact {
         switch (action) {
             case "tap":
                 if (this.time < this.settings.timeTreshold.hold) {
-                    this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, this.dataClone);
+                    this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, this.data);
                 } else {
-                    this.eventCallback(this.settings.callbacks.hold, this.dataClone);
+                    this.eventCallback(this.settings.callbacks.hold, this.data);
                 }
                 break;
             case "doubletap":
                 if (this.time < this.settings.timeTreshold.hold) {
-                    this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, this.dataClone);
+                    this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, this.data);
                 } else {
-                    this.eventCallback(this.settings.callbacks.tapHold, this.dataClone);
+                    this.eventCallback(this.settings.callbacks.tapHold, this.data);
                 }
                 break;
             default:
@@ -694,7 +683,7 @@ export class Interact {
 
         this.clearTimeouts(this.data.timeoutHold);
 
-        this.data = $.extend(true, this.data, this.calculateEnd(e));
+        this.data = Object.assign({}, this.data, this.calculateEnd(e));
 
         // called only when not moved
         if (!this.data.moved && this.data.down && !this.data.multitouch) {
@@ -729,11 +718,11 @@ export class Interact {
             const originalEnd = this.getAbsolutePosition(this.data.positionEnd);
             if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
                 this.data.directions = this.getSwipeDirections(this.data.direction);
-                this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
+                this.eventCallback(this.settings.callbacks.swipe, this.data);
             }
         }
         if (this.settings.callbacks.flick && (this.timeToLastMove <= this.settings.timeTreshold.flick)) {
-            this.eventCallback(this.settings.callbacks.flick, this.dataClone);
+            this.eventCallback(this.settings.callbacks.flick, this.data);
         }
 
         return this;
@@ -904,7 +893,7 @@ export class Interact {
      * @return {Object} new fixed and optimized event
      */
     getEvent(e) {
-        if (e.originalEvent.touches && e.originalEvent.touches.length === 0) return e.originalEvent.changedTouches || e.originalEvent;
-        return e.originalEvent.touches || e.originalEvent.changedTouches || e.originalEvent;
+        if (e.touches && e.touches.length === 0) return e.changedTouches || e;
+        return e.touches || e.changedTouches || e;
     }
 }

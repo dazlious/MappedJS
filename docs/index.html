@@ -90,7 +90,7 @@
 <p><a name="module_DataEnrichment"></a></p>
 <h2 id="dataenrichment">DataEnrichment</h2>
 <p>enriches delivered data with default values</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x6d;&#100;&#x75;&#118;&#x65;&#x40;&#100;&#x65;&#x73;&#105;&#x67;&#110;&#109;&#97;&#x69;&#108;&#46;&#x6e;&#x65;&#116;">&#x6d;&#100;&#x75;&#118;&#x65;&#x40;&#100;&#x65;&#x73;&#105;&#x67;&#110;&#109;&#97;&#x69;&#108;&#46;&#x6e;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#58;&#109;&#x64;&#117;&#x76;&#101;&#64;&#100;&#101;&#115;&#105;&#x67;&#x6e;&#109;&#x61;&#105;&#x6c;&#x2e;&#110;&#x65;&#x74;">&#109;&#x64;&#117;&#x76;&#101;&#64;&#100;&#101;&#115;&#105;&#x67;&#x6e;&#109;&#x61;&#105;&#x6c;&#x2e;&#110;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_DataEnrichment">DataEnrichment</a><ul>
 <li><a href="#module_DataEnrichment.marker">.marker(data)</a> ⇒ <code>object</code></li>
@@ -115,7 +115,7 @@
 <p><a name="module_Helper"></a></p>
 <h2 id="helper">Helper</h2>
 <p>Helper for general purposes</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#109;&#100;&#x75;&#118;&#101;&#x40;&#x64;&#101;&#x73;&#105;&#103;&#x6e;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x6e;&#x65;&#x74;">&#109;&#100;&#x75;&#118;&#101;&#x40;&#x64;&#101;&#x73;&#105;&#103;&#x6e;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#109;&#100;&#x75;&#118;&#101;&#x40;&#100;&#101;&#x73;&#x69;&#x67;&#x6e;&#109;&#97;&#105;&#108;&#46;&#110;&#101;&#x74;">&#109;&#100;&#x75;&#118;&#101;&#x40;&#100;&#101;&#x73;&#x69;&#x67;&#x6e;&#109;&#97;&#105;&#108;&#46;&#110;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_Helper">Helper</a><ul>
 <li><a href="#module_Helper.requestJSON">.requestJSON(filename, callback)</a> ⇒ <code>Helper</code></li>
@@ -235,7 +235,6 @@
 <li><a href="#new_Interact_new">new Interact(settings)</a></li>
 <li><a href="#Interact+timeToLastMove">.timeToLastMove</a> ⇒ <code>number</code></li>
 <li><a href="#Interact+time">.time</a> ⇒ <code>number</code></li>
-<li><a href="#Interact+dataClone">.dataClone</a> ⇒ <code>Object</code></li>
 <li><a href="#Interact+getDefaultSettings">.getDefaultSettings()</a> ⇒ <code>Object</code></li>
 <li><a href="#Interact+getDefaultCallbacks">.getDefaultCallbacks()</a> ⇒ <code>Object</code></li>
 <li><a href="#Interact+getDefaultEventNames">.getDefaultEventNames()</a> ⇒ <code>Object</code></li>
@@ -293,7 +292,7 @@
 <p><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - new instance<br><strong>Params</strong></p>
 <ul>
 <li>settings <code>Object</code> - = {} - all the settings<ul>
-<li>.container <code>string</code> | <code>Object</code> - = &quot;.interact-container&quot; - Container, either string, jQuery-object or dom-object</li>
+<li>.container <code>string</code> | <code>Object</code> - = &quot;.interact-container&quot; - Container, either string or dom-object</li>
 <li>.timeTreshold <code>Object</code> - = {} - settings for the timing tresholds<ul>
 <li>.tap <code>number</code> - = 200 - timing treshold for tap</li>
 <li>.hold <code>number</code> - = 500 - timing treshold for hold</li>
@@ -356,10 +355,7 @@
 <p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>number</code> - difference<br><a name="Interact+time"></a></p>
 <h3 id="interact-time-code-number-code-">interact.time ⇒ <code>number</code></h3>
 <p>get time difference to start</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>number</code> - difference<br><a name="Interact+dataClone"></a></p>
-<h3 id="interact-dataclone-code-object-code-">interact.dataClone ⇒ <code>Object</code></h3>
-<p>clones the data object</p>
-<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - data object<br><a name="Interact+getDefaultSettings"></a></p>
+<p><strong>Kind</strong>: instance property of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>number</code> - difference<br><a name="Interact+getDefaultSettings"></a></p>
 <h3 id="interact-getdefaultsettings-code-object-code-">interact.getDefaultSettings() ⇒ <code>Object</code></h3>
 <p>get the default settings</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - settings<br><a name="Interact+getDefaultCallbacks"></a></p>
@@ -383,7 +379,7 @@
 <p>initializes class settings and bindings</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - Returns this instance<br><strong>Params</strong></p>
 <ul>
-<li>container <code>Object</code> | <code>string</code> - Container, either string, jQuery-object or dom-object</li>
+<li>container <code>Object</code> | <code>string</code> - Container, either string or dom-object</li>
 </ul>
 <p><a name="Interact+bindEvents"></a></p>
 <h3 id="interact-bindevents-code-interact-interact-code-">interact.bindEvents() ⇒ <code><a href="#Interact">Interact</a></code></h3>
@@ -1725,7 +1721,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="Events"></a></p>
 <h2 id="events-code-object-code-">Events : <code>object</code></h2>
 <p>Helper for naming events</p>
-<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#x6d;&#100;&#x75;&#118;&#x65;&#x40;&#100;&#x65;&#x73;&#105;&#x67;&#110;&#109;&#97;&#105;&#x6c;&#46;&#110;&#x65;&#x74;">&#x6d;&#100;&#x75;&#118;&#x65;&#x40;&#100;&#x65;&#x73;&#105;&#x67;&#110;&#109;&#97;&#105;&#x6c;&#46;&#110;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#109;&#100;&#117;&#x76;&#x65;&#64;&#x64;&#101;&#115;&#105;&#x67;&#110;&#109;&#x61;&#105;&#x6c;&#x2e;&#110;&#x65;&#116;">&#109;&#100;&#117;&#x76;&#x65;&#64;&#x64;&#101;&#115;&#105;&#x67;&#110;&#109;&#x61;&#105;&#x6c;&#x2e;&#110;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#Events">Events</a> : <code>object</code><ul>
 <li><a href="#Events.ToolTip">.ToolTip</a> : <code>Object</code></li>

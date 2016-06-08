@@ -149,7 +149,7 @@
                 var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
                 var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-                this.container = typeof container === "string" ? document.querySelectorAll(container)[0] : container;
+                this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
                 this.container.classList.add("mappedJS");
                 this.content = document.createElement("div");
                 this.content.classList.add("map-content");

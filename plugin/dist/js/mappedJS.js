@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("Handlebars"), require("jQuery"));
+		module.exports = factory(require("Handlebars"));
 	else if(typeof define === 'function' && define.amd)
-		define(["Handlebars", "jQuery"], factory);
+		define(["Handlebars"], factory);
 	else if(typeof exports === 'object')
-		exports["de"] = factory(require("Handlebars"), require("jQuery"));
+		exports["de"] = factory(require("Handlebars"));
 	else
-		root["de"] = factory(root["Handlebars"], root["jQuery"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_207__, __WEBPACK_EXTERNAL_MODULE_212__) {
+		root["de"] = factory(root["Handlebars"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_207__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -188,7 +188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 	            var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-	            this.container = typeof container === "string" ? document.querySelectorAll(container)[0] : container;
+	            this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
 	            this.container.classList.add("mappedJS");
 	            this.content = document.createElement("div");
 	            this.content.classList.add("map-content");
@@ -5752,6 +5752,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        return this;
 	    },
+	    find: function find(elementString) {
+	        var element = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+	        return (element || document).querySelector(elementString);
+	    },
+	    findAll: function findAll(elementString) {
+	        var element = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+	        return (element || document).querySelectorAll(elementString);
+	    },
 	    show: function show(elem) {
 	        elem.style.display = "";
 	    },
@@ -5809,7 +5819,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var xhr = new XMLHttpRequest();
 	        xhr.onreadystatechange = function () {
 	            if (xhr.readyState === XMLHttpRequest.DONE) {
-	                if (xhr.status === 200) if (callback) callback(xhr.responseText);else throw new Error("The JSON submitted seems not valid", xhr);
+	                if (xhr.status === 200 && callback) callback(xhr.responseText);else throw new Error("The JSON submitted seems not valid", xhr);
 	            }
 	        };
 	        xhr.open("GET", url, true);
@@ -6461,7 +6471,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function repositionMarkerContainer() {
 	            if (this.markerContainer) {
 	                var newSize = this.view.currentView.getDistortedRect(this.view.distortionFactor);
-	                var oldSize = new _Point.Point(this.markerContainer.clientWidth, this.markerContainer.clientHeight);
 	                _Helper.Helper.css(this.markerContainer, {
 	                    "width": newSize.width + 'px',
 	                    "height": newSize.height + 'px',
@@ -6583,7 +6592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _this4.redraw();
 	                if (_this4.stateHandler.current.value < 2) {
 	                    _this4.initializeMarkers();
-	                    _this4.createTooltipContainer();
+	                    if (_this4.markerData && _this4.markerData.length) _this4.createTooltipContainer();
 	                }
 	            });
 
@@ -8066,6 +8075,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return false;
 	            } else if (!automatic) {
 	                this.wasSmallerLastTime = false;
+	            } else if (automatic) {
+	                this.wasSmallerLastTime = viewportIsSmaller;
 	            }
 
 	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
@@ -10139,20 +10150,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.Interact = undefined;
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*global PointerEvent,MSPointerEvent*/
 
-
-	var _jQuery = __webpack_require__(212);
-
-	var _jQuery2 = _interopRequireDefault(_jQuery);
 
 	var _Point = __webpack_require__(195);
 
 	var _Helper = __webpack_require__(191);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -10186,20 +10189,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        /**
-	         * clones the data object
-	         * @return {Object} data object
-	         */
-
-	    }, {
-	        key: 'dataClone',
-	        get: function get() {
-	            return (0, _jQuery2.default)(this.data)[0];
-	        }
-
-	        /**
 	         * @constructor
 	         * @param {Object} settings = {} - all the settings
-	         * @param {string|Object} settings.container = ".interact-container" - Container, either string, jQuery-object or dom-object
+	         * @param {string|Object} settings.container = ".interact-container" - Container, either string or dom-object
 	         * @param {Object} settings.timeTreshold = {} - settings for the timing tresholds
 	         * @param {number} settings.timeTreshold.tap = 200 - timing treshold for tap
 	         * @param {number} settings.timeTreshold.hold = 500 - timing treshold for hold
@@ -10250,7 +10242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.settings = Object.assign(this.getDefaultSettings(), settings);
 	        this.data = this.getDefaultData();
 	        if (this.settings.overwriteViewportSettings) this.handleViewport(this.settings.overwriteViewportSettings);
-	        this.init(this.settings.container).bindEvents();
+	        this.init(this.settings.container);
 	    }
 
 	    /**
@@ -10380,34 +10372,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handleViewport',
 	        value: function handleViewport(viewport) {
-	            if (typeof viewport !== "string") {
-	                viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
-	            }
-	            var metaViewInHead = (0, _jQuery2.default)("meta[name=viewport]").length,
-	                $viewportMeta = metaViewInHead !== 0 ? (0, _jQuery2.default)("meta[name=viewport]") : (0, _jQuery2.default)("head").append((0, _jQuery2.default)("<meta name='viewport' />"));
-	            $viewportMeta.attr("content", viewport);
+	            if (typeof viewport !== "string") viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
+	            var metaViewInHead = _Helper.Helper.find("meta[name=viewport]");
+	            var viewportMeta = metaViewInHead ? metaViewInHead : _Helper.Helper.find("head").appendChild(document.createElement("head").setAttribute("name", "viewport"));
+	            viewportMeta.setAttribute("content", viewport);
 	            return this;
 	        }
 
 	        /**
 	         * initializes class settings and bindings
-	         * @param  {Object|string} container - Container, either string, jQuery-object or dom-object
+	         * @param  {Object|string} container - Container, either string or dom-object
 	         * @return {Interact} Returns this instance
 	         */
 
 	    }, {
 	        key: 'init',
 	        value: function init(container) {
-	            this.$container = typeof container === "string" ? (0, _jQuery2.default)(container) : (typeof container === 'undefined' ? 'undefined' : _typeof(container)) === "object" && container instanceof jQuery ? container : (0, _jQuery2.default)(container);
-	            if (!(this.$container instanceof jQuery)) throw new Error("Container " + container + " not found");
+	            this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
 	            var css = {
 	                "-ms-touch-action": "none",
 	                "touch-action": "none",
 	                "-ms-content-zooming": "none"
 	            };
-	            this.$container.css(css);
-	            this.$container.find("> *").css(css);
-	            this.container = this.$container[0];
+	            _Helper.Helper.css(this.container, css);
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+
+	            try {
+	                for (var _iterator = this.container.childNodes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var child = _step.value;
+
+	                    _Helper.Helper.css(child, css);
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+
+	            this.bindEvents();
 	            return this;
 	        }
 
@@ -10436,7 +10449,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindIEEvents',
 	        value: function bindIEEvents() {
-	            this.$container.on(this.settings.events.scroll, this.scrollHandler.bind(this));
+	            this.container.addEventListener(this.settings.events.scroll, this.scrollHandler.bind(this), false);
 	            this.bindTouchEvents();
 	            this.container.addEventListener("contextmenu", function (e) {
 	                return e.preventDefault();
@@ -10452,7 +10465,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindTouchEvents',
 	        value: function bindTouchEvents() {
-	            this.$container.on(this.settings.events.start.touch, this.startHandler.bind(this)).on(this.settings.events.move.touch, this.moveHandler.bind(this)).on(this.settings.events.end.touch, this.endHandler.bind(this)).on(this.settings.events.leave.touch, this.endHandler.bind(this));
+	            this.container.addEventListener(this.settings.events.start.touch, this.startHandler.bind(this), false);
+	            this.container.addEventListener(this.settings.events.move.touch, this.moveHandler.bind(this), false);
+	            this.container.addEventListener(this.settings.events.end.touch, this.endHandler.bind(this), false);
+	            this.container.addEventListener(this.settings.events.leave.touch, this.endHandler.bind(this), false);
 	            return this;
 	        }
 
@@ -10464,7 +10480,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindMouseEvents',
 	        value: function bindMouseEvents() {
-	            this.$container.on(this.settings.events.scroll, this.scrollHandler.bind(this)).on(this.settings.events.start.mouse, this.startHandler.bind(this)).on(this.settings.events.move.mouse, this.moveHandler.bind(this)).on(this.settings.events.end.mouse, this.endHandler.bind(this)).on(this.settings.events.leave.mouse, this.endHandler.bind(this));
+	            this.container.addEventListener(this.settings.events.scroll, this.scrollHandler.bind(this), false);
+	            this.container.addEventListener(this.settings.events.start.mouse, this.startHandler.bind(this), false);
+	            this.container.addEventListener(this.settings.events.move.mouse, this.moveHandler.bind(this), false);
+	            this.container.addEventListener(this.settings.events.end.mouse, this.endHandler.bind(this), false);
+	            this.container.addEventListener(this.settings.events.leave.mouse, this.endHandler.bind(this), false);
 	            return this;
 	        }
 
@@ -10494,7 +10514,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function scrollHandler(event) {
 	            event = event || window.event;
 
-	            var e = this.preHandle(event) || event.originalEvent;
+	            var e = this.preHandle(event) || event;
 
 	            this.data.delta = this.normalizeWheelDelta(event);
 	            this.data.positionStart = this.getRelativePosition(e);
@@ -10502,10 +10522,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.data.zoom = this.data.directions.indexOf("up") > -1 ? 1 : this.data.directions.indexOf("down") > -1 ? -1 : 0;
 
 	            if (this.settings.callbacks.wheel) {
-	                this.eventCallback(this.settings.callbacks.wheel, this.dataClone);
+	                this.eventCallback(this.settings.callbacks.wheel, this.data);
 	            }
 	            if (this.settings.callbacks.zoom && (this.data.directions.indexOf("up") > -1 || this.data.directions.indexOf("down") > -1)) {
-	                this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
+	                this.eventCallback(this.settings.callbacks.zoom, this.data);
 	            }
 	            return false;
 	        }
@@ -10520,7 +10540,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'normalizeWheelDelta',
 	        value: function normalizeWheelDelta(e) {
-	            var o = e.originalEvent,
+	            var o = e.originalEvent || e,
 	                w = o.wheelDelta || o.deltaY * -1 * 10,
 	                n = 225,
 	                n1 = n - 1;
@@ -10533,7 +10553,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Quadratic scale if |d| > 1
 	            d = d < 1 ? d < -1 ? (-Math.pow(d, 2) - n1) / n : d : (Math.pow(d, 2) + n1) / n;
 	            // Delta *should* not be greater than 2...
-	            return Math.min(Math.max(d / 2, -1), 1);
+	            return _Helper.Helper.clamp(d / 2, -1, 1);
 	        }
 
 	        /**
@@ -10565,7 +10585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 	            // mouse is used
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-	                return _jQuery2.default.extend(true, data, this.handleSingletouchStart(e));
+	                return Object.assign({}, data, this.handleSingletouchStart(e));
 	            } // if is pointerEvent
 	            else if (this.isPointerEvent(e)) {
 	                    return this.handlePointerEventStart(data, e);
@@ -10588,7 +10608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function handlePointerEventStart(data, e) {
 	            this.data.pointerArray[e.pointerId] = e;
 	            var getData = Object.keys(this.data.pointerArray).length <= 1 ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
-	            return _jQuery2.default.extend(true, data, getData);
+	            return Object.assign({}, data, getData);
 	        }
 
 	        /**
@@ -10666,13 +10686,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                case null:
 	                    this.data.actionLast = "tap";
 	                    if (this.settings.autoFireHold) {
-	                        this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, this.dataClone, true);
+	                        this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, this.data, true);
 	                    }
 	                    break;
 	                case "tap":
 	                    this.data.actionLast = "doubletap";
 	                    if (this.settings.autoFireHold) {
-	                        this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, this.dataClone, true);
+	                        this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, this.data, true);
 	                    }
 	                    break;
 	                default:
@@ -10696,7 +10716,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var e = this.preHandle(event);
 	            this.data.timeStart = event.timeStamp;
 	            this.clearTimeouts(this.data.timeoutDefault);
-	            this.data = _jQuery2.default.extend(true, this.data, this.calculateStart(e));
+	            this.data = Object.assign({}, this.data, this.calculateStart(e));
 	            this.takeActionStart(this.data.actionLast);
 	            return false;
 	        }
@@ -10732,7 +10752,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-	                return _jQuery2.default.extend(true, data, this.handleSingletouchMove(e));
+	                return Object.assign({}, data, this.handleSingletouchMove(e));
 	            } // if is pointerEvent
 	            else if (this.isPointerEvent(e)) {
 	                    return this.handlePointerEventMove(data, e);
@@ -10754,10 +10774,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function handlePointerEventMove(data, e) {
 	            this.data.pointerArray[e.pointerId] = e;
 	            if (Object.keys(this.data.pointerArray).length <= 1) {
-	                return _jQuery2.default.extend(true, data, this.handleSingletouchMove(e));
+	                return Object.assign({}, data, this.handleSingletouchMove(e));
 	            } else {
 	                var pointerPos = this.getPointerArray();
-	                return _jQuery2.default.extend(true, data, this.handleMultitouchMove(pointerPos));
+	                return Object.assign({}, data, this.handleMultitouchMove(pointerPos));
 	            }
 	        }
 
@@ -10777,7 +10797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'handleTouchEvent',
 	        value: function handleTouchEvent(data, e, fnSingle, fnMulti) {
 	            var getData = e.length === 1 ? fnSingle(e[0]) : fnMulti(e);
-	            return _jQuery2.default.extend(true, data, getData);
+	            return Object.assign({}, data, getData);
 	        }
 
 	        /**
@@ -10837,12 +10857,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.clearTimeouts(this.data.timeoutDefault);
 	            this.clearTimeouts(this.data.timeoutHold);
-	            this.data = _jQuery2.default.extend(true, this.data, this.calculateMove(e));
+	            this.data = Object.assign({}, this.data, this.calculateMove(e));
 
 	            if (this.data.multitouch) {
 	                this.handlePinchAndZoom();
 	            } else {
-	                this.eventCallback(this.settings.callbacks.pan, this.dataClone);
+	                this.eventCallback(this.settings.callbacks.pan, this.data);
 	            }
 	            return false;
 	        }
@@ -10859,8 +10879,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.data.difference = this.data.distance - this.data.distanceLast;
 	            if (Math.abs(this.data.difference) >= 0.005) {
-	                if (this.settings.callbacks.pinch) this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
-	                if (this.settings.callbacks.zoom) this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
+	                if (this.settings.callbacks.pinch) this.eventCallback(this.settings.callbacks.pinch, this.data);
+	                if (this.settings.callbacks.zoom) this.eventCallback(this.settings.callbacks.zoom, this.data);
 	                this.data.distanceLast = this.data.distance;
 	            }
 	            return this;
@@ -10892,17 +10912,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-	                return _jQuery2.default.extend(true, data, this.handleSingletouchEnd(e));
+	                return Object.assign({}, data, this.handleSingletouchEnd(e));
 	            } // if is pointerEvent
 	            else if (this.isPointerEvent(e)) {
 	                    var end = this.handleSingletouchEnd(e);
 	                    delete this.data.pointerArray[e.pointerId];
-	                    return _jQuery2.default.extend(true, data, end);
+	                    return Object.assign({}, data, end);
 	                } // touch is used
 	                else {
 	                        // singletouch ended
 	                        if (e.length <= 1) {
-	                            return _jQuery2.default.extend(true, data, this.handleSingletouchEnd(e[0]));
+	                            return Object.assign({}, data, this.handleSingletouchEnd(e[0]));
 	                        }
 	                    }
 	        }
@@ -10933,16 +10953,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            switch (action) {
 	                case "tap":
 	                    if (this.time < this.settings.timeTreshold.hold) {
-	                        this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, this.dataClone);
+	                        this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, this.data);
 	                    } else {
-	                        this.eventCallback(this.settings.callbacks.hold, this.dataClone);
+	                        this.eventCallback(this.settings.callbacks.hold, this.data);
 	                    }
 	                    break;
 	                case "doubletap":
 	                    if (this.time < this.settings.timeTreshold.hold) {
-	                        this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, this.dataClone);
+	                        this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, this.data);
 	                    } else {
-	                        this.eventCallback(this.settings.callbacks.tapHold, this.dataClone);
+	                        this.eventCallback(this.settings.callbacks.tapHold, this.data);
 	                    }
 	                    break;
 	                default:
@@ -10966,7 +10986,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.clearTimeouts(this.data.timeoutHold);
 
-	            this.data = _jQuery2.default.extend(true, this.data, this.calculateEnd(e));
+	            this.data = Object.assign({}, this.data, this.calculateEnd(e));
 
 	            // called only when not moved
 	            if (!this.data.moved && this.data.down && !this.data.multitouch) {
@@ -11004,11 +11024,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var originalEnd = this.getAbsolutePosition(this.data.positionEnd);
 	                if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
 	                    this.data.directions = this.getSwipeDirections(this.data.direction);
-	                    this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
+	                    this.eventCallback(this.settings.callbacks.swipe, this.data);
 	                }
 	            }
 	            if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
-	                this.eventCallback(this.settings.callbacks.flick, this.dataClone);
+	                this.eventCallback(this.settings.callbacks.flick, this.data);
 	            }
 
 	            return this;
@@ -11220,19 +11240,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'getEvent',
 	        value: function getEvent(e) {
-	            if (e.originalEvent.touches && e.originalEvent.touches.length === 0) return e.originalEvent.changedTouches || e.originalEvent;
-	            return e.originalEvent.touches || e.originalEvent.changedTouches || e.originalEvent;
+	            if (e.touches && e.touches.length === 0) return e.changedTouches || e;
+	            return e.touches || e.changedTouches || e;
 	        }
 	    }]);
 
 	    return Interact;
 	}();
-
-/***/ },
-/* 212 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_212__;
 
 /***/ }
 /******/ ])

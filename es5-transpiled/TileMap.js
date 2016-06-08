@@ -286,7 +286,6 @@
             value: function repositionMarkerContainer() {
                 if (this.markerContainer) {
                     var newSize = this.view.currentView.getDistortedRect(this.view.distortionFactor);
-                    var oldSize = new _Point.Point(this.markerContainer.clientWidth, this.markerContainer.clientHeight);
                     _Helper.Helper.css(this.markerContainer, {
                         "width": newSize.width + 'px',
                         "height": newSize.height + 'px',
@@ -408,7 +407,7 @@
                     _this4.redraw();
                     if (_this4.stateHandler.current.value < 2) {
                         _this4.initializeMarkers();
-                        _this4.createTooltipContainer();
+                        if (_this4.markerData && _this4.markerData.length) _this4.createTooltipContainer();
                     }
                 });
 

@@ -19,6 +19,12 @@ export var Helper = {
         });
         return this;
     },
+    find(elementString, element = null) {
+        return (element||document).querySelector(elementString);
+    },
+    findAll(elementString, element = null) {
+        return (element||document).querySelectorAll(elementString);
+    },
     show(elem) {
         elem.style.display = "";
     },
@@ -69,7 +75,7 @@ export var Helper = {
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
             if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) if (callback) callback(xhr.responseText);
+                if (xhr.status === 200 && callback) callback(xhr.responseText);
                 else throw new Error("The JSON submitted seems not valid", xhr);
             }
         };
