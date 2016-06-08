@@ -271,22 +271,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    },
 	                    doubletap: function doubletap(data) {
 	                        _this2.tileMap.velocity = new _Point.Point();
-	                        _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
+	                        _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.positionStart));
 	                    },
 	                    pan: function pan(data) {
 	                        if (data.target.classList.contains("control")) return false;
-	                        var change = data.last.position.clone.substract(data.position.move);
+	                        var change = data.positionLast.clone.substract(data.positionMove);
 	                        _this2.tileMap.velocity = new _Point.Point();
 	                        _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
 	                    },
 	                    wheel: function wheel(data) {
 	                        var factor = data.delta / 4;
 	                        _this2.tileMap.velocity = new _Point.Point();
-	                        _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.position.start));
+	                        _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.positionStart));
 	                    },
 	                    pinch: function pinch(data) {
 	                        _this2.tileMap.velocity = new _Point.Point();
-	                        _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
+	                        _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.positionMove));
 	                    },
 	                    flick: function flick(data) {
 	                        _this2.tileMap.velocity = data.velocity.multiply(20);
@@ -5809,11 +5809,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var xhr = new XMLHttpRequest();
 	        xhr.onreadystatechange = function () {
 	            if (xhr.readyState === XMLHttpRequest.DONE) {
-	                if (xhr.status === 200) {
-	                    if (callback) callback(xhr.responseText);
-	                } else {
-	                    throw new Error("The JSON submitted seems not valid", xhr);
-	                }
+	                if (xhr.status === 200) if (callback) callback(xhr.responseText);else throw new Error("The JSON submitted seems not valid", xhr);
 	            }
 	        };
 	        xhr.open("GET", url, true);
@@ -6465,6 +6461,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function repositionMarkerContainer() {
 	            if (this.markerContainer) {
 	                var newSize = this.view.currentView.getDistortedRect(this.view.distortionFactor);
+	                var oldSize = new _Point.Point(this.markerContainer.clientWidth, this.markerContainer.clientHeight);
 	                _Helper.Helper.css(this.markerContainer, {
 	                    "width": newSize.width + 'px',
 	                    "height": newSize.height + 'px',
@@ -10174,7 +10171,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @return {number} difference
 	         */
 	        get: function get() {
-	            return this.data.time.end - this.data.time.last;
+	            return this.data.timeEnd - this.data.timeLast;
 	        }
 
 	        /**
@@ -10185,7 +10182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'time',
 	        get: function get() {
-	            return this.data.time.end - this.data.time.start;
+	            return this.data.timeEnd - this.data.timeStart;
 	        }
 
 	        /**
@@ -10354,31 +10351,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	                pointerArray: {},
 	                multitouch: false,
 	                distance: null,
+	                distanceLast: null,
+	                actionLast: null,
 	                direction: new _Point.Point(),
 	                velocity: new _Point.Point(),
 	                directions: [],
 	                zoom: 0,
 	                difference: null,
 	                target: null,
-	                last: {
-	                    position: null,
-	                    distance: null,
-	                    action: null
-	                },
-	                position: {
-	                    start: null,
-	                    move: null,
-	                    end: null
-	                },
-	                time: {
-	                    start: null,
-	                    last: null,
-	                    end: null
-	                },
-	                timeout: {
-	                    hold: null,
-	                    default: null
-	                }
+	                positionLast: null,
+	                positionStart: null,
+	                positionMove: null,
+	                positionEnd: null,
+	                timeStart: null,
+	                timeLast: null,
+	                timeEnd: null,
+	                timeoutHold: null,
+	                timeoutDefault: null
 	            };
 	        }
 
@@ -10508,7 +10497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var e = this.preHandle(event) || event.originalEvent;
 
 	            this.data.delta = this.normalizeWheelDelta(event);
-	            this.data.position.start = this.getRelativePosition(e);
+	            this.data.positionStart = this.getRelativePosition(e);
 	            this.data.directions = this.getScrollDirection(e);
 	            this.data.zoom = this.data.directions.indexOf("up") > -1 ? 1 : this.data.directions.indexOf("down") > -1 ? -1 : 0;
 
@@ -10572,9 +10561,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                multitouch: false,
 	                distance: 0,
 	                down: true,
-	                position: {
-	                    start: new _Point.Point()
-	                }
+	                positionStart: new _Point.Point()
 	            };
 	            // mouse is used
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
@@ -10648,9 +10635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return {
 	                multitouch: true,
 	                distance: pos1.distance(pos2),
-	                position: {
-	                    start: pos1.add(pos2).divide(2, 2)
-	                }
+	                positionStart: pos1.clone.add(pos2).divide(2, 2)
 	            };
 	        }
 
@@ -10664,9 +10649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'handleSingletouchStart',
 	        value: function handleSingletouchStart(position) {
 	            return {
-	                position: {
-	                    start: this.getRelativePosition(position)
-	                }
+	                positionStart: this.getRelativePosition(position)
 	            };
 	        }
 
@@ -10681,13 +10664,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function takeActionStart(action) {
 	            switch (action) {
 	                case null:
-	                    this.data.last.action = "tap";
+	                    this.data.actionLast = "tap";
 	                    if (this.settings.autoFireHold) {
 	                        this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, this.dataClone, true);
 	                    }
 	                    break;
 	                case "tap":
-	                    this.data.last.action = "doubletap";
+	                    this.data.actionLast = "doubletap";
 	                    if (this.settings.autoFireHold) {
 	                        this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, this.dataClone, true);
 	                    }
@@ -10711,10 +10694,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return false;
 	            }
 	            var e = this.preHandle(event);
-	            this.data.time.start = event.timeStamp;
-	            this.clearTimeouts(this.data.timeout.default);
+	            this.data.timeStart = event.timeStamp;
+	            this.clearTimeouts(this.data.timeoutDefault);
 	            this.data = _jQuery2.default.extend(true, this.data, this.calculateStart(e));
-	            this.takeActionStart(this.data.last.action);
+	            this.takeActionStart(this.data.actionLast);
 	            return false;
 	        }
 
@@ -10744,12 +10727,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function calculateMove(e) {
 	            var data = {
 	                moved: true,
-	                last: {
-	                    action: "moved"
-	                },
-	                position: {
-	                    move: new _Point.Point()
-	                }
+	                actionLast: "moved",
+	                positionMove: new _Point.Point()
 	            };
 
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
@@ -10814,9 +10793,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var pointerPos2 = this.getRelativePosition(positionsArray[1]);
 	            var pos = pointerPos2.clone.add(pointerPos1).divide(2);
 	            return {
-	                position: {
-	                    move: pos
-	                },
+	                positionMove: pos,
 	                distance: pointerPos1.distance(pointerPos2),
 	                multitouch: true
 	            };
@@ -10833,10 +10810,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function handleSingletouchMove(position) {
 	            var pos = this.getRelativePosition(position);
 	            return {
-	                position: {
-	                    move: pos
-	                },
-	                distance: this.data.last.position.distance(pos),
+	                positionMove: pos,
+	                distance: this.data.positionLast.distance(pos),
 	                multitouch: false
 	            };
 	        }
@@ -10854,15 +10829,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!this.data.down || this.data.pinched) return false;
 
 	            var e = this.preHandle(event);
-	            this.data.time.last = event.timeStamp;
-	            this.data.last.position = this.data.position.move ? this.data.position.move : this.data.position.start;
-	            this.data.time.last = this.data.time.last ? this.data.time.last : this.data.time.start;
+	            this.data.positionLast = this.data.positionMove ? this.data.positionMove : this.data.positionStart;
+	            this.data.timeLast = event.timeStamp;
 
 	            // if positions have not changed
 	            if (this.positionDidNotChange(e)) return false;
 
-	            this.clearTimeouts(this.data.timeout.default);
-	            this.clearTimeouts(this.data.timeout.hold);
+	            this.clearTimeouts(this.data.timeoutDefault);
+	            this.clearTimeouts(this.data.timeoutHold);
 	            this.data = _jQuery2.default.extend(true, this.data, this.calculateMove(e));
 
 	            if (this.data.multitouch) {
@@ -10881,13 +10855,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'handlePinchAndZoom',
 	        value: function handlePinchAndZoom() {
-	            if (!this.data.last.distance) this.data.last.distance = this.data.distance;
+	            if (!this.data.distanceLast) this.data.distanceLast = this.data.distance;
 
-	            this.data.difference = this.data.distance - this.data.last.distance;
+	            this.data.difference = this.data.distance - this.data.distanceLast;
 	            if (Math.abs(this.data.difference) >= 0.005) {
 	                if (this.settings.callbacks.pinch) this.eventCallback(this.settings.callbacks.pinch, this.dataClone);
 	                if (this.settings.callbacks.zoom) this.eventCallback(this.settings.callbacks.zoom, this.dataClone);
-	                this.data.last.distance = this.data.distance;
+	                this.data.distanceLast = this.data.distance;
 	            }
 	            return this;
 	        }
@@ -10901,7 +10875,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'positionDidNotChange',
 	        value: function positionDidNotChange(e) {
-	            return _Helper.Helper.isIE() && (this.getRelativePosition(e).equals(this.data.last.position) || this.getRelativePosition(e).equals(this.data.position.start)) || !_Helper.Helper.isIE() && _Helper.Helper.isTouch() && this.getRelativePosition(e[0]).equals(this.data.last.position);
+	            return _Helper.Helper.isIE() && (this.getRelativePosition(e).equals(this.data.positionLast) || this.getRelativePosition(e).equals(this.data.positionStart)) || !_Helper.Helper.isIE() && _Helper.Helper.isTouch() && this.getRelativePosition(e[0]).equals(this.data.positionLast);
 	        }
 
 	        /**
@@ -10914,9 +10888,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'calculateEnd',
 	        value: function calculateEnd(e) {
 	            var data = {
-	                position: {
-	                    end: new _Point.Point()
-	                }
+	                positionEnd: new _Point.Point()
 	            };
 
 	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
@@ -10945,9 +10917,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'handleSingletouchEnd',
 	        value: function handleSingletouchEnd(position) {
 	            return {
-	                position: {
-	                    end: this.getRelativePosition(position)
-	                }
+	                positionEnd: this.getRelativePosition(position)
 	            };
 	        }
 
@@ -10976,7 +10946,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                    break;
 	                default:
-	                    this.data.last.action = null;
+	                    this.data.actionLast = null;
 	            }
 	        }
 
@@ -10992,26 +10962,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var e = this.preHandle(event);
 
-	            this.data.time.end = event.timeStamp;
+	            this.data.timeEnd = event.timeStamp;
 
-	            this.clearTimeouts(this.data.timeout.hold);
+	            this.clearTimeouts(this.data.timeoutHold);
 
 	            this.data = _jQuery2.default.extend(true, this.data, this.calculateEnd(e));
 
 	            // called only when not moved
 	            if (!this.data.moved && this.data.down && !this.data.multitouch) {
-	                this.takeActionEnd(this.data.last.action);
+	                this.takeActionEnd(this.data.actionLast);
 	            }
 	            // if was moved
 	            else if (this.data.moved && this.data.down && !this.data.multitouch) {
 	                    if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
 	                        this.handleSwipeAndFlick();
 	                    }
-	                    this.data.last.action = null;
+	                    this.data.actionLast = null;
 	                }
 	            this.pinchBalance();
 	            this.handleMultitouchEnd(e);
-	            this.data.last.position = null;
+	            this.data.positionLast = null;
 	            return false;
 	        }
 
@@ -11024,14 +10994,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'handleSwipeAndFlick',
 	        value: function handleSwipeAndFlick() {
 	            if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
-	                this.data.direction = this.data.position.end.clone.substract(this.data.last.position);
+	                this.data.direction = this.data.positionEnd.clone.substract(this.data.positionLast);
 	                this.data.velocity = this.data.direction.clone.multiply(this.timeToLastMove);
-	                this.data.distance = this.data.last.position.distance(this.data.position.end);
+	                this.data.distance = this.data.positionLast.distance(this.data.positionEnd);
 	            }
 
 	            if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
-	                var originalStart = this.getAbsolutePosition(this.data.position.start);
-	                var originalEnd = this.getAbsolutePosition(this.data.position.end);
+	                var originalStart = this.getAbsolutePosition(this.data.positionStart);
+	                var originalEnd = this.getAbsolutePosition(this.data.positionEnd);
 	                if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
 	                    this.data.directions = this.getSwipeDirections(this.data.direction);
 	                    this.eventCallback(this.settings.callbacks.swipe, this.dataClone);
@@ -11071,7 +11041,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    } else if (e.length > 0) {
 	                        this.data.down = true;
 	                    }
-	                    this.data.position.move = null;
+	                    this.data.positionMove = null;
 	                }
 	            return this;
 	        }
@@ -11084,12 +11054,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'pinchBalance',
 	        value: function pinchBalance() {
+	            var _this = this;
+
 	            if (this.data.multitouch) {
 	                this.data.pinched = true;
 	                setTimeout(function () {
-	                    this.data.pinched = false;
-	                    this.data.last.distance = null;
-	                }.bind(this), this.settings.pinchBalanceTime);
+	                    _this.data.pinched = false;
+	                    _this.data.distanceLast = null;
+	                }, this.settings.pinchBalanceTime);
 	            }
 	            return this;
 	        }
@@ -11119,9 +11091,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'setTimeoutForEvent',
 	        value: function setTimeoutForEvent(callback, timeout, args, holdTimeout) {
 	            if (holdTimeout) {
-	                this.data.timeout.hold = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
+	                this.data.timeoutHold = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
 	            } else {
-	                this.data.timeout.default = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
+	                this.data.timeoutDefault = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
 	            }
 	            return this;
 	        }
@@ -11137,7 +11109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'eventCallback',
 	        value: function eventCallback(callback, args) {
 	            if (callback && typeof callback === "function") callback(args);
-	            this.data.last.action = null;
+	            this.data.actionLast = null;
 	            return this;
 	        }
 
@@ -11248,10 +11220,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'getEvent',
 	        value: function getEvent(e) {
-	            jQuery.event.fix(e);
-	            if (e.originalEvent.touches && e.originalEvent.touches.length === 0) {
-	                return e.originalEvent.changedTouches || e.originalEvent;
-	            }
+	            if (e.originalEvent.touches && e.originalEvent.touches.length === 0) return e.originalEvent.changedTouches || e.originalEvent;
 	            return e.originalEvent.touches || e.originalEvent.changedTouches || e.originalEvent;
 	        }
 	    }]);

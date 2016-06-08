@@ -208,6 +208,7 @@ export class TileMap {
     repositionMarkerContainer() {
         if (this.markerContainer) {
             const newSize = this.view.currentView.getDistortedRect(this.view.distortionFactor);
+            const oldSize = new Point(this.markerContainer.clientWidth, this.markerContainer.clientHeight);
             Helper.css(this.markerContainer, {
                "width": `${newSize.width}px`,
                "height": `${newSize.height}px`,

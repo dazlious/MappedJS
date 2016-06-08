@@ -26,7 +26,7 @@ export var Helper = {
         elem.style.display = "none";
     },
     css(elem, css) {
-        for (let property in css) {
+        for (const property in css) {
             elem.style[property] = css[property];
         }
     },
@@ -51,7 +51,7 @@ export var Helper = {
      */
     loadImage(path, cb) {
         const img = new Image();
-        img.onload = function() {
+        img.onload = () => {
             if (cb && typeof cb === "function") cb(img);
         };
         img.src = path;
@@ -69,11 +69,8 @@ export var Helper = {
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
             if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    if (callback) callback(xhr.responseText);
-                } else {
-                    throw new Error("The JSON submitted seems not valid", xhr);
-                }
+                if (xhr.status === 200) if (callback) callback(xhr.responseText);
+                else throw new Error("The JSON submitted seems not valid", xhr);
             }
         };
         xhr.open("GET", url, true);

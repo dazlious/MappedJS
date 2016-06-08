@@ -95,11 +95,9 @@
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
+                    if (xhr.status === 200)
                         if (callback) callback(xhr.responseText);
-                    } else {
-                        throw new Error("The JSON submitted seems not valid", xhr);
-                    }
+                        else throw new Error("The JSON submitted seems not valid", xhr);
                 }
             };
             xhr.open("GET", url, true);

@@ -149,22 +149,22 @@ export class MappedJS {
                 },
                 doubletap: (data) => {
                     this.tileMap.velocity = new Point();
-                    this.tileMap.zoom(0.2, this.getAbsolutePosition(data.position.start));
+                    this.tileMap.zoom(0.2, this.getAbsolutePosition(data.positionStart));
                 },
                 pan: (data) => {
                     if (data.target.classList.contains("control")) return false;
-                    const change = data.last.position.clone.substract(data.position.move);
+                    const change = data.positionLast.clone.substract(data.positionMove);
                     this.tileMap.velocity = new Point();
                     this.tileMap.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                 },
                 wheel: (data) => {
                     const factor = data.delta / 4;
                     this.tileMap.velocity = new Point();
-                    this.tileMap.zoom(factor, this.getAbsolutePosition(data.position.start));
+                    this.tileMap.zoom(factor, this.getAbsolutePosition(data.positionStart));
                 },
                 pinch: (data) => {
                     this.tileMap.velocity = new Point();
-                    this.tileMap.zoom(data.difference * 3, this.getAbsolutePosition(data.position.move));
+                    this.tileMap.zoom(data.difference * 3, this.getAbsolutePosition(data.positionMove));
                 },
                 flick: (data) => {
                     this.tileMap.velocity = data.velocity.multiply(20);
