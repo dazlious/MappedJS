@@ -86,7 +86,6 @@ module.exports = function(grunt) {
                 keepalive: false,
                 inline: true,
                 externals: {
-                    jQuery: "jQuery",
                     Handlebars: "Handlebars"
                 },
                 target: "web",
