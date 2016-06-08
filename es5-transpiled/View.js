@@ -370,6 +370,8 @@
                     return false;
                 } else if (!automatic) {
                     this.wasSmallerLastTime = false;
+                } else if (automatic) {
+                    this.wasSmallerLastTime = viewportIsSmaller;
                 }
 
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {

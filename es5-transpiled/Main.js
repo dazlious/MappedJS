@@ -149,7 +149,7 @@
                 var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
                 var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-                this.container = typeof container === "string" ? document.querySelectorAll(container)[0] : container;
+                this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
                 this.container.classList.add("mappedJS");
                 this.content = document.createElement("div");
                 this.content.classList.add("map-content");
@@ -232,22 +232,22 @@
                         },
                         doubletap: function doubletap(data) {
                             _this2.tileMap.velocity = new _Point.Point();
-                            _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.position.start));
+                            _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.positionStart));
                         },
                         pan: function pan(data) {
                             if (data.target.classList.contains("control")) return false;
-                            var change = data.last.position.clone.substract(data.position.move);
+                            var change = data.positionLast.clone.substract(data.positionMove);
                             _this2.tileMap.velocity = new _Point.Point();
                             _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
                         },
                         wheel: function wheel(data) {
                             var factor = data.delta / 4;
                             _this2.tileMap.velocity = new _Point.Point();
-                            _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.position.start));
+                            _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.positionStart));
                         },
                         pinch: function pinch(data) {
                             _this2.tileMap.velocity = new _Point.Point();
-                            _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.position.move));
+                            _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.positionMove));
                         },
                         flick: function flick(data) {
                             _this2.tileMap.velocity = data.velocity.multiply(20);

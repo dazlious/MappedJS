@@ -14,7 +14,6 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            '../vendor/js/jquery-2.2.1.min.js',
             {
                 pattern: 'assets/**.json',
                 included: false

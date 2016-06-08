@@ -407,7 +407,7 @@
                     _this4.redraw();
                     if (_this4.stateHandler.current.value < 2) {
                         _this4.initializeMarkers();
-                        _this4.createTooltipContainer();
+                        if (_this4.markerData && _this4.markerData.length) _this4.createTooltipContainer();
                     }
                 });
 

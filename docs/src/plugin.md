@@ -278,7 +278,6 @@ get height of boundaries
     * [new Interact(settings)](#new_Interact_new)
     * [.timeToLastMove](#Interact+timeToLastMove) ⇒ <code>number</code>
     * [.time](#Interact+time) ⇒ <code>number</code>
-    * [.dataClone](#Interact+dataClone) ⇒ <code>Object</code>
     * [.getDefaultSettings()](#Interact+getDefaultSettings) ⇒ <code>Object</code>
     * [.getDefaultCallbacks()](#Interact+getDefaultCallbacks) ⇒ <code>Object</code>
     * [.getDefaultEventNames()](#Interact+getDefaultEventNames) ⇒ <code>Object</code>
@@ -336,7 +335,7 @@ get height of boundaries
 **Params**
 
 - settings <code>Object</code> - = {} - all the settings
-    - .container <code>string</code> | <code>Object</code> - = ".interact-container" - Container, either string, jQuery-object or dom-object
+    - .container <code>string</code> | <code>Object</code> - = ".interact-container" - Container, either string or dom-object
     - .timeTreshold <code>Object</code> - = {} - settings for the timing tresholds
         - .tap <code>number</code> - = 200 - timing treshold for tap
         - .hold <code>number</code> - = 500 - timing treshold for hold
@@ -389,13 +388,6 @@ get time difference to start
 
 **Kind**: instance property of <code>[Interact](#Interact)</code>  
 **Returns**: <code>number</code> - difference  
-<a name="Interact+dataClone"></a>
-
-### interact.dataClone ⇒ <code>Object</code>
-clones the data object
-
-**Kind**: instance property of <code>[Interact](#Interact)</code>  
-**Returns**: <code>Object</code> - data object  
 <a name="Interact+getDefaultSettings"></a>
 
 ### interact.getDefaultSettings() ⇒ <code>Object</code>
@@ -444,7 +436,7 @@ initializes class settings and bindings
 **Returns**: <code>[Interact](#Interact)</code> - Returns this instance  
 **Params**
 
-- container <code>Object</code> | <code>string</code> - Container, either string, jQuery-object or dom-object
+- container <code>Object</code> | <code>string</code> - Container, either string or dom-object
 
 <a name="Interact+bindEvents"></a>
 
