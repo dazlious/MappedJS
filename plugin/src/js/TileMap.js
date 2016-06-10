@@ -207,11 +207,13 @@ export class TileMap {
      */
     repositionMarkerContainer() {
         if (this.markerContainer) {
-            const newSize = this.view.currentView.getDistortedRect(this.view.distortionFactor);
+            const newSize = this.view.view.getDistortedRect(this.view.distortionFactor);
+            const left = (newSize.left + this.view.offsetToCenter).toFixed(4);
+            const top = (newSize.top).toFixed(4);
             Helper.css(this.markerContainer, {
                "width": `${newSize.width}px`,
                "height": `${newSize.height}px`,
-               "transform": `translate3d(${newSize.left + this.view.offsetToCenter}px, ${newSize.top}px, 0px)`
+               "transform": `translate3d(${left}px, ${top}px, 0px)`
             });
         }
         return this;
@@ -331,13 +333,13 @@ export class TileMap {
             zoomFactor: zoom
         });
         this.view.zoom(0, this.view.viewport.center);
-        this.view.currentView.setCenter(center);
+        this.view.view.setCenter(center);
         this.drawIsNeeded = true;
     }
 
     changelevel(direction) {
         const lastLevel = this.levelHandler.current.level,
-              lastCenter = this.view.currentView.center;
+              lastCenter = this.view.view.center;
         let extrema;
         if (direction < 0) {
             this.levelHandler.previous();

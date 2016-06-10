@@ -14,17 +14,13 @@ import {Drawable} from './Drawable.js';
  */
 export class View extends Drawable {
 
-    get currentView() {
-        return this.view;
-    }
-
     /**
      * get all visible tiles
      * @return {array} all tiles that are currently visible
      */
     get visibleTiles() {
         return this.tiles.filter((t) => {
-            const newTile = t.clone.scale(this.zoomFactor).getDistortedRect(this.distortionFactor).translate(this.currentView.x * this.distortionFactor + this.offsetToCenter, this.currentView.y);
+            const newTile = t.clone.scale(this.zoomFactor).getDistortedRect(this.distortionFactor).translate(this.view.x * this.distortionFactor + this.offsetToCenter, this.view.y);
             return this.viewport.intersects(newTile);
         });
     }
@@ -74,12 +70,12 @@ export class View extends Drawable {
         this.centerSmallMap = centerSmallMap;
 
         const newCenter = this.viewport.center.substract(this.info.convertLatLngToPoint(center));
-        this.currentView.position(newCenter.x + this.offsetToCenter, newCenter.y);
+        this.view.position(newCenter.x + this.offsetToCenter, newCenter.y);
 
         this.originalMapView = currentView.clone;
 
         this.eventManager.publish(Events.MapInformation.UPDATE, {
-            view: this.currentView
+            view: this.view
         });
 
         this.tiles = [];
@@ -98,7 +94,7 @@ export class View extends Drawable {
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             view: this.originalMapView.clone
         });
-        this.currentView.translate(0 - this.offsetToCenter, 0);
+        this.view.translate(0 - this.offsetToCenter, 0);
         this.initializeTiles();
         this.isInitialized = true;
         return this;
@@ -116,7 +112,7 @@ export class View extends Drawable {
     getDistortedView() {
         const nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
               se = this.info.convertLatLngToPoint(this.limitToBounds.se),
-              limit = new Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
+              limit = new Rectangle(nw.x + this.view.x, nw.y + this.view.y, se.x - nw.x, se.y - nw.y);
         return limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
     }
 
@@ -134,9 +130,9 @@ export class View extends Drawable {
             offset.y = this.checkX(distanceTop, distanceBottom, equalizedMap.height, this.viewport.height);
         }
         offset.multiply(1/this.distortionFactor, 1);
-        this.currentView.translate(offset.x, offset.y);
+        this.view.translate(offset.x, offset.y);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
-            view: this.currentView
+            view: this.view
         });
 
         if (this.viewportIsSmallerThanView(equalizedMap)) {
@@ -168,9 +164,9 @@ export class View extends Drawable {
                     x -= right;
                 }
             } else {
-                this.currentView.setCenterX(this.viewport.center.x);
+                this.view.setCenterX(this.viewport.center.x);
                 this.eventManager.publish(Events.MapInformation.UPDATE, {
-                    view: this.currentView
+                    view: this.view
                 });
             }
         }
@@ -193,9 +189,9 @@ export class View extends Drawable {
                     y -= bottom;
                 }
             } else {
-                this.currentView.setCenterX(this.viewport.center.x);
+                this.view.setCenterX(this.viewport.center.x);
                 this.eventManager.publish(Events.MapInformation.UPDATE, {
-                    view: this.currentView
+                    view: this.view
                 });
             }
         }
@@ -221,17 +217,17 @@ export class View extends Drawable {
      * @return {View} instance of View for chaining
      */
     setLatLngToPosition(latlng, position) {
-        const currentPosition = this.currentView.topLeft.substract(position).multiply(-1),
+        const currentPosition = this.view.topLeft.substract(position).multiply(-1),
               diff = currentPosition.substract(this.info.convertLatLngToPoint(latlng));
 
-        this.currentView.translate(0, diff.y);
+        this.view.translate(0, diff.y);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
-            view: this.currentView
+            view: this.view
         });
         this.calculateNewCenter();
-        this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
+        this.view.translate(diff.x + this.getDeltaXToCenter(position), 0);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
-            view: this.currentView
+            view: this.view
         });
         return this;
     }
@@ -271,14 +267,14 @@ export class View extends Drawable {
             zoomFactor: Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
         });
 
-        const mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
+        const mapPosition = this.view.topLeft.substract(pos).multiply(-1);
         mapPosition.x += this.getDeltaXToCenter(pos);
         const latlngPosition = this.info.convertPointToLatLng(mapPosition).multiply(-1);
 
         const newSize = this.originalMapView.clone.scale(this.zoomFactor);
-        this.currentView.setSize(newSize.width, newSize.height);
+        this.view.setSize(newSize.width, newSize.height);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
-            view: this.currentView
+            view: this.view
         });
 
         this.setLatLngToPosition(latlngPosition, pos);
@@ -300,7 +296,7 @@ export class View extends Drawable {
      * @return {View} instance of View for chaining
      */
     calculateNewCenter() {
-        const newCenter = this.info.convertPointToLatLng(this.viewport.center.substract(this.currentView.topLeft));
+        const newCenter = this.info.convertPointToLatLng(this.viewport.center.substract(this.view.topLeft));
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             center: newCenter
         });
@@ -313,14 +309,11 @@ export class View extends Drawable {
      * @return {View} instance of View for chaining
      */
     moveView(pos) {
-        this.currentView.translate(0, pos.y);
-        this.eventManager.publish(Events.MapInformation.UPDATE, {
-            view: this.currentView
-        });
+        this.view.translate(0, pos.y);
         this.calculateNewCenter();
-        this.currentView.translate(pos.x * (1/this.distortionFactor), 0);
+        this.view.translate(pos.x * (1/this.distortionFactor), 0);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
-            view: this.currentView
+            view: this.view
         });
         return this;
     }
@@ -349,7 +342,7 @@ export class View extends Drawable {
      */
     drawThumbnail() {
         if (this.thumb) {
-            const rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+            const rect = this.view.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
             this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
         }
         return this;
