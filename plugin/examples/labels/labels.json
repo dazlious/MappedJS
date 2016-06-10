@@ -14,6 +14,10 @@
                 "type": "circle",
                 "size": 2,
                 "color": "#333333"
+            },
+            "visibility": {
+                "min": 0,
+                "max": 4
             }
         },
         {
@@ -64,6 +68,10 @@
                 "size": [32, 32],
                 "offset": [-12, -32],
                 "url": "img/icon.png"
+            },
+            "visibility": {
+                "min": 3,
+                "max": 5
             }
         }
     ]

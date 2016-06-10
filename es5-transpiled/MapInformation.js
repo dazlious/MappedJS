@@ -86,7 +86,8 @@
                     distortionFactor: 1,
                     offsetToCenter: 0,
                     bounds: new _Bounds.Bounds(),
-                    zoomFactor: 0
+                    zoomFactor: 0,
+                    level: 0
                 };
                 this.data.offsetToCenter = this.offsetToCenter;
                 this.eventManager = new _Publisher.Publisher(this.id);
