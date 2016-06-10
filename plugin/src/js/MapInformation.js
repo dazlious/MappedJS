@@ -42,7 +42,8 @@ export class MapInformation {
                 distortionFactor: 1,
                 offsetToCenter: 0,
                 bounds: new Bounds(),
-                zoomFactor: 0
+                zoomFactor: 0,
+                level: 0
             };
             this.data.offsetToCenter = this.offsetToCenter;
             this.eventManager = new Publisher(this.id);
@@ -64,7 +65,7 @@ export class MapInformation {
         const oldData = this.data;
         this.data = Object.assign({}, this.data, obj);
         const centerUpdateDone = (!oldData.center.equals(this.data.center)) ? this.centerUpdated() : false;
-        if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.viewportUpdated();        
+        if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.viewportUpdated();
         this.eventManager.publish(Events.TileMap.DRAW);
     }
 

@@ -49,6 +49,11 @@
                 return this.info.get().view;
             }
         }, {
+            key: 'level',
+            get: function get() {
+                return this.info.get().level;
+            }
+        }, {
             key: 'viewport',
             get: function get() {
                 return this.info.get().viewport;

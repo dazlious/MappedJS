@@ -6379,7 +6379,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _Helper.Helper.forEach(this.imgData, function (element, i) {
 	            var currentLevel = {
 	                value: element,
-	                description: i,
+	                level: i,
 	                instance: _this.createViewFromData(settings.bounds, settings.center, element, settings.zoom)
 	            };
 	            _this.levels.push(currentLevel);
@@ -6410,7 +6410,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(TileMap, [{
 	        key: 'reset',
 	        value: function reset() {
-	            if (this.levelHandler.current.description !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
+	            if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
 	            this.view.reset();
 	            this.redraw();
 	            this.clusterHandler();
@@ -6632,7 +6632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'changelevel',
 	        value: function changelevel(direction) {
-	            var lastLevel = this.levelHandler.current.description,
+	            var lastLevel = this.levelHandler.current.level,
 	                lastCenter = this.view.currentView.center;
 	            var extrema = void 0;
 	            if (direction < 0) {
@@ -6645,9 +6645,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!this.view.isInitialized) {
 	                this.view.init();
 	            }
-	            if (lastLevel !== this.levelHandler.current.description) {
+	            if (lastLevel !== this.levelHandler.current.level) {
 	                this.setViewToOldView(lastCenter, extrema);
 	            }
+	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                level: this.levelHandler.current.level
+	            });
 	        }
 
 	        /**
@@ -8715,7 +8718,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                distortionFactor: 1,
 	                offsetToCenter: 0,
 	                bounds: new _Bounds.Bounds(),
-	                zoomFactor: 0
+	                zoomFactor: 0,
+	                level: 0
 	            };
 	            this.data.offsetToCenter = this.offsetToCenter;
 	            this.eventManager = new _Publisher.Publisher(this.id);
@@ -8857,6 +8861,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'view',
 	        get: function get() {
 	            return this.info.get().view;
+	        }
+	    }, {
+	        key: 'level',
+	        get: function get() {
+	            return this.info.get().level;
 	        }
 	    }, {
 	        key: 'viewport',
@@ -9235,7 +9244,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	};
 	DataEnrichment.DATA_LABEL = {
-	    "position": [0, 0]
+	    "position": [0, 0],
+	    "visibility": {
+	        "min": 0,
+	        "max": Number.MAX_VALUE
+	    }
 	};
 	DataEnrichment.DATA_LABEL_TEXT = {
 	    "content": "",
@@ -9608,6 +9621,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.text = settings.text;
 	        _this.icon = settings.icon;
 	        _this.content = settings.content;
+	        _this.visibility = settings.visibility;
 	        _this.offset = new _Point.Point();
 
 	        if (_this.icon && _this.icon.type === "circle") _this.drawIconType = _this.drawCircleIcon(_this.icon.size);else if (_this.icon && _this.icon.type === "square") _this.drawIconType = _this.drawSquareIcon(_this.icon.size);else if (_this.icon && _this.icon.type === "image") {
@@ -9638,13 +9652,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'draw',
 	        value: function draw() {
-	            var pos = this.position;
-	            var textPos = pos.clone.add(this.text.offset);
+	            if (this.level >= this.visibility.min && this.level <= this.visibility.max) {
+	                var pos = this.position;
+	                var textPos = pos.clone.add(this.text.offset);
 
-	            this.context.beginPath();
-	            this.drawElements(pos, textPos);
-	            this.context.closePath();
-
+	                this.context.beginPath();
+	                this.drawElements(pos, textPos);
+	                this.context.closePath();
+	            }
 	            return this;
 	        }
 	    }, {

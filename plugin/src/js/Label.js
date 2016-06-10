@@ -46,8 +46,9 @@ export class Label extends Drawable {
         this.text = settings.text;
         this.icon = settings.icon;
         this.content = settings.content;
+        this.visibility = settings.visibility;
         this.offset = new Point();
-        
+
         if (this.icon && this.icon.type === "circle") this.drawIconType = this.drawCircleIcon(this.icon.size);
         else if (this.icon && this.icon.type === "square") this.drawIconType = this.drawSquareIcon(this.icon.size);
         else if (this.icon && this.icon.type === "image") {
@@ -73,13 +74,14 @@ export class Label extends Drawable {
     }
 
     draw() {
-        const pos = this.position;
-        const textPos = pos.clone.add(this.text.offset);
+        if (this.level >= this.visibility.min && this.level <= this.visibility.max) {
+            const pos = this.position;
+            const textPos = pos.clone.add(this.text.offset);
 
-        this.context.beginPath();
-        this.drawElements(pos, textPos);
-        this.context.closePath();
-
+            this.context.beginPath();
+            this.drawElements(pos, textPos);
+            this.context.closePath();
+        }
         return this;
     }
 

@@ -129,7 +129,7 @@ export class TileMap {
         Helper.forEach(this.imgData, (element, i) => {
             const currentLevel = {
                 value: element,
-                description: i,
+                level: i,
                 instance: this.createViewFromData(settings.bounds, settings.center, element, settings.zoom)
             };
             this.levels.push(currentLevel);
@@ -156,7 +156,7 @@ export class TileMap {
      * resets view to initial state
      */
     reset() {
-        if (this.levelHandler.current.description !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
+        if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
         this.view.reset();
         this.redraw();
         this.clusterHandler();
@@ -336,7 +336,7 @@ export class TileMap {
     }
 
     changelevel(direction) {
-        const lastLevel = this.levelHandler.current.description,
+        const lastLevel = this.levelHandler.current.level,
               lastCenter = this.view.currentView.center;
         let extrema;
         if (direction < 0) {
@@ -349,9 +349,13 @@ export class TileMap {
         if (!this.view.isInitialized) {
             this.view.init();
         }
-        if (lastLevel !== this.levelHandler.current.description) {
+        if (lastLevel !== this.levelHandler.current.level) {
             this.setViewToOldView(lastCenter, extrema);
         }
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            level: this.levelHandler.current.level
+        });
+
     }
 
     /**

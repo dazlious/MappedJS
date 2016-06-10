@@ -194,7 +194,7 @@
             _Helper.Helper.forEach(this.imgData, function(element, i) {
                 var currentLevel = {
                     value: element,
-                    description: i,
+                    level: i,
                     instance: _this.createViewFromData(settings.bounds, settings.center, element, settings.zoom)
                 };
                 _this.levels.push(currentLevel);
@@ -225,7 +225,7 @@
         _createClass(TileMap, [{
             key: 'reset',
             value: function reset() {
-                if (this.levelHandler.current.description !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
+                if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
                 this.view.reset();
                 this.redraw();
                 this.clusterHandler();
@@ -447,7 +447,7 @@
         }, {
             key: 'changelevel',
             value: function changelevel(direction) {
-                var lastLevel = this.levelHandler.current.description,
+                var lastLevel = this.levelHandler.current.level,
                     lastCenter = this.view.currentView.center;
                 var extrema = void 0;
                 if (direction < 0) {
@@ -460,9 +460,12 @@
                 if (!this.view.isInitialized) {
                     this.view.init();
                 }
-                if (lastLevel !== this.levelHandler.current.description) {
+                if (lastLevel !== this.levelHandler.current.level) {
                     this.setViewToOldView(lastCenter, extrema);
                 }
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    level: this.levelHandler.current.level
+                });
             }
 
             /**

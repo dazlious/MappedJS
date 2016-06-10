@@ -118,6 +118,7 @@
             _this.text = settings.text;
             _this.icon = settings.icon;
             _this.content = settings.content;
+            _this.visibility = settings.visibility;
             _this.offset = new _Point.Point();
 
             if (_this.icon && _this.icon.type === "circle") _this.drawIconType = _this.drawCircleIcon(_this.icon.size);
@@ -150,13 +151,14 @@
         }, {
             key: 'draw',
             value: function draw() {
-                var pos = this.position;
-                var textPos = pos.clone.add(this.text.offset);
+                if (this.level >= this.visibility.min && this.level <= this.visibility.max) {
+                    var pos = this.position;
+                    var textPos = pos.clone.add(this.text.offset);
 
-                this.context.beginPath();
-                this.drawElements(pos, textPos);
-                this.context.closePath();
-
+                    this.context.beginPath();
+                    this.drawElements(pos, textPos);
+                    this.context.closePath();
+                }
                 return this;
             }
         }, {

@@ -12,6 +12,10 @@ export class Drawable {
         return this.info.get().view;
     }
 
+    get level() {
+        return this.info.get().level;
+    }
+
     get viewport() {
         return this.info.get().viewport;
     }

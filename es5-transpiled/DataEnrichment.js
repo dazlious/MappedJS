@@ -159,7 +159,11 @@
         }
     };
     DataEnrichment.DATA_LABEL = {
-        "position": [0, 0]
+        "position": [0, 0],
+        "visibility": {
+            "min": 0,
+            "max": Number.MAX_VALUE
+        }
     };
     DataEnrichment.DATA_LABEL_TEXT = {
         "content": "",
