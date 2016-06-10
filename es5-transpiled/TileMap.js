@@ -285,11 +285,13 @@
             key: 'repositionMarkerContainer',
             value: function repositionMarkerContainer() {
                 if (this.markerContainer) {
-                    var newSize = this.view.currentView.getDistortedRect(this.view.distortionFactor);
+                    var newSize = this.view.view.getDistortedRect(this.view.distortionFactor);
+                    var left = (newSize.left + this.view.offsetToCenter).toFixed(4);
+                    var top = newSize.top.toFixed(4);
                     _Helper.Helper.css(this.markerContainer, {
                         "width": newSize.width + 'px',
                         "height": newSize.height + 'px',
-                        "transform": 'translate3d(' + (newSize.left + this.view.offsetToCenter) + 'px, ' + newSize.top + 'px, 0px)'
+                        "transform": 'translate3d(' + left + 'px, ' + top + 'px, 0px)'
                     });
                 }
                 return this;
@@ -441,14 +443,14 @@
                     zoomFactor: zoom
                 });
                 this.view.zoom(0, this.view.viewport.center);
-                this.view.currentView.setCenter(center);
+                this.view.view.setCenter(center);
                 this.drawIsNeeded = true;
             }
         }, {
             key: 'changelevel',
             value: function changelevel(direction) {
                 var lastLevel = this.levelHandler.current.level,
-                    lastCenter = this.view.currentView.center;
+                    lastCenter = this.view.view.center;
                 var extrema = void 0;
                 if (direction < 0) {
                     this.levelHandler.previous();

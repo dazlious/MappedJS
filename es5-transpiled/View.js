@@ -70,23 +70,18 @@
         _inherits(View, _Drawable);
 
         _createClass(View, [{
-            key: 'currentView',
-            get: function get() {
-                return this.view;
-            }
+            key: 'visibleTiles',
+
 
             /**
              * get all visible tiles
              * @return {array} all tiles that are currently visible
              */
-
-        }, {
-            key: 'visibleTiles',
             get: function get() {
                 var _this2 = this;
 
                 return this.tiles.filter(function(t) {
-                    var newTile = t.clone.scale(_this2.zoomFactor).getDistortedRect(_this2.distortionFactor).translate(_this2.currentView.x * _this2.distortionFactor + _this2.offsetToCenter, _this2.currentView.y);
+                    var newTile = t.clone.scale(_this2.zoomFactor).getDistortedRect(_this2.distortionFactor).translate(_this2.view.x * _this2.distortionFactor + _this2.offsetToCenter, _this2.view.y);
                     return _this2.viewport.intersects(newTile);
                 });
             }
@@ -155,12 +150,12 @@
             _this.centerSmallMap = centerSmallMap;
 
             var newCenter = _this.viewport.center.substract(_this.info.convertLatLngToPoint(center));
-            _this.currentView.position(newCenter.x + _this.offsetToCenter, newCenter.y);
+            _this.view.position(newCenter.x + _this.offsetToCenter, newCenter.y);
 
             _this.originalMapView = currentView.clone;
 
             _this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-                view: _this.currentView
+                view: _this.view
             });
 
             _this.tiles = [];
@@ -181,7 +176,7 @@
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
                     view: this.originalMapView.clone
                 });
-                this.currentView.translate(0 - this.offsetToCenter, 0);
+                this.view.translate(0 - this.offsetToCenter, 0);
                 this.initializeTiles();
                 this.isInitialized = true;
                 return this;
@@ -203,7 +198,7 @@
             value: function getDistortedView() {
                 var nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
                     se = this.info.convertLatLngToPoint(this.limitToBounds.se),
-                    limit = new _Rectangle.Rectangle(nw.x + this.currentView.x, nw.y + this.currentView.y, se.x - nw.x, se.y - nw.y);
+                    limit = new _Rectangle.Rectangle(nw.x + this.view.x, nw.y + this.view.y, se.x - nw.x, se.y - nw.y);
                 return limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
             }
         }, {
@@ -222,9 +217,9 @@
                     offset.y = this.checkX(distanceTop, distanceBottom, equalizedMap.height, this.viewport.height);
                 }
                 offset.multiply(1 / this.distortionFactor, 1);
-                this.currentView.translate(offset.x, offset.y);
+                this.view.translate(offset.x, offset.y);
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-                    view: this.currentView
+                    view: this.view
                 });
 
                 if (this.viewportIsSmallerThanView(equalizedMap)) {
@@ -258,9 +253,9 @@
                             x -= right;
                         }
                     } else {
-                        this.currentView.setCenterX(this.viewport.center.x);
+                        this.view.setCenterX(this.viewport.center.x);
                         this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-                            view: this.currentView
+                            view: this.view
                         });
                     }
                 }
@@ -284,9 +279,9 @@
                             y -= bottom;
                         }
                     } else {
-                        this.currentView.setCenterX(this.viewport.center.x);
+                        this.view.setCenterX(this.viewport.center.x);
                         this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-                            view: this.currentView
+                            view: this.view
                         });
                     }
                 }
@@ -320,17 +315,17 @@
         }, {
             key: 'setLatLngToPosition',
             value: function setLatLngToPosition(latlng, position) {
-                var currentPosition = this.currentView.topLeft.substract(position).multiply(-1),
+                var currentPosition = this.view.topLeft.substract(position).multiply(-1),
                     diff = currentPosition.substract(this.info.convertLatLngToPoint(latlng));
 
-                this.currentView.translate(0, diff.y);
+                this.view.translate(0, diff.y);
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-                    view: this.currentView
+                    view: this.view
                 });
                 this.calculateNewCenter();
-                this.currentView.translate(diff.x + this.getDeltaXToCenter(position), 0);
+                this.view.translate(diff.x + this.getDeltaXToCenter(position), 0);
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-                    view: this.currentView
+                    view: this.view
                 });
                 return this;
             }
@@ -378,14 +373,14 @@
                     zoomFactor: _Helper.Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
                 });
 
-                var mapPosition = this.currentView.topLeft.substract(pos).multiply(-1);
+                var mapPosition = this.view.topLeft.substract(pos).multiply(-1);
                 mapPosition.x += this.getDeltaXToCenter(pos);
                 var latlngPosition = this.info.convertPointToLatLng(mapPosition).multiply(-1);
 
                 var newSize = this.originalMapView.clone.scale(this.zoomFactor);
-                this.currentView.setSize(newSize.width, newSize.height);
+                this.view.setSize(newSize.width, newSize.height);
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-                    view: this.currentView
+                    view: this.view
                 });
 
                 this.setLatLngToPosition(latlngPosition, pos);
@@ -411,7 +406,7 @@
         }, {
             key: 'calculateNewCenter',
             value: function calculateNewCenter() {
-                var newCenter = this.info.convertPointToLatLng(this.viewport.center.substract(this.currentView.topLeft));
+                var newCenter = this.info.convertPointToLatLng(this.viewport.center.substract(this.view.topLeft));
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
                     center: newCenter
                 });
@@ -427,14 +422,11 @@
         }, {
             key: 'moveView',
             value: function moveView(pos) {
-                this.currentView.translate(0, pos.y);
-                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-                    view: this.currentView
-                });
+                this.view.translate(0, pos.y);
                 this.calculateNewCenter();
-                this.currentView.translate(pos.x * (1 / this.distortionFactor), 0);
+                this.view.translate(pos.x * (1 / this.distortionFactor), 0);
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-                    view: this.currentView
+                    view: this.view
                 });
                 return this;
             }
@@ -473,7 +465,7 @@
             key: 'drawThumbnail',
             value: function drawThumbnail() {
                 if (this.thumb) {
-                    var rect = this.currentView.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+                    var rect = this.view.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
                     this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
                 }
                 return this;
