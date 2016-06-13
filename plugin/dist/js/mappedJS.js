@@ -308,11 +308,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.initializeInteractForMap();
 
-	            window.addEventListener("resize", this.resizeHandler.bind(this), false);
-	            window.addEventListener("orientationchange", this.resizeHandler.bind(this), false);
+	            _Helper.Helper.addListener(window, "resize orientationchange", this.resizeHandler.bind(this));
 
-	            document.addEventListener(_Events.Events.Handling.KEYDOWN, this.keyPress.bind(this), false);
-	            document.addEventListener(_Events.Events.Handling.KEYUP, this.keyRelease.bind(this), false);
+	            _Helper.Helper.addListener(document, _Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
+	            _Helper.Helper.addListener(document, _Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
 
 	            this.zoomIn.setAttribute("data-id", "zoom-button-plus");
 	            this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
@@ -5774,6 +5773,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            elem.style[property] = _css[property];
 	        }
 	    },
+	    addListener: function addListener(el, s, fn) {
+	        s.split(" ").forEach(function (e) {
+	            return el.addEventListener(e, fn, false);
+	        });
+	    },
 
 	    /**
 	     * clamps a value to specified min and max
@@ -10491,9 +10495,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindIEEvents',
 	        value: function bindIEEvents() {
-	            this.container.addEventListener(this.settings.events.scroll, this.scrollHandler.bind(this), false);
+	            _Helper.Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
 	            this.bindTouchEvents();
-	            this.container.addEventListener("contextmenu", function (e) {
+	            _Helper.Helper.addListener(this.container, "contextmenu", function (e) {
 	                return e.preventDefault();
 	            }, false);
 	            return this;
@@ -10507,10 +10511,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindTouchEvents',
 	        value: function bindTouchEvents() {
-	            this.container.addEventListener(this.settings.events.start.touch, this.startHandler.bind(this), false);
-	            this.container.addEventListener(this.settings.events.move.touch, this.moveHandler.bind(this), false);
-	            this.container.addEventListener(this.settings.events.end.touch, this.endHandler.bind(this), false);
-	            this.container.addEventListener(this.settings.events.leave.touch, this.endHandler.bind(this), false);
+	            _Helper.Helper.addListener(this.container, this.settings.events.start.touch, this.startHandler.bind(this));
+	            _Helper.Helper.addListener(this.container, this.settings.events.move.touch, this.moveHandler.bind(this));
+	            _Helper.Helper.addListener(this.container, this.settings.events.end.touch, this.endHandler.bind(this));
+	            _Helper.Helper.addListener(this.container, this.settings.events.leave.touch, this.endHandler.bind(this));
 	            return this;
 	        }
 
@@ -10522,11 +10526,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'bindMouseEvents',
 	        value: function bindMouseEvents() {
-	            this.container.addEventListener(this.settings.events.scroll, this.scrollHandler.bind(this), false);
-	            this.container.addEventListener(this.settings.events.start.mouse, this.startHandler.bind(this), false);
-	            this.container.addEventListener(this.settings.events.move.mouse, this.moveHandler.bind(this), false);
-	            this.container.addEventListener(this.settings.events.end.mouse, this.endHandler.bind(this), false);
-	            this.container.addEventListener(this.settings.events.leave.mouse, this.endHandler.bind(this), false);
+	            _Helper.Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
+	            _Helper.Helper.addListener(this.container, this.settings.events.start.mouse, this.startHandler.bind(this));
+	            _Helper.Helper.addListener(this.container, this.settings.events.move.mouse, this.moveHandler.bind(this));
+	            _Helper.Helper.addListener(this.container, this.settings.events.end.mouse, this.endHandler.bind(this));
+	            _Helper.Helper.addListener(this.container, this.settings.events.leave.mouse, this.endHandler.bind(this));
 	            return this;
 	        }
 

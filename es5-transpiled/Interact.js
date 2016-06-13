@@ -326,9 +326,9 @@
         }, {
             key: 'bindIEEvents',
             value: function bindIEEvents() {
-                this.container.addEventListener(this.settings.events.scroll, this.scrollHandler.bind(this), false);
+                _Helper.Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
                 this.bindTouchEvents();
-                this.container.addEventListener("contextmenu", function(e) {
+                _Helper.Helper.addListener(this.container, "contextmenu", function(e) {
                     return e.preventDefault();
                 }, false);
                 return this;
@@ -342,10 +342,10 @@
         }, {
             key: 'bindTouchEvents',
             value: function bindTouchEvents() {
-                this.container.addEventListener(this.settings.events.start.touch, this.startHandler.bind(this), false);
-                this.container.addEventListener(this.settings.events.move.touch, this.moveHandler.bind(this), false);
-                this.container.addEventListener(this.settings.events.end.touch, this.endHandler.bind(this), false);
-                this.container.addEventListener(this.settings.events.leave.touch, this.endHandler.bind(this), false);
+                _Helper.Helper.addListener(this.container, this.settings.events.start.touch, this.startHandler.bind(this));
+                _Helper.Helper.addListener(this.container, this.settings.events.move.touch, this.moveHandler.bind(this));
+                _Helper.Helper.addListener(this.container, this.settings.events.end.touch, this.endHandler.bind(this));
+                _Helper.Helper.addListener(this.container, this.settings.events.leave.touch, this.endHandler.bind(this));
                 return this;
             }
 
@@ -357,11 +357,11 @@
         }, {
             key: 'bindMouseEvents',
             value: function bindMouseEvents() {
-                this.container.addEventListener(this.settings.events.scroll, this.scrollHandler.bind(this), false);
-                this.container.addEventListener(this.settings.events.start.mouse, this.startHandler.bind(this), false);
-                this.container.addEventListener(this.settings.events.move.mouse, this.moveHandler.bind(this), false);
-                this.container.addEventListener(this.settings.events.end.mouse, this.endHandler.bind(this), false);
-                this.container.addEventListener(this.settings.events.leave.mouse, this.endHandler.bind(this), false);
+                _Helper.Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
+                _Helper.Helper.addListener(this.container, this.settings.events.start.mouse, this.startHandler.bind(this));
+                _Helper.Helper.addListener(this.container, this.settings.events.move.mouse, this.moveHandler.bind(this));
+                _Helper.Helper.addListener(this.container, this.settings.events.end.mouse, this.endHandler.bind(this));
+                _Helper.Helper.addListener(this.container, this.settings.events.leave.mouse, this.endHandler.bind(this));
                 return this;
             }
 

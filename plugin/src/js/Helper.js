@@ -36,6 +36,9 @@ export var Helper = {
             elem.style[property] = css[property];
         }
     },
+    addListener(el, s, fn) {
+        s.split(" ").forEach(e => el.addEventListener(e, fn, false));
+    },
     /**
      * clamps a value to specified min and max
      * @function

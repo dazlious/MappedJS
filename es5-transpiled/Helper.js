@@ -59,6 +59,11 @@
                 elem.style[property] = _css[property];
             }
         },
+        addListener: function addListener(el, s, fn) {
+            s.split(" ").forEach(function(e) {
+                return el.addEventListener(e, fn, false);
+            });
+        },
 
         /**
          * clamps a value to specified min and max

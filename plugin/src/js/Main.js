@@ -183,11 +183,10 @@ export class MappedJS {
 
         this.initializeInteractForMap();
 
-        window.addEventListener("resize", this.resizeHandler.bind(this), false);
-        window.addEventListener("orientationchange", this.resizeHandler.bind(this), false);
+        Helper.addListener(window, "resize orientationchange", this.resizeHandler.bind(this));
 
-        document.addEventListener(Events.Handling.KEYDOWN, this.keyPress.bind(this), false);
-        document.addEventListener(Events.Handling.KEYUP, this.keyRelease.bind(this), false);
+        Helper.addListener(document, Events.Handling.KEYDOWN, this.keyPress.bind(this));
+        Helper.addListener(document, Events.Handling.KEYUP, this.keyRelease.bind(this));
 
         this.zoomIn.setAttribute("data-id", "zoom-button-plus");
         this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));

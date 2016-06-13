@@ -231,9 +231,9 @@ export class Interact {
      * @return {Interact} Returns this instance
      */
     bindIEEvents() {
-        this.container.addEventListener(this.settings.events.scroll, this.scrollHandler.bind(this), false);
+        Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
         this.bindTouchEvents();
-        this.container.addEventListener("contextmenu", (e) => e.preventDefault(), false);
+        Helper.addListener(this.container,"contextmenu", (e) => e.preventDefault(), false);
         return this;
     }
 
@@ -242,10 +242,10 @@ export class Interact {
      * @return {Interact} Returns this instance
      */
     bindTouchEvents() {
-        this.container.addEventListener(this.settings.events.start.touch, this.startHandler.bind(this), false);
-        this.container.addEventListener(this.settings.events.move.touch, this.moveHandler.bind(this), false);
-        this.container.addEventListener(this.settings.events.end.touch, this.endHandler.bind(this), false);
-        this.container.addEventListener(this.settings.events.leave.touch, this.endHandler.bind(this), false);
+        Helper.addListener(this.container,this.settings.events.start.touch, this.startHandler.bind(this));
+        Helper.addListener(this.container,this.settings.events.move.touch, this.moveHandler.bind(this));
+        Helper.addListener(this.container,this.settings.events.end.touch, this.endHandler.bind(this));
+        Helper.addListener(this.container,this.settings.events.leave.touch, this.endHandler.bind(this));
         return this;
     }
 
@@ -254,11 +254,11 @@ export class Interact {
      * @return {Interact} Returns this instance
      */
     bindMouseEvents() {
-        this.container.addEventListener(this.settings.events.scroll, this.scrollHandler.bind(this), false);
-        this.container.addEventListener(this.settings.events.start.mouse, this.startHandler.bind(this), false);
-        this.container.addEventListener(this.settings.events.move.mouse, this.moveHandler.bind(this), false);
-        this.container.addEventListener(this.settings.events.end.mouse, this.endHandler.bind(this), false);
-        this.container.addEventListener(this.settings.events.leave.mouse, this.endHandler.bind(this), false);
+        Helper.addListener(this.container,this.settings.events.scroll, this.scrollHandler.bind(this));
+        Helper.addListener(this.container,this.settings.events.start.mouse, this.startHandler.bind(this));
+        Helper.addListener(this.container,this.settings.events.move.mouse, this.moveHandler.bind(this));
+        Helper.addListener(this.container,this.settings.events.end.mouse, this.endHandler.bind(this));
+        Helper.addListener(this.container,this.settings.events.leave.mouse, this.endHandler.bind(this));
         return this;
     }
 
