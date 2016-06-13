@@ -77,12 +77,10 @@ export class ToolTip {
      * @return {ToolTip} instance of ToolTip for chaining
      */
     bindEvents() {
-        window.addEventListener("resize", this.resizeHandler.bind(this), false);
-        window.addEventListener("orientationchange", this.resizeHandler.bind(this), false);
-
+        Helper.addListener(window, Events.Handling.RESIZE, this.resizeHandler.bind(this));
+        Helper.addListener(this.close, Events.Handling.CLICK, () => { this.closeTooltip(); });
         this.eventManager.subscribe(Events.ToolTip.OPEN, this.open.bind(this));
         this.eventManager.subscribe(Events.ToolTip.CLOSE, () => { this.closeTooltip(); });
-        this.close.addEventListener(Events.Handling.CLICK, () => { this.closeTooltip(); }, false);
         return this;
     }
 

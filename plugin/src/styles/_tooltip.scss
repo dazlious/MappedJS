@@ -17,17 +17,16 @@ $icon-height: (7*$gutter);
         display: block;
         width: $icon-width;
         height: $icon-height;
-        transition: background .15s ease;
         cursor: pointer;
         background: {
             color: map-get($light-theme, popupBg);
-            image: url("data:image/svg+xml;charset=utf8,%3Csvg id='close' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23333;}%3C/style%3E%3C/defs%3E%3Ctitle%3Elight%3C/title%3E%3Cpath class='cls-1' d='M503.17157,62.17476a4.01176,4.01176,0,0,0,0-5.65685L455.48209,8.82843a4.01176,4.01176,0,0,0-5.65685,0L258.82843,199.82524a4.01176,4.01176,0,0,1-5.65685,0L62.17476,8.82843a4.01176,4.01176,0,0,0-5.65685,0L8.82843,56.51791a4.01176,4.01176,0,0,0,0,5.65685L199.82524,253.17157a4.01176,4.01176,0,0,1,0,5.65685L8.82843,449.82524a4.01176,4.01176,0,0,0,0,5.65685l47.68948,47.68948a4.01176,4.01176,0,0,0,5.65685,0L253.17157,312.17476a4.01176,4.01176,0,0,1,5.65685,0L449.82524,503.17157a4.01176,4.01176,0,0,0,5.65685,0l47.68948-47.68948a4.01176,4.01176,0,0,0,0-5.65685L312.17476,258.82843a4.01176,4.01176,0,0,1,0-5.65685Z'/%3E%3C/svg%3E");
-            size: 80%;
-            position: center;
+            size: 200%;
+            image: url('../../img/icons.png');
+            position: 0% 0%;
             repeat: no-repeat;
         }
         &:hover {
-            background-size: 90%;
+            background-position: 100% 0%;
         }
     }
     @at-root .mappedJS.left {

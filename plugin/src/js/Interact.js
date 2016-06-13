@@ -270,7 +270,6 @@ export class Interact {
     preHandle(event) {
         if (this.settings.stopPropagation) event.stopPropagation();
         if (this.settings.preventDefault) event.preventDefault();
-        this.data.target = event.target;
         return this.getEvent(event);
     }
 
@@ -281,7 +280,7 @@ export class Interact {
      */
     scrollHandler(event) {
         event = event || window.event;
-
+        this.data.target = event.target;
         const e = this.preHandle(event) || event;
 
         this.data.delta = this.normalizeWheelDelta(event);
@@ -450,6 +449,7 @@ export class Interact {
         if (event.button && event.button !== 0) {
             return false;
         }
+        this.data.target = event.target;
         const e = this.preHandle(event);
         this.data.timeStart = event.timeStamp;
         this.clearTimeouts(this.data.timeoutDefault);

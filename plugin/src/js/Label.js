@@ -64,8 +64,7 @@ export class Label extends Drawable {
     }
 
     getNearestPositionToCenter() {
-        const center = this.center.clone.multiply(-1);
-        this.latlng = this.latlng.sort((a, b) => center.distance(a) - center.distance(b));
+        this.latlng = this.latlng.sort((a, b) => this.center.distance(a) - this.center.distance(b));
         return this.latlng[0];
     }
 

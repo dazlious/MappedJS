@@ -63,8 +63,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	__webpack_require__(1);
 
 	var _Helper = __webpack_require__(191);
@@ -121,6 +119,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, MappedJS);
 
+	        this.polyfill();
+
 	        this.initializeSettings(container, events, mapSettings);
 
 	        this.id = this.generateUniqueID();
@@ -145,312 +145,423 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
-	    _createClass(MappedJS, [{
-	        key: 'generateUniqueID',
-	        value: function generateUniqueID() {
-	            return parseInt(Date.now() * (Math.random() * 10), 10);
+	    MappedJS.prototype.generateUniqueID = function generateUniqueID() {
+	        return parseInt(Date.now() * (Math.random() * 10), 10);
+	    };
+
+	    /**
+	     * add controls (zoom, home) to DOM
+	     */
+
+
+	    MappedJS.prototype.addControls = function addControls() {
+	        if (this.mapSettings.controls) {
+	            this.controls = document.createElement("div");
+	            this.controls.classList.add("control-container");
+	            this.controls.classList.add(this.mapSettings.controls.theme);
+	            this.controls.classList.add(this.mapSettings.controls.position);
+	            this.zoomIn = document.createElement("div");
+	            this.zoomIn.classList.add("control");
+	            this.zoomIn.classList.add("zoom-in");
+	            this.zoomOut = document.createElement("div");
+	            this.zoomOut.classList.add("control");
+	            this.zoomOut.classList.add("zoom-out");
+	            this.home = document.createElement("div");
+	            this.home.classList.add("control");
+	            this.home.classList.add("home");
+	            this.controls.appendChild(this.home);
+	            this.controls.appendChild(this.zoomIn);
+	            this.controls.appendChild(this.zoomOut);
+	            this.content.appendChild(this.controls);
 	        }
+	    };
 
-	        /**
-	         * add controls (zoom, home) to DOM
-	         */
+	    /**
+	     * initializes the settings and handles errors
+	     * @param  {string|Object} container - Container, either string or dom-object
+	     * @param  {object} events - List of events
+	     * @param  {object} settings - List of settings
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
 
-	    }, {
-	        key: 'addControls',
-	        value: function addControls() {
-	            if (this.mapSettings.controls) {
-	                this.controls = document.createElement("div");
-	                this.controls.classList.add("control-container", this.mapSettings.controls.theme, this.mapSettings.controls.position);
-	                this.zoomIn = document.createElement("div");
-	                this.zoomIn.classList.add("control", "zoom-in");
-	                this.zoomOut = document.createElement("div");
-	                this.zoomOut.classList.add("control", "zoom-out");
-	                this.home = document.createElement("div");
-	                this.home.classList.add("control", "home");
-	                this.controls.appendChild(this.home);
-	                this.controls.appendChild(this.zoomIn);
-	                this.controls.appendChild(this.zoomOut);
-	                this.content.appendChild(this.controls);
-	            }
-	        }
 
-	        /**
-	         * initializes the settings and handles errors
-	         * @param  {string|Object} container - Container, either string or dom-object
-	         * @param  {object} events - List of events
-	         * @param  {object} settings - List of settings
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
+	    MappedJS.prototype.initializeSettings = function initializeSettings(container) {
+	        var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	        var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-	    }, {
-	        key: 'initializeSettings',
-	        value: function initializeSettings(container) {
-	            var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	            var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	        this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
+	        this.container.classList.add("mappedJS");
+	        this.content = document.createElement("div");
+	        this.content.classList.add("map-content");
+	        this.container.appendChild(this.content);
 
-	            this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
-	            this.container.classList.add("mappedJS");
-	            this.content = document.createElement("div");
-	            this.content.classList.add("map-content");
-	            this.container.appendChild(this.content);
+	        this.mapSettings = _DataEnrichment.DataEnrichment.mapSettings(settings);
+	        this.events = events;
 
-	            this.mapSettings = _DataEnrichment.DataEnrichment.mapSettings(settings);
-	            this.events = events;
+	        return this;
+	    };
 
-	            return this;
-	        }
+	    /**
+	     * initializes the data, asynchronous
+	     * @param  {Object} mapData - data of map tiles, can be json or path to file
+	     * @param  {Helper~requestJSONCallback} cb - called, when data is received
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
 
-	        /**
-	         * initializes the data, asynchronous
-	         * @param  {Object} mapData - data of map tiles, can be json or path to file
-	         * @param  {Helper~requestJSONCallback} cb - called, when data is received
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
 
-	    }, {
-	        key: 'initializeData',
-	        value: function initializeData(mapData, cb) {
-	            if (typeof mapData === "string") {
-	                _Helper.Helper.requestJSON(mapData, function (data) {
-	                    cb(data);
-	                });
-	            } else {
-	                cb((typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null);
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * initializes Map module
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'initializeMap',
-	        value: function initializeMap() {
-	            this.tileMap = new _TileMap.TileMap({
-	                container: this.content,
-	                tilesData: this.mapData,
-	                id: this.id,
-	                settings: this.mapSettings
+	    MappedJS.prototype.initializeData = function initializeData(mapData, cb) {
+	        if (typeof mapData === "string") {
+	            _Helper.Helper.requestJSON(mapData, function (data) {
+	                cb(data);
 	            });
-	            return this;
+	        } else {
+	            cb((typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null);
 	        }
+	        return this;
+	    };
 
-	        /**
-	         * get absolute position of a point
-	         * @param  {Point} point - specified relative position
-	         * @return {Point} absolute position to viewport
-	         */
+	    /**
+	     * initializes Map module
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
 
-	    }, {
-	        key: 'getAbsolutePosition',
-	        value: function getAbsolutePosition(point) {
-	            return point.clone.multiply(this.tileMap.width, this.tileMap.height);
-	        }
 
-	        /**
-	         * initializes interaction
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
+	    MappedJS.prototype.initializeMap = function initializeMap() {
+	        this.tileMap = new _TileMap.TileMap({
+	            container: this.content,
+	            tilesData: this.mapData,
+	            id: this.id,
+	            settings: this.mapSettings
+	        });
+	        return this;
+	    };
 
-	    }, {
-	        key: 'initializeInteractForMap',
-	        value: function initializeInteractForMap() {
-	            var _this2 = this;
+	    /**
+	     * get absolute position of a point
+	     * @param  {Point} point - specified relative position
+	     * @return {Point} absolute position to viewport
+	     */
 
-	            this.interact = new _Interact.Interact({
-	                container: this.content,
-	                autoFireHold: 300,
-	                overwriteViewportSettings: true,
-	                callbacks: {
-	                    tap: function tap(data) {
-	                        var pos = _this2.getAbsolutePosition(data.positionStart);
-	                        _this2.tileMap.velocity = new _Point.Point();
-	                        var id = data.target.getAttribute("data-id");
-	                        if (id) _this2.eventManager.publish(id, pos);
-	                    },
-	                    doubletap: function doubletap(data) {
-	                        _this2.tileMap.velocity = new _Point.Point();
-	                        _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.positionStart));
-	                    },
-	                    pan: function pan(data) {
-	                        if (data.target.classList.contains("control")) return false;
-	                        var change = data.positionLast.clone.substract(data.positionMove);
-	                        _this2.tileMap.velocity = new _Point.Point();
-	                        _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
-	                    },
-	                    wheel: function wheel(data) {
-	                        var factor = data.delta / 4;
-	                        _this2.tileMap.velocity = new _Point.Point();
-	                        _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.positionStart));
-	                    },
-	                    pinch: function pinch(data) {
-	                        _this2.tileMap.velocity = new _Point.Point();
-	                        _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.positionMove));
-	                    },
-	                    flick: function flick(data) {
-	                        _this2.tileMap.velocity = data.velocity.multiply(20);
-	                    }
+
+	    MappedJS.prototype.getAbsolutePosition = function getAbsolutePosition(point) {
+	        return point.clone.multiply(this.tileMap.width, this.tileMap.height);
+	    };
+
+	    /**
+	     * initializes interaction
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    MappedJS.prototype.initializeInteractForMap = function initializeInteractForMap() {
+	        var _this2 = this;
+
+	        this.interact = new _Interact.Interact({
+	            container: this.content,
+	            autoFireHold: 300,
+	            overwriteViewportSettings: true,
+	            callbacks: {
+	                tap: function tap(data) {
+	                    var pos = _this2.getAbsolutePosition(data.positionStart);
+	                    _this2.tileMap.velocity = new _Point.Point();
+	                    var id = data.target.getAttribute("data-id");
+	                    if (id) _this2.eventManager.publish(id, pos);
+	                },
+	                doubletap: function doubletap(data) {
+	                    _this2.tileMap.velocity = new _Point.Point();
+	                    _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.positionStart));
+	                },
+	                pan: function pan(data) {
+	                    if (data.target.classList.contains("control")) return false;
+	                    var change = data.positionLast.clone.substract(data.positionMove);
+	                    _this2.tileMap.velocity = new _Point.Point();
+	                    _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
+	                },
+	                wheel: function wheel(data) {
+	                    var factor = data.delta / 4;
+	                    _this2.tileMap.velocity = new _Point.Point();
+	                    _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.positionStart));
+	                },
+	                pinch: function pinch(data) {
+	                    _this2.tileMap.velocity = new _Point.Point();
+	                    _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.positionMove));
+	                },
+	                flick: function flick(data) {
+	                    _this2.tileMap.velocity = data.velocity.multiply(20);
 	                }
-	            });
-	            return this;
-	        }
-
-	        /**
-	         * binds all events to handlers
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'bindEvents',
-	        value: function bindEvents() {
-
-	            this.initializeInteractForMap();
-
-	            _Helper.Helper.addListener(window, "resize orientationchange", this.resizeHandler.bind(this));
-
-	            _Helper.Helper.addListener(document, _Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
-	            _Helper.Helper.addListener(document, _Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
-
-	            this.zoomIn.setAttribute("data-id", "zoom-button-plus");
-	            this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
-
-	            this.zoomOut.setAttribute("data-id", "zoom-button-minus");
-	            this.eventManager.subscribe("zoom-button-minus", this.zoomOutToCenter.bind(this));
-
-	            this.home.setAttribute("data-id", "home-button");
-	            this.eventManager.subscribe("home-button", this.resetToInitialState.bind(this));
-
-	            return this;
-	        }
-
-	        /**
-	         * resets map to initial state
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'resetToInitialState',
-	        value: function resetToInitialState() {
-	            this.tileMap.reset();
-	            return this;
-	        }
-
-	        /**
-	         * zooms into center of map
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'zoomInToCenter',
-	        value: function zoomInToCenter() {
-	            this.tileMap.zoom(0.2, this.tileMap.view.viewport.center);
-	            return this;
-	        }
-
-	        /**
-	         * zooms out of center of map
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'zoomOutToCenter',
-	        value: function zoomOutToCenter() {
-	            this.tileMap.zoom(-0.2, this.tileMap.view.viewport.center);
-	            return this;
-	        }
-
-	        /**
-	         * Keypress handler
-	         * @param  {object} e VanillaJS-Event-Object
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'keyPress',
-	        value: function keyPress(e) {
-	            switch (e.keyCode) {
-	                case 38:
-	                    // up
-	                    this.handleMovementByKeys(new _Point.Point(0, 1));
-	                    break;
-	                case 37:
-	                    // left
-	                    this.handleMovementByKeys(new _Point.Point(1, 0));
-	                    break;
-	                case 39:
-	                    // right
-	                    this.handleMovementByKeys(new _Point.Point(-1, 0));
-	                    break;
-	                case 40:
-	                    // down
-	                    this.handleMovementByKeys(new _Point.Point(0, -1));
-	                    break;
-	                case 187: // plus
-	                case 107:
-	                    // plus numpad
-	                    this.zoomInToCenter();
-	                    break;
-	                case 189: // minus
-	                case 109:
-	                    // minus numpad
-	                    this.zoomOutToCenter();
-	                    break;
-	                case 72: // h
-	                case 27:
-	                    // esc
-	                    this.resetToInitialState();
-	                    break;
-	                default:
-	                    break;
 	            }
-	            this.eventManager.publish(_Events.Events.TileMap.DRAW);
-	            return this;
-	        }
+	        });
+	        return this;
+	    };
 
-	        /**
-	         * handles the translation of the map by keypress
-	         * @param  {Point} direction - x,y point where to translate to
-	         * @return {MappedJS} instance of MappedJS for chaining
+	    /**
+	     * binds all events to handlers
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    MappedJS.prototype.bindEvents = function bindEvents() {
+
+	        this.initializeInteractForMap();
+
+	        _Helper.Helper.addListener(window, _Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
+
+	        _Helper.Helper.addListener(document, _Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
+	        _Helper.Helper.addListener(document, _Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
+
+	        this.zoomIn.setAttribute("data-id", "zoom-button-plus");
+	        this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
+
+	        this.zoomOut.setAttribute("data-id", "zoom-button-minus");
+	        this.eventManager.subscribe("zoom-button-minus", this.zoomOutToCenter.bind(this));
+
+	        this.home.setAttribute("data-id", "home-button");
+	        this.eventManager.subscribe("home-button", this.resetToInitialState.bind(this));
+
+	        return this;
+	    };
+
+	    /**
+	     * resets map to initial state
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    MappedJS.prototype.resetToInitialState = function resetToInitialState() {
+	        this.tileMap.reset();
+	        return this;
+	    };
+
+	    /**
+	     * zooms into center of map
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    MappedJS.prototype.zoomInToCenter = function zoomInToCenter() {
+	        this.tileMap.zoom(0.2, this.tileMap.view.viewport.center);
+	        return this;
+	    };
+
+	    /**
+	     * zooms out of center of map
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    MappedJS.prototype.zoomOutToCenter = function zoomOutToCenter() {
+	        this.tileMap.zoom(-0.2, this.tileMap.view.viewport.center);
+	        return this;
+	    };
+
+	    /**
+	     * Keypress handler
+	     * @param  {object} e VanillaJS-Event-Object
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    MappedJS.prototype.keyPress = function keyPress(e) {
+	        switch (e.keyCode) {
+	            case 38:
+	                // up
+	                this.handleMovementByKeys(new _Point.Point(0, 1));
+	                break;
+	            case 37:
+	                // left
+	                this.handleMovementByKeys(new _Point.Point(1, 0));
+	                break;
+	            case 39:
+	                // right
+	                this.handleMovementByKeys(new _Point.Point(-1, 0));
+	                break;
+	            case 40:
+	                // down
+	                this.handleMovementByKeys(new _Point.Point(0, -1));
+	                break;
+	            case 187: // plus
+	            case 107:
+	                // plus numpad
+	                this.zoomInToCenter();
+	                break;
+	            case 189: // minus
+	            case 109:
+	                // minus numpad
+	                this.zoomOutToCenter();
+	                break;
+	            case 72: // h
+	            case 27:
+	                // esc
+	                this.resetToInitialState();
+	                break;
+	            default:
+	                break;
+	        }
+	        this.eventManager.publish(_Events.Events.TileMap.DRAW);
+	        return this;
+	    };
+
+	    /**
+	     * handles the translation of the map by keypress
+	     * @param  {Point} direction - x,y point where to translate to
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    MappedJS.prototype.handleMovementByKeys = function handleMovementByKeys(direction) {
+	        this.keyTicks++;
+	        this.tileMap.moveView(direction.multiply(this.keyTicks));
+	        return this;
+	    };
+
+	    MappedJS.prototype.keyRelease = function keyRelease() {
+	        this.keyTicks = 0;
+	    };
+
+	    /**
+	     * handles resizing of window
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    MappedJS.prototype.resizeHandler = function resizeHandler() {
+	        this.tileMap.resize();
+	        return this;
+	    };
+
+	    /**
+	     * called when loading and initialization is finished
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    MappedJS.prototype.loadingFinished = function loadingFinished() {
+	        return this;
+	    };
+
+	    MappedJS.prototype.polyfill = function polyfill() {
+	        /*
+	        polyfill from eligrey for element.class | Listhttps://github.com/eligrey/classList.js/
 	         */
-
-	    }, {
-	        key: 'handleMovementByKeys',
-	        value: function handleMovementByKeys(direction) {
-	            this.keyTicks++;
-	            this.tileMap.moveView(direction.multiply(this.keyTicks));
-	            return this;
-	        }
-	    }, {
-	        key: 'keyRelease',
-	        value: function keyRelease() {
-	            this.keyTicks = 0;
-	        }
-
-	        /**
-	         * handles resizing of window
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'resizeHandler',
-	        value: function resizeHandler() {
-	            this.tileMap.resize();
-	            return this;
-	        }
-
-	        /**
-	         * called when loading and initialization is finished
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'loadingFinished',
-	        value: function loadingFinished() {
-	            return this;
-	        }
-	    }]);
+	        /* jshint ignore:start */
+	        if ("document" in self) {
+	            if (!("classList" in document.createElement("_")) || document.createElementNS && !("classList" in document.createElementNS("http://www.w3.org/2000/svg", "g"))) {
+	                (function (t) {
+	                    if (!("Element" in t)) return;var e = "classList",
+	                        i = "prototype",
+	                        n = t.Element[i],
+	                        s = Object,
+	                        r = String[i].trim || function () {
+	                        return this.replace(/^\s+|\s+$/g, "");
+	                    },
+	                        a = Array[i].indexOf || function (t) {
+	                        var e = 0,
+	                            i = this.length;for (; e < i; e++) {
+	                            if (e in this && this[e] === t) {
+	                                return e;
+	                            }
+	                        }return -1;
+	                    },
+	                        o = function o(t, e) {
+	                        this.name = t;this.code = DOMException[t];this.message = e;
+	                    },
+	                        l = function l(t, e) {
+	                        if (e === "") {
+	                            throw new o("SYNTAX_ERR", "An invalid or illegal string was specified");
+	                        }if (/\s/.test(e)) {
+	                            throw new o("INVALID_CHARACTER_ERR", "String contains an invalid character");
+	                        }return a.call(t, e);
+	                    },
+	                        c = function c(t) {
+	                        var e = r.call(t.getAttribute("class") || ""),
+	                            i = e ? e.split(/\s+/) : [],
+	                            n = 0,
+	                            s = i.length;for (; n < s; n++) {
+	                            this.push(i[n]);
+	                        }this._updateClassName = function () {
+	                            t.setAttribute("class", this.toString());
+	                        };
+	                    },
+	                        u = c[i] = [],
+	                        f = function f() {
+	                        return new c(this);
+	                    };o[i] = Error[i];u.item = function (t) {
+	                        return this[t] || null;
+	                    };u.contains = function (t) {
+	                        t += "";return l(this, t) !== -1;
+	                    };u.add = function () {
+	                        var t = arguments,
+	                            e = 0,
+	                            i = t.length,
+	                            n,
+	                            s = false;do {
+	                            n = t[e] + "";if (l(this, n) === -1) {
+	                                this.push(n);s = true;
+	                            }
+	                        } while (++e < i);if (s) {
+	                            this._updateClassName();
+	                        }
+	                    };u.remove = function () {
+	                        var t = arguments,
+	                            e = 0,
+	                            i = t.length,
+	                            n,
+	                            s = false,
+	                            r;do {
+	                            n = t[e] + "";r = l(this, n);while (r !== -1) {
+	                                this.splice(r, 1);s = true;r = l(this, n);
+	                            }
+	                        } while (++e < i);if (s) {
+	                            this._updateClassName();
+	                        }
+	                    };u.toggle = function (t, e) {
+	                        t += "";var i = this.contains(t),
+	                            n = i ? e !== true && "remove" : e !== false && "add";if (n) {
+	                            this[n](t);
+	                        }if (e === true || e === false) {
+	                            return e;
+	                        } else {
+	                            return !i;
+	                        }
+	                    };u.toString = function () {
+	                        return this.join(" ");
+	                    };if (s.defineProperty) {
+	                        var h = { get: f, enumerable: true, configurable: true };try {
+	                            s.defineProperty(n, e, h);
+	                        } catch (d) {
+	                            if (d.number === -2146823252) {
+	                                h.enumerable = false;s.defineProperty(n, e, h);
+	                            }
+	                        }
+	                    } else if (s[i].__defineGetter__) {
+	                        n.__defineGetter__(e, f);
+	                    }
+	                })(self);
+	            } else {
+	                (function () {
+	                    var t = document.createElement("_");t.classList.add("c1", "c2");if (!t.classList.contains("c2")) {
+	                        var e = function e(t) {
+	                            var e = DOMTokenList.prototype[t];DOMTokenList.prototype[t] = function (t) {
+	                                var i,
+	                                    n = arguments.length;for (i = 0; i < n; i++) {
+	                                    t = arguments[i];e.call(this, t);
+	                                }
+	                            };
+	                        };e("add");e("remove");
+	                    }t.classList.toggle("c3", false);if (t.classList.contains("c3")) {
+	                        var i = DOMTokenList.prototype.toggle;DOMTokenList.prototype.toggle = function (t, e) {
+	                            if (1 in arguments && !this.contains(t) === !e) {
+	                                return e;
+	                            } else {
+	                                return i.call(this, t);
+	                            }
+	                        };
+	                    }t = null;
+	                })();
+	            }
+	        };
+	        /* jshint ignore:end */
+	    };
 
 	    return MappedJS;
 	}();
@@ -6045,8 +6156,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _Events = __webpack_require__(192);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -6085,106 +6194,99 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    _createClass(Publisher, [{
-	        key: "subscribe",
-	        value: function subscribe() {
-	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
-	            var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
+	    Publisher.prototype.subscribe = function subscribe() {
+	        var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	        var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
 
-	            if (!this.subscribers[type]) this.subscribers[type] = [];
-	            this.subscribers[type].push(fn);
-	            return this;
-	        }
+	        if (!this.subscribers[type]) this.subscribers[type] = [];
+	        this.subscribers[type].push(fn);
+	        return this;
+	    };
 
-	        /**
-	         * unsubscribe from a topic
-	         * @param  {string} type="any" - a topic
-	         * @param  {Function} fn=function(){} - a function to callback
-	         * @return {Publisher} instance of Publisher for chaining
-	         */
+	    /**
+	     * unsubscribe from a topic
+	     * @param  {string} type="any" - a topic
+	     * @param  {Function} fn=function(){} - a function to callback
+	     * @return {Publisher} instance of Publisher for chaining
+	     */
 
-	    }, {
-	        key: "unsubscribe",
-	        value: function unsubscribe() {
-	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
-	            var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
 
-	            return this.handle(_Events.Events.Publisher.UNSUBSCRIBE, type, fn);
-	        }
+	    Publisher.prototype.unsubscribe = function unsubscribe() {
+	        var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	        var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
 
-	        /**
-	         * publish to a topic
-	         * @param  {string} type="any" - a topic
-	         * @param  {Function} arg=[] - list of parameters
-	         * @return {Publisher} instance of Publisher for chaining
-	         */
+	        return this.handle(_Events.Events.Publisher.UNSUBSCRIBE, type, fn);
+	    };
 
-	    }, {
-	        key: "publish",
-	        value: function publish() {
-	            var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
-	            var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+	    /**
+	     * publish to a topic
+	     * @param  {string} type="any" - a topic
+	     * @param  {Function} arg=[] - list of parameters
+	     * @return {Publisher} instance of Publisher for chaining
+	     */
 
-	            return this.handle(_Events.Events.Publisher.PUBLISH, type, arg);
-	        }
 
-	        /**
-	         * handle subscribe to a topic
-	         * @param  {string} action - eventname
-	         * @param  {string} type="any" - a topic
-	         * @param  {Object} a function to callback or arguments
-	         * @return {Publisher} instance of Publisher for chaining
-	         */
+	    Publisher.prototype.publish = function publish() {
+	        var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
+	        var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
-	    }, {
-	        key: "handle",
-	        value: function handle(action, type, data) {
-	            var subs = this.subscribers[type] ? this.subscribers[type] : [];
-	            var _iteratorNormalCompletion = true;
-	            var _didIteratorError = false;
-	            var _iteratorError = undefined;
+	        return this.handle(_Events.Events.Publisher.PUBLISH, type, arg);
+	    };
 
-	            try {
-	                for (var _iterator = subs.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var _step$value = _slicedToArray(_step.value, 2);
+	    /**
+	     * handle subscribe to a topic
+	     * @param  {string} action - eventname
+	     * @param  {string} type="any" - a topic
+	     * @param  {Object} a function to callback or arguments
+	     * @return {Publisher} instance of Publisher for chaining
+	     */
 
-	                    var i = _step$value[0];
-	                    var fn = _step$value[1];
 
-	                    if (action === _Events.Events.Publisher.PUBLISH) {
-	                        fn(data);
-	                    } else {
-	                        if (fn === data) subs.splice(i, 1);
-	                    }
-	                }
-	            } catch (err) {
-	                _didIteratorError = true;
-	                _iteratorError = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion && _iterator.return) {
-	                        _iterator.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError) {
-	                        throw _iteratorError;
-	                    }
+	    Publisher.prototype.handle = function handle(action, type, data) {
+	        var subs = this.subscribers[type] ? this.subscribers[type] : [];
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	            for (var _iterator = subs.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                var _step$value = _slicedToArray(_step.value, 2);
+
+	                var i = _step$value[0];
+	                var fn = _step$value[1];
+
+	                if (action === _Events.Events.Publisher.PUBLISH) {
+	                    fn(data);
+	                } else {
+	                    if (fn === data) subs.splice(i, 1);
 	                }
 	            }
-
-	            return this;
+	        } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion && _iterator.return) {
+	                    _iterator.return();
+	                }
+	            } finally {
+	                if (_didIteratorError) {
+	                    throw _iteratorError;
+	                }
+	            }
 	        }
 
-	        /**
-	         * destroys singleton instance
-	         */
+	        return this;
+	    };
 
-	    }, {
-	        key: "destroy",
-	        value: function destroy() {
-	            Publisher.instances[this.id] = null;
-	        }
-	    }]);
+	    /**
+	     * destroys singleton instance
+	     */
+
+
+	    Publisher.prototype.destroy = function destroy() {
+	        Publisher.instances[this.id] = null;
+	    };
 
 	    return Publisher;
 	}();
@@ -6412,406 +6514,382 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    _createClass(TileMap, [{
-	        key: 'reset',
-	        value: function reset() {
-	            if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
-	            this.view.reset();
-	            this.redraw();
-	            this.clusterHandler();
-	        }
-	    }, {
-	        key: 'initializeLabels',
-	        value: function initializeLabels() {
-	            var _this2 = this;
+	    TileMap.prototype.reset = function reset() {
+	        if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
+	        this.view.reset();
+	        this.redraw();
+	        this.clusterHandler();
+	    };
 
-	            this.labelData = this.enrichLabelData(this.labelData);
-	            this.labels = [];
-	            _Helper.Helper.forEach(this.labelData, function (label) {
-	                var currentLabel = new _Label.Label({
-	                    context: _this2.canvasContext,
-	                    id: _this2.id,
-	                    settings: label
+	    TileMap.prototype.initializeLabels = function initializeLabels() {
+	        var _this2 = this;
+
+	        this.labelData = this.enrichLabelData(this.labelData);
+	        this.labels = [];
+	        _Helper.Helper.forEach(this.labelData, function (label) {
+	            var currentLabel = new _Label.Label({
+	                context: _this2.canvasContext,
+	                id: _this2.id,
+	                settings: label
+	            });
+	            _this2.labels.push(currentLabel);
+	        });
+	    };
+
+	    /**
+	     * creates a View from specified parameters
+	     * @param  {Bounds} bounds - specified boundaries
+	     * @param  {LatLng} center - specified center
+	     * @param  {object} data - specified data
+	     * @param  {number} zoom - initial zoom level
+	     * @return {View} created View
+	     */
+
+
+	    TileMap.prototype.createViewFromData = function createViewFromData(bounds, center, data, zoom) {
+	        return new _View.View({
+	            viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
+	            currentView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
+	            bounds: bounds,
+	            center: center,
+	            initialCenter: this.initial.center,
+	            data: data,
+	            maxZoom: data.zoom ? data.zoom.max : 1,
+	            currentZoom: zoom,
+	            minZoom: data.zoom ? data.zoom.min : 1,
+	            context: this.canvasContext,
+	            id: this.id,
+	            centerSmallMap: this.settings.centerSmallMap,
+	            limitToBounds: this.settings.limitToBounds
+	        });
+	    };
+
+	    /**
+	     * reposition marker container
+	     * @return {View} instance of View for chaining
+	     */
+
+
+	    TileMap.prototype.repositionMarkerContainer = function repositionMarkerContainer() {
+	        if (this.markerContainer) {
+	            var newSize = this.view.view.getDistortedRect(this.view.distortionFactor);
+	            var left = (newSize.left + this.view.offsetToCenter).toFixed(4);
+	            var top = newSize.top.toFixed(4);
+	            _Helper.Helper.css(this.markerContainer, {
+	                "width": newSize.width + 'px',
+	                "height": newSize.height + 'px',
+	                "transform": 'translate3d(' + left + 'px, ' + top + 'px, 0px)'
+	            });
+	        }
+	        return this;
+	    };
+
+	    /**
+	     * enrich marker data
+	     * @param  {Object} markerData - data of markers
+	     * @return {Object} enriched marker data
+	     */
+
+
+	    TileMap.prototype.enrichMarkerData = function enrichMarkerData(markerData) {
+	        return _DataEnrichment.DataEnrichment.marker(markerData);
+	    };
+
+	    TileMap.prototype.enrichLabelData = function enrichLabelData(labelData) {
+	        return _DataEnrichment.DataEnrichment.label(labelData);
+	    };
+
+	    /**
+	     * initializes all markers
+	     * @param  {Object} markerData - data of all markers
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.initializeMarkers = function initializeMarkers() {
+	        var _this3 = this;
+
+	        if (this.markerData && this.markerData.length) {
+	            (function () {
+	                var markers = [];
+	                _this3.markerData = _this3.enrichMarkerData(_this3.markerData);
+	                _Helper.Helper.forEach(_this3.markerData, function (currentData) {
+	                    markers.push(new _Marker.Marker({
+	                        data: currentData,
+	                        container: _this3.markerContainer,
+	                        id: _this3.id
+	                    }));
 	                });
-	                _this2.labels.push(currentLabel);
-	            });
-	        }
-
-	        /**
-	         * creates a View from specified parameters
-	         * @param  {Bounds} bounds - specified boundaries
-	         * @param  {LatLng} center - specified center
-	         * @param  {object} data - specified data
-	         * @param  {number} zoom - initial zoom level
-	         * @return {View} created View
-	         */
-
-	    }, {
-	        key: 'createViewFromData',
-	        value: function createViewFromData(bounds, center, data, zoom) {
-	            return new _View.View({
-	                viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
-	                currentView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
-	                bounds: bounds,
-	                center: center,
-	                initialCenter: this.initial.center,
-	                data: data,
-	                maxZoom: data.zoom ? data.zoom.max : 1,
-	                currentZoom: zoom,
-	                minZoom: data.zoom ? data.zoom.min : 1,
-	                context: this.canvasContext,
-	                id: this.id,
-	                centerSmallMap: this.settings.centerSmallMap,
-	                limitToBounds: this.settings.limitToBounds
-	            });
-	        }
-
-	        /**
-	         * reposition marker container
-	         * @return {View} instance of View for chaining
-	         */
-
-	    }, {
-	        key: 'repositionMarkerContainer',
-	        value: function repositionMarkerContainer() {
-	            if (this.markerContainer) {
-	                var newSize = this.view.view.getDistortedRect(this.view.distortionFactor);
-	                var left = (newSize.left + this.view.offsetToCenter).toFixed(4);
-	                var top = newSize.top.toFixed(4);
-	                _Helper.Helper.css(this.markerContainer, {
-	                    "width": newSize.width + 'px',
-	                    "height": newSize.height + 'px',
-	                    "transform": 'translate3d(' + left + 'px, ' + top + 'px, 0px)'
+	                markers = markers.sort(function (a, b) {
+	                    return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
 	                });
+	                _Helper.Helper.forEach(markers, function (marker, i) {
+	                    marker.icon.style.zIndex = i;
+	                });
+
+	                _this3.markerClusterer = new _MarkerClusterer.MarkerClusterer({
+	                    markers: markers,
+	                    id: _this3.id,
+	                    container: _this3.markerContainer
+	                });
+	            })();
+	        }
+	        this.stateHandler.next();
+	        return this;
+	    };
+
+	    /**
+	     * append marker container to DOM
+	    ´     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.appendMarkerContainerToDom = function appendMarkerContainerToDom() {
+	        if (this.markerData && this.markerData.length) {
+	            this.markerContainer = document.createElement("div");
+	            this.markerContainer.classList.add("marker-container");
+	            this.container.appendChild(this.markerContainer);
+	        }
+	        return this;
+	    };
+
+	    /**
+	     * creates an instance of ToolTip
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.createTooltipContainer = function createTooltipContainer() {
+	        this.tooltip = new _ToolTip.ToolTip({
+	            container: this.container.parentNode,
+	            id: this.id,
+	            templates: this.templates
+	        });
+	        this.stateHandler.next();
+	        return this;
+	    };
+
+	    /**
+	     * bind all events
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.bindEvents = function bindEvents() {
+	        var _this4 = this;
+
+	        this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function () {
+	            _this4.resize();
+	        });
+
+	        this.eventManager.subscribe(_Events.Events.TileMap.DRAW, function () {
+	            _this4.redraw();
+	        });
+
+	        this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function () {
+	            _this4.redraw();
+	            if (_this4.stateHandler.current.value < 2) {
+	                _this4.initializeMarkers();
+	                if (_this4.markerData && _this4.markerData.length) _this4.createTooltipContainer();
 	            }
-	            return this;
-	        }
+	        });
 
-	        /**
-	         * enrich marker data
-	         * @param  {Object} markerData - data of markers
-	         * @return {Object} enriched marker data
-	         */
-
-	    }, {
-	        key: 'enrichMarkerData',
-	        value: function enrichMarkerData(markerData) {
-	            return _DataEnrichment.DataEnrichment.marker(markerData);
-	        }
-	    }, {
-	        key: 'enrichLabelData',
-	        value: function enrichLabelData(labelData) {
-	            return _DataEnrichment.DataEnrichment.label(labelData);
-	        }
-
-	        /**
-	         * initializes all markers
-	         * @param  {Object} markerData - data of all markers
-	         * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'initializeMarkers',
-	        value: function initializeMarkers() {
-	            var _this3 = this;
-
-	            if (this.markerData && this.markerData.length) {
-	                (function () {
-	                    var markers = [];
-	                    _this3.markerData = _this3.enrichMarkerData(_this3.markerData);
-	                    _Helper.Helper.forEach(_this3.markerData, function (currentData) {
-	                        markers.push(new _Marker.Marker({
-	                            data: currentData,
-	                            container: _this3.markerContainer,
-	                            id: _this3.id
-	                        }));
-	                    });
-	                    markers = markers.sort(function (a, b) {
-	                        return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
-	                    });
-	                    _Helper.Helper.forEach(markers, function (marker, i) {
-	                        marker.icon.style.zIndex = i;
-	                    });
-
-	                    _this3.markerClusterer = new _MarkerClusterer.MarkerClusterer({
-	                        markers: markers,
-	                        id: _this3.id,
-	                        container: _this3.markerContainer
-	                    });
-	                })();
-	            }
-	            this.stateHandler.next();
-	            return this;
-	        }
-
-	        /**
-	         * append marker container to DOM
-	        ´     * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'appendMarkerContainerToDom',
-	        value: function appendMarkerContainerToDom() {
-	            if (this.markerData && this.markerData.length) {
-	                this.markerContainer = document.createElement("div");
-	                this.markerContainer.classList.add("marker-container");
-	                this.container.appendChild(this.markerContainer);
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * creates an instance of ToolTip
-	         * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'createTooltipContainer',
-	        value: function createTooltipContainer() {
-	            this.tooltip = new _ToolTip.ToolTip({
-	                container: this.container.parentNode,
-	                id: this.id,
-	                templates: this.templates
-	            });
-	            this.stateHandler.next();
-	            return this;
-	        }
-
-	        /**
-	         * bind all events
-	         * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'bindEvents',
-	        value: function bindEvents() {
-	            var _this4 = this;
-
-	            this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function () {
-	                _this4.resize();
-	            });
-
-	            this.eventManager.subscribe(_Events.Events.TileMap.DRAW, function () {
-	                _this4.redraw();
-	            });
-
-	            this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function () {
-	                _this4.redraw();
-	                if (_this4.stateHandler.current.value < 2) {
-	                    _this4.initializeMarkers();
-	                    if (_this4.markerData && _this4.markerData.length) _this4.createTooltipContainer();
-	                }
-	            });
-
-	            this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function (data) {
-	                var zoomIncrease = Math.min(_this4.view.viewport.width / data.boundingBox.width, _this4.view.viewport.height / data.boundingBox.height);
-	                while (zoomIncrease > 0) {
-	                    var possibleZoomOnLevel = _this4.view.maxZoom - _this4.view.zoomFactor;
-	                    zoomIncrease -= possibleZoomOnLevel;
-	                    if (_this4.levelHandler.hasNext()) {
-	                        _this4.changelevel(1);
-	                    } else {
-	                        _this4.zoom(possibleZoomOnLevel, _this4.view.viewport.center);
-	                        zoomIncrease = 0;
-	                    }
-	                }
-	                _this4.view.setLatLngToPosition(data.center, _this4.view.viewport.center);
-	            });
-
-	            this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function () {
-	                _this4.changelevel(1);
-	            });
-	            this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function () {
-	                _this4.changelevel(-1);
-	            });
-
-	            return this;
-	        }
-	    }, {
-	        key: 'setViewToOldView',
-	        value: function setViewToOldView(center, zoom) {
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                zoomFactor: zoom
-	            });
-	            this.view.zoom(0, this.view.viewport.center);
-	            this.view.view.setCenter(center);
-	            this.drawIsNeeded = true;
-	        }
-	    }, {
-	        key: 'changelevel',
-	        value: function changelevel(direction) {
-	            var lastLevel = this.levelHandler.current.level,
-	                lastCenter = this.view.view.center;
-	            var extrema = void 0;
-	            if (direction < 0) {
-	                this.levelHandler.previous();
-	                extrema = this.view.maxZoom;
-	            } else {
-	                this.levelHandler.next();
-	                extrema = this.view.minZoom;
-	            }
-	            if (!this.view.isInitialized) {
-	                this.view.init();
-	            }
-	            if (lastLevel !== this.levelHandler.current.level) {
-	                this.setViewToOldView(lastCenter, extrema);
-	            }
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                level: this.levelHandler.current.level
-	            });
-	        }
-
-	        /**
-	         * initializes the canvas, adds to DOM
-	         * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'initializeCanvas',
-	        value: function initializeCanvas() {
-	            this.canvas = document.createElement("canvas");
-	            this.canvas.classList.add("mjs-canvas");
-	            this.container.appendChild(this.canvas);
-	            this.canvasContext = this.canvas.getContext("2d");
-	            return this;
-	        }
-
-	        /**
-	         * complete clear and draw of all visible tiles
-	         * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'redraw',
-	        value: function redraw() {
-	            this.drawIsNeeded = true;
-	            return this;
-	        }
-
-	        /**
-	         * Handles resizing of TileMap
-	         * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'resize',
-	        value: function resize() {
-	            return this.resizeCanvas().resizeView().redraw();
-	        }
-
-	        /**
-	         * move view by delta
-	         * @param  {Point} delta - delta of x/y
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'moveView',
-	        value: function moveView(delta) {
-	            this.view.moveView(delta);
-	            this.redraw();
-	            return this;
-	        }
-
-	        /**
-	         * handles zoom by factor and position
-	         * @param  {number} factor - difference in zoom scale
-	         * @param  {Point} position - position to zoom to
-	         * @return {MappedJS} instance of MappedJS for chaining
-	         */
-
-	    }, {
-	        key: 'zoom',
-	        value: function zoom(factor, position) {
-	            if (factor !== 0) {
-	                this.view.zoom(factor, position);
-	                this.clusterHandler();
-	                this.redraw();
-	            }
-	            return this;
-	        }
-	    }, {
-	        key: 'clusterHandler',
-	        value: function clusterHandler() {
-	            var _this5 = this;
-
-	            if (this.clusterHandlingTimeout) {
-	                this.clusterHandlingTimeout = clearTimeout(this.clusterHandlingTimeout);
-	            }
-	            this.clusterHandlingTimeout = setTimeout(function () {
-	                if (_this5.levelHandler.hasNext()) {
-	                    _this5.eventManager.publish(_Events.Events.MarkerClusterer.CLUSTERIZE);
+	        this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function (data) {
+	            var zoomIncrease = Math.min(_this4.view.viewport.width / data.boundingBox.width, _this4.view.viewport.height / data.boundingBox.height);
+	            while (zoomIncrease > 0) {
+	                var possibleZoomOnLevel = _this4.view.maxZoom - _this4.view.zoomFactor;
+	                zoomIncrease -= possibleZoomOnLevel;
+	                if (_this4.levelHandler.hasNext()) {
+	                    _this4.changelevel(1);
 	                } else {
-	                    _this5.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
+	                    _this4.zoom(possibleZoomOnLevel, _this4.view.viewport.center);
+	                    zoomIncrease = 0;
 	                }
-	            }, 150);
-	        }
-
-	        /**
-	         * resizes the canvas sizes
-	         * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'resizeCanvas',
-	        value: function resizeCanvas() {
-	            this.canvas.width = this.width;
-	            this.canvas.height = this.height;
-	            return this;
-	        }
-
-	        /**
-	         * Handles resizing of view
-	         * @return {TileMap} instance of TileMap for chaining
-	         */
-
-	    }, {
-	        key: 'resizeView',
-	        value: function resizeView() {
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                viewport: this.viewport
-	            });
-	            return this;
-	        }
-
-	        /**
-	         * main draw call
-	         */
-
-	    }, {
-	        key: 'mainLoop',
-	        value: function mainLoop() {
-	            var _this6 = this;
-
-	            var currentMillisecs = Date.now();
-	            var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
-	            this.lastFrameMillisecs = currentMillisecs;
-	            this.deltaTiming = _Helper.Helper.clamp(deltaMillisecs / this.bestDeltaTiming, 1, 4);
-
-	            if (this.velocity.length >= 0.2) this.moveView(this.velocity.multiply(0.9).clone.multiply(this.deltaTiming));
-
-	            if (this.drawIsNeeded) {
-	                this.canvasContext.clearRect(0, 0, this.width, this.height);
-	                this.view.checkBoundaries();
-	                this.view.draw();
-	                this.drawLabels();
-	                this.repositionMarkerContainer();
-	                this.drawIsNeeded = false;
 	            }
+	            _this4.view.setLatLngToPosition(data.center, _this4.view.viewport.center);
+	        });
 
-	            window.requestAnimFrame(function () {
-	                return _this6.mainLoop();
-	            });
+	        this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function () {
+	            _this4.changelevel(1);
+	        });
+	        this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function () {
+	            _this4.changelevel(-1);
+	        });
+
+	        return this;
+	    };
+
+	    TileMap.prototype.setViewToOldView = function setViewToOldView(center, zoom) {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            zoomFactor: zoom
+	        });
+	        this.view.zoom(0, this.view.viewport.center);
+	        this.view.view.setCenter(center);
+	        this.drawIsNeeded = true;
+	    };
+
+	    TileMap.prototype.changelevel = function changelevel(direction) {
+	        var lastLevel = this.levelHandler.current.level,
+	            lastCenter = this.view.view.center;
+	        var extrema = void 0;
+	        if (direction < 0) {
+	            this.levelHandler.previous();
+	            extrema = this.view.maxZoom;
+	        } else {
+	            this.levelHandler.next();
+	            extrema = this.view.minZoom;
 	        }
-	    }, {
-	        key: 'drawLabels',
-	        value: function drawLabels() {
-	            _Helper.Helper.forEach(this.labels, function (label) {
-	                return label.draw();
-	            });
-	            return this;
+	        if (!this.view.isInitialized) {
+	            this.view.init();
 	        }
-	    }]);
+	        if (lastLevel !== this.levelHandler.current.level) {
+	            this.setViewToOldView(lastCenter, extrema);
+	        }
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            level: this.levelHandler.current.level
+	        });
+	    };
+
+	    /**
+	     * initializes the canvas, adds to DOM
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.initializeCanvas = function initializeCanvas() {
+	        this.canvas = document.createElement("canvas");
+	        this.canvas.classList.add("mjs-canvas");
+	        this.container.appendChild(this.canvas);
+	        this.canvasContext = this.canvas.getContext("2d");
+	        return this;
+	    };
+
+	    /**
+	     * complete clear and draw of all visible tiles
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.redraw = function redraw() {
+	        this.drawIsNeeded = true;
+	        return this;
+	    };
+
+	    /**
+	     * Handles resizing of TileMap
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.resize = function resize() {
+	        return this.resizeCanvas().resizeView().redraw();
+	    };
+
+	    /**
+	     * move view by delta
+	     * @param  {Point} delta - delta of x/y
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    TileMap.prototype.moveView = function moveView(delta) {
+	        this.view.moveView(delta);
+	        this.redraw();
+	        return this;
+	    };
+
+	    /**
+	     * handles zoom by factor and position
+	     * @param  {number} factor - difference in zoom scale
+	     * @param  {Point} position - position to zoom to
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
+	    TileMap.prototype.zoom = function zoom(factor, position) {
+	        if (factor !== 0) {
+	            this.view.zoom(factor, position);
+	            this.clusterHandler();
+	            this.redraw();
+	        }
+	        return this;
+	    };
+
+	    TileMap.prototype.clusterHandler = function clusterHandler() {
+	        var _this5 = this;
+
+	        if (this.clusterHandlingTimeout) {
+	            this.clusterHandlingTimeout = clearTimeout(this.clusterHandlingTimeout);
+	        }
+	        this.clusterHandlingTimeout = setTimeout(function () {
+	            if (_this5.levelHandler.hasNext()) {
+	                _this5.eventManager.publish(_Events.Events.MarkerClusterer.CLUSTERIZE);
+	            } else {
+	                _this5.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
+	            }
+	        }, 150);
+	    };
+
+	    /**
+	     * resizes the canvas sizes
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.resizeCanvas = function resizeCanvas() {
+	        this.canvas.width = this.width;
+	        this.canvas.height = this.height;
+	        return this;
+	    };
+
+	    /**
+	     * Handles resizing of view
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.resizeView = function resizeView() {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            viewport: this.viewport
+	        });
+	        return this;
+	    };
+
+	    /**
+	     * main draw call
+	     */
+
+
+	    TileMap.prototype.mainLoop = function mainLoop() {
+	        var _this6 = this;
+
+	        var currentMillisecs = Date.now();
+	        var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
+	        this.lastFrameMillisecs = currentMillisecs;
+	        this.deltaTiming = _Helper.Helper.clamp(deltaMillisecs / this.bestDeltaTiming, 1, 4);
+
+	        if (this.velocity.length >= 0.2) this.moveView(this.velocity.multiply(0.9).clone.multiply(this.deltaTiming));
+
+	        if (this.drawIsNeeded) {
+	            this.canvasContext.clearRect(0, 0, this.width, this.height);
+	            this.view.checkBoundaries();
+	            this.view.draw();
+	            this.drawLabels();
+	            this.repositionMarkerContainer();
+	            this.drawIsNeeded = false;
+	        }
+
+	        window.requestAnimFrame(function () {
+	            return _this6.mainLoop();
+	        });
+	    };
+
+	    TileMap.prototype.drawLabels = function drawLabels() {
+	        _Helper.Helper.forEach(this.labels, function (label) {
+	            return label.draw();
+	        });
+	        return this;
+	    };
 
 	    return TileMap;
 	}();
@@ -6910,141 +6988,130 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  _createClass(Point, [{
-	    key: "substract",
-	    value: function substract() {
-	      var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
+	  Point.prototype.substract = function substract() {
+	    var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
 
-	      this.x -= point.x;
-	      this.y -= point.y;
-	      return this;
-	    }
+	    this.x -= point.x;
+	    this.y -= point.y;
+	    return this;
+	  };
 
-	    /**
-	     * adds 2 points
-	     * @param  {Point} point = new Point() - the point to add to this
-	     * @return {Point} instance of Point for chaining
-	     */
+	  /**
+	   * adds 2 points
+	   * @param  {Point} point = new Point() - the point to add to this
+	   * @return {Point} instance of Point for chaining
+	   */
 
-	  }, {
-	    key: "add",
-	    value: function add() {
-	      var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
 
-	      this.x += point.x;
-	      this.y += point.y;
-	      return this;
-	    }
+	  Point.prototype.add = function add() {
+	    var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
 
-	    /**
-	     * multiplicates a point with a given x and y
-	     * @param  {number} x = 1 - factor to multiplicate x with
-	     * @param  {number} y = x - factor to multiplicate y with
-	     * @return {Point} instance of Point for chaining
-	     */
+	    this.x += point.x;
+	    this.y += point.y;
+	    return this;
+	  };
 
-	  }, {
-	    key: "multiply",
-	    value: function multiply() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	  /**
+	   * multiplicates a point with a given x and y
+	   * @param  {number} x = 1 - factor to multiplicate x with
+	   * @param  {number} y = x - factor to multiplicate y with
+	   * @return {Point} instance of Point for chaining
+	   */
 
-	      this.x *= x;
-	      this.y *= y;
-	      return this;
-	    }
 
-	    /**
-	     * divide a point with a given x and y
-	     * @param  {number} x = 1 - factor to divide x with
-	     * @param  {number} y = x - factor to divide y with
-	     * @return {Point} instance of Point for chaining
-	     */
+	  Point.prototype.multiply = function multiply() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	  }, {
-	    key: "divide",
-	    value: function divide() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	    this.x *= x;
+	    this.y *= y;
+	    return this;
+	  };
 
-	      this.x /= x;
-	      this.y /= y;
-	      return this;
-	    }
+	  /**
+	   * divide a point with a given x and y
+	   * @param  {number} x = 1 - factor to divide x with
+	   * @param  {number} y = x - factor to divide y with
+	   * @return {Point} instance of Point for chaining
+	   */
 
-	    /**
-	     * check if points are equal
-	     * @param  {Point} point - the point to check against this
-	     * @return {Boolean} is true, if x and y are the same
-	     */
 
-	  }, {
-	    key: "equals",
-	    value: function equals(point) {
-	      return this.x === point.x && this.y === point.y;
-	    }
+	  Point.prototype.divide = function divide() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	    /**
-	     * Returns the distance from this Point to a specified Point
-	     * @param  {Point} point = new Point() - the specified point to be measured against this Point
-	     * @return {Point} the distance between this Point and specified point
-	     */
+	    this.x /= x;
+	    this.y /= y;
+	    return this;
+	  };
 
-	  }, {
-	    key: "distance",
-	    value: function distance() {
-	      var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
+	  /**
+	   * check if points are equal
+	   * @param  {Point} point - the point to check against this
+	   * @return {Boolean} is true, if x and y are the same
+	   */
 
-	      return this.clone.substract(point).length;
-	    }
 
-	    /**
-	     * translates a point by x and y
-	     * @param  {number} x = 0 - value to move x
-	     * @param  {number} y = x - value to move y
-	     * @return {Point} instance of Point for chaining
-	     */
+	  Point.prototype.equals = function equals(point) {
+	    return this.x === point.x && this.y === point.y;
+	  };
 
-	  }, {
-	    key: "translate",
-	    value: function translate() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	  /**
+	   * Returns the distance from this Point to a specified Point
+	   * @param  {Point} point = new Point() - the specified point to be measured against this Point
+	   * @return {Point} the distance between this Point and specified point
+	   */
 
-	      this.x += x;
-	      this.y += y;
-	      return this;
-	    }
 
-	    /**
-	     * positions a point by x and y
-	     * @param  {number} x = 0 - value to position x
-	     * @param  {number} y = x - value to position y
-	     * @return {Point} instance of Point for chaining
-	     */
+	  Point.prototype.distance = function distance() {
+	    var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
 
-	  }, {
-	    key: "position",
-	    value: function position() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	    return this.clone.substract(point).length;
+	  };
 
-	      this.x = x;
-	      this.y = y;
-	      return this;
-	    }
+	  /**
+	   * translates a point by x and y
+	   * @param  {number} x = 0 - value to move x
+	   * @param  {number} y = x - value to move y
+	   * @return {Point} instance of Point for chaining
+	   */
 
-	    /**
-	     * translates a Point to an array
-	     * @return {Array} Returns Point as Array(x, y)
-	     */
 
-	  }, {
-	    key: "toArray",
-	    value: function toArray() {
-	      return [this.x, this.y];
-	    }
-	  }]);
+	  Point.prototype.translate = function translate() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	    this.x += x;
+	    this.y += y;
+	    return this;
+	  };
+
+	  /**
+	   * positions a point by x and y
+	   * @param  {number} x = 0 - value to position x
+	   * @param  {number} y = x - value to position y
+	   * @return {Point} instance of Point for chaining
+	   */
+
+
+	  Point.prototype.position = function position() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+
+	    this.x = x;
+	    this.y = y;
+	    return this;
+	  };
+
+	  /**
+	   * translates a Point to an array
+	   * @return {Array} Returns Point as Array(x, y)
+	   */
+
+
+	  Point.prototype.toArray = function toArray() {
+	    return [this.x, this.y];
+	  };
 
 	  return Point;
 	}();
@@ -7131,106 +7198,98 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    _createClass(StateHandler, [{
-	        key: 'next',
-	        value: function next() {
-	            this.lastState = this.current;
-	            if (this.hasNext()) this.i++;
-	            return this;
-	        }
+	    StateHandler.prototype.next = function next() {
+	        this.lastState = this.current;
+	        if (this.hasNext()) this.i++;
+	        return this;
+	    };
 
-	        /**
-	         * get the previous element
-	         * @return {StateHandler} instance of StateHandler for chaining
-	         */
+	    /**
+	     * get the previous element
+	     * @return {StateHandler} instance of StateHandler for chaining
+	     */
 
-	    }, {
-	        key: 'previous',
-	        value: function previous() {
-	            this.lastState = this.current;
-	            if (this.hasPrevious()) this.i--;
-	            return this;
-	        }
 
-	        /**
-	         * change the state to specified state
-	         * @param {number} state - index of state in array
-	         * @return {StateHandler} instance of StateHandler for chaining
-	         */
+	    StateHandler.prototype.previous = function previous() {
+	        this.lastState = this.current;
+	        if (this.hasPrevious()) this.i--;
+	        return this;
+	    };
 
-	    }, {
-	        key: 'changeTo',
-	        value: function changeTo(state) {
-	            if (state >= 0 && state < this.length) this.i = state;
-	            return this;
-	        }
+	    /**
+	     * change the state to specified state
+	     * @param {number} state - index of state in array
+	     * @return {StateHandler} instance of StateHandler for chaining
+	     */
 
-	        /**
-	         * change the state to specified value of specified property
-	         * @param {object} prop - specified property to be changed
-	         * @param {object} value - specified value that should be changed to
-	         * @return {StateHandler} instance of StateHandler for chaining
-	         */
 
-	    }, {
-	        key: 'changeToValue',
-	        value: function changeToValue(prop, value) {
-	            var _iteratorNormalCompletion = true;
-	            var _didIteratorError = false;
-	            var _iteratorError = undefined;
+	    StateHandler.prototype.changeTo = function changeTo(state) {
+	        if (state >= 0 && state < this.length) this.i = state;
+	        return this;
+	    };
 
-	            try {
-	                for (var _iterator = this.states[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var _step$value = _slicedToArray(_step.value, 2);
+	    /**
+	     * change the state to specified value of specified property
+	     * @param {object} prop - specified property to be changed
+	     * @param {object} value - specified value that should be changed to
+	     * @return {StateHandler} instance of StateHandler for chaining
+	     */
 
-	                    var i = _step$value[0];
-	                    var element = _step$value[1];
 
-	                    if (value === element[prop]) {
-	                        this.i = i;
-	                        break;
-	                    }
-	                }
-	            } catch (err) {
-	                _didIteratorError = true;
-	                _iteratorError = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion && _iterator.return) {
-	                        _iterator.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError) {
-	                        throw _iteratorError;
-	                    }
+	    StateHandler.prototype.changeToValue = function changeToValue(prop, value) {
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	            for (var _iterator = this.states[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                var _step$value = _slicedToArray(_step.value, 2);
+
+	                var i = _step$value[0];
+	                var element = _step$value[1];
+
+	                if (value === element[prop]) {
+	                    this.i = i;
+	                    break;
 	                }
 	            }
-
-	            return this;
+	        } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion && _iterator.return) {
+	                    _iterator.return();
+	                }
+	            } finally {
+	                if (_didIteratorError) {
+	                    throw _iteratorError;
+	                }
+	            }
 	        }
 
-	        /**
-	         * checks if there is a next element
-	         * @return {Boolean} wheter there is a next state or not
-	         */
+	        return this;
+	    };
 
-	    }, {
-	        key: 'hasNext',
-	        value: function hasNext() {
-	            return this.i < this.length - 1;
-	        }
+	    /**
+	     * checks if there is a next element
+	     * @return {Boolean} wheter there is a next state or not
+	     */
 
-	        /**
-	         * checks if there is a previous element
-	         * @return {Boolean} wheter there is a previous state or not
-	         */
 
-	    }, {
-	        key: 'hasPrevious',
-	        value: function hasPrevious() {
-	            return this.i > 0;
-	        }
-	    }]);
+	    StateHandler.prototype.hasNext = function hasNext() {
+	        return this.i < this.length - 1;
+	    };
+
+	    /**
+	     * checks if there is a previous element
+	     * @return {Boolean} wheter there is a previous state or not
+	     */
+
+
+	    StateHandler.prototype.hasPrevious = function hasPrevious() {
+	        return this.i > 0;
+	    };
 
 	    return StateHandler;
 	}();
@@ -7245,8 +7304,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	exports.Rectangle = undefined;
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -7401,7 +7458,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _classCallCheck(this, Rectangle);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Rectangle).call(this, x, y));
+	    var _this = _possibleConstructorReturn(this, _Point.call(this, x, y));
 
 	    _this.width = width;
 	    _this.height = height;
@@ -7415,319 +7472,297 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 
-	  _createClass(Rectangle, [{
-	    key: 'intersects',
-	    value: function intersects() {
-	      var rect = arguments.length <= 0 || arguments[0] === undefined ? new Rectangle() : arguments[0];
+	  Rectangle.prototype.intersects = function intersects() {
+	    var rect = arguments.length <= 0 || arguments[0] === undefined ? new Rectangle() : arguments[0];
 
-	      return !(rect.left > this.right || rect.right < this.left || rect.top > this.bottom || rect.bottom < this.top);
-	    }
+	    return !(rect.left > this.right || rect.right < this.left || rect.top > this.bottom || rect.bottom < this.top);
+	  };
 
-	    /**
-	     * Checks whether Rectangle entirely contains the Rectangle or Point
-	     * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
-	     * @return {Boolean} true if containment is entirely
-	     */
+	  /**
+	   * Checks whether Rectangle entirely contains the Rectangle or Point
+	   * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
+	   * @return {Boolean} true if containment is entirely
+	   */
 
-	  }, {
-	    key: 'contains',
-	    value: function contains(rectOrPoint) {
-	      return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
-	    }
-	  }, {
-	    key: 'extend',
-	    value: function extend(rect) {
-	      var left = Math.min(this.left, rect.left);
-	      var right = Math.max(this.right, rect.right);
-	      var top = Math.min(this.top, rect.top);
-	      var bottom = Math.max(this.bottom, rect.bottom);
-	      this.size(left, top, right - left, bottom - top);
-	      return this;
-	    }
 
-	    /**
-	     * Sets the center of this Rectangle to specified point
-	     * @param  {Point} point = new Point() - specified point to set center of rectangle to
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
+	  Rectangle.prototype.contains = function contains(rectOrPoint) {
+	    return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
+	  };
 
-	  }, {
-	    key: 'setCenter',
-	    value: function setCenter() {
-	      var point = arguments.length <= 0 || arguments[0] === undefined ? new _Point2.Point() : arguments[0];
+	  Rectangle.prototype.extend = function extend(rect) {
+	    var left = Math.min(this.left, rect.left);
+	    var right = Math.max(this.right, rect.right);
+	    var top = Math.min(this.top, rect.top);
+	    var bottom = Math.max(this.bottom, rect.bottom);
+	    this.size(left, top, right - left, bottom - top);
+	    return this;
+	  };
 
-	      var difference = point.substract(this.center);
-	      this.translate(difference.x, difference.y);
-	      return this;
-	    }
+	  /**
+	   * Sets the center of this Rectangle to specified point
+	   * @param  {Point} point = new Point() - specified point to set center of rectangle to
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
 
-	    /**
-	     * Sets the x-center of this Rectangle to specified x
-	     * @param  {number} x = 0 - specified x coordinate to set x center of rectangle to
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
 
-	  }, {
-	    key: 'setCenterX',
-	    value: function setCenterX() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	  Rectangle.prototype.setCenter = function setCenter() {
+	    var point = arguments.length <= 0 || arguments[0] === undefined ? new _Point2.Point() : arguments[0];
 
-	      var difference = x - this.center.x;
-	      this.translate(difference, 0);
-	      return this;
-	    }
+	    var difference = point.substract(this.center);
+	    this.translate(difference.x, difference.y);
+	    return this;
+	  };
 
-	    /**
-	     * Sets the y-center of this Rectangle to specified y
-	     * @param  {number} y = 0 - specified y coordinate to set y center of rectangle to
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
+	  /**
+	   * Sets the x-center of this Rectangle to specified x
+	   * @param  {number} x = 0 - specified x coordinate to set x center of rectangle to
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
 
-	  }, {
-	    key: 'setCenterY',
-	    value: function setCenterY() {
-	      var y = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-	      var difference = y - this.center.y;
-	      this.translate(0, difference);
-	      return this;
-	    }
+	  Rectangle.prototype.setCenterX = function setCenterX() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-	    /**
-	     * Checks whether Rectangle entirely contains the Point
-	     * @param  {Point} point = new Point() - the specified point to check against
-	     * @return {Boolean} true if containment is entirely
-	     */
+	    var difference = x - this.center.x;
+	    this.translate(difference, 0);
+	    return this;
+	  };
 
-	  }, {
-	    key: 'containsPoint',
-	    value: function containsPoint() {
-	      var point = arguments.length <= 0 || arguments[0] === undefined ? new _Point2.Point() : arguments[0];
+	  /**
+	   * Sets the y-center of this Rectangle to specified y
+	   * @param  {number} y = 0 - specified y coordinate to set y center of rectangle to
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
 
-	      return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
-	    }
 
-	    /**
-	     * Checks whether Rectangle entirely contains the Rectangle
-	     * @param  {Rectangle} rect = new Rectangle() - the specified rectangle to check against
-	     * @return {Boolean} true if containment is entirely
-	     */
+	  Rectangle.prototype.setCenterY = function setCenterY() {
+	    var y = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-	  }, {
-	    key: 'containsRect',
-	    value: function containsRect() {
-	      var rect = arguments.length <= 0 || arguments[0] === undefined ? new Rectangle() : arguments[0];
+	    var difference = y - this.center.y;
+	    this.translate(0, difference);
+	    return this;
+	  };
 
-	      return rect instanceof Rectangle ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
-	    }
+	  /**
+	   * Checks whether Rectangle entirely contains the Point
+	   * @param  {Point} point = new Point() - the specified point to check against
+	   * @return {Boolean} true if containment is entirely
+	   */
 
-	    /**
-	     * distorts rectangle by factor
-	     * @param  {number} factor = 1 - the specified factor of distortion
-	     * @return {Rectangle} a distorted Rectangle
-	     */
 
-	  }, {
-	    key: 'getDistortedRect',
-	    value: function getDistortedRect() {
-	      var factor = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	  Rectangle.prototype.containsPoint = function containsPoint() {
+	    var point = arguments.length <= 0 || arguments[0] === undefined ? new _Point2.Point() : arguments[0];
 
-	      return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
-	    }
+	    return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
+	  };
 
-	    /**
-	     * redistorts rectangle by factor
-	     * @param  {number} factor = 1- the specified factor of distortion
-	     * @return {Rectangle} an undistorted Rectangle
-	     */
+	  /**
+	   * Checks whether Rectangle entirely contains the Rectangle
+	   * @param  {Rectangle} rect = new Rectangle() - the specified rectangle to check against
+	   * @return {Boolean} true if containment is entirely
+	   */
 
-	  }, {
-	    key: 'getNormalRect',
-	    value: function getNormalRect() {
-	      var factor = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
-	      return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1 / factor);
-	    }
+	  Rectangle.prototype.containsRect = function containsRect() {
+	    var rect = arguments.length <= 0 || arguments[0] === undefined ? new Rectangle() : arguments[0];
 
-	    /**
-	     * scale x and width of rectangle
-	     * @param  {number} x = 1 - factor to be applied to scale
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
+	    return rect instanceof Rectangle ? rect.left >= this.left && rect.top >= this.top && rect.right <= this.right && rect.bottom <= this.bottom : false;
+	  };
 
-	  }, {
-	    key: 'scaleX',
-	    value: function scaleX() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	  /**
+	   * distorts rectangle by factor
+	   * @param  {number} factor = 1 - the specified factor of distortion
+	   * @return {Rectangle} a distorted Rectangle
+	   */
 
-	      this.x *= x;
-	      this.width *= x;
-	      return this;
-	    }
 
-	    /**
-	     * scale y and height of rectangle
-	     * @param  {number} y = 1- factor to be applied to scale
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
+	  Rectangle.prototype.getDistortedRect = function getDistortedRect() {
+	    var factor = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
-	  }, {
-	    key: 'scaleY',
-	    value: function scaleY() {
-	      var y = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	    return new Rectangle(this.x, this.y, this.width, this.height).scaleX(factor);
+	  };
 
-	      this.y *= y;
-	      this.height *= y;
-	      return this;
-	    }
+	  /**
+	   * redistorts rectangle by factor
+	   * @param  {number} factor = 1- the specified factor of distortion
+	   * @return {Rectangle} an undistorted Rectangle
+	   */
 
-	    /**
-	     * scale x and y for width and height of rectangle
-	     * @param  {number} x = 1 - factor to be applied to scale
-	     * @param  {number} y = x - factor to be applied to scale
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
 
-	  }, {
-	    key: 'scale',
-	    value: function scale() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	  Rectangle.prototype.getNormalRect = function getNormalRect() {
+	    var factor = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
-	      this.scaleX(x);
-	      this.scaleY(y);
-	      return this;
-	    }
+	    return new Rectangle(this.x, this.y, this.width, this.height).scaleX(1 / factor);
+	  };
 
-	    /**
-	     * scale x and y for width and height of rectangle
-	     * @param  {number} x = 1 - factor to be applied to scale
-	     * @param  {number} y = x - factor to be applied to scale
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
+	  /**
+	   * scale x and width of rectangle
+	   * @param  {number} x = 1 - factor to be applied to scale
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
 
-	  }, {
-	    key: 'scaleCenter',
-	    value: function scaleCenter() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	      var oldCenter = this.clone.center;
-	      this.scale(x, y);
-	      this.setCenter(oldCenter);
-	      return this;
-	    }
+	  Rectangle.prototype.scaleX = function scaleX() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
-	    /**
-	     * moves a rectangle by specified coords
-	     * @param  {number} x = 0 - specified x to be added to x position
-	     * @param  {number} y = x - specified y to be added to y position
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
+	    this.x *= x;
+	    this.width *= x;
+	    return this;
+	  };
 
-	  }, {
-	    key: 'translate',
-	    value: function translate() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	  /**
+	   * scale y and height of rectangle
+	   * @param  {number} y = 1- factor to be applied to scale
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
 
-	      _get(Object.getPrototypeOf(Rectangle.prototype), 'translate', this).call(this, x, y);
-	      return this;
-	    }
 
-	    /**
-	     * transforms a rectangle by specified coords
-	     * @param  {number} x = 0 - specified x to be added to x position
-	     * @param  {number} y = x - specified y to be added to y position
-	     * @param  {number} width = 0 - specified width to be added to this width
-	     * @param  {number} height = 0 - specified height to be added to this height
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
+	  Rectangle.prototype.scaleY = function scaleY() {
+	    var y = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
-	  }, {
-	    key: 'transform',
-	    value: function transform() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-	      var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-	      var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+	    this.y *= y;
+	    this.height *= y;
+	    return this;
+	  };
 
-	      this.translate(x, y);
-	      this.width += width;
-	      this.height += height;
-	      return this;
-	    }
+	  /**
+	   * scale x and y for width and height of rectangle
+	   * @param  {number} x = 1 - factor to be applied to scale
+	   * @param  {number} y = x - factor to be applied to scale
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
 
-	    /**
-	     * changes the position a rectangle by specified coords
-	     * @param  {number} x = 0 - the new x position
-	     * @param  {number} y = 0 - he new y position
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
 
-	  }, {
-	    key: 'position',
-	    value: function position() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	  Rectangle.prototype.scale = function scale() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	      _get(Object.getPrototypeOf(Rectangle.prototype), 'position', this).call(this, x, y);
-	      return this;
-	    }
+	    this.scaleX(x);
+	    this.scaleY(y);
+	    return this;
+	  };
 
-	    /**
-	     * changes the size of a rectangle by specified params
-	     * @param  {number} x = 0- the new x position
-	     * @param  {number} y = x - the new y position
-	     * @param  {number} width = 0 - the new width
-	     * @param  {number} height = 0 - the new width
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
+	  /**
+	   * scale x and y for width and height of rectangle
+	   * @param  {number} x = 1 - factor to be applied to scale
+	   * @param  {number} y = x - factor to be applied to scale
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
 
-	  }, {
-	    key: 'size',
-	    value: function size() {
-	      var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	      var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-	      var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-	      var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
 
-	      this.position(x, y);
-	      this.width = width;
-	      this.height = height;
-	      return this;
-	    }
+	  Rectangle.prototype.scaleCenter = function scaleCenter() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	    /**
-	     * changes the size of a rectangle by specified params
-	     * @param  {number} width = 0 - the new width
-	     * @param  {number} height = width - the new width
-	     * @return {Rectangle} instance of Rectangle for chaining
-	     */
+	    var oldCenter = this.clone.center;
+	    this.scale(x, y);
+	    this.setCenter(oldCenter);
+	    return this;
+	  };
 
-	  }, {
-	    key: 'setSize',
-	    value: function setSize() {
-	      var width = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	      var height = arguments.length <= 1 || arguments[1] === undefined ? width : arguments[1];
+	  /**
+	   * moves a rectangle by specified coords
+	   * @param  {number} x = 0 - specified x to be added to x position
+	   * @param  {number} y = x - specified y to be added to y position
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
 
-	      this.width = width;
-	      this.height = height;
-	      return this;
-	    }
 
-	    /**
-	     * check if rectangles are equal
-	     * @param  {Rectangle} rectangle - the specified rectangle to check against this
-	     * @return {Boolean} is true, if x, y, width and height are the same
-	     */
+	  Rectangle.prototype.translate = function translate() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
-	  }, {
-	    key: 'equals',
-	    value: function equals(rectangle) {
-	      return rectangle instanceof Rectangle ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
-	    }
-	  }]);
+	    _Point.prototype.translate.call(this, x, y);
+	    return this;
+	  };
+
+	  /**
+	   * transforms a rectangle by specified coords
+	   * @param  {number} x = 0 - specified x to be added to x position
+	   * @param  {number} y = x - specified y to be added to y position
+	   * @param  {number} width = 0 - specified width to be added to this width
+	   * @param  {number} height = 0 - specified height to be added to this height
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
+
+
+	  Rectangle.prototype.transform = function transform() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	    var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+	    var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
+	    this.translate(x, y);
+	    this.width += width;
+	    this.height += height;
+	    return this;
+	  };
+
+	  /**
+	   * changes the position a rectangle by specified coords
+	   * @param  {number} x = 0 - the new x position
+	   * @param  {number} y = 0 - he new y position
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
+
+
+	  Rectangle.prototype.position = function position() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	    _Point.prototype.position.call(this, x, y);
+	    return this;
+	  };
+
+	  /**
+	   * changes the size of a rectangle by specified params
+	   * @param  {number} x = 0- the new x position
+	   * @param  {number} y = x - the new y position
+	   * @param  {number} width = 0 - the new width
+	   * @param  {number} height = 0 - the new width
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
+
+
+	  Rectangle.prototype.size = function size() {
+	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
+	    var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+	    var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
+	    this.position(x, y);
+	    this.width = width;
+	    this.height = height;
+	    return this;
+	  };
+
+	  /**
+	   * changes the size of a rectangle by specified params
+	   * @param  {number} width = 0 - the new width
+	   * @param  {number} height = width - the new width
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
+
+
+	  Rectangle.prototype.setSize = function setSize() {
+	    var width = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var height = arguments.length <= 1 || arguments[1] === undefined ? width : arguments[1];
+
+	    this.width = width;
+	    this.height = height;
+	    return this;
+	  };
+
+	  /**
+	   * check if rectangles are equal
+	   * @param  {Rectangle} rectangle - the specified rectangle to check against this
+	   * @return {Boolean} is true, if x, y, width and height are the same
+	   */
+
+
+	  Rectangle.prototype.equals = function equals(rectangle) {
+	    return rectangle instanceof Rectangle ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
+	  };
 
 	  return Rectangle;
 	}(_Point2.Point);
@@ -7850,7 +7885,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, View);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(View).call(this, { id: id }));
+	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, { id: id }));
 
 	        _this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            center: center,
@@ -7886,325 +7921,305 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _ret = _this.zoom(0, _this.viewport.center).loadThumb(), _possibleConstructorReturn(_this, _ret);
 	    }
 
-	    _createClass(View, [{
-	        key: 'init',
-	        value: function init() {
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                view: this.originalMapView.clone
-	            });
-	            this.view.translate(0 - this.offsetToCenter, 0);
-	            this.initializeTiles();
-	            this.isInitialized = true;
-	            return this;
+	    View.prototype.init = function init() {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            view: this.originalMapView.clone
+	        });
+	        this.view.translate(0 - this.offsetToCenter, 0);
+	        this.initializeTiles();
+	        this.isInitialized = true;
+	        return this;
+	    };
+
+	    /**
+	     * resets current View to its initial position
+	     */
+
+
+	    View.prototype.reset = function reset() {
+	        this.setLatLngToPosition(this.initial.position, this.viewport.center);
+	        var delta = this.initial.zoom - this.zoomFactor;
+	        this.zoom(delta, this.viewport.center);
+	    };
+
+	    View.prototype.getDistortedView = function getDistortedView() {
+	        var nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
+	            se = this.info.convertLatLngToPoint(this.limitToBounds.se),
+	            limit = new _Rectangle.Rectangle(nw.x + this.view.x, nw.y + this.view.y, se.x - nw.x, se.y - nw.y);
+	        return limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+	    };
+
+	    View.prototype.checkBoundaries = function checkBoundaries() {
+	        var offset = new _Point.Point();
+	        var equalizedMap = this.getDistortedView();
+	        if (!equalizedMap.containsRect(this.viewport)) {
+
+	            var distanceLeft = equalizedMap.left - this.viewport.left,
+	                distanceRight = equalizedMap.right - this.viewport.right,
+	                distanceTop = equalizedMap.top - this.viewport.top,
+	                distanceBottom = equalizedMap.bottom - this.viewport.bottom;
+
+	            offset.x = this.checkX(distanceLeft, distanceRight, equalizedMap.width, this.viewport.width);
+	            offset.y = this.checkX(distanceTop, distanceBottom, equalizedMap.height, this.viewport.height);
 	        }
+	        offset.multiply(1 / this.distortionFactor, 1);
+	        this.view.translate(offset.x, offset.y);
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            view: this.view
+	        });
 
-	        /**
-	         * resets current View to its initial position
-	         */
-
-	    }, {
-	        key: 'reset',
-	        value: function reset() {
-	            this.setLatLngToPosition(this.initial.position, this.viewport.center);
-	            var delta = this.initial.zoom - this.zoomFactor;
-	            this.zoom(delta, this.viewport.center);
+	        if (this.viewportIsSmallerThanView(equalizedMap)) {
+	            var diffInHeight = 1 - equalizedMap.height / this.viewport.height;
+	            var diffInWidth = 1 - equalizedMap.width / this.viewport.width;
+	            var diff = _Helper.Helper.clamp(Math.max(diffInHeight, diffInWidth), 0, Number.MAX_VALUE);
+	            this.zoom(diff, this.viewport.center, true);
+	            return false;
 	        }
-	    }, {
-	        key: 'getDistortedView',
-	        value: function getDistortedView() {
-	            var nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
-	                se = this.info.convertLatLngToPoint(this.limitToBounds.se),
-	                limit = new _Rectangle.Rectangle(nw.x + this.view.x, nw.y + this.view.y, se.x - nw.x, se.y - nw.y);
-	            return limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
-	        }
-	    }, {
-	        key: 'checkBoundaries',
-	        value: function checkBoundaries() {
-	            var offset = new _Point.Point();
-	            var equalizedMap = this.getDistortedView();
-	            if (!equalizedMap.containsRect(this.viewport)) {
+	    };
 
-	                var distanceLeft = equalizedMap.left - this.viewport.left,
-	                    distanceRight = equalizedMap.right - this.viewport.right,
-	                    distanceTop = equalizedMap.top - this.viewport.top,
-	                    distanceBottom = equalizedMap.bottom - this.viewport.bottom;
+	    View.prototype.viewportIsSmallerThanView = function viewportIsSmallerThanView(view) {
+	        return this.viewport.width > view.width || this.viewport.height > view.height;
+	    };
 
-	                offset.x = this.checkX(distanceLeft, distanceRight, equalizedMap.width, this.viewport.width);
-	                offset.y = this.checkX(distanceTop, distanceBottom, equalizedMap.height, this.viewport.height);
+	    View.prototype.checkX = function checkX(left, right, mapWidth, viewWidth) {
+	        var x = 0;
+	        if (mapWidth >= viewWidth) {
+	            if (left > 0) {
+	                x -= left;
+	            } else if (right < 0) {
+	                x -= right;
 	            }
-	            offset.multiply(1 / this.distortionFactor, 1);
-	            this.view.translate(offset.x, offset.y);
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                view: this.view
-	            });
-
-	            if (this.viewportIsSmallerThanView(equalizedMap)) {
-	                var diffInHeight = 1 - equalizedMap.height / this.viewport.height;
-	                var diffInWidth = 1 - equalizedMap.width / this.viewport.width;
-	                var diff = _Helper.Helper.clamp(Math.max(diffInHeight, diffInWidth), 0, Number.MAX_VALUE);
-	                this.zoom(diff, this.viewport.center, true);
-	                return false;
-	            }
-	        }
-	    }, {
-	        key: 'viewportIsSmallerThanView',
-	        value: function viewportIsSmallerThanView(view) {
-	            return this.viewport.width > view.width || this.viewport.height > view.height;
-	        }
-	    }, {
-	        key: 'checkX',
-	        value: function checkX(left, right, mapWidth, viewWidth) {
-	            var x = 0;
-	            if (mapWidth >= viewWidth) {
-	                if (left > 0) {
+	        } else {
+	            if (!this.centerSmallMap) {
+	                if (left < 0 && right < 0) {
 	                    x -= left;
-	                } else if (right < 0) {
+	                } else if (right > 0 && left > 0) {
 	                    x -= right;
 	                }
 	            } else {
-	                if (!this.centerSmallMap) {
-	                    if (left < 0 && right < 0) {
-	                        x -= left;
-	                    } else if (right > 0 && left > 0) {
-	                        x -= right;
-	                    }
-	                } else {
-	                    this.view.setCenterX(this.viewport.center.x);
-	                    this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                        view: this.view
-	                    });
-	                }
+	                this.view.setCenterX(this.viewport.center.x);
+	                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                    view: this.view
+	                });
 	            }
-	            return x;
 	        }
-	    }, {
-	        key: 'checkY',
-	        value: function checkY(top, bottom, mapHeight, viewHeight) {
-	            var y = 0;
-	            if (mapHeight >= viewHeight) {
-	                if (top > 0) {
+	        return x;
+	    };
+
+	    View.prototype.checkY = function checkY(top, bottom, mapHeight, viewHeight) {
+	        var y = 0;
+	        if (mapHeight >= viewHeight) {
+	            if (top > 0) {
+	                y -= top;
+	            } else if (bottom < 0) {
+	                y -= bottom;
+	            }
+	        } else {
+	            if (!this.centerSmallMap) {
+	                if (top < 0 && bottom < 0) {
 	                    y -= top;
-	                } else if (bottom < 0) {
+	                } else if (bottom > 0 && top > 0) {
 	                    y -= bottom;
 	                }
 	            } else {
-	                if (!this.centerSmallMap) {
-	                    if (top < 0 && bottom < 0) {
-	                        y -= top;
-	                    } else if (bottom > 0 && top > 0) {
-	                        y -= bottom;
-	                    }
-	                } else {
-	                    this.view.setCenterX(this.viewport.center.x);
-	                    this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                        view: this.view
-	                    });
-	                }
-	            }
-	            return y;
-	        }
-
-	        /**
-	         * loads thumbnail of view
-	         * @return {View} instance of View for chaining
-	         */
-
-	    }, {
-	        key: 'loadThumb',
-	        value: function loadThumb() {
-	            var _this3 = this;
-
-	            _Helper.Helper.loadImage(this.data.thumb, function (img) {
-	                _this3.thumb = img;
-	                _this3.eventManager.publish(_Events.Events.View.THUMB_LOADED);
-	            });
-	            return this;
-	        }
-
-	        /**
-	         * set specified lat/lng to position x/y
-	         * @param {LatLng} latlng - specified latlng to be set Point to
-	         * @param {Point} position - specified position to set LatLng to
-	         * @return {View} instance of View for chaining
-	         */
-
-	    }, {
-	        key: 'setLatLngToPosition',
-	        value: function setLatLngToPosition(latlng, position) {
-	            var currentPosition = this.view.topLeft.substract(position).multiply(-1),
-	                diff = currentPosition.substract(this.info.convertLatLngToPoint(latlng));
-
-	            this.view.translate(0, diff.y);
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                view: this.view
-	            });
-	            this.calculateNewCenter();
-	            this.view.translate(diff.x + this.getDeltaXToCenter(position), 0);
-	            this.calculateNewCenter();
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                view: this.view
-	            });
-	            return this;
-	        }
-
-	        /**
-	         * receive relative Position to center of viewport
-	         * @param  {Point} pos - specified position
-	         * @return {number} delta of point to center of viewport
-	         */
-
-	    }, {
-	        key: 'getDeltaXToCenter',
-	        value: function getDeltaXToCenter(pos) {
-	            var diffToCenter = pos.clone.substract(this.viewport.center),
-	                distanceToCenter = diffToCenter.x / this.viewport.center.x,
-	                delta = distanceToCenter * this.offsetToCenter;
-	            return delta / this.distortionFactor;
-	        }
-
-	        /**
-	         * zooming handler
-	         * @param  {number} factor - increase/decrease factor
-	         * @param  {Point} pos - Position to zoom to
-	         * @return {View} instance of View for chaining
-	         */
-
-	    }, {
-	        key: 'zoom',
-	        value: function zoom(factor, pos) {
-	            var automatic = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
-
-	            var equalizedMap = this.getDistortedView();
-	            var viewportIsSmaller = this.viewportIsSmallerThanView(equalizedMap);
-
-	            if (factor < 0 && viewportIsSmaller || factor < 0 && this.wasSmallerLastTime) {
-	                this.wasSmallerLastTime = true;
-	                return false;
-	            } else if (!automatic) {
-	                this.wasSmallerLastTime = false;
-	            } else if (automatic) {
-	                this.wasSmallerLastTime = viewportIsSmaller;
-	            }
-
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                zoomFactor: _Helper.Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
-	            });
-
-	            var mapPosition = this.view.topLeft.substract(pos).multiply(-1);
-	            mapPosition.x += this.getDeltaXToCenter(pos);
-	            var latlngPosition = this.info.convertPointToLatLng(mapPosition);
-
-	            var newSize = this.originalMapView.clone.scale(this.zoomFactor);
-	            this.view.setSize(newSize.width, newSize.height);
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                view: this.view
-	            });
-
-	            this.setLatLngToPosition(latlngPosition, pos);
-	            this.changeZoomLevelIfNecessary(factor, viewportIsSmaller);
-
-	            return this;
-	        }
-	    }, {
-	        key: 'changeZoomLevelIfNecessary',
-	        value: function changeZoomLevelIfNecessary(factor, viewportIsSmaller) {
-	            if (this.zoomFactor >= this.maxZoom && factor > 0) {
-	                this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
-	            } else if (this.zoomFactor <= this.minZoom && factor < 0 && !viewportIsSmaller) {
-	                this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
+	                this.view.setCenterX(this.viewport.center.x);
+	                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	                    view: this.view
+	                });
 	            }
 	        }
+	        return y;
+	    };
 
-	        /**
-	         * update center position of view
-	         * @return {View} instance of View for chaining
-	         */
+	    /**
+	     * loads thumbnail of view
+	     * @return {View} instance of View for chaining
+	     */
 
-	    }, {
-	        key: 'calculateNewCenter',
-	        value: function calculateNewCenter() {
-	            var newCenter = this.info.convertPointToLatLng(this.viewport.center.substract(this.view.topLeft));
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                center: newCenter
-	            });
-	            return this;
+
+	    View.prototype.loadThumb = function loadThumb() {
+	        var _this3 = this;
+
+	        _Helper.Helper.loadImage(this.data.thumb, function (img) {
+	            _this3.thumb = img;
+	            _this3.eventManager.publish(_Events.Events.View.THUMB_LOADED);
+	        });
+	        return this;
+	    };
+
+	    /**
+	     * set specified lat/lng to position x/y
+	     * @param {LatLng} latlng - specified latlng to be set Point to
+	     * @param {Point} position - specified position to set LatLng to
+	     * @return {View} instance of View for chaining
+	     */
+
+
+	    View.prototype.setLatLngToPosition = function setLatLngToPosition(latlng, position) {
+	        var currentPosition = this.view.topLeft.substract(position).multiply(-1),
+	            diff = currentPosition.substract(this.info.convertLatLngToPoint(latlng));
+
+	        this.view.translate(0, diff.y);
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            view: this.view
+	        });
+	        this.calculateNewCenter();
+	        this.view.translate(diff.x + this.getDeltaXToCenter(position), 0);
+	        this.calculateNewCenter();
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            view: this.view
+	        });
+	        return this;
+	    };
+
+	    /**
+	     * receive relative Position to center of viewport
+	     * @param  {Point} pos - specified position
+	     * @return {number} delta of point to center of viewport
+	     */
+
+
+	    View.prototype.getDeltaXToCenter = function getDeltaXToCenter(pos) {
+	        var diffToCenter = pos.clone.substract(this.viewport.center),
+	            distanceToCenter = diffToCenter.x / this.viewport.center.x,
+	            delta = distanceToCenter * this.offsetToCenter;
+	        return delta / this.distortionFactor;
+	    };
+
+	    /**
+	     * zooming handler
+	     * @param  {number} factor - increase/decrease factor
+	     * @param  {Point} pos - Position to zoom to
+	     * @return {View} instance of View for chaining
+	     */
+
+
+	    View.prototype.zoom = function zoom(factor, pos) {
+	        var automatic = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+	        var equalizedMap = this.getDistortedView();
+	        var viewportIsSmaller = this.viewportIsSmallerThanView(equalizedMap);
+
+	        if (factor < 0 && viewportIsSmaller || factor < 0 && this.wasSmallerLastTime) {
+	            this.wasSmallerLastTime = true;
+	            return false;
+	        } else if (!automatic) {
+	            this.wasSmallerLastTime = false;
+	        } else if (automatic) {
+	            this.wasSmallerLastTime = viewportIsSmaller;
 	        }
 
-	        /**
-	         * moves the view's current position by pos
-	         * @param  {Point} pos - specified additional offset
-	         * @return {View} instance of View for chaining
-	         */
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            zoomFactor: _Helper.Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
+	        });
 
-	    }, {
-	        key: 'moveView',
-	        value: function moveView(pos) {
-	            this.view.translate(0, pos.y);
-	            this.calculateNewCenter();
-	            this.view.translate(pos.x * (1 / this.distortionFactor), 0);
-	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	                view: this.view
-	            });
-	            return this;
+	        var mapPosition = this.view.topLeft.substract(pos).multiply(-1);
+	        mapPosition.x += this.getDeltaXToCenter(pos);
+	        var latlngPosition = this.info.convertPointToLatLng(mapPosition);
+
+	        var newSize = this.originalMapView.clone.scale(this.zoomFactor);
+	        this.view.setSize(newSize.width, newSize.height);
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            view: this.view
+	        });
+
+	        this.setLatLngToPosition(latlngPosition, pos);
+	        this.changeZoomLevelIfNecessary(factor, viewportIsSmaller);
+
+	        return this;
+	    };
+
+	    View.prototype.changeZoomLevelIfNecessary = function changeZoomLevelIfNecessary(factor, viewportIsSmaller) {
+	        if (this.zoomFactor >= this.maxZoom && factor > 0) {
+	            this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
+	        } else if (this.zoomFactor <= this.minZoom && factor < 0 && !viewportIsSmaller) {
+	            this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
 	        }
+	    };
 
-	        /**
-	         * Handles draw of visible elements
-	         * @return {View} instance of View for chaining
-	         */
+	    /**
+	     * update center position of view
+	     * @return {View} instance of View for chaining
+	     */
 
-	    }, {
-	        key: 'draw',
-	        value: function draw() {
-	            return this.drawThumbnail().drawVisibleTiles();
+
+	    View.prototype.calculateNewCenter = function calculateNewCenter() {
+	        var newCenter = this.info.convertPointToLatLng(this.viewport.center.substract(this.view.topLeft));
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            center: newCenter
+	        });
+	        return this;
+	    };
+
+	    /**
+	     * moves the view's current position by pos
+	     * @param  {Point} pos - specified additional offset
+	     * @return {View} instance of View for chaining
+	     */
+
+
+	    View.prototype.moveView = function moveView(pos) {
+	        this.view.translate(0, pos.y);
+	        this.calculateNewCenter();
+	        this.view.translate(pos.x * (1 / this.distortionFactor), 0);
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            view: this.view
+	        });
+	        return this;
+	    };
+
+	    /**
+	     * Handles draw of visible elements
+	     * @return {View} instance of View for chaining
+	     */
+
+
+	    View.prototype.draw = function draw() {
+	        return this.drawThumbnail().drawVisibleTiles();
+	    };
+
+	    /**
+	     * draws all visible tiles
+	     * @return {View} instance of View for chaining
+	     */
+
+
+	    View.prototype.drawVisibleTiles = function drawVisibleTiles() {
+	        _Helper.Helper.forEach(this.visibleTiles, function (tile) {
+	            return tile.draw();
+	        });
+	        return this;
+	    };
+
+	    /**
+	     * draws the thumbnail
+	     * @return {View} instance of View for chaining
+	     */
+
+
+	    View.prototype.drawThumbnail = function drawThumbnail() {
+	        if (this.thumb) {
+	            var rect = this.view.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
+	            this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
 	        }
+	        return this;
+	    };
 
-	        /**
-	         * draws all visible tiles
-	         * @return {View} instance of View for chaining
-	         */
+	    /**
+	     * initializes tiles
+	     * @return {View} instance of View for chaining
+	     */
 
-	    }, {
-	        key: 'drawVisibleTiles',
-	        value: function drawVisibleTiles() {
-	            _Helper.Helper.forEach(this.visibleTiles, function (tile) {
-	                return tile.draw();
-	            });
-	            return this;
-	        }
 
-	        /**
-	         * draws the thumbnail
-	         * @return {View} instance of View for chaining
-	         */
+	    View.prototype.initializeTiles = function initializeTiles() {
+	        var _this4 = this;
 
-	    }, {
-	        key: 'drawThumbnail',
-	        value: function drawThumbnail() {
-	            if (this.thumb) {
-	                var rect = this.view.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
-	                this.context.drawImage(this.thumb, 0, 0, this.thumb.width, this.thumb.height, rect.x, rect.y, rect.width, rect.height);
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * initializes tiles
-	         * @return {View} instance of View for chaining
-	         */
-
-	    }, {
-	        key: 'initializeTiles',
-	        value: function initializeTiles() {
-	            var _this4 = this;
-
-	            var currentLevel = this.data.tiles;
-	            _Helper.Helper.forEach(currentLevel, function (currentTileData) {
-	                _this4.tiles.push(new _Tile.Tile(currentTileData, _this4.context, _this4.id));
-	            });
-	            return this;
-	        }
-	    }]);
+	        var currentLevel = this.data.tiles;
+	        _Helper.Helper.forEach(currentLevel, function (currentTileData) {
+	            _this4.tiles.push(new _Tile.Tile(currentTileData, _this4.context, _this4.id));
+	        });
+	        return this;
+	    };
 
 	    return View;
 	}(_Drawable2.Drawable);
@@ -8273,105 +8288,96 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
-	    _createClass(LatLng, [{
-	        key: "distance",
-	        value: function distance() {
-	            var latlng = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+	    LatLng.prototype.distance = function distance() {
+	        var latlng = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
 
-	            return this.clone.substract(latlng).length;
-	        }
+	        return this.clone.substract(latlng).length;
+	    };
 
-	        /**
-	         * substract specified coord from this coordinate
-	         * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
-	         * @return {LatLng} instance of LatLng for chaining
-	         */
+	    /**
+	     * substract specified coord from this coordinate
+	     * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
+	     * @return {LatLng} instance of LatLng for chaining
+	     */
 
-	    }, {
-	        key: "substract",
-	        value: function substract() {
-	            var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
 
-	            this.lat -= coord.lat;
-	            this.lng -= coord.lng;
-	            return this;
-	        }
+	    LatLng.prototype.substract = function substract() {
+	        var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
 
-	        /**
-	         * add specified coord to this coordinate
-	         * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
-	         * @return {LatLng} instance of LatLng for chaining
-	         */
+	        this.lat -= coord.lat;
+	        this.lng -= coord.lng;
+	        return this;
+	    };
 
-	    }, {
-	        key: "add",
-	        value: function add() {
-	            var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+	    /**
+	     * add specified coord to this coordinate
+	     * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
+	     * @return {LatLng} instance of LatLng for chaining
+	     */
 
-	            this.lat += coord.lat;
-	            this.lng += coord.lng;
-	            return this;
-	        }
 
-	        /**
-	        * divides a latlng with a given factor
-	        * @param  {number} factorLat = 1 - factor to divide lat with
-	        * @param  {number} factorLng = factorLat - factor to divide lng with
-	        * @return {LatLng} instance of LatLng for chaining
-	        */
+	    LatLng.prototype.add = function add() {
+	        var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
 
-	    }, {
-	        key: "divide",
-	        value: function divide() {
-	            var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	            var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+	        this.lat += coord.lat;
+	        this.lng += coord.lng;
+	        return this;
+	    };
 
-	            this.lat /= factorLat;
-	            this.lng /= factorLng;
-	            return this;
-	        }
+	    /**
+	    * divides a latlng with a given factor
+	    * @param  {number} factorLat = 1 - factor to divide lat with
+	    * @param  {number} factorLng = factorLat - factor to divide lng with
+	    * @return {LatLng} instance of LatLng for chaining
+	    */
 
-	        /**
-	         * multiplicates a latlng with a given factor
-	         * @param  {number} factorLat = 1 - factor to multiplicate lat with
-	         * @param  {number} factorLng = factorLat - factor to multiplicate lng with
-	         * @return {LatLng} instance of LatLng for chaining
-	         */
 
-	    }, {
-	        key: "multiply",
-	        value: function multiply() {
-	            var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	            var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+	    LatLng.prototype.divide = function divide() {
+	        var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	        var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
-	            this.lat *= factorLat;
-	            this.lng *= factorLng;
-	            return this;
-	        }
+	        this.lat /= factorLat;
+	        this.lng /= factorLng;
+	        return this;
+	    };
 
-	        /**
-	         * checks if specified coord equals this coord
-	         * @param  {LatLng} coord - specified coord to check against
-	         * @return {Boolean} Returns if specified coord equals this coord
-	         */
+	    /**
+	     * multiplicates a latlng with a given factor
+	     * @param  {number} factorLat = 1 - factor to multiplicate lat with
+	     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
+	     * @return {LatLng} instance of LatLng for chaining
+	     */
 
-	    }, {
-	        key: "equals",
-	        value: function equals(coord) {
-	            return this.lat === coord.lat && this.lng === coord.lng;
-	        }
 
-	        /**
-	         * converts a LatLng to string
-	         * @return {string} representing LatLng
-	         */
+	    LatLng.prototype.multiply = function multiply() {
+	        var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	        var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
 
-	    }, {
-	        key: "toString",
-	        value: function toString() {
-	            return "(" + this.lat + ", " + this.lng + ")";
-	        }
-	    }]);
+	        this.lat *= factorLat;
+	        this.lng *= factorLng;
+	        return this;
+	    };
+
+	    /**
+	     * checks if specified coord equals this coord
+	     * @param  {LatLng} coord - specified coord to check against
+	     * @return {Boolean} Returns if specified coord equals this coord
+	     */
+
+
+	    LatLng.prototype.equals = function equals(coord) {
+	        return this.lat === coord.lat && this.lng === coord.lng;
+	    };
+
+	    /**
+	     * converts a LatLng to string
+	     * @return {string} representing LatLng
+	     */
+
+
+	    LatLng.prototype.toString = function toString() {
+	        return "(" + this.lat + ", " + this.lng + ")";
+	    };
 
 	    return LatLng;
 	}();
@@ -8468,8 +8474,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	exports.Tile = undefined;
-
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8571,7 +8575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Tile);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tile).call(this, x, y, w, h));
+	        var _this = _possibleConstructorReturn(this, _Rectangle.call(this, x, y, w, h));
 
 	        if (!path || typeof path !== "string" || path.length === 0) throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
 
@@ -8593,49 +8597,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    _createClass(Tile, [{
-	        key: 'initialize',
-	        value: function initialize() {
-	            var _this2 = this;
+	    Tile.prototype.initialize = function initialize() {
+	        var _this2 = this;
 
+	        this.state.next();
+	        _Helper.Helper.loadImage(this.path, function (img) {
+	            _this2.img = img;
+	            _this2.state.next();
+	            _this2.eventManager.publish(_Events.Events.TileMap.DRAW);
+	        });
+	        return this;
+	    };
+
+	    /**
+	     * draws image data of tile on context
+	     * @return {Tile} instance of Tile for chaining
+	     */
+
+
+	    Tile.prototype.draw = function draw() {
+	        if (this.state.current.value >= 2) {
 	            this.state.next();
-	            _Helper.Helper.loadImage(this.path, function (img) {
-	                _this2.img = img;
-	                _this2.state.next();
-	                _this2.eventManager.publish(_Events.Events.TileMap.DRAW);
-	            });
-	            return this;
+	            this.context.drawImage(this.img, this.distortedTile.x, this.distortedTile.y, this.distortedTile.width, this.distortedTile.height);
+	        } else if (this.state.current.value === 0) {
+	            this.initialize();
 	        }
+	        return this;
+	    };
 
-	        /**
-	         * draws image data of tile on context
-	         * @return {Tile} instance of Tile for chaining
-	         */
+	    /**
+	     * check if tiles are equal
+	     * @param  {Tile} tile - the specified tile to check against this
+	     * @return {Boolean} is true, if x, y, width and height and path are the same
+	     */
 
-	    }, {
-	        key: 'draw',
-	        value: function draw() {
-	            if (this.state.current.value >= 2) {
-	                this.state.next();
-	                this.context.drawImage(this.img, this.distortedTile.x, this.distortedTile.y, this.distortedTile.width, this.distortedTile.height);
-	            } else if (this.state.current.value === 0) {
-	                this.initialize();
-	            }
-	            return this;
-	        }
 
-	        /**
-	         * check if tiles are equal
-	         * @param  {Tile} tile - the specified tile to check against this
-	         * @return {Boolean} is true, if x, y, width and height and path are the same
-	         */
-
-	    }, {
-	        key: 'equals',
-	        value: function equals(tile) {
-	            return tile instanceof Tile ? _get(Object.getPrototypeOf(Tile.prototype), 'equals', this).call(this, tile) && this.path === tile.path : false;
-	        }
-	    }]);
+	    Tile.prototype.equals = function equals(tile) {
+	        return tile instanceof Tile ? _Rectangle.prototype.equals.call(this, tile) && this.path === tile.path : false;
+	    };
 
 	    return Tile;
 	}(_Rectangle2.Rectangle);
@@ -8730,96 +8729,84 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return MapInformation.instances[id];
 	    }
 
-	    _createClass(MapInformation, [{
-	        key: 'get',
-	        value: function get() {
-	            return this.data;
-	        }
-	    }, {
-	        key: 'bindEvents',
-	        value: function bindEvents() {
-	            this.eventManager.subscribe(_Events.Events.MapInformation.UPDATE, this.update.bind(this));
-	        }
-	    }, {
-	        key: 'update',
-	        value: function update() {
-	            var obj = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    MapInformation.prototype.get = function get() {
+	        return this.data;
+	    };
 
-	            var oldData = this.data;
-	            this.data = Object.assign({}, this.data, obj);
-	            var centerUpdateDone = !oldData.center.equals(this.data.center) ? this.centerUpdated() : false;
-	            if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.viewportUpdated();
-	            this.eventManager.publish(_Events.Events.TileMap.DRAW);
-	        }
+	    MapInformation.prototype.bindEvents = function bindEvents() {
+	        this.eventManager.subscribe(_Events.Events.MapInformation.UPDATE, this.update.bind(this));
+	    };
 
-	        /**
-	         * converts a Point to LatLng in view
-	         * @param  {Point} point - specified point to be converted
-	         * @return {LatLng} presentation of point in lat-lng system
-	         */
+	    MapInformation.prototype.update = function update() {
+	        var obj = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-	    }, {
-	        key: 'convertPointToLatLng',
-	        value: function convertPointToLatLng(point) {
-	            point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
-	            return new _LatLng.LatLng(this.data.bounds.nw.lat - point.y, point.x + this.data.bounds.nw.lng);
-	        }
+	        var oldData = this.data;
+	        this.data = Object.assign({}, this.data, obj);
+	        var centerUpdateDone = !oldData.center.equals(this.data.center) ? this.centerUpdated() : false;
+	        if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.viewportUpdated();
+	        this.eventManager.publish(_Events.Events.TileMap.DRAW);
+	    };
 
-	        /**
-	         * converts a LatLng to Point in view
-	         * @param  {LatLng} latlng - specified latlng to be converted
-	         * @return {Point} presentation of point in pixel system
-	         */
+	    /**
+	     * converts a Point to LatLng in view
+	     * @param  {Point} point - specified point to be converted
+	     * @return {LatLng} presentation of point in lat-lng system
+	     */
 
-	    }, {
-	        key: 'convertLatLngToPoint',
-	        value: function convertLatLngToPoint(latlng) {
-	            var relativePosition = this.data.bounds.nw.clone.substract(latlng);
-	            relativePosition.multiply(this.pixelPerLatLng.y, this.pixelPerLatLng.x);
-	            return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
-	        }
-	    }, {
-	        key: 'centerUpdated',
-	        value: function centerUpdated() {
-	            this.data.distortionFactor = this.getDistortionFactorForLatitude(this.data.center);
-	            this.data.offsetToCenter = this.offsetToCenter;
-	            return true;
-	        }
-	    }, {
-	        key: 'viewUpdated',
-	        value: function viewUpdated() {
-	            this.data.offsetToCenter = this.offsetToCenter;
-	            return true;
-	        }
-	    }, {
-	        key: 'viewportUpdated',
-	        value: function viewportUpdated() {
-	            this.data.offsetToCenter = this.offsetToCenter;
-	            return true;
-	        }
 
-	        /**
-	         * get distortion factor for specified latitude
-	         * @param  {LatLng} latlng - lat/lng position
-	         * @return {number} distortion factor
-	         */
+	    MapInformation.prototype.convertPointToLatLng = function convertPointToLatLng(point) {
+	        point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
+	        return new _LatLng.LatLng(this.data.bounds.nw.lat - point.y, point.x + this.data.bounds.nw.lng);
+	    };
 
-	    }, {
-	        key: 'getDistortionFactorForLatitude',
-	        value: function getDistortionFactorForLatitude(latlng) {
-	            return Math.cos(_Helper.Helper.toRadians(latlng.lat));
-	        }
+	    /**
+	     * converts a LatLng to Point in view
+	     * @param  {LatLng} latlng - specified latlng to be converted
+	     * @return {Point} presentation of point in pixel system
+	     */
 
-	        /**
-	         * destroys singleton instance
-	         */
 
-	    }, {
-	        key: 'destroy',
-	        value: function destroy() {
-	            MapInformation.instances[this.id] = null;
-	        }
-	    }]);
+	    MapInformation.prototype.convertLatLngToPoint = function convertLatLngToPoint(latlng) {
+	        var relativePosition = this.data.bounds.nw.clone.substract(latlng);
+	        relativePosition.multiply(this.pixelPerLatLng.y, this.pixelPerLatLng.x);
+	        return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
+	    };
+
+	    MapInformation.prototype.centerUpdated = function centerUpdated() {
+	        this.data.distortionFactor = this.getDistortionFactorForLatitude(this.data.center);
+	        this.data.offsetToCenter = this.offsetToCenter;
+	        return true;
+	    };
+
+	    MapInformation.prototype.viewUpdated = function viewUpdated() {
+	        this.data.offsetToCenter = this.offsetToCenter;
+	        return true;
+	    };
+
+	    MapInformation.prototype.viewportUpdated = function viewportUpdated() {
+	        this.data.offsetToCenter = this.offsetToCenter;
+	        return true;
+	    };
+
+	    /**
+	     * get distortion factor for specified latitude
+	     * @param  {LatLng} latlng - lat/lng position
+	     * @return {number} distortion factor
+	     */
+
+
+	    MapInformation.prototype.getDistortionFactorForLatitude = function getDistortionFactorForLatitude(latlng) {
+	        return Math.cos(_Helper.Helper.toRadians(latlng.lat));
+	    };
+
+	    /**
+	     * destroys singleton instance
+	     */
+
+
+	    MapInformation.prototype.destroy = function destroy() {
+	        MapInformation.instances[this.id] = null;
+	    };
 
 	    return MapInformation;
 	}();
@@ -8911,12 +8898,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
-	    _createClass(Drawable, [{
-	        key: 'draw',
-	        value: function draw() {
-	            return this;
-	        }
-	    }]);
+	    Drawable.prototype.draw = function draw() {
+	        return this;
+	    };
 
 	    return Drawable;
 	}();
@@ -8988,7 +8972,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Marker);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Marker).call(this, { id: id }));
+	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, { id: id }));
 
 	        _this.container = container;
 
@@ -9016,73 +9000,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    _createClass(Marker, [{
-	        key: 'bindEvents',
-	        value: function bindEvents() {
-	            var _this2 = this;
+	    Marker.prototype.bindEvents = function bindEvents() {
+	        var _this2 = this;
 
-	            if (this.content.length) {
-	                this.icon.setAttribute("data-id", 'marker-' + this.uniqueID);
-	                this.eventManager.subscribe('marker-' + this.uniqueID, this.action.bind(this));
-	                this.eventManager.subscribe(_Events.Events.Marker.DEACTIVATE, function () {
-	                    _this2.icon.classList.remove("active");
-	                });
-	            }
-	            return this;
-	        }
-	    }, {
-	        key: 'action',
-	        value: function action() {
-	            this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
-	            this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
-	            this.icon.classList.add("active");
-	        }
-
-	        /**
-	         * adds a marker to the DOM
-	         * @param {Object} container - container to append to
-	         * @returns {Object} DOM-selector of append markup
-	         */
-
-	    }, {
-	        key: 'addMarkerToDOM',
-	        value: function addMarkerToDOM(container) {
-	            var icon = document.createElement("div");
-	            icon.classList.add("marker");
-	            _Helper.Helper.css(icon, {
-	                "width": this.size.x + 'px',
-	                "height": this.size.y + 'px',
-	                "margin-left": this.offset.x + 'px',
-	                "margin-top": this.offset.y + 'px',
-	                "transform": 'translateZ(0)',
-	                "background-image": 'url(' + this.img + ')',
-	                "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
+	        if (this.content.length) {
+	            this.icon.setAttribute("data-id", 'marker-' + this.uniqueID);
+	            this.eventManager.subscribe('marker-' + this.uniqueID, this.action.bind(this));
+	            this.eventManager.subscribe(_Events.Events.Marker.DEACTIVATE, function () {
+	                _this2.icon.classList.remove("active");
 	            });
-	            if (container) {
-	                _Helper.Helper.hide(icon);
-	                container.appendChild(icon);
-	            }
-	            return icon;
 	        }
+	        return this;
+	    };
 
-	        /**
-	         * set initial position of this marker
-	         * @return {Marker} instance of Marker for chaining
-	         */
+	    Marker.prototype.action = function action() {
+	        this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
+	        this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
+	        this.icon.classList.add("active");
+	    };
 
-	    }, {
-	        key: 'positionMarker',
-	        value: function positionMarker() {
-	            this.position = this.info.convertLatLngToPoint(this.latlng);
-	            var p = this.position.clone.divide(this.view.width, this.view.height).multiply(100);
-	            _Helper.Helper.css(this.icon, {
-	                "left": p.x + '%',
-	                "top": p.y + '%'
-	            });
-	            _Helper.Helper.show(this.icon);
-	            return this;
+	    /**
+	     * adds a marker to the DOM
+	     * @param {Object} container - container to append to
+	     * @returns {Object} DOM-selector of append markup
+	     */
+
+
+	    Marker.prototype.addMarkerToDOM = function addMarkerToDOM(container) {
+	        var icon = document.createElement("div");
+	        icon.classList.add("marker");
+	        _Helper.Helper.css(icon, {
+	            "width": this.size.x + 'px',
+	            "height": this.size.y + 'px',
+	            "margin-left": this.offset.x + 'px',
+	            "margin-top": this.offset.y + 'px',
+	            "transform": 'translateZ(0)',
+	            "background-image": 'url(' + this.img + ')',
+	            "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
+	        });
+	        if (container) {
+	            _Helper.Helper.hide(icon);
+	            container.appendChild(icon);
 	        }
-	    }]);
+	        return icon;
+	    };
+
+	    /**
+	     * set initial position of this marker
+	     * @return {Marker} instance of Marker for chaining
+	     */
+
+
+	    Marker.prototype.positionMarker = function positionMarker() {
+	        this.position = this.info.convertLatLngToPoint(this.latlng);
+	        var p = this.position.clone.divide(this.view.width, this.view.height).multiply(100);
+	        _Helper.Helper.css(this.icon, {
+	            "left": p.x + '%',
+	            "top": p.y + '%'
+	        });
+	        _Helper.Helper.show(this.icon);
+	        return this;
+	    };
 
 	    return Marker;
 	}(_Drawable2.Drawable);
@@ -9366,165 +9344,152 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    _createClass(ToolTip, [{
-	        key: 'registerHandlebarHelpers',
-	        value: function registerHandlebarHelpers() {
-	            if (_Handlebars2.default) {
-	                _Handlebars2.default.registerHelper('getRatio', function (w, h) {
-	                    return h / w * 100 + "%";
-	                });
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * initialize all templates
-	         * @param  {object} templates = {} - all specified templates
-	         * @return {ToolTip} instance of ToolTip for chaining
-	         */
-
-	    }, {
-	        key: 'initializeTemplates',
-	        value: function initializeTemplates(templates) {
-	            this.templates = templates;
-	            this.loadedTemplates = 0;
-	            this.compileTemplates();
-	            return this;
-	        }
-
-	        /**
-	         * bind all events
-	         * @return {ToolTip} instance of ToolTip for chaining
-	         */
-
-	    }, {
-	        key: 'bindEvents',
-	        value: function bindEvents() {
-	            var _this = this;
-
-	            window.addEventListener("resize", this.resizeHandler.bind(this), false);
-	            window.addEventListener("orientationchange", this.resizeHandler.bind(this), false);
-
-	            this.eventManager.subscribe(_Events.Events.ToolTip.OPEN, this.open.bind(this));
-	            this.eventManager.subscribe(_Events.Events.ToolTip.CLOSE, function () {
-	                _this.closeTooltip();
+	    ToolTip.prototype.registerHandlebarHelpers = function registerHandlebarHelpers() {
+	        if (_Handlebars2.default) {
+	            _Handlebars2.default.registerHelper('getRatio', function (w, h) {
+	                return h / w * 100 + "%";
 	            });
-	            this.close.addEventListener(_Events.Events.Handling.CLICK, function () {
-	                _this.closeTooltip();
-	            }, false);
-	            return this;
 	        }
+	        return this;
+	    };
 
-	        /**
-	         * on resize check if tooltip is bottom or left position
-	         * @return {ToolTip} instance of ToolTip for chaining
-	         */
+	    /**
+	     * initialize all templates
+	     * @param  {object} templates = {} - all specified templates
+	     * @return {ToolTip} instance of ToolTip for chaining
+	     */
 
-	    }, {
-	        key: 'resizeHandler',
-	        value: function resizeHandler() {
+
+	    ToolTip.prototype.initializeTemplates = function initializeTemplates(templates) {
+	        this.templates = templates;
+	        this.loadedTemplates = 0;
+	        this.compileTemplates();
+	        return this;
+	    };
+
+	    /**
+	     * bind all events
+	     * @return {ToolTip} instance of ToolTip for chaining
+	     */
+
+
+	    ToolTip.prototype.bindEvents = function bindEvents() {
+	        var _this = this;
+
+	        _Helper.Helper.addListener(window, _Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
+	        _Helper.Helper.addListener(this.close, _Events.Events.Handling.CLICK, function () {
+	            _this.closeTooltip();
+	        });
+	        this.eventManager.subscribe(_Events.Events.ToolTip.OPEN, this.open.bind(this));
+	        this.eventManager.subscribe(_Events.Events.ToolTip.CLOSE, function () {
+	            _this.closeTooltip();
+	        });
+	        return this;
+	    };
+
+	    /**
+	     * on resize check if tooltip is bottom or left position
+	     * @return {ToolTip} instance of ToolTip for chaining
+	     */
+
+
+	    ToolTip.prototype.resizeHandler = function resizeHandler() {
+	        this.setPosition();
+	        return this;
+	    };
+
+	    /**
+	     * inserts content to ToolTip instance container
+	     * @param  {object} content = {} - content object
+	     * @return {ToolTip} instance of ToolTip for chaining
+	     */
+
+
+	    ToolTip.prototype.insertContent = function insertContent() {
+	        var _this2 = this;
+
+	        var content = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	        this.content.innerHTML = "";
+	        _Helper.Helper.forEach(content, function (data) {
+	            if (_this2.templates[data.type]) {
+	                var html = _this2.templates[data.type](data.content);
+	                _this2.content.innerHTML += html;
+	            }
+	        });
+	        return this;
+	    };
+
+	    /**
+	     * opens a tooltip
+	     * @param  {object} data - content object
+	     * @return {ToolTip} instance of ToolTip for chaining
+	     */
+
+
+	    ToolTip.prototype.open = function open(data) {
+	        if (data) this.insertContent(data);
+	        if (this.container.classList.contains(_Events.Events.ToolTip.CLOSE)) {
 	            this.setPosition();
-	            return this;
+	            this.container.classList.remove(_Events.Events.ToolTip.CLOSE);
+	            this.container.classList.add(_Events.Events.ToolTip.OPEN);
+	            this.eventManager.publish(_Events.Events.TileMap.RESIZE);
 	        }
+	        return this;
+	    };
 
-	        /**
-	         * inserts content to ToolTip instance container
-	         * @param  {object} content = {} - content object
-	         * @return {ToolTip} instance of ToolTip for chaining
-	         */
+	    /**
+	     * closes a tooltip
+	     * @return {ToolTip} instance of ToolTip for chaining
+	     */
 
-	    }, {
-	        key: 'insertContent',
-	        value: function insertContent() {
-	            var _this2 = this;
 
-	            var content = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    ToolTip.prototype.closeTooltip = function closeTooltip() {
+	        if (this.container.classList.contains(_Events.Events.ToolTip.OPEN)) {
+	            this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
+	            this.setPosition();
+	            this.container.classList.remove(_Events.Events.ToolTip.OPEN);
+	            this.container.classList.add(_Events.Events.ToolTip.CLOSE);
+	            this.eventManager.publish(_Events.Events.TileMap.RESIZE);
+	        }
+	        return this;
+	    };
 
-	            this.content.innerHTML = "";
-	            _Helper.Helper.forEach(content, function (data) {
-	                if (_this2.templates[data.type]) {
-	                    var html = _this2.templates[data.type](data.content);
-	                    _this2.content.innerHTML += html;
-	                }
+	    /**
+	     * sets position of tooltip to left or bottom
+	     * @return {ToolTip} instance of ToolTip for chaining
+	     */
+
+
+	    ToolTip.prototype.setPosition = function setPosition() {
+	        if (this.container.clientWidth > this.container.clientHeight) {
+	            this.container.classList.add("left");
+	            this.container.classList.remove("bottom");
+	        } else {
+	            this.container.classList.add("bottom");
+	            this.container.classList.remove("left");
+	        }
+	        return this;
+	    };
+
+	    /**
+	     * precompiles all Handlebars templates
+	     * @return {ToolTip} instance of ToolTip for chaining
+	     */
+
+
+	    ToolTip.prototype.compileTemplates = function compileTemplates() {
+	        var _this3 = this;
+
+	        _Helper.Helper.forEach(this.templates, function (template, type) {
+	            _Helper.Helper.getFile(template, function (html) {
+	                _this3.templates[type] = _Handlebars2.default.compile(html);
+	                _this3.loadedTemplates++;
+	                if (_this3.allTemplatesLoaded) _this3.container.appendChild(_this3.popup);
 	            });
-	            return this;
-	        }
-
-	        /**
-	         * opens a tooltip
-	         * @param  {object} data - content object
-	         * @return {ToolTip} instance of ToolTip for chaining
-	         */
-
-	    }, {
-	        key: 'open',
-	        value: function open(data) {
-	            if (data) this.insertContent(data);
-	            if (this.container.classList.contains(_Events.Events.ToolTip.CLOSE)) {
-	                this.setPosition();
-	                this.container.classList.remove(_Events.Events.ToolTip.CLOSE);
-	                this.container.classList.add(_Events.Events.ToolTip.OPEN);
-	                this.eventManager.publish(_Events.Events.TileMap.RESIZE);
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * closes a tooltip
-	         * @return {ToolTip} instance of ToolTip for chaining
-	         */
-
-	    }, {
-	        key: 'closeTooltip',
-	        value: function closeTooltip() {
-	            if (this.container.classList.contains(_Events.Events.ToolTip.OPEN)) {
-	                this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
-	                this.setPosition();
-	                this.container.classList.remove(_Events.Events.ToolTip.OPEN);
-	                this.container.classList.add(_Events.Events.ToolTip.CLOSE);
-	                this.eventManager.publish(_Events.Events.TileMap.RESIZE);
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * sets position of tooltip to left or bottom
-	         * @return {ToolTip} instance of ToolTip for chaining
-	         */
-
-	    }, {
-	        key: 'setPosition',
-	        value: function setPosition() {
-	            if (this.container.clientWidth > this.container.clientHeight) {
-	                this.container.classList.add("left");
-	                this.container.classList.remove("bottom");
-	            } else {
-	                this.container.classList.add("bottom");
-	                this.container.classList.remove("left");
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * precompiles all Handlebars templates
-	         * @return {ToolTip} instance of ToolTip for chaining
-	         */
-
-	    }, {
-	        key: 'compileTemplates',
-	        value: function compileTemplates() {
-	            var _this3 = this;
-
-	            _Helper.Helper.forEach(this.templates, function (template, type) {
-	                _Helper.Helper.getFile(template, function (html) {
-	                    _this3.templates[type] = _Handlebars2.default.compile(html);
-	                    _this3.loadedTemplates++;
-	                    if (_this3.allTemplatesLoaded) _this3.container.appendChild(_this3.popup);
-	                });
-	            });
-	            return this;
-	        }
-	    }]);
+	        });
+	        return this;
+	    };
 
 	    return ToolTip;
 	}();
@@ -9612,7 +9577,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Label);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Label).call(this, { id: id }));
+	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, { id: id }));
 
 	        _this.id = id;
 
@@ -9636,103 +9601,92 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
-	    _createClass(Label, [{
-	        key: 'getNearestPositionToCenter',
-	        value: function getNearestPositionToCenter() {
-	            var center = this.center.clone.multiply(-1);
-	            this.latlng = this.latlng.sort(function (a, b) {
-	                return center.distance(a) - center.distance(b);
-	            });
-	            return this.latlng[0];
-	        }
-	    }, {
-	        key: 'openToolTip',
-	        value: function openToolTip() {
-	            this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
-	        }
-	    }, {
-	        key: 'draw',
-	        value: function draw() {
-	            if (this.level >= this.visibility.min && this.level <= this.visibility.max) {
-	                var pos = this.position;
-	                var textPos = pos.clone.add(this.text.offset);
+	    Label.prototype.getNearestPositionToCenter = function getNearestPositionToCenter() {
+	        var _this2 = this;
 
-	                this.context.beginPath();
-	                this.drawElements(pos, textPos);
-	                this.context.closePath();
-	            }
-	            return this;
-	        }
-	    }, {
-	        key: 'decideWhatToDraw',
-	        value: function decideWhatToDraw(text, icon) {
-	            var _this2 = this;
+	        this.latlng = this.latlng.sort(function (a, b) {
+	            return _this2.center.distance(a) - _this2.center.distance(b);
+	        });
+	        return this.latlng[0];
+	    };
 
-	            if (text && icon) {
-	                return function (pos, textPos) {
-	                    _this2.drawText(textPos);
-	                    _this2.drawIcon(pos);
-	                };
-	            } else if (icon) {
-	                return function (pos) {
-	                    return _this2.drawIcon(pos);
-	                };
-	            } else if (text) {
-	                return function (pos, textPos) {
-	                    return _this2.drawText(textPos);
-	                };
-	            }
-	        }
-	    }, {
-	        key: 'drawText',
-	        value: function drawText(pos) {
-	            this.context.textAlign = this.text.align;
-	            this.context.textBaseline = this.text.baseline;
-	            this.context.font = this.text.font;
-	            this.context.fillStyle = this.text.color;
-	            this.context.fillText(this.text.content, pos.x, pos.y);
-	        }
-	    }, {
-	        key: 'drawIcon',
-	        value: function drawIcon(pos) {
-	            this.context.fillStyle = this.icon.color;
-	            this.drawIconType(pos);
-	            this.context.fill();
-	        }
-	    }, {
-	        key: 'drawCircleIcon',
-	        value: function drawCircleIcon(size) {
-	            var _this3 = this;
+	    Label.prototype.openToolTip = function openToolTip() {
+	        this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
+	    };
 
+	    Label.prototype.draw = function draw() {
+	        if (this.level >= this.visibility.min && this.level <= this.visibility.max) {
+	            var pos = this.position;
+	            var textPos = pos.clone.add(this.text.offset);
+
+	            this.context.beginPath();
+	            this.drawElements(pos, textPos);
+	            this.context.closePath();
+	        }
+	        return this;
+	    };
+
+	    Label.prototype.decideWhatToDraw = function decideWhatToDraw(text, icon) {
+	        var _this3 = this;
+
+	        if (text && icon) {
+	            return function (pos, textPos) {
+	                _this3.drawText(textPos);
+	                _this3.drawIcon(pos);
+	            };
+	        } else if (icon) {
 	            return function (pos) {
-	                return _this3.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
+	                return _this3.drawIcon(pos);
+	            };
+	        } else if (text) {
+	            return function (pos, textPos) {
+	                return _this3.drawText(textPos);
 	            };
 	        }
-	    }, {
-	        key: 'drawSquareIcon',
-	        value: function drawSquareIcon(size) {
-	            var _this4 = this;
+	    };
 
-	            return function (pos) {
-	                return _this4.context.rect(pos.x, pos.y, size, size);
-	            };
-	        }
-	    }, {
-	        key: 'drawImageIcon',
-	        value: function drawImageIcon(image, size, offset) {
-	            var _this5 = this;
+	    Label.prototype.drawText = function drawText(pos) {
+	        this.context.textAlign = this.text.align;
+	        this.context.textBaseline = this.text.baseline;
+	        this.context.font = this.text.font;
+	        this.context.fillStyle = this.text.color;
+	        this.context.fillText(this.text.content, pos.x, pos.y);
+	    };
 
-	            this.offset = offset;
-	            return function (pos) {
-	                return _this5.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
-	            };
-	        }
-	    }, {
-	        key: 'hit',
-	        value: function hit(point) {
-	            return this.boundingBox.containsPoint(point);
-	        }
-	    }]);
+	    Label.prototype.drawIcon = function drawIcon(pos) {
+	        this.context.fillStyle = this.icon.color;
+	        this.drawIconType(pos);
+	        this.context.fill();
+	    };
+
+	    Label.prototype.drawCircleIcon = function drawCircleIcon(size) {
+	        var _this4 = this;
+
+	        return function (pos) {
+	            return _this4.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
+	        };
+	    };
+
+	    Label.prototype.drawSquareIcon = function drawSquareIcon(size) {
+	        var _this5 = this;
+
+	        return function (pos) {
+	            return _this5.context.rect(pos.x, pos.y, size, size);
+	        };
+	    };
+
+	    Label.prototype.drawImageIcon = function drawImageIcon(image, size, offset) {
+	        var _this6 = this;
+
+	        this.offset = offset;
+	        return function (pos) {
+	            return _this6.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
+	        };
+	    };
+
+	    Label.prototype.hit = function hit(point) {
+	        return this.boundingBox.containsPoint(point);
+	    };
 
 	    return Label;
 	}(_Drawable2.Drawable);
@@ -9747,8 +9701,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	exports.MarkerClusterer = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _Events = __webpack_require__(192);
 
@@ -9789,194 +9741,186 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
-	    _createClass(MarkerClusterer, [{
-	        key: 'bindEvents',
-	        value: function bindEvents() {
-	            var _this = this;
+	    MarkerClusterer.prototype.bindEvents = function bindEvents() {
+	        var _this = this;
 
-	            this.eventManager.subscribe(_Events.Events.MarkerClusterer.CLUSTERIZE, function () {
-	                _this.clusterize();
-	            });
-	            this.eventManager.subscribe(_Events.Events.MarkerClusterer.UNCLUSTERIZE, function () {
-	                _this.deleteAllClusters();
-	            });
-	        }
-	    }, {
-	        key: 'clusterize',
-	        value: function clusterize() {
-	            this.deleteAllClusters();
-	            var _iteratorNormalCompletion = true;
-	            var _didIteratorError = false;
-	            var _iteratorError = undefined;
+	        this.eventManager.subscribe(_Events.Events.MarkerClusterer.CLUSTERIZE, function () {
+	            _this.clusterize();
+	        });
+	        this.eventManager.subscribe(_Events.Events.MarkerClusterer.UNCLUSTERIZE, function () {
+	            _this.deleteAllClusters();
+	        });
+	    };
 
-	            try {
-	                for (var _iterator = this.markers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var marker = _step.value;
+	    MarkerClusterer.prototype.clusterize = function clusterize() {
+	        this.deleteAllClusters();
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
 
-	                    var hits = [];
-	                    var _iteratorNormalCompletion3 = true;
-	                    var _didIteratorError3 = false;
-	                    var _iteratorError3 = undefined;
+	        try {
+	            for (var _iterator = this.markers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                var marker = _step.value;
 
+	                var hits = [];
+	                var _iteratorNormalCompletion3 = true;
+	                var _didIteratorError3 = false;
+	                var _iteratorError3 = undefined;
+
+	                try {
+	                    for (var _iterator3 = this.clusters[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                        var cluster = _step3.value;
+
+	                        if (marker.boundingBox.intersects(cluster.boundingBox)) {
+	                            hits.push(cluster);
+	                        }
+	                    }
+	                } catch (err) {
+	                    _didIteratorError3 = true;
+	                    _iteratorError3 = err;
+	                } finally {
 	                    try {
-	                        for (var _iterator3 = this.clusters[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	                            var cluster = _step3.value;
-
-	                            if (marker.boundingBox.intersects(cluster.boundingBox)) {
-	                                hits.push(cluster);
-	                            }
+	                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                            _iterator3.return();
 	                        }
-	                    } catch (err) {
-	                        _didIteratorError3 = true;
-	                        _iteratorError3 = err;
 	                    } finally {
-	                        try {
-	                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	                                _iterator3.return();
-	                            }
-	                        } finally {
-	                            if (_didIteratorError3) {
-	                                throw _iteratorError3;
-	                            }
+	                        if (_didIteratorError3) {
+	                            throw _iteratorError3;
 	                        }
 	                    }
-
-	                    if (!hits.length) {
-	                        var newCluster = this.createCluster(marker);
-	                        this.clusters.push(newCluster);
-	                    } else {
-	                        var nearestCluster = this.findNearestHit(marker, hits);
-	                        nearestCluster.addMarker(marker);
-	                    }
 	                }
-	            } catch (err) {
-	                _didIteratorError = true;
-	                _iteratorError = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion && _iterator.return) {
-	                        _iterator.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError) {
-	                        throw _iteratorError;
-	                    }
+
+	                if (!hits.length) {
+	                    var newCluster = this.createCluster(marker);
+	                    this.clusters.push(newCluster);
+	                } else {
+	                    var nearestCluster = this.findNearestHit(marker, hits);
+	                    nearestCluster.addMarker(marker);
 	                }
 	            }
-
-	            var _iteratorNormalCompletion2 = true;
-	            var _didIteratorError2 = false;
-	            var _iteratorError2 = undefined;
-
+	        } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
+	        } finally {
 	            try {
-	                for (var _iterator2 = this.clusters[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                    var _cluster = _step2.value;
-
-	                    _cluster.init();
+	                if (!_iteratorNormalCompletion && _iterator.return) {
+	                    _iterator.return();
 	                }
-	            } catch (err) {
-	                _didIteratorError2 = true;
-	                _iteratorError2 = err;
 	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                        _iterator2.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError2) {
-	                        throw _iteratorError2;
-	                    }
+	                if (_didIteratorError) {
+	                    throw _iteratorError;
 	                }
 	            }
 	        }
-	    }, {
-	        key: 'findNearestHit',
-	        value: function findNearestHit(marker, hits) {
-	            var lastDistance = void 0,
-	                minimalHit = void 0;
-	            var _iteratorNormalCompletion4 = true;
-	            var _didIteratorError4 = false;
-	            var _iteratorError4 = undefined;
 
+	        var _iteratorNormalCompletion2 = true;
+	        var _didIteratorError2 = false;
+	        var _iteratorError2 = undefined;
+
+	        try {
+	            for (var _iterator2 = this.clusters[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                var _cluster = _step2.value;
+
+	                _cluster.init();
+	            }
+	        } catch (err) {
+	            _didIteratorError2 = true;
+	            _iteratorError2 = err;
+	        } finally {
 	            try {
-	                for (var _iterator4 = hits[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-	                    var hit = _step4.value;
+	                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                    _iterator2.return();
+	                }
+	            } finally {
+	                if (_didIteratorError2) {
+	                    throw _iteratorError2;
+	                }
+	            }
+	        }
+	    };
 
-	                    if (!lastDistance) {
-	                        lastDistance = this.getDistance(marker, hit);
+	    MarkerClusterer.prototype.findNearestHit = function findNearestHit(marker, hits) {
+	        var lastDistance = void 0,
+	            minimalHit = void 0;
+	        var _iteratorNormalCompletion4 = true;
+	        var _didIteratorError4 = false;
+	        var _iteratorError4 = undefined;
+
+	        try {
+	            for (var _iterator4 = hits[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	                var hit = _step4.value;
+
+	                if (!lastDistance) {
+	                    lastDistance = this.getDistance(marker, hit);
+	                    minimalHit = hit;
+	                } else {
+	                    var currentDistance = this.getDistance(marker, hit);
+	                    if (currentDistance < lastDistance) {
+	                        lastDistance = currentDistance;
 	                        minimalHit = hit;
-	                    } else {
-	                        var currentDistance = this.getDistance(marker, hit);
-	                        if (currentDistance < lastDistance) {
-	                            lastDistance = currentDistance;
-	                            minimalHit = hit;
-	                        }
-	                    }
-	                }
-	            } catch (err) {
-	                _didIteratorError4 = true;
-	                _iteratorError4 = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
-	                        _iterator4.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError4) {
-	                        throw _iteratorError4;
 	                    }
 	                }
 	            }
-
-	            return minimalHit;
-	        }
-	    }, {
-	        key: 'getDistance',
-	        value: function getDistance(marker, cluster) {
-	            return marker.boundingBox.center.distance(cluster.boundingBox.center);
-	        }
-	    }, {
-	        key: 'createCluster',
-	        value: function createCluster(marker) {
-	            var newCluster = new _Cluster.Cluster({
-	                container: this.container,
-	                id: this.id
-	            });
-	            newCluster.addMarker(marker);
-	            return newCluster;
-	        }
-	    }, {
-	        key: 'deleteAllClusters',
-	        value: function deleteAllClusters() {
-	            var _iteratorNormalCompletion5 = true;
-	            var _didIteratorError5 = false;
-	            var _iteratorError5 = undefined;
-
+	        } catch (err) {
+	            _didIteratorError4 = true;
+	            _iteratorError4 = err;
+	        } finally {
 	            try {
-	                for (var _iterator5 = this.clusters[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-	                    var cluster = _step5.value;
-
-	                    cluster.removeFromDOM();
+	                if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	                    _iterator4.return();
 	                }
-	            } catch (err) {
-	                _didIteratorError5 = true;
-	                _iteratorError5 = err;
 	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
-	                        _iterator5.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError5) {
-	                        throw _iteratorError5;
-	                    }
+	                if (_didIteratorError4) {
+	                    throw _iteratorError4;
 	                }
 	            }
-
-	            this.clusters = [];
-	            _Cluster.Cluster.count = 0;
 	        }
-	    }]);
+
+	        return minimalHit;
+	    };
+
+	    MarkerClusterer.prototype.getDistance = function getDistance(marker, cluster) {
+	        return marker.boundingBox.center.distance(cluster.boundingBox.center);
+	    };
+
+	    MarkerClusterer.prototype.createCluster = function createCluster(marker) {
+	        var newCluster = new _Cluster.Cluster({
+	            container: this.container,
+	            id: this.id
+	        });
+	        newCluster.addMarker(marker);
+	        return newCluster;
+	    };
+
+	    MarkerClusterer.prototype.deleteAllClusters = function deleteAllClusters() {
+	        var _iteratorNormalCompletion5 = true;
+	        var _didIteratorError5 = false;
+	        var _iteratorError5 = undefined;
+
+	        try {
+	            for (var _iterator5 = this.clusters[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	                var cluster = _step5.value;
+
+	                cluster.removeFromDOM();
+	            }
+	        } catch (err) {
+	            _didIteratorError5 = true;
+	            _iteratorError5 = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion5 && _iterator5.return) {
+	                    _iterator5.return();
+	                }
+	            } finally {
+	                if (_didIteratorError5) {
+	                    throw _iteratorError5;
+	                }
+	            }
+	        }
+
+	        this.clusters = [];
+	        _Cluster.Cluster.count = 0;
+	    };
 
 	    return MarkerClusterer;
 	}();
@@ -9991,8 +9935,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	exports.Cluster = undefined;
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _Events = __webpack_require__(192);
 
@@ -10031,7 +9973,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Cluster);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Cluster).call(this, { id: id }));
+	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, { id: id }));
 
 	        _this.uniqueID = Cluster.count;
 	        Cluster.count++;
@@ -10040,145 +9982,136 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
-	    _createClass(Cluster, [{
-	        key: 'init',
-	        value: function init() {
-	            if (this.markers.length === 1) {
-	                _Helper.Helper.show(this.markers[0].icon);
-	            } else {
-	                this.createClusterMarker();
+	    Cluster.prototype.init = function init() {
+	        if (this.markers.length === 1) {
+	            _Helper.Helper.show(this.markers[0].icon);
+	        } else {
+	            this.createClusterMarker();
+	        }
+	    };
+
+	    Cluster.prototype.createClusterMarker = function createClusterMarker() {
+	        var p = void 0;
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	            for (var _iterator = this.markers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                var marker = _step.value;
+
+	                _Helper.Helper.hide(marker.icon);
+	                var currentPos = new _Point.Point(parseFloat(marker.icon.style.left), parseFloat(marker.icon.style.top));
+	                p = !p ? currentPos : p.add(currentPos);
+	            }
+	        } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion && _iterator.return) {
+	                    _iterator.return();
+	                }
+	            } finally {
+	                if (_didIteratorError) {
+	                    throw _iteratorError;
+	                }
 	            }
 	        }
-	    }, {
-	        key: 'createClusterMarker',
-	        value: function createClusterMarker() {
-	            var p = void 0;
-	            var _iteratorNormalCompletion = true;
-	            var _didIteratorError = false;
-	            var _iteratorError = undefined;
+
+	        p.divide(this.markers.length);
+
+	        this.cluster = document.createElement("div");
+	        this.cluster.innerHTML = this.markers.length;
+	        this.cluster.classList.add("cluster");
+	        _Helper.Helper.css(this.cluster, {
+	            "left": p.x + '%',
+	            "top": p.y + '%',
+	            "transform": "translateZ(0)"
+	        });
+	        this.cluster.setAttribute("data-id", 'cluster-' + this.uniqueID);
+	        this.container.appendChild(this.cluster);
+	        this.bindEvents();
+	    };
+
+	    Cluster.prototype.bindEvents = function bindEvents() {
+	        this.eventManager.subscribe('cluster-' + this.uniqueID, this.action.bind(this));
+	    };
+
+	    Cluster.prototype.unbindEvents = function unbindEvents() {
+	        this.eventManager.unsubscribe('cluster-' + this.uniqueID, this.action.bind(this));
+	    };
+
+	    Cluster.prototype.action = function action() {
+	        var center = void 0;
+	        var _iteratorNormalCompletion2 = true;
+	        var _didIteratorError2 = false;
+	        var _iteratorError2 = undefined;
+
+	        try {
+	            for (var _iterator2 = this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                var marker = _step2.value;
+
+	                center = !center ? marker.latlng : center.add(marker.latlng);
+	            }
+	        } catch (err) {
+	            _didIteratorError2 = true;
+	            _iteratorError2 = err;
+	        } finally {
+	            try {
+	                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                    _iterator2.return();
+	                }
+	            } finally {
+	                if (_didIteratorError2) {
+	                    throw _iteratorError2;
+	                }
+	            }
+	        }
+
+	        center.divide(this.markers.length);
+	        this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, {
+	            boundingBox: this.boundingBox,
+	            center: center
+	        });
+	    };
+
+	    Cluster.prototype.addMarker = function addMarker(marker) {
+	        this.markers.push(marker);
+	        this.boundingBox = !this.boundingBox ? marker.boundingBox : this.boundingBox.extend(marker.boundingBox);
+	    };
+
+	    Cluster.prototype.removeFromDOM = function removeFromDOM() {
+	        if (this.markers.length > 1) {
+	            var _iteratorNormalCompletion3 = true;
+	            var _didIteratorError3 = false;
+	            var _iteratorError3 = undefined;
 
 	            try {
-	                for (var _iterator = this.markers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var marker = _step.value;
+	                for (var _iterator3 = this.markers[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                    var marker = _step3.value;
 
-	                    _Helper.Helper.hide(marker.icon);
-	                    var currentPos = new _Point.Point(parseFloat(marker.icon.style.left), parseFloat(marker.icon.style.top));
-	                    p = !p ? currentPos : p.add(currentPos);
+	                    _Helper.Helper.show(marker.icon);
 	                }
 	            } catch (err) {
-	                _didIteratorError = true;
-	                _iteratorError = err;
+	                _didIteratorError3 = true;
+	                _iteratorError3 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion && _iterator.return) {
-	                        _iterator.return();
+	                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                        _iterator3.return();
 	                    }
 	                } finally {
-	                    if (_didIteratorError) {
-	                        throw _iteratorError;
+	                    if (_didIteratorError3) {
+	                        throw _iteratorError3;
 	                    }
 	                }
 	            }
 
-	            p.divide(this.markers.length);
-
-	            this.cluster = document.createElement("div");
-	            this.cluster.innerHTML = this.markers.length;
-	            this.cluster.classList.add("cluster");
-	            _Helper.Helper.css(this.cluster, {
-	                "left": p.x + '%',
-	                "top": p.y + '%',
-	                "transform": "translateZ(0)"
-	            });
-	            this.cluster.setAttribute("data-id", 'cluster-' + this.uniqueID);
-	            this.container.appendChild(this.cluster);
-	            this.bindEvents();
+	            this.cluster.parentNode.removeChild(this.cluster);
 	        }
-	    }, {
-	        key: 'bindEvents',
-	        value: function bindEvents() {
-	            this.eventManager.subscribe('cluster-' + this.uniqueID, this.action.bind(this));
-	        }
-	    }, {
-	        key: 'unbindEvents',
-	        value: function unbindEvents() {
-	            this.eventManager.unsubscribe('cluster-' + this.uniqueID, this.action.bind(this));
-	        }
-	    }, {
-	        key: 'action',
-	        value: function action() {
-	            var center = void 0;
-	            var _iteratorNormalCompletion2 = true;
-	            var _didIteratorError2 = false;
-	            var _iteratorError2 = undefined;
-
-	            try {
-	                for (var _iterator2 = this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                    var marker = _step2.value;
-
-	                    center = !center ? marker.latlng : center.add(marker.latlng);
-	                }
-	            } catch (err) {
-	                _didIteratorError2 = true;
-	                _iteratorError2 = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                        _iterator2.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError2) {
-	                        throw _iteratorError2;
-	                    }
-	                }
-	            }
-
-	            center.divide(this.markers.length);
-	            this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, {
-	                boundingBox: this.boundingBox,
-	                center: center
-	            });
-	        }
-	    }, {
-	        key: 'addMarker',
-	        value: function addMarker(marker) {
-	            this.markers.push(marker);
-	            this.boundingBox = !this.boundingBox ? marker.boundingBox : this.boundingBox.extend(marker.boundingBox);
-	        }
-	    }, {
-	        key: 'removeFromDOM',
-	        value: function removeFromDOM() {
-	            if (this.markers.length > 1) {
-	                var _iteratorNormalCompletion3 = true;
-	                var _didIteratorError3 = false;
-	                var _iteratorError3 = undefined;
-
-	                try {
-	                    for (var _iterator3 = this.markers[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-	                        var marker = _step3.value;
-
-	                        _Helper.Helper.show(marker.icon);
-	                    }
-	                } catch (err) {
-	                    _didIteratorError3 = true;
-	                    _iteratorError3 = err;
-	                } finally {
-	                    try {
-	                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
-	                            _iterator3.return();
-	                        }
-	                    } finally {
-	                        if (_didIteratorError3) {
-	                            throw _iteratorError3;
-	                        }
-	                    }
-	                }
-
-	                this.cluster.parentNode.removeChild(this.cluster);
-	            }
-	            this.unbindEvents();
-	        }
-	    }]);
+	        this.unbindEvents();
+	    };
 
 	    return Cluster;
 	}(_Drawable2.Drawable);
@@ -10297,999 +10230,947 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    _createClass(Interact, [{
-	        key: 'getDefaultSettings',
-	        value: function getDefaultSettings() {
-	            return {
-	                container: ".interact-container",
-	                timeTreshold: {
-	                    tap: 200,
-	                    hold: 500,
-	                    swipe: 300,
-	                    flick: 20
-	                },
-	                distanceTreshold: {
-	                    swipe: 200
-	                },
-	                speedThreshold: 0.01,
-	                overwriteViewportSettings: false,
-	                stopPropagation: true,
-	                preventDefault: true,
-	                autoFireHold: false,
-	                pinchBalanceTime: 500,
-	                callbacks: this.getDefaultCallbacks(),
-	                events: this.getDefaultEventNames()
-	            };
-	        }
+	    Interact.prototype.getDefaultSettings = function getDefaultSettings() {
+	        return {
+	            container: ".interact-container",
+	            timeTreshold: {
+	                tap: 200,
+	                hold: 500,
+	                swipe: 300,
+	                flick: 20
+	            },
+	            distanceTreshold: {
+	                swipe: 200
+	            },
+	            speedThreshold: 0.01,
+	            overwriteViewportSettings: false,
+	            stopPropagation: true,
+	            preventDefault: true,
+	            autoFireHold: false,
+	            pinchBalanceTime: 500,
+	            callbacks: this.getDefaultCallbacks(),
+	            events: this.getDefaultEventNames()
+	        };
+	    };
 
-	        /**
-	         * get default callbacks
-	         * @return {Object} callbacks
-	         */
+	    /**
+	     * get default callbacks
+	     * @return {Object} callbacks
+	     */
 
-	    }, {
-	        key: 'getDefaultCallbacks',
-	        value: function getDefaultCallbacks() {
-	            return {
-	                tap: null,
-	                tapHold: null,
-	                doubletap: null,
-	                hold: null,
-	                pan: null,
-	                swipe: null,
-	                flick: null,
-	                zoom: null,
-	                wheel: null,
-	                pinch: null
-	            };
-	        }
 
-	        /**
-	         * get default eventnames
-	         * @return {Object} eventnames
-	         */
+	    Interact.prototype.getDefaultCallbacks = function getDefaultCallbacks() {
+	        return {
+	            tap: null,
+	            tapHold: null,
+	            doubletap: null,
+	            hold: null,
+	            pan: null,
+	            swipe: null,
+	            flick: null,
+	            zoom: null,
+	            wheel: null,
+	            pinch: null
+	        };
+	    };
 
-	    }, {
-	        key: 'getDefaultEventNames',
-	        value: function getDefaultEventNames() {
-	            var isIE = _Helper.Helper.isIE();
-	            return {
-	                start: {
-	                    touch: isIE ? "MSPointerDown pointerdown" : "touchstart",
-	                    mouse: isIE ? "MSPointerDown pointerdown" : "mousedown"
-	                },
-	                move: {
-	                    touch: isIE ? "MSPointerMove pointermove" : "touchmove",
-	                    mouse: isIE ? "MSPointerMove pointermove" : "mousemove"
-	                },
-	                end: {
-	                    touch: isIE ? "MSPointerUp pointerup" : "touchend",
-	                    mouse: isIE ? "MSPointerUp pointerup" : "mouseup"
-	                },
-	                leave: {
-	                    touch: isIE ? "MSPointerLeave pointerleave" : "touchleave",
-	                    mouse: isIE ? "MSPointerLeave pointerleave" : "mouseleave"
-	                },
-	                scroll: _Helper.Helper.scrollEvent()
-	            };
-	        }
+	    /**
+	     * get default eventnames
+	     * @return {Object} eventnames
+	     */
 
-	        /**
-	         * get default data
-	         * @return {Object} data
-	         */
 
-	    }, {
-	        key: 'getDefaultData',
-	        value: function getDefaultData() {
-	            return {
-	                down: false,
-	                moved: false,
-	                pinched: false,
-	                pointerArray: {},
-	                multitouch: false,
-	                distance: null,
-	                distanceLast: null,
-	                actionLast: null,
-	                direction: new _Point.Point(),
-	                velocity: new _Point.Point(),
-	                directions: [],
-	                zoom: 0,
-	                difference: null,
-	                target: null,
-	                positionLast: null,
-	                positionStart: null,
-	                positionMove: null,
-	                positionEnd: null,
-	                timeStart: null,
-	                timeLast: null,
-	                timeEnd: null,
-	                timeoutHold: null,
-	                timeoutDefault: null
-	            };
-	        }
+	    Interact.prototype.getDefaultEventNames = function getDefaultEventNames() {
+	        var isIE = _Helper.Helper.isIE();
+	        return {
+	            start: {
+	                touch: isIE ? "MSPointerDown pointerdown" : "touchstart",
+	                mouse: isIE ? "MSPointerDown pointerdown" : "mousedown"
+	            },
+	            move: {
+	                touch: isIE ? "MSPointerMove pointermove" : "touchmove",
+	                mouse: isIE ? "MSPointerMove pointermove" : "mousemove"
+	            },
+	            end: {
+	                touch: isIE ? "MSPointerUp pointerup" : "touchend",
+	                mouse: isIE ? "MSPointerUp pointerup" : "mouseup"
+	            },
+	            leave: {
+	                touch: isIE ? "MSPointerLeave pointerleave" : "touchleave",
+	                mouse: isIE ? "MSPointerLeave pointerleave" : "mouseleave"
+	            },
+	            scroll: _Helper.Helper.scrollEvent()
+	        };
+	    };
 
-	        /**
-	         * handles the overwrite of viewport meta
-	         * @param  {Boolean|string} viewport - specified viewport option
-	         * @return {Interact} Returns this instance
-	         */
+	    /**
+	     * get default data
+	     * @return {Object} data
+	     */
 
-	    }, {
-	        key: 'handleViewport',
-	        value: function handleViewport(viewport) {
-	            if (typeof viewport !== "string") viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
-	            var metaViewInHead = _Helper.Helper.find("meta[name=viewport]");
-	            var viewportMeta = metaViewInHead ? metaViewInHead : _Helper.Helper.find("head").appendChild(document.createElement("head").setAttribute("name", "viewport"));
-	            viewportMeta.setAttribute("content", viewport);
-	            return this;
-	        }
 
-	        /**
-	         * initializes class settings and bindings
-	         * @param  {Object|string} container - Container, either string or dom-object
-	         * @return {Interact} Returns this instance
-	         */
+	    Interact.prototype.getDefaultData = function getDefaultData() {
+	        return {
+	            down: false,
+	            moved: false,
+	            pinched: false,
+	            pointerArray: {},
+	            multitouch: false,
+	            distance: null,
+	            distanceLast: null,
+	            actionLast: null,
+	            direction: new _Point.Point(),
+	            velocity: new _Point.Point(),
+	            directions: [],
+	            zoom: 0,
+	            difference: null,
+	            target: null,
+	            positionLast: null,
+	            positionStart: null,
+	            positionMove: null,
+	            positionEnd: null,
+	            timeStart: null,
+	            timeLast: null,
+	            timeEnd: null,
+	            timeoutHold: null,
+	            timeoutDefault: null
+	        };
+	    };
 
-	    }, {
-	        key: 'init',
-	        value: function init(container) {
-	            this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
-	            var css = {
-	                "-ms-touch-action": "none",
-	                "touch-action": "none",
-	                "-ms-content-zooming": "none"
-	            };
-	            _Helper.Helper.css(this.container, css);
-	            var _iteratorNormalCompletion = true;
-	            var _didIteratorError = false;
-	            var _iteratorError = undefined;
+	    /**
+	     * handles the overwrite of viewport meta
+	     * @param  {Boolean|string} viewport - specified viewport option
+	     * @return {Interact} Returns this instance
+	     */
 
+
+	    Interact.prototype.handleViewport = function handleViewport(viewport) {
+	        if (typeof viewport !== "string") viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
+	        var metaViewInHead = _Helper.Helper.find("meta[name=viewport]");
+	        var viewportMeta = metaViewInHead ? metaViewInHead : _Helper.Helper.find("head").appendChild(document.createElement("head").setAttribute("name", "viewport"));
+	        viewportMeta.setAttribute("content", viewport);
+	        return this;
+	    };
+
+	    /**
+	     * initializes class settings and bindings
+	     * @param  {Object|string} container - Container, either string or dom-object
+	     * @return {Interact} Returns this instance
+	     */
+
+
+	    Interact.prototype.init = function init(container) {
+	        this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
+	        var css = {
+	            "-ms-touch-action": "none",
+	            "touch-action": "none",
+	            "-ms-content-zooming": "none"
+	        };
+	        _Helper.Helper.css(this.container, css);
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	            for (var _iterator = this.container.childNodes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                var child = _step.value;
+
+	                _Helper.Helper.css(child, css);
+	            }
+	        } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
+	        } finally {
 	            try {
-	                for (var _iterator = this.container.childNodes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var child = _step.value;
-
-	                    _Helper.Helper.css(child, css);
+	                if (!_iteratorNormalCompletion && _iterator.return) {
+	                    _iterator.return();
 	                }
-	            } catch (err) {
-	                _didIteratorError = true;
-	                _iteratorError = err;
 	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion && _iterator.return) {
-	                        _iterator.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError) {
-	                        throw _iteratorError;
-	                    }
+	                if (_didIteratorError) {
+	                    throw _iteratorError;
 	                }
 	            }
-
-	            this.bindEvents();
-	            return this;
 	        }
 
-	        /**
-	         * binds all needed events
-	         * @return {Interact} Returns this instance
-	         */
+	        this.bindEvents();
+	        return this;
+	    };
 
-	    }, {
-	        key: 'bindEvents',
-	        value: function bindEvents() {
-	            if (_Helper.Helper.isIE()) {
-	                this.bindIEEvents();
-	            } else {
-	                if (_Helper.Helper.isTouch()) this.bindTouchEvents();
-	                if (_Helper.Helper.isMouse()) this.bindMouseEvents();
-	            }
-	            return this;
+	    /**
+	     * binds all needed events
+	     * @return {Interact} Returns this instance
+	     */
+
+
+	    Interact.prototype.bindEvents = function bindEvents() {
+	        if (_Helper.Helper.isIE()) {
+	            this.bindIEEvents();
+	        } else {
+	            if (_Helper.Helper.isTouch()) this.bindTouchEvents();
+	            if (_Helper.Helper.isMouse()) this.bindMouseEvents();
 	        }
+	        return this;
+	    };
 
-	        /**
-	         * binds all needed events for IE
-	         * @return {Interact} Returns this instance
-	         */
+	    /**
+	     * binds all needed events for IE
+	     * @return {Interact} Returns this instance
+	     */
 
-	    }, {
-	        key: 'bindIEEvents',
-	        value: function bindIEEvents() {
-	            _Helper.Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
-	            this.bindTouchEvents();
-	            _Helper.Helper.addListener(this.container, "contextmenu", function (e) {
-	                return e.preventDefault();
-	            }, false);
-	            return this;
+
+	    Interact.prototype.bindIEEvents = function bindIEEvents() {
+	        _Helper.Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
+	        this.bindTouchEvents();
+	        _Helper.Helper.addListener(this.container, "contextmenu", function (e) {
+	            return e.preventDefault();
+	        }, false);
+	        return this;
+	    };
+
+	    /**
+	     * binds all needed events for touch devices
+	     * @return {Interact} Returns this instance
+	     */
+
+
+	    Interact.prototype.bindTouchEvents = function bindTouchEvents() {
+	        _Helper.Helper.addListener(this.container, this.settings.events.start.touch, this.startHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.move.touch, this.moveHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.end.touch, this.endHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.leave.touch, this.endHandler.bind(this));
+	        return this;
+	    };
+
+	    /**
+	     * binds all needed events for mouse devices
+	     * @return {Interact} Returns this instance
+	     */
+
+
+	    Interact.prototype.bindMouseEvents = function bindMouseEvents() {
+	        _Helper.Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.start.mouse, this.startHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.move.mouse, this.moveHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.end.mouse, this.endHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.leave.mouse, this.endHandler.bind(this));
+	        return this;
+	    };
+
+	    /**
+	     * pre handle all events
+	     * @param  {Object} event - original event of Vanilla JS
+	     * @return {Object} normalized jQuery-fixed event
+	     */
+
+
+	    Interact.prototype.preHandle = function preHandle(event) {
+	        if (this.settings.stopPropagation) event.stopPropagation();
+	        if (this.settings.preventDefault) event.preventDefault();
+	        return this.getEvent(event);
+	    };
+
+	    /**
+	     * handles cross-browser and -device scroll
+	     * @param  {Object} event - jQuery-Event-Object
+	     * @return {Boolean} always returns false
+	     */
+
+
+	    Interact.prototype.scrollHandler = function scrollHandler(event) {
+	        event = event || window.event;
+	        this.data.target = event.target;
+	        var e = this.preHandle(event) || event;
+
+	        this.data.delta = this.normalizeWheelDelta(event);
+	        this.data.positionStart = this.getRelativePosition(e);
+	        this.data.directions = this.getScrollDirection(e);
+	        this.data.zoom = this.data.directions.indexOf("up") > -1 ? 1 : this.data.directions.indexOf("down") > -1 ? -1 : 0;
+
+	        if (this.settings.callbacks.wheel) {
+	            this.eventCallback(this.settings.callbacks.wheel, this.data);
 	        }
-
-	        /**
-	         * binds all needed events for touch devices
-	         * @return {Interact} Returns this instance
-	         */
-
-	    }, {
-	        key: 'bindTouchEvents',
-	        value: function bindTouchEvents() {
-	            _Helper.Helper.addListener(this.container, this.settings.events.start.touch, this.startHandler.bind(this));
-	            _Helper.Helper.addListener(this.container, this.settings.events.move.touch, this.moveHandler.bind(this));
-	            _Helper.Helper.addListener(this.container, this.settings.events.end.touch, this.endHandler.bind(this));
-	            _Helper.Helper.addListener(this.container, this.settings.events.leave.touch, this.endHandler.bind(this));
-	            return this;
+	        if (this.settings.callbacks.zoom && (this.data.directions.indexOf("up") > -1 || this.data.directions.indexOf("down") > -1)) {
+	            this.eventCallback(this.settings.callbacks.zoom, this.data);
 	        }
-
-	        /**
-	         * binds all needed events for mouse devices
-	         * @return {Interact} Returns this instance
-	         */
-
-	    }, {
-	        key: 'bindMouseEvents',
-	        value: function bindMouseEvents() {
-	            _Helper.Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
-	            _Helper.Helper.addListener(this.container, this.settings.events.start.mouse, this.startHandler.bind(this));
-	            _Helper.Helper.addListener(this.container, this.settings.events.move.mouse, this.moveHandler.bind(this));
-	            _Helper.Helper.addListener(this.container, this.settings.events.end.mouse, this.endHandler.bind(this));
-	            _Helper.Helper.addListener(this.container, this.settings.events.leave.mouse, this.endHandler.bind(this));
-	            return this;
-	        }
-
-	        /**
-	         * pre handle all events
-	         * @param  {Object} event - original event of Vanilla JS
-	         * @return {Object} normalized jQuery-fixed event
-	         */
-
-	    }, {
-	        key: 'preHandle',
-	        value: function preHandle(event) {
-	            if (this.settings.stopPropagation) event.stopPropagation();
-	            if (this.settings.preventDefault) event.preventDefault();
-	            this.data.target = event.target;
-	            return this.getEvent(event);
-	        }
-
-	        /**
-	         * handles cross-browser and -device scroll
-	         * @param  {Object} event - jQuery-Event-Object
-	         * @return {Boolean} always returns false
-	         */
-
-	    }, {
-	        key: 'scrollHandler',
-	        value: function scrollHandler(event) {
-	            event = event || window.event;
-
-	            var e = this.preHandle(event) || event;
-
-	            this.data.delta = this.normalizeWheelDelta(event);
-	            this.data.positionStart = this.getRelativePosition(e);
-	            this.data.directions = this.getScrollDirection(e);
-	            this.data.zoom = this.data.directions.indexOf("up") > -1 ? 1 : this.data.directions.indexOf("down") > -1 ? -1 : 0;
-
-	            if (this.settings.callbacks.wheel) {
-	                this.eventCallback(this.settings.callbacks.wheel, this.data);
-	            }
-	            if (this.settings.callbacks.zoom && (this.data.directions.indexOf("up") > -1 || this.data.directions.indexOf("down") > -1)) {
-	                this.eventCallback(this.settings.callbacks.zoom, this.data);
-	            }
-	            return false;
-	        }
-
-	        /**
-	         *
-	         * Solution from http://jsfiddle.net/uNeBr/
-	         * @param  {Object} event - VanillaJS-Event-Object
-	         * @return {number} normalized wheel delta
-	         */
-
-	    }, {
-	        key: 'normalizeWheelDelta',
-	        value: function normalizeWheelDelta(e) {
-	            var o = e.originalEvent || e,
-	                w = o.wheelDelta || o.deltaY * -1 * 10,
-	                n = 225,
-	                n1 = n - 1;
-
-	            var d = o.detail,
-	                f = void 0;
-
-	            // Normalize delta
-	            d = d ? w && (f = w / d) ? d / f : -d / 1.35 : w / 120;
-	            // Quadratic scale if |d| > 1
-	            d = d < 1 ? d < -1 ? (-Math.pow(d, 2) - n1) / n : d : (Math.pow(d, 2) + n1) / n;
-	            // Delta *should* not be greater than 2...
-	            return _Helper.Helper.clamp(d / 2, -1, 1);
-	        }
-
-	        /**
-	         * check if event is a PointerEvent (IE)
-	         * @param  {Object} event - original event of Vanilla JS
-	         * @return {Boolean} Whether event is PointerEvent
-	         */
-
-	    }, {
-	        key: 'isPointerEvent',
-	        value: function isPointerEvent(e) {
-	            return _Helper.Helper.isIE() && (e instanceof MSPointerEvent || e instanceof PointerEvent);
-	        }
-
-	        /**
-	         * calculation to be made at start-handler
-	         * @param  {Object} e - jQuery-Event-Object
-	         * @return {Object} calculated data
-	         */
-
-	    }, {
-	        key: 'calculateStart',
-	        value: function calculateStart(e) {
-	            var data = {
-	                multitouch: false,
-	                distance: 0,
-	                down: true,
-	                positionStart: new _Point.Point()
-	            };
-	            // mouse is used
-	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-	                return Object.assign({}, data, this.handleSingletouchStart(e));
-	            } // if is pointerEvent
-	            else if (this.isPointerEvent(e)) {
-	                    return this.handlePointerEventStart(data, e);
-	                } // touch is used
-	                else {
-	                        // singletouch startet
-	                        return this.handleTouchEventStart(data, e);
-	                    }
-	        }
-
-	        /**
-	         * handle PointerEvent calculations
-	         * @param  {Object} data - current data
-	         * @param  {Object} e - jQuery-Event-Object
-	         * @return {Object} manipulated enriched data
-	         */
-
-	    }, {
-	        key: 'handlePointerEventStart',
-	        value: function handlePointerEventStart(data, e) {
-	            this.data.pointerArray[e.pointerId] = e;
-	            var getData = Object.keys(this.data.pointerArray).length <= 1 ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
-	            return Object.assign({}, data, getData);
-	        }
-
-	        /**
-	         * handle TouchEvent calculations for start
-	         * @param  {Object} data - current data
-	         * @param  {Object} e - jQuery-Event-Object
-	         * @return {Object} manipulated enriched data
-	         */
-
-	    }, {
-	        key: 'handleTouchEventStart',
-	        value: function handleTouchEventStart(data, e) {
-	            return this.handleTouchEvent(data, e, this.handleSingletouchStart.bind(this), this.handleMultitouchStart.bind(this));
-	        }
-
-	        /**
-	         * get array of pointers (IE)
-	         * @return {Object} array of pointerIDs
-	         */
-
-	    }, {
-	        key: 'getPointerArray',
-	        value: function getPointerArray() {
-	            var pointerPos = [];
-	            for (var pointer in this.data.pointerArray) {
-	                if (this.data.pointerArray[pointer]) {
-	                    pointerPos.push(this.data.pointerArray[pointer]);
-	                }
-	            }
-	            return pointerPos;
-	        }
-
-	        /**
-	         * handles multitouch for start
-	         * @param  {Object} positionsArray - array of positions
-	         * @return {Object} manipulated enriched data
-	         */
-
-	    }, {
-	        key: 'handleMultitouchStart',
-	        value: function handleMultitouchStart(positionsArray) {
-	            var pos1 = this.getRelativePosition(positionsArray[0]),
-	                pos2 = this.getRelativePosition(positionsArray[1]);
-	            return {
-	                multitouch: true,
-	                distance: pos1.distance(pos2),
-	                positionStart: pos1.clone.add(pos2).divide(2, 2)
-	            };
-	        }
-
-	        /**
-	         * handles singletouch for start
-	         * @param  {Point} position - position of touch
-	         * @return {Object} manipulated enriched data
-	         */
-
-	    }, {
-	        key: 'handleSingletouchStart',
-	        value: function handleSingletouchStart(position) {
-	            return {
-	                positionStart: this.getRelativePosition(position)
-	            };
-	        }
-
-	        /**
-	         * handle action at start event handler
-	         * @param  {String} action - last action made
-	         * @return {Interact} instance of Interact for chaining
-	         */
-
-	    }, {
-	        key: 'takeActionStart',
-	        value: function takeActionStart(action) {
-	            switch (action) {
-	                case null:
-	                    this.data.actionLast = "tap";
-	                    if (this.settings.autoFireHold) {
-	                        this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, this.data, true);
-	                    }
-	                    break;
-	                case "tap":
-	                    this.data.actionLast = "doubletap";
-	                    if (this.settings.autoFireHold) {
-	                        this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, this.data, true);
-	                    }
-	                    break;
-	                default:
-	                    break;
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * handles cross-browser and -device start-event
-	         * @param  {Object} event - jQuery-Event-Object
-	         * @return {Boolean} always returns false
-	         */
-
-	    }, {
-	        key: 'startHandler',
-	        value: function startHandler(event) {
-	            if (event.button && event.button !== 0) {
-	                return false;
-	            }
-	            var e = this.preHandle(event);
-	            this.data.timeStart = event.timeStamp;
-	            this.clearTimeouts(this.data.timeoutDefault);
-	            this.data = Object.assign({}, this.data, this.calculateStart(e));
-	            this.takeActionStart(this.data.actionLast);
-	            return false;
-	        }
-
-	        /**
-	         * clear timeout helper
-	         * @param  {Object} timeout - timeout object to be cleared
-	         * @return {Interact} instance of Interact for chaining
-	         */
-
-	    }, {
-	        key: 'clearTimeouts',
-	        value: function clearTimeouts(timeout) {
-	            if (timeout) {
-	                timeout = clearTimeout(timeout);
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * calculation to be made at move-handler
-	         * @param  {Object} e - jQuery-Event-Object
-	         * @return {Object} calculated data
-	         */
-
-	    }, {
-	        key: 'calculateMove',
-	        value: function calculateMove(e) {
-	            var data = {
-	                moved: true,
-	                actionLast: "moved",
-	                positionMove: new _Point.Point()
-	            };
-
-	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-	                return Object.assign({}, data, this.handleSingletouchMove(e));
-	            } // if is pointerEvent
-	            else if (this.isPointerEvent(e)) {
-	                    return this.handlePointerEventMove(data, e);
-	                } // touch is used
-	                else {
-	                        return this.handleTouchEventMove(data, e);
-	                    }
-	        }
-
-	        /**
-	         * handle PointerEvent at moving (IE)
-	         * @param  {Object} data - specified input data
-	         * @param  {Object} e - jQuery-Event-Object
-	         * @return {Object} manipulated enriched data
-	         */
-
-	    }, {
-	        key: 'handlePointerEventMove',
-	        value: function handlePointerEventMove(data, e) {
-	            this.data.pointerArray[e.pointerId] = e;
-	            if (Object.keys(this.data.pointerArray).length <= 1) {
-	                return Object.assign({}, data, this.handleSingletouchMove(e));
-	            } else {
-	                var pointerPos = this.getPointerArray();
-	                return Object.assign({}, data, this.handleMultitouchMove(pointerPos));
-	            }
-	        }
-
-	        /**
-	         * handle TouchEvent calculations for move
-	         * @param  {Object} data - current data
-	         * @param  {Object} e - jQuery-Event-Object
-	         * @return {Object} manipulated enriched data
-	         */
-
-	    }, {
-	        key: 'handleTouchEventMove',
-	        value: function handleTouchEventMove(data, e) {
-	            return this.handleTouchEvent(data, e, this.handleSingletouchMove.bind(this), this.handleMultitouchMove.bind(this));
-	        }
-	    }, {
-	        key: 'handleTouchEvent',
-	        value: function handleTouchEvent(data, e, fnSingle, fnMulti) {
-	            var getData = e.length === 1 ? fnSingle(e[0]) : fnMulti(e);
-	            return Object.assign({}, data, getData);
-	        }
-
-	        /**
-	         * handles multitouch for move
-	         * @param  {Object} positionsArray - array of positions
-	         * @return {Object} manipulated enriched data
-	         */
-
-	    }, {
-	        key: 'handleMultitouchMove',
-	        value: function handleMultitouchMove(positionsArray) {
-	            var pointerPos1 = this.getRelativePosition(positionsArray[0]);
-	            var pointerPos2 = this.getRelativePosition(positionsArray[1]);
-	            var pos = pointerPos2.clone.add(pointerPos1).divide(2);
-	            return {
-	                positionMove: pos,
-	                distance: pointerPos1.distance(pointerPos2),
-	                multitouch: true
-	            };
-	        }
-
-	        /**
-	         * handles singletouch for move
-	         * @param  {Point} position - position
-	         * @return {Object} manipulated enriched data
-	         */
-
-	    }, {
-	        key: 'handleSingletouchMove',
-	        value: function handleSingletouchMove(position) {
-	            var pos = this.getRelativePosition(position);
-	            return {
-	                positionMove: pos,
-	                distance: this.data.positionLast.distance(pos),
-	                multitouch: false
-	            };
-	        }
-
-	        /**
-	         * handles cross-browser and -device move-event
-	         * @param  {Object} event - jQuery-Event-Object
-	         * @return {Boolean} always returns false
-	         */
-
-	    }, {
-	        key: 'moveHandler',
-	        value: function moveHandler(event) {
-	            // if touchstart event was not fired
-	            if (!this.data.down || this.data.pinched) return false;
-
-	            var e = this.preHandle(event);
-	            this.data.positionLast = this.data.positionMove ? this.data.positionMove : this.data.positionStart;
-	            this.data.timeLast = event.timeStamp;
-
-	            // if positions have not changed
-	            if (this.positionDidNotChange(e)) return false;
-
-	            this.clearTimeouts(this.data.timeoutDefault);
-	            this.clearTimeouts(this.data.timeoutHold);
-	            this.data = Object.assign({}, this.data, this.calculateMove(e));
-
-	            if (this.data.multitouch) {
-	                this.handlePinchAndZoom();
-	            } else {
-	                this.eventCallback(this.settings.callbacks.pan, this.data);
-	            }
-	            return false;
-	        }
-
-	        /**
-	         * handles pinch and zoom
-	         * @return {Interact} instance of Interact for chaining
-	         */
-
-	    }, {
-	        key: 'handlePinchAndZoom',
-	        value: function handlePinchAndZoom() {
-	            if (!this.data.distanceLast) this.data.distanceLast = this.data.distance;
-
-	            this.data.difference = this.data.distance - this.data.distanceLast;
-	            if (Math.abs(this.data.difference) >= 0.005) {
-	                if (this.settings.callbacks.pinch) this.eventCallback(this.settings.callbacks.pinch, this.data);
-	                if (this.settings.callbacks.zoom) this.eventCallback(this.settings.callbacks.zoom, this.data);
-	                this.data.distanceLast = this.data.distance;
-	            }
-	            return this;
-	        }
-
-	        /**
-	         * check if position has been changed
-	         * @param  {Object} e - jQuery-Event-Object
-	         * @return {Boolean} Whether or not position has changed
-	         */
-
-	    }, {
-	        key: 'positionDidNotChange',
-	        value: function positionDidNotChange(e) {
-	            return _Helper.Helper.isIE() && (this.getRelativePosition(e).equals(this.data.positionLast) || this.getRelativePosition(e).equals(this.data.positionStart)) || !_Helper.Helper.isIE() && _Helper.Helper.isTouch() && this.getRelativePosition(e[0]).equals(this.data.positionLast);
-	        }
-
-	        /**
-	         * calculation to be made at end-handler
-	         * @param  {Object} e - jQuery-Event-Object
-	         * @return {Object} calculated data
-	         */
-
-	    }, {
-	        key: 'calculateEnd',
-	        value: function calculateEnd(e) {
-	            var data = {
-	                positionEnd: new _Point.Point()
-	            };
-
-	            if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
-	                return Object.assign({}, data, this.handleSingletouchEnd(e));
-	            } // if is pointerEvent
-	            else if (this.isPointerEvent(e)) {
-	                    var end = this.handleSingletouchEnd(e);
-	                    delete this.data.pointerArray[e.pointerId];
-	                    return Object.assign({}, data, end);
-	                } // touch is used
-	                else {
-	                        // singletouch ended
-	                        if (e.length <= 1) {
-	                            return Object.assign({}, data, this.handleSingletouchEnd(e[0]));
-	                        }
-	                    }
-	        }
-
-	        /**
-	         * handles singletouch for end
-	         * @param  {Object} position - position
-	         * @return {Object} manipulated enriched data
-	         */
-
-	    }, {
-	        key: 'handleSingletouchEnd',
-	        value: function handleSingletouchEnd(position) {
-	            return {
-	                positionEnd: this.getRelativePosition(position)
-	            };
-	        }
-
-	        /**
-	         * handle action at end event handler
-	         * @param  {String} action - last action made
-	         * @return {Interact} instance of Interact for chaining
-	         */
-
-	    }, {
-	        key: 'takeActionEnd',
-	        value: function takeActionEnd(action) {
-	            switch (action) {
-	                case "tap":
-	                    if (this.time < this.settings.timeTreshold.hold) {
-	                        this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, this.data);
-	                    } else {
-	                        this.eventCallback(this.settings.callbacks.hold, this.data);
-	                    }
-	                    break;
-	                case "doubletap":
-	                    if (this.time < this.settings.timeTreshold.hold) {
-	                        this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, this.data);
-	                    } else {
-	                        this.eventCallback(this.settings.callbacks.tapHold, this.data);
-	                    }
-	                    break;
-	                default:
-	                    this.data.actionLast = null;
-	            }
-	        }
-
-	        /**
-	         * handles cross-browser and -device end-event
-	         * @param  {Object} event - jQuery-Event-Object
-	         * @return {Boolean} always returns false
-	         */
-
-	    }, {
-	        key: 'endHandler',
-	        value: function endHandler(event) {
-
-	            var e = this.preHandle(event);
-
-	            this.data.timeEnd = event.timeStamp;
-
-	            this.clearTimeouts(this.data.timeoutHold);
-
-	            this.data = Object.assign({}, this.data, this.calculateEnd(e));
-
-	            // called only when not moved
-	            if (!this.data.moved && this.data.down && !this.data.multitouch) {
-	                this.takeActionEnd(this.data.actionLast);
-	            }
-	            // if was moved
-	            else if (this.data.moved && this.data.down && !this.data.multitouch) {
-	                    if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
-	                        this.handleSwipeAndFlick();
-	                    }
-	                    this.data.actionLast = null;
-	                }
-	            this.pinchBalance();
-	            this.handleMultitouchEnd(e);
-	            this.data.positionLast = null;
-	            return false;
-	        }
-
-	        /**
-	         * handles flick and swipe events
-	         * @return {Interact} instance of Interact for chaining
-	         */
-
-	    }, {
-	        key: 'handleSwipeAndFlick',
-	        value: function handleSwipeAndFlick() {
-	            if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
-	                this.data.direction = this.data.positionEnd.clone.substract(this.data.positionLast);
-	                this.data.velocity = this.data.direction.clone.multiply(this.timeToLastMove);
-	                this.data.distance = this.data.positionLast.distance(this.data.positionEnd);
-	            }
-
-	            if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
-	                var originalStart = this.getAbsolutePosition(this.data.positionStart);
-	                var originalEnd = this.getAbsolutePosition(this.data.positionEnd);
-	                if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
-	                    this.data.directions = this.getSwipeDirections(this.data.direction);
-	                    this.eventCallback(this.settings.callbacks.swipe, this.data);
-	                }
-	            }
-	            if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
-	                this.eventCallback(this.settings.callbacks.flick, this.data);
-	            }
-
-	            return this;
-	        }
-
-	        /**
-	         * handles multitouch for end
-	         * @param  {e} e - jQuery-Event-Object
-	         * @return {Interact} instance of Interact for chaining
-	         */
-
-	    }, {
-	        key: 'handleMultitouchEnd',
-	        value: function handleMultitouchEnd(e) {
-	            this.data.multitouch = false;
-	            this.data.down = false;
-	            this.data.moved = false;
-
-	            // if is pointerEvent
-	            if (this.isPointerEvent(e)) {
-	                if (Object.keys(this.data.pointerArray).length > 1) {
-	                    this.data.multitouch = true;
-	                } else if (Object.keys(this.data.pointerArray).length > 0) {
-	                    this.data.down = true;
-	                }
+	        return false;
+	    };
+
+	    /**
+	     *
+	     * Solution from http://jsfiddle.net/uNeBr/
+	     * @param  {Object} event - VanillaJS-Event-Object
+	     * @return {number} normalized wheel delta
+	     */
+
+
+	    Interact.prototype.normalizeWheelDelta = function normalizeWheelDelta(e) {
+	        var o = e.originalEvent || e,
+	            w = o.wheelDelta || o.deltaY * -1 * 10,
+	            n = 225,
+	            n1 = n - 1;
+
+	        var d = o.detail,
+	            f = void 0;
+
+	        // Normalize delta
+	        d = d ? w && (f = w / d) ? d / f : -d / 1.35 : w / 120;
+	        // Quadratic scale if |d| > 1
+	        d = d < 1 ? d < -1 ? (-Math.pow(d, 2) - n1) / n : d : (Math.pow(d, 2) + n1) / n;
+	        // Delta *should* not be greater than 2...
+	        return _Helper.Helper.clamp(d / 2, -1, 1);
+	    };
+
+	    /**
+	     * check if event is a PointerEvent (IE)
+	     * @param  {Object} event - original event of Vanilla JS
+	     * @return {Boolean} Whether event is PointerEvent
+	     */
+
+
+	    Interact.prototype.isPointerEvent = function isPointerEvent(e) {
+	        return _Helper.Helper.isIE() && (e instanceof MSPointerEvent || e instanceof PointerEvent);
+	    };
+
+	    /**
+	     * calculation to be made at start-handler
+	     * @param  {Object} e - jQuery-Event-Object
+	     * @return {Object} calculated data
+	     */
+
+
+	    Interact.prototype.calculateStart = function calculateStart(e) {
+	        var data = {
+	            multitouch: false,
+	            distance: 0,
+	            down: true,
+	            positionStart: new _Point.Point()
+	        };
+	        // mouse is used
+	        if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
+	            return Object.assign({}, data, this.handleSingletouchStart(e));
+	        } // if is pointerEvent
+	        else if (this.isPointerEvent(e)) {
+	                return this.handlePointerEventStart(data, e);
 	            } // touch is used
 	            else {
-	                    if (e.length > 1) {
-	                        this.data.multitouch = true;
-	                    } else if (e.length > 0) {
-	                        this.data.down = true;
-	                    }
-	                    this.data.positionMove = null;
+	                    // singletouch startet
+	                    return this.handleTouchEventStart(data, e);
 	                }
-	            return this;
-	        }
+	    };
 
-	        /**
-	         * balances pinching after release of finger
-	         * @return {Interact} instance of Interact for chaining
-	         */
+	    /**
+	     * handle PointerEvent calculations
+	     * @param  {Object} data - current data
+	     * @param  {Object} e - jQuery-Event-Object
+	     * @return {Object} manipulated enriched data
+	     */
 
-	    }, {
-	        key: 'pinchBalance',
-	        value: function pinchBalance() {
-	            var _this = this;
 
-	            if (this.data.multitouch) {
-	                this.data.pinched = true;
-	                setTimeout(function () {
-	                    _this.data.pinched = false;
-	                    _this.data.distanceLast = null;
-	                }, this.settings.pinchBalanceTime);
+	    Interact.prototype.handlePointerEventStart = function handlePointerEventStart(data, e) {
+	        this.data.pointerArray[e.pointerId] = e;
+	        var getData = Object.keys(this.data.pointerArray).length <= 1 ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
+	        return Object.assign({}, data, getData);
+	    };
+
+	    /**
+	     * handle TouchEvent calculations for start
+	     * @param  {Object} data - current data
+	     * @param  {Object} e - jQuery-Event-Object
+	     * @return {Object} manipulated enriched data
+	     */
+
+
+	    Interact.prototype.handleTouchEventStart = function handleTouchEventStart(data, e) {
+	        return this.handleTouchEvent(data, e, this.handleSingletouchStart.bind(this), this.handleMultitouchStart.bind(this));
+	    };
+
+	    /**
+	     * get array of pointers (IE)
+	     * @return {Object} array of pointerIDs
+	     */
+
+
+	    Interact.prototype.getPointerArray = function getPointerArray() {
+	        var pointerPos = [];
+	        for (var pointer in this.data.pointerArray) {
+	            if (this.data.pointerArray[pointer]) {
+	                pointerPos.push(this.data.pointerArray[pointer]);
 	            }
-	            return this;
 	        }
+	        return pointerPos;
+	    };
 
-	        /**
-	         * Returns an array of strings, representing the directions
-	         * @param  {Point} direction - the specified direction in pixel
-	         * @return {string[]} returns an array representing the directions as strings
-	         */
+	    /**
+	     * handles multitouch for start
+	     * @param  {Object} positionsArray - array of positions
+	     * @return {Object} manipulated enriched data
+	     */
 
-	    }, {
-	        key: 'getSwipeDirections',
-	        value: function getSwipeDirections(direction) {
-	            return [direction.x < 0 ? "left" : direction.x > 0 ? "right" : "none", direction.y < 0 ? "up" : direction.y > 0 ? "down" : "none"];
+
+	    Interact.prototype.handleMultitouchStart = function handleMultitouchStart(positionsArray) {
+	        var pos1 = this.getRelativePosition(positionsArray[0]),
+	            pos2 = this.getRelativePosition(positionsArray[1]);
+	        return {
+	            multitouch: true,
+	            distance: pos1.distance(pos2),
+	            positionStart: pos1.clone.add(pos2).divide(2, 2)
+	        };
+	    };
+
+	    /**
+	     * handles singletouch for start
+	     * @param  {Point} position - position of touch
+	     * @return {Object} manipulated enriched data
+	     */
+
+
+	    Interact.prototype.handleSingletouchStart = function handleSingletouchStart(position) {
+	        return {
+	            positionStart: this.getRelativePosition(position)
+	        };
+	    };
+
+	    /**
+	     * handle action at start event handler
+	     * @param  {String} action - last action made
+	     * @return {Interact} instance of Interact for chaining
+	     */
+
+
+	    Interact.prototype.takeActionStart = function takeActionStart(action) {
+	        switch (action) {
+	            case null:
+	                this.data.actionLast = "tap";
+	                if (this.settings.autoFireHold) {
+	                    this.setTimeoutForEvent(this.settings.callbacks.hold, this.settings.autoFireHold, this.data, true);
+	                }
+	                break;
+	            case "tap":
+	                this.data.actionLast = "doubletap";
+	                if (this.settings.autoFireHold) {
+	                    this.setTimeoutForEvent(this.settings.callbacks.tapHold, this.settings.autoFireHold, this.data, true);
+	                }
+	                break;
+	            default:
+	                break;
 	        }
+	        return this;
+	    };
 
-	        /**
-	         * Helper for setting a timeout for events
-	         * @param {Function} callback - function to be called
-	         * @param {number} timeout - time in milliseconds
-	         * @param {Object[]} args - array of arguments
-	         * @param {Boolean} holdTimeout - if true, a different variable will be used
-	         * @return {Interact} Returns this instance
-	         */
+	    /**
+	     * handles cross-browser and -device start-event
+	     * @param  {Object} event - jQuery-Event-Object
+	     * @return {Boolean} always returns false
+	     */
 
-	    }, {
-	        key: 'setTimeoutForEvent',
-	        value: function setTimeoutForEvent(callback, timeout, args, holdTimeout) {
-	            if (holdTimeout) {
-	                this.data.timeoutHold = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
-	            } else {
-	                this.data.timeoutDefault = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
+
+	    Interact.prototype.startHandler = function startHandler(event) {
+	        if (event.button && event.button !== 0) {
+	            return false;
+	        }
+	        this.data.target = event.target;
+	        var e = this.preHandle(event);
+	        this.data.timeStart = event.timeStamp;
+	        this.clearTimeouts(this.data.timeoutDefault);
+	        this.data = Object.assign({}, this.data, this.calculateStart(e));
+	        this.takeActionStart(this.data.actionLast);
+	        return false;
+	    };
+
+	    /**
+	     * clear timeout helper
+	     * @param  {Object} timeout - timeout object to be cleared
+	     * @return {Interact} instance of Interact for chaining
+	     */
+
+
+	    Interact.prototype.clearTimeouts = function clearTimeouts(timeout) {
+	        if (timeout) {
+	            timeout = clearTimeout(timeout);
+	        }
+	        return this;
+	    };
+
+	    /**
+	     * calculation to be made at move-handler
+	     * @param  {Object} e - jQuery-Event-Object
+	     * @return {Object} calculated data
+	     */
+
+
+	    Interact.prototype.calculateMove = function calculateMove(e) {
+	        var data = {
+	            moved: true,
+	            actionLast: "moved",
+	            positionMove: new _Point.Point()
+	        };
+
+	        if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
+	            return Object.assign({}, data, this.handleSingletouchMove(e));
+	        } // if is pointerEvent
+	        else if (this.isPointerEvent(e)) {
+	                return this.handlePointerEventMove(data, e);
+	            } // touch is used
+	            else {
+	                    return this.handleTouchEventMove(data, e);
+	                }
+	    };
+
+	    /**
+	     * handle PointerEvent at moving (IE)
+	     * @param  {Object} data - specified input data
+	     * @param  {Object} e - jQuery-Event-Object
+	     * @return {Object} manipulated enriched data
+	     */
+
+
+	    Interact.prototype.handlePointerEventMove = function handlePointerEventMove(data, e) {
+	        this.data.pointerArray[e.pointerId] = e;
+	        if (Object.keys(this.data.pointerArray).length <= 1) {
+	            return Object.assign({}, data, this.handleSingletouchMove(e));
+	        } else {
+	            var pointerPos = this.getPointerArray();
+	            return Object.assign({}, data, this.handleMultitouchMove(pointerPos));
+	        }
+	    };
+
+	    /**
+	     * handle TouchEvent calculations for move
+	     * @param  {Object} data - current data
+	     * @param  {Object} e - jQuery-Event-Object
+	     * @return {Object} manipulated enriched data
+	     */
+
+
+	    Interact.prototype.handleTouchEventMove = function handleTouchEventMove(data, e) {
+	        return this.handleTouchEvent(data, e, this.handleSingletouchMove.bind(this), this.handleMultitouchMove.bind(this));
+	    };
+
+	    Interact.prototype.handleTouchEvent = function handleTouchEvent(data, e, fnSingle, fnMulti) {
+	        var getData = e.length === 1 ? fnSingle(e[0]) : fnMulti(e);
+	        return Object.assign({}, data, getData);
+	    };
+
+	    /**
+	     * handles multitouch for move
+	     * @param  {Object} positionsArray - array of positions
+	     * @return {Object} manipulated enriched data
+	     */
+
+
+	    Interact.prototype.handleMultitouchMove = function handleMultitouchMove(positionsArray) {
+	        var pointerPos1 = this.getRelativePosition(positionsArray[0]);
+	        var pointerPos2 = this.getRelativePosition(positionsArray[1]);
+	        var pos = pointerPos2.clone.add(pointerPos1).divide(2);
+	        return {
+	            positionMove: pos,
+	            distance: pointerPos1.distance(pointerPos2),
+	            multitouch: true
+	        };
+	    };
+
+	    /**
+	     * handles singletouch for move
+	     * @param  {Point} position - position
+	     * @return {Object} manipulated enriched data
+	     */
+
+
+	    Interact.prototype.handleSingletouchMove = function handleSingletouchMove(position) {
+	        var pos = this.getRelativePosition(position);
+	        return {
+	            positionMove: pos,
+	            distance: this.data.positionLast.distance(pos),
+	            multitouch: false
+	        };
+	    };
+
+	    /**
+	     * handles cross-browser and -device move-event
+	     * @param  {Object} event - jQuery-Event-Object
+	     * @return {Boolean} always returns false
+	     */
+
+
+	    Interact.prototype.moveHandler = function moveHandler(event) {
+	        // if touchstart event was not fired
+	        if (!this.data.down || this.data.pinched) return false;
+
+	        var e = this.preHandle(event);
+	        this.data.positionLast = this.data.positionMove ? this.data.positionMove : this.data.positionStart;
+	        this.data.timeLast = event.timeStamp;
+
+	        // if positions have not changed
+	        if (this.positionDidNotChange(e)) return false;
+
+	        this.clearTimeouts(this.data.timeoutDefault);
+	        this.clearTimeouts(this.data.timeoutHold);
+	        this.data = Object.assign({}, this.data, this.calculateMove(e));
+
+	        if (this.data.multitouch) {
+	            this.handlePinchAndZoom();
+	        } else {
+	            this.eventCallback(this.settings.callbacks.pan, this.data);
+	        }
+	        return false;
+	    };
+
+	    /**
+	     * handles pinch and zoom
+	     * @return {Interact} instance of Interact for chaining
+	     */
+
+
+	    Interact.prototype.handlePinchAndZoom = function handlePinchAndZoom() {
+	        if (!this.data.distanceLast) this.data.distanceLast = this.data.distance;
+
+	        this.data.difference = this.data.distance - this.data.distanceLast;
+	        if (Math.abs(this.data.difference) >= 0.005) {
+	            if (this.settings.callbacks.pinch) this.eventCallback(this.settings.callbacks.pinch, this.data);
+	            if (this.settings.callbacks.zoom) this.eventCallback(this.settings.callbacks.zoom, this.data);
+	            this.data.distanceLast = this.data.distance;
+	        }
+	        return this;
+	    };
+
+	    /**
+	     * check if position has been changed
+	     * @param  {Object} e - jQuery-Event-Object
+	     * @return {Boolean} Whether or not position has changed
+	     */
+
+
+	    Interact.prototype.positionDidNotChange = function positionDidNotChange(e) {
+	        return _Helper.Helper.isIE() && (this.getRelativePosition(e).equals(this.data.positionLast) || this.getRelativePosition(e).equals(this.data.positionStart)) || !_Helper.Helper.isIE() && _Helper.Helper.isTouch() && this.getRelativePosition(e[0]).equals(this.data.positionLast);
+	    };
+
+	    /**
+	     * calculation to be made at end-handler
+	     * @param  {Object} e - jQuery-Event-Object
+	     * @return {Object} calculated data
+	     */
+
+
+	    Interact.prototype.calculateEnd = function calculateEnd(e) {
+	        var data = {
+	            positionEnd: new _Point.Point()
+	        };
+
+	        if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
+	            return Object.assign({}, data, this.handleSingletouchEnd(e));
+	        } // if is pointerEvent
+	        else if (this.isPointerEvent(e)) {
+	                var end = this.handleSingletouchEnd(e);
+	                delete this.data.pointerArray[e.pointerId];
+	                return Object.assign({}, data, end);
+	            } // touch is used
+	            else {
+	                    // singletouch ended
+	                    if (e.length <= 1) {
+	                        return Object.assign({}, data, this.handleSingletouchEnd(e[0]));
+	                    }
+	                }
+	    };
+
+	    /**
+	     * handles singletouch for end
+	     * @param  {Object} position - position
+	     * @return {Object} manipulated enriched data
+	     */
+
+
+	    Interact.prototype.handleSingletouchEnd = function handleSingletouchEnd(position) {
+	        return {
+	            positionEnd: this.getRelativePosition(position)
+	        };
+	    };
+
+	    /**
+	     * handle action at end event handler
+	     * @param  {String} action - last action made
+	     * @return {Interact} instance of Interact for chaining
+	     */
+
+
+	    Interact.prototype.takeActionEnd = function takeActionEnd(action) {
+	        switch (action) {
+	            case "tap":
+	                if (this.time < this.settings.timeTreshold.hold) {
+	                    this.setTimeoutForEvent(this.settings.callbacks.tap, this.settings.timeTreshold.tap, this.data);
+	                } else {
+	                    this.eventCallback(this.settings.callbacks.hold, this.data);
+	                }
+	                break;
+	            case "doubletap":
+	                if (this.time < this.settings.timeTreshold.hold) {
+	                    this.setTimeoutForEvent(this.settings.callbacks.doubletap, this.settings.timeTreshold.tap, this.data);
+	                } else {
+	                    this.eventCallback(this.settings.callbacks.tapHold, this.data);
+	                }
+	                break;
+	            default:
+	                this.data.actionLast = null;
+	        }
+	    };
+
+	    /**
+	     * handles cross-browser and -device end-event
+	     * @param  {Object} event - jQuery-Event-Object
+	     * @return {Boolean} always returns false
+	     */
+
+
+	    Interact.prototype.endHandler = function endHandler(event) {
+
+	        var e = this.preHandle(event);
+
+	        this.data.timeEnd = event.timeStamp;
+
+	        this.clearTimeouts(this.data.timeoutHold);
+
+	        this.data = Object.assign({}, this.data, this.calculateEnd(e));
+
+	        // called only when not moved
+	        if (!this.data.moved && this.data.down && !this.data.multitouch) {
+	            this.takeActionEnd(this.data.actionLast);
+	        }
+	        // if was moved
+	        else if (this.data.moved && this.data.down && !this.data.multitouch) {
+	                if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
+	                    this.handleSwipeAndFlick();
+	                }
+	                this.data.actionLast = null;
 	            }
-	            return this;
+	        this.pinchBalance();
+	        this.handleMultitouchEnd(e);
+	        this.data.positionLast = null;
+	        return false;
+	    };
+
+	    /**
+	     * handles flick and swipe events
+	     * @return {Interact} instance of Interact for chaining
+	     */
+
+
+	    Interact.prototype.handleSwipeAndFlick = function handleSwipeAndFlick() {
+	        if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
+	            this.data.direction = this.data.positionEnd.clone.substract(this.data.positionLast);
+	            this.data.velocity = this.data.direction.clone.multiply(this.timeToLastMove);
+	            this.data.distance = this.data.positionLast.distance(this.data.positionEnd);
 	        }
 
-	        /**
-	         * Eventhandler for handling the callbacks
-	         * @param  {Function} callback - function to be called
-	         * @param  {object[]} args - arguments for the function
-	         * @return {Interact} Returns this instance
-	         */
-
-	    }, {
-	        key: 'eventCallback',
-	        value: function eventCallback(callback, args) {
-	            if (callback && typeof callback === "function") callback(args);
-	            this.data.actionLast = null;
-	            return this;
+	        if (this.settings.callbacks.swipe && this.time <= this.settings.timeTreshold.swipe) {
+	            var originalStart = this.getAbsolutePosition(this.data.positionStart);
+	            var originalEnd = this.getAbsolutePosition(this.data.positionEnd);
+	            if (originalEnd.distance(originalStart) >= this.settings.distanceTreshold.swipe) {
+	                this.data.directions = this.getSwipeDirections(this.data.direction);
+	                this.eventCallback(this.settings.callbacks.swipe, this.data);
+	            }
+	        }
+	        if (this.settings.callbacks.flick && this.timeToLastMove <= this.settings.timeTreshold.flick) {
+	            this.eventCallback(this.settings.callbacks.flick, this.data);
 	        }
 
-	        /**
-	         * get the relative position of clientX and clientY
-	         * @param  {Object} e - event object
-	         * @return {Point} calculated relative position
-	         */
+	        return this;
+	    };
 
-	    }, {
-	        key: 'getRelativePosition',
-	        value: function getRelativePosition(e) {
-	            var clientBounds = this.container.getBoundingClientRect(),
-	                pos = new _Point.Point(e.clientX, e.clientY),
-	                bounds = new _Point.Point(clientBounds.left, clientBounds.top);
-	            return pos.substract(bounds).divide(clientBounds.width, clientBounds.height);
+	    /**
+	     * handles multitouch for end
+	     * @param  {e} e - jQuery-Event-Object
+	     * @return {Interact} instance of Interact for chaining
+	     */
+
+
+	    Interact.prototype.handleMultitouchEnd = function handleMultitouchEnd(e) {
+	        this.data.multitouch = false;
+	        this.data.down = false;
+	        this.data.moved = false;
+
+	        // if is pointerEvent
+	        if (this.isPointerEvent(e)) {
+	            if (Object.keys(this.data.pointerArray).length > 1) {
+	                this.data.multitouch = true;
+	            } else if (Object.keys(this.data.pointerArray).length > 0) {
+	                this.data.down = true;
+	            }
+	        } // touch is used
+	        else {
+	                if (e.length > 1) {
+	                    this.data.multitouch = true;
+	                } else if (e.length > 0) {
+	                    this.data.down = true;
+	                }
+	                this.data.positionMove = null;
+	            }
+	        return this;
+	    };
+
+	    /**
+	     * balances pinching after release of finger
+	     * @return {Interact} instance of Interact for chaining
+	     */
+
+
+	    Interact.prototype.pinchBalance = function pinchBalance() {
+	        var _this = this;
+
+	        if (this.data.multitouch) {
+	            this.data.pinched = true;
+	            setTimeout(function () {
+	                _this.data.pinched = false;
+	                _this.data.distanceLast = null;
+	            }, this.settings.pinchBalanceTime);
 	        }
+	        return this;
+	    };
 
-	        /**
-	         * get the absolute position of clientX and clientY
-	         * @param  {Object} e - event object
-	         * @return {Point} calculated absolute position
-	         */
+	    /**
+	     * Returns an array of strings, representing the directions
+	     * @param  {Point} direction - the specified direction in pixel
+	     * @return {string[]} returns an array representing the directions as strings
+	     */
 
-	    }, {
-	        key: 'getAbsolutePosition',
-	        value: function getAbsolutePosition(point) {
-	            var clientBounds = this.container.getBoundingClientRect();
-	            return point.multiply(clientBounds.width, clientBounds.height);
+
+	    Interact.prototype.getSwipeDirections = function getSwipeDirections(direction) {
+	        return [direction.x < 0 ? "left" : direction.x > 0 ? "right" : "none", direction.y < 0 ? "up" : direction.y > 0 ? "down" : "none"];
+	    };
+
+	    /**
+	     * Helper for setting a timeout for events
+	     * @param {Function} callback - function to be called
+	     * @param {number} timeout - time in milliseconds
+	     * @param {Object[]} args - array of arguments
+	     * @param {Boolean} holdTimeout - if true, a different variable will be used
+	     * @return {Interact} Returns this instance
+	     */
+
+
+	    Interact.prototype.setTimeoutForEvent = function setTimeoutForEvent(callback, timeout, args, holdTimeout) {
+	        if (holdTimeout) {
+	            this.data.timeoutHold = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
+	        } else {
+	            this.data.timeoutDefault = setTimeout(this.eventCallback.bind(this, callback, args), timeout);
 	        }
+	        return this;
+	    };
 
-	        /**
-	         * get scroll direction from event
-	         * @param  {Object} event - event object
-	         * @return {string[]} an array with scroll directions
-	         */
+	    /**
+	     * Eventhandler for handling the callbacks
+	     * @param  {Function} callback - function to be called
+	     * @param  {object[]} args - arguments for the function
+	     * @return {Interact} Returns this instance
+	     */
 
-	    }, {
-	        key: 'getScrollDirection',
-	        value: function getScrollDirection(event) {
-	            var axis = parseInt(event.axis, 10);
-	            var direction = [];
-	            if (this.isDownDirection(axis, event)) direction.push("down"); // down
-	            else if (this.isUpDirection(axis, event)) direction.push("up"); // up
-	            if (this.isRightDirection(axis, event)) direction.push("right"); // right
-	            else if (this.isLeftDirection(axis, event)) direction.push("left"); // left
-	            return direction;
-	        }
 
-	        /**
-	         * checks if direction is down
-	         * @param  {number} axis - what axis is used
-	         * @param  {Object} event - Vanilla JS event
-	         * @return {Boolean} Whether or not direction is down
-	         */
+	    Interact.prototype.eventCallback = function eventCallback(callback, args) {
+	        if (callback && typeof callback === "function") callback(args);
+	        this.data.actionLast = null;
+	        return this;
+	    };
 
-	    }, {
-	        key: 'isDownDirection',
-	        value: function isDownDirection(axis, event) {
-	            return event.deltaY > 0 || !event.deltaY && event.wheelDeltaY < 0 || axis === 2 && event.detail > 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) < 0;
-	        }
+	    /**
+	     * get the relative position of clientX and clientY
+	     * @param  {Object} e - event object
+	     * @return {Point} calculated relative position
+	     */
 
-	        /**
-	         * checks if direction is up
-	         * @param  {number} axis - what axis is used
-	         * @param  {Object} event - Vanilla JS event
-	         * @return {Boolean} Whether or not direction is up
-	         */
 
-	    }, {
-	        key: 'isUpDirection',
-	        value: function isUpDirection(axis, event) {
-	            return event.deltaY < 0 || !event.deltaY && event.wheelDeltaY > 0 || axis === 2 && event.detail < 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) > 0;
-	        }
+	    Interact.prototype.getRelativePosition = function getRelativePosition(e) {
+	        var clientBounds = this.container.getBoundingClientRect(),
+	            pos = new _Point.Point(e.clientX, e.clientY),
+	            bounds = new _Point.Point(clientBounds.left, clientBounds.top);
+	        return pos.substract(bounds).divide(clientBounds.width, clientBounds.height);
+	    };
 
-	        /**
-	         * checks if direction is right
-	         * @param  {number} axis - what axis is used
-	         * @param  {Object} event - Vanilla JS event
-	         * @return {Boolean} Whether or not direction is right
-	         */
+	    /**
+	     * get the absolute position of clientX and clientY
+	     * @param  {Object} e - event object
+	     * @return {Point} calculated absolute position
+	     */
 
-	    }, {
-	        key: 'isRightDirection',
-	        value: function isRightDirection(axis, event) {
-	            return event.deltaX > 0 || !event.deltaX && event.wheelDeltaX > 0 || axis === 1 && event.detail > 0;
-	        }
 
-	        /**
-	         * checks if direction is left
-	         * @param  {number} axis - what axis is used
-	         * @param  {Object} event - Vanilla JS event
-	         * @return {Boolean} Whether or not direction is left
-	         */
+	    Interact.prototype.getAbsolutePosition = function getAbsolutePosition(point) {
+	        var clientBounds = this.container.getBoundingClientRect();
+	        return point.multiply(clientBounds.width, clientBounds.height);
+	    };
 
-	    }, {
-	        key: 'isLeftDirection',
-	        value: function isLeftDirection(axis, event) {
-	            return event.deltaX < 0 || !event.deltaX && event.wheelDeltaX < 0 || axis === 1 && event.detail < 0;
-	        }
+	    /**
+	     * get scroll direction from event
+	     * @param  {Object} event - event object
+	     * @return {string[]} an array with scroll directions
+	     */
 
-	        /**
-	         * Get event helper, applies jQuery-event-fix too
-	         * @param  {Object} e - event object
-	         * @return {Object} new fixed and optimized event
-	         */
 
-	    }, {
-	        key: 'getEvent',
-	        value: function getEvent(e) {
-	            if (e.touches && e.touches.length === 0) return e.changedTouches || e;
-	            return e.touches || e.changedTouches || e;
-	        }
-	    }]);
+	    Interact.prototype.getScrollDirection = function getScrollDirection(event) {
+	        var axis = parseInt(event.axis, 10);
+	        var direction = [];
+	        if (this.isDownDirection(axis, event)) direction.push("down"); // down
+	        else if (this.isUpDirection(axis, event)) direction.push("up"); // up
+	        if (this.isRightDirection(axis, event)) direction.push("right"); // right
+	        else if (this.isLeftDirection(axis, event)) direction.push("left"); // left
+	        return direction;
+	    };
+
+	    /**
+	     * checks if direction is down
+	     * @param  {number} axis - what axis is used
+	     * @param  {Object} event - Vanilla JS event
+	     * @return {Boolean} Whether or not direction is down
+	     */
+
+
+	    Interact.prototype.isDownDirection = function isDownDirection(axis, event) {
+	        return event.deltaY > 0 || !event.deltaY && event.wheelDeltaY < 0 || axis === 2 && event.detail > 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) < 0;
+	    };
+
+	    /**
+	     * checks if direction is up
+	     * @param  {number} axis - what axis is used
+	     * @param  {Object} event - Vanilla JS event
+	     * @return {Boolean} Whether or not direction is up
+	     */
+
+
+	    Interact.prototype.isUpDirection = function isUpDirection(axis, event) {
+	        return event.deltaY < 0 || !event.deltaY && event.wheelDeltaY > 0 || axis === 2 && event.detail < 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) > 0;
+	    };
+
+	    /**
+	     * checks if direction is right
+	     * @param  {number} axis - what axis is used
+	     * @param  {Object} event - Vanilla JS event
+	     * @return {Boolean} Whether or not direction is right
+	     */
+
+
+	    Interact.prototype.isRightDirection = function isRightDirection(axis, event) {
+	        return event.deltaX > 0 || !event.deltaX && event.wheelDeltaX > 0 || axis === 1 && event.detail > 0;
+	    };
+
+	    /**
+	     * checks if direction is left
+	     * @param  {number} axis - what axis is used
+	     * @param  {Object} event - Vanilla JS event
+	     * @return {Boolean} Whether or not direction is left
+	     */
+
+
+	    Interact.prototype.isLeftDirection = function isLeftDirection(axis, event) {
+	        return event.deltaX < 0 || !event.deltaX && event.wheelDeltaX < 0 || axis === 1 && event.detail < 0;
+	    };
+
+	    /**
+	     * Get event helper, applies jQuery-event-fix too
+	     * @param  {Object} e - event object
+	     * @return {Object} new fixed and optimized event
+	     */
+
+
+	    Interact.prototype.getEvent = function getEvent(e) {
+	        if (e.touches && e.touches.length === 0) return e.changedTouches || e;
+	        return e.touches || e.changedTouches || e;
+	    };
 
 	    return Interact;
 	}();
