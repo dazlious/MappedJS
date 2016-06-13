@@ -137,9 +137,10 @@
         _createClass(Label, [{
             key: 'getNearestPositionToCenter',
             value: function getNearestPositionToCenter() {
-                var center = this.center.clone.multiply(-1);
+                var _this2 = this;
+
                 this.latlng = this.latlng.sort(function(a, b) {
-                    return center.distance(a) - center.distance(b);
+                    return _this2.center.distance(a) - _this2.center.distance(b);
                 });
                 return this.latlng[0];
             }
@@ -164,20 +165,20 @@
         }, {
             key: 'decideWhatToDraw',
             value: function decideWhatToDraw(text, icon) {
-                var _this2 = this;
+                var _this3 = this;
 
                 if (text && icon) {
                     return function(pos, textPos) {
-                        _this2.drawText(textPos);
-                        _this2.drawIcon(pos);
+                        _this3.drawText(textPos);
+                        _this3.drawIcon(pos);
                     };
                 } else if (icon) {
                     return function(pos) {
-                        return _this2.drawIcon(pos);
+                        return _this3.drawIcon(pos);
                     };
                 } else if (text) {
                     return function(pos, textPos) {
-                        return _this2.drawText(textPos);
+                        return _this3.drawText(textPos);
                     };
                 }
             }
@@ -200,29 +201,29 @@
         }, {
             key: 'drawCircleIcon',
             value: function drawCircleIcon(size) {
-                var _this3 = this;
+                var _this4 = this;
 
                 return function(pos) {
-                    return _this3.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
+                    return _this4.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
                 };
             }
         }, {
             key: 'drawSquareIcon',
             value: function drawSquareIcon(size) {
-                var _this4 = this;
+                var _this5 = this;
 
                 return function(pos) {
-                    return _this4.context.rect(pos.x, pos.y, size, size);
+                    return _this5.context.rect(pos.x, pos.y, size, size);
                 };
             }
         }, {
             key: 'drawImageIcon',
             value: function drawImageIcon(image, size, offset) {
-                var _this5 = this;
+                var _this6 = this;
 
                 this.offset = offset;
                 return function(pos) {
-                    return _this5.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
+                    return _this6.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
                 };
             }
         }, {

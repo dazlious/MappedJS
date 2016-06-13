@@ -113,81 +113,82 @@
 	height: 36px;
 	cursor: pointer;
 	border-radius: 3px;
-	background-size: 60%;
+	background-size: 72px 144px;
+	background-image: url("../../img/icons.png");
 	background-position: center center;
 	background-repeat: no-repeat;
 }
 
-/* line 33, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 34, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container .zoom-in {
 	border-bottom: 1px solid;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
 }
 
-/* line 38, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 39, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container .zoom-out {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
 
-/* line 42, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 43, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container .home {
 	margin-bottom: 3px;
 }
 
-/* line 46, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 47, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.dark .control {
 	background-color: rgba(0, 0, 0, 0.5);
 	box-shadow: 0px 0px 0px 1px rgba(204, 204, 204, 0.2);
 }
 
-/* line 49, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 50, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.dark .control:hover {
 	background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* line 53, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 54, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.dark .zoom-in {
 	border-bottom-color: #888;
-	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='plus' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23cdcdcd;}%3C/style%3E%3C/defs%3E%3Ctitle%3Elight%3C/title%3E%3Cpath class='cls-1' d='M506,215a4.01176,4.01176,0,0,0-4-4H305a4.01176,4.01176,0,0,1-4-4V10a4.01176,4.01176,0,0,0-4-4H215a4.01176,4.01176,0,0,0-4,4V207a4.01176,4.01176,0,0,1-4,4H10a4.01176,4.01176,0,0,0-4,4v82a4.01176,4.01176,0,0,0,4,4H207a4.01176,4.01176,0,0,1,4,4V502a4.01176,4.01176,0,0,0,4,4h82a4.01176,4.01176,0,0,0,4-4V305a4.01176,4.01176,0,0,1,4-4H502a4.01176,4.01176,0,0,0,4-4V215Z'/%3E%3C/svg%3E");
+	background-position: 100% 66.66%;
 }
 
-/* line 57, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 58, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.dark .zoom-out {
-	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='minus' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23cdcdcd;}%3C/style%3E%3C/defs%3E%3Ctitle%3Elight%3C/title%3E%3Crect class='cls-1' x='6' y='211' width='500' height='90' rx='4' ry='4'/%3E%3C/svg%3E");
+	background-position: 100% 100%;
 }
 
-/* line 60, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 61, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.dark .home {
-	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='home' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23cdcdcd;}%3C/style%3E%3C/defs%3E%3Ctitle%3Elight%3C/title%3E%3Cpath class='cls-1' d='M327.25707,309.74971a4.01252,4.01252,0,0,0-4.00063-4H188.55758a4.00489,4.00489,0,0,0-3.99433,4l0.11933,192.17052a4.01109,4.01109,0,0,1-3.99745,4.002l-147.99232.07537a4.01723,4.01723,0,0,1-4.00493-3.99958L28.297,184.54589a9.2628,9.2628,0,0,1,3.1504-6.45843L249.16094,8.45844a5.521,5.521,0,0,1,6.34872-.04966L480.51455,178.13a9.06905,9.06905,0,0,1,3.19089,6.40878L483.50684,502a4.01473,4.01473,0,0,1-4.0025,3.99995l-148.21656-.00189a4.01258,4.01258,0,0,1-4.00063-4.00005Z'/%3E%3C/svg%3E");
+	background-position: 100% 33.33%;
 }
 
-/* line 65, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 66, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.light .control {
 	background-color: rgba(255, 255, 255, 0.5);
 	box-shadow: 0px 0px 0px 1px rgba(51, 51, 51, 0.2);
 }
 
-/* line 68, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 69, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.light .control:hover {
 	background-color: #fff;
 }
 
-/* line 72, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 73, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.light .zoom-in {
 	border-bottom-color: #eee;
-	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='plus' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23333;}%3C/style%3E%3C/defs%3E%3Ctitle%3Edark%3C/title%3E%3Cpath class='cls-1' d='M506,215a4.01176,4.01176,0,0,0-4-4H305a4.01176,4.01176,0,0,1-4-4V10a4.01176,4.01176,0,0,0-4-4H215a4.01176,4.01176,0,0,0-4,4V207a4.01176,4.01176,0,0,1-4,4H10a4.01176,4.01176,0,0,0-4,4v82a4.01176,4.01176,0,0,0,4,4H207a4.01176,4.01176,0,0,1,4,4V502a4.01176,4.01176,0,0,0,4,4h82a4.01176,4.01176,0,0,0,4-4V305a4.01176,4.01176,0,0,1,4-4H502a4.01176,4.01176,0,0,0,4-4V215Z'/%3E%3C/svg%3E");
+	background-position: 0% 66.66%;
 }
 
-/* line 76, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 77, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.light .zoom-out {
-	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='minus' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23333;}%3C/style%3E%3C/defs%3E%3Ctitle%3Edark%3C/title%3E%3Crect class='cls-1' x='6' y='211' width='500' height='90' rx='4' ry='4'/%3E%3C/svg%3E");
+	background-position: 0% 100%;
 }
 
-/* line 79, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
+/* line 80, /Users/mduve/repository/MappedJS/plugin/src/styles/_controls.scss */
 .mappedJS .control-container.light .home {
-	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='home' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23333;}%3C/style%3E%3C/defs%3E%3Ctitle%3Edark%3C/title%3E%3Cpath class='cls-1' d='M327.25707,309.74971a4.01252,4.01252,0,0,0-4.00063-4H188.55758a4.00489,4.00489,0,0,0-3.99433,4l0.11933,192.17052a4.01109,4.01109,0,0,1-3.99745,4.002l-147.99232.07537a4.01723,4.01723,0,0,1-4.00493-3.99958L28.297,184.54589a9.2628,9.2628,0,0,1,3.1504-6.45843L249.16094,8.45844a5.521,5.521,0,0,1,6.34872-.04966L480.51455,178.13a9.06905,9.06905,0,0,1,3.19089,6.40878L483.50684,502a4.01473,4.01473,0,0,1-4.0025,3.99995l-148.21656-.00189a4.01258,4.01258,0,0,1-4.00063-4.00005Z'/%3E%3C/svg%3E");
+	background-position: 0% 33.33%;
 }
 
 /* line 4, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
@@ -210,24 +211,20 @@
 	display: block;
 	width: 21px;
 	height: 21px;
-	-webkit-transition: background .15s ease;
-	-moz-transition: background .15s ease;
-	-o-transition: background .15s ease;
-	transition: background .15s ease;
 	cursor: pointer;
 	background-color: white;
-	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='close' xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cstyle%3E.cls-1{fill:%23333;}%3C/style%3E%3C/defs%3E%3Ctitle%3Elight%3C/title%3E%3Cpath class='cls-1' d='M503.17157,62.17476a4.01176,4.01176,0,0,0,0-5.65685L455.48209,8.82843a4.01176,4.01176,0,0,0-5.65685,0L258.82843,199.82524a4.01176,4.01176,0,0,1-5.65685,0L62.17476,8.82843a4.01176,4.01176,0,0,0-5.65685,0L8.82843,56.51791a4.01176,4.01176,0,0,0,0,5.65685L199.82524,253.17157a4.01176,4.01176,0,0,1,0,5.65685L8.82843,449.82524a4.01176,4.01176,0,0,0,0,5.65685l47.68948,47.68948a4.01176,4.01176,0,0,0,5.65685,0L253.17157,312.17476a4.01176,4.01176,0,0,1,5.65685,0L449.82524,503.17157a4.01176,4.01176,0,0,0,5.65685,0l47.68948-47.68948a4.01176,4.01176,0,0,0,0-5.65685L312.17476,258.82843a4.01176,4.01176,0,0,1,0-5.65685Z'/%3E%3C/svg%3E");
-	background-size: 80%;
-	background-position: center;
+	background-size: 200%;
+	background-image: url("../../img/icons.png");
+	background-position: 0% 0%;
 	background-repeat: no-repeat;
 }
 
-/* line 29, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 28, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS .tooltip-container .close-button:hover {
-	background-size: 90%;
+	background-position: 100% 0%;
 }
 
-/* line 34, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 33, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS.left .tooltip-container {
 	bottom: -100%;
 	left: -100%;
@@ -239,30 +236,30 @@
 	transition: left .15s ease;
 }
 
-/* line 42, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 41, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS.left .map-content {
 	overflow: hidden;
 }
 
-/* line 46, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 45, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS.left.tooltip-open .map-content {
 	left: 40%;
 	width: 60%;
 }
 
-/* line 51, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 50, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS.left.tooltip-close .map-content {
 	left: 0;
 	width: 100%;
 }
 
-/* line 56, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 55, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS.left.tooltip-open .tooltip-container {
 	left: 0;
 	bottom: 0;
 }
 
-/* line 62, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 61, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS.bottom .tooltip-container {
 	left: -100%;
 	height: 100%;
@@ -273,13 +270,13 @@
 	transition: bottom .15s ease;
 }
 
-/* line 68, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 67, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS.bottom.tooltip-open .tooltip-container {
 	left: 0;
 	bottom: 0;
 }
 
-/* line 73, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 72, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS .tooltip-container .tooltip-content {
 	height: 100%;
 	padding: 9px 9px 9px;
@@ -289,7 +286,7 @@
 	/* http://codepen.io/maddesigns/pen/ZWdQjM */
 }
 
-/* line 79, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
+/* line 78, /Users/mduve/repository/MappedJS/plugin/src/styles/_tooltip.scss */
 .mappedJS .tooltip-container .tooltip-content > * {
 	width: 100%;
 }

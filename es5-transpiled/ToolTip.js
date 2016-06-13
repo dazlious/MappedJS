@@ -146,16 +146,14 @@
             value: function bindEvents() {
                 var _this = this;
 
-                window.addEventListener("resize", this.resizeHandler.bind(this), false);
-                window.addEventListener("orientationchange", this.resizeHandler.bind(this), false);
-
+                _Helper.Helper.addListener(window, _Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
+                _Helper.Helper.addListener(this.close, _Events.Events.Handling.CLICK, function() {
+                    _this.closeTooltip();
+                });
                 this.eventManager.subscribe(_Events.Events.ToolTip.OPEN, this.open.bind(this));
                 this.eventManager.subscribe(_Events.Events.ToolTip.CLOSE, function() {
                     _this.closeTooltip();
                 });
-                this.close.addEventListener(_Events.Events.Handling.CLICK, function() {
-                    _this.closeTooltip();
-                }, false);
                 return this;
             }
 

@@ -82,6 +82,8 @@
 
             _classCallCheck(this, MappedJS);
 
+            this.polyfill();
+
             this.initializeSettings(container, events, mapSettings);
 
             this.id = this.generateUniqueID();
@@ -121,13 +123,18 @@
             value: function addControls() {
                 if (this.mapSettings.controls) {
                     this.controls = document.createElement("div");
-                    this.controls.classList.add("control-container", this.mapSettings.controls.theme, this.mapSettings.controls.position);
+                    this.controls.classList.add("control-container");
+                    this.controls.classList.add(this.mapSettings.controls.theme);
+                    this.controls.classList.add(this.mapSettings.controls.position);
                     this.zoomIn = document.createElement("div");
-                    this.zoomIn.classList.add("control", "zoom-in");
+                    this.zoomIn.classList.add("control");
+                    this.zoomIn.classList.add("zoom-in");
                     this.zoomOut = document.createElement("div");
-                    this.zoomOut.classList.add("control", "zoom-out");
+                    this.zoomOut.classList.add("control");
+                    this.zoomOut.classList.add("zoom-out");
                     this.home = document.createElement("div");
-                    this.home.classList.add("control", "home");
+                    this.home.classList.add("control");
+                    this.home.classList.add("home");
                     this.controls.appendChild(this.home);
                     this.controls.appendChild(this.zoomIn);
                     this.controls.appendChild(this.zoomOut);
@@ -269,7 +276,7 @@
 
                 this.initializeInteractForMap();
 
-                _Helper.Helper.addListener(window, "resize orientationchange", this.resizeHandler.bind(this));
+                _Helper.Helper.addListener(window, _Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
 
                 _Helper.Helper.addListener(document, _Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
                 _Helper.Helper.addListener(document, _Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
@@ -410,6 +417,179 @@
             key: 'loadingFinished',
             value: function loadingFinished() {
                 return this;
+            }
+        }, {
+            key: 'polyfill',
+            value: function polyfill() {
+                /*
+                polyfill from eligrey for element.class | Listhttps://github.com/eligrey/classList.js/
+                 */
+                /* jshint ignore:start */
+                if ("document" in self) {
+                    if (!("classList" in document.createElement("_")) || document.createElementNS && !("classList" in document.createElementNS("http://www.w3.org/2000/svg", "g"))) {
+                        (function(t) {
+                            if (!("Element" in t)) return;
+                            var e = "classList",
+                                i = "prototype",
+                                n = t.Element[i],
+                                s = Object,
+                                r = String[i].trim || function() {
+                                    return this.replace(/^\s+|\s+$/g, "");
+                                },
+                                a = Array[i].indexOf || function(t) {
+                                    var e = 0,
+                                        i = this.length;
+                                    for (; e < i; e++) {
+                                        if (e in this && this[e] === t) {
+                                            return e;
+                                        }
+                                    }
+                                    return -1;
+                                },
+                                o = function o(t, e) {
+                                    this.name = t;
+                                    this.code = DOMException[t];
+                                    this.message = e;
+                                },
+                                l = function l(t, e) {
+                                    if (e === "") {
+                                        throw new o("SYNTAX_ERR", "An invalid or illegal string was specified");
+                                    }
+                                    if (/\s/.test(e)) {
+                                        throw new o("INVALID_CHARACTER_ERR", "String contains an invalid character");
+                                    }
+                                    return a.call(t, e);
+                                },
+                                c = function c(t) {
+                                    var e = r.call(t.getAttribute("class") || ""),
+                                        i = e ? e.split(/\s+/) : [],
+                                        n = 0,
+                                        s = i.length;
+                                    for (; n < s; n++) {
+                                        this.push(i[n]);
+                                    }
+                                    this._updateClassName = function() {
+                                        t.setAttribute("class", this.toString());
+                                    };
+                                },
+                                u = c[i] = [],
+                                f = function f() {
+                                    return new c(this);
+                                };
+                            o[i] = Error[i];
+                            u.item = function(t) {
+                                return this[t] || null;
+                            };
+                            u.contains = function(t) {
+                                t += "";
+                                return l(this, t) !== -1;
+                            };
+                            u.add = function() {
+                                var t = arguments,
+                                    e = 0,
+                                    i = t.length,
+                                    n,
+                                    s = false;
+                                do {
+                                    n = t[e] + "";
+                                    if (l(this, n) === -1) {
+                                        this.push(n);
+                                        s = true;
+                                    }
+                                } while (++e < i);
+                                if (s) {
+                                    this._updateClassName();
+                                }
+                            };
+                            u.remove = function() {
+                                var t = arguments,
+                                    e = 0,
+                                    i = t.length,
+                                    n,
+                                    s = false,
+                                    r;
+                                do {
+                                    n = t[e] + "";
+                                    r = l(this, n);
+                                    while (r !== -1) {
+                                        this.splice(r, 1);
+                                        s = true;
+                                        r = l(this, n);
+                                    }
+                                } while (++e < i);
+                                if (s) {
+                                    this._updateClassName();
+                                }
+                            };
+                            u.toggle = function(t, e) {
+                                t += "";
+                                var i = this.contains(t),
+                                    n = i ? e !== true && "remove" : e !== false && "add";
+                                if (n) {
+                                    this[n](t);
+                                }
+                                if (e === true || e === false) {
+                                    return e;
+                                } else {
+                                    return !i;
+                                }
+                            };
+                            u.toString = function() {
+                                return this.join(" ");
+                            };
+                            if (s.defineProperty) {
+                                var h = {
+                                    get: f,
+                                    enumerable: true,
+                                    configurable: true
+                                };
+                                try {
+                                    s.defineProperty(n, e, h);
+                                } catch (d) {
+                                    if (d.number === -2146823252) {
+                                        h.enumerable = false;
+                                        s.defineProperty(n, e, h);
+                                    }
+                                }
+                            } else if (s[i].__defineGetter__) {
+                                n.__defineGetter__(e, f);
+                            }
+                        })(self);
+                    } else {
+                        (function() {
+                            var t = document.createElement("_");
+                            t.classList.add("c1", "c2");
+                            if (!t.classList.contains("c2")) {
+                                var e = function e(t) {
+                                    var e = DOMTokenList.prototype[t];
+                                    DOMTokenList.prototype[t] = function(t) {
+                                        var i,
+                                            n = arguments.length;
+                                        for (i = 0; i < n; i++) {
+                                            t = arguments[i];
+                                            e.call(this, t);
+                                        }
+                                    };
+                                };
+                                e("add");
+                                e("remove");
+                            }
+                            t.classList.toggle("c3", false);
+                            if (t.classList.contains("c3")) {
+                                var i = DOMTokenList.prototype.toggle;
+                                DOMTokenList.prototype.toggle = function(t, e) {
+                                    if (1 in arguments && !this.contains(t) === !e) {
+                                        return e;
+                                    } else {
+                                        return i.call(this, t);
+                                    }
+                                };
+                            }
+                            t = null;
+                        })();
+                    }
+                };
+                /* jshint ignore:end */
             }
         }]);
 

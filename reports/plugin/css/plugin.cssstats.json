@@ -1,7 +1,7 @@
 {
     "fileSize": {
-        "size": "22.63 KB",
-        "gzipSize": "8.62 KB"
+        "size": "18.46 KB",
+        "gzipSize": "7.85 KB"
     },
     "selectorSpecifity": {
         "max": 51,
@@ -10,9 +10,9 @@
     "totals": {
         "rules": 54,
         "selectors": 57,
-        "declarations": 178,
+        "declarations": 175,
         "properties": 51,
-        "vendorPrefixes": 13,
+        "vendorPrefixes": 10,
         "mediaQueries": 0,
         "importants": 0
     },
@@ -180,7 +180,7 @@
             2,
             2,
             2,
-            7,
+            8,
             3,
             2,
             1,
@@ -195,7 +195,7 @@
             1,
             1,
             7,
-            17,
+            13,
             1,
             8,
             1,
