@@ -413,18 +413,19 @@
                     }
                 });
 
-                this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function(bounds) {
-                    var zoomIncrease = Math.min(_this4.view.viewport.width / bounds.width, _this4.view.viewport.height / bounds.height);
+                this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function(data) {
+                    var zoomIncrease = Math.min(_this4.view.viewport.width / data.boundingBox.width, _this4.view.viewport.height / data.boundingBox.height);
                     while (zoomIncrease > 0) {
                         var possibleZoomOnLevel = _this4.view.maxZoom - _this4.view.zoomFactor;
                         zoomIncrease -= possibleZoomOnLevel;
                         if (_this4.levelHandler.hasNext()) {
                             _this4.changelevel(1);
                         } else {
-                            _this4.zoom(possibleZoomOnLevel, bounds.center);
+                            _this4.zoom(possibleZoomOnLevel, _this4.view.viewport.center);
                             zoomIncrease = 0;
                         }
                     }
+                    _this4.view.setLatLngToPosition(data.center, _this4.view.viewport.center);
                 });
 
                 this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function() {

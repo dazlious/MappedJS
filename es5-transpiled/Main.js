@@ -226,9 +226,10 @@
                     overwriteViewportSettings: true,
                     callbacks: {
                         tap: function tap(data) {
+                            var pos = _this2.getAbsolutePosition(data.positionStart);
                             _this2.tileMap.velocity = new _Point.Point();
                             var id = data.target.getAttribute("data-id");
-                            if (id) _this2.eventManager.publish(id);
+                            if (id) _this2.eventManager.publish(id, pos);
                         },
                         doubletap: function doubletap(data) {
                             _this2.tileMap.velocity = new _Point.Point();
@@ -268,11 +269,10 @@
 
                 this.initializeInteractForMap();
 
-                window.addEventListener("resize", this.resizeHandler.bind(this), false);
-                window.addEventListener("orientationchange", this.resizeHandler.bind(this), false);
+                _Helper.Helper.addListener(window, "resize orientationchange", this.resizeHandler.bind(this));
 
-                document.addEventListener(_Events.Events.Handling.KEYDOWN, this.keyPress.bind(this), false);
-                document.addEventListener(_Events.Events.Handling.KEYUP, this.keyRelease.bind(this), false);
+                _Helper.Helper.addListener(document, _Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
+                _Helper.Helper.addListener(document, _Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
 
                 this.zoomIn.setAttribute("data-id", "zoom-button-plus");
                 this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
