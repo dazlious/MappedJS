@@ -76,7 +76,7 @@ export class MapInformation {
      */
     convertPointToLatLng(point) {
         point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
-        return new LatLng(this.data.bounds.nw.lat - point.y, point.x + this.data.bounds.nw.lng).multiply(-1);
+        return new LatLng(this.data.bounds.nw.lat - point.y, point.x + this.data.bounds.nw.lng);
     }
 
     /**

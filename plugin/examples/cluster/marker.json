@@ -63,6 +63,38 @@
                 "lat": 52.5,
                 "lng": 13.33
             }
+        },
+        {
+            "icon": "img/icon.png",
+            "hover": true,
+            "offset": {
+                "x": 5,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            },
+            "position": {
+                "lat": 52.777,
+                "lng": 12.916
+            }
+        },
+        {
+            "icon": "img/icon.png",
+            "hover": true,
+            "offset": {
+                "x": 5,
+                "y": 0
+            },
+            "size": {
+                "width": 64,
+                "height": 32
+            },
+            "position": {
+                "lat": 52.777,
+                "lng": 12.916
+            }
         }
     ]
 }

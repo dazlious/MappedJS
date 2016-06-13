@@ -61,7 +61,15 @@ export class Cluster extends Drawable {
     }
 
     action() {
-        this.eventManager.publish(Events.TileMap.ZOOM_TO_BOUNDS, this.boundingBox);
+        let center;
+        for (const marker of this.markers) {
+            center = (!center) ? marker.latlng : center.add(marker.latlng);
+        }
+        center.divide(this.markers.length);
+        this.eventManager.publish(Events.TileMap.ZOOM_TO_BOUNDS, {
+            boundingBox: this.boundingBox,
+            center: center
+        });
     }
 
     addMarker(marker) {

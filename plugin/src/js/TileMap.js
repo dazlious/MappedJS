@@ -308,18 +308,19 @@ export class TileMap {
             }
         });
 
-        this.eventManager.subscribe(Events.TileMap.ZOOM_TO_BOUNDS, (bounds) => {
-            let zoomIncrease = Math.min(this.view.viewport.width / bounds.width, this.view.viewport.height / bounds.height);
+        this.eventManager.subscribe(Events.TileMap.ZOOM_TO_BOUNDS, (data) => {
+            let zoomIncrease = Math.min(this.view.viewport.width / data.boundingBox.width, this.view.viewport.height / data.boundingBox.height);
             while (zoomIncrease > 0) {
                 const possibleZoomOnLevel = this.view.maxZoom - this.view.zoomFactor;
                 zoomIncrease -= possibleZoomOnLevel;
                 if (this.levelHandler.hasNext()) {
                     this.changelevel(1);
                 } else {
-                    this.zoom(possibleZoomOnLevel, bounds.center);
+                    this.zoom(possibleZoomOnLevel, this.view.viewport.center);
                     zoomIncrease = 0;
                 }
             }
+            this.view.setLatLngToPosition(data.center, this.view.viewport.center);
         });
 
         this.eventManager.subscribe(Events.TileMap.NEXT_LEVEL, () => { this.changelevel(1); });

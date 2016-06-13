@@ -226,6 +226,7 @@ export class View extends Drawable {
         });
         this.calculateNewCenter();
         this.view.translate(diff.x + this.getDeltaXToCenter(position), 0);
+        this.calculateNewCenter();
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             view: this.view
         });
@@ -269,7 +270,7 @@ export class View extends Drawable {
 
         const mapPosition = this.view.topLeft.substract(pos).multiply(-1);
         mapPosition.x += this.getDeltaXToCenter(pos);
-        const latlngPosition = this.info.convertPointToLatLng(mapPosition).multiply(-1);
+        const latlngPosition = this.info.convertPointToLatLng(mapPosition);
 
         const newSize = this.originalMapView.clone.scale(this.zoomFactor);
         this.view.setSize(newSize.width, newSize.height);

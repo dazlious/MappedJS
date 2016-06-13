@@ -324,6 +324,7 @@
                 });
                 this.calculateNewCenter();
                 this.view.translate(diff.x + this.getDeltaXToCenter(position), 0);
+                this.calculateNewCenter();
                 this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
                     view: this.view
                 });
@@ -375,7 +376,7 @@
 
                 var mapPosition = this.view.topLeft.substract(pos).multiply(-1);
                 mapPosition.x += this.getDeltaXToCenter(pos);
-                var latlngPosition = this.info.convertPointToLatLng(mapPosition).multiply(-1);
+                var latlngPosition = this.info.convertPointToLatLng(mapPosition);
 
                 var newSize = this.originalMapView.clone.scale(this.zoomFactor);
                 this.view.setSize(newSize.width, newSize.height);

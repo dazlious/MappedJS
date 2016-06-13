@@ -143,9 +143,10 @@ export class MappedJS {
             overwriteViewportSettings: true,
             callbacks: {
                 tap: (data) => {
+                    const pos = this.getAbsolutePosition(data.positionStart);
                     this.tileMap.velocity = new Point();
                     const id = data.target.getAttribute("data-id");
-                    if (id) this.eventManager.publish(id);
+                    if (id) this.eventManager.publish(id, pos);
                 },
                 doubletap: (data) => {
                     this.tileMap.velocity = new Point();

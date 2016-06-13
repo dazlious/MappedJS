@@ -226,9 +226,10 @@
                     overwriteViewportSettings: true,
                     callbacks: {
                         tap: function tap(data) {
+                            var pos = _this2.getAbsolutePosition(data.positionStart);
                             _this2.tileMap.velocity = new _Point.Point();
                             var id = data.target.getAttribute("data-id");
-                            if (id) _this2.eventManager.publish(id);
+                            if (id) _this2.eventManager.publish(id, pos);
                         },
                         doubletap: function doubletap(data) {
                             _this2.tileMap.velocity = new _Point.Point();

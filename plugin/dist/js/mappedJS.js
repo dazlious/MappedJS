@@ -265,9 +265,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                overwriteViewportSettings: true,
 	                callbacks: {
 	                    tap: function tap(data) {
+	                        var pos = _this2.getAbsolutePosition(data.positionStart);
 	                        _this2.tileMap.velocity = new _Point.Point();
 	                        var id = data.target.getAttribute("data-id");
-	                        if (id) _this2.eventManager.publish(id);
+	                        if (id) _this2.eventManager.publish(id, pos);
 	                    },
 	                    doubletap: function doubletap(data) {
 	                        _this2.tileMap.velocity = new _Point.Point();
@@ -6598,18 +6599,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            });
 
-	            this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function (bounds) {
-	                var zoomIncrease = Math.min(_this4.view.viewport.width / bounds.width, _this4.view.viewport.height / bounds.height);
+	            this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function (data) {
+	                var zoomIncrease = Math.min(_this4.view.viewport.width / data.boundingBox.width, _this4.view.viewport.height / data.boundingBox.height);
 	                while (zoomIncrease > 0) {
 	                    var possibleZoomOnLevel = _this4.view.maxZoom - _this4.view.zoomFactor;
 	                    zoomIncrease -= possibleZoomOnLevel;
 	                    if (_this4.levelHandler.hasNext()) {
 	                        _this4.changelevel(1);
 	                    } else {
-	                        _this4.zoom(possibleZoomOnLevel, bounds.center);
+	                        _this4.zoom(possibleZoomOnLevel, _this4.view.viewport.center);
 	                        zoomIncrease = 0;
 	                    }
 	                }
+	                _this4.view.setLatLngToPosition(data.center, _this4.view.viewport.center);
 	            });
 
 	            this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function () {
@@ -8034,6 +8036,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	            this.calculateNewCenter();
 	            this.view.translate(diff.x + this.getDeltaXToCenter(position), 0);
+	            this.calculateNewCenter();
 	            this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	                view: this.view
 	            });
@@ -8085,7 +8088,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var mapPosition = this.view.topLeft.substract(pos).multiply(-1);
 	            mapPosition.x += this.getDeltaXToCenter(pos);
-	            var latlngPosition = this.info.convertPointToLatLng(mapPosition).multiply(-1);
+	            var latlngPosition = this.info.convertPointToLatLng(mapPosition);
 
 	            var newSize = this.originalMapView.clone.scale(this.zoomFactor);
 	            this.view.setSize(newSize.width, newSize.height);
@@ -8755,7 +8758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'convertPointToLatLng',
 	        value: function convertPointToLatLng(point) {
 	            point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
-	            return new _LatLng.LatLng(this.data.bounds.nw.lat - point.y, point.x + this.data.bounds.nw.lng).multiply(-1);
+	            return new _LatLng.LatLng(this.data.bounds.nw.lat - point.y, point.x + this.data.bounds.nw.lng);
 	        }
 
 	        /**
@@ -10100,7 +10103,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'action',
 	        value: function action() {
-	            this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, this.boundingBox);
+	            var center = void 0;
+	            var _iteratorNormalCompletion2 = true;
+	            var _didIteratorError2 = false;
+	            var _iteratorError2 = undefined;
+
+	            try {
+	                for (var _iterator2 = this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    var marker = _step2.value;
+
+	                    center = !center ? marker.latlng : center.add(marker.latlng);
+	                }
+	            } catch (err) {
+	                _didIteratorError2 = true;
+	                _iteratorError2 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                        _iterator2.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError2) {
+	                        throw _iteratorError2;
+	                    }
+	                }
+	            }
+
+	            center.divide(this.markers.length);
+	            this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, {
+	                boundingBox: this.boundingBox,
+	                center: center
+	            });
 	        }
 	    }, {
 	        key: 'addMarker',
@@ -10112,27 +10145,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'removeFromDOM',
 	        value: function removeFromDOM() {
 	            if (this.markers.length > 1) {
-	                var _iteratorNormalCompletion2 = true;
-	                var _didIteratorError2 = false;
-	                var _iteratorError2 = undefined;
+	                var _iteratorNormalCompletion3 = true;
+	                var _didIteratorError3 = false;
+	                var _iteratorError3 = undefined;
 
 	                try {
-	                    for (var _iterator2 = this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                        var marker = _step2.value;
+	                    for (var _iterator3 = this.markers[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                        var marker = _step3.value;
 
 	                        _Helper.Helper.show(marker.icon);
 	                    }
 	                } catch (err) {
-	                    _didIteratorError2 = true;
-	                    _iteratorError2 = err;
+	                    _didIteratorError3 = true;
+	                    _iteratorError3 = err;
 	                } finally {
 	                    try {
-	                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                            _iterator2.return();
+	                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                            _iterator3.return();
 	                        }
 	                    } finally {
-	                        if (_didIteratorError2) {
-	                            throw _iteratorError2;
+	                        if (_didIteratorError3) {
+	                            throw _iteratorError3;
 	                        }
 	                    }
 	                }
