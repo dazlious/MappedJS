@@ -107,6 +107,7 @@ export class View extends Drawable {
         this.setLatLngToPosition(this.initial.position, this.viewport.center);
         const delta = this.initial.zoom - this.zoomFactor;
         this.zoom(delta, this.viewport.center);
+        this.checkBoundaries();
     }
 
     getDistortedView() {

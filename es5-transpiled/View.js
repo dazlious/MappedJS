@@ -192,6 +192,7 @@
                 this.setLatLngToPosition(this.initial.position, this.viewport.center);
                 var delta = this.initial.zoom - this.zoomFactor;
                 this.zoom(delta, this.viewport.center);
+                this.checkBoundaries();
             }
         }, {
             key: 'getDistortedView',
