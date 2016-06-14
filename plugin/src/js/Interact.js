@@ -70,6 +70,7 @@ export class Interact {
     constructor(settings = {}) {
         this.settings = Object.assign(this.getDefaultSettings(), settings);
         this.data = this.getDefaultData();
+        this.pointerArray= {};
         if (this.settings.overwriteViewportSettings) this.handleViewport(this.settings.overwriteViewportSettings);
         this.init(this.settings.container);
     }
@@ -156,7 +157,6 @@ export class Interact {
             down: false,
             moved: false,
             pinched: false,
-            pointerArray: {},
             multitouch: false,
             distance: null,
             distanceLast: null,
@@ -265,7 +265,7 @@ export class Interact {
     /**
      * pre handle all events
      * @param  {Object} event - original event of Vanilla JS
-     * @return {Object} normalized jQuery-fixed event
+     * @return {Object} normalized Event
      */
     preHandle(event) {
         if (this.settings.stopPropagation) event.stopPropagation();
@@ -275,7 +275,7 @@ export class Interact {
 
     /**
      * handles cross-browser and -device scroll
-     * @param  {Object} event - jQuery-Event-Object
+     * @param  {Object} event - Event-Object
      * @return {Boolean} always returns false
      */
     scrollHandler(event) {
@@ -331,7 +331,7 @@ export class Interact {
 
     /**
      * calculation to be made at start-handler
-     * @param  {Object} e - jQuery-Event-Object
+     * @param  {Object} e - Event-Object
      * @return {Object} calculated data
      */
     calculateStart(e) {
@@ -356,19 +356,19 @@ export class Interact {
     /**
      * handle PointerEvent calculations
      * @param  {Object} data - current data
-     * @param  {Object} e - jQuery-Event-Object
+     * @param  {Object} e - Event-Object
      * @return {Object} manipulated enriched data
      */
     handlePointerEventStart(data, e) {
-        this.data.pointerArray[e.pointerId] = e;
-        const getData = (Object.keys(this.data.pointerArray).length <= 1) ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
+        this.pointerArray[e.pointerId] = e;
+        const getData = (Object.keys(this.pointerArray).length <= 1) ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
         return Object.assign({}, data, getData);
     }
 
     /**
      * handle TouchEvent calculations for start
      * @param  {Object} data - current data
-     * @param  {Object} e - jQuery-Event-Object
+     * @param  {Object} e - Event-Object
      * @return {Object} manipulated enriched data
      */
     handleTouchEventStart(data, e) {
@@ -381,9 +381,9 @@ export class Interact {
      */
     getPointerArray() {
         const pointerPos = [];
-        for (const pointer in this.data.pointerArray) {
-            if (this.data.pointerArray[pointer]) {
-                pointerPos.push(this.data.pointerArray[pointer]);
+        for (const pointer in this.pointerArray) {
+            if (this.pointerArray[pointer]) {
+                pointerPos.push(this.pointerArray[pointer]);
             }
         }
         return pointerPos;
@@ -442,7 +442,7 @@ export class Interact {
 
     /**
      * handles cross-browser and -device start-event
-     * @param  {Object} event - jQuery-Event-Object
+     * @param  {Object} event - Event-Object
      * @return {Boolean} always returns false
      */
     startHandler(event) {
@@ -472,7 +472,7 @@ export class Interact {
 
     /**
      * calculation to be made at move-handler
-     * @param  {Object} e - jQuery-Event-Object
+     * @param  {Object} e - Event-Object
      * @return {Object} calculated data
      */
     calculateMove(e) {
@@ -496,12 +496,12 @@ export class Interact {
     /**
      * handle PointerEvent at moving (IE)
      * @param  {Object} data - specified input data
-     * @param  {Object} e - jQuery-Event-Object
+     * @param  {Object} e - Event-Object
      * @return {Object} manipulated enriched data
      */
     handlePointerEventMove(data, e) {
-        this.data.pointerArray[e.pointerId] = e;
-        if (Object.keys(this.data.pointerArray).length <= 1) {
+        this.pointerArray[e.pointerId] = e;
+        if (Object.keys(this.pointerArray).length <= 1) {
             return Object.assign({}, data, this.handleSingletouchMove(e));
         } else {
             const pointerPos = this.getPointerArray();
@@ -512,7 +512,7 @@ export class Interact {
     /**
      * handle TouchEvent calculations for move
      * @param  {Object} data - current data
-     * @param  {Object} e - jQuery-Event-Object
+     * @param  {Object} e - Event-Object
      * @return {Object} manipulated enriched data
      */
     handleTouchEventMove(data, e) {
@@ -556,7 +556,7 @@ export class Interact {
 
     /**
      * handles cross-browser and -device move-event
-     * @param  {Object} event - jQuery-Event-Object
+     * @param  {Object} event - Event-Object
      * @return {Boolean} always returns false
      */
     moveHandler(event) {
@@ -564,6 +564,7 @@ export class Interact {
         if (!this.data.down || this.data.pinched) return false;
 
         const e = this.preHandle(event);
+
         this.data.positionLast = (this.data.positionMove) ? this.data.positionMove : this.data.positionStart;
         this.data.timeLast = event.timeStamp;
 
@@ -600,7 +601,7 @@ export class Interact {
 
     /**
      * check if position has been changed
-     * @param  {Object} e - jQuery-Event-Object
+     * @param  {Object} e - Event-Object
      * @return {Boolean} Whether or not position has changed
      */
     positionDidNotChange(e) {
@@ -609,7 +610,7 @@ export class Interact {
 
     /**
      * calculation to be made at end-handler
-     * @param  {Object} e - jQuery-Event-Object
+     * @param  {Object} e - Event-Object
      * @return {Object} calculated data
      */
     calculateEnd(e) {
@@ -622,7 +623,7 @@ export class Interact {
         } // if is pointerEvent
         else if (this.isPointerEvent(e)) {
             const end = this.handleSingletouchEnd(e);
-            delete this.data.pointerArray[e.pointerId];
+            delete this.pointerArray[e.pointerId];
             return Object.assign({}, data, end);
         } // touch is used
         else {
@@ -672,7 +673,7 @@ export class Interact {
 
     /**
      * handles cross-browser and -device end-event
-     * @param  {Object} event - jQuery-Event-Object
+     * @param  {Object} event - Event-Object
      * @return {Boolean} always returns false
      */
     endHandler(event) {
@@ -698,7 +699,10 @@ export class Interact {
         }
         this.pinchBalance();
         this.handleMultitouchEnd(e);
-        this.data.positionLast = null;
+
+        this.data.positionLast = undefined;
+        this.data.positionMove = undefined;
+
         return false;
     }
 
@@ -730,7 +734,7 @@ export class Interact {
 
     /**
      * handles multitouch for end
-     * @param  {e} e - jQuery-Event-Object
+     * @param  {e} e - Event-Object
      * @return {Interact} instance of Interact for chaining
      */
     handleMultitouchEnd(e) {
@@ -740,9 +744,9 @@ export class Interact {
 
         // if is pointerEvent
         if (this.isPointerEvent(e)) {
-            if (Object.keys(this.data.pointerArray).length > 1) {
+            if (Object.keys(this.pointerArray).length > 1) {
                 this.data.multitouch = true;
-            } else if (Object.keys(this.data.pointerArray).length > 0) {
+            } else if (Object.keys(this.pointerArray).length > 0) {
                 this.data.down = true;
             }
         } // touch is used
@@ -752,7 +756,7 @@ export class Interact {
             } else if (e.length > 0) {
                 this.data.down = true;
             }
-            this.data.positionMove = null;
+            this.data.positionMove = undefined;
         }
         return this;
     }
@@ -888,7 +892,7 @@ export class Interact {
     }
 
     /**
-     * Get event helper, applies jQuery-event-fix too
+     * Get event helper, applies event-fix too
      * @param  {Object} e - event object
      * @return {Object} new fixed and optimized event
      */

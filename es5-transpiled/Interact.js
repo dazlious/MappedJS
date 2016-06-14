@@ -118,6 +118,7 @@
 
             this.settings = Object.assign(this.getDefaultSettings(), settings);
             this.data = this.getDefaultData();
+            this.pointerArray = {};
             if (this.settings.overwriteViewportSettings) this.handleViewport(this.settings.overwriteViewportSettings);
             this.init(this.settings.container);
         }
@@ -217,7 +218,6 @@
                     down: false,
                     moved: false,
                     pinched: false,
-                    pointerArray: {},
                     multitouch: false,
                     distance: null,
                     distanceLast: null,
@@ -368,7 +368,7 @@
             /**
              * pre handle all events
              * @param  {Object} event - original event of Vanilla JS
-             * @return {Object} normalized jQuery-fixed event
+             * @return {Object} normalized Event
              */
 
         }, {
@@ -381,7 +381,7 @@
 
             /**
              * handles cross-browser and -device scroll
-             * @param  {Object} event - jQuery-Event-Object
+             * @param  {Object} event - Event-Object
              * @return {Boolean} always returns false
              */
 
@@ -446,7 +446,7 @@
 
             /**
              * calculation to be made at start-handler
-             * @param  {Object} e - jQuery-Event-Object
+             * @param  {Object} e - Event-Object
              * @return {Object} calculated data
              */
 
@@ -475,22 +475,22 @@
             /**
              * handle PointerEvent calculations
              * @param  {Object} data - current data
-             * @param  {Object} e - jQuery-Event-Object
+             * @param  {Object} e - Event-Object
              * @return {Object} manipulated enriched data
              */
 
         }, {
             key: 'handlePointerEventStart',
             value: function handlePointerEventStart(data, e) {
-                this.data.pointerArray[e.pointerId] = e;
-                var getData = Object.keys(this.data.pointerArray).length <= 1 ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
+                this.pointerArray[e.pointerId] = e;
+                var getData = Object.keys(this.pointerArray).length <= 1 ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
                 return Object.assign({}, data, getData);
             }
 
             /**
              * handle TouchEvent calculations for start
              * @param  {Object} data - current data
-             * @param  {Object} e - jQuery-Event-Object
+             * @param  {Object} e - Event-Object
              * @return {Object} manipulated enriched data
              */
 
@@ -509,9 +509,9 @@
             key: 'getPointerArray',
             value: function getPointerArray() {
                 var pointerPos = [];
-                for (var pointer in this.data.pointerArray) {
-                    if (this.data.pointerArray[pointer]) {
-                        pointerPos.push(this.data.pointerArray[pointer]);
+                for (var pointer in this.pointerArray) {
+                    if (this.pointerArray[pointer]) {
+                        pointerPos.push(this.pointerArray[pointer]);
                     }
                 }
                 return pointerPos;
@@ -579,7 +579,7 @@
 
             /**
              * handles cross-browser and -device start-event
-             * @param  {Object} event - jQuery-Event-Object
+             * @param  {Object} event - Event-Object
              * @return {Boolean} always returns false
              */
 
@@ -615,7 +615,7 @@
 
             /**
              * calculation to be made at move-handler
-             * @param  {Object} e - jQuery-Event-Object
+             * @param  {Object} e - Event-Object
              * @return {Object} calculated data
              */
 
@@ -642,15 +642,15 @@
             /**
              * handle PointerEvent at moving (IE)
              * @param  {Object} data - specified input data
-             * @param  {Object} e - jQuery-Event-Object
+             * @param  {Object} e - Event-Object
              * @return {Object} manipulated enriched data
              */
 
         }, {
             key: 'handlePointerEventMove',
             value: function handlePointerEventMove(data, e) {
-                this.data.pointerArray[e.pointerId] = e;
-                if (Object.keys(this.data.pointerArray).length <= 1) {
+                this.pointerArray[e.pointerId] = e;
+                if (Object.keys(this.pointerArray).length <= 1) {
                     return Object.assign({}, data, this.handleSingletouchMove(e));
                 } else {
                     var pointerPos = this.getPointerArray();
@@ -661,7 +661,7 @@
             /**
              * handle TouchEvent calculations for move
              * @param  {Object} data - current data
-             * @param  {Object} e - jQuery-Event-Object
+             * @param  {Object} e - Event-Object
              * @return {Object} manipulated enriched data
              */
 
@@ -715,7 +715,7 @@
 
             /**
              * handles cross-browser and -device move-event
-             * @param  {Object} event - jQuery-Event-Object
+             * @param  {Object} event - Event-Object
              * @return {Boolean} always returns false
              */
 
@@ -726,6 +726,7 @@
                 if (!this.data.down || this.data.pinched) return false;
 
                 var e = this.preHandle(event);
+
                 this.data.positionLast = this.data.positionMove ? this.data.positionMove : this.data.positionStart;
                 this.data.timeLast = event.timeStamp;
 
@@ -765,7 +766,7 @@
 
             /**
              * check if position has been changed
-             * @param  {Object} e - jQuery-Event-Object
+             * @param  {Object} e - Event-Object
              * @return {Boolean} Whether or not position has changed
              */
 
@@ -777,7 +778,7 @@
 
             /**
              * calculation to be made at end-handler
-             * @param  {Object} e - jQuery-Event-Object
+             * @param  {Object} e - Event-Object
              * @return {Object} calculated data
              */
 
@@ -793,7 +794,7 @@
                 } // if is pointerEvent
                 else if (this.isPointerEvent(e)) {
                     var end = this.handleSingletouchEnd(e);
-                    delete this.data.pointerArray[e.pointerId];
+                    delete this.pointerArray[e.pointerId];
                     return Object.assign({}, data, end);
                 } // touch is used
                 else {
@@ -849,7 +850,7 @@
 
             /**
              * handles cross-browser and -device end-event
-             * @param  {Object} event - jQuery-Event-Object
+             * @param  {Object} event - Event-Object
              * @return {Boolean} always returns false
              */
 
@@ -878,7 +879,10 @@
                 }
                 this.pinchBalance();
                 this.handleMultitouchEnd(e);
-                this.data.positionLast = null;
+
+                this.data.positionLast = undefined;
+                this.data.positionMove = undefined;
+
                 return false;
             }
 
@@ -913,7 +917,7 @@
 
             /**
              * handles multitouch for end
-             * @param  {e} e - jQuery-Event-Object
+             * @param  {e} e - Event-Object
              * @return {Interact} instance of Interact for chaining
              */
 
@@ -926,9 +930,9 @@
 
                 // if is pointerEvent
                 if (this.isPointerEvent(e)) {
-                    if (Object.keys(this.data.pointerArray).length > 1) {
+                    if (Object.keys(this.pointerArray).length > 1) {
                         this.data.multitouch = true;
-                    } else if (Object.keys(this.data.pointerArray).length > 0) {
+                    } else if (Object.keys(this.pointerArray).length > 0) {
                         this.data.down = true;
                     }
                 } // touch is used
@@ -938,7 +942,7 @@
                     } else if (e.length > 0) {
                         this.data.down = true;
                     }
-                    this.data.positionMove = null;
+                    this.data.positionMove = undefined;
                 }
                 return this;
             }
@@ -1109,7 +1113,7 @@
             }
 
             /**
-             * Get event helper, applies jQuery-event-fix too
+             * Get event helper, applies event-fix too
              * @param  {Object} e - event object
              * @return {Object} new fixed and optimized event
              */
