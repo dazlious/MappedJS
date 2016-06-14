@@ -472,7 +472,7 @@ binds all needed events for mouse devices
 pre handle all events
 
 **Kind**: instance method of <code>[Interact](#Interact)</code>  
-**Returns**: <code>Object</code> - normalized jQuery-fixed event  
+**Returns**: <code>Object</code> - normalized Event  
 **Params**
 
 - event <code>Object</code> - original event of Vanilla JS
@@ -486,7 +486,7 @@ handles cross-browser and -device scroll
 **Returns**: <code>Boolean</code> - always returns false  
 **Params**
 
-- event <code>Object</code> - jQuery-Event-Object
+- event <code>Object</code> - Event-Object
 
 <a name="Interact+normalizeWheelDelta"></a>
 
@@ -519,7 +519,7 @@ calculation to be made at start-handler
 **Returns**: <code>Object</code> - calculated data  
 **Params**
 
-- e <code>Object</code> - jQuery-Event-Object
+- e <code>Object</code> - Event-Object
 
 <a name="Interact+handlePointerEventStart"></a>
 
@@ -531,7 +531,7 @@ handle PointerEvent calculations
 **Params**
 
 - data <code>Object</code> - current data
-- e <code>Object</code> - jQuery-Event-Object
+- e <code>Object</code> - Event-Object
 
 <a name="Interact+handleTouchEventStart"></a>
 
@@ -543,7 +543,7 @@ handle TouchEvent calculations for start
 **Params**
 
 - data <code>Object</code> - current data
-- e <code>Object</code> - jQuery-Event-Object
+- e <code>Object</code> - Event-Object
 
 <a name="Interact+getPointerArray"></a>
 
@@ -594,7 +594,7 @@ handles cross-browser and -device start-event
 **Returns**: <code>Boolean</code> - always returns false  
 **Params**
 
-- event <code>Object</code> - jQuery-Event-Object
+- event <code>Object</code> - Event-Object
 
 <a name="Interact+clearTimeouts"></a>
 
@@ -616,7 +616,7 @@ calculation to be made at move-handler
 **Returns**: <code>Object</code> - calculated data  
 **Params**
 
-- e <code>Object</code> - jQuery-Event-Object
+- e <code>Object</code> - Event-Object
 
 <a name="Interact+handlePointerEventMove"></a>
 
@@ -628,7 +628,7 @@ handle PointerEvent at moving (IE)
 **Params**
 
 - data <code>Object</code> - specified input data
-- e <code>Object</code> - jQuery-Event-Object
+- e <code>Object</code> - Event-Object
 
 <a name="Interact+handleTouchEventMove"></a>
 
@@ -640,7 +640,7 @@ handle TouchEvent calculations for move
 **Params**
 
 - data <code>Object</code> - current data
-- e <code>Object</code> - jQuery-Event-Object
+- e <code>Object</code> - Event-Object
 
 <a name="Interact+handleMultitouchMove"></a>
 
@@ -673,7 +673,7 @@ handles cross-browser and -device move-event
 **Returns**: <code>Boolean</code> - always returns false  
 **Params**
 
-- event <code>Object</code> - jQuery-Event-Object
+- event <code>Object</code> - Event-Object
 
 <a name="Interact+handlePinchAndZoom"></a>
 
@@ -691,7 +691,7 @@ check if position has been changed
 **Returns**: <code>Boolean</code> - Whether or not position has changed  
 **Params**
 
-- e <code>Object</code> - jQuery-Event-Object
+- e <code>Object</code> - Event-Object
 
 <a name="Interact+calculateEnd"></a>
 
@@ -702,7 +702,7 @@ calculation to be made at end-handler
 **Returns**: <code>Object</code> - calculated data  
 **Params**
 
-- e <code>Object</code> - jQuery-Event-Object
+- e <code>Object</code> - Event-Object
 
 <a name="Interact+handleSingletouchEnd"></a>
 
@@ -735,7 +735,7 @@ handles cross-browser and -device end-event
 **Returns**: <code>Boolean</code> - always returns false  
 **Params**
 
-- event <code>Object</code> - jQuery-Event-Object
+- event <code>Object</code> - Event-Object
 
 <a name="Interact+handleSwipeAndFlick"></a>
 
@@ -753,7 +753,7 @@ handles multitouch for end
 **Returns**: <code>[Interact](#Interact)</code> - instance of Interact for chaining  
 **Params**
 
-- e <code>e</code> - jQuery-Event-Object
+- e <code>e</code> - Event-Object
 
 <a name="Interact+pinchBalance"></a>
 
@@ -883,7 +883,7 @@ checks if direction is left
 <a name="Interact+getEvent"></a>
 
 ### interact.getEvent(e) ⇒ <code>Object</code>
-Get event helper, applies jQuery-event-fix too
+Get event helper, applies event-fix too
 
 **Kind**: instance method of <code>[Interact](#Interact)</code>  
 **Returns**: <code>Object</code> - new fixed and optimized event  

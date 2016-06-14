@@ -90,7 +90,7 @@
 <p><a name="module_DataEnrichment"></a></p>
 <h2 id="dataenrichment">DataEnrichment</h2>
 <p>enriches delivered data with default values</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#109;&#x64;&#117;&#118;&#x65;&#x40;&#100;&#x65;&#115;&#x69;&#103;&#110;&#109;&#x61;&#x69;&#108;&#x2e;&#110;&#x65;&#116;">&#109;&#x64;&#117;&#118;&#x65;&#x40;&#100;&#x65;&#115;&#x69;&#103;&#110;&#109;&#x61;&#x69;&#108;&#x2e;&#110;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#109;&#x64;&#x75;&#118;&#x65;&#64;&#100;&#x65;&#115;&#x69;&#x67;&#x6e;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x6e;&#101;&#x74;">&#109;&#x64;&#x75;&#118;&#x65;&#64;&#100;&#x65;&#115;&#x69;&#x67;&#x6e;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x6e;&#101;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_DataEnrichment">DataEnrichment</a><ul>
 <li><a href="#module_DataEnrichment.marker">.marker(data)</a> ⇒ <code>object</code></li>
@@ -115,7 +115,7 @@
 <p><a name="module_Helper"></a></p>
 <h2 id="helper">Helper</h2>
 <p>Helper for general purposes</p>
-<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x6d;&#x64;&#x75;&#118;&#x65;&#64;&#x64;&#x65;&#x73;&#x69;&#103;&#110;&#x6d;&#x61;&#105;&#108;&#46;&#110;&#101;&#116;">&#x6d;&#x64;&#x75;&#118;&#x65;&#64;&#x64;&#x65;&#x73;&#x69;&#103;&#110;&#x6d;&#x61;&#105;&#108;&#46;&#110;&#101;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Author:</strong> Michael Duve <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x6d;&#100;&#x75;&#118;&#x65;&#x40;&#x64;&#101;&#115;&#105;&#x67;&#x6e;&#x6d;&#x61;&#x69;&#x6c;&#46;&#110;&#101;&#116;">&#x6d;&#100;&#x75;&#118;&#x65;&#x40;&#x64;&#101;&#115;&#105;&#x67;&#x6e;&#x6d;&#x61;&#x69;&#x6c;&#46;&#110;&#101;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#module_Helper">Helper</a><ul>
 <li><a href="#module_Helper.requestJSON">.requestJSON(filename, callback)</a> ⇒ <code>Helper</code></li>
@@ -396,7 +396,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - Returns this instance<br><a name="Interact+preHandle"></a></p>
 <h3 id="interact-prehandle-event-code-object-code-">interact.preHandle(event) ⇒ <code>Object</code></h3>
 <p>pre handle all events</p>
-<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - normalized jQuery-fixed event<br><strong>Params</strong></p>
+<p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - normalized Event<br><strong>Params</strong></p>
 <ul>
 <li>event <code>Object</code> - original event of Vanilla JS</li>
 </ul>
@@ -405,7 +405,7 @@
 <p>handles cross-browser and -device scroll</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - always returns false<br><strong>Params</strong></p>
 <ul>
-<li>event <code>Object</code> - jQuery-Event-Object</li>
+<li>event <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+normalizeWheelDelta"></a></p>
 <h3 id="interact-normalizewheeldelta-event-code-number-code-">interact.normalizeWheelDelta(event) ⇒ <code>number</code></h3>
@@ -426,7 +426,7 @@
 <p>calculation to be made at start-handler</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - calculated data<br><strong>Params</strong></p>
 <ul>
-<li>e <code>Object</code> - jQuery-Event-Object</li>
+<li>e <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+handlePointerEventStart"></a></p>
 <h3 id="interact-handlepointereventstart-data-e-code-object-code-">interact.handlePointerEventStart(data, e) ⇒ <code>Object</code></h3>
@@ -434,7 +434,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - manipulated enriched data<br><strong>Params</strong></p>
 <ul>
 <li>data <code>Object</code> - current data</li>
-<li>e <code>Object</code> - jQuery-Event-Object</li>
+<li>e <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+handleTouchEventStart"></a></p>
 <h3 id="interact-handletoucheventstart-data-e-code-object-code-">interact.handleTouchEventStart(data, e) ⇒ <code>Object</code></h3>
@@ -442,7 +442,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - manipulated enriched data<br><strong>Params</strong></p>
 <ul>
 <li>data <code>Object</code> - current data</li>
-<li>e <code>Object</code> - jQuery-Event-Object</li>
+<li>e <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+getPointerArray"></a></p>
 <h3 id="interact-getpointerarray-code-object-code-">interact.getPointerArray() ⇒ <code>Object</code></h3>
@@ -473,7 +473,7 @@
 <p>handles cross-browser and -device start-event</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - always returns false<br><strong>Params</strong></p>
 <ul>
-<li>event <code>Object</code> - jQuery-Event-Object</li>
+<li>event <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+clearTimeouts"></a></p>
 <h3 id="interact-cleartimeouts-timeout-code-interact-interact-code-">interact.clearTimeouts(timeout) ⇒ <code><a href="#Interact">Interact</a></code></h3>
@@ -487,7 +487,7 @@
 <p>calculation to be made at move-handler</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - calculated data<br><strong>Params</strong></p>
 <ul>
-<li>e <code>Object</code> - jQuery-Event-Object</li>
+<li>e <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+handlePointerEventMove"></a></p>
 <h3 id="interact-handlepointereventmove-data-e-code-object-code-">interact.handlePointerEventMove(data, e) ⇒ <code>Object</code></h3>
@@ -495,7 +495,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - manipulated enriched data<br><strong>Params</strong></p>
 <ul>
 <li>data <code>Object</code> - specified input data</li>
-<li>e <code>Object</code> - jQuery-Event-Object</li>
+<li>e <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+handleTouchEventMove"></a></p>
 <h3 id="interact-handletoucheventmove-data-e-code-object-code-">interact.handleTouchEventMove(data, e) ⇒ <code>Object</code></h3>
@@ -503,7 +503,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - manipulated enriched data<br><strong>Params</strong></p>
 <ul>
 <li>data <code>Object</code> - current data</li>
-<li>e <code>Object</code> - jQuery-Event-Object</li>
+<li>e <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+handleMultitouchMove"></a></p>
 <h3 id="interact-handlemultitouchmove-positionsarray-code-object-code-">interact.handleMultitouchMove(positionsArray) ⇒ <code>Object</code></h3>
@@ -524,7 +524,7 @@
 <p>handles cross-browser and -device move-event</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - always returns false<br><strong>Params</strong></p>
 <ul>
-<li>event <code>Object</code> - jQuery-Event-Object</li>
+<li>event <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+handlePinchAndZoom"></a></p>
 <h3 id="interact-handlepinchandzoom-code-interact-interact-code-">interact.handlePinchAndZoom() ⇒ <code><a href="#Interact">Interact</a></code></h3>
@@ -534,14 +534,14 @@
 <p>check if position has been changed</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - Whether or not position has changed<br><strong>Params</strong></p>
 <ul>
-<li>e <code>Object</code> - jQuery-Event-Object</li>
+<li>e <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+calculateEnd"></a></p>
 <h3 id="interact-calculateend-e-code-object-code-">interact.calculateEnd(e) ⇒ <code>Object</code></h3>
 <p>calculation to be made at end-handler</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - calculated data<br><strong>Params</strong></p>
 <ul>
-<li>e <code>Object</code> - jQuery-Event-Object</li>
+<li>e <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+handleSingletouchEnd"></a></p>
 <h3 id="interact-handlesingletouchend-position-code-object-code-">interact.handleSingletouchEnd(position) ⇒ <code>Object</code></h3>
@@ -562,7 +562,7 @@
 <p>handles cross-browser and -device end-event</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Boolean</code> - always returns false<br><strong>Params</strong></p>
 <ul>
-<li>event <code>Object</code> - jQuery-Event-Object</li>
+<li>event <code>Object</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+handleSwipeAndFlick"></a></p>
 <h3 id="interact-handleswipeandflick-code-interact-interact-code-">interact.handleSwipeAndFlick() ⇒ <code><a href="#Interact">Interact</a></code></h3>
@@ -572,7 +572,7 @@
 <p>handles multitouch for end</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code><a href="#Interact">Interact</a></code> - instance of Interact for chaining<br><strong>Params</strong></p>
 <ul>
-<li>e <code>e</code> - jQuery-Event-Object</li>
+<li>e <code>e</code> - Event-Object</li>
 </ul>
 <p><a name="Interact+pinchBalance"></a></p>
 <h3 id="interact-pinchbalance-code-interact-interact-code-">interact.pinchBalance() ⇒ <code><a href="#Interact">Interact</a></code></h3>
@@ -657,7 +657,7 @@
 </ul>
 <p><a name="Interact+getEvent"></a></p>
 <h3 id="interact-getevent-e-code-object-code-">interact.getEvent(e) ⇒ <code>Object</code></h3>
-<p>Get event helper, applies jQuery-event-fix too</p>
+<p>Get event helper, applies event-fix too</p>
 <p><strong>Kind</strong>: instance method of <code><a href="#Interact">Interact</a></code><br><strong>Returns</strong>: <code>Object</code> - new fixed and optimized event<br><strong>Params</strong></p>
 <ul>
 <li>e <code>Object</code> - event object</li>
@@ -1721,7 +1721,7 @@
 <p><strong>Kind</strong>: instance method of <code><a href="#View">View</a></code><br><strong>Returns</strong>: <code><a href="#View">View</a></code> - instance of View for chaining<br><a name="Events"></a></p>
 <h2 id="events-code-object-code-">Events : <code>object</code></h2>
 <p>Helper for naming events</p>
-<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x6d;&#100;&#x75;&#118;&#x65;&#x40;&#x64;&#x65;&#115;&#105;&#x67;&#110;&#x6d;&#97;&#x69;&#108;&#x2e;&#x6e;&#x65;&#x74;">&#x6d;&#100;&#x75;&#118;&#x65;&#x40;&#x64;&#x65;&#115;&#105;&#x67;&#110;&#x6d;&#97;&#x69;&#108;&#x2e;&#x6e;&#x65;&#x74;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
+<p><strong>Kind</strong>: global namespace<br><strong>Author:</strong> Michael Duve <a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x6d;&#100;&#x75;&#x76;&#x65;&#64;&#100;&#101;&#115;&#x69;&#x67;&#x6e;&#x6d;&#97;&#105;&#108;&#46;&#x6e;&#x65;&#116;">&#x6d;&#100;&#x75;&#x76;&#x65;&#64;&#100;&#101;&#115;&#x69;&#x67;&#x6e;&#x6d;&#97;&#105;&#108;&#46;&#x6e;&#x65;&#116;</a><br><strong>Copyright</strong>: Michael Duve 2016  </p>
 <ul>
 <li><a href="#Events">Events</a> : <code>object</code><ul>
 <li><a href="#Events.ToolTip">.ToolTip</a> : <code>Object</code></li>

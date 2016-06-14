@@ -275,6 +275,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    if (data.target.classList.contains("control")) return false;
 	                    var change = data.positionLast.clone.substract(data.positionMove);
 	                    _this2.tileMap.velocity = new _Point.Point();
+	                    //console.log(data.positionLast, data.positionMove);
 	                    _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
 	                },
 	                wheel: function wheel(data) {
@@ -6516,9 +6517,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    TileMap.prototype.reset = function reset() {
 	        if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            level: this.initial.level,
+	            zoomFactor: this.initial.zoom,
+	            view: this.levelHandler.current.instance.view
+	        });
 	        this.view.reset();
-	        this.redraw();
 	        this.clusterHandler();
+	        this.redraw();
 	    };
 
 	    TileMap.prototype.initializeLabels = function initializeLabels() {
@@ -7940,6 +7946,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.setLatLngToPosition(this.initial.position, this.viewport.center);
 	        var delta = this.initial.zoom - this.zoomFactor;
 	        this.zoom(delta, this.viewport.center);
+	        this.checkBoundaries();
 	    };
 
 	    View.prototype.getDistortedView = function getDistortedView() {
@@ -10220,6 +10227,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.settings = Object.assign(this.getDefaultSettings(), settings);
 	        this.data = this.getDefaultData();
+	        this.pointerArray = {};
 	        if (this.settings.overwriteViewportSettings) this.handleViewport(this.settings.overwriteViewportSettings);
 	        this.init(this.settings.container);
 	    }
@@ -10314,7 +10322,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            down: false,
 	            moved: false,
 	            pinched: false,
-	            pointerArray: {},
 	            multitouch: false,
 	            distance: null,
 	            distanceLast: null,
@@ -10459,7 +10466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * pre handle all events
 	     * @param  {Object} event - original event of Vanilla JS
-	     * @return {Object} normalized jQuery-fixed event
+	     * @return {Object} normalized Event
 	     */
 
 
@@ -10471,7 +10478,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles cross-browser and -device scroll
-	     * @param  {Object} event - jQuery-Event-Object
+	     * @param  {Object} event - Event-Object
 	     * @return {Boolean} always returns false
 	     */
 
@@ -10533,7 +10540,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * calculation to be made at start-handler
-	     * @param  {Object} e - jQuery-Event-Object
+	     * @param  {Object} e - Event-Object
 	     * @return {Object} calculated data
 	     */
 
@@ -10561,21 +10568,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * handle PointerEvent calculations
 	     * @param  {Object} data - current data
-	     * @param  {Object} e - jQuery-Event-Object
+	     * @param  {Object} e - Event-Object
 	     * @return {Object} manipulated enriched data
 	     */
 
 
 	    Interact.prototype.handlePointerEventStart = function handlePointerEventStart(data, e) {
-	        this.data.pointerArray[e.pointerId] = e;
-	        var getData = Object.keys(this.data.pointerArray).length <= 1 ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
+	        this.pointerArray[e.pointerId] = e;
+	        var getData = Object.keys(this.pointerArray).length <= 1 ? this.handleSingletouchStart(e) : this.handleMultitouchStart(this.getPointerArray());
 	        return Object.assign({}, data, getData);
 	    };
 
 	    /**
 	     * handle TouchEvent calculations for start
 	     * @param  {Object} data - current data
-	     * @param  {Object} e - jQuery-Event-Object
+	     * @param  {Object} e - Event-Object
 	     * @return {Object} manipulated enriched data
 	     */
 
@@ -10592,9 +10599,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Interact.prototype.getPointerArray = function getPointerArray() {
 	        var pointerPos = [];
-	        for (var pointer in this.data.pointerArray) {
-	            if (this.data.pointerArray[pointer]) {
-	                pointerPos.push(this.data.pointerArray[pointer]);
+	        for (var pointer in this.pointerArray) {
+	            if (this.pointerArray[pointer]) {
+	                pointerPos.push(this.pointerArray[pointer]);
 	            }
 	        }
 	        return pointerPos;
@@ -10659,7 +10666,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles cross-browser and -device start-event
-	     * @param  {Object} event - jQuery-Event-Object
+	     * @param  {Object} event - Event-Object
 	     * @return {Boolean} always returns false
 	     */
 
@@ -10693,7 +10700,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * calculation to be made at move-handler
-	     * @param  {Object} e - jQuery-Event-Object
+	     * @param  {Object} e - Event-Object
 	     * @return {Object} calculated data
 	     */
 
@@ -10719,14 +10726,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * handle PointerEvent at moving (IE)
 	     * @param  {Object} data - specified input data
-	     * @param  {Object} e - jQuery-Event-Object
+	     * @param  {Object} e - Event-Object
 	     * @return {Object} manipulated enriched data
 	     */
 
 
 	    Interact.prototype.handlePointerEventMove = function handlePointerEventMove(data, e) {
-	        this.data.pointerArray[e.pointerId] = e;
-	        if (Object.keys(this.data.pointerArray).length <= 1) {
+	        this.pointerArray[e.pointerId] = e;
+	        if (Object.keys(this.pointerArray).length <= 1) {
 	            return Object.assign({}, data, this.handleSingletouchMove(e));
 	        } else {
 	            var pointerPos = this.getPointerArray();
@@ -10737,7 +10744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * handle TouchEvent calculations for move
 	     * @param  {Object} data - current data
-	     * @param  {Object} e - jQuery-Event-Object
+	     * @param  {Object} e - Event-Object
 	     * @return {Object} manipulated enriched data
 	     */
 
@@ -10787,7 +10794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles cross-browser and -device move-event
-	     * @param  {Object} event - jQuery-Event-Object
+	     * @param  {Object} event - Event-Object
 	     * @return {Boolean} always returns false
 	     */
 
@@ -10797,6 +10804,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!this.data.down || this.data.pinched) return false;
 
 	        var e = this.preHandle(event);
+
 	        this.data.positionLast = this.data.positionMove ? this.data.positionMove : this.data.positionStart;
 	        this.data.timeLast = event.timeStamp;
 
@@ -10835,7 +10843,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * check if position has been changed
-	     * @param  {Object} e - jQuery-Event-Object
+	     * @param  {Object} e - Event-Object
 	     * @return {Boolean} Whether or not position has changed
 	     */
 
@@ -10846,7 +10854,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * calculation to be made at end-handler
-	     * @param  {Object} e - jQuery-Event-Object
+	     * @param  {Object} e - Event-Object
 	     * @return {Object} calculated data
 	     */
 
@@ -10861,7 +10869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } // if is pointerEvent
 	        else if (this.isPointerEvent(e)) {
 	                var end = this.handleSingletouchEnd(e);
-	                delete this.data.pointerArray[e.pointerId];
+	                delete this.pointerArray[e.pointerId];
 	                return Object.assign({}, data, end);
 	            } // touch is used
 	            else {
@@ -10915,7 +10923,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles cross-browser and -device end-event
-	     * @param  {Object} event - jQuery-Event-Object
+	     * @param  {Object} event - Event-Object
 	     * @return {Boolean} always returns false
 	     */
 
@@ -10943,7 +10951,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        this.pinchBalance();
 	        this.handleMultitouchEnd(e);
-	        this.data.positionLast = null;
+
+	        this.data.positionLast = undefined;
+	        this.data.positionMove = undefined;
+
 	        return false;
 	    };
 
@@ -10977,7 +10988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles multitouch for end
-	     * @param  {e} e - jQuery-Event-Object
+	     * @param  {e} e - Event-Object
 	     * @return {Interact} instance of Interact for chaining
 	     */
 
@@ -10989,9 +11000,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // if is pointerEvent
 	        if (this.isPointerEvent(e)) {
-	            if (Object.keys(this.data.pointerArray).length > 1) {
+	            if (Object.keys(this.pointerArray).length > 1) {
 	                this.data.multitouch = true;
-	            } else if (Object.keys(this.data.pointerArray).length > 0) {
+	            } else if (Object.keys(this.pointerArray).length > 0) {
 	                this.data.down = true;
 	            }
 	        } // touch is used
@@ -11001,7 +11012,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } else if (e.length > 0) {
 	                    this.data.down = true;
 	                }
-	                this.data.positionMove = null;
+	                this.data.positionMove = undefined;
 	            }
 	        return this;
 	    };
@@ -11161,7 +11172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    /**
-	     * Get event helper, applies jQuery-event-fix too
+	     * Get event helper, applies event-fix too
 	     * @param  {Object} e - event object
 	     * @return {Object} new fixed and optimized event
 	     */

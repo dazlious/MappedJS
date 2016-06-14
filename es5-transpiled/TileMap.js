@@ -226,9 +226,14 @@
             key: 'reset',
             value: function reset() {
                 if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
+                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+                    level: this.initial.level,
+                    zoomFactor: this.initial.zoom,
+                    view: this.levelHandler.current.instance.view
+                });
                 this.view.reset();
-                this.redraw();
                 this.clusterHandler();
+                this.redraw();
             }
         }, {
             key: 'initializeLabels',
