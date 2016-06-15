@@ -218,7 +218,9 @@ export class TileMap {
             Helper.css(this.markerContainer, {
                "width": `${newSize.width}px`,
                "height": `${newSize.height}px`,
-               "transform": `translate3d(${left}px, ${top}px, 0px)`
+               "transform": `translate3d(${left}px, ${top}px, 0px)`,
+               "-ms-transform": `translate(${left}px, ${top}px)`
+
             });
         }
         return this;
