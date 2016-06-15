@@ -3980,7 +3980,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * reposition marker container
 	     * @return {View} instance of View for chaining
 	     */
-
+	
 
 	    TileMap.prototype.repositionMarkerContainer = function repositionMarkerContainer() {
 	        if (this.markerContainer) {
@@ -3990,7 +3990,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].css(this.markerContainer, {
 	                "width": newSize.width + 'px',
 	                "height": newSize.height + 'px',
-	                "transform": 'translate3d(' + left + 'px, ' + top + 'px, 0px)'
+	                "transform": 'translate3d(' + left + 'px, ' + top + 'px, 0px)',
+	                "-ms-transform": 'translate(' + left + 'px, ' + top + 'px)'
+	
 	            });
 	        }
 	        return this;
