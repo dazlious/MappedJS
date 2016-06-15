@@ -64,63 +64,7 @@ module.exports = function(grunt) {
             }
         },
         webpack: {
-            options: {
-                entry: {
-                    mappedJS: __dirname + '/plugin/src/js/Main.js'
-                },
-                output: {
-                    path: 'plugin/dist/js/',
-                    filename: '[name].js',
-                    libraryTarget: "umd",
-                    library: ["de"]
-                },
-                devtool: "cheap-module-source-map",
-                stats: {
-                    colors: true,
-                    modules: true,
-                    reasons: true
-                },
-                progress: false,
-                failOnError: false,
-                watch: false,
-                keepalive: false,
-                inline: true,
-                externals: {
-                    Handlebars: "Handlebars"
-                },
-                target: "web",
-                module: {
-                    loaders: [
-                        {
-                        test: /\.js?$/,
-                        loader: 'babel-loader',
-                        exclude: /node_modules/,
-                        query: {
-                            plugins: [
-                                'transform-es2015-template-literals',
-                                'transform-es2015-literals',
-                                'transform-es2015-function-name',
-                                'transform-es2015-arrow-functions',
-                                'transform-es2015-block-scoped-functions',
-                                ["transform-es2015-classes", { "loose": true }],
-                                'transform-es2015-object-super',
-                                'transform-es2015-shorthand-properties',
-                                'transform-es2015-computed-properties',
-                                'transform-es2015-for-of',
-                                'transform-es2015-sticky-regex',
-                                'transform-es2015-unicode-regex',
-                                'check-es2015-constants',
-                                'transform-es2015-spread',
-                                'transform-es2015-parameters',
-                                'transform-es2015-destructuring',
-                                'transform-es2015-block-scoping',
-                                'transform-es2015-typeof-symbol',
-                                ['transform-regenerator', { async: false, asyncGenerators: false }],
-                            ]
-                        }
-                    }]
-                }
-            },
+            options: require("./webpack.config.js"),
             dev: {
                 output: {
                     filename: '[name].js'
@@ -130,6 +74,7 @@ module.exports = function(grunt) {
                 output: {
                     filename: '[name].min.js'
                 },
+                devtool: "source-map",
                 plugins: [
                     new webpack.optimize.UglifyJsPlugin()
                 ]
