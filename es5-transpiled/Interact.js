@@ -272,31 +272,9 @@
                     "-ms-content-zooming": "none"
                 };
                 _Helper.Helper.css(this.container, css);
-                var _iteratorNormalCompletion = true;
-                var _didIteratorError = false;
-                var _iteratorError = undefined;
-
-                try {
-                    for (var _iterator = this.container.childNodes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var child = _step.value;
-
-                        _Helper.Helper.css(child, css);
-                    }
-                } catch (err) {
-                    _didIteratorError = true;
-                    _iteratorError = err;
-                } finally {
-                    try {
-                        if (!_iteratorNormalCompletion && _iterator.return) {
-                            _iterator.return();
-                        }
-                    } finally {
-                        if (_didIteratorError) {
-                            throw _iteratorError;
-                        }
-                    }
+                for (var i = 0; i < this.container.childNodes; i++) {
+                    _Helper.Helper.css(this.container.childNodes[i], css);
                 }
-
                 this.bindEvents();
                 return this;
             }
