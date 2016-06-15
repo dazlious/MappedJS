@@ -165,7 +165,6 @@ export class MappedJS {
                     if (data.target.classList.contains("control")) return false;
                     const change = data.positionLast.clone.substract(data.positionMove);
                     this.tileMap.velocity = new Point();
-                    //console.log(data.positionLast, data.positionMove);
                     this.tileMap.moveView(this.getAbsolutePosition(change).multiply(-1, -1));
                 },
                 wheel: (data) => {
