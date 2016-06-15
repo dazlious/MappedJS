@@ -143,17 +143,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	"use strict";
-	
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Events; });/**
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file Helper for naming events
 	 * @copyright Michael Duve 2016
 	 * @namespace Events
 	*/
-	var Events = {
+	var Events = exports.Events = {
 	    /**
 	     * Eventnames for ToolTip class
 	     * @type {Object}
@@ -251,26 +255,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    MarkerClusterer: {
 	        CLUSTERIZE: "clusterize",
 	        UNCLUSTERIZE: "unclusterize"
-	
+
 	    },
 	    MapInformation: {
 	        UPDATE: "information-update"
-		    }
-	};
+	    }
+		};
 
 /***/ },
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	"use strict";
-	
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Helper; });/**
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file Helper for general purposes
 	 * @copyright Michael Duve 2016
 	 * @module Helper
 	 */
-	var Helper = {
+	var Helper = exports.Helper = {
 	    /**
 	     * request json-data from given file and calls callback on success
 	     * @function
@@ -279,7 +287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Helper~requestJSONCallback} callback - function called when data is loaded successfully
 	     * @return {Helper} Helper object for chaining
 	     */
-	
+
 	    requestJSON: function requestJSON(filename, callback) {
 	        Helper.getFile(filename, function (jsonFileData) {
 	            if (callback) callback(JSON.parse(jsonFileData));
@@ -288,12 +296,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    find: function find(elementString) {
 	        var element = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-	
+
 	        return (element || document).querySelector(elementString);
 	    },
 	    findAll: function findAll(elementString) {
 	        var element = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-	
+
 	        return (element || document).querySelectorAll(elementString);
 	    },
 	    show: function show(elem) {
@@ -312,7 +320,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return el.addEventListener(e, fn, false);
 	        });
 	    },
-	
+
 	    /**
 	     * clamps a value to specified min and max
 	     * @function
@@ -326,10 +334,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var v = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	        var min = arguments.length <= 1 || arguments[1] === undefined ? v : arguments[1];
 	        var max = arguments.length <= 2 || arguments[2] === undefined ? v : arguments[2];
-	
+
 	        return Math.min(Math.max(v, min), max);
 	    },
-	
+
 	    /**
 	     * loads an image and calls callback on success
 	     * @function
@@ -345,7 +353,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        img.src = path;
 	        return this;
 	    },
-	
+
 	    /**
 	     * request data from given file and calls callback on success
 	     * @function
@@ -365,7 +373,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        xhr.send();
 	        return this;
 	    },
-	
+
 	    /**
 	     * for each helper
 	     * @function
@@ -380,7 +388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return this;
 	    },
-	
+
 	    /**
 	     * formula for linear easing
 	     * @function
@@ -394,7 +402,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    linearEase: function linearEase(t, b, c, d) {
 	        return c.clone.multiply(t).divide(d).add(b);
 	    },
-	
+
 	    /**
 	     * convert degree to radian
 	     * @function
@@ -414,7 +422,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    isMouse: function isMouse() {
 	        return 'onmousedown' in window;
 	    },
-	
+
 	    /**
 	     * checks if touch is possible
 	     * @function
@@ -424,7 +432,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    isTouch: function isTouch() {
 	        return 'ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 	    },
-	
+
 	    /**
 	     * checks if IE is used
 	     * @function
@@ -434,7 +442,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    isIE: function isIE() {
 	        return navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 	    },
-	
+
 	    /**
 	     * gets cross-browser scroll-event
 	     * @function
@@ -443,8 +451,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    scrollEvent: function scrollEvent() {
 	        return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
-		    }
-	};
+	    }
+		};
 
 /***/ },
 /* 5 */
@@ -456,11 +464,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 6 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	"use strict";
-	
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Point; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -469,11 +482,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @file represents a point with x and y value
 	 * @copyright Michael Duve 2016
 	 */
-	var Point = function () {
+
+	var Point = exports.Point = function () {
 	  _createClass(Point, [{
 	    key: "length",
 
-	
+
 	    /**
 	     * length of a point
 	     * @return {number} length of a point
@@ -481,79 +495,79 @@ return /******/ (function(modules) { // webpackBootstrap
 	    get: function get() {
 	      return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
 	    }
-	
+
 	    /**
 	     * gets a clone of this point
 	     * @return {Point} new instance equals this point
 	     */
-	
+
 	  }, {
 	    key: "clone",
 	    get: function get() {
 	      return Point.createFromPoint(this);
 	    }
-	
+
 	    /**
 	     * gets absolute Point
 	     * @return {Point} returns Point with absolute values
 	     */
-	
+
 	  }, {
 	    key: "abs",
 	    get: function get() {
 	      return new Point(Math.abs(this.x), Math.abs(this.y));
 	    }
-	
+
 	    /**
 	     * @constructor
 	     * @param  {number} x = 0 - representation of x coordinate
 	     * @param  {number} y = 0 - representation of y coordinate
 	     * @return {Point} instance of Point for chaining
 	     */
-	
+
 	  }]);
-	
+
 	  function Point() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-	
+
 	    _classCallCheck(this, Point);
-	
+
 	    this.x = x;
 	    this.y = y;
 	    return this;
 	  }
-	
+
 	  /**
 	   * substracts 2 points
 	   * @param  {Point} point = new Point() - the point to substract from this
 	   * @return {Point} instance of Point for chaining
 	   */
 
-	
+
 	  Point.prototype.substract = function substract() {
 	    var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
-	
+
 	    this.x -= point.x;
 	    this.y -= point.y;
 	    return this;
 	  };
-	
+
 	  /**
 	   * adds 2 points
 	   * @param  {Point} point = new Point() - the point to add to this
 	   * @return {Point} instance of Point for chaining
 	   */
 
-	
+
 	  Point.prototype.add = function add() {
 	    var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
-	
+
 	    this.x += point.x;
 	    this.y += point.y;
 	    return this;
 	  };
-	
+
 	  /**
 	   * multiplicates a point with a given x and y
 	   * @param  {number} x = 1 - factor to multiplicate x with
@@ -561,16 +575,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @return {Point} instance of Point for chaining
 	   */
 
-	
+
 	  Point.prototype.multiply = function multiply() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-	
+
 	    this.x *= x;
 	    this.y *= y;
 	    return this;
 	  };
-	
+
 	  /**
 	   * divide a point with a given x and y
 	   * @param  {number} x = 1 - factor to divide x with
@@ -578,40 +592,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @return {Point} instance of Point for chaining
 	   */
 
-	
+
 	  Point.prototype.divide = function divide() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-	
+
 	    this.x /= x;
 	    this.y /= y;
 	    return this;
 	  };
-	
+
 	  /**
 	   * check if points are equal
 	   * @param  {Point} point - the point to check against this
 	   * @return {Boolean} is true, if x and y are the same
 	   */
 
-	
+
 	  Point.prototype.equals = function equals(point) {
 	    return this.x === point.x && this.y === point.y;
 	  };
-	
+
 	  /**
 	   * Returns the distance from this Point to a specified Point
 	   * @param  {Point} point = new Point() - the specified point to be measured against this Point
 	   * @return {Point} the distance between this Point and specified point
 	   */
 
-	
+
 	  Point.prototype.distance = function distance() {
 	    var point = arguments.length <= 0 || arguments[0] === undefined ? new Point() : arguments[0];
-	
+
 	    return this.clone.substract(point).length;
 	  };
-	
+
 	  /**
 	   * translates a point by x and y
 	   * @param  {number} x = 0 - value to move x
@@ -619,16 +633,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @return {Point} instance of Point for chaining
 	   */
 
-	
+
 	  Point.prototype.translate = function translate() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-	
+
 	    this.x += x;
 	    this.y += y;
 	    return this;
 	  };
-	
+
 	  /**
 	   * positions a point by x and y
 	   * @param  {number} x = 0 - value to position x
@@ -636,37 +650,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @return {Point} instance of Point for chaining
 	   */
 
-	
+
 	  Point.prototype.position = function position() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
-	
+
 	    this.x = x;
 	    this.y = y;
 	    return this;
 	  };
-	
+
 	  /**
 	   * translates a Point to an array
 	   * @return {Array} Returns Point as Array(x, y)
 	   */
 
-	
+
 	  Point.prototype.toArray = function toArray() {
 	    return [this.x, this.y];
 	  };
-	
+
 	  return Point;
 	}();
-	
+
 	/**
 	 * Creates a Point from specified point
 	 * @param  {Point} point - specified point
 	 * @return {Point} the point specified
 	 */
+
+
 	Point.createFromPoint = function (point) {
-		  return new Point(point.x, point.y);
-	};
+	  return new Point(point.x, point.y);
+		};
 
 /***/ },
 /* 7 */
@@ -707,26 +723,32 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Events_js__ = __webpack_require__(3);
+	"use strict";
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Publisher; });var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Publisher = undefined;
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	var _Events = __webpack_require__(3);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file Publish/Subscribe pattern
 	 * @copyright Michael Duve 2016
 	 */
-	var Publisher = function () {
+
+	var Publisher = exports.Publisher = function () {
 
 	    /**
 	     * @constructor
 	     * @return {Publisher} singleton instance of Publisher for chaining
 	     */
-	
+
 	    function Publisher() {
 	        var id = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
@@ -746,8 +768,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Function} fn=function(){} - a function to callback
 	     * @return {Publisher} instance of Publisher for chaining
 	     */
-	
-	
+
+
 	    Publisher.prototype.subscribe = function subscribe() {
 	        var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
 	        var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
@@ -763,13 +785,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Function} fn=function(){} - a function to callback
 	     * @return {Publisher} instance of Publisher for chaining
 	     */
-	
-	
+
+
 	    Publisher.prototype.unsubscribe = function unsubscribe() {
 	        var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
 	        var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
 
-	        return this.handle(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].Publisher.UNSUBSCRIBE, type, fn);
+	        return this.handle(_Events.Events.Publisher.UNSUBSCRIBE, type, fn);
 	    };
 
 	    /**
@@ -778,13 +800,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Function} arg=[] - list of parameters
 	     * @return {Publisher} instance of Publisher for chaining
 	     */
-	
-	
+
+
 	    Publisher.prototype.publish = function publish() {
 	        var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
 	        var arg = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
 
-	        return this.handle(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].Publisher.PUBLISH, type, arg);
+	        return this.handle(_Events.Events.Publisher.PUBLISH, type, arg);
 	    };
 
 	    /**
@@ -794,22 +816,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} a function to callback or arguments
 	     * @return {Publisher} instance of Publisher for chaining
 	     */
-	
-	
+
+
 	    Publisher.prototype.handle = function handle(action, type, data) {
 	        var subs = this.subscribers[type] ? this.subscribers[type] : [];
 	        var _iteratorNormalCompletion = true;
 	        var _didIteratorError = false;
 	        var _iteratorError = undefined;
-	
+
 	        try {
 	            for (var _iterator = subs.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	                var _step$value = _slicedToArray(_step.value, 2);
-	
+
 	                var i = _step$value[0];
 	                var fn = _step$value[1];
 
-	                if (action === __WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].Publisher.PUBLISH) {
+	                if (action === _Events.Events.Publisher.PUBLISH) {
 	                    fn(data);
 	                } else {
 	                    if (fn === data) subs.splice(i, 1);
@@ -836,20 +858,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * destroys singleton instance
 	     */
-	
-	
+
+
 	    Publisher.prototype.destroy = function destroy() {
 	        Publisher.instances[this.id] = null;
 	    };
-	
+
 	    return Publisher;
 	}();
 
 	/**
 	 * singleton instance wrapper
-		 * @type {Object}
+	 * @type {Object}
 	 */
-	Publisher.instances = {};
+
+
+		Publisher.instances = {};
 
 /***/ },
 /* 11 */
@@ -886,9 +910,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Point_js__ = __webpack_require__(6);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Rectangle; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Rectangle = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Point2 = __webpack_require__(6);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -896,78 +927,77 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	
-
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file represents a rectangle with a point as position, width and height
 	 * @extends Point
 	 * @copyright Michael Duve 2016
 	 */
-	var Rectangle = function (_Point) {
+
+	var Rectangle = exports.Rectangle = function (_Point) {
 	  _inherits(Rectangle, _Point);
-	
+
 	  _createClass(Rectangle, [{
 	    key: 'center',
-	
+
 
 	    /**
 	     * get center-position of rectangle
 	     * @return {Point} center point
 	     */
 	    get: function get() {
-	      return new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */](this.x + this.width / 2, this.y + this.height / 2);
+	      return new _Point2.Point(this.x + this.width / 2, this.y + this.height / 2);
 	    }
 
 	    /**
 	     * get top-left-position of rectangle
 	     * @return {Point} top-left point
 	     */
-	
+
 	  }, {
 	    key: 'topLeft',
 	    get: function get() {
-	      return new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */](this.x, this.y);
+	      return new _Point2.Point(this.x, this.y);
 	    }
 
 	    /**
 	     * get top-right-position of rectangle
 	     * @return {Point} top-right point
 	     */
-	
+
 	  }, {
 	    key: 'topRight',
 	    get: function get() {
-	      return new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */](this.x + this.width, this.y);
+	      return new _Point2.Point(this.x + this.width, this.y);
 	    }
 
 	    /**
 	     * get bottom-left-position of rectangle
 	     * @return {Point} bottom-left point
 	     */
-	
+
 	  }, {
 	    key: 'bottomLeft',
 	    get: function get() {
-	      return new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */](this.x, this.y + this.height);
+	      return new _Point2.Point(this.x, this.y + this.height);
 	    }
 
 	    /**
 	     * get bottom-right-position of rectangle
 	     * @return {Point} bottom-right point
 	     */
-	
+
 	  }, {
 	    key: 'bottomRight',
 	    get: function get() {
-	      return new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */](this.x + this.width, this.y + this.height);
+	      return new _Point2.Point(this.x + this.width, this.y + this.height);
 	    }
 
 	    /**
 	     * Returns right position of Rectangle
 	     * @return {number} right position
 	     */
-	
+
 	  }, {
 	    key: 'right',
 	    get: function get() {
@@ -978,7 +1008,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Returns left position of Rectangle
 	     * @return {number} left position
 	     */
-	
+
 	  }, {
 	    key: 'left',
 	    get: function get() {
@@ -989,7 +1019,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Returns top position of Rectangle
 	     * @return {number} top position
 	     */
-	
+
 	  }, {
 	    key: 'top',
 	    get: function get() {
@@ -1000,7 +1030,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Returns bottom position of Rectangle
 	     * @return {number} bottom position
 	     */
-	
+
 	  }, {
 	    key: 'bottom',
 	    get: function get() {
@@ -1011,7 +1041,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * clones a rectangle
 	     * @return {Rectangle} duplicated rectangle
 	     */
-	
+
 	  }, {
 	    key: 'clone',
 	    get: function get() {
@@ -1028,7 +1058,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }]);
-	
+
 	  function Rectangle() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
@@ -1052,8 +1082,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {Rectangle} rect = new Rectangle() - the specified rectangle to check against
 	   * @return {Boolean} true if containment is entirely
 	   */
-	
-	
+
+
 	  Rectangle.prototype.intersects = function intersects() {
 	    var rect = arguments.length <= 0 || arguments[0] === undefined ? new Rectangle() : arguments[0];
 
@@ -1065,12 +1095,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {Rectangle|Point} rectOrPoint - the specified point or rectangle to check against
 	   * @return {Boolean} true if containment is entirely
 	   */
-	
-	
+
+
 	  Rectangle.prototype.contains = function contains(rectOrPoint) {
-	    return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */] ? this.containsPoint(rectOrPoint) : false;
+	    return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
 	  };
-	
+
 	  Rectangle.prototype.extend = function extend(rect) {
 	    var left = Math.min(this.left, rect.left);
 	    var right = Math.max(this.right, rect.right);
@@ -1085,10 +1115,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {Point} point = new Point() - specified point to set center of rectangle to
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.setCenter = function setCenter() {
-	    var point = arguments.length <= 0 || arguments[0] === undefined ? new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */]() : arguments[0];
+	    var point = arguments.length <= 0 || arguments[0] === undefined ? new _Point2.Point() : arguments[0];
 
 	    var difference = point.substract(this.center);
 	    this.translate(difference.x, difference.y);
@@ -1100,8 +1130,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} x = 0 - specified x coordinate to set x center of rectangle to
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.setCenterX = function setCenterX() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
@@ -1115,8 +1145,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} y = 0 - specified y coordinate to set y center of rectangle to
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.setCenterY = function setCenterY() {
 	    var y = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
@@ -1130,12 +1160,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {Point} point = new Point() - the specified point to check against
 	   * @return {Boolean} true if containment is entirely
 	   */
-	
-	
-	  Rectangle.prototype.containsPoint = function containsPoint() {
-	    var point = arguments.length <= 0 || arguments[0] === undefined ? new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */]() : arguments[0];
 
-	    return point instanceof __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */] ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
+
+	  Rectangle.prototype.containsPoint = function containsPoint() {
+	    var point = arguments.length <= 0 || arguments[0] === undefined ? new _Point2.Point() : arguments[0];
+
+	    return point instanceof _Point2.Point ? point.x >= this.left && point.y >= this.top && point.x <= this.right && point.y <= this.bottom : false;
 	  };
 
 	  /**
@@ -1143,8 +1173,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {Rectangle} rect = new Rectangle() - the specified rectangle to check against
 	   * @return {Boolean} true if containment is entirely
 	   */
-	
-	
+
+
 	  Rectangle.prototype.containsRect = function containsRect() {
 	    var rect = arguments.length <= 0 || arguments[0] === undefined ? new Rectangle() : arguments[0];
 
@@ -1156,8 +1186,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} factor = 1 - the specified factor of distortion
 	   * @return {Rectangle} a distorted Rectangle
 	   */
-	
-	
+
+
 	  Rectangle.prototype.getDistortedRect = function getDistortedRect() {
 	    var factor = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
@@ -1169,8 +1199,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} factor = 1- the specified factor of distortion
 	   * @return {Rectangle} an undistorted Rectangle
 	   */
-	
-	
+
+
 	  Rectangle.prototype.getNormalRect = function getNormalRect() {
 	    var factor = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
@@ -1182,8 +1212,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} x = 1 - factor to be applied to scale
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.scaleX = function scaleX() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
@@ -1197,8 +1227,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} y = 1- factor to be applied to scale
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.scaleY = function scaleY() {
 	    var y = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
@@ -1213,8 +1243,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} y = x - factor to be applied to scale
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.scale = function scale() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
@@ -1230,8 +1260,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} y = x - factor to be applied to scale
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.scaleCenter = function scaleCenter() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
@@ -1248,8 +1278,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} y = x - specified y to be added to y position
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.translate = function translate() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
@@ -1266,8 +1296,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} height = 0 - specified height to be added to this height
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.transform = function transform() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
@@ -1286,8 +1316,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} y = 0 - he new y position
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.position = function position() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
@@ -1304,8 +1334,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} height = 0 - the new width
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.size = function size() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
@@ -1324,8 +1354,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {number} height = width - the new width
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
-	
-	
+
+
 	  Rectangle.prototype.setSize = function setSize() {
 	    var width = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var height = arguments.length <= 1 || arguments[1] === undefined ? width : arguments[1];
@@ -1340,23 +1370,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param  {Rectangle} rectangle - the specified rectangle to check against this
 	   * @return {Boolean} is true, if x, y, width and height are the same
 	   */
-	
-	
+
+
 	  Rectangle.prototype.equals = function equals(rectangle) {
 	    return rectangle instanceof Rectangle ? this.x === rectangle.x && this.y === rectangle.y && this.width === rectangle.width && this.height === rectangle.height : false;
 	  };
-	
+
 	  return Rectangle;
-	}(__WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */]);
+	}(_Point2.Point);
 
 	/**
 	 * Creates a Rectangle from specified Rectangle
 	 * @param  {Rectangle} rect - specified Rectangle
 	 * @return {Rectangle} a copy of specified rectangle
 	 */
-		Rectangle.createFromRectangle = function (rect) {
+
+
+	Rectangle.createFromRectangle = function (rect) {
 	  return new Rectangle(rect.x, rect.y, rect.width, rect.height);
-	};
+		};
 
 /***/ },
 /* 15 */
@@ -1371,11 +1403,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 16 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	"use strict";
-	
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return LatLng; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1384,11 +1421,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @file represents latitude and longitude coordinates in a geographic coordinate system
 	 * @copyright Michael Duve 2016
 	 */
-	var LatLng = function () {
+
+	var LatLng = exports.LatLng = function () {
 	    _createClass(LatLng, [{
 	        key: "length",
 
-	
+
 	        /**
 	         * length of a latlng
 	         * @return {number} length of a latlng
@@ -1396,74 +1434,74 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	            return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
 	        }
-	
+
 	        /**
 	         * gets a clone of this latlng
 	         * @return {LatLng} create a copy
 	         */
-	
+
 	    }, {
 	        key: "clone",
 	        get: function get() {
 	            return LatLng.createFromLatLng(this);
 	        }
-	
+
 	        /**
 	         * @constructor
 	         * @param  {number} lat = 0 - representation of latitude
 	         * @param  {number} lng = 0 - representation of longitude
 	         * @return {LatLng} instance of LatLng for chaining
 	         */
-	
+
 	    }]);
-	
+
 	    function LatLng() {
 	        var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	        var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-	
+
 	        _classCallCheck(this, LatLng);
-	
+
 	        this.lat = lat;
 	        this.lng = lng;
 	        return this;
 	    }
-	
+
 	    LatLng.prototype.distance = function distance() {
 	        var latlng = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
-	
+
 	        return this.clone.substract(latlng).length;
 	    };
-	
+
 	    /**
 	     * substract specified coord from this coordinate
 	     * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
 	     * @return {LatLng} instance of LatLng for chaining
 	     */
 
-	
+
 	    LatLng.prototype.substract = function substract() {
 	        var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
-	
+
 	        this.lat -= coord.lat;
 	        this.lng -= coord.lng;
 	        return this;
 	    };
-	
+
 	    /**
 	     * add specified coord to this coordinate
 	     * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
 	     * @return {LatLng} instance of LatLng for chaining
 	     */
 
-	
+
 	    LatLng.prototype.add = function add() {
 	        var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
-	
+
 	        this.lat += coord.lat;
 	        this.lng += coord.lng;
 	        return this;
 	    };
-	
+
 	    /**
 	    * divides a latlng with a given factor
 	    * @param  {number} factorLat = 1 - factor to divide lat with
@@ -1471,16 +1509,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    * @return {LatLng} instance of LatLng for chaining
 	    */
 
-	
+
 	    LatLng.prototype.divide = function divide() {
 	        var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 	        var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
-	
+
 	        this.lat /= factorLat;
 	        this.lng /= factorLng;
 	        return this;
 	    };
-	
+
 	    /**
 	     * multiplicates a latlng with a given factor
 	     * @param  {number} factorLat = 1 - factor to multiplicate lat with
@@ -1488,48 +1526,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {LatLng} instance of LatLng for chaining
 	     */
 
-	
+
 	    LatLng.prototype.multiply = function multiply() {
 	        var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 	        var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
-	
+
 	        this.lat *= factorLat;
 	        this.lng *= factorLng;
 	        return this;
 	    };
-	
+
 	    /**
 	     * checks if specified coord equals this coord
 	     * @param  {LatLng} coord - specified coord to check against
 	     * @return {Boolean} Returns if specified coord equals this coord
 	     */
 
-	
+
 	    LatLng.prototype.equals = function equals(coord) {
 	        return this.lat === coord.lat && this.lng === coord.lng;
 	    };
-	
+
 	    /**
 	     * converts a LatLng to string
 	     * @return {string} representing LatLng
 	     */
 
-	
+
 	    LatLng.prototype.toString = function toString() {
 	        return "(" + this.lat + ", " + this.lng + ")";
 	    };
-	
+
 	    return LatLng;
 	}();
-	
+
 	/**
 	 * Creates a LatLng from specified LatLng
 	 * @param  {LatLng} LatLng - specified LatLng
 	 * @return {LatLng} the LatLng specified
 	 */
+
+
 	LatLng.createFromLatLng = function (latlng) {
-		    return new LatLng(latlng.lat, latlng.lng);
-	};
+	    return new LatLng(latlng.lat, latlng.lng);
+		};
 
 /***/ },
 /* 17 */
@@ -1561,22 +1601,28 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Publisher_js__ = __webpack_require__(10);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__MapInformation_js__ = __webpack_require__(35);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Drawable; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Drawable = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Publisher = __webpack_require__(10);
+
+	var _MapInformation = __webpack_require__(35);
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	
-
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file
 	 * @copyright Michael Duve 2016
 	 */
-	var Drawable = function () {
+
+	var Drawable = exports.Drawable = function () {
 	    _createClass(Drawable, [{
 	        key: 'view',
 	        get: function get() {
@@ -1621,18 +1667,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function Drawable(_ref) {
 	        var id = _ref.id;
-	
+
 	        _classCallCheck(this, Drawable);
 
 	        this.id = id;
-	        this.info = new __WEBPACK_IMPORTED_MODULE_1__MapInformation_js__["a" /* MapInformation */](this.id);
-	        this.eventManager = new __WEBPACK_IMPORTED_MODULE_0__Publisher_js__["a" /* Publisher */](this.id);
+	        this.info = new _MapInformation.MapInformation(this.id);
+	        this.eventManager = new _Publisher.Publisher(this.id);
 	        return this;
 	    }
 
 	    Drawable.prototype.draw = function draw() {
 	        return this;
-		    };
+	    };
 
 	    return Drawable;
 	}();
@@ -1809,15 +1855,20 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Helper_js__ = __webpack_require__(4);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Point_js__ = __webpack_require__(6);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LatLng_js__ = __webpack_require__(16);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Bounds_js__ = __webpack_require__(34);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return DataEnrichment; });
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.DataEnrichment = undefined;
 
+	var _Helper = __webpack_require__(4);
 
+	var _Point = __webpack_require__(6);
 
+	var _LatLng = __webpack_require__(16);
+
+	var _Bounds = __webpack_require__(34);
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
@@ -1825,7 +1876,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @copyright Michael Duve 2016
 	 * @module DataEnrichment
 	 */
-	var DataEnrichment = {
+	var DataEnrichment = exports.DataEnrichment = {
 	    /**
 	     * enriches marker data with all needed data
 	     * @function
@@ -1838,12 +1889,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var enrichedData = [];
 
-	        __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].forEach(data, function (entry) {
+	        _Helper.Helper.forEach(data, function (entry) {
 	            entry = Object.assign({}, DataEnrichment.DATA_MARKER, entry);
 
-	            var offset = new __WEBPACK_IMPORTED_MODULE_1__Point_js__["a" /* Point */](entry.offset.x, entry.offset.y),
-	                latlng = new __WEBPACK_IMPORTED_MODULE_2__LatLng_js__["a" /* LatLng */](entry.position.lat, entry.position.lng),
-	                size = new __WEBPACK_IMPORTED_MODULE_1__Point_js__["a" /* Point */](entry.size.width, entry.size.height);
+	            var offset = new _Point.Point(entry.offset.x, entry.offset.y),
+	                latlng = new _LatLng.LatLng(entry.position.lat, entry.position.lng),
+	                size = new _Point.Point(entry.size.width, entry.size.height);
 
 	            enrichedData.push({
 	                offset: offset,
@@ -1860,23 +1911,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    label: function label(data) {
 	        var enrichedData = [];
 
-	        __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].forEach(data, function (entry) {
+	        _Helper.Helper.forEach(data, function (entry) {
 	            entry = Object.assign({}, DataEnrichment.DATA_LABEL, entry);
 
 	            if (entry.text) entry.text = Object.assign({}, DataEnrichment.DATA_LABEL_TEXT, entry.text);
 	            if (entry.icon) entry.icon = Object.assign({}, DataEnrichment.DATA_LABEL_ICON, entry.icon);
 
 	            if (typeof entry.position[0] === "number") {
-	                entry.position = new __WEBPACK_IMPORTED_MODULE_2__LatLng_js__["a" /* LatLng */](entry.position[0], entry.position[1]);
+	                entry.position = new _LatLng.LatLng(entry.position[0], entry.position[1]);
 	            } else {
-	                __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].forEach(entry.position, function (pos, i) {
-	                    entry.position[i] = new __WEBPACK_IMPORTED_MODULE_2__LatLng_js__["a" /* LatLng */](pos[0], pos[1]);
+	                _Helper.Helper.forEach(entry.position, function (pos, i) {
+	                    entry.position[i] = new _LatLng.LatLng(pos[0], pos[1]);
 	                });
 	            }
 
-	            if (entry.text) entry.text.offset = new __WEBPACK_IMPORTED_MODULE_1__Point_js__["a" /* Point */](entry.text.offset[0], entry.text.offset[1]);
-	            if (entry.icon) entry.icon.offset = new __WEBPACK_IMPORTED_MODULE_1__Point_js__["a" /* Point */](entry.icon.offset[0], entry.icon.offset[1]);
-	            if (entry.icon && typeof entry.icon.size !== "number") entry.icon.size = new __WEBPACK_IMPORTED_MODULE_1__Point_js__["a" /* Point */](entry.icon.size[0], entry.icon.size[1]);
+	            if (entry.text) entry.text.offset = new _Point.Point(entry.text.offset[0], entry.text.offset[1]);
+	            if (entry.icon) entry.icon.offset = new _Point.Point(entry.icon.offset[0], entry.icon.offset[1]);
+	            if (entry.icon && typeof entry.icon.size !== "number") entry.icon.size = new _Point.Point(entry.icon.size[0], entry.icon.size[1]);
 
 	            enrichedData.push(entry);
 	        });
@@ -1893,14 +1944,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    mapSettings: function mapSettings(data) {
 	        var enrichedData = Object.assign({}, DataEnrichment.MAP_SETTINGS, data),
-	            bounds = new __WEBPACK_IMPORTED_MODULE_3__Bounds_js__["a" /* Bounds */](new __WEBPACK_IMPORTED_MODULE_2__LatLng_js__["a" /* LatLng */](enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new __WEBPACK_IMPORTED_MODULE_2__LatLng_js__["a" /* LatLng */](enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
-	            center = new __WEBPACK_IMPORTED_MODULE_2__LatLng_js__["a" /* LatLng */](enrichedData.center.lat, enrichedData.center.lng);
+	            bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
+	            center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
 	        if (!enrichedData.limitToBounds) {
 	            enrichedData.limitToBounds = bounds;
 	        } else {
-	            if (!(enrichedData.limitToBounds instanceof __WEBPACK_IMPORTED_MODULE_3__Bounds_js__["a" /* Bounds */])) {
-	                enrichedData.limitToBounds = new __WEBPACK_IMPORTED_MODULE_3__Bounds_js__["a" /* Bounds */](new __WEBPACK_IMPORTED_MODULE_2__LatLng_js__["a" /* LatLng */](enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new __WEBPACK_IMPORTED_MODULE_2__LatLng_js__["a" /* LatLng */](enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
+	            if (!(enrichedData.limitToBounds instanceof _Bounds.Bounds)) {
+	                enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
 	            }
 	        }
 
@@ -1911,11 +1962,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    tooltip: function tooltip() {
 	        var data = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
+
 	        return Object.assign({}, DataEnrichment.TOOLTIP, data);
 	    }
 	};
-	
+
 	/**
 	 * Default initial values for a Marker
 	 * @type {Object}
@@ -1977,35 +2028,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	    "offset": [0, 0]
 	};
 	DataEnrichment.TOOLTIP = {
-		    image: "/plugin/hbs/image.hbs",
+	    image: "/plugin/hbs/image.hbs",
 	    text: "/plugin/hbs/text.hbs",
 	    headline: "/plugin/hbs/headline.hbs",
 	    crossheading: "/plugin/hbs/crossheading.hbs",
 	    iframe: "/plugin/hbs/iframe.hbs"
-	};
+		};
 
 /***/ },
 /* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LatLng_js__ = __webpack_require__(16);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Bounds; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Bounds = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _LatLng = __webpack_require__(16);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file represents boundaries of a geographic coordinate system
 	 * @copyright Michael Duve 2016
 	 */
-	var Bounds = function () {
+
+	var Bounds = exports.Bounds = function () {
 	  _createClass(Bounds, [{
 	    key: 'width',
-	
+
 
 	    /**
 	     * get width of boundaries
@@ -2019,7 +2076,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * get height of boundaries
 	     * @return {number} distance between north and south boundary
 	     */
-	
+
 	  }, {
 	    key: 'height',
 	    get: function get() {
@@ -2034,10 +2091,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	  }]);
-	
+
 	  function Bounds() {
-	    var northWest = arguments.length <= 0 || arguments[0] === undefined ? new __WEBPACK_IMPORTED_MODULE_0__LatLng_js__["a" /* LatLng */]() : arguments[0];
-	    var southEast = arguments.length <= 1 || arguments[1] === undefined ? new __WEBPACK_IMPORTED_MODULE_0__LatLng_js__["a" /* LatLng */]() : arguments[1];
+	    var northWest = arguments.length <= 0 || arguments[0] === undefined ? new _LatLng.LatLng() : arguments[0];
+	    var southEast = arguments.length <= 1 || arguments[1] === undefined ? new _LatLng.LatLng() : arguments[1];
 
 	    _classCallCheck(this, Bounds);
 
@@ -2046,7 +2103,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.se = southEast;
 	    return this;
 	  }
-		
+
 	  return Bounds;
 	}();
 
@@ -2055,43 +2112,49 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Events_js__ = __webpack_require__(3);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Helper_js__ = __webpack_require__(4);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Publisher_js__ = __webpack_require__(10);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LatLng_js__ = __webpack_require__(16);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Bounds_js__ = __webpack_require__(34);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Point_js__ = __webpack_require__(6);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Rectangle_js__ = __webpack_require__(14);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return MapInformation; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.MapInformation = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Events = __webpack_require__(3);
+
+	var _Helper = __webpack_require__(4);
+
+	var _Publisher = __webpack_require__(10);
+
+	var _LatLng = __webpack_require__(16);
+
+	var _Bounds = __webpack_require__(34);
+
+	var _Point = __webpack_require__(6);
+
+	var _Rectangle = __webpack_require__(14);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	
-
-
-
-
-	
-	
-	
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file
 	 * @copyright Michael Duve 2016
 	 */
-	var MapInformation = function () {
+
+	var MapInformation = exports.MapInformation = function () {
 	    _createClass(MapInformation, [{
 	        key: 'offsetToCenter',
 
-	
+
 	        /**
 	         * Returns the current distorted viewport
 	         */
 	        get: function get() {
 	            return (this.data.viewport.width - this.data.viewport.width * this.data.distortionFactor) / 2;
 	        }
-	
+
 	        /**
 	         * how many pixels per lat and lng
 	         * @return {Point} pixels per lat/lng
@@ -2100,14 +2163,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'pixelPerLatLng',
 	        get: function get() {
-	            return new __WEBPACK_IMPORTED_MODULE_5__Point_js__["a" /* Point */](this.data.view.width / this.data.bounds.width, this.data.view.height / this.data.bounds.height);
+	            return new _Point.Point(this.data.view.width / this.data.bounds.width, this.data.view.height / this.data.bounds.height);
 	        }
-	
+
 	        /**
 	         * @constructor
 	         * @return {MapInformation} singleton instance of MapInformation for chaining
 	         */
-	
+
 	    }]);
 
 	    function MapInformation() {
@@ -2118,17 +2181,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!MapInformation.instances[id]) {
 	            this.id = id;
 	            this.data = {
-	                center: new __WEBPACK_IMPORTED_MODULE_3__LatLng_js__["a" /* LatLng */](),
-	                view: new __WEBPACK_IMPORTED_MODULE_6__Rectangle_js__["a" /* Rectangle */](),
-	                viewport: new __WEBPACK_IMPORTED_MODULE_6__Rectangle_js__["a" /* Rectangle */](),
+	                center: new _LatLng.LatLng(),
+	                view: new _Rectangle.Rectangle(),
+	                viewport: new _Rectangle.Rectangle(),
 	                distortionFactor: 1,
 	                offsetToCenter: 0,
-	                bounds: new __WEBPACK_IMPORTED_MODULE_4__Bounds_js__["a" /* Bounds */](),
+	                bounds: new _Bounds.Bounds(),
 	                zoomFactor: 0,
 	                level: 0
 	            };
 	            this.data.offsetToCenter = this.offsetToCenter;
-	            this.eventManager = new __WEBPACK_IMPORTED_MODULE_2__Publisher_js__["a" /* Publisher */](this.id);
+	            this.eventManager = new _Publisher.Publisher(this.id);
 	            this.bindEvents();
 	            MapInformation.instances[id] = this;
 	        }
@@ -2138,21 +2201,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    MapInformation.prototype.get = function get() {
 	        return this.data;
 	    };
-	
+
 	    MapInformation.prototype.bindEvents = function bindEvents() {
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].MapInformation.UPDATE, this.update.bind(this));
+	        this.eventManager.subscribe(_Events.Events.MapInformation.UPDATE, this.update.bind(this));
 	    };
 
 	    MapInformation.prototype.update = function update() {
 	        var obj = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
+
 	        var oldData = this.data;
 	        this.data = Object.assign({}, this.data, obj);
 	        var centerUpdateDone = !oldData.center.equals(this.data.center) ? this.centerUpdated() : false;
 	        if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.viewportUpdated();
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].TileMap.DRAW);
+	        this.eventManager.publish(_Events.Events.TileMap.DRAW);
 	    };
-	
+
 	    /**
 	     * converts a Point to LatLng in view
 	     * @param  {Point} point - specified point to be converted
@@ -2162,22 +2225,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    MapInformation.prototype.convertPointToLatLng = function convertPointToLatLng(point) {
 	        point.divide(this.pixelPerLatLng.x, this.pixelPerLatLng.y);
-	        return new __WEBPACK_IMPORTED_MODULE_3__LatLng_js__["a" /* LatLng */](this.data.bounds.nw.lat - point.y, point.x + this.data.bounds.nw.lng);
+	        return new _LatLng.LatLng(this.data.bounds.nw.lat - point.y, point.x + this.data.bounds.nw.lng);
 	    };
-	
+
 	    /**
 	     * converts a LatLng to Point in view
 	     * @param  {LatLng} latlng - specified latlng to be converted
 	     * @return {Point} presentation of point in pixel system
 	     */
-	
-	
+
+
 	    MapInformation.prototype.convertLatLngToPoint = function convertLatLngToPoint(latlng) {
 	        var relativePosition = this.data.bounds.nw.clone.substract(latlng);
 	        relativePosition.multiply(this.pixelPerLatLng.y, this.pixelPerLatLng.x);
-	        return new __WEBPACK_IMPORTED_MODULE_5__Point_js__["a" /* Point */](relativePosition.lng, relativePosition.lat).abs;
+	        return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
 	    };
-	
+
 	    MapInformation.prototype.centerUpdated = function centerUpdated() {
 	        this.data.distortionFactor = this.getDistortionFactorForLatitude(this.data.center);
 	        this.data.offsetToCenter = this.offsetToCenter;
@@ -2193,7 +2256,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.data.offsetToCenter = this.offsetToCenter;
 	        return true;
 	    };
-	
+
 	    /**
 	     * get distortion factor for specified latitude
 	     * @param  {LatLng} latlng - lat/lng position
@@ -2202,18 +2265,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    MapInformation.prototype.getDistortionFactorForLatitude = function getDistortionFactorForLatitude(latlng) {
-	        return Math.cos(__WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].toRadians(latlng.lat));
+	        return Math.cos(_Helper.Helper.toRadians(latlng.lat));
 	    };
 
 	    /**
 	     * destroys singleton instance
 	     */
 
-	
+
 	    MapInformation.prototype.destroy = function destroy() {
 	        MapInformation.instances[this.id] = null;
 	    };
-		
+
 	    return MapInformation;
 	}();
 
@@ -2221,7 +2284,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * singleton instance wrapper
 	 * @type {Object}
 	 */
-	MapInformation.instances = {};
+
+
+		MapInformation.instances = {};
 
 /***/ },
 /* 36 */
@@ -2295,11 +2360,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 39 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	"use strict";
-	
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return StateHandler; });var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -2310,11 +2380,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @file State pattern
 	 * @copyright Michael Duve 2016
 	 */
-	var StateHandler = function () {
+
+	var StateHandler = exports.StateHandler = function () {
 	    _createClass(StateHandler, [{
 	        key: 'current',
 
-	
+
 	        /**
 	         * get current state
 	         * @return {Object} current state from STATES-array
@@ -2322,73 +2393,73 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	            return this.states[this.i];
 	        }
-	
+
 	        /**
 	         * get number of states
 	         * @return {number} number of states
 	         */
-	
+
 	    }, {
 	        key: 'length',
 	        get: function get() {
 	            return this.states.length;
 	        }
-	
+
 	        /**
 	         * @constructor
 	         * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
 	         * @return {StateHandler} instance of StateHandler for chaining
 	         */
-	
+
 	    }]);
-	
+
 	    function StateHandler() {
 	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{ value: 0, description: 'Default' }] : arguments[0];
-	
+
 	        _classCallCheck(this, StateHandler);
-	
+
 	        this.states = states_array;
 	        this.i = 0;
 	        this.lastState = this.current;
 	        return this;
 	    }
-	
+
 	    /**
 	     * get the next element
 	     * @return {StateHandler} instance of StateHandler for chaining
 	     */
 
-	
+
 	    StateHandler.prototype.next = function next() {
 	        this.lastState = this.current;
 	        if (this.hasNext()) this.i++;
 	        return this;
 	    };
-	
+
 	    /**
 	     * get the previous element
 	     * @return {StateHandler} instance of StateHandler for chaining
 	     */
 
-	
+
 	    StateHandler.prototype.previous = function previous() {
 	        this.lastState = this.current;
 	        if (this.hasPrevious()) this.i--;
 	        return this;
 	    };
-	
+
 	    /**
 	     * change the state to specified state
 	     * @param {number} state - index of state in array
 	     * @return {StateHandler} instance of StateHandler for chaining
 	     */
 
-	
+
 	    StateHandler.prototype.changeTo = function changeTo(state) {
 	        if (state >= 0 && state < this.length) this.i = state;
 	        return this;
 	    };
-	
+
 	    /**
 	     * change the state to specified value of specified property
 	     * @param {object} prop - specified property to be changed
@@ -2396,19 +2467,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {StateHandler} instance of StateHandler for chaining
 	     */
 
-	
+
 	    StateHandler.prototype.changeToValue = function changeToValue(prop, value) {
 	        var _iteratorNormalCompletion = true;
 	        var _didIteratorError = false;
 	        var _iteratorError = undefined;
-	
+
 	        try {
 	            for (var _iterator = this.states[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	                var _step$value = _slicedToArray(_step.value, 2);
-	
+
 	                var i = _step$value[0];
 	                var element = _step$value[1];
-	
+
 	                if (value === element[prop]) {
 	                    this.i = i;
 	                    break;
@@ -2428,31 +2499,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	        }
-	
+
 	        return this;
 	    };
-	
+
 	    /**
 	     * checks if there is a next element
 	     * @return {Boolean} wheter there is a next state or not
 	     */
 
-	
+
 	    StateHandler.prototype.hasNext = function hasNext() {
 	        return this.i < this.length - 1;
 	    };
-	
+
 	    /**
 	     * checks if there is a previous element
 	     * @return {Boolean} wheter there is a previous state or not
 	     */
 
-	
+
 	    StateHandler.prototype.hasPrevious = function hasPrevious() {
 	        return this.i > 0;
 	    };
-	
-		    return StateHandler;
+
+	    return StateHandler;
 	}();
 
 /***/ },
@@ -2682,23 +2753,29 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Point_js__ = __webpack_require__(6);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Helper_js__ = __webpack_require__(4);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Interact; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Interact = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*global PointerEvent,MSPointerEvent*/
+
+
+	var _Point = __webpack_require__(6);
+
+	var _Helper = __webpack_require__(4);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/*global PointerEvent,MSPointerEvent*/
-	
-
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file implements interaction like panning, zooming, flicking and more, cross-browser and cross-device
 	 * @copyright Michael Duve 2016
 	 */
-	var Interact = function () {
+
+	var Interact = exports.Interact = function () {
 	    _createClass(Interact, [{
 	        key: 'timeToLastMove',
 
@@ -2714,7 +2791,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * get time difference to start
 	         * @return {number} difference
 	         */
-	
+
 	    }, {
 	        key: 'time',
 	        get: function get() {
@@ -2764,12 +2841,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param {string} settings.events.scroll = ("wheel" || "mousewhell" || "DOMMouseScroll") - settings all scroll eventnames
 	         * @return {Interact} new instance
 	         */
-	
+
 	    }]);
 
 	    function Interact() {
 	        var settings = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
+
 	        _classCallCheck(this, Interact);
 
 	        this.settings = Object.assign(this.getDefaultSettings(), settings);
@@ -2783,7 +2860,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * get the default settings
 	     * @return {Object} settings
 	     */
-	
+
 
 	    Interact.prototype.getDefaultSettings = function getDefaultSettings() {
 	        return {
@@ -2812,7 +2889,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * get default callbacks
 	     * @return {Object} callbacks
 	     */
-	
+
 
 	    Interact.prototype.getDefaultCallbacks = function getDefaultCallbacks() {
 	        return {
@@ -2833,10 +2910,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * get default eventnames
 	     * @return {Object} eventnames
 	     */
-	
+
 
 	    Interact.prototype.getDefaultEventNames = function getDefaultEventNames() {
-	        var isIE = __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].isIE();
+	        var isIE = _Helper.Helper.isIE();
 	        return {
 	            start: {
 	                touch: isIE ? "MSPointerDown pointerdown" : "touchstart",
@@ -2854,7 +2931,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                touch: isIE ? "MSPointerLeave pointerleave" : "touchleave",
 	                mouse: isIE ? "MSPointerLeave pointerleave" : "mouseleave"
 	            },
-	            scroll: __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].scrollEvent()
+	            scroll: _Helper.Helper.scrollEvent()
 	        };
 	    };
 
@@ -2862,7 +2939,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * get default data
 	     * @return {Object} data
 	     */
-	
+
 
 	    Interact.prototype.getDefaultData = function getDefaultData() {
 	        return {
@@ -2873,8 +2950,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            distance: null,
 	            distanceLast: null,
 	            actionLast: null,
-	            direction: new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */](),
-	            velocity: new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */](),
+	            direction: new _Point.Point(),
+	            velocity: new _Point.Point(),
 	            directions: [],
 	            zoom: 0,
 	            difference: null,
@@ -2896,12 +2973,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Boolean|string} viewport - specified viewport option
 	     * @return {Interact} Returns this instance
 	     */
-	
+
 
 	    Interact.prototype.handleViewport = function handleViewport(viewport) {
 	        if (typeof viewport !== "string") viewport = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
-	        var metaViewInHead = __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].find("meta[name=viewport]");
-	        var viewportMeta = metaViewInHead ? metaViewInHead : __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].find("head").appendChild(document.createElement("head").setAttribute("name", "viewport"));
+	        var metaViewInHead = _Helper.Helper.find("meta[name=viewport]");
+	        var viewportMeta = metaViewInHead ? metaViewInHead : _Helper.Helper.find("head").appendChild(document.createElement("head").setAttribute("name", "viewport"));
 	        viewportMeta.setAttribute("content", viewport);
 	        return this;
 	    };
@@ -2911,18 +2988,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object|string} container - Container, either string or dom-object
 	     * @return {Interact} Returns this instance
 	     */
-	
+
 
 	    Interact.prototype.init = function init(container) {
-	        this.container = typeof container === "string" ? __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].find(container) : container;
+	        this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
 	        var css = {
 	            "-ms-touch-action": "none",
 	            "touch-action": "none",
 	            "-ms-content-zooming": "none"
 	        };
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].css(this.container, css);
+	        _Helper.Helper.css(this.container, css);
 	        for (var i = 0; i < this.container.childNodes; i++) {
-	            __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].css(this.container.childNodes[i], css);
+	            _Helper.Helper.css(this.container.childNodes[i], css);
 	        }
 	        this.bindEvents();
 	        return this;
@@ -2932,14 +3009,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * binds all needed events
 	     * @return {Interact} Returns this instance
 	     */
-	
+
 
 	    Interact.prototype.bindEvents = function bindEvents() {
-	        if (__WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].isIE()) {
+	        if (_Helper.Helper.isIE()) {
 	            this.bindIEEvents();
 	        } else {
-	            if (__WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].isTouch()) this.bindTouchEvents();
-	            if (__WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].isMouse()) this.bindMouseEvents();
+	            if (_Helper.Helper.isTouch()) this.bindTouchEvents();
+	            if (_Helper.Helper.isMouse()) this.bindMouseEvents();
 	        }
 	        return this;
 	    };
@@ -2948,12 +3025,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * binds all needed events for IE
 	     * @return {Interact} Returns this instance
 	     */
-	
+
 
 	    Interact.prototype.bindIEEvents = function bindIEEvents() {
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
 	        this.bindTouchEvents();
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, "contextmenu", function (e) {
+	        _Helper.Helper.addListener(this.container, "contextmenu", function (e) {
 	            return e.preventDefault();
 	        }, false);
 	        return this;
@@ -2963,13 +3040,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * binds all needed events for touch devices
 	     * @return {Interact} Returns this instance
 	     */
-	
+
 
 	    Interact.prototype.bindTouchEvents = function bindTouchEvents() {
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, this.settings.events.start.touch, this.startHandler.bind(this));
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, this.settings.events.move.touch, this.moveHandler.bind(this));
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, this.settings.events.end.touch, this.endHandler.bind(this));
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, this.settings.events.leave.touch, this.endHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.start.touch, this.startHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.move.touch, this.moveHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.end.touch, this.endHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.leave.touch, this.endHandler.bind(this));
 	        return this;
 	    };
 
@@ -2977,14 +3054,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * binds all needed events for mouse devices
 	     * @return {Interact} Returns this instance
 	     */
-	
+
 
 	    Interact.prototype.bindMouseEvents = function bindMouseEvents() {
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, this.settings.events.start.mouse, this.startHandler.bind(this));
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, this.settings.events.move.mouse, this.moveHandler.bind(this));
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, this.settings.events.end.mouse, this.endHandler.bind(this));
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].addListener(this.container, this.settings.events.leave.mouse, this.endHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.start.mouse, this.startHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.move.mouse, this.moveHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.end.mouse, this.endHandler.bind(this));
+	        _Helper.Helper.addListener(this.container, this.settings.events.leave.mouse, this.endHandler.bind(this));
 	        return this;
 	    };
 
@@ -2993,7 +3070,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - original event of Vanilla JS
 	     * @return {Object} normalized Event
 	     */
-	
+
 
 	    Interact.prototype.preHandle = function preHandle(event) {
 	        if (this.settings.stopPropagation) event.stopPropagation();
@@ -3006,7 +3083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - Event-Object
 	     * @return {Boolean} always returns false
 	     */
-	
+
 
 	    Interact.prototype.scrollHandler = function scrollHandler(event) {
 	        event = event || window.event;
@@ -3033,7 +3110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - VanillaJS-Event-Object
 	     * @return {number} normalized wheel delta
 	     */
-	
+
 
 	    Interact.prototype.normalizeWheelDelta = function normalizeWheelDelta(e) {
 	        var o = e.originalEvent || e,
@@ -3043,13 +3120,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var d = o.detail,
 	            f = void 0;
-	
+
 	        // Normalize delta
 	        d = d ? w && (f = w / d) ? d / f : -d / 1.35 : w / 120;
 	        // Quadratic scale if |d| > 1
 	        d = d < 1 ? d < -1 ? (-Math.pow(d, 2) - n1) / n : d : (Math.pow(d, 2) + n1) / n;
 	        // Delta *should* not be greater than 2...
-	        return __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].clamp(d / 2, -1, 1);
+	        return _Helper.Helper.clamp(d / 2, -1, 1);
 	    };
 
 	    /**
@@ -3057,10 +3134,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - original event of Vanilla JS
 	     * @return {Boolean} Whether event is PointerEvent
 	     */
-	
+
 
 	    Interact.prototype.isPointerEvent = function isPointerEvent(e) {
-	        return __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].isIE() && (e instanceof MSPointerEvent || e instanceof PointerEvent);
+	        return _Helper.Helper.isIE() && (e instanceof MSPointerEvent || e instanceof PointerEvent);
 	    };
 
 	    /**
@@ -3068,14 +3145,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - Event-Object
 	     * @return {Object} calculated data
 	     */
-	
+
 
 	    Interact.prototype.calculateStart = function calculateStart(e) {
 	        var data = {
 	            multitouch: false,
 	            distance: 0,
 	            down: true,
-	            positionStart: new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */]()
+	            positionStart: new _Point.Point()
 	        };
 	        // mouse is used
 	        if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
@@ -3096,7 +3173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - Event-Object
 	     * @return {Object} manipulated enriched data
 	     */
-	
+
 
 	    Interact.prototype.handlePointerEventStart = function handlePointerEventStart(data, e) {
 	        this.pointerArray[e.pointerId] = e;
@@ -3110,7 +3187,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - Event-Object
 	     * @return {Object} manipulated enriched data
 	     */
-	
+
 
 	    Interact.prototype.handleTouchEventStart = function handleTouchEventStart(data, e) {
 	        return this.handleTouchEvent(data, e, this.handleSingletouchStart.bind(this), this.handleMultitouchStart.bind(this));
@@ -3120,7 +3197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * get array of pointers (IE)
 	     * @return {Object} array of pointerIDs
 	     */
-	
+
 
 	    Interact.prototype.getPointerArray = function getPointerArray() {
 	        var pointerPos = [];
@@ -3137,7 +3214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} positionsArray - array of positions
 	     * @return {Object} manipulated enriched data
 	     */
-	
+
 
 	    Interact.prototype.handleMultitouchStart = function handleMultitouchStart(positionsArray) {
 	        var pos1 = this.getRelativePosition(positionsArray[0]),
@@ -3154,7 +3231,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Point} position - position of touch
 	     * @return {Object} manipulated enriched data
 	     */
-	
+
 
 	    Interact.prototype.handleSingletouchStart = function handleSingletouchStart(position) {
 	        return {
@@ -3167,7 +3244,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {String} action - last action made
 	     * @return {Interact} instance of Interact for chaining
 	     */
-	
+
 
 	    Interact.prototype.takeActionStart = function takeActionStart(action) {
 	        switch (action) {
@@ -3194,7 +3271,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - Event-Object
 	     * @return {Boolean} always returns false
 	     */
-	
+
 
 	    Interact.prototype.startHandler = function startHandler(event) {
 	        if (event.button && event.button !== 0) {
@@ -3214,7 +3291,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} timeout - timeout object to be cleared
 	     * @return {Interact} instance of Interact for chaining
 	     */
-	
+
 
 	    Interact.prototype.clearTimeouts = function clearTimeouts(timeout) {
 	        if (timeout) {
@@ -3228,13 +3305,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - Event-Object
 	     * @return {Object} calculated data
 	     */
-	
+
 
 	    Interact.prototype.calculateMove = function calculateMove(e) {
 	        var data = {
 	            moved: true,
 	            actionLast: "moved",
-	            positionMove: new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */]()
+	            positionMove: new _Point.Point()
 	        };
 
 	        if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
@@ -3254,7 +3331,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - Event-Object
 	     * @return {Object} manipulated enriched data
 	     */
-	
+
 
 	    Interact.prototype.handlePointerEventMove = function handlePointerEventMove(data, e) {
 	        this.pointerArray[e.pointerId] = e;
@@ -3272,7 +3349,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - Event-Object
 	     * @return {Object} manipulated enriched data
 	     */
-	
+
 
 	    Interact.prototype.handleTouchEventMove = function handleTouchEventMove(data, e) {
 	        return this.handleTouchEvent(data, e, this.handleSingletouchMove.bind(this), this.handleMultitouchMove.bind(this));
@@ -3288,7 +3365,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} positionsArray - array of positions
 	     * @return {Object} manipulated enriched data
 	     */
-	
+
 
 	    Interact.prototype.handleMultitouchMove = function handleMultitouchMove(positionsArray) {
 	        var pointerPos1 = this.getRelativePosition(positionsArray[0]);
@@ -3306,7 +3383,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Point} position - position
 	     * @return {Object} manipulated enriched data
 	     */
-	
+
 
 	    Interact.prototype.handleSingletouchMove = function handleSingletouchMove(position) {
 	        var pos = this.getRelativePosition(position);
@@ -3322,8 +3399,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - Event-Object
 	     * @return {Boolean} always returns false
 	     */
-	
-	
+
+
 	    Interact.prototype.moveHandler = function moveHandler(event) {
 	        // if touchstart event was not fired
 	        if (!this.data.down || this.data.pinched) return false;
@@ -3352,7 +3429,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * handles pinch and zoom
 	     * @return {Interact} instance of Interact for chaining
 	     */
-	
+
 
 	    Interact.prototype.handlePinchAndZoom = function handlePinchAndZoom() {
 	        if (!this.data.distanceLast) this.data.distanceLast = this.data.distance;
@@ -3371,10 +3448,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - Event-Object
 	     * @return {Boolean} Whether or not position has changed
 	     */
-	
+
 
 	    Interact.prototype.positionDidNotChange = function positionDidNotChange(e) {
-	        return __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].isIE() && (this.getRelativePosition(e).equals(this.data.positionLast) || this.getRelativePosition(e).equals(this.data.positionStart)) || !__WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].isIE() && __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].isTouch() && this.getRelativePosition(e[0]).equals(this.data.positionLast);
+	        return _Helper.Helper.isIE() && (this.getRelativePosition(e).equals(this.data.positionLast) || this.getRelativePosition(e).equals(this.data.positionStart)) || !_Helper.Helper.isIE() && _Helper.Helper.isTouch() && this.getRelativePosition(e[0]).equals(this.data.positionLast);
 	    };
 
 	    /**
@@ -3382,11 +3459,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - Event-Object
 	     * @return {Object} calculated data
 	     */
-	
+
 
 	    Interact.prototype.calculateEnd = function calculateEnd(e) {
 	        var data = {
-	            positionEnd: new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */]()
+	            positionEnd: new _Point.Point()
 	        };
 
 	        if (e instanceof MouseEvent && !this.isPointerEvent(e)) {
@@ -3410,7 +3487,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} position - position
 	     * @return {Object} manipulated enriched data
 	     */
-	
+
 
 	    Interact.prototype.handleSingletouchEnd = function handleSingletouchEnd(position) {
 	        return {
@@ -3423,7 +3500,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {String} action - last action made
 	     * @return {Interact} instance of Interact for chaining
 	     */
-	
+
 
 	    Interact.prototype.takeActionEnd = function takeActionEnd(action) {
 	        switch (action) {
@@ -3452,7 +3529,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {Boolean} always returns false
 	     */
 
-	
+
 	    Interact.prototype.endHandler = function endHandler(event) {
 
 	        var e = this.preHandle(event);
@@ -3460,7 +3537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.data.timeEnd = event.timeStamp;
 
 	        this.clearTimeouts(this.data.timeoutHold);
-	
+
 	        this.data = Object.assign({}, this.data, this.calculateEnd(e));
 
 	        // called only when not moved
@@ -3487,7 +3564,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * handles flick and swipe events
 	     * @return {Interact} instance of Interact for chaining
 	     */
-	
+
 
 	    Interact.prototype.handleSwipeAndFlick = function handleSwipeAndFlick() {
 	        if (this.settings.callbacks.swipe || this.settings.callbacks.flick) {
@@ -3516,7 +3593,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {e} e - Event-Object
 	     * @return {Interact} instance of Interact for chaining
 	     */
-	
+
 
 	    Interact.prototype.handleMultitouchEnd = function handleMultitouchEnd(e) {
 	        this.data.multitouch = false;
@@ -3546,7 +3623,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * balances pinching after release of finger
 	     * @return {Interact} instance of Interact for chaining
 	     */
-	
+
 
 	    Interact.prototype.pinchBalance = function pinchBalance() {
 	        var _this = this;
@@ -3566,7 +3643,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Point} direction - the specified direction in pixel
 	     * @return {string[]} returns an array representing the directions as strings
 	     */
-	
+
 
 	    Interact.prototype.getSwipeDirections = function getSwipeDirections(direction) {
 	        return [direction.x < 0 ? "left" : direction.x > 0 ? "right" : "none", direction.y < 0 ? "up" : direction.y > 0 ? "down" : "none"];
@@ -3580,7 +3657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {Boolean} holdTimeout - if true, a different variable will be used
 	     * @return {Interact} Returns this instance
 	     */
-	
+
 
 	    Interact.prototype.setTimeoutForEvent = function setTimeoutForEvent(callback, timeout, args, holdTimeout) {
 	        if (holdTimeout) {
@@ -3597,7 +3674,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {object[]} args - arguments for the function
 	     * @return {Interact} Returns this instance
 	     */
-	
+
 
 	    Interact.prototype.eventCallback = function eventCallback(callback, args) {
 	        if (callback && typeof callback === "function") callback(args);
@@ -3610,12 +3687,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - event object
 	     * @return {Point} calculated relative position
 	     */
-	
+
 
 	    Interact.prototype.getRelativePosition = function getRelativePosition(e) {
 	        var clientBounds = this.container.getBoundingClientRect(),
-	            pos = new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */](e.clientX, e.clientY),
-	            bounds = new __WEBPACK_IMPORTED_MODULE_0__Point_js__["a" /* Point */](clientBounds.left, clientBounds.top);
+	            pos = new _Point.Point(e.clientX, e.clientY),
+	            bounds = new _Point.Point(clientBounds.left, clientBounds.top);
 	        return pos.substract(bounds).divide(clientBounds.width, clientBounds.height);
 	    };
 
@@ -3624,7 +3701,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - event object
 	     * @return {Point} calculated absolute position
 	     */
-	
+
 
 	    Interact.prototype.getAbsolutePosition = function getAbsolutePosition(point) {
 	        var clientBounds = this.container.getBoundingClientRect();
@@ -3636,7 +3713,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - event object
 	     * @return {string[]} an array with scroll directions
 	     */
-	
+
 
 	    Interact.prototype.getScrollDirection = function getScrollDirection(event) {
 	        var axis = parseInt(event.axis, 10);
@@ -3654,7 +3731,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - Vanilla JS event
 	     * @return {Boolean} Whether or not direction is down
 	     */
-	
+
 
 	    Interact.prototype.isDownDirection = function isDownDirection(axis, event) {
 	        return event.deltaY > 0 || !event.deltaY && event.wheelDeltaY < 0 || axis === 2 && event.detail > 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) < 0;
@@ -3666,7 +3743,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - Vanilla JS event
 	     * @return {Boolean} Whether or not direction is up
 	     */
-	
+
 
 	    Interact.prototype.isUpDirection = function isUpDirection(axis, event) {
 	        return event.deltaY < 0 || !event.deltaY && event.wheelDeltaY > 0 || axis === 2 && event.detail < 0 || Math.max(-1, Math.min(1, event.wheelDelta || -event.detail)) > 0;
@@ -3678,7 +3755,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - Vanilla JS event
 	     * @return {Boolean} Whether or not direction is right
 	     */
-	
+
 
 	    Interact.prototype.isRightDirection = function isRightDirection(axis, event) {
 	        return event.deltaX > 0 || !event.deltaX && event.wheelDeltaX > 0 || axis === 1 && event.detail > 0;
@@ -3690,7 +3767,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} event - Vanilla JS event
 	     * @return {Boolean} Whether or not direction is left
 	     */
-	
+
 
 	    Interact.prototype.isLeftDirection = function isLeftDirection(axis, event) {
 	        return event.deltaX < 0 || !event.deltaX && event.wheelDeltaX < 0 || axis === 1 && event.detail < 0;
@@ -3701,12 +3778,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} e - event object
 	     * @return {Object} new fixed and optimized event
 	     */
-	
+
 
 	    Interact.prototype.getEvent = function getEvent(e) {
 	        if (e.touches && e.touches.length === 0) return e.changedTouches || e;
 	        return e.touches || e.changedTouches || e;
-		    };
+	    };
 
 	    return Interact;
 	}();
@@ -3716,48 +3793,54 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Helper_js__ = __webpack_require__(4);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Events_js__ = __webpack_require__(3);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Point_js__ = __webpack_require__(6);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Publisher_js__ = __webpack_require__(10);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__StateHandler_js__ = __webpack_require__(39);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Rectangle_js__ = __webpack_require__(14);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__View_js__ = __webpack_require__(64);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Marker_js__ = __webpack_require__(60);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__DataEnrichment_js__ = __webpack_require__(33);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ToolTip_js__ = __webpack_require__(63);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Label_js__ = __webpack_require__(58);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__MarkerClusterer_js__ = __webpack_require__(61);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__MapInformation_js__ = __webpack_require__(35);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return TileMap; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.TileMap = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Helper = __webpack_require__(4);
+
+	var _Events = __webpack_require__(3);
+
+	var _Point = __webpack_require__(6);
+
+	var _Publisher = __webpack_require__(10);
+
+	var _StateHandler = __webpack_require__(39);
+
+	var _Rectangle = __webpack_require__(14);
+
+	var _View = __webpack_require__(64);
+
+	var _Marker = __webpack_require__(60);
+
+	var _DataEnrichment = __webpack_require__(33);
+
+	var _ToolTip = __webpack_require__(63);
+
+	var _Label = __webpack_require__(58);
+
+	var _MarkerClusterer = __webpack_require__(61);
+
+	var _MapInformation = __webpack_require__(35);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	
-
-
-
-
-	
-	
-	
-
-
-	
-
-
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file Represents a map with its different levels of zooms and markers
 	 * @copyright Michael Duve 2016
 	 */
-	var TileMap = function () {
+
+	var TileMap = exports.TileMap = function () {
 	    _createClass(TileMap, [{
 	        key: 'left',
 
-	
+
 	        /**
 	         * Returns left offset of container
 	         * @return {number} - left offset of container
@@ -3770,7 +3853,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Returns top offset of container
 	         * @return {number} - top offset of container
 	         */
-	
+
 	    }, {
 	        key: 'top',
 	        get: function get() {
@@ -3781,18 +3864,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Returns width of container
 	         * @return {number} - width of container
 	         */
-	
+
 	    }, {
 	        key: 'width',
 	        get: function get() {
 	            return this.container.getBoundingClientRect().width;
 	        }
-	
+
 	        /**
 	         * Returns height of container
 	         * @return {number} - height of container
 	         */
-	
+
 	    }, {
 	        key: 'height',
 	        get: function get() {
@@ -3801,14 +3884,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'viewport',
 	        get: function get() {
-	            return new __WEBPACK_IMPORTED_MODULE_5__Rectangle_js__["a" /* Rectangle */](this.left, this.top, this.width, this.height);
+	            return new _Rectangle.Rectangle(this.left, this.top, this.width, this.height);
 	        }
 	    }, {
 	        key: 'pixelPerLatLng',
 	        get: function get() {
 	            this.levelHandler.current.instance.pixelPerLatLng();
 	        }
-	
+
 	        /**
 	         * gets data of current zoom level
 	         * @return {Object} data for current level as json
@@ -3824,7 +3907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	            return this.levelHandler.current.instance;
 	        }
-	
+
 	        /**
 	         * @constructor
 	         * @param  {Object} container = null - jQuery-object holding the container
@@ -3832,9 +3915,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {Object} settings={} - json object representing settings of TileMap
 	         * @return {TileMap} instance of TileMap for chaining
 	         */
-	
+
 	    }]);
-	
+
 	    function TileMap(_ref) {
 	        var _this = this;
 
@@ -3853,23 +3936,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.id = id;
 
-	        this.info = new __WEBPACK_IMPORTED_MODULE_12__MapInformation_js__["a" /* MapInformation */](this.id);
-	        this.eventManager = new __WEBPACK_IMPORTED_MODULE_3__Publisher_js__["a" /* Publisher */](this.id);
+	        this.info = new _MapInformation.MapInformation(this.id);
+	        this.eventManager = new _Publisher.Publisher(this.id);
 
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            viewport: this.viewport
 	        });
 
-	        this.imgData = tilesData[__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.IMG_DATA_NAME];
-	        this.markerData = tilesData[__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.MARKER_DATA_NAME];
-	        this.labelData = tilesData[__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.LABEL_DATA_NAME];
+	        this.imgData = tilesData[_Events.Events.TileMap.IMG_DATA_NAME];
+	        this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
+	        this.labelData = tilesData[_Events.Events.TileMap.LABEL_DATA_NAME];
 
 	        this.settings = settings;
 
-	        this.stateHandler = new __WEBPACK_IMPORTED_MODULE_4__StateHandler_js__["a" /* StateHandler */]([{ value: 0, description: "start" }, { value: 1, description: "view-initialized" }, { value: 2, description: "marker-initialized" }, { value: 3, description: "tooltip-initialized" }]);
+	        this.stateHandler = new _StateHandler.StateHandler([{ value: 0, description: "start" }, { value: 1, description: "view-initialized" }, { value: 2, description: "marker-initialized" }, { value: 3, description: "tooltip-initialized" }]);
 
 	        this.templates = this.settings.tooltip ? this.settings.tooltip.templates : {};
-	        this.templates = __WEBPACK_IMPORTED_MODULE_8__DataEnrichment_js__["a" /* DataEnrichment */].tooltip(this.templates);
+	        this.templates = _DataEnrichment.DataEnrichment.tooltip(this.templates);
 
 	        this.levels = [];
 	        this.clusterHandlingTimeout = null;
@@ -3878,7 +3961,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.deltaTiming = 1.0;
 	        this.bestDeltaTiming = 1000.0 / 60.0;
 
-	        this.velocity = new __WEBPACK_IMPORTED_MODULE_2__Point_js__["a" /* Point */]();
+	        this.velocity = new _Point.Point();
 	        this.drawIsNeeded = false;
 
 	        this.initial = {
@@ -3890,7 +3973,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.initializeCanvas();
 
-	        __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].forEach(this.imgData, function (element, i) {
+	        _Helper.Helper.forEach(this.imgData, function (element, i) {
 	            var currentLevel = {
 	                value: element,
 	                level: i,
@@ -3899,7 +3982,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this.levels.push(currentLevel);
 	        });
 
-	        this.levelHandler = new __WEBPACK_IMPORTED_MODULE_4__StateHandler_js__["a" /* StateHandler */](this.levels);
+	        this.levelHandler = new _StateHandler.StateHandler(this.levels);
 	        this.levelHandler.changeTo(this.settings.level);
 
 	        this.view.init();
@@ -3919,11 +4002,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * resets view to initial state
 	     */
-	
-	
+
+
 	    TileMap.prototype.reset = function reset() {
 	        if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            level: this.initial.level,
 	            zoomFactor: this.initial.zoom,
 	            view: this.levelHandler.current.instance.view
@@ -3938,8 +4021,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.labelData = this.enrichLabelData(this.labelData);
 	        this.labels = [];
-	        __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].forEach(this.labelData, function (label) {
-	            var currentLabel = new __WEBPACK_IMPORTED_MODULE_10__Label_js__["a" /* Label */]({
+	        _Helper.Helper.forEach(this.labelData, function (label) {
+	            var currentLabel = new _Label.Label({
 	                context: _this2.canvasContext,
 	                id: _this2.id,
 	                settings: label
@@ -3959,9 +4042,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    TileMap.prototype.createViewFromData = function createViewFromData(bounds, center, data, zoom) {
-	        return new __WEBPACK_IMPORTED_MODULE_6__View_js__["a" /* View */]({
-	            viewport: new __WEBPACK_IMPORTED_MODULE_5__Rectangle_js__["a" /* Rectangle */](this.left, this.top, this.width, this.height),
-	            currentView: new __WEBPACK_IMPORTED_MODULE_5__Rectangle_js__["a" /* Rectangle */](0, 0, data.dimensions.width, data.dimensions.height),
+	        return new _View.View({
+	            viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
+	            currentView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
 	            bounds: bounds,
 	            center: center,
 	            initialCenter: this.initial.center,
@@ -3980,19 +4063,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * reposition marker container
 	     * @return {View} instance of View for chaining
 	     */
-	
+
 
 	    TileMap.prototype.repositionMarkerContainer = function repositionMarkerContainer() {
 	        if (this.markerContainer) {
 	            var newSize = this.view.view.getDistortedRect(this.view.distortionFactor);
 	            var left = (newSize.left + this.view.offsetToCenter).toFixed(4);
 	            var top = newSize.top.toFixed(4);
-	            __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].css(this.markerContainer, {
+	            _Helper.Helper.css(this.markerContainer, {
 	                "width": newSize.width + 'px',
 	                "height": newSize.height + 'px',
 	                "transform": 'translate3d(' + left + 'px, ' + top + 'px, 0px)',
 	                "-ms-transform": 'translate(' + left + 'px, ' + top + 'px)'
-	
+
 	            });
 	        }
 	        return this;
@@ -4006,11 +4089,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    TileMap.prototype.enrichMarkerData = function enrichMarkerData(markerData) {
-	        return __WEBPACK_IMPORTED_MODULE_8__DataEnrichment_js__["a" /* DataEnrichment */].marker(markerData);
+	        return _DataEnrichment.DataEnrichment.marker(markerData);
 	    };
 
 	    TileMap.prototype.enrichLabelData = function enrichLabelData(labelData) {
-	        return __WEBPACK_IMPORTED_MODULE_8__DataEnrichment_js__["a" /* DataEnrichment */].label(labelData);
+	        return _DataEnrichment.DataEnrichment.label(labelData);
 	    };
 
 	    /**
@@ -4018,17 +4101,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} markerData - data of all markers
 	     * @return {TileMap} instance of TileMap for chaining
 	     */
-	
-	
+
+
 	    TileMap.prototype.initializeMarkers = function initializeMarkers() {
 	        var _this3 = this;
-	
+
 	        if (this.markerData && this.markerData.length) {
 	            (function () {
 	                var markers = [];
 	                _this3.markerData = _this3.enrichMarkerData(_this3.markerData);
-	                __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].forEach(_this3.markerData, function (currentData) {
-	                    markers.push(new __WEBPACK_IMPORTED_MODULE_7__Marker_js__["a" /* Marker */]({
+	                _Helper.Helper.forEach(_this3.markerData, function (currentData) {
+	                    markers.push(new _Marker.Marker({
 	                        data: currentData,
 	                        container: _this3.markerContainer,
 	                        id: _this3.id
@@ -4037,11 +4120,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                markers = markers.sort(function (a, b) {
 	                    return b.latlng.lat - a.latlng.lat !== 0 ? b.latlng.lat - a.latlng.lat : b.latlng.lng - a.latlng.lng;
 	                });
-	                __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].forEach(markers, function (marker, i) {
+	                _Helper.Helper.forEach(markers, function (marker, i) {
 	                    marker.icon.style.zIndex = i;
 	                });
 
-	                _this3.markerClusterer = new __WEBPACK_IMPORTED_MODULE_11__MarkerClusterer_js__["a" /* MarkerClusterer */]({
+	                _this3.markerClusterer = new _MarkerClusterer.MarkerClusterer({
 	                    markers: markers,
 	                    id: _this3.id,
 	                    container: _this3.markerContainer
@@ -4074,7 +4157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    TileMap.prototype.createTooltipContainer = function createTooltipContainer() {
-	        this.tooltip = new __WEBPACK_IMPORTED_MODULE_9__ToolTip_js__["a" /* ToolTip */]({
+	        this.tooltip = new _ToolTip.ToolTip({
 	            container: this.container.parentNode,
 	            id: this.id,
 	            templates: this.templates
@@ -4092,15 +4175,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TileMap.prototype.bindEvents = function bindEvents() {
 	        var _this4 = this;
 
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.RESIZE, function () {
+	        this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function () {
 	            _this4.resize();
 	        });
 
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.DRAW, function () {
+	        this.eventManager.subscribe(_Events.Events.TileMap.DRAW, function () {
 	            _this4.redraw();
 	        });
 
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].View.THUMB_LOADED, function () {
+	        this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function () {
 	            _this4.redraw();
 	            if (_this4.stateHandler.current.value < 2) {
 	                _this4.initializeMarkers();
@@ -4108,7 +4191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        });
 
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.ZOOM_TO_BOUNDS, function (data) {
+	        this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function (data) {
 	            var zoomIncrease = Math.min(_this4.view.viewport.width / data.boundingBox.width, _this4.view.viewport.height / data.boundingBox.height);
 	            while (zoomIncrease > 0) {
 	                var possibleZoomOnLevel = _this4.view.maxZoom - _this4.view.zoomFactor;
@@ -4122,19 +4205,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            _this4.view.setLatLngToPosition(data.center, _this4.view.viewport.center);
 	        });
-	
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.NEXT_LEVEL, function () {
+
+	        this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function () {
 	            _this4.changelevel(1);
 	        });
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.PREVIOUS_LEVEL, function () {
+	        this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function () {
 	            _this4.changelevel(-1);
 	        });
-	
+
 	        return this;
 	    };
 
 	    TileMap.prototype.setViewToOldView = function setViewToOldView(center, zoom) {
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            zoomFactor: zoom
 	        });
 	        this.view.zoom(0, this.view.viewport.center);
@@ -4159,7 +4242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (lastLevel !== this.levelHandler.current.level) {
 	            this.setViewToOldView(lastCenter, extrema);
 	        }
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            level: this.levelHandler.current.level
 	        });
 	    };
@@ -4182,8 +4265,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * complete clear and draw of all visible tiles
 	     * @return {TileMap} instance of TileMap for chaining
 	     */
-	
-	
+
+
 	    TileMap.prototype.redraw = function redraw() {
 	        this.drawIsNeeded = true;
 	        return this;
@@ -4193,12 +4276,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Handles resizing of TileMap
 	     * @return {TileMap} instance of TileMap for chaining
 	     */
-	
+
 
 	    TileMap.prototype.resize = function resize() {
 	        return this.resizeCanvas().resizeView().redraw();
 	    };
-	
+
 	    /**
 	     * move view by delta
 	     * @param  {Point} delta - delta of x/y
@@ -4218,7 +4301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Point} position - position to zoom to
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
-	
+
 
 	    TileMap.prototype.zoom = function zoom(factor, position) {
 	        if (factor !== 0) {
@@ -4237,9 +4320,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.clusterHandlingTimeout = setTimeout(function () {
 	            if (_this5.levelHandler.hasNext()) {
-	                _this5.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MarkerClusterer.CLUSTERIZE);
+	                _this5.eventManager.publish(_Events.Events.MarkerClusterer.CLUSTERIZE);
 	            } else {
-	                _this5.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MarkerClusterer.UNCLUSTERIZE);
+	                _this5.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
 	            }
 	        }, 150);
 	    };
@@ -4248,22 +4331,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * resizes the canvas sizes
 	     * @return {TileMap} instance of TileMap for chaining
 	     */
-	
-	
+
+
 	    TileMap.prototype.resizeCanvas = function resizeCanvas() {
 	        this.canvas.width = this.width;
 	        this.canvas.height = this.height;
 	        return this;
 	    };
-	
+
 	    /**
 	     * Handles resizing of view
 	     * @return {TileMap} instance of TileMap for chaining
 	     */
-	
-	
+
+
 	    TileMap.prototype.resizeView = function resizeView() {
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            viewport: this.viewport
 	        });
 	        return this;
@@ -4280,8 +4363,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var currentMillisecs = Date.now();
 	        var deltaMillisecs = currentMillisecs - this.lastFrameMillisecs;
 	        this.lastFrameMillisecs = currentMillisecs;
-	        this.deltaTiming = __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].clamp(deltaMillisecs / this.bestDeltaTiming, 1, 4);
-	
+	        this.deltaTiming = _Helper.Helper.clamp(deltaMillisecs / this.bestDeltaTiming, 1, 4);
+
 	        if (this.velocity.length >= 0.2) this.moveView(this.velocity.multiply(0.9).clone.multiply(this.deltaTiming));
 
 	        if (this.drawIsNeeded) {
@@ -4292,14 +4375,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.repositionMarkerContainer();
 	            this.drawIsNeeded = false;
 	        }
-	
+
 	        window.requestAnimFrame(function () {
 	            return _this6.mainLoop();
 	        });
 	    };
 
 	    TileMap.prototype.drawLabels = function drawLabels() {
-	        __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].forEach(this.labels, function (label) {
+	        _Helper.Helper.forEach(this.labels, function (label) {
 	            return label.draw();
 	        });
 	        return this;
@@ -4312,6 +4395,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * request animation frame browser polyfill
 	 * @return {Function} supported requestAnimationFrame-function
 	 */
+
+
 	window.requestAnimFrame = function () {
 	    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
 	        window.setTimeout(callback, 1000 / 60);
@@ -4374,38 +4459,44 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Events_js__ = __webpack_require__(3);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Helper_js__ = __webpack_require__(4);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Point_js__ = __webpack_require__(6);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Drawable_js__ = __webpack_require__(19);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Cluster; });function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Cluster = undefined;
+
+	var _Events = __webpack_require__(3);
+
+	var _Helper = __webpack_require__(4);
+
+	var _Point = __webpack_require__(6);
+
+	var _Drawable2 = __webpack_require__(19);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	
-
-
-
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file represents a cluster of markers
 	 * @copyright Michael Duve 2016
 	 */
-	var Cluster = function (_Drawable) {
+
+	var Cluster = exports.Cluster = function (_Drawable) {
 	    _inherits(Cluster, _Drawable);
 
 	    /**
 	     * @constructor
 	     * @return {Cluster} instance of Cluster for chaining
 	     */
-	
+
 	    function Cluster(_ref) {
 	        var _ret;
-	
+
 	        var _ref$container = _ref.container;
 	        var container = _ref$container === undefined ? null : _ref$container;
 	        var id = _ref.id;
@@ -4423,24 +4514,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Cluster.prototype.init = function init() {
 	        if (this.markers.length === 1) {
-	            __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].show(this.markers[0].icon);
+	            _Helper.Helper.show(this.markers[0].icon);
 	        } else {
 	            this.createClusterMarker();
 	        }
 	    };
-	
+
 	    Cluster.prototype.createClusterMarker = function createClusterMarker() {
 	        var p = void 0;
 	        var _iteratorNormalCompletion = true;
 	        var _didIteratorError = false;
 	        var _iteratorError = undefined;
-	
+
 	        try {
 	            for (var _iterator = this.markers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	                var marker = _step.value;
-	
-	                __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].hide(marker.icon);
-	                var currentPos = new __WEBPACK_IMPORTED_MODULE_2__Point_js__["a" /* Point */](parseFloat(marker.icon.style.left), parseFloat(marker.icon.style.top));
+
+	                _Helper.Helper.hide(marker.icon);
+	                var currentPos = new _Point.Point(parseFloat(marker.icon.style.left), parseFloat(marker.icon.style.top));
 	                p = !p ? currentPos : p.add(currentPos);
 	            }
 	        } catch (err) {
@@ -4463,7 +4554,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.cluster = document.createElement("div");
 	        this.cluster.innerHTML = this.markers.length;
 	        this.cluster.classList.add("cluster");
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].css(this.cluster, {
+	        _Helper.Helper.css(this.cluster, {
 	            "left": p.x + '%',
 	            "top": p.y + '%',
 	            "transform": "translateZ(0)"
@@ -4472,25 +4563,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.container.appendChild(this.cluster);
 	        this.bindEvents();
 	    };
-	
+
 	    Cluster.prototype.bindEvents = function bindEvents() {
 	        this.eventManager.subscribe('cluster-' + this.uniqueID, this.action.bind(this));
 	    };
-	
+
 	    Cluster.prototype.unbindEvents = function unbindEvents() {
 	        this.eventManager.unsubscribe('cluster-' + this.uniqueID, this.action.bind(this));
 	    };
-	
+
 	    Cluster.prototype.action = function action() {
 	        var center = void 0;
 	        var _iteratorNormalCompletion2 = true;
 	        var _didIteratorError2 = false;
 	        var _iteratorError2 = undefined;
-	
+
 	        try {
 	            for (var _iterator2 = this.markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	                var marker = _step2.value;
-	
+
 	                center = !center ? marker.latlng : center.add(marker.latlng);
 	            }
 	        } catch (err) {
@@ -4507,9 +4598,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	        }
-	
+
 	        center.divide(this.markers.length);
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].TileMap.ZOOM_TO_BOUNDS, {
+	        this.eventManager.publish(_Events.Events.TileMap.ZOOM_TO_BOUNDS, {
 	            boundingBox: this.boundingBox,
 	            center: center
 	        });
@@ -4519,18 +4610,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.markers.push(marker);
 	        this.boundingBox = !this.boundingBox ? marker.boundingBox : this.boundingBox.extend(marker.boundingBox);
 	    };
-	
+
 	    Cluster.prototype.removeFromDOM = function removeFromDOM() {
 	        if (this.markers.length > 1) {
 	            var _iteratorNormalCompletion3 = true;
 	            var _didIteratorError3 = false;
 	            var _iteratorError3 = undefined;
-	
+
 	            try {
 	                for (var _iterator3 = this.markers[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
 	                    var marker = _step3.value;
-	
-	                    __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].show(marker.icon);
+
+	                    _Helper.Helper.show(marker.icon);
 	                }
 	            } catch (err) {
 	                _didIteratorError3 = true;
@@ -4550,48 +4641,54 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.cluster.parentNode.removeChild(this.cluster);
 	        }
 	        this.unbindEvents();
-		    };
+	    };
 
 	    return Cluster;
-	}(__WEBPACK_IMPORTED_MODULE_3__Drawable_js__["a" /* Drawable */]);
+	}(_Drawable2.Drawable);
 
-	Cluster.count = 0;
+		Cluster.count = 0;
 
 /***/ },
 /* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Events_js__ = __webpack_require__(3);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Helper_js__ = __webpack_require__(4);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Drawable_js__ = __webpack_require__(19);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LatLng_js__ = __webpack_require__(16);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Point_js__ = __webpack_require__(6);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Rectangle_js__ = __webpack_require__(14);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Label; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Label = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Events = __webpack_require__(3);
+
+	var _Helper = __webpack_require__(4);
+
+	var _Drawable2 = __webpack_require__(19);
+
+	var _LatLng = __webpack_require__(16);
+
+	var _Point = __webpack_require__(6);
+
+	var _Rectangle = __webpack_require__(14);
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	
-
-
-
-
-	
-	
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file shows an icon and/or a text at given position
 	 * @copyright Michael Duve 2016
 	 */
-	var Label = function (_Drawable) {
+
+	var Label = exports.Label = function (_Drawable) {
 	    _inherits(Label, _Drawable);
-	
+
 	    _createClass(Label, [{
 	        key: 'position',
 	        get: function get() {
@@ -4600,7 +4697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'nearestPositionToCenter',
 	        get: function get() {
-	            return this.latlng instanceof __WEBPACK_IMPORTED_MODULE_3__LatLng_js__["a" /* LatLng */] ? this.latlng : this.getNearestPositionToCenter();
+	            return this.latlng instanceof _LatLng.LatLng ? this.latlng : this.getNearestPositionToCenter();
 	        }
 	    }, {
 	        key: 'boundingBox',
@@ -4610,19 +4707,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var sizeX = this.icon.size.x || this.icon.size;
 	            var sizeY = this.icon.size.y || this.icon.size;
 
-	            return new __WEBPACK_IMPORTED_MODULE_5__Rectangle_js__["a" /* Rectangle */](x, y, sizeX, sizeY).scaleCenter(2);
+	            return new _Rectangle.Rectangle(x, y, sizeX, sizeY).scaleCenter(2);
 	        }
 
 	        /**
 	         * @constructor
 	         * @return {Label} instance of Label for chaining
 	         */
-	
+
 	    }]);
 
 	    function Label(_ref) {
 	        var _ret;
-	
+
 	        var settings = _ref.settings;
 	        var context = _ref.context;
 	        var id = _ref.id;
@@ -4640,22 +4737,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.icon = settings.icon;
 	        _this.content = settings.content;
 	        _this.visibility = settings.visibility;
-	        _this.offset = new __WEBPACK_IMPORTED_MODULE_4__Point_js__["a" /* Point */]();
+	        _this.offset = new _Point.Point();
 
 	        if (_this.icon && _this.icon.type === "circle") _this.drawIconType = _this.drawCircleIcon(_this.icon.size);else if (_this.icon && _this.icon.type === "square") _this.drawIconType = _this.drawSquareIcon(_this.icon.size);else if (_this.icon && _this.icon.type === "image") {
 	            _this.drawIconType = function () {};
-	            __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].loadImage(_this.icon.url, function (img) {
+	            _Helper.Helper.loadImage(_this.icon.url, function (img) {
 	                _this.drawIconType = _this.drawImageIcon(img, _this.icon.size, _this.icon.offset);
 	            });
 	        }
 	        _this.drawElements = _this.decideWhatToDraw(_this.text, _this.icon);
-	
+
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    Label.prototype.getNearestPositionToCenter = function getNearestPositionToCenter() {
 	        var _this2 = this;
-	
+
 	        this.latlng = this.latlng.sort(function (a, b) {
 	            return _this2.center.distance(a) - _this2.center.distance(b);
 	        });
@@ -4663,7 +4760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Label.prototype.openToolTip = function openToolTip() {
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].ToolTip.OPEN, this.content);
+	        this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
 	    };
 
 	    Label.prototype.draw = function draw() {
@@ -4704,7 +4801,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.context.fillStyle = this.text.color;
 	        this.context.fillText(this.text.content, pos.x, pos.y);
 	    };
-	
+
 	    Label.prototype.drawIcon = function drawIcon(pos) {
 	        this.context.fillStyle = this.icon.color;
 	        this.drawIconType(pos);
@@ -4713,7 +4810,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Label.prototype.drawCircleIcon = function drawCircleIcon(size) {
 	        var _this4 = this;
-	
+
 	        return function (pos) {
 	            return _this4.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
 	        };
@@ -4721,72 +4818,72 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Label.prototype.drawSquareIcon = function drawSquareIcon(size) {
 	        var _this5 = this;
-	
+
 	        return function (pos) {
 	            return _this5.context.rect(pos.x, pos.y, size, size);
 	        };
 	    };
-	
+
 	    Label.prototype.drawImageIcon = function drawImageIcon(image, size, offset) {
 	        var _this6 = this;
-	
+
 	        this.offset = offset;
 	        return function (pos) {
 	            return _this6.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
 	        };
-		    };
+	    };
 
 	    Label.prototype.hit = function hit(point) {
 	        return this.boundingBox.containsPoint(point);
 	    };
 
 	    return Label;
-	}(__WEBPACK_IMPORTED_MODULE_2__Drawable_js__["a" /* Drawable */]);
+	}(_Drawable2.Drawable);
 
 /***/ },
 /* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_babel_polyfill_node_modules_core_js_es5_index_js__ = __webpack_require__(54);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_babel_polyfill_node_modules_core_js_es5_index_js___default = __WEBPACK_IMPORTED_MODULE_0__node_modules_babel_polyfill_node_modules_core_js_es5_index_js__ && __WEBPACK_IMPORTED_MODULE_0__node_modules_babel_polyfill_node_modules_core_js_es5_index_js__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_0__node_modules_babel_polyfill_node_modules_core_js_es5_index_js__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_0__node_modules_babel_polyfill_node_modules_core_js_es5_index_js__; };
-	/* harmony import */ __webpack_require__.d(__WEBPACK_IMPORTED_MODULE_0__node_modules_babel_polyfill_node_modules_core_js_es5_index_js___default, 'a', __WEBPACK_IMPORTED_MODULE_0__node_modules_babel_polyfill_node_modules_core_js_es5_index_js___default);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_babel_polyfill_node_modules_core_js_es6_object_js__ = __webpack_require__(56);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_babel_polyfill_node_modules_core_js_es6_object_js___default = __WEBPACK_IMPORTED_MODULE_1__node_modules_babel_polyfill_node_modules_core_js_es6_object_js__ && __WEBPACK_IMPORTED_MODULE_1__node_modules_babel_polyfill_node_modules_core_js_es6_object_js__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_1__node_modules_babel_polyfill_node_modules_core_js_es6_object_js__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_1__node_modules_babel_polyfill_node_modules_core_js_es6_object_js__; };
-	/* harmony import */ __webpack_require__.d(__WEBPACK_IMPORTED_MODULE_1__node_modules_babel_polyfill_node_modules_core_js_es6_object_js___default, 'a', __WEBPACK_IMPORTED_MODULE_1__node_modules_babel_polyfill_node_modules_core_js_es6_object_js___default);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_babel_polyfill_node_modules_core_js_es6_array_js__ = __webpack_require__(55);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_babel_polyfill_node_modules_core_js_es6_array_js___default = __WEBPACK_IMPORTED_MODULE_2__node_modules_babel_polyfill_node_modules_core_js_es6_array_js__ && __WEBPACK_IMPORTED_MODULE_2__node_modules_babel_polyfill_node_modules_core_js_es6_array_js__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_2__node_modules_babel_polyfill_node_modules_core_js_es6_array_js__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_2__node_modules_babel_polyfill_node_modules_core_js_es6_array_js__; };
-	/* harmony import */ __webpack_require__.d(__WEBPACK_IMPORTED_MODULE_2__node_modules_babel_polyfill_node_modules_core_js_es6_array_js___default, 'a', __WEBPACK_IMPORTED_MODULE_2__node_modules_babel_polyfill_node_modules_core_js_es6_array_js___default);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Helper_js__ = __webpack_require__(4);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Events_js__ = __webpack_require__(3);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Publisher_js__ = __webpack_require__(10);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__TileMap_js__ = __webpack_require__(53);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__DataEnrichment_js__ = __webpack_require__(33);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Interact_js__ = __webpack_require__(52);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Point_js__ = __webpack_require__(6);
+	"use strict";
 
-	/* harmony export */ __webpack_require__.d(exports, "MappedJS", function() { return MappedJS; });var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.MappedJS = undefined;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	__webpack_require__(54);
+
+	__webpack_require__(56);
+
+	__webpack_require__(55);
+
+	var _Helper = __webpack_require__(4);
+
+	var _Events = __webpack_require__(3);
+
+	var _Publisher = __webpack_require__(10);
+
+	var _TileMap = __webpack_require__(53);
+
+	var _DataEnrichment = __webpack_require__(33);
+
+	var _Interact = __webpack_require__(52);
+
+	var _Point = __webpack_require__(6);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-
-	
-
-
-
-
-
-
-
-
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file application initializes all instances and objects
 	 * @copyright Michael Duve 2016
 	 */
-	var MappedJS = function () {
-	
+
+	var MappedJS = exports.MappedJS = function () {
+
 	    /**
 	     * @constructor
 	     * @param  {string|Object} container=".mjs" - Container, either string or dom-object
@@ -4796,7 +4893,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} events={loaded: "mjs-loaded"} - List of events
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
-	
+
 	    function MappedJS() {
 	        var _this = this;
 
@@ -4823,7 +4920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.id = this.generateUniqueID();
 
-	        this.eventManager = new __WEBPACK_IMPORTED_MODULE_5__Publisher_js__["a" /* Publisher */](this.id);
+	        this.eventManager = new _Publisher.Publisher(this.id);
 	        this.initializeData(mapData, function (loadedMapData) {
 	            _this.mapData = loadedMapData;
 	            _this.initializeData(markerData, function (loadedMarkerData) {
@@ -4882,18 +4979,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
 
-	
+
 	    MappedJS.prototype.initializeSettings = function initializeSettings(container) {
 	        var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 	        var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-	        this.container = typeof container === "string" ? __WEBPACK_IMPORTED_MODULE_3__Helper_js__["a" /* Helper */].find(container) : container;
+	        this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
 	        this.container.classList.add("mappedJS");
 	        this.content = document.createElement("div");
 	        this.content.classList.add("map-content");
 	        this.container.appendChild(this.content);
 
-	        this.mapSettings = __WEBPACK_IMPORTED_MODULE_7__DataEnrichment_js__["a" /* DataEnrichment */].mapSettings(settings);
+	        this.mapSettings = _DataEnrichment.DataEnrichment.mapSettings(settings);
 	        this.events = events;
 
 	        return this;
@@ -4909,7 +5006,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    MappedJS.prototype.initializeData = function initializeData(mapData, cb) {
 	        if (typeof mapData === "string") {
-	            __WEBPACK_IMPORTED_MODULE_3__Helper_js__["a" /* Helper */].requestJSON(mapData, function (data) {
+	            _Helper.Helper.requestJSON(mapData, function (data) {
 	                cb(data);
 	            });
 	        } else {
@@ -4917,7 +5014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return this;
 	    };
-	
+
 	    /**
 	     * initializes Map module
 	     * @return {MappedJS} instance of MappedJS for chaining
@@ -4925,7 +5022,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    MappedJS.prototype.initializeMap = function initializeMap() {
-	        this.tileMap = new __WEBPACK_IMPORTED_MODULE_6__TileMap_js__["a" /* TileMap */]({
+	        this.tileMap = new _TileMap.TileMap({
 	            container: this.content,
 	            tilesData: this.mapData,
 	            id: this.id,
@@ -4954,34 +5051,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	    MappedJS.prototype.initializeInteractForMap = function initializeInteractForMap() {
 	        var _this2 = this;
 
-	        this.interact = new __WEBPACK_IMPORTED_MODULE_8__Interact_js__["a" /* Interact */]({
+	        this.interact = new _Interact.Interact({
 	            container: this.content,
 	            autoFireHold: 300,
 	            overwriteViewportSettings: true,
 	            callbacks: {
 	                tap: function tap(data) {
 	                    var pos = _this2.getAbsolutePosition(data.positionStart);
-	                    _this2.tileMap.velocity = new __WEBPACK_IMPORTED_MODULE_9__Point_js__["a" /* Point */]();
+	                    _this2.tileMap.velocity = new _Point.Point();
 	                    var id = data.target.getAttribute("data-id");
 	                    if (id) _this2.eventManager.publish(id, pos);
 	                },
 	                doubletap: function doubletap(data) {
-	                    _this2.tileMap.velocity = new __WEBPACK_IMPORTED_MODULE_9__Point_js__["a" /* Point */]();
+	                    _this2.tileMap.velocity = new _Point.Point();
 	                    _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.positionStart));
 	                },
 	                pan: function pan(data) {
 	                    if (data.target.classList.contains("control")) return false;
 	                    var change = data.positionLast.clone.substract(data.positionMove);
-	                    _this2.tileMap.velocity = new __WEBPACK_IMPORTED_MODULE_9__Point_js__["a" /* Point */]();
+	                    _this2.tileMap.velocity = new _Point.Point();
 	                    _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
 	                },
 	                wheel: function wheel(data) {
 	                    var factor = data.delta / 4;
-	                    _this2.tileMap.velocity = new __WEBPACK_IMPORTED_MODULE_9__Point_js__["a" /* Point */]();
+	                    _this2.tileMap.velocity = new _Point.Point();
 	                    _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.positionStart));
 	                },
 	                pinch: function pinch(data) {
-	                    _this2.tileMap.velocity = new __WEBPACK_IMPORTED_MODULE_9__Point_js__["a" /* Point */]();
+	                    _this2.tileMap.velocity = new _Point.Point();
 	                    _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.positionMove));
 	                },
 	                flick: function flick(data) {
@@ -5002,14 +5099,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.initializeInteractForMap();
 
-	        __WEBPACK_IMPORTED_MODULE_3__Helper_js__["a" /* Helper */].addListener(window, __WEBPACK_IMPORTED_MODULE_4__Events_js__["a" /* Events */].Handling.RESIZE, this.resizeHandler.bind(this));
+	        _Helper.Helper.addListener(window, _Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
 
-	        __WEBPACK_IMPORTED_MODULE_3__Helper_js__["a" /* Helper */].addListener(document, __WEBPACK_IMPORTED_MODULE_4__Events_js__["a" /* Events */].Handling.KEYDOWN, this.keyPress.bind(this));
-	        __WEBPACK_IMPORTED_MODULE_3__Helper_js__["a" /* Helper */].addListener(document, __WEBPACK_IMPORTED_MODULE_4__Events_js__["a" /* Events */].Handling.KEYUP, this.keyRelease.bind(this));
+	        _Helper.Helper.addListener(document, _Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
+	        _Helper.Helper.addListener(document, _Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
 
 	        this.zoomIn.setAttribute("data-id", "zoom-button-plus");
 	        this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
-	
+
 	        this.zoomOut.setAttribute("data-id", "zoom-button-minus");
 	        this.eventManager.subscribe("zoom-button-minus", this.zoomOutToCenter.bind(this));
 
@@ -5024,7 +5121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
 
-	
+
 	    MappedJS.prototype.resetToInitialState = function resetToInitialState() {
 	        this.tileMap.reset();
 	        return this;
@@ -5035,7 +5132,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
 
-	
+
 	    MappedJS.prototype.zoomInToCenter = function zoomInToCenter() {
 	        this.tileMap.zoom(0.2, this.tileMap.view.viewport.center);
 	        return this;
@@ -5045,8 +5142,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * zooms out of center of map
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
-	
-	
+
+
 	    MappedJS.prototype.zoomOutToCenter = function zoomOutToCenter() {
 	        this.tileMap.zoom(-0.2, this.tileMap.view.viewport.center);
 	        return this;
@@ -5057,25 +5154,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {object} e VanillaJS-Event-Object
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
-	
-	
+
+
 	    MappedJS.prototype.keyPress = function keyPress(e) {
 	        switch (e.keyCode) {
 	            case 38:
 	                // up
-	                this.handleMovementByKeys(new __WEBPACK_IMPORTED_MODULE_9__Point_js__["a" /* Point */](0, 1));
+	                this.handleMovementByKeys(new _Point.Point(0, 1));
 	                break;
 	            case 37:
 	                // left
-	                this.handleMovementByKeys(new __WEBPACK_IMPORTED_MODULE_9__Point_js__["a" /* Point */](1, 0));
+	                this.handleMovementByKeys(new _Point.Point(1, 0));
 	                break;
 	            case 39:
 	                // right
-	                this.handleMovementByKeys(new __WEBPACK_IMPORTED_MODULE_9__Point_js__["a" /* Point */](-1, 0));
+	                this.handleMovementByKeys(new _Point.Point(-1, 0));
 	                break;
 	            case 40:
 	                // down
-	                this.handleMovementByKeys(new __WEBPACK_IMPORTED_MODULE_9__Point_js__["a" /* Point */](0, -1));
+	                this.handleMovementByKeys(new _Point.Point(0, -1));
 	                break;
 	            case 187: // plus
 	            case 107:
@@ -5095,7 +5192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            default:
 	                break;
 	        }
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_4__Events_js__["a" /* Events */].TileMap.DRAW);
+	        this.eventManager.publish(_Events.Events.TileMap.DRAW);
 	        return this;
 	    };
 
@@ -5105,7 +5202,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
 
-	
+
 	    MappedJS.prototype.handleMovementByKeys = function handleMovementByKeys(direction) {
 	        this.keyTicks++;
 	        this.tileMap.moveView(direction.multiply(this.keyTicks));
@@ -5120,23 +5217,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * handles resizing of window
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
-	
-	
+
+
 	    MappedJS.prototype.resizeHandler = function resizeHandler() {
 	        this.tileMap.resize();
 	        return this;
 	    };
-	
+
 	    /**
 	     * called when loading and initialization is finished
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
-	
-	
+
+
 	    MappedJS.prototype.loadingFinished = function loadingFinished() {
 	        return this;
 	    };
-	
+
 	    MappedJS.prototype.polyfill = function polyfill() {
 	        /*
 	        polyfill from eligrey for element.class | Listhttps://github.com/eligrey/classList.js/
@@ -5245,7 +5342,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                    t = arguments[i];e.call(this, t);
 	                                }
 	                            };
-		                        };e("add");e("remove");
+	                        };e("add");e("remove");
 	                    }t.classList.toggle("c3", false);if (t.classList.contains("c3")) {
 	                        var i = DOMTokenList.prototype.toggle;DOMTokenList.prototype.toggle = function (t, e) {
 	                            if (1 in arguments && !this.contains(t) === !e) {
@@ -5269,34 +5366,40 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Events_js__ = __webpack_require__(3);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Helper_js__ = __webpack_require__(4);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Point_js__ = __webpack_require__(6);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Rectangle_js__ = __webpack_require__(14);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__DataEnrichment_js__ = __webpack_require__(33);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Drawable_js__ = __webpack_require__(19);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Marker; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Marker = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Events = __webpack_require__(3);
+
+	var _Helper = __webpack_require__(4);
+
+	var _Point = __webpack_require__(6);
+
+	var _Rectangle = __webpack_require__(14);
+
+	var _DataEnrichment = __webpack_require__(33);
+
+	var _Drawable2 = __webpack_require__(19);
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	
-
-
-
-
-	
-	
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file represents a marker with an image, a position and content
 	 * @copyright Michael Duve 2016
 	 */
-	var Marker = function (_Drawable) {
+
+	var Marker = exports.Marker = function (_Drawable) {
 	    _inherits(Marker, _Drawable);
 
 	    _createClass(Marker, [{
@@ -5304,7 +5407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	            var bBox = this.icon.getBoundingClientRect();
 	            var parentBBox = this.container.getBoundingClientRect();
-	            return new __WEBPACK_IMPORTED_MODULE_3__Rectangle_js__["a" /* Rectangle */](bBox.left - parentBBox.left, bBox.top - parentBBox.top, bBox.width, bBox.height).scaleCenter(1.2);
+	            return new _Rectangle.Rectangle(bBox.left - parentBBox.left, bBox.top - parentBBox.top, bBox.width, bBox.height).scaleCenter(1.2);
 	        }
 
 	        /**
@@ -5313,14 +5416,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {View} _instance = parent instance - instance of parent view
 	         * @return {Marker} - instance of Marker for chaining
 	         */
-	
+
 	    }]);
-	
+
 	    function Marker(_ref) {
 	        var _ret;
 
 	        var _ref$data = _ref.data;
-	        var data = _ref$data === undefined ? __WEBPACK_IMPORTED_MODULE_4__DataEnrichment_js__["a" /* DataEnrichment */].DATA_MARKER : _ref$data;
+	        var data = _ref$data === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : _ref$data;
 	        var container = _ref.container;
 	        var id = _ref.id;
 
@@ -5339,15 +5442,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (_this.hover) _this.size.divide(2, 1);
 
 	        _this.img = data.icon;
-	        _this.offset = data.offset.add(new __WEBPACK_IMPORTED_MODULE_2__Point_js__["a" /* Point */](-(_this.size.x / 2), -_this.size.y));
+	        _this.offset = data.offset.add(new _Point.Point(-(_this.size.x / 2), -_this.size.y));
 	        _this.latlng = data.latlng;
-	
+
 	        _this.content = data.content;
 	        _this.icon = _this.addMarkerToDOM(container);
 
 	        return _ret = _this.bindEvents().positionMarker(), _possibleConstructorReturn(_this, _ret);
 	    }
-	
+
 	    /**
 	     * binds all events
 	     * @return {Marker} instance of Marker for chaining
@@ -5360,16 +5463,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.content.length) {
 	            this.icon.setAttribute("data-id", 'marker-' + this.uniqueID);
 	            this.eventManager.subscribe('marker-' + this.uniqueID, this.action.bind(this));
-	            this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].Marker.DEACTIVATE, function () {
+	            this.eventManager.subscribe(_Events.Events.Marker.DEACTIVATE, function () {
 	                _this2.icon.classList.remove("active");
 	            });
 	        }
 	        return this;
 	    };
-	
+
 	    Marker.prototype.action = function action() {
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].ToolTip.OPEN, this.content);
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].Marker.DEACTIVATE);
+	        this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
+	        this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
 	        this.icon.classList.add("active");
 	    };
 
@@ -5383,7 +5486,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Marker.prototype.addMarkerToDOM = function addMarkerToDOM(container) {
 	        var icon = document.createElement("div");
 	        icon.classList.add("marker");
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].css(icon, {
+	        _Helper.Helper.css(icon, {
 	            "width": this.size.x + 'px',
 	            "height": this.size.y + 'px',
 	            "margin-left": this.offset.x + 'px',
@@ -5393,60 +5496,66 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "background-size": (this.hover ? this.size.x * 2 : this.size.x) + 'px ' + this.size.y + 'px'
 	        });
 	        if (container) {
-	            __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].hide(icon);
+	            _Helper.Helper.hide(icon);
 	            container.appendChild(icon);
 	        }
 	        return icon;
 	    };
-	
+
 	    /**
 	     * set initial position of this marker
 	     * @return {Marker} instance of Marker for chaining
 	     */
 
-	
+
 	    Marker.prototype.positionMarker = function positionMarker() {
 	        this.position = this.info.convertLatLngToPoint(this.latlng);
 	        var p = this.position.clone.divide(this.view.width, this.view.height).multiply(100);
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].css(this.icon, {
+	        _Helper.Helper.css(this.icon, {
 	            "left": p.x + '%',
 	            "top": p.y + '%'
 	        });
-		        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].show(this.icon);
+	        _Helper.Helper.show(this.icon);
 	        return this;
 	    };
 
 	    return Marker;
-	}(__WEBPACK_IMPORTED_MODULE_5__Drawable_js__["a" /* Drawable */]);
+	}(_Drawable2.Drawable);
 
-	Marker.count = 0;
+		Marker.count = 0;
 
 /***/ },
 /* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Events_js__ = __webpack_require__(3);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Publisher_js__ = __webpack_require__(10);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Cluster_js__ = __webpack_require__(57);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return MarkerClusterer; });function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.MarkerClusterer = undefined;
 
-	
+	var _Events = __webpack_require__(3);
 
+	var _Publisher = __webpack_require__(10);
 
+	var _Cluster = __webpack_require__(57);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file represents a class which helps clustering overlapping markers
 	 * @copyright Michael Duve 2016
 	 */
-	var MarkerClusterer = function () {
+
+	var MarkerClusterer = exports.MarkerClusterer = function () {
 	    /**
 	     * @constructor
 	     * @return {MarkerClusterer} instance of MarkerClusterer for chaining
 	     */
-	
+
 	    function MarkerClusterer(_ref) {
 	        var _ref$markers = _ref.markers;
 	        var markers = _ref$markers === undefined ? [] : _ref$markers;
@@ -5460,23 +5569,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.id = id;
 	        this.container = container;
 	        this.clusters = [];
-	        this.eventManager = new __WEBPACK_IMPORTED_MODULE_1__Publisher_js__["a" /* Publisher */](this.id);
+	        this.eventManager = new _Publisher.Publisher(this.id);
 	        this.bindEvents();
 	        this.clusterize();
 	        return this;
 	    }
-	
+
 	    MarkerClusterer.prototype.bindEvents = function bindEvents() {
 	        var _this = this;
 
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].MarkerClusterer.CLUSTERIZE, function () {
+	        this.eventManager.subscribe(_Events.Events.MarkerClusterer.CLUSTERIZE, function () {
 	            _this.clusterize();
 	        });
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].MarkerClusterer.UNCLUSTERIZE, function () {
+	        this.eventManager.subscribe(_Events.Events.MarkerClusterer.UNCLUSTERIZE, function () {
 	            _this.deleteAllClusters();
 	        });
 	    };
-	
+
 	    MarkerClusterer.prototype.clusterize = function clusterize() {
 	        this.deleteAllClusters();
 	        var _iteratorNormalCompletion = true;
@@ -5486,7 +5595,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        try {
 	            for (var _iterator = this.markers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	                var marker = _step.value;
-	
+
 	                var hits = [];
 	                var _iteratorNormalCompletion3 = true;
 	                var _didIteratorError3 = false;
@@ -5545,7 +5654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        try {
 	            for (var _iterator2 = this.clusters[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	                var _cluster = _step2.value;
-	
+
 	                _cluster.init();
 	            }
 	        } catch (err) {
@@ -5563,7 +5672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    };
-	
+
 	    MarkerClusterer.prototype.findNearestHit = function findNearestHit(marker, hits) {
 	        var lastDistance = void 0,
 	            minimalHit = void 0;
@@ -5600,7 +5709,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	        }
-	
+
 	        return minimalHit;
 	    };
 
@@ -5609,14 +5718,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    MarkerClusterer.prototype.createCluster = function createCluster(marker) {
-	        var newCluster = new __WEBPACK_IMPORTED_MODULE_2__Cluster_js__["a" /* Cluster */]({
+	        var newCluster = new _Cluster.Cluster({
 	            container: this.container,
 	            id: this.id
 	        });
 	        newCluster.addMarker(marker);
 	        return newCluster;
 	    };
-	
+
 	    MarkerClusterer.prototype.deleteAllClusters = function deleteAllClusters() {
 	        var _iteratorNormalCompletion5 = true;
 	        var _didIteratorError5 = false;
@@ -5625,7 +5734,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        try {
 	            for (var _iterator5 = this.clusters[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
 	                var cluster = _step5.value;
-	
+
 	                cluster.removeFromDOM();
 	            }
 	        } catch (err) {
@@ -5644,7 +5753,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        this.clusters = [];
-		        __WEBPACK_IMPORTED_MODULE_2__Cluster_js__["a" /* Cluster */].count = 0;
+	        _Cluster.Cluster.count = 0;
 	    };
 
 	    return MarkerClusterer;
@@ -5655,43 +5764,49 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Events_js__ = __webpack_require__(3);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Helper_js__ = __webpack_require__(4);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__MapInformation_js__ = __webpack_require__(35);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__StateHandler_js__ = __webpack_require__(39);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Rectangle_js__ = __webpack_require__(14);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Publisher_js__ = __webpack_require__(10);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return Tile; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Tile = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Events = __webpack_require__(3);
+
+	var _Helper = __webpack_require__(4);
+
+	var _MapInformation = __webpack_require__(35);
+
+	var _StateHandler = __webpack_require__(39);
+
+	var _Rectangle2 = __webpack_require__(14);
+
+	var _Publisher = __webpack_require__(10);
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	
-
-
-
-	
-
-	
 	/**
 	 * States of a tile
 	 * @type {Array}
 	 */
 	var STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Initialized' }, { value: 2, description: 'Loaded' }, { value: 3, description: 'Drawn' }];
-	
+
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file Represents a part of the background map
 	 * @extends Rectangle
 	 * @copyright Michael Duve 2016
 	 */
-	var Tile = function (_Rectangle) {
+
+	var Tile = exports.Tile = function (_Rectangle) {
 	    _inherits(Tile, _Rectangle);
-	
+
 	    _createClass(Tile, [{
 	        key: 'distortedTile',
 	        get: function get() {
@@ -5732,12 +5847,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {number} h = 0 - tile height
 	         * @return {Tile} instance of Tile for chaining
 	         */
-	
+
 	    }]);
-	
+
 	    function Tile() {
 	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
+
 	        var _ref$path = _ref.path;
 	        var path = _ref$path === undefined ? null : _ref$path;
 	        var _ref$x = _ref.x;
@@ -5749,9 +5864,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _ref$h = _ref.h;
 	        var h = _ref$h === undefined ? 0 : _ref$h;
 	        var context = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-	
+
 	        var _ret;
-	
+
 	        var id = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
 
 	        _classCallCheck(this, Tile);
@@ -5761,17 +5876,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!path || typeof path !== "string" || path.length === 0) throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
 
 	        _this.id = id;
-	        _this.info = new __WEBPACK_IMPORTED_MODULE_2__MapInformation_js__["a" /* MapInformation */](_this.id);
-	        _this.eventManager = new __WEBPACK_IMPORTED_MODULE_5__Publisher_js__["a" /* Publisher */](_this.id);
+	        _this.info = new _MapInformation.MapInformation(_this.id);
+	        _this.eventManager = new _Publisher.Publisher(_this.id);
 
-	        _this.state = new __WEBPACK_IMPORTED_MODULE_3__StateHandler_js__["a" /* StateHandler */](STATES);
-	
+	        _this.state = new _StateHandler.StateHandler(STATES);
+
 	        _this.context = context;
 	        _this.path = path;
 
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
-	
+
 	    /**
 	     * initializes tile and starts loading image
 	     * @return {Tile} instance of Tile for chaining
@@ -5782,14 +5897,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this2 = this;
 
 	        this.state.next();
-	        __WEBPACK_IMPORTED_MODULE_1__Helper_js__["a" /* Helper */].loadImage(this.path, function (img) {
+	        _Helper.Helper.loadImage(this.path, function (img) {
 	            _this2.img = img;
 	            _this2.state.next();
-	            _this2.eventManager.publish(__WEBPACK_IMPORTED_MODULE_0__Events_js__["a" /* Events */].TileMap.DRAW);
+	            _this2.eventManager.publish(_Events.Events.TileMap.DRAW);
 	        });
 	        return this;
 	    };
-	
+
 	    /**
 	     * draws image data of tile on context
 	     * @return {Tile} instance of Tile for chaining
@@ -5811,45 +5926,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Tile} tile - the specified tile to check against this
 	     * @return {Boolean} is true, if x, y, width and height and path are the same
 	     */
-		
+
 
 	    Tile.prototype.equals = function equals(tile) {
 	        return tile instanceof Tile ? _Rectangle.prototype.equals.call(this, tile) && this.path === tile.path : false;
 	    };
 
 	    return Tile;
-	}(__WEBPACK_IMPORTED_MODULE_4__Rectangle_js__["a" /* Rectangle */]);
+	}(_Rectangle2.Rectangle);
 
 /***/ },
 /* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_Handlebars__ = __webpack_require__(106);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_Handlebars___default = __WEBPACK_IMPORTED_MODULE_0_Handlebars__ && __WEBPACK_IMPORTED_MODULE_0_Handlebars__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_0_Handlebars__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_0_Handlebars__; };
-	/* harmony import */ __webpack_require__.d(__WEBPACK_IMPORTED_MODULE_0_Handlebars___default, 'a', __WEBPACK_IMPORTED_MODULE_0_Handlebars___default);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Events_js__ = __webpack_require__(3);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Helper_js__ = __webpack_require__(4);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Publisher_js__ = __webpack_require__(10);
+	'use strict';
 
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return ToolTip; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.ToolTip = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Handlebars = __webpack_require__(106);
+
+	var _Handlebars2 = _interopRequireDefault(_Handlebars);
+
+	var _Events = __webpack_require__(3);
+
+	var _Helper = __webpack_require__(4);
+
+	var _Publisher = __webpack_require__(10);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-
-
-
-	
-	
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file represents an overlay showing detailed contents
 	 * @copyright Michael Duve 2016
 	 */
-	var ToolTip = function () {
+
+	var ToolTip = exports.ToolTip = function () {
 	    _createClass(ToolTip, [{
 	        key: 'allTemplatesLoaded',
-	
+
 
 	        /**
 	         * checks if all templates were loaded
@@ -5866,9 +5989,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {object} templates - defined templates
 	         * @return {ToolTip} instance of ToolTip for chaining
 	         */
-	
+
 	    }]);
-	
+
 	    function ToolTip(_ref) {
 	        var container = _ref.container;
 	        var _ref$templates = _ref.templates;
@@ -5879,7 +6002,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.container = container;
 	        this.id = id;
-	        this.container.classList.add(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].ToolTip.CLOSE);
+	        this.container.classList.add(_Events.Events.ToolTip.CLOSE);
 
 	        this.close = document.createElement("div");
 	        this.close.classList.add("close-button");
@@ -5893,13 +6016,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.popup.appendChild(this.close);
 	        this.popup.appendChild(this.content);
 
-	        this.eventManager = new __WEBPACK_IMPORTED_MODULE_3__Publisher_js__["a" /* Publisher */](this.id);
+	        this.eventManager = new _Publisher.Publisher(this.id);
 	        this.bindEvents();
 	        this.registerHandlebarHelpers();
 
 	        return this.setPosition().initializeTemplates(templates);
 	    }
-	
+
 	    /**
 	     * register helpers for handlebars
 	     * @return {ToolTip} instance of ToolTip for chaining
@@ -5907,8 +6030,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    ToolTip.prototype.registerHandlebarHelpers = function registerHandlebarHelpers() {
-	        if (__WEBPACK_IMPORTED_MODULE_0_Handlebars___default.a) {
-	            __WEBPACK_IMPORTED_MODULE_0_Handlebars___default.a.registerHelper('getRatio', function (w, h) {
+	        if (_Handlebars2.default) {
+	            _Handlebars2.default.registerHelper('getRatio', function (w, h) {
 	                return h / w * 100 + "%";
 	            });
 	        }
@@ -5928,32 +6051,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.compileTemplates();
 	        return this;
 	    };
-	
+
 	    /**
 	     * bind all events
 	     * @return {ToolTip} instance of ToolTip for chaining
 	     */
-	
-	
+
+
 	    ToolTip.prototype.bindEvents = function bindEvents() {
 	        var _this = this;
-	
-	        __WEBPACK_IMPORTED_MODULE_2__Helper_js__["a" /* Helper */].addListener(window, __WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].Handling.RESIZE, this.resizeHandler.bind(this));
-	        __WEBPACK_IMPORTED_MODULE_2__Helper_js__["a" /* Helper */].addListener(this.close, __WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].Handling.CLICK, function () {
+
+	        _Helper.Helper.addListener(window, _Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
+	        _Helper.Helper.addListener(this.close, _Events.Events.Handling.CLICK, function () {
 	            _this.closeTooltip();
 	        });
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].ToolTip.OPEN, this.open.bind(this));
-	        this.eventManager.subscribe(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].ToolTip.CLOSE, function () {
+	        this.eventManager.subscribe(_Events.Events.ToolTip.OPEN, this.open.bind(this));
+	        this.eventManager.subscribe(_Events.Events.ToolTip.CLOSE, function () {
 	            _this.closeTooltip();
 	        });
 	        return this;
 	    };
-	
+
 	    /**
 	     * on resize check if tooltip is bottom or left position
 	     * @return {ToolTip} instance of ToolTip for chaining
 	     */
-	
+
 
 	    ToolTip.prototype.resizeHandler = function resizeHandler() {
 	        this.setPosition();
@@ -5965,7 +6088,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {object} content = {} - content object
 	     * @return {ToolTip} instance of ToolTip for chaining
 	     */
-	
+
 
 	    ToolTip.prototype.insertContent = function insertContent() {
 	        var _this2 = this;
@@ -5973,7 +6096,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var content = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
 	        this.content.innerHTML = "";
-	        __WEBPACK_IMPORTED_MODULE_2__Helper_js__["a" /* Helper */].forEach(content, function (data) {
+	        _Helper.Helper.forEach(content, function (data) {
 	            if (_this2.templates[data.type]) {
 	                var html = _this2.templates[data.type](data.content);
 	                _this2.content.innerHTML += html;
@@ -5991,15 +6114,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    ToolTip.prototype.open = function open(data) {
 	        if (data) this.insertContent(data);
-	        if (this.container.classList.contains(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].ToolTip.CLOSE)) {
+	        if (this.container.classList.contains(_Events.Events.ToolTip.CLOSE)) {
 	            this.setPosition();
-	            this.container.classList.remove(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].ToolTip.CLOSE);
-	            this.container.classList.add(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].ToolTip.OPEN);
-	            this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.RESIZE);
+	            this.container.classList.remove(_Events.Events.ToolTip.CLOSE);
+	            this.container.classList.add(_Events.Events.ToolTip.OPEN);
+	            this.eventManager.publish(_Events.Events.TileMap.RESIZE);
 	        }
 	        return this;
 	    };
-	
+
 	    /**
 	     * closes a tooltip
 	     * @return {ToolTip} instance of ToolTip for chaining
@@ -6007,16 +6130,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    ToolTip.prototype.closeTooltip = function closeTooltip() {
-	        if (this.container.classList.contains(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].ToolTip.OPEN)) {
-	            this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].Marker.DEACTIVATE);
+	        if (this.container.classList.contains(_Events.Events.ToolTip.OPEN)) {
+	            this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
 	            this.setPosition();
-	            this.container.classList.remove(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].ToolTip.OPEN);
-	            this.container.classList.add(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].ToolTip.CLOSE);
-	            this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.RESIZE);
+	            this.container.classList.remove(_Events.Events.ToolTip.OPEN);
+	            this.container.classList.add(_Events.Events.ToolTip.CLOSE);
+	            this.eventManager.publish(_Events.Events.TileMap.RESIZE);
 	        }
 	        return this;
 	    };
-	
+
 	    /**
 	     * sets position of tooltip to left or bottom
 	     * @return {ToolTip} instance of ToolTip for chaining
@@ -6033,7 +6156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return this;
 	    };
-	
+
 	    /**
 	     * precompiles all Handlebars templates
 	     * @return {ToolTip} instance of ToolTip for chaining
@@ -6043,11 +6166,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ToolTip.prototype.compileTemplates = function compileTemplates() {
 	        var _this3 = this;
 
-	        __WEBPACK_IMPORTED_MODULE_2__Helper_js__["a" /* Helper */].forEach(this.templates, function (template, type) {
-	            __WEBPACK_IMPORTED_MODULE_2__Helper_js__["a" /* Helper */].getFile(template, function (html) {
-	                _this3.templates[type] = __WEBPACK_IMPORTED_MODULE_0_Handlebars___default.a.compile(html);
+	        _Helper.Helper.forEach(this.templates, function (template, type) {
+	            _Helper.Helper.getFile(template, function (html) {
+	                _this3.templates[type] = _Handlebars2.default.compile(html);
 	                _this3.loadedTemplates++;
-		                if (_this3.allTemplatesLoaded) _this3.container.appendChild(_this3.popup);
+	                if (_this3.allTemplatesLoaded) _this3.container.appendChild(_this3.popup);
 	            });
 	        });
 	        return this;
@@ -6061,16 +6184,30 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Helper_js__ = __webpack_require__(4);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Events_js__ = __webpack_require__(3);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Point_js__ = __webpack_require__(6);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LatLng_js__ = __webpack_require__(16);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Bounds_js__ = __webpack_require__(34);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Rectangle_js__ = __webpack_require__(14);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Tile_js__ = __webpack_require__(62);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Drawable_js__ = __webpack_require__(19);
-	
-	/* harmony export */ __webpack_require__.d(exports, "a", function() { return View; });var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.View = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Helper = __webpack_require__(4);
+
+	var _Events = __webpack_require__(3);
+
+	var _Point = __webpack_require__(6);
+
+	var _LatLng = __webpack_require__(16);
+
+	var _Bounds = __webpack_require__(34);
+
+	var _Rectangle = __webpack_require__(14);
+
+	var _Tile = __webpack_require__(62);
+
+	var _Drawable2 = __webpack_require__(19);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6078,26 +6215,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	
-
-
-
-
-	
-	
-
-	
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file represents a level of zoom
 	 * @copyright Michael Duve 2016
 	 */
-	var View = function (_Drawable) {
+
+	var View = exports.View = function (_Drawable) {
 	    _inherits(View, _Drawable);
-	
+
 	    _createClass(View, [{
 	        key: 'visibleTiles',
-	
+
 
 	        /**
 	         * get all visible tiles
@@ -6127,20 +6256,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {number} limitToBounds - where to limit panning
 	         * @return {View} instance of View for chaining
 	         */
-	
+
 	    }]);
-	
+
 	    function View(_ref) {
 	        var _ret;
-	
+
 	        var _ref$currentView = _ref.currentView;
-	        var currentView = _ref$currentView === undefined ? new __WEBPACK_IMPORTED_MODULE_5__Rectangle_js__["a" /* Rectangle */]() : _ref$currentView;
+	        var currentView = _ref$currentView === undefined ? new _Rectangle.Rectangle() : _ref$currentView;
 	        var _ref$bounds = _ref.bounds;
-	        var bounds = _ref$bounds === undefined ? new __WEBPACK_IMPORTED_MODULE_4__Bounds_js__["a" /* Bounds */]() : _ref$bounds;
+	        var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
 	        var _ref$center = _ref.center;
-	        var center = _ref$center === undefined ? new __WEBPACK_IMPORTED_MODULE_3__LatLng_js__["a" /* LatLng */]() : _ref$center;
+	        var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
 	        var _ref$initialCenter = _ref.initialCenter;
-	        var initialCenter = _ref$initialCenter === undefined ? new __WEBPACK_IMPORTED_MODULE_3__LatLng_js__["a" /* LatLng */]() : _ref$initialCenter;
+	        var initialCenter = _ref$initialCenter === undefined ? new _LatLng.LatLng() : _ref$initialCenter;
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? {} : _ref$data;
 	        var _ref$context = _ref.context;
@@ -6160,7 +6289,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, { id: id }));
 
-	        _this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        _this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            center: center,
 	            view: currentView,
 	            bounds: bounds,
@@ -6178,14 +6307,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _this.originalMapView = currentView.clone;
 
-	        _this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        _this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            view: _this.view
 	        });
 
 	        _this.tiles = [];
 	        _this.data = data;
 	        _this.context = context;
-	
+
 	        _this.initial = {
 	            position: initialCenter,
 	            zoom: currentZoom
@@ -6195,7 +6324,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    View.prototype.init = function init() {
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            view: this.originalMapView.clone
 	        });
 	        this.view.translate(0 - this.offsetToCenter, 0);
@@ -6207,24 +6336,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * resets current View to its initial position
 	     */
-	
-	
+
+
 	    View.prototype.reset = function reset() {
 	        this.setLatLngToPosition(this.initial.position, this.viewport.center);
 	        var delta = this.initial.zoom - this.zoomFactor;
 	        this.zoom(delta, this.viewport.center);
 	        this.checkBoundaries();
 	    };
-	
+
 	    View.prototype.getDistortedView = function getDistortedView() {
 	        var nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
 	            se = this.info.convertLatLngToPoint(this.limitToBounds.se),
-	            limit = new __WEBPACK_IMPORTED_MODULE_5__Rectangle_js__["a" /* Rectangle */](nw.x + this.view.x, nw.y + this.view.y, se.x - nw.x, se.y - nw.y);
+	            limit = new _Rectangle.Rectangle(nw.x + this.view.x, nw.y + this.view.y, se.x - nw.x, se.y - nw.y);
 	        return limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
 	    };
 
 	    View.prototype.checkBoundaries = function checkBoundaries() {
-	        var offset = new __WEBPACK_IMPORTED_MODULE_2__Point_js__["a" /* Point */]();
+	        var offset = new _Point.Point();
 	        var equalizedMap = this.getDistortedView();
 	        if (!equalizedMap.containsRect(this.viewport)) {
 
@@ -6238,14 +6367,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        offset.multiply(1 / this.distortionFactor, 1);
 	        this.view.translate(offset.x, offset.y);
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            view: this.view
 	        });
 
 	        if (this.viewportIsSmallerThanView(equalizedMap)) {
 	            var diffInHeight = 1 - equalizedMap.height / this.viewport.height;
 	            var diffInWidth = 1 - equalizedMap.width / this.viewport.width;
-	            var diff = __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].clamp(Math.max(diffInHeight, diffInWidth), 0, Number.MAX_VALUE);
+	            var diff = _Helper.Helper.clamp(Math.max(diffInHeight, diffInWidth), 0, Number.MAX_VALUE);
 	            this.zoom(diff, this.viewport.center, true);
 	            return false;
 	        }
@@ -6272,7 +6401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            } else {
 	                this.view.setCenterX(this.viewport.center.x);
-	                this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	                    view: this.view
 	                });
 	            }
@@ -6297,7 +6426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            } else {
 	                this.view.setCenterX(this.viewport.center.x);
-	                this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	                this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	                    view: this.view
 	                });
 	            }
@@ -6314,44 +6443,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	    View.prototype.loadThumb = function loadThumb() {
 	        var _this3 = this;
 
-	        __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].loadImage(this.data.thumb, function (img) {
+	        _Helper.Helper.loadImage(this.data.thumb, function (img) {
 	            _this3.thumb = img;
-	            _this3.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].View.THUMB_LOADED);
+	            _this3.eventManager.publish(_Events.Events.View.THUMB_LOADED);
 	        });
 	        return this;
 	    };
-	
+
 	    /**
 	     * set specified lat/lng to position x/y
 	     * @param {LatLng} latlng - specified latlng to be set Point to
 	     * @param {Point} position - specified position to set LatLng to
 	     * @return {View} instance of View for chaining
 	     */
-	
-	
+
+
 	    View.prototype.setLatLngToPosition = function setLatLngToPosition(latlng, position) {
 	        var currentPosition = this.view.topLeft.substract(position).multiply(-1),
 	            diff = currentPosition.substract(this.info.convertLatLngToPoint(latlng));
 
 	        this.view.translate(0, diff.y);
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            view: this.view
 	        });
 	        this.calculateNewCenter();
 	        this.view.translate(diff.x + this.getDeltaXToCenter(position), 0);
 	        this.calculateNewCenter();
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            view: this.view
 	        });
 	        return this;
 	    };
-	
+
 	    /**
 	     * receive relative Position to center of viewport
 	     * @param  {Point} pos - specified position
 	     * @return {number} delta of point to center of viewport
 	     */
-	
+
 
 	    View.prototype.getDeltaXToCenter = function getDeltaXToCenter(pos) {
 	        var diffToCenter = pos.clone.substract(this.viewport.center),
@@ -6359,7 +6488,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            delta = distanceToCenter * this.offsetToCenter;
 	        return delta / this.distortionFactor;
 	    };
-	
+
 	    /**
 	     * zooming handler
 	     * @param  {number} factor - increase/decrease factor
@@ -6383,17 +6512,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.wasSmallerLastTime = viewportIsSmaller;
 	        }
 
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
-	            zoomFactor: __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            zoomFactor: _Helper.Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
 	        });
-	
+
 	        var mapPosition = this.view.topLeft.substract(pos).multiply(-1);
 	        mapPosition.x += this.getDeltaXToCenter(pos);
 	        var latlngPosition = this.info.convertPointToLatLng(mapPosition);
 
 	        var newSize = this.originalMapView.clone.scale(this.zoomFactor);
 	        this.view.setSize(newSize.width, newSize.height);
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            view: this.view
 	        });
 
@@ -6402,12 +6531,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return this;
 	    };
-	
+
 	    View.prototype.changeZoomLevelIfNecessary = function changeZoomLevelIfNecessary(factor, viewportIsSmaller) {
 	        if (this.zoomFactor >= this.maxZoom && factor > 0) {
-	            this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.NEXT_LEVEL);
+	            this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
 	        } else if (this.zoomFactor <= this.minZoom && factor < 0 && !viewportIsSmaller) {
-	            this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].TileMap.PREVIOUS_LEVEL);
+	            this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
 	        }
 	    };
 
@@ -6416,32 +6545,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {View} instance of View for chaining
 	     */
 
-	
+
 	    View.prototype.calculateNewCenter = function calculateNewCenter() {
 	        var newCenter = this.info.convertPointToLatLng(this.viewport.center.substract(this.view.topLeft));
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            center: newCenter
 	        });
 	        return this;
 	    };
-	
+
 	    /**
 	     * moves the view's current position by pos
 	     * @param  {Point} pos - specified additional offset
 	     * @return {View} instance of View for chaining
 	     */
-	
+
 
 	    View.prototype.moveView = function moveView(pos) {
 	        this.view.translate(0, pos.y);
 	        this.calculateNewCenter();
 	        this.view.translate(pos.x * (1 / this.distortionFactor), 0);
-	        this.eventManager.publish(__WEBPACK_IMPORTED_MODULE_1__Events_js__["a" /* Events */].MapInformation.UPDATE, {
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            view: this.view
 	        });
 	        return this;
 	    };
-	
+
 	    /**
 	     * Handles draw of visible elements
 	     * @return {View} instance of View for chaining
@@ -6451,15 +6580,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    View.prototype.draw = function draw() {
 	        return this.drawThumbnail().drawVisibleTiles();
 	    };
-	
+
 	    /**
 	     * draws all visible tiles
 	     * @return {View} instance of View for chaining
 	     */
-	
+
 
 	    View.prototype.drawVisibleTiles = function drawVisibleTiles() {
-	        __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].forEach(this.visibleTiles, function (tile) {
+	        _Helper.Helper.forEach(this.visibleTiles, function (tile) {
 	            return tile.draw();
 	        });
 	        return this;
@@ -6470,7 +6599,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {View} instance of View for chaining
 	     */
 
-	
+
 	    View.prototype.drawThumbnail = function drawThumbnail() {
 	        if (this.thumb) {
 	            var rect = this.view.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
@@ -6487,16 +6616,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    View.prototype.initializeTiles = function initializeTiles() {
 	        var _this4 = this;
-		
+
 	        var currentLevel = this.data.tiles;
-	        __WEBPACK_IMPORTED_MODULE_0__Helper_js__["a" /* Helper */].forEach(currentLevel, function (currentTileData) {
-	            _this4.tiles.push(new __WEBPACK_IMPORTED_MODULE_6__Tile_js__["a" /* Tile */](currentTileData, _this4.context, _this4.id));
+	        _Helper.Helper.forEach(currentLevel, function (currentTileData) {
+	            _this4.tiles.push(new _Tile.Tile(currentTileData, _this4.context, _this4.id));
 	        });
 	        return this;
 	    };
 
 	    return View;
-	}(__WEBPACK_IMPORTED_MODULE_7__Drawable_js__["a" /* Drawable */]);
+	}(_Drawable2.Drawable);
 
 /***/ },
 /* 65 */
