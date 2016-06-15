@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for Helper.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="index.html">All files</a> Helper.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">16.67% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>7/42</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">6.12% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>3/49</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">14.29% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/21</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">16.22% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>6/37</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * @author Michael Duve &lt;mduve@designmail.net&gt;
+ * @file Helper for general purposes
+ * @copyright Michael Duve 2016
+ * @module Helper
+ */
+export var Helper = <span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" >{</span></span></span></span></span></span></span></span></span></span>
+    /**
+     * request json-data from given file and calls callback on success
+     * @function
+     * @memberof module:Helper
+     * @param  {string} filename - path to file
+     * @param  {Helper~requestJSONCallback} callback - function called when data is loaded successfully
+     * @return {Helper} Helper object for chaining
+     */
+    requestJSON(filename, callback) {
+<span class="cstat-no" title="statement not covered" >        Helper.getFile(filename, <span class="fstat-no" title="function not covered" >(jsonFileData) =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (callback) <span class="cstat-no" title="statement not covered" >c</span>allback(JSON.parse(jsonFileData));</span>
+        });
+<span class="cstat-no" title="statement not covered" >        return this;</span>
+    },
+    find(elementString, element = null) <span class="cstat-no" title="statement not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >        return (element||document).querySelector(elementString);</span>
+    },
+    findAll(elementString, element = null) <span class="cstat-no" title="statement not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >        return (element||document).querySelectorAll(elementString);</span>
+    },
+    show(elem) {
+<span class="cstat-no" title="statement not covered" >        elem.style.display = "";</span>
+    },
+    hide(elem) {
+<span class="cstat-no" title="statement not covered" >        elem.style.display = "none";</span>
+    },
+    css(elem, css) {
+<span class="cstat-no" title="statement not covered" >        for (const property in css) {</span>
+<span class="cstat-no" title="statement not covered" >            elem.style[property] = css[property];</span>
+        }
+    },
+    addListener(el, s, fn) {
+<span class="cstat-no" title="statement not covered" >        s.split(" ").forEach(<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >e =&gt; el.addEventListener(e, fn, false));</span></span></span>
+    },
+    /**
+     * clamps a value to specified min and max
+     * @function
+     * @memberof module:Helper
+     * @param  {number} v = 0 - specified value to clamp
+     * @param  {number} min = v - minimum value to clamp to
+     * @param  {number} max = v - maximum value to clamp to
+     * @return {number} clamped value
+     */
+    clamp(v = 0, min = v, max = v) <span class="cstat-no" title="statement not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >        return Math.min(Math.max(v, min), max);</span>
+    },
+    /**
+     * loads an image and calls callback on success
+     * @function
+     * @memberof module:Helper
+     * @param {Helper~loadImageCallback} cb - callback-function on success
+     * @return {Helper} Helper object for chaining
+     */
+    loadImage(path, cb) {
+<span class="cstat-no" title="statement not covered" >        const img = new Image();</span>
+<span class="cstat-no" title="statement not covered" >        img.onload = <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (cb &amp;&amp; typeof cb === "function") <span class="cstat-no" title="statement not covered" >c</span>b(img);</span>
+        };
+<span class="cstat-no" title="statement not covered" >        img.src = path;</span>
+<span class="cstat-no" title="statement not covered" >        return this;</span>
+    },
+    /**
+     * request data from given file and calls callback on success
+     * @function
+     * @memberof module:Helper
+     * @param  {string} url - path to file
+     * @param  {Helper~getFileCallback} callback - function called when data is loaded successfully
+     * @return {Helper} Helper object for chaining
+     */
+    getFile(url, callback) {
+<span class="cstat-no" title="statement not covered" >        const xhr = new XMLHttpRequest();</span>
+<span class="cstat-no" title="statement not covered" >        xhr.onreadystatechange = <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (xhr.readyState === XMLHttpRequest.DONE) {</span>
+<span class="cstat-no" title="statement not covered" >                i</span>f (xhr.status === 200 &amp;&amp; callback) <span class="cstat-no" title="statement not covered" >callback(xhr.responseText);</span>
+                else <span class="cstat-no" title="statement not covered" >throw new Error("The JSON submitted seems not valid", xhr);</span>
+            }
+        };
+<span class="cstat-no" title="statement not covered" >        xhr.open("GET", url, true);</span>
+<span class="cstat-no" title="statement not covered" >        xhr.send();</span>
+<span class="cstat-no" title="statement not covered" >        return this;</span>
+    },
+    /**
+     * for each helper
+     * @function
+     * @memberof module:Helper
+     * @param  {Object[]} a - array to iterate over each value
+     * @param  {Helper~forEachCallback} cb - callback for each object
+     * @return {Helper} Helper object for chaining
+     */
+    forEach(a, cb) {
+        for (const i in a) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (a[i] &amp;&amp; typeof cb === "function") cb(a[i], i);
+        }
+        return this;
+    },
+    /**
+     * formula for linear easing
+     * @function
+     * @memberof module:Helper
+     * @param  {number} t - current time
+     * @param  {Point} b - start value
+     * @param  {Point} c - total difference to start
+     * @param  {number} d - duration
+     * @return {number} linear value at specific time
+     */
+    linearEase(t, b, c, d) {
+        return c.clone.multiply(t).divide(d).add(b);
+    },
+    /**
+     * convert degree to radian
+     * @function
+     * @memberof module:Helper
+     * @param {number} degrees - specified degrees
+     * @return {number} converted radian
+     */
+    toRadians: degrees =&gt; degrees * Math.PI / 180,
+    /**
+     * checks if mouse is possible
+     * @function
+     * @memberof module:Helper
+     * @return {Boolean} if true, mouse is possible
+     */
+    isMouse: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; ('onmousedown' in window),</span></span>
+&nbsp;
+    /**
+     * checks if touch is possible
+     * @function
+     * @memberof module:Helper
+     * @return {Boolean} if true, touch is possible
+     */
+    isTouch: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; (('ontouchstart' in window) || (navigator.MaxTouchPoints &gt; 0) || (navigator.msMaxTouchPoints &gt; 0)),</span></span>
+&nbsp;
+    /**
+     * checks if IE is used
+     * @function
+     * @memberof module:Helper
+     * @return {Boolean} if true, IE is used
+     */
+    isIE: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; ((navigator.MaxTouchPoints &gt; 0) || (navigator.msMaxTouchPoints &gt; 0)),</span></span>
+&nbsp;
+    /**
+     * gets cross-browser scroll-event
+     * @function
+     * @memberof module:Helper
+     * @return {string} name of scroll event
+     */
+    scrollEvent: <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll"</span></span>
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 15 2016 23:14:18 GMT+0200 (CEST)
+</div>
+</div>
+<script src="prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="sorter.js"></script>
+</body>
+</html>

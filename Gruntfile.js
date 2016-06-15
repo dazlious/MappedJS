@@ -122,7 +122,9 @@ module.exports = function(grunt) {
                 }
             },
             dev: {
-
+                output: {
+                    filename: '[name].js'
+                }
             },
             prod: {
                 output: {
@@ -133,30 +135,12 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        babel: {
-            options: {
-                presets: ['es2015'],
-                plugins: ["transform-es2015-modules-umd"]
-            },
-            plugin: {
-                files: [{
-                    expand: true,
-                    cwd: 'plugin/src/js/',
-                    src: ['**.js'],
-                    dest: 'es5-transpiled'
-                }]
-            }
-        },
-        jsbeautifier: {
-            files: ["es5-transpiled/**.js"],
-            options: {
-                jslint_happy: true,
-                break_chained_methods: true
-            }
-        },
         shell: {
             deployDocs: {
                 command: 'sh ./deploy-pages.sh'
+            },
+            tests: {
+                command: './node_modules/.bin/istanbul cover _mocha'
             }
         },
         watch: {
@@ -180,14 +164,6 @@ module.exports = function(grunt) {
                     "plugin/dist/styles/mappedJS.css": "plugin/src/styles/mappedJS.scss"
                 }
             }
-        },
-        karma: {
-            chrome: {
-                configFile: 'test/chrome.karma.config.js'
-            },
-            full: {
-                configFile: 'test/full.karma.config.js'
-            }
         }
     });
 
@@ -197,31 +173,26 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-md');
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-webpack');
-    grunt.loadNpmTasks('grunt-babel');
-    grunt.loadNpmTasks("grunt-jsbeautifier");
     grunt.loadNpmTasks("grunt-shell");
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-sass');
-    grunt.loadNpmTasks('grunt-karma');
 
     // Register grunt tasks
     grunt.registerTask('default', []);
 
-    grunt.registerTask("transpile", ["babel:plugin", "jsbeautifier"]);
     grunt.registerTask('docs', ["jsdoc2md:plugin", "md:plugin"]);
     grunt.registerTask('report', ["postcss", "cssstats:plugin"]);
 
-    grunt.registerTask('deployDocs', ["transpile", "docs", "report"]);
+    grunt.registerTask('deployDocs', ["docs", "report"]);
     grunt.registerTask('gh-pages', ["shell:deployDocs"]);
 
     grunt.registerTask('dev', ["watch:plugin"]);
     grunt.registerTask('bundle', ["sass:plugin", "postcss:dev", "webpack:dev"]);
     grunt.registerTask('ship', ["sass:plugin", "postcss:prod", "webpack:prod"]);
 
-    grunt.registerTask('tests', ["transpile", "karma:chrome"]);
-    grunt.registerTask('testsFull', ["transpile", "karma:full"]);
+    grunt.registerTask('tests', ["shell:tests"]);
 
-    grunt.registerTask('full', ["testsFull", "bundle", "ship", "deployDocs"]);
+    grunt.registerTask('full', ["tests", "bundle", "ship", "deployDocs"]);
 
 
 };
