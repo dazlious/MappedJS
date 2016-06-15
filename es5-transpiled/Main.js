@@ -246,7 +246,6 @@
                             if (data.target.classList.contains("control")) return false;
                             var change = data.positionLast.clone.substract(data.positionMove);
                             _this2.tileMap.velocity = new _Point.Point();
-                            //console.log(data.positionLast, data.positionMove);
                             _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
                         },
                         wheel: function wheel(data) {
