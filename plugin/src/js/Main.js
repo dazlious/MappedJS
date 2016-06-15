@@ -1,4 +1,6 @@
-import "babel-polyfill";
+import "../../../node_modules/babel-polyfill/node_modules/core-js/es5/index.js";
+import "../../../node_modules/babel-polyfill/node_modules/core-js/es6/object.js";
+import "../../../node_modules/babel-polyfill/node_modules/core-js/es6/array.js";
 import {Helper} from './Helper.js';
 import {Events} from './Events.js';
 import {Publisher} from './Publisher.js';

@@ -1,17 +1,17 @@
 (function(global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(['exports', './Helper.js', './Events.js', './Publisher.js', './TileMap.js', './DataEnrichment.js', './Interact.js', './Point.js', 'babel-polyfill'], factory);
+        define(["exports", "./Helper.js", "./Events.js", "./Publisher.js", "./TileMap.js", "./DataEnrichment.js", "./Interact.js", "./Point.js", "../../../node_modules/babel-polyfill/node_modules/core-js/es5/index.js", "../../../node_modules/babel-polyfill/node_modules/core-js/es6/object.js", "../../../node_modules/babel-polyfill/node_modules/core-js/es6/array.js"], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports, require('./Helper.js'), require('./Events.js'), require('./Publisher.js'), require('./TileMap.js'), require('./DataEnrichment.js'), require('./Interact.js'), require('./Point.js'), require('babel-polyfill'));
+        factory(exports, require("./Helper.js"), require("./Events.js"), require("./Publisher.js"), require("./TileMap.js"), require("./DataEnrichment.js"), require("./Interact.js"), require("./Point.js"), require("../../../node_modules/babel-polyfill/node_modules/core-js/es5/index.js"), require("../../../node_modules/babel-polyfill/node_modules/core-js/es6/object.js"), require("../../../node_modules/babel-polyfill/node_modules/core-js/es6/array.js"));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports, global.Helper, global.Events, global.Publisher, global.TileMap, global.DataEnrichment, global.Interact, global.Point, global.babelPolyfill);
+        factory(mod.exports, global.Helper, global.Events, global.Publisher, global.TileMap, global.DataEnrichment, global.Interact, global.Point, global.index, global.object, global.array);
         global.Main = mod.exports;
     }
 })(this, function(exports, _Helper, _Events, _Publisher, _TileMap, _DataEnrichment, _Interact, _Point) {
-    'use strict';
+    "use strict";
 
     Object.defineProperty(exports, "__esModule", {
         value: true
@@ -109,7 +109,7 @@
         }
 
         _createClass(MappedJS, [{
-            key: 'generateUniqueID',
+            key: "generateUniqueID",
             value: function generateUniqueID() {
                 return parseInt(Date.now() * (Math.random() * 10), 10);
             }
@@ -119,7 +119,7 @@
              */
 
         }, {
-            key: 'addControls',
+            key: "addControls",
             value: function addControls() {
                 if (this.mapSettings.controls) {
                     this.controls = document.createElement("div");
@@ -151,7 +151,7 @@
              */
 
         }, {
-            key: 'initializeSettings',
+            key: "initializeSettings",
             value: function initializeSettings(container) {
                 var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
                 var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
@@ -176,14 +176,14 @@
              */
 
         }, {
-            key: 'initializeData',
+            key: "initializeData",
             value: function initializeData(mapData, cb) {
                 if (typeof mapData === "string") {
                     _Helper.Helper.requestJSON(mapData, function(data) {
                         cb(data);
                     });
                 } else {
-                    cb((typeof mapData === 'undefined' ? 'undefined' : _typeof(mapData)) === "object" ? mapData : null);
+                    cb((typeof mapData === "undefined" ? "undefined" : _typeof(mapData)) === "object" ? mapData : null);
                 }
                 return this;
             }
@@ -194,7 +194,7 @@
              */
 
         }, {
-            key: 'initializeMap',
+            key: "initializeMap",
             value: function initializeMap() {
                 this.tileMap = new _TileMap.TileMap({
                     container: this.content,
@@ -212,7 +212,7 @@
              */
 
         }, {
-            key: 'getAbsolutePosition',
+            key: "getAbsolutePosition",
             value: function getAbsolutePosition(point) {
                 return point.clone.multiply(this.tileMap.width, this.tileMap.height);
             }
@@ -223,7 +223,7 @@
              */
 
         }, {
-            key: 'initializeInteractForMap',
+            key: "initializeInteractForMap",
             value: function initializeInteractForMap() {
                 var _this2 = this;
 
@@ -272,7 +272,7 @@
              */
 
         }, {
-            key: 'bindEvents',
+            key: "bindEvents",
             value: function bindEvents() {
 
                 this.initializeInteractForMap();
@@ -300,7 +300,7 @@
              */
 
         }, {
-            key: 'resetToInitialState',
+            key: "resetToInitialState",
             value: function resetToInitialState() {
                 this.tileMap.reset();
                 return this;
@@ -312,7 +312,7 @@
              */
 
         }, {
-            key: 'zoomInToCenter',
+            key: "zoomInToCenter",
             value: function zoomInToCenter() {
                 this.tileMap.zoom(0.2, this.tileMap.view.viewport.center);
                 return this;
@@ -324,7 +324,7 @@
              */
 
         }, {
-            key: 'zoomOutToCenter',
+            key: "zoomOutToCenter",
             value: function zoomOutToCenter() {
                 this.tileMap.zoom(-0.2, this.tileMap.view.viewport.center);
                 return this;
@@ -337,7 +337,7 @@
              */
 
         }, {
-            key: 'keyPress',
+            key: "keyPress",
             value: function keyPress(e) {
                 switch (e.keyCode) {
                     case 38:
@@ -385,14 +385,14 @@
              */
 
         }, {
-            key: 'handleMovementByKeys',
+            key: "handleMovementByKeys",
             value: function handleMovementByKeys(direction) {
                 this.keyTicks++;
                 this.tileMap.moveView(direction.multiply(this.keyTicks));
                 return this;
             }
         }, {
-            key: 'keyRelease',
+            key: "keyRelease",
             value: function keyRelease() {
                 this.keyTicks = 0;
             }
@@ -403,7 +403,7 @@
              */
 
         }, {
-            key: 'resizeHandler',
+            key: "resizeHandler",
             value: function resizeHandler() {
                 this.tileMap.resize();
                 return this;
@@ -415,12 +415,12 @@
              */
 
         }, {
-            key: 'loadingFinished',
+            key: "loadingFinished",
             value: function loadingFinished() {
                 return this;
             }
         }, {
-            key: 'polyfill',
+            key: "polyfill",
             value: function polyfill() {
                 /*
                 polyfill from eligrey for element.class | Listhttps://github.com/eligrey/classList.js/

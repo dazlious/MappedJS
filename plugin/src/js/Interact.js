@@ -205,8 +205,8 @@ export class Interact {
             "-ms-content-zooming": "none"
         };
         Helper.css(this.container, css);
-        for (const child of this.container.childNodes) {
-            Helper.css(child, css);
+        for (let i = 0; i < this.container.childNodes; i++) {
+            Helper.css(this.container.childNodes[i], css);
         }
         this.bindEvents();
         return this;
