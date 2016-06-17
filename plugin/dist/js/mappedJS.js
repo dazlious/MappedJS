@@ -1862,6 +1862,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.DataEnrichment = undefined;
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	var _Helper = __webpack_require__(4);
 
 	var _Point = __webpack_require__(6);
@@ -1942,17 +1944,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {object} data - specified data for mapsettings
 	     * @return {object} enriched mapsettings data
 	     */
-	    mapSettings: function mapSettings(data) {
+	    mapSettings: function mapSettings() {
+	        var data = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
 	        var enrichedData = Object.assign({}, DataEnrichment.MAP_SETTINGS, data),
 	            bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
 	            center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
-	        if (!enrichedData.limitToBounds) {
-	            enrichedData.limitToBounds = bounds;
+	        if (_typeof(data.limitToBounds) === "object") {
+	            var boundsNW = new _LatLng.LatLng(data.limitToBounds.northWest[0], data.limitToBounds.northWest[1]);
+	            var boundsSE = new _LatLng.LatLng(data.limitToBounds.southEast[0], data.limitToBounds.southEast[1]);
+	            var boundsLimit = new _Bounds.Bounds(boundsNW, boundsSE);
+	            enrichedData.limitToBounds = boundsLimit;
 	        } else {
-	            if (!(enrichedData.limitToBounds instanceof _Bounds.Bounds)) {
-	                enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
-	            }
+	            enrichedData.limitToBounds = bounds;
 	        }
 
 	        enrichedData.bounds = bounds;
