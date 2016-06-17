@@ -266,7 +266,7 @@ export class Rectangle extends Point {
      * @param  {number} height = 0 - specified height to be added to this height
      * @return {Rectangle} instance of Rectangle for chaining
      */
-    transform(x = 0, y = x, width = 0, height = 0) {
+    transform(x = 0, y = x, width = 0, height = width) {
         this.translate(x, y);
         this.width += width;
         this.height += height;
@@ -279,7 +279,7 @@ export class Rectangle extends Point {
      * @param  {number} y = 0 - he new y position
      * @return {Rectangle} instance of Rectangle for chaining
      */
-    position(x = 0, y = 0) {
+    position(x = 0, y = x) {
         super.position(x, y);
         return this;
     }
@@ -292,7 +292,7 @@ export class Rectangle extends Point {
      * @param  {number} height = 0 - the new width
      * @return {Rectangle} instance of Rectangle for chaining
      */
-    size(x = 0, y = x, width = 0, height = 0) {
+    size(x = 0, y = x, width = 0, height = width) {
         this.position(x, y);
         this.width = width;
         this.height = height;

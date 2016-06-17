@@ -1302,7 +1302,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 	    var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-	    var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+	    var height = arguments.length <= 3 || arguments[3] === undefined ? width : arguments[3];
 
 	    this.translate(x, y);
 	    this.width += width;
@@ -1320,7 +1320,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  Rectangle.prototype.position = function position() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
 	    _Point.prototype.position.call(this, x, y);
 	    return this;
@@ -1340,7 +1340,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 	    var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-	    var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+	    var height = arguments.length <= 3 || arguments[3] === undefined ? width : arguments[3];
 
 	    this.position(x, y);
 	    this.width = width;
