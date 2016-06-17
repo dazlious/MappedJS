@@ -27,7 +27,7 @@ export class Publisher {
      * @return {Publisher} instance of Publisher for chaining
      */
     subscribe(type = "any", fn = function() {}) {
-        if (!this.subscribers[type]) this.subscribers[type] = [];
+        if (this.subscribers[type] === undefined) this.subscribers[type] = [];
         this.subscribers[type].push(fn);
         return this;
     }
@@ -60,7 +60,7 @@ export class Publisher {
      * @return {Publisher} instance of Publisher for chaining
      */
     handle(action, type, data) {
-        const subs = (this.subscribers[type]) ? this.subscribers[type]: [];
+        const subs = (this.subscribers[type] !== undefined) ? this.subscribers[type]: [];
         for (const [i, fn] of subs.entries()) {
             if (action === Events.Publisher.PUBLISH) {
                 fn(data);

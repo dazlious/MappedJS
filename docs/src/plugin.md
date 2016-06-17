@@ -1818,7 +1818,7 @@ transforms a rectangle by specified coords
 - x <code>number</code> <code> = 0</code> - = 0 - specified x to be added to x position
 - y <code>number</code> - = x - specified y to be added to y position
 - width <code>number</code> <code> = 0</code> - = 0 - specified width to be added to this width
-- height <code>number</code> <code> = 0</code> - = 0 - specified height to be added to this height
+- height <code>number</code> - = 0 - specified height to be added to this height
 
 <a name="Rectangle+position"></a>
 
@@ -1830,7 +1830,7 @@ changes the position a rectangle by specified coords
 **Params**
 
 - x <code>number</code> <code> = 0</code> - = 0 - the new x position
-- y <code>number</code> <code> = 0</code> - = 0 - he new y position
+- y <code>number</code> - = 0 - he new y position
 
 <a name="Rectangle+size"></a>
 
@@ -1844,7 +1844,7 @@ changes the size of a rectangle by specified params
 - x <code>number</code> <code> = 0</code> - = 0- the new x position
 - y <code>number</code> - = x - the new y position
 - width <code>number</code> <code> = 0</code> - = 0 - the new width
-- height <code>number</code> <code> = 0</code> - = 0 - the new width
+- height <code>number</code> - = 0 - the new width
 
 <a name="Rectangle+setSize"></a>
 

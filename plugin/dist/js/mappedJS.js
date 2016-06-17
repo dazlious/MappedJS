@@ -774,7 +774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
 	        var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
 
-	        if (!this.subscribers[type]) this.subscribers[type] = [];
+	        if (this.subscribers[type] === undefined) this.subscribers[type] = [];
 	        this.subscribers[type].push(fn);
 	        return this;
 	    };
@@ -819,7 +819,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    Publisher.prototype.handle = function handle(action, type, data) {
-	        var subs = this.subscribers[type] ? this.subscribers[type] : [];
+	        var subs = this.subscribers[type] !== undefined ? this.subscribers[type] : [];
 	        var _iteratorNormalCompletion = true;
 	        var _didIteratorError = false;
 	        var _iteratorError = undefined;
@@ -1302,7 +1302,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 	    var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-	    var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+	    var height = arguments.length <= 3 || arguments[3] === undefined ? width : arguments[3];
 
 	    this.translate(x, y);
 	    this.width += width;
@@ -1320,7 +1320,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  Rectangle.prototype.position = function position() {
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	    var y = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 
 	    _Point.prototype.position.call(this, x, y);
 	    return this;
@@ -1340,7 +1340,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var x = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	    var y = arguments.length <= 1 || arguments[1] === undefined ? x : arguments[1];
 	    var width = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-	    var height = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+	    var height = arguments.length <= 3 || arguments[3] === undefined ? width : arguments[3];
 
 	    this.position(x, y);
 	    this.width = width;
@@ -1862,6 +1862,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.DataEnrichment = undefined;
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	var _Helper = __webpack_require__(4);
 
 	var _Point = __webpack_require__(6);
@@ -1942,17 +1944,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {object} data - specified data for mapsettings
 	     * @return {object} enriched mapsettings data
 	     */
-	    mapSettings: function mapSettings(data) {
+	    mapSettings: function mapSettings() {
+	        var data = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
 	        var enrichedData = Object.assign({}, DataEnrichment.MAP_SETTINGS, data),
 	            bounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new _LatLng.LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
 	            center = new _LatLng.LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
-	        if (!enrichedData.limitToBounds) {
-	            enrichedData.limitToBounds = bounds;
+	        if (_typeof(data.limitToBounds) === "object") {
+	            var boundsNW = new _LatLng.LatLng(data.limitToBounds.northWest[0], data.limitToBounds.northWest[1]);
+	            var boundsSE = new _LatLng.LatLng(data.limitToBounds.southEast[0], data.limitToBounds.southEast[1]);
+	            var boundsLimit = new _Bounds.Bounds(boundsNW, boundsSE);
+	            enrichedData.limitToBounds = boundsLimit;
 	        } else {
-	            if (!(enrichedData.limitToBounds instanceof _Bounds.Bounds)) {
-	                enrichedData.limitToBounds = new _Bounds.Bounds(new _LatLng.LatLng(enrichedData.limitToBounds.northWest[0], enrichedData.limitToBounds.northWest[1]), new _LatLng.LatLng(enrichedData.limitToBounds.southEast[0], enrichedData.limitToBounds.southEast[1]));
-	            }
+	            enrichedData.limitToBounds = bounds;
 	        }
 
 	        enrichedData.bounds = bounds;
