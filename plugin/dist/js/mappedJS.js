@@ -774,7 +774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var type = arguments.length <= 0 || arguments[0] === undefined ? "any" : arguments[0];
 	        var fn = arguments.length <= 1 || arguments[1] === undefined ? function () {} : arguments[1];
 
-	        if (!this.subscribers[type]) this.subscribers[type] = [];
+	        if (this.subscribers[type] === undefined) this.subscribers[type] = [];
 	        this.subscribers[type].push(fn);
 	        return this;
 	    };
@@ -819,7 +819,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    Publisher.prototype.handle = function handle(action, type, data) {
-	        var subs = this.subscribers[type] ? this.subscribers[type] : [];
+	        var subs = this.subscribers[type] !== undefined ? this.subscribers[type] : [];
 	        var _iteratorNormalCompletion = true;
 	        var _didIteratorError = false;
 	        var _iteratorError = undefined;
