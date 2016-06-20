@@ -1892,7 +1892,6 @@ Creates a Rectangle from specified Rectangle
     * [.next()](#StateHandler+next) ⇒ <code>[StateHandler](#StateHandler)</code>
     * [.previous()](#StateHandler+previous) ⇒ <code>[StateHandler](#StateHandler)</code>
     * [.changeTo(state)](#StateHandler+changeTo) ⇒ <code>[StateHandler](#StateHandler)</code>
-    * [.changeToValue(prop, value)](#StateHandler+changeToValue) ⇒ <code>[StateHandler](#StateHandler)</code>
     * [.hasNext()](#StateHandler+hasNext) ⇒ <code>Boolean</code>
     * [.hasPrevious()](#StateHandler+hasPrevious) ⇒ <code>Boolean</code>
 
@@ -1942,18 +1941,6 @@ change the state to specified state
 **Params**
 
 - state <code>number</code> - index of state in array
-
-<a name="StateHandler+changeToValue"></a>
-
-### stateHandler.changeToValue(prop, value) ⇒ <code>[StateHandler](#StateHandler)</code>
-change the state to specified value of specified property
-
-**Kind**: instance method of <code>[StateHandler](#StateHandler)</code>  
-**Returns**: <code>[StateHandler](#StateHandler)</code> - instance of StateHandler for chaining  
-**Params**
-
-- prop <code>object</code> - specified property to be changed
-- value <code>object</code> - specified value that should be changed to
 
 <a name="StateHandler+hasNext"></a>
 

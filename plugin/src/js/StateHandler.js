@@ -64,22 +64,6 @@ export class StateHandler {
     }
 
     /**
-     * change the state to specified value of specified property
-     * @param {object} prop - specified property to be changed
-     * @param {object} value - specified value that should be changed to
-     * @return {StateHandler} instance of StateHandler for chaining
-     */
-    changeToValue(prop, value) {
-        for (const [i, element] of this.states) {
-            if (value === element[prop]) {
-                this.i = i;
-                break;
-            }
-        }
-        return this;
-    }
-
-    /**
      * checks if there is a next element
      * @return {Boolean} wheter there is a next state or not
      */
