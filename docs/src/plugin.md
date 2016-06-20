@@ -112,7 +112,6 @@ Helper for general purposes
     * [.loadImage(cb)](#module_Helper.loadImage) ⇒ <code>Helper</code>
     * [.getFile(url, callback)](#module_Helper.getFile) ⇒ <code>Helper</code>
     * [.forEach(a, cb)](#module_Helper.forEach) ⇒ <code>Helper</code>
-    * [.linearEase(t, b, c, d)](#module_Helper.linearEase) ⇒ <code>number</code>
     * [.toRadians(degrees)](#module_Helper.toRadians) ⇒ <code>number</code>
     * [.isMouse()](#module_Helper.isMouse) ⇒ <code>Boolean</code>
     * [.isTouch()](#module_Helper.isTouch) ⇒ <code>Boolean</code>
@@ -178,20 +177,6 @@ for each helper
 
 - a <code>Array.&lt;Object&gt;</code> - array to iterate over each value
 - cb <code>Helper~forEachCallback</code> - callback for each object
-
-<a name="module_Helper.linearEase"></a>
-
-### Helper.linearEase(t, b, c, d) ⇒ <code>number</code>
-formula for linear easing
-
-**Kind**: static method of <code>[Helper](#module_Helper)</code>  
-**Returns**: <code>number</code> - linear value at specific time  
-**Params**
-
-- t <code>number</code> - current time
-- b <code>[Point](#Point)</code> - start value
-- c <code>[Point](#Point)</code> - total difference to start
-- d <code>number</code> - duration
 
 <a name="module_Helper.toRadians"></a>
 

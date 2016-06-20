@@ -384,23 +384,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    forEach: function forEach(a, cb) {
 	        for (var i in a) {
-	            if (a[i] && typeof cb === "function") cb(a[i], i);
+	            if (a[i] !== undefined && typeof cb === "function") cb(a[i], i);
 	        }
 	        return this;
-	    },
-
-	    /**
-	     * formula for linear easing
-	     * @function
-	     * @memberof module:Helper
-	     * @param  {number} t - current time
-	     * @param  {Point} b - start value
-	     * @param  {Point} c - total difference to start
-	     * @param  {number} d - duration
-	     * @return {number} linear value at specific time
-	     */
-	    linearEase: function linearEase(t, b, c, d) {
-	        return c.clone.multiply(t).divide(d).add(b);
 	    },
 
 	    /**
@@ -422,7 +408,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    isMouse: function isMouse() {
 	        return 'onmousedown' in window;
 	    },
-
 	    /**
 	     * checks if touch is possible
 	     * @function
@@ -432,7 +417,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    isTouch: function isTouch() {
 	        return 'ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 	    },
-
 	    /**
 	     * checks if IE is used
 	     * @function
@@ -442,7 +426,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    isIE: function isIE() {
 	        return navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 	    },
-
 	    /**
 	     * gets cross-browser scroll-event
 	     * @function

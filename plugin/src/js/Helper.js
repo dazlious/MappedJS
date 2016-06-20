@@ -96,22 +96,9 @@ export var Helper = {
      */
     forEach(a, cb) {
         for (const i in a) {
-            if (a[i] && typeof cb === "function") cb(a[i], i);
+            if (a[i] !== undefined && typeof cb === "function") cb(a[i], i);
         }
         return this;
-    },
-    /**
-     * formula for linear easing
-     * @function
-     * @memberof module:Helper
-     * @param  {number} t - current time
-     * @param  {Point} b - start value
-     * @param  {Point} c - total difference to start
-     * @param  {number} d - duration
-     * @return {number} linear value at specific time
-     */
-    linearEase(t, b, c, d) {
-        return c.clone.multiply(t).divide(d).add(b);
     },
     /**
      * convert degree to radian
@@ -128,7 +115,6 @@ export var Helper = {
      * @return {Boolean} if true, mouse is possible
      */
     isMouse: () => ('onmousedown' in window),
-
     /**
      * checks if touch is possible
      * @function
@@ -136,7 +122,6 @@ export var Helper = {
      * @return {Boolean} if true, touch is possible
      */
     isTouch: () => (('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
-
     /**
      * checks if IE is used
      * @function
@@ -144,7 +129,6 @@ export var Helper = {
      * @return {Boolean} if true, IE is used
      */
     isIE: () => ((navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
-
     /**
      * gets cross-browser scroll-event
      * @function
