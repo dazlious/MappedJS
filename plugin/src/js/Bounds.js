@@ -30,7 +30,7 @@ export class Bounds {
      * @return {Bounds} instance of Bounds for chaining
      */
     constructor(northWest = new LatLng(), southEast = new LatLng()) {
-        if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) throw new Error(`${northWest} needs to be top-right corner and ${southEast} bottom-left`);
+        if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) throw new Error(`${northWest} needs to be top-left corner and ${southEast} bottom-right`);
         this.nw = northWest;
         this.se = southEast;
         return this;
