@@ -41,7 +41,7 @@ export class Drawable extends Rectangle {
         return this.info.get().bounds;
     }
 
-    constructor({id, x = 0, y = 0, w = 0, h = 0}) {
+    constructor(id = 0, x = 0, y = 0, w = 0, h = 0) {
         super(x, y, w, h);
         this.id = id;
         this.info = new MapInformation(this.id);

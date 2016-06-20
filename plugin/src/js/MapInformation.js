@@ -25,7 +25,7 @@ export class MapInformation {
      * @return {Point} pixels per lat/lng
      */
     get pixelPerLatLng() {
-        return new Point(this.data.view.width / this.data.bounds.width, this.data.view.height / this.data.bounds.height);
+        return new Point((this.data.view.width / this.data.bounds.width) || 0, (this.data.view.height / this.data.bounds.height) || 0);
     }
 
     /**
@@ -42,7 +42,7 @@ export class MapInformation {
                 distortionFactor: 1,
                 offsetToCenter: 0,
                 bounds: new Bounds(),
-                zoomFactor: 0,
+                zoomFactor: 1,
                 level: 0
             };
             this.data.offsetToCenter = this.offsetToCenter;
@@ -65,7 +65,7 @@ export class MapInformation {
         const oldData = this.data;
         this.data = Object.assign({}, this.data, obj);
         const centerUpdateDone = (!oldData.center.equals(this.data.center)) ? this.centerUpdated() : false;
-        if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.viewportUpdated();
+        if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.updateOffsetToCenter();
         this.eventManager.publish(Events.TileMap.DRAW);
     }
 
@@ -92,16 +92,11 @@ export class MapInformation {
 
     centerUpdated() {
         this.data.distortionFactor = this.getDistortionFactorForLatitude(this.data.center);
-        this.data.offsetToCenter = this.offsetToCenter;
+        this.updateOffsetToCenter();
         return true;
     }
 
-    viewUpdated() {
-        this.data.offsetToCenter = this.offsetToCenter;
-        return true;
-    }
-
-    viewportUpdated() {
+    updateOffsetToCenter() {
         this.data.offsetToCenter = this.offsetToCenter;
         return true;
     }

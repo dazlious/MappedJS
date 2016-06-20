@@ -14,7 +14,7 @@ export class Cluster extends Drawable {
      * @return {Cluster} instance of Cluster for chaining
      */
     constructor({container = null, id}) {
-        super({id: id});
+        super(id);
         this.uniqueID = Cluster.count;
         Cluster.count++;
         this.markers = [];

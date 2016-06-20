@@ -1461,18 +1461,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }]);
 
-	    function Drawable(_ref) {
+	    function Drawable() {
+	        var id = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	        var x = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	        var y = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+	        var w = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
 	        var _ret;
 
-	        var id = _ref.id;
-	        var _ref$x = _ref.x;
-	        var x = _ref$x === undefined ? 0 : _ref$x;
-	        var _ref$y = _ref.y;
-	        var y = _ref$y === undefined ? 0 : _ref$y;
-	        var _ref$w = _ref.w;
-	        var w = _ref$w === undefined ? 0 : _ref$w;
-	        var _ref$h = _ref.h;
-	        var h = _ref$h === undefined ? 0 : _ref$h;
+	        var h = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
 
 	        _classCallCheck(this, Drawable);
 
@@ -2241,7 +2238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'pixelPerLatLng',
 	        get: function get() {
-	            return new _Point.Point(this.data.view.width / this.data.bounds.width, this.data.view.height / this.data.bounds.height);
+	            return new _Point.Point(this.data.view.width / this.data.bounds.width || 0, this.data.view.height / this.data.bounds.height || 0);
 	        }
 
 	        /**
@@ -2265,7 +2262,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                distortionFactor: 1,
 	                offsetToCenter: 0,
 	                bounds: new _Bounds.Bounds(),
-	                zoomFactor: 0,
+	                zoomFactor: 1,
 	                level: 0
 	            };
 	            this.data.offsetToCenter = this.offsetToCenter;
@@ -2290,7 +2287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var oldData = this.data;
 	        this.data = Object.assign({}, this.data, obj);
 	        var centerUpdateDone = !oldData.center.equals(this.data.center) ? this.centerUpdated() : false;
-	        if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.viewportUpdated();
+	        if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.updateOffsetToCenter();
 	        this.eventManager.publish(_Events.Events.TileMap.DRAW);
 	    };
 
@@ -2321,16 +2318,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    MapInformation.prototype.centerUpdated = function centerUpdated() {
 	        this.data.distortionFactor = this.getDistortionFactorForLatitude(this.data.center);
-	        this.data.offsetToCenter = this.offsetToCenter;
+	        this.updateOffsetToCenter();
 	        return true;
 	    };
 
-	    MapInformation.prototype.viewUpdated = function viewUpdated() {
-	        this.data.offsetToCenter = this.offsetToCenter;
-	        return true;
-	    };
-
-	    MapInformation.prototype.viewportUpdated = function viewportUpdated() {
+	    MapInformation.prototype.updateOffsetToCenter = function updateOffsetToCenter() {
 	        this.data.offsetToCenter = this.offsetToCenter;
 	        return true;
 	    };
@@ -4713,7 +4705,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Cluster);
 
-	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, { id: id }));
+	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, id));
 
 	        _this.uniqueID = Cluster.count;
 	        Cluster.count++;
@@ -4936,9 +4928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Label);
 
-	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, { id: id }));
-
-	        _this.id = id;
+	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, id));
 
 	        _this.context = context;
 
@@ -5516,7 +5506,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Marker);
 
-	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, { id: id }));
+	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, id));
 
 	        _this.container = container;
 
@@ -5929,13 +5919,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, Tile);
 
-	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, {
-	            id: id,
-	            x: x,
-	            y: y,
-	            w: w,
-	            h: h
-	        }));
+	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, id, x, y, w, h));
 
 	        if (!path || typeof path !== "string" || path.length === 0) throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
 	        _this.state = new _StateHandler.StateHandler(STATES);
@@ -6334,7 +6318,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, View);
 
-	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, { id: id }));
+	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, id));
 
 	        _this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            center: center,

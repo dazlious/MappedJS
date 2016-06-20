@@ -37,8 +37,7 @@ export class Label extends Drawable {
      * @return {Label} instance of Label for chaining
      */
     constructor({settings, context, id}) {
-        super({id: id});
-        this.id = id;
+        super(id);
 
         this.context = context;
 
@@ -56,7 +55,6 @@ export class Label extends Drawable {
             Helper.loadImage(this.icon.url, (img) => {
                 this.drawIconType = this.drawImageIcon(img, this.icon.size, this.icon.offset);
             });
-
         }
         this.drawElements = this.decideWhatToDraw(this.text, this.icon);
 

@@ -39,13 +39,7 @@ export class Tile extends Drawable {
      * @return {Tile} instance of Tile for chaining
      */
     constructor({path = null, x = 0, y = 0, w = 0, h = 0} = {}, context = null, id = undefined) {
-        super({
-            id: id,
-            x: x,
-            y: y,
-            w: w,
-            h: h
-        });
+        super(id, x, y, w, h);
         if (!path || typeof path !== "string" || path.length === 0) throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
         this.state = new StateHandler(STATES);
         this.context = context;
