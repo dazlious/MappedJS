@@ -1,9 +1,7 @@
 import {Events} from './Events.js';
 import {Helper} from './Helper.js';
-import {MapInformation} from './MapInformation.js';
 import {StateHandler} from './StateHandler.js';
-import {Rectangle} from './Rectangle.js';
-import {Publisher} from './Publisher.js';
+import {Drawable} from './Drawable.js';
 
 /**
  * States of a tile
@@ -22,33 +20,13 @@ const STATES = [
  * @extends Rectangle
  * @copyright Michael Duve 2016
  */
-export class Tile extends Rectangle {
+export class Tile extends Drawable {
 
     get distortedTile() {
         return this.clone.scale(this.zoomFactor)
                                         .translate(this.view.x, this.view.y)
                                         .scaleX(this.distortionFactor)
                                         .translate(this.offsetToCenter, 0);
-    }
-
-    get zoomFactor() {
-        return this.info.get().zoomFactor;
-    }
-
-    get view() {
-        return this.info.get().view;
-    }
-
-    get distortionFactor() {
-        return this.info.get().distortionFactor;
-    }
-
-    get offsetToCenter() {
-        return this.info.get().offsetToCenter;
-    }
-
-    get center() {
-        return this.info.get().center;
     }
 
     /**
@@ -61,19 +39,17 @@ export class Tile extends Rectangle {
      * @return {Tile} instance of Tile for chaining
      */
     constructor({path = null, x = 0, y = 0, w = 0, h = 0} = {}, context = null, id = undefined) {
-        super(x, y, w, h);
-
+        super({
+            id: id,
+            x: x,
+            y: y,
+            w: w,
+            h: h
+        });
         if (!path || typeof path !== "string" || path.length === 0) throw new TypeError(`Path ${path} needs to be of type string and should not be empty`);
-
-        this.id = id;
-        this.info = new MapInformation(this.id);
-        this.eventManager = new Publisher(this.id);
-
         this.state = new StateHandler(STATES);
-
         this.context = context;
         this.path = path;
-
         return this;
     }
 
@@ -97,21 +73,13 @@ export class Tile extends Rectangle {
      */
     draw() {
         if (this.state.current.value >= 2) {
+            const t = this.distortedTile;
             this.state.next();
-            this.context.drawImage(this.img, this.distortedTile.x, this.distortedTile.y, this.distortedTile.width, this.distortedTile.height);
+            this.context.drawImage(this.img, t.x, t.y, t.width, t.height);
         } else if (this.state.current.value === 0) {
             this.initialize();
         }
         return this;
-    }
-
-    /**
-     * check if tiles are equal
-     * @param  {Tile} tile - the specified tile to check against this
-     * @return {Boolean} is true, if x, y, width and height and path are the same
-     */
-    equals(tile) {
-        return (tile instanceof Tile) ? super.equals(tile) && this.path === tile.path : false;
     }
 
 }
