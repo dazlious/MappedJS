@@ -54,7 +54,7 @@ export class View extends Drawable {
         limitToBounds,
         id
     }) {
-        super({id: id});
+        super(id);
 
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             center: center,

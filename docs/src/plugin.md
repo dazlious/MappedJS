@@ -1950,7 +1950,6 @@ checks if there is a previous element
     * [new Tile(path, x, y, w, h)](#new_Tile_new)
     * [.initialize()](#Tile+initialize) ⇒ <code>[Tile](#Tile)</code>
     * [.draw()](#Tile+draw) ⇒ <code>[Tile](#Tile)</code>
-    * [.equals(tile)](#Tile+equals) ⇒ <code>Boolean</code>
 
 <a name="new_Tile_new"></a>
 
@@ -1978,17 +1977,6 @@ draws image data of tile on context
 
 **Kind**: instance method of <code>[Tile](#Tile)</code>  
 **Returns**: <code>[Tile](#Tile)</code> - instance of Tile for chaining  
-<a name="Tile+equals"></a>
-
-### tile.equals(tile) ⇒ <code>Boolean</code>
-check if tiles are equal
-
-**Kind**: instance method of <code>[Tile](#Tile)</code>  
-**Returns**: <code>Boolean</code> - is true, if x, y, width and height and path are the same  
-**Params**
-
-- tile <code>[Tile](#Tile)</code> - the specified tile to check against this
-
 <a name="TileMap"></a>
 
 ## TileMap

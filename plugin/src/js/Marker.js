@@ -25,7 +25,7 @@ export class Marker extends Drawable {
      * @return {Marker} - instance of Marker for chaining
      */
     constructor({data = DataEnrichment.DATA_MARKER, container, id}) {
-        super({id: id});
+        super(id);
         this.container = container;
 
         this.uniqueID = Marker.count;

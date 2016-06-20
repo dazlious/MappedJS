@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for Bounds.js</title>
+    <title>Code coverage report for Drawable.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="prettify.css" />
     <link rel="stylesheet" href="base.css" />
@@ -16,18 +16,18 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="index.html">All files</a> Bounds.js
+      <a href="index.html">All files</a> Drawable.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>9/9</span>
+        <span class='fraction'>17/17</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>12/12</span>
+        <span class='fraction'>20/20</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>8/8</span>
+        <span class='fraction'>17/17</span>
       </div>
     </div>
   </div>
@@ -82,7 +82,26 @@
 37
 38
 39
-40</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -92,70 +111,102 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">25x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">96x</span>
-<span class="cline-any cline-yes">32x</span>
-<span class="cline-any cline-yes">31x</span>
-<span class="cline-any cline-yes">31x</span>
-<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {LatLng} from './LatLng.js';
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">84x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {Publisher} from './Publisher.js';
+import {MapInformation} from './MapInformation.js';
+import {Rectangle} from './Rectangle.js';
 &nbsp;
 /**
  * @author Michael Duve &lt;mduve@designmail.net&gt;
- * @file represents boundaries of a geographic coordinate system
+ * @file
  * @copyright Michael Duve 2016
  */
-export class Bounds {
+export class Drawable extends Rectangle {
 &nbsp;
-    /**
-     * get width of boundaries
-     * @return {number} distance between east and west boundary
-     */
-    get width() {
-        return Math.abs(this.se.lng - this.nw.lng);
+    get view() {
+        return this.info.get().view;
     }
 &nbsp;
-    /**
-     * get height of boundaries
-     * @return {number} distance between north and south boundary
-     */
-    get height() {
-        return Math.abs(this.se.lat - this.nw.lat);
+    get level() {
+        return this.info.get().level;
     }
 &nbsp;
-    /**
-     * @constructor
-     * @param  {number} northWest = new LatLng() - representation of northWest boundary
-     * @param  {number} southEast = new LatLng() - representation of southEast boundary
-     * @return {Bounds} instance of Bounds for chaining
-     */
-    constructor(northWest = new LatLng(), southEast = new LatLng()) {
-        if (northWest.lat &lt; southEast.lat || northWest.lng &gt; southEast.lng) throw new Error(`${northWest} needs to be top-left corner and ${southEast} bottom-right`);
-        this.nw = northWest;
-        this.se = southEast;
+    get viewport() {
+        return this.info.get().viewport;
+    }
+&nbsp;
+    get distortionFactor() {
+        return this.info.get().distortionFactor;
+    }
+&nbsp;
+    get offsetToCenter() {
+        return this.info.get().offsetToCenter;
+    }
+&nbsp;
+    get centerPosition() {
+        return this.info.get().center;
+    }
+&nbsp;
+    get zoomFactor() {
+        return this.info.get().zoomFactor;
+    }
+&nbsp;
+    get bounds() {
+        return this.info.get().bounds;
+    }
+&nbsp;
+    constructor(id = 0, x = 0, y = 0, w = 0, h = 0) {
+        super(x, y, w, h);
+        this.id = id;
+        this.info = new MapInformation(this.id);
+        this.eventManager = new Publisher(this.id);
+        return this;
+    }
+&nbsp;
+    draw() {
         return this;
     }
 &nbsp;
