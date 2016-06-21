@@ -12,7 +12,7 @@ export class MarkerClusterer {
      * @constructor
      * @return {MarkerClusterer} instance of MarkerClusterer for chaining
      */
-    constructor({markers = [], container = null, id}) {
+    constructor({markers = [], container = null, id = 0}) {
         this.markers = markers;
         this.id = id;
         this.container = container;

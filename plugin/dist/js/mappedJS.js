@@ -5669,7 +5669,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var markers = _ref$markers === undefined ? [] : _ref$markers;
 	        var _ref$container = _ref.container;
 	        var container = _ref$container === undefined ? null : _ref$container;
-	        var id = _ref.id;
+	        var _ref$id = _ref.id;
+	        var id = _ref$id === undefined ? 0 : _ref$id;
 
 	        _classCallCheck(this, MarkerClusterer);
 
