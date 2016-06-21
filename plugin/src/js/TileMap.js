@@ -130,7 +130,10 @@ export class TileMap {
             const currentLevel = {
                 value: element,
                 level: i,
-                instance: this.createViewFromData(settings.bounds, settings.center, element, settings.zoom)
+                instance: this.createViewFromData(element),
+                bounds: settings.bounds,
+                center: settings.center,
+                zoom: settings.zoom
             };
             this.levels.push(currentLevel);
         });
@@ -138,14 +141,19 @@ export class TileMap {
         this.levelHandler = new StateHandler(this.levels);
         this.levelHandler.changeTo(this.settings.level);
 
-        this.view.init();
-
         this.appendMarkerContainerToDom();
         this.initializeLabels();
 
         this.bindEvents();
         this.stateHandler.next();
         this.resizeCanvas();
+
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            bounds: this.levelHandler.current.bounds,
+            zoom: this.levelHandler.current.zoom,
+            center: this.levelHandler.current.center
+        });
+        this.view.init();
 
         window.requestAnimFrame(this.mainLoop.bind(this));
 
@@ -156,14 +164,29 @@ export class TileMap {
      * resets view to initial state
      */
     reset() {
-        if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
+        let newLevel = this.settings.level;
+        let fits = false;
+
+        while (!fits) {
+            const initialView = this.levelHandler.states[newLevel].instance;
+            const newView = initialView.originalMapView.clone.scale(initialView.maxZoom).getDistortedRect(this.info.getDistortionFactorForLatitude(this.initial.center));
+
+            if (!newView.containsRect(this.viewport)) {
+                newLevel++;
+            } else {
+                fits = true;
+            }
+        }
+
+        if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(newLevel);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
-            level: this.initial.level,
-            zoomFactor: this.initial.zoom,
-            view: this.levelHandler.current.instance.view
+            view: this.levelHandler.current.instance.view,
+            bounds: this.levelHandler.current.bounds,
+            level: this.levelHandler.current.level,
+            center: this.levelHandler.current.center,
+            zoomFactor: this.initial.zoom
         });
         this.view.reset();
-        this.clusterHandler();
         this.redraw();
     }
 
@@ -188,21 +211,17 @@ export class TileMap {
      * @param  {number} zoom - initial zoom level
      * @return {View} created View
      */
-    createViewFromData(bounds, center, data, zoom) {
+    createViewFromData(data) {
         return new View({
-            viewport: new Rectangle(this.left, this.top, this.width, this.height),
-            currentView: new Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
-            bounds: bounds,
-            center: center,
+            id: this.id,
+            view: new Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
             initialCenter: this.initial.center,
             data: data,
             maxZoom: (data.zoom) ? data.zoom.max : 1,
-            currentZoom: zoom,
             minZoom: (data.zoom) ? data.zoom.min : 1,
             context: this.canvasContext,
-            id: this.id,
             centerSmallMap: this.settings.centerSmallMap,
-            limitToBounds: this.settings.limitToBounds
+            limitToBounds: this.settings.limitToBounds || this.levelHandler.current.bounds
         });
     }
 
@@ -356,6 +375,11 @@ export class TileMap {
             this.levelHandler.next();
             extrema = this.view.minZoom;
         }
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            bounds: this.levelHandler.current.bounds,
+            zoom: this.levelHandler.current.zoom,
+            center: this.levelHandler.current.center
+        });
         if (!this.view.isInitialized) {
             this.view.init();
         }
@@ -394,9 +418,7 @@ export class TileMap {
      * @return {TileMap} instance of TileMap for chaining
      */
     resize() {
-        return this.resizeCanvas()
-                   .resizeView()
-                   .redraw();
+        return this.resizeCanvas().resizeView().redraw();
     }
 
     /**
@@ -470,9 +492,10 @@ export class TileMap {
 
         if (this.velocity.length >= 0.2) this.moveView(this.velocity.multiply(0.9).clone.multiply(this.deltaTiming));
 
+        this.view.checkBoundaries();
+
         if (this.drawIsNeeded) {
             this.canvasContext.clearRect(0, 0, this.width, this.height);
-            this.view.checkBoundaries();
             this.view.draw();
             this.drawLabels();
             this.repositionMarkerContainer();
