@@ -41,14 +41,10 @@ export class View extends Drawable {
      * @return {View} instance of View for chaining
      */
     constructor({
-        currentView = new Rectangle(),
-        bounds = new Bounds(),
-        center = new LatLng(),
-        initialCenter = new LatLng(),
+        view = new Rectangle(),
         data = {},
         context = null,
         maxZoom = 1.5,
-        currentZoom = 1,
         minZoom = 0.8,
         centerSmallMap = false,
         limitToBounds,
@@ -56,38 +52,23 @@ export class View extends Drawable {
     }) {
         super(id);
 
-        this.eventManager.publish(Events.MapInformation.UPDATE, {
-            center: center,
-            view: currentView,
-            bounds: bounds,
-            zoomFactor: currentZoom
-        });
-
         this.maxZoom = maxZoom;
         this.minZoom = minZoom;
-        this.limitToBounds = limitToBounds || bounds;
+        this.limitToBounds = limitToBounds;
         this.isInitialized = false;
         this.centerSmallMap = centerSmallMap;
 
-        const newCenter = this.viewport.center.substract(this.info.convertLatLngToPoint(center));
-        this.view.position(newCenter.x + this.offsetToCenter, newCenter.y);
-
-        this.originalMapView = currentView.clone;
+        this.originalMapView = view.clone;
 
         this.eventManager.publish(Events.MapInformation.UPDATE, {
-            view: this.view
+            view: view
         });
 
         this.tiles = [];
         this.data = data;
         this.context = context;
 
-        this.initial = {
-            position: initialCenter,
-            zoom: currentZoom
-        };
-
-        return this.zoom(0, this.viewport.center).loadThumb();
+        return this.loadThumb();
     }
 
     init() {
@@ -103,11 +84,10 @@ export class View extends Drawable {
     /**
      * resets current View to its initial position
      */
-    reset() {
-        this.setLatLngToPosition(this.initial.position, this.viewport.center);
-        const delta = this.initial.zoom - this.zoomFactor;
-        this.zoom(delta, this.viewport.center);
-        this.checkBoundaries();
+    reset(position, zoom) {
+        this.setLatLngToPosition(position, this.viewport.center);
+        const delta = zoom - this.zoomFactor;
+        this.zoom(delta, this.view.center);
     }
 
     getDistortedView() {
@@ -121,7 +101,6 @@ export class View extends Drawable {
         const offset = new Point();
         const equalizedMap = this.getDistortedView();
         if (!equalizedMap.containsRect(this.viewport)) {
-
             const distanceLeft = equalizedMap.left - this.viewport.left,
                   distanceRight = equalizedMap.right - this.viewport.right,
                   distanceTop = equalizedMap.top - this.viewport.top,
@@ -141,7 +120,6 @@ export class View extends Drawable {
             const diffInWidth = (1 - (equalizedMap.width / this.viewport.width));
             const diff = Helper.clamp(Math.max(diffInHeight, diffInWidth), 0, Number.MAX_VALUE);
             this.zoom(diff, this.viewport.center, true);
-            return false;
         }
     }
 
@@ -256,7 +234,7 @@ export class View extends Drawable {
         const equalizedMap = this.getDistortedView();
         const viewportIsSmaller = this.viewportIsSmallerThanView(equalizedMap);
 
-        if ((factor < 0 && viewportIsSmaller) || (factor < 0 && this.wasSmallerLastTime)) {
+        if (factor < 0 && (viewportIsSmaller || this.wasSmallerLastTime)) {
             this.wasSmallerLastTime = true;
             return false;
         } else if (!automatic) {
@@ -265,17 +243,16 @@ export class View extends Drawable {
             this.wasSmallerLastTime = viewportIsSmaller;
         }
 
-        this.eventManager.publish(Events.MapInformation.UPDATE, {
-            zoomFactor: Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
-        });
+        const newZoom = Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom);
 
         const mapPosition = this.view.topLeft.substract(pos).multiply(-1);
         mapPosition.x += this.getDeltaXToCenter(pos);
         const latlngPosition = this.info.convertPointToLatLng(mapPosition);
 
-        const newSize = this.originalMapView.clone.scale(this.zoomFactor);
+        const newSize = this.originalMapView.clone.scale(newZoom);
         this.view.setSize(newSize.width, newSize.height);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
+            zoomFactor: newZoom,
             view: this.view
         });
 
@@ -325,8 +302,7 @@ export class View extends Drawable {
      * @return {View} instance of View for chaining
      */
     draw() {
-        return this.drawThumbnail()
-                   .drawVisibleTiles();
+        return this.drawThumbnail().drawVisibleTiles();
     }
 
     /**

@@ -3932,15 +3932,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var currentLevel = {
 	                value: element,
 	                level: i,
-	                instance: _this.createViewFromData(settings.bounds, settings.center, element, settings.zoom)
+	                instance: _this.createViewFromData(element),
+	                bounds: settings.bounds,
+	                center: settings.center,
+	                zoom: settings.zoom
 	            };
 	            _this.levels.push(currentLevel);
 	        });
 
 	        this.levelHandler = new _StateHandler.StateHandler(this.levels);
 	        this.levelHandler.changeTo(this.settings.level);
-
-	        this.view.init();
 
 	        this.appendMarkerContainerToDom();
 	        this.initializeLabels();
@@ -3949,10 +3950,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.stateHandler.next();
 	        this.resizeCanvas();
 
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            bounds: this.levelHandler.current.bounds,
+	            zoom: this.levelHandler.current.zoom,
+	            center: this.levelHandler.current.center
+	        });
+	        this.view.init();
+
+	        this.reset();
+
 	        window.requestAnimFrame(this.mainLoop.bind(this));
 
 	        return this;
 	    }
+
+	    TileMap.prototype.checkIfLevelCanFitBounds = function checkIfLevelCanFitBounds() {
+	        var newLevel = this.settings.level;
+	        var fits = false;
+
+	        while (!fits) {
+	            var initialView = this.levelHandler.states[newLevel].instance;
+	            var newView = initialView.originalMapView.clone.scale(initialView.maxZoom).getDistortedRect(this.info.getDistortionFactorForLatitude(this.initial.center));
+
+	            if (!newView.containsRect(this.viewport)) {
+	                newLevel++;
+	            } else {
+	                fits = true;
+	            }
+	        }
+	        return newLevel;
+	    };
 
 	    /**
 	     * resets view to initial state
@@ -3960,13 +3987,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    TileMap.prototype.reset = function reset() {
-	        if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(this.settings.level);
+	        var newLevel = this.checkIfLevelCanFitBounds();
+	        if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(newLevel);
 	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	            level: this.initial.level,
-	            zoomFactor: this.initial.zoom,
-	            view: this.levelHandler.current.instance.view
+	            view: this.levelHandler.current.instance.view,
+	            bounds: this.levelHandler.current.bounds,
+	            level: this.levelHandler.current.level,
+	            center: this.levelHandler.current.center,
+	            zoomFactor: this.initial.zoom
 	        });
-	        this.view.reset();
+	        this.view.reset(this.initial.center, this.initial.zoom);
 	        this.clusterHandler();
 	        this.redraw();
 	    };
@@ -3996,21 +4026,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    TileMap.prototype.createViewFromData = function createViewFromData(bounds, center, data, zoom) {
+	    TileMap.prototype.createViewFromData = function createViewFromData(data) {
 	        return new _View.View({
-	            viewport: new _Rectangle.Rectangle(this.left, this.top, this.width, this.height),
-	            currentView: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
-	            bounds: bounds,
-	            center: center,
-	            initialCenter: this.initial.center,
+	            id: this.id,
+	            view: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
 	            data: data,
 	            maxZoom: data.zoom ? data.zoom.max : 1,
-	            currentZoom: zoom,
 	            minZoom: data.zoom ? data.zoom.min : 1,
 	            context: this.canvasContext,
-	            id: this.id,
 	            centerSmallMap: this.settings.centerSmallMap,
-	            limitToBounds: this.settings.limitToBounds
+	            limitToBounds: this.settings.limitToBounds || this.levelHandler.current.bounds
 	        });
 	    };
 
@@ -4191,6 +4216,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.levelHandler.next();
 	            extrema = this.view.minZoom;
 	        }
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            bounds: this.levelHandler.current.bounds,
+	            zoom: this.levelHandler.current.zoom,
+	            center: this.levelHandler.current.center
+	        });
 	        if (!this.view.isInitialized) {
 	            this.view.init();
 	        }
@@ -4322,9 +4352,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        if (this.velocity.length >= 0.2) this.moveView(this.velocity.multiply(0.9).clone.multiply(this.deltaTiming));
 
+	        this.view.checkBoundaries();
+
 	        if (this.drawIsNeeded) {
 	            this.canvasContext.clearRect(0, 0, this.width, this.height);
-	            this.view.checkBoundaries();
 	            this.view.draw();
 	            this.drawLabels();
 	            this.repositionMarkerContainer();
@@ -6293,22 +6324,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function View(_ref) {
 	        var _ret;
 
-	        var _ref$currentView = _ref.currentView;
-	        var currentView = _ref$currentView === undefined ? new _Rectangle.Rectangle() : _ref$currentView;
-	        var _ref$bounds = _ref.bounds;
-	        var bounds = _ref$bounds === undefined ? new _Bounds.Bounds() : _ref$bounds;
-	        var _ref$center = _ref.center;
-	        var center = _ref$center === undefined ? new _LatLng.LatLng() : _ref$center;
-	        var _ref$initialCenter = _ref.initialCenter;
-	        var initialCenter = _ref$initialCenter === undefined ? new _LatLng.LatLng() : _ref$initialCenter;
+	        var _ref$view = _ref.view;
+	        var view = _ref$view === undefined ? new _Rectangle.Rectangle() : _ref$view;
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? {} : _ref$data;
 	        var _ref$context = _ref.context;
 	        var context = _ref$context === undefined ? null : _ref$context;
 	        var _ref$maxZoom = _ref.maxZoom;
 	        var maxZoom = _ref$maxZoom === undefined ? 1.5 : _ref$maxZoom;
-	        var _ref$currentZoom = _ref.currentZoom;
-	        var currentZoom = _ref$currentZoom === undefined ? 1 : _ref$currentZoom;
 	        var _ref$minZoom = _ref.minZoom;
 	        var minZoom = _ref$minZoom === undefined ? 0.8 : _ref$minZoom;
 	        var _ref$centerSmallMap = _ref.centerSmallMap;
@@ -6320,38 +6343,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, id));
 
-	        _this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	            center: center,
-	            view: currentView,
-	            bounds: bounds,
-	            zoomFactor: currentZoom
-	        });
-
 	        _this.maxZoom = maxZoom;
 	        _this.minZoom = minZoom;
-	        _this.limitToBounds = limitToBounds || bounds;
+	        _this.limitToBounds = limitToBounds;
 	        _this.isInitialized = false;
 	        _this.centerSmallMap = centerSmallMap;
 
-	        var newCenter = _this.viewport.center.substract(_this.info.convertLatLngToPoint(center));
-	        _this.view.position(newCenter.x + _this.offsetToCenter, newCenter.y);
-
-	        _this.originalMapView = currentView.clone;
+	        _this.originalMapView = view.clone;
 
 	        _this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	            view: _this.view
+	            view: view
 	        });
 
 	        _this.tiles = [];
 	        _this.data = data;
 	        _this.context = context;
 
-	        _this.initial = {
-	            position: initialCenter,
-	            zoom: currentZoom
-	        };
-
-	        return _ret = _this.zoom(0, _this.viewport.center).loadThumb(), _possibleConstructorReturn(_this, _ret);
+	        return _ret = _this.loadThumb(), _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    View.prototype.init = function init() {
@@ -6369,11 +6377,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    View.prototype.reset = function reset() {
-	        this.setLatLngToPosition(this.initial.position, this.viewport.center);
-	        var delta = this.initial.zoom - this.zoomFactor;
-	        this.zoom(delta, this.viewport.center);
-	        this.checkBoundaries();
+	    View.prototype.reset = function reset(position, zoom) {
+	        this.setLatLngToPosition(position, this.viewport.center);
+	        var delta = zoom - this.zoomFactor;
+	        this.zoom(delta, this.view.center);
 	    };
 
 	    View.prototype.getDistortedView = function getDistortedView() {
@@ -6387,7 +6394,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var offset = new _Point.Point();
 	        var equalizedMap = this.getDistortedView();
 	        if (!equalizedMap.containsRect(this.viewport)) {
-
 	            var distanceLeft = equalizedMap.left - this.viewport.left,
 	                distanceRight = equalizedMap.right - this.viewport.right,
 	                distanceTop = equalizedMap.top - this.viewport.top,
@@ -6407,7 +6413,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var diffInWidth = 1 - equalizedMap.width / this.viewport.width;
 	            var diff = _Helper.Helper.clamp(Math.max(diffInHeight, diffInWidth), 0, Number.MAX_VALUE);
 	            this.zoom(diff, this.viewport.center, true);
-	            return false;
 	        }
 	    };
 
@@ -6534,7 +6539,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var equalizedMap = this.getDistortedView();
 	        var viewportIsSmaller = this.viewportIsSmallerThanView(equalizedMap);
 
-	        if (factor < 0 && viewportIsSmaller || factor < 0 && this.wasSmallerLastTime) {
+	        if (factor < 0 && (viewportIsSmaller || this.wasSmallerLastTime)) {
 	            this.wasSmallerLastTime = true;
 	            return false;
 	        } else if (!automatic) {
@@ -6543,17 +6548,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.wasSmallerLastTime = viewportIsSmaller;
 	        }
 
-	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	            zoomFactor: _Helper.Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom)
-	        });
+	        var newZoom = _Helper.Helper.clamp(this.zoomFactor + factor, this.minZoom, this.maxZoom);
 
 	        var mapPosition = this.view.topLeft.substract(pos).multiply(-1);
 	        mapPosition.x += this.getDeltaXToCenter(pos);
 	        var latlngPosition = this.info.convertPointToLatLng(mapPosition);
 
-	        var newSize = this.originalMapView.clone.scale(this.zoomFactor);
+	        var newSize = this.originalMapView.clone.scale(newZoom);
 	        this.view.setSize(newSize.width, newSize.height);
 	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            zoomFactor: newZoom,
 	            view: this.view
 	        });
 
