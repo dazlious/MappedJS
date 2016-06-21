@@ -2288,7 +2288,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.data = Object.assign({}, this.data, obj);
 	        var centerUpdateDone = !oldData.center.equals(this.data.center) ? this.centerUpdated() : false;
 	        if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.updateOffsetToCenter();
-	        this.eventManager.publish(_Events.Events.TileMap.DRAW);
 	    };
 
 	    /**
@@ -4984,10 +4983,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Label.prototype.getNearestPositionToCenter = function getNearestPositionToCenter() {
 	        var _this2 = this;
 
+	        var oldPos = this.latlng[0];
 	        this.latlng = this.latlng.sort(function (a, b) {
-	            return _this2.centerPosition.distance(a) - _this2.centerPosition.distance(b);
+	            var c = a.clone.multiply(1, _this2.distortionFactor);
+	            var d = b.clone.multiply(1, _this2.distortionFactor);
+	            var center = _this2.centerPosition.clone.multiply(1, _this2.distortionFactor);
+	            return center.distance(c) - center.distance(d);
 	        });
-	        return this.latlng[0];
+	        return this.latlng[0].distance(oldPos) > 0.01 ? this.latlng[0] : oldPos;
 	    };
 
 	    Label.prototype.openToolTip = function openToolTip() {
