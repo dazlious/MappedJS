@@ -3957,17 +3957,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        this.view.init();
 
+	        this.reset();
+
 	        window.requestAnimFrame(this.mainLoop.bind(this));
 
 	        return this;
 	    }
 
-	    /**
-	     * resets view to initial state
-	     */
-
-
-	    TileMap.prototype.reset = function reset() {
+	    TileMap.prototype.checkIfLevelCanFitBounds = function checkIfLevelCanFitBounds() {
 	        var newLevel = this.settings.level;
 	        var fits = false;
 
@@ -3981,7 +3978,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                fits = true;
 	            }
 	        }
+	        return newLevel;
+	    };
 
+	    /**
+	     * resets view to initial state
+	     */
+
+
+	    TileMap.prototype.reset = function reset() {
+	        var newLevel = this.checkIfLevelCanFitBounds();
 	        if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(newLevel);
 	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            view: this.levelHandler.current.instance.view,
@@ -3990,7 +3996,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            center: this.levelHandler.current.center,
 	            zoomFactor: this.initial.zoom
 	        });
-	        this.view.reset();
+	        this.view.reset(this.initial.center, this.initial.zoom);
+	        this.clusterHandler();
 	        this.redraw();
 	    };
 
@@ -4023,7 +4030,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new _View.View({
 	            id: this.id,
 	            view: new _Rectangle.Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
-	            initialCenter: this.initial.center,
 	            data: data,
 	            maxZoom: data.zoom ? data.zoom.max : 1,
 	            minZoom: data.zoom ? data.zoom.min : 1,
@@ -6320,8 +6326,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var _ref$view = _ref.view;
 	        var view = _ref$view === undefined ? new _Rectangle.Rectangle() : _ref$view;
-	        var _ref$initialCenter = _ref.initialCenter;
-	        var initialCenter = _ref$initialCenter === undefined ? new _LatLng.LatLng() : _ref$initialCenter;
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? {} : _ref$data;
 	        var _ref$context = _ref.context;
@@ -6355,12 +6359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.data = data;
 	        _this.context = context;
 
-	        _this.initial = {
-	            position: initialCenter,
-	            zoom: _this.zoomFactor
-	        };
-
-	        return _ret = _this.zoom(0, _this.viewport.center).loadThumb(), _possibleConstructorReturn(_this, _ret);
+	        return _ret = _this.loadThumb(), _possibleConstructorReturn(_this, _ret);
 	    }
 
 	    View.prototype.init = function init() {
@@ -6378,9 +6377,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 
-	    View.prototype.reset = function reset() {
-	        this.setLatLngToPosition(this.initial.position, this.viewport.center);
-	        var delta = this.initial.zoom - this.zoomFactor;
+	    View.prototype.reset = function reset(position, zoom) {
+	        this.setLatLngToPosition(position, this.viewport.center);
+	        var delta = zoom - this.zoomFactor;
 	        this.zoom(delta, this.view.center);
 	    };
 

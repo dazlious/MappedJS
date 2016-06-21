@@ -155,15 +155,14 @@ export class TileMap {
         });
         this.view.init();
 
+        this.reset();
+
         window.requestAnimFrame(this.mainLoop.bind(this));
 
         return this;
     }
 
-    /**
-     * resets view to initial state
-     */
-    reset() {
+    checkIfLevelCanFitBounds() {
         let newLevel = this.settings.level;
         let fits = false;
 
@@ -177,7 +176,14 @@ export class TileMap {
                 fits = true;
             }
         }
+        return newLevel;
+    }
 
+    /**
+     * resets view to initial state
+     */
+    reset() {
+        const newLevel = this.checkIfLevelCanFitBounds();
         if (this.levelHandler.current.level !== this.settings.level) this.levelHandler.changeTo(newLevel);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             view: this.levelHandler.current.instance.view,
@@ -186,7 +192,8 @@ export class TileMap {
             center: this.levelHandler.current.center,
             zoomFactor: this.initial.zoom
         });
-        this.view.reset();
+        this.view.reset(this.initial.center, this.initial.zoom);
+        this.clusterHandler();
         this.redraw();
     }
 
@@ -215,7 +222,6 @@ export class TileMap {
         return new View({
             id: this.id,
             view: new Rectangle(0, 0, data.dimensions.width, data.dimensions.height),
-            initialCenter: this.initial.center,
             data: data,
             maxZoom: (data.zoom) ? data.zoom.max : 1,
             minZoom: (data.zoom) ? data.zoom.min : 1,

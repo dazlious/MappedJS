@@ -42,7 +42,6 @@ export class View extends Drawable {
      */
     constructor({
         view = new Rectangle(),
-        initialCenter = new LatLng(),
         data = {},
         context = null,
         maxZoom = 1.5,
@@ -69,12 +68,7 @@ export class View extends Drawable {
         this.data = data;
         this.context = context;
 
-        this.initial = {
-            position: initialCenter,
-            zoom: this.zoomFactor
-        };
-
-        return this.zoom(0, this.viewport.center).loadThumb();
+        return this.loadThumb();
     }
 
     init() {
@@ -90,9 +84,9 @@ export class View extends Drawable {
     /**
      * resets current View to its initial position
      */
-    reset() {
-        this.setLatLngToPosition(this.initial.position, this.viewport.center);
-        const delta = this.initial.zoom - this.zoomFactor;
+    reset(position, zoom) {
+        this.setLatLngToPosition(position, this.viewport.center);
+        const delta = zoom - this.zoomFactor;
         this.zoom(delta, this.view.center);
     }
 
