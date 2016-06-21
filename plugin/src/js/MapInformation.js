@@ -66,7 +66,6 @@ export class MapInformation {
         this.data = Object.assign({}, this.data, obj);
         const centerUpdateDone = (!oldData.center.equals(this.data.center)) ? this.centerUpdated() : false;
         if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.updateOffsetToCenter();
-        this.eventManager.publish(Events.TileMap.DRAW);
     }
 
     /**

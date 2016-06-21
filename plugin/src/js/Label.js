@@ -62,8 +62,14 @@ export class Label extends Drawable {
     }
 
     getNearestPositionToCenter() {
-        this.latlng = this.latlng.sort((a, b) => this.centerPosition.distance(a) - this.centerPosition.distance(b));
-        return this.latlng[0];
+        const oldPos = this.latlng[0];
+        this.latlng = this.latlng.sort((a, b) => {
+            const c = a.clone.multiply(1, this.distortionFactor);
+            const d = b.clone.multiply(1, this.distortionFactor);
+            const center = this.centerPosition.clone.multiply(1, this.distortionFactor);
+            return center.distance(c) - center.distance(d);
+        });
+        return (this.latlng[0].distance(oldPos) > 0.01) ? this.latlng[0] : oldPos;
     }
 
     openToolTip() {
@@ -93,7 +99,6 @@ export class Label extends Drawable {
         } else if (text) {
             return (pos, textPos) => this.drawText(textPos);
         }
-
     }
 
     drawText(pos) {
