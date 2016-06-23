@@ -1,40 +1,43 @@
 {
     "fileSize": {
-        "size": "18.46 KB",
-        "gzipSize": "7.85 KB"
+        "size": "21.01 KB",
+        "gzipSize": "8.15 KB"
     },
     "selectorSpecifity": {
         "max": 51,
-        "average": 33
+        "average": 32.61333333333334
     },
     "totals": {
-        "rules": 54,
-        "selectors": 57,
-        "declarations": 175,
-        "properties": 51,
+        "rules": 66,
+        "selectors": 75,
+        "declarations": 214,
+        "properties": 54,
         "vendorPrefixes": 10,
         "mediaQueries": 0,
         "importants": 0
     },
     "uniqueDeclarations": {
-        "width": 12,
-        "height": 11,
-        "color": 3,
+        "width": 13,
+        "height": 12,
+        "color": 4,
         "font-size": 9,
         "background-color": 5
     },
     "selectors": {
         "type": 11,
-        "class": 57,
+        "class": 75,
         "id": 0,
         "pseudoClass": 5,
-        "pseudoElement": 0
+        "pseudoElement": 5
     },
     "propertyResets": {
-        "padding": 1
+        "padding": 1,
+        "padding-right": 1,
+        "padding-left": 1
     },
     "uniqueValues": {
         "colors": {
+            "#efefef": 1,
             "#555": 1,
             "#333": 1,
             "#888": 1
@@ -113,6 +116,24 @@
             11,
             20,
             20,
+            21,
+            30,
+            30,
+            31,
+            31,
+            40,
+            40,
+            30,
+            30,
+            30,
+            30,
+            31,
+            31,
+            40,
+            40,
+            30,
+            30,
+            20,
             20,
             30,
             30,
@@ -170,6 +191,18 @@
             4,
             1,
             5,
+            4,
+            11,
+            5,
+            4,
+            2,
+            1,
+            1,
+            5,
+            4,
+            2,
+            1,
+            1,
             6,
             5,
             1,
@@ -180,7 +213,7 @@
             2,
             2,
             2,
-            8,
+            6,
             3,
             2,
             1,

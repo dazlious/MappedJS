@@ -259,6 +259,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    MapInformation: {
 	        UPDATE: "information-update"
+	    },
+	    General: {
+	        ACTIVE: "active"
 	    }
 		};
 
@@ -5164,6 +5167,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    _this.mapData = Object.assign(_this.mapData, loadedLabelData);
 	                    _this.initializeMap();
 	                    _this.addControls();
+
+	                    if (mapSettings.legend) _this.addInformationLayer("legend", mapSettings.legend);
+	                    if (mapSettings.locator) _this.addInformationLayer("location", mapSettings.locator);
+
 	                    _this.bindEvents();
 	                    _this.loadingFinished();
 	                });
@@ -5177,6 +5184,29 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    MappedJS.prototype.generateUniqueID = function generateUniqueID() {
 	        return parseInt(Date.now() * (Math.random() * 10), 10);
+	    };
+
+	    MappedJS.prototype.addInformationLayer = function addInformationLayer(type, settings) {
+	        var _this2 = this;
+
+	        var infoElement = document.createElement("div");
+	        infoElement.classList.add("info-container");
+	        infoElement.classList.add(type);
+	        infoElement.classList.add(settings.position);
+	        if (settings.show) infoElement.classList.add(_Events.Events.General.ACTIVE);
+
+	        _Helper.Helper.loadImage(settings.path, function (img) {
+	            infoElement.appendChild(img);
+	            _this2[type] = infoElement;
+	            _this2.container.appendChild(infoElement);
+	            _Helper.Helper.addListener(infoElement, _Events.Events.Handling.CLICK, function () {
+	                if (infoElement.classList.contains(_Events.Events.General.ACTIVE)) {
+	                    infoElement.classList.remove(_Events.Events.General.ACTIVE);
+	                } else {
+	                    infoElement.classList.add(_Events.Events.General.ACTIVE);
+	                }
+	            });
+	        });
 	    };
 
 	    /**
@@ -5284,7 +5314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    MappedJS.prototype.initializeInteractForMap = function initializeInteractForMap() {
-	        var _this2 = this;
+	        var _this3 = this;
 
 	        this.interact = new _Interact.Interact({
 	            container: this.content,
@@ -5292,32 +5322,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	            overwriteViewportSettings: true,
 	            callbacks: {
 	                tap: function tap(data) {
-	                    var pos = _this2.getAbsolutePosition(data.positionStart);
-	                    _this2.tileMap.velocity = new _Point.Point();
+	                    var pos = _this3.getAbsolutePosition(data.positionStart);
+	                    _this3.tileMap.velocity = new _Point.Point();
 	                    var id = data.target.getAttribute("data-id");
-	                    if (id) _this2.eventManager.publish(id, pos);
+	                    if (id) _this3.eventManager.publish(id, pos);
 	                },
 	                doubletap: function doubletap(data) {
-	                    _this2.tileMap.velocity = new _Point.Point();
-	                    _this2.tileMap.zoom(0.2, _this2.getAbsolutePosition(data.positionStart));
+	                    _this3.tileMap.velocity = new _Point.Point();
+	                    _this3.tileMap.zoom(0.2, _this3.getAbsolutePosition(data.positionStart));
 	                },
 	                pan: function pan(data) {
 	                    if (data.target.classList.contains("control")) return false;
 	                    var change = data.positionLast.clone.substract(data.positionMove);
-	                    _this2.tileMap.velocity = new _Point.Point();
-	                    _this2.tileMap.moveView(_this2.getAbsolutePosition(change).multiply(-1, -1));
+	                    _this3.tileMap.velocity = new _Point.Point();
+	                    _this3.tileMap.moveView(_this3.getAbsolutePosition(change).multiply(-1, -1));
 	                },
 	                wheel: function wheel(data) {
 	                    var factor = data.delta / 4;
-	                    _this2.tileMap.velocity = new _Point.Point();
-	                    _this2.tileMap.zoom(factor, _this2.getAbsolutePosition(data.positionStart));
+	                    _this3.tileMap.velocity = new _Point.Point();
+	                    _this3.tileMap.zoom(factor, _this3.getAbsolutePosition(data.positionStart));
 	                },
 	                pinch: function pinch(data) {
-	                    _this2.tileMap.velocity = new _Point.Point();
-	                    _this2.tileMap.zoom(data.difference * 3, _this2.getAbsolutePosition(data.positionMove));
+	                    _this3.tileMap.velocity = new _Point.Point();
+	                    _this3.tileMap.zoom(data.difference * 3, _this3.getAbsolutePosition(data.positionMove));
 	                },
 	                flick: function flick(data) {
-	                    _this2.tileMap.velocity = data.velocity.multiply(20);
+	                    _this3.tileMap.velocity = data.velocity.multiply(20);
 	                }
 	            }
 	        });

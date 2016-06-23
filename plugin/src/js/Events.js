@@ -106,5 +106,8 @@ export var Events = {
     },
     MapInformation: {
         UPDATE: "information-update"
+    },
+    General: {
+        ACTIVE: "active"
     }
 };
