@@ -223,18 +223,18 @@ export class MappedJS {
         Helper.addListener(document, Events.Handling.KEYDOWN, this.keyPress.bind(this));
         Helper.addListener(document, Events.Handling.KEYUP, this.keyRelease.bind(this));
 
-        Helper.addListener(this.container, "mouseenter", () => {
+        Helper.addListener(this.container, Events.Handling.ENTER, () => {
             this.container.focus();
         });
 
-        this.zoomIn.setAttribute("data-id", "zoom-button-plus");
-        this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
+        this.zoomIn.setAttribute("data-id", Events.General.ZOOM_IN);
+        this.eventManager.subscribe(Events.General.ZOOM_IN, this.zoomInToCenter.bind(this));
 
-        this.zoomOut.setAttribute("data-id", "zoom-button-minus");
-        this.eventManager.subscribe("zoom-button-minus", this.zoomOutToCenter.bind(this));
+        this.zoomOut.setAttribute("data-id", Events.General.ZOOM_OUT);
+        this.eventManager.subscribe(Events.General.ZOOM_OUT, this.zoomOutToCenter.bind(this));
 
-        this.home.setAttribute("data-id", "home-button");
-        this.eventManager.subscribe("home-button", this.resetToInitialState.bind(this));
+        this.home.setAttribute("data-id", Events.General.HOME);
+        this.eventManager.subscribe(Events.General.HOME, this.resetToInitialState.bind(this));
 
         return this;
     }

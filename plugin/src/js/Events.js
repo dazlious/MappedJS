@@ -80,7 +80,8 @@ export var Events = {
         TOUCHEND: "touchend",
         MOUSEUP: "mouseup",
         KEYDOWN: "keydown",
-        KEYUP: "keyup"
+        KEYUP: "keyup",
+        ENTER: "mouseenter pointerenter"
     },
     /**
     * Eventnames for View class
@@ -108,6 +109,9 @@ export var Events = {
         UPDATE: "information-update"
     },
     General: {
-        ACTIVE: "active"
+        ACTIVE: "active",
+        ZOOM_IN: "zoom-button-plus",
+        ZOOM_OUT: "zoom-button-minus",
+        HOME: "home-button"
     }
 };

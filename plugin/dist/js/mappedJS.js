@@ -233,7 +233,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        TOUCHEND: "touchend",
 	        MOUSEUP: "mouseup",
 	        KEYDOWN: "keydown",
-	        KEYUP: "keyup"
+	        KEYUP: "keyup",
+	        ENTER: "mouseenter pointerenter"
 	    },
 	    /**
 	    * Eventnames for View class
@@ -261,7 +262,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        UPDATE: "information-update"
 	    },
 	    General: {
-	        ACTIVE: "active"
+	        ACTIVE: "active",
+	        ZOOM_IN: "zoom-button-plus",
+	        ZOOM_OUT: "zoom-button-minus",
+	        HOME: "home-button"
 	    }
 		};
 
@@ -5372,18 +5376,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _Helper.Helper.addListener(document, _Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
 	        _Helper.Helper.addListener(document, _Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
 
-	        _Helper.Helper.addListener(this.container, "mouseenter", function () {
+	        _Helper.Helper.addListener(this.container, _Events.Events.Handling.ENTER, function () {
 	            _this4.container.focus();
 	        });
 
-	        this.zoomIn.setAttribute("data-id", "zoom-button-plus");
-	        this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
+	        this.zoomIn.setAttribute("data-id", _Events.Events.General.ZOOM_IN);
+	        this.eventManager.subscribe(_Events.Events.General.ZOOM_IN, this.zoomInToCenter.bind(this));
 
-	        this.zoomOut.setAttribute("data-id", "zoom-button-minus");
-	        this.eventManager.subscribe("zoom-button-minus", this.zoomOutToCenter.bind(this));
+	        this.zoomOut.setAttribute("data-id", _Events.Events.General.ZOOM_OUT);
+	        this.eventManager.subscribe(_Events.Events.General.ZOOM_OUT, this.zoomOutToCenter.bind(this));
 
-	        this.home.setAttribute("data-id", "home-button");
-	        this.eventManager.subscribe("home-button", this.resetToInitialState.bind(this));
+	        this.home.setAttribute("data-id", _Events.Events.General.HOME);
+	        this.eventManager.subscribe(_Events.Events.General.HOME, this.resetToInitialState.bind(this));
 
 	        return this;
 	    };
