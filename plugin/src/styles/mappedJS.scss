@@ -30,6 +30,9 @@ $light-theme: map-get($themes, light);
 .mappedJS {
     position: relative;
     overflow: hidden;
+    &:focus {
+            outline: 0;
+    }
     * {
         box-sizing: border-box;
         -webkit-tap-highlight-color: transparent;
@@ -46,7 +49,6 @@ $light-theme: map-get($themes, light);
         width: 100%;
         height: 100%;
     }
-
     @import "_info_container.scss";
     @import "_marker.scss";
     @import "_cluster.scss";

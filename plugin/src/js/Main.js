@@ -30,6 +30,7 @@ export class MappedJS {
         this.initializeSettings(container, events, mapSettings);
 
         this.id = this.generateUniqueID();
+        MappedJS.count++;
 
         this.eventManager = new Publisher(this.id);
         this.initializeData(mapData, (loadedMapData) => {
@@ -118,6 +119,7 @@ export class MappedJS {
         this.content = document.createElement("div");
         this.content.classList.add("map-content");
         this.container.appendChild(this.content);
+        this.container.setAttribute("tabindex", MappedJS.count);
 
         this.mapSettings = DataEnrichment.mapSettings(settings);
         this.events = events;
@@ -221,6 +223,10 @@ export class MappedJS {
         Helper.addListener(document, Events.Handling.KEYDOWN, this.keyPress.bind(this));
         Helper.addListener(document, Events.Handling.KEYUP, this.keyRelease.bind(this));
 
+        Helper.addListener(this.container, "mouseenter", () => {
+            this.container.focus();
+        });
+
         this.zoomIn.setAttribute("data-id", "zoom-button-plus");
         this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
 
@@ -266,6 +272,7 @@ export class MappedJS {
      * @return {MappedJS} instance of MappedJS for chaining
      */
     keyPress(e) {
+        if (this.container !== document.activeElement) return false;
         switch(e.keyCode) {
             case 38: // up
                 this.handleMovementByKeys(new Point(0, 1));
@@ -331,3 +338,5 @@ export class MappedJS {
     }
 
 }
+
+MappedJS.count = 1;

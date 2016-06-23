@@ -5157,6 +5157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.initializeSettings(container, events, mapSettings);
 
 	        this.id = this.generateUniqueID();
+	        MappedJS.count++;
 
 	        this.eventManager = new _Publisher.Publisher(this.id);
 	        this.initializeData(mapData, function (loadedMapData) {
@@ -5254,6 +5255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.content = document.createElement("div");
 	        this.content.classList.add("map-content");
 	        this.container.appendChild(this.content);
+	        this.container.setAttribute("tabindex", MappedJS.count);
 
 	        this.mapSettings = _DataEnrichment.DataEnrichment.mapSettings(settings);
 	        this.events = events;
@@ -5361,6 +5363,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    MappedJS.prototype.bindEvents = function bindEvents() {
+	        var _this4 = this;
 
 	        this.initializeInteractForMap();
 
@@ -5368,6 +5371,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _Helper.Helper.addListener(document, _Events.Events.Handling.KEYDOWN, this.keyPress.bind(this));
 	        _Helper.Helper.addListener(document, _Events.Events.Handling.KEYUP, this.keyRelease.bind(this));
+
+	        _Helper.Helper.addListener(this.container, "mouseenter", function () {
+	            _this4.container.focus();
+	        });
 
 	        this.zoomIn.setAttribute("data-id", "zoom-button-plus");
 	        this.eventManager.subscribe("zoom-button-plus", this.zoomInToCenter.bind(this));
@@ -5422,6 +5429,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    MappedJS.prototype.keyPress = function keyPress(e) {
+	        if (this.container !== document.activeElement) return false;
 	        switch (e.keyCode) {
 	            case 38:
 	                // up
@@ -5501,6 +5509,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return MappedJS;
 	}();
+
+		MappedJS.count = 1;
 
 /***/ },
 /* 61 */
