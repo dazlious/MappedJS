@@ -26,10 +26,8 @@ $height: $width;
         height: $height;
         cursor: pointer;
         border-radius: $gutter;
-        background-size: 72px 144px;
-        background-image: url('../../img/icons.png');
-        background-position: center center;
-        background-repeat: no-repeat;
+        background: $icons;
+        background-size: 72px 180px;
     }
     .zoom-in {
         border-bottom: 1px solid;
@@ -53,13 +51,13 @@ $height: $width;
         }
         .zoom-in {
             border-bottom-color: map-get($dark-theme, border);
-            background-position: 100% 66.66%;
+            background-position: 100% 50%;
         }
         .zoom-out {
-            background-position: 100% 100%;
+            background-position: 100% 75%;
         }
         .home {
-            background-position: 100% 33.33%;
+            background-position: 100% 25%;
         }
     }
     &.light {
@@ -72,13 +70,13 @@ $height: $width;
         }
         .zoom-in {
             border-bottom-color: map-get($light-theme, border);
-            background-position: 0% 66.66%;
+            background-position: 0% 50%;
         }
         .zoom-out {
-            background-position: 0% 100%;
+            background-position: 0% 75%;
         }
         .home {
-            background-position: 0% 33.33%;
+            background-position: 0% 25%;
         }
     }
 }

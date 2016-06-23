@@ -40,6 +40,10 @@ export class MappedJS {
                     this.mapData = Object.assign(this.mapData, loadedLabelData);
                     this.initializeMap();
                     this.addControls();
+
+                    if (mapSettings.legend) this.addInformationLayer("legend", mapSettings.legend);
+                    if (mapSettings.locator) this.addInformationLayer("location", mapSettings.locator);
+
                     this.bindEvents();
                     this.loadingFinished();
                 });
@@ -53,6 +57,27 @@ export class MappedJS {
 
     generateUniqueID() {
         return parseInt(Date.now() * (Math.random() * 10), 10);
+    }
+
+    addInformationLayer(type, settings) {
+        const infoElement = document.createElement("div");
+        infoElement.classList.add("info-container");
+        infoElement.classList.add(type);
+        infoElement.classList.add(settings.position);
+        if (settings.show) infoElement.classList.add(Events.General.ACTIVE);
+
+        Helper.loadImage(settings.path, (img) => {
+            infoElement.appendChild(img);
+            this[type] = infoElement;
+            this.container.appendChild(infoElement);
+            Helper.addListener(infoElement, Events.Handling.CLICK, () => {
+                if (infoElement.classList.contains(Events.General.ACTIVE)) {
+                    infoElement.classList.remove(Events.General.ACTIVE);
+                } else {
+                    infoElement.classList.add(Events.General.ACTIVE);
+                }
+            });
+        });
     }
 
     /**
