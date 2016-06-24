@@ -1,9 +1,21 @@
-import {Events} from './Events.js';
-import {Helper} from './Helper.js';
-import {Drawable} from './Drawable.js';
-import {LatLng} from './LatLng.js';
-import {Point} from './Point.js';
-import {Rectangle} from './Rectangle.js';
+import {
+    Events
+} from './Events.js';
+import {
+    Helper
+} from './Helper.js';
+import {
+    Drawable
+} from './Drawable.js';
+import {
+    LatLng
+} from './LatLng.js';
+import {
+    Point
+} from './Point.js';
+import {
+    Rectangle
+} from './Rectangle.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -12,6 +24,10 @@ import {Rectangle} from './Rectangle.js';
  */
 export class Label extends Drawable {
 
+    /**
+     * position of label
+     * @return {Point} position
+     */
     get position() {
         return this.info.convertLatLngToPoint(this.nearestPositionToCenter)
             .translate(this.view.x, this.view.y)
@@ -19,24 +35,27 @@ export class Label extends Drawable {
             .translate(this.offsetToCenter, 0);
     }
 
+    /**
+     * find nearest position to mapcenter
+     * @return {LatLng} nearest position
+     */
     get nearestPositionToCenter() {
         return (this.latlng instanceof LatLng) ? this.latlng : this.getNearestPositionToCenter();
     }
 
-    get boundingBox() {
-        const x = this.position.x + this.offset.x;
-        const y = this.position.y + this.offset.y;
-        const sizeX = this.icon.size.x || this.icon.size;
-        const sizeY = this.icon.size.y || this.icon.size;
-
-        return new Rectangle(x, y, sizeX, sizeY).scaleCenter(2);
-    }
-
+    /**
     /**
      * @constructor
+     * @param  {Object} settings = {} - settings for label
+     * @param  {CanvasRenderingContext2D} context = null - canvas context
+     * @param  {Number} id = 0 - id of parent instance
      * @return {Label} instance of Label for chaining
      */
-    constructor({settings, context, id}) {
+    constructor({
+        settings = {},
+        context = null,
+        id = 0
+    }) {
         super(id);
 
         this.context = context;
@@ -61,6 +80,10 @@ export class Label extends Drawable {
         return this;
     }
 
+    /**
+     * find nearest position to mapcenter
+     * @return {LatLng} nearest position
+     */
     getNearestPositionToCenter() {
         const oldPos = this.latlng[0];
         this.latlng = this.latlng.sort((a, b) => {
@@ -72,10 +95,10 @@ export class Label extends Drawable {
         return (this.latlng[0].distance(oldPos) > 0.01) ? this.latlng[0] : oldPos;
     }
 
-    openToolTip() {
-        this.eventManager.publish(Events.ToolTip.OPEN, this.content);
-    }
-
+    /**
+     * draw a label
+     * @return {Label} instance of Label for chaining
+     */
     draw() {
         if (this.level >= this.visibility.min && this.level <= this.visibility.max) {
             const pos = this.position;
@@ -88,6 +111,12 @@ export class Label extends Drawable {
         return this;
     }
 
+    /**
+     * currying function for drawing text, icon or both
+     * @param  {Object} text - data for text
+     * @param  {Object} icon - data for icon
+     * @return {Function} function to be called on draw
+     */
     decideWhatToDraw(text, icon) {
         if (text && icon) {
             return (pos, textPos) => {
@@ -101,6 +130,10 @@ export class Label extends Drawable {
         }
     }
 
+    /**
+     * draw text of label
+     * @param  {Point} pos - origin of label
+     */
     drawText(pos) {
         this.context.textAlign = this.text.align;
         this.context.textBaseline = this.text.baseline;
@@ -109,27 +142,44 @@ export class Label extends Drawable {
         this.context.fillText(this.text.content, pos.x, pos.y);
     }
 
+    /**
+     * draw icon of label
+     * @param  {Point} pos - origin of label
+     */
     drawIcon(pos) {
         this.context.fillStyle = this.icon.color;
         this.drawIconType(pos);
         this.context.fill();
     }
 
+    /**
+     * currying function for drawing a circle
+     * @param  {Number} size - size of circle
+     * @return {Function} function for drawing circle icon
+     */
     drawCircleIcon(size) {
         return (pos) => this.context.arc(pos.x, pos.y, size, 0, 2 * Math.PI, false);
     }
 
+    /**
+     * currying function for drawing a square
+     * @param  {Number} size - size of square
+     * @return {Function} function for drawing square icon
+     */
     drawSquareIcon(size) {
         return (pos) => this.context.rect(pos.x, pos.y, size, size);
     }
 
+    /**
+     * currying function for drawing an image
+     * @param  {Image} image - image to be drawn
+     * @param  {Point} size - dimension of image
+     * @param  {Point} offset - offset of image
+     * @return {Function} function for drawing image icon
+     */
     drawImageIcon(image, size, offset) {
         this.offset = offset;
         return (pos) => this.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
-    }
-
-    hit(point) {
-        return this.boundingBox.containsPoint(point);
     }
 
 }

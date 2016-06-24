@@ -1,4 +1,6 @@
-import {Events} from './Events.js';
+import {
+    Events
+} from './Events.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -9,10 +11,11 @@ export class Publisher {
 
     /**
      * @constructor
+     * @param {Number} id = 0 - id of parent instance
      * @return {Publisher} singleton instance of Publisher for chaining
      */
     constructor(id = 0) {
-        if(!Publisher.instances[id]) {
+        if (!Publisher.instances[id]) {
             this.subscribers = {};
             this.id = id;
             Publisher.instances[id] = this;
@@ -22,8 +25,8 @@ export class Publisher {
 
     /**
      * subscribe to a topic
-     * @param  {string} type="any" - a topic
-     * @param  {Function} fn=function(){} - a function to callback
+     * @param  {String} type = "any" - a topic
+     * @param  {Function} fn = function(){} - a function to callback
      * @return {Publisher} instance of Publisher for chaining
      */
     subscribe(type = "any", fn = function() {}) {
@@ -34,8 +37,8 @@ export class Publisher {
 
     /**
      * unsubscribe from a topic
-     * @param  {string} type="any" - a topic
-     * @param  {Function} fn=function(){} - a function to callback
+     * @param  {String} type = "any" - a topic
+     * @param  {Function} fn = function(){} - a function to callback
      * @return {Publisher} instance of Publisher for chaining
      */
     unsubscribe(type = "any", fn = function() {}) {
@@ -44,8 +47,8 @@ export class Publisher {
 
     /**
      * publish to a topic
-     * @param  {string} type="any" - a topic
-     * @param  {Function} arg=[] - list of parameters
+     * @param  {String} type = "any" - a topic
+     * @param  {Function} arg = [] - list of parameters
      * @return {Publisher} instance of Publisher for chaining
      */
     publish(type = "any", arg = []) {
@@ -54,18 +57,18 @@ export class Publisher {
 
     /**
      * handle subscribe to a topic
-     * @param  {string} action - eventname
-     * @param  {string} type="any" - a topic
+     * @param  {String} action - eventname
+     * @param  {String} type = "any" - a topic
      * @param  {Object} a function to callback or arguments
      * @return {Publisher} instance of Publisher for chaining
      */
     handle(action, type, data) {
-        const subs = (this.subscribers[type] !== undefined) ? this.subscribers[type]: [];
+        const subs = (this.subscribers[type] !== undefined) ? this.subscribers[type] : [];
         for (const [i, fn] of subs.entries()) {
             if (action === Events.Publisher.PUBLISH) {
                 fn(data);
             } else {
-                if (fn === data) subs.splice(i,1);
+                if (fn === data) subs.splice(i, 1);
             }
         }
         return this;

@@ -149,124 +149,141 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file Helper for naming events
 	 * @copyright Michael Duve 2016
 	 * @namespace Events
-	*/
+	 */
 	var Events = exports.Events = {
-	    /**
-	     * Eventnames for ToolTip class
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} OPEN - when a tooltip should be openend
-	     * @property {object} CLOSE - when a tooltip should be closed
-	     */
-	    ToolTip: {
-	        OPEN: "tooltip-open",
-	        CLOSE: "tooltip-close"
-	    },
-	    /**
-	     * Eventnames for Marker class
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} DEACTIVATE - when a Marker should be in deactived state
-	     */
-	    Marker: {
-	        DEACTIVATE: "deactivate-marker"
-	    },
-	    /**
-	     * Eventnames for Publisher class
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} PUBLISH - notifies all subscribers
-	     * @property {object} SUBSCRIBE - subscribes to a topic
-	     * @property {object} UNSUBSCRIBE - unsubscribes from a topic
-	     */
-	    Publisher: {
-	        PUBLISH: "publish",
-	        SUBSCRIBE: "subscribe",
-	        UNSUBSCRIBE: "unsubscribe"
-	    },
-	    /**
-	     * Eventnames for TileMap class
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} IMG_DATA_NAME - notifies all subscribers
-	     * @property {object} MARKER_DATA_NAME - subscribes to a topic
-	     * @property {object} NEXT_LEVEL - next level of view
-	     * @property {object} PREVIOUS_LEVEL - previous level of view
-	     * @property {object} RESIZE - resize of view needed
-	     * @property {object} ZOOM_TO_BOUNDS - zoom to bounds
-	     */
-	    TileMap: {
-	        IMG_DATA_NAME: "img_data",
-	        MARKER_DATA_NAME: "marker",
-	        LABEL_DATA_NAME: "labels",
-	        NEXT_LEVEL: "next-level",
-	        PREVIOUS_LEVEL: "previous-level",
-	        RESIZE: "resize",
-	        ZOOM_TO_BOUNDS: "zoom-to-bounds",
-	        DRAW: "draw"
-	    },
-	    /**
-	     * Eventnames for Handling in all classes
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} RESIZE - resize of window happened needed
-	     * @property {object} CLICK - click occured
-	     * @property {object} TOUCHSTART - Touch started
-	     * @property {object} TOUCHEND - Touch ended
-	     * @property {object} MOUSEDOWN - Mouse started
-	     * @property {object} MOUSEUP - Mouse ended
-	     * @property {object} KEYDOWN - key pressed
-	     * @property {object} KEYUP - key released
-	     */
-	    Handling: {
-	        RESIZE: "resize orientationchange",
-	        CLICK: "click",
-	        TOUCHSTART: "touchstart",
-	        MOUSEDOWN: "mousedown",
-	        TOUCHEND: "touchend",
-	        MOUSEUP: "mouseup",
-	        KEYDOWN: "keydown",
-	        KEYUP: "keyup",
-	        ENTER: "mouseenter pointerenter"
-	    },
-	    /**
-	    * Eventnames for View class
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} DRAW - draw is needed
-	     * @property {object} THUMB_LOADED - thumbnail was loaded
-	     */
-	    View: {
-	        THUMB_LOADED: "thumb-loaded"
-	    },
-	    /**
-	    * Eventnames for MarkerClusterer class
-	     * @type {Object}
-	     * @memberof Events
-	     * @property {object} CLUSTERIZE - create cluster
-	     * @property {object} UNCLUSTERIZE - destroy cluster
-	     */
-	    MarkerClusterer: {
-	        CLUSTERIZE: "clusterize",
-	        UNCLUSTERIZE: "unclusterize"
+	  /**
+	   * Eventnames for ToolTip class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {Object} OPEN - when a tooltip should be openend
+	   * @property {Object} CLOSE - when a tooltip should be closed
+	   */
+	  ToolTip: {
+	    OPEN: "tooltip-open",
+	    CLOSE: "tooltip-close"
+	  },
+	  /**
+	   * Eventnames for Marker class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {Object} DEACTIVATE - when a Marker should be in deactived state
+	   */
+	  Marker: {
+	    DEACTIVATE: "deactivate-marker"
+	  },
+	  /**
+	   * Eventnames for Publisher class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {Object} PUBLISH - notifies all subscribers
+	   * @property {Object} SUBSCRIBE - subscribes to a topic
+	   * @property {Object} UNSUBSCRIBE - unsubscribes from a topic
+	   */
+	  Publisher: {
+	    PUBLISH: "publish",
+	    SUBSCRIBE: "subscribe",
+	    UNSUBSCRIBE: "unsubscribe"
+	  },
+	  /**
+	   * Eventnames for TileMap class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {Object} IMG_DATA_NAME - name of img data
+	   * @property {Object} MARKER_DATA_NAME - name of marker data
+	   * @property {Object} LABEL_DATA_NAME - name of label data
+	   * @property {Object} NEXT_LEVEL - next level of view
+	   * @property {Object} PREVIOUS_LEVEL - previous level of view
+	   * @property {Object} RESIZE - resize of view needed
+	   * @property {Object} ZOOM_TO_BOUNDS - zoom to bounds
+	   * @property {Object} DRAW - draw is needed
+	   */
+	  TileMap: {
+	    IMG_DATA_NAME: "img_data",
+	    MARKER_DATA_NAME: "marker",
+	    LABEL_DATA_NAME: "labels",
+	    NEXT_LEVEL: "next-level",
+	    PREVIOUS_LEVEL: "previous-level",
+	    RESIZE: "resize",
+	    ZOOM_TO_BOUNDS: "zoom-to-bounds",
+	    DRAW: "draw"
+	  },
+	  /**
+	   * Eventnames for Handling in all classes
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {Object} RESIZE - resize of window happened needed
+	   * @property {Object} CLICK - click occured
+	   * @property {Object} TOUCHSTART - Touch started
+	   * @property {Object} TOUCHEND - Touch ended
+	   * @property {Object} MOUSEDOWN - Mouse started
+	   * @property {Object} MOUSEUP - Mouse ended
+	   * @property {Object} KEYDOWN - key pressed
+	   * @property {Object} KEYUP - key released
+	   * @property {Object} ENTER - entering of mouse
+	   */
+	  Handling: {
+	    RESIZE: "resize orientationchange",
+	    CLICK: "click",
+	    TOUCHSTART: "touchstart",
+	    MOUSEDOWN: "mousedown",
+	    TOUCHEND: "touchend",
+	    MOUSEUP: "mouseup",
+	    KEYDOWN: "keydown",
+	    KEYUP: "keyup",
+	    ENTER: "mouseenter pointerenter"
+	  },
+	  /**
+	   * Eventnames for View class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {Object} THUMB_LOADED - thumbnail was loaded
+	   */
+	  View: {
+	    THUMB_LOADED: "thumb-loaded"
+	  },
+	  /**
+	   * Eventnames for MarkerClusterer class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {Object} CLUSTERIZE - create cluster
+	   * @property {Object} UNCLUSTERIZE - destroy cluster
+	   */
+	  MarkerClusterer: {
+	    CLUSTERIZE: "clusterize",
+	    UNCLUSTERIZE: "unclusterize"
 
-	    },
-	    MapInformation: {
-	        UPDATE: "information-update"
-	    },
-	    General: {
-	        ACTIVE: "active",
-	        ZOOM_IN: "zoom-button-plus",
-	        ZOOM_OUT: "zoom-button-minus",
-	        HOME: "home-button"
-	    }
+	  },
+	  /**
+	   * Eventnames for MapInformation class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {Object} UPDATE - updates informations
+	   */
+	  MapInformation: {
+	    UPDATE: "information-update"
+	  },
+	  /**
+	   * Eventnames for MappedJS class
+	   * @type {Object}
+	   * @memberof Events
+	   * @property {Object} ACTIVE - DomElement is marked active
+	   * @property {Object} ZOOM_IN - zoom in button
+	   * @property {Object} ZOOM_OUT - zoom out button
+	   * @property {Object} HOME - home button
+	   */
+	  General: {
+	    ACTIVE: "active",
+	    ZOOM_IN: "zoom-button-plus",
+	    ZOOM_OUT: "zoom-button-minus",
+	    HOME: "home-button"
+	  }
 		};
 
 /***/ },
@@ -290,7 +307,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * request json-data from given file and calls callback on success
 	     * @function
 	     * @memberof module:Helper
-	     * @param  {string} filename - path to file
+	     * @param  {String} filename - path to file
 	     * @param  {Helper~requestJSONCallback} callback - function called when data is loaded successfully
 	     * @return {Helper} Helper object for chaining
 	     */
@@ -301,41 +318,98 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        return this;
 	    },
-	    find: function find(elementString) {
+
+	    /**
+	     * find an element in DOM
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {String} elementString = "*" - element to lookup
+	     * @param  {HTMLElement} element = null - element to start looking in for
+	     * @return {HTMLElement} reference to HTMLElement or null if not found
+	     */
+	    find: function find() {
+	        var elementString = arguments.length <= 0 || arguments[0] === undefined ? "*" : arguments[0];
 	        var element = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
 	        return (element || document).querySelector(elementString);
 	    },
-	    findAll: function findAll(elementString) {
+
+	    /**
+	     * find multiple elements in DOM
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {String} elementString = "*" - element to lookup
+	     * @param  {HTMLElement} element = null - element to start looking in for
+	     * @return {NodeList} list of found elements
+	     */
+	    findAll: function findAll() {
+	        var elementString = arguments.length <= 0 || arguments[0] === undefined ? "*" : arguments[0];
 	        var element = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
 	        return (element || document).querySelectorAll(elementString);
 	    },
+
+	    /**
+	     * show a HTMLElement
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {HTMLElement} elem - specified element
+	     * @return {Helper} reference of Helper for chaining
+	     */
 	    show: function show(elem) {
 	        elem.style.display = "";
+	        return this;
 	    },
+
+	    /**
+	     * hide a HTMLElement
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {HTMLElement} elem - specified element
+	     * @return {Helper} reference of Helper for chaining
+	     */
 	    hide: function hide(elem) {
 	        elem.style.display = "none";
 	    },
+
+	    /**
+	     * applies css to given HTMLElement
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {HTMLElement} elem - specified element to apply css to
+	     * @param  {Object} css - object containing css property and value
+	     * @return {Helper} reference of Helper for chaining
+	     */
 	    css: function css(elem, _css) {
 	        for (var property in _css) {
 	            elem.style[property] = _css[property];
 	        }
 	    },
-	    addListener: function addListener(el, s, fn) {
-	        s.split(" ").forEach(function (e) {
-	            return el.addEventListener(e, fn, false);
+
+	    /**
+	     * adds a listener to given HTMLElement
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {HTMLElement} elem - specified element to bind listener to
+	     * @param  {String} bindTo - names of events to bind to, seperated by spaces
+	     * @param  {Function} fn~addListenerCallback - callback-function for binding
+	     * @return {Helper} reference of Helper for chaining
+	     */
+	    addListener: function addListener(elem, bindTo, fn) {
+	        bindTo.split(" ").forEach(function (e) {
+	            return elem.addEventListener(e, fn, false);
 	        });
+	        return this;
 	    },
 
 	    /**
 	     * clamps a value to specified min and max
 	     * @function
 	     * @memberof module:Helper
-	     * @param  {number} v = 0 - specified value to clamp
-	     * @param  {number} min = v - minimum value to clamp to
-	     * @param  {number} max = v - maximum value to clamp to
-	     * @return {number} clamped value
+	     * @param  {Number} v = 0 - specified value to clamp
+	     * @param  {Number} min = v - minimum value to clamp to
+	     * @param  {Number} max = v - maximum value to clamp to
+	     * @return {Number} clamped value
 	     */
 	    clamp: function clamp() {
 	        var v = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
@@ -350,7 +424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @function
 	     * @memberof module:Helper
 	     * @param {Helper~loadImageCallback} cb - callback-function on success
-	     * @return {Helper} Helper object for chaining
+	     * @return {Helper} reference of Helper for chaining
 	     */
 	    loadImage: function loadImage(path, cb) {
 	        var img = new Image();
@@ -367,7 +441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @memberof module:Helper
 	     * @param  {string} url - path to file
 	     * @param  {Helper~getFileCallback} callback - function called when data is loaded successfully
-	     * @return {Helper} Helper object for chaining
+	     * @return {Helper} reference of Helper for chaining
 	     */
 	    getFile: function getFile(url, callback) {
 	        var xhr = new XMLHttpRequest();
@@ -387,7 +461,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @memberof module:Helper
 	     * @param  {Object[]} a - array to iterate over each value
 	     * @param  {Helper~forEachCallback} cb - callback for each object
-	     * @return {Helper} Helper object for chaining
+	     * @return {Helper} reference of Helper for chaining
 	     */
 	    forEach: function forEach(a, cb) {
 	        for (var i in a) {
@@ -400,8 +474,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * convert degree to radian
 	     * @function
 	     * @memberof module:Helper
-	     * @param {number} degrees - specified degrees
-	     * @return {number} converted radian
+	     * @param {Number} degrees - specified degrees
+	     * @return {Number} converted radian
 	     */
 	    toRadians: function toRadians(degrees) {
 	        return degrees * Math.PI / 180;
@@ -437,7 +511,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * gets cross-browser scroll-event
 	     * @function
 	     * @memberof module:Helper
-	     * @return {string} name of scroll event
+	     * @return {String} name of scroll event
 	     */
 	    scrollEvent: function scrollEvent() {
 	        return "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
@@ -480,7 +554,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * length of a point
-	     * @return {number} length of a point
+	     * @return {Number} length of a point
 	     */
 	    get: function get() {
 	      return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
@@ -510,8 +584,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * @constructor
-	     * @param  {number} x = 0 - representation of x coordinate
-	     * @param  {number} y = 0 - representation of y coordinate
+	     * @param  {Number} x = 0 - representation of x coordinate
+	     * @param  {Number} y = 0 - representation of y coordinate
 	     * @return {Point} instance of Point for chaining
 	     */
 
@@ -560,8 +634,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * multiplicates a point with a given x and y
-	   * @param  {number} x = 1 - factor to multiplicate x with
-	   * @param  {number} y = x - factor to multiplicate y with
+	   * @param  {Number} x = 1 - factor to multiplicate x with
+	   * @param  {Number} y = x - factor to multiplicate y with
 	   * @return {Point} instance of Point for chaining
 	   */
 
@@ -577,8 +651,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * divide a point with a given x and y
-	   * @param  {number} x = 1 - factor to divide x with
-	   * @param  {number} y = x - factor to divide y with
+	   * @param  {Number} x = 1 - factor to divide x with
+	   * @param  {Number} y = x - factor to divide y with
 	   * @return {Point} instance of Point for chaining
 	   */
 
@@ -618,8 +692,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * translates a point by x and y
-	   * @param  {number} x = 0 - value to move x
-	   * @param  {number} y = x - value to move y
+	   * @param  {Number} x = 0 - value to move x
+	   * @param  {Number} y = x - value to move y
 	   * @return {Point} instance of Point for chaining
 	   */
 
@@ -635,8 +709,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * positions a point by x and y
-	   * @param  {number} x = 0 - value to position x
-	   * @param  {number} y = x - value to position y
+	   * @param  {Number} x = 0 - value to position x
+	   * @param  {Number} y = x - value to position y
 	   * @return {Point} instance of Point for chaining
 	   */
 
@@ -766,6 +840,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * @constructor
+	     * @param {Number} id = 0 - id of parent instance
 	     * @return {Publisher} singleton instance of Publisher for chaining
 	     */
 
@@ -784,8 +859,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * subscribe to a topic
-	     * @param  {string} type="any" - a topic
-	     * @param  {Function} fn=function(){} - a function to callback
+	     * @param  {String} type = "any" - a topic
+	     * @param  {Function} fn = function(){} - a function to callback
 	     * @return {Publisher} instance of Publisher for chaining
 	     */
 
@@ -801,8 +876,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * unsubscribe from a topic
-	     * @param  {string} type="any" - a topic
-	     * @param  {Function} fn=function(){} - a function to callback
+	     * @param  {String} type = "any" - a topic
+	     * @param  {Function} fn = function(){} - a function to callback
 	     * @return {Publisher} instance of Publisher for chaining
 	     */
 
@@ -816,8 +891,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * publish to a topic
-	     * @param  {string} type="any" - a topic
-	     * @param  {Function} arg=[] - list of parameters
+	     * @param  {String} type = "any" - a topic
+	     * @param  {Function} arg = [] - list of parameters
 	     * @return {Publisher} instance of Publisher for chaining
 	     */
 
@@ -831,8 +906,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handle subscribe to a topic
-	     * @param  {string} action - eventname
-	     * @param  {string} type="any" - a topic
+	     * @param  {String} action - eventname
+	     * @param  {String} type = "any" - a topic
 	     * @param  {Object} a function to callback or arguments
 	     * @return {Publisher} instance of Publisher for chaining
 	     */
@@ -985,7 +1060,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Returns right position of Rectangle
-	     * @return {number} right position
+	     * @return {Number} right position
 	     */
 
 	  }, {
@@ -996,7 +1071,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Returns left position of Rectangle
-	     * @return {number} left position
+	     * @return {Number} left position
 	     */
 
 	  }, {
@@ -1007,7 +1082,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Returns top position of Rectangle
-	     * @return {number} top position
+	     * @return {Number} top position
 	     */
 
 	  }, {
@@ -1018,7 +1093,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Returns bottom position of Rectangle
-	     * @return {number} bottom position
+	     * @return {Number} bottom position
 	     */
 
 	  }, {
@@ -1040,10 +1115,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * @constructor
-	     * @param  {number} x=0 - x-position of specified rectangle
-	     * @param  {number} y=0 - y-position of specified rectangle
-	     * @param  {number} width=0 - width of specified rectangle
-	     * @param  {number} height=0 - height of specified rectangle
+	     * @param  {Number} x = 0 - x-position of specified rectangle
+	     * @param  {Number} y = 0 - y-position of specified rectangle
+	     * @param  {Number} width = 0 - width of specified rectangle
+	     * @param  {Number} height = 0 - height of specified rectangle
 	     * @return {Rectangle} instance of Rectangle for chaining
 	     */
 
@@ -1091,6 +1166,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return rectOrPoint instanceof Rectangle ? this.containsRect(rectOrPoint) : rectOrPoint instanceof _Point2.Point ? this.containsPoint(rectOrPoint) : false;
 	  };
 
+	  /**
+	   * extend a rectangle by specified rectangle dimensions
+	   * @param  {Rectangle} rect - specified rectangle
+	   * @return {Rectangle} instance of Rectangle for chaining
+	   */
+
+
 	  Rectangle.prototype.extend = function extend(rect) {
 	    var left = Math.min(this.left, rect.left);
 	    var right = Math.max(this.right, rect.right);
@@ -1117,7 +1199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * Sets the x-center of this Rectangle to specified x
-	   * @param  {number} x = 0 - specified x coordinate to set x center of rectangle to
+	   * @param  {Number} x = 0 - specified x coordinate to set x center of rectangle to
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1132,7 +1214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * Sets the y-center of this Rectangle to specified y
-	   * @param  {number} y = 0 - specified y coordinate to set y center of rectangle to
+	   * @param  {Number} y = 0 - specified y coordinate to set y center of rectangle to
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1173,7 +1255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * distorts rectangle by factor
-	   * @param  {number} factor = 1 - the specified factor of distortion
+	   * @param  {Number} factor = 1 - the specified factor of distortion
 	   * @return {Rectangle} a distorted Rectangle
 	   */
 
@@ -1186,7 +1268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * redistorts rectangle by factor
-	   * @param  {number} factor = 1- the specified factor of distortion
+	   * @param  {Number} factor = 1- the specified factor of distortion
 	   * @return {Rectangle} an undistorted Rectangle
 	   */
 
@@ -1199,7 +1281,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * scale x and width of rectangle
-	   * @param  {number} x = 1 - factor to be applied to scale
+	   * @param  {Number} x = 1 - factor to be applied to scale
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1214,7 +1296,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * scale y and height of rectangle
-	   * @param  {number} y = 1- factor to be applied to scale
+	   * @param  {Number} y = 1- factor to be applied to scale
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1229,8 +1311,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * scale x and y for width and height of rectangle
-	   * @param  {number} x = 1 - factor to be applied to scale
-	   * @param  {number} y = x - factor to be applied to scale
+	   * @param  {Number} x = 1 - factor to be applied to scale
+	   * @param  {Number} y = x - factor to be applied to scale
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1246,8 +1328,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * scale x and y for width and height of rectangle
-	   * @param  {number} x = 1 - factor to be applied to scale
-	   * @param  {number} y = x - factor to be applied to scale
+	   * @param  {Number} x = 1 - factor to be applied to scale
+	   * @param  {Number} y = x - factor to be applied to scale
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1264,8 +1346,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * moves a rectangle by specified coords
-	   * @param  {number} x = 0 - specified x to be added to x position
-	   * @param  {number} y = x - specified y to be added to y position
+	   * @param  {Number} x = 0 - specified x to be added to x position
+	   * @param  {Number} y = x - specified y to be added to y position
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1280,10 +1362,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * transforms a rectangle by specified coords
-	   * @param  {number} x = 0 - specified x to be added to x position
-	   * @param  {number} y = x - specified y to be added to y position
-	   * @param  {number} width = 0 - specified width to be added to this width
-	   * @param  {number} height = 0 - specified height to be added to this height
+	   * @param  {Number} x = 0 - specified x to be added to x position
+	   * @param  {Number} y = x - specified y to be added to y position
+	   * @param  {Number} width = 0 - specified width to be added to this width
+	   * @param  {Number} height = 0 - specified height to be added to this height
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1302,8 +1384,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * changes the position a rectangle by specified coords
-	   * @param  {number} x = 0 - the new x position
-	   * @param  {number} y = 0 - he new y position
+	   * @param  {Number} x = 0 - the new x position
+	   * @param  {Number} y = 0 - he new y position
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1318,10 +1400,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * changes the size of a rectangle by specified params
-	   * @param  {number} x = 0- the new x position
-	   * @param  {number} y = x - the new y position
-	   * @param  {number} width = 0 - the new width
-	   * @param  {number} height = 0 - the new width
+	   * @param  {Number} x = 0- the new x position
+	   * @param  {Number} y = x - the new y position
+	   * @param  {Number} width = 0 - the new width
+	   * @param  {Number} height = 0 - the new width
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1340,8 +1422,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  /**
 	   * changes the size of a rectangle by specified params
-	   * @param  {number} width = 0 - the new width
-	   * @param  {number} height = width - the new width
+	   * @param  {Number} width = 0 - the new width
+	   * @param  {Number} height = width - the new width
 	   * @return {Rectangle} instance of Rectangle for chaining
 	   */
 
@@ -1419,7 +1501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
-	 * @file
+	 * @file represents an item, that is displayed and needs information for its position
 	 * @copyright Michael Duve 2016
 	 */
 
@@ -1428,44 +1510,103 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _createClass(Drawable, [{
 	        key: 'view',
+
+
+	        /**
+	         * stores mapdimension information
+	         * @return {Rectangle} map
+	         */
 	        get: function get() {
 	            return this.info.get().view;
 	        }
+
+	        /**
+	         * stores level information
+	         * @return {Number} level
+	         */
+
 	    }, {
 	        key: 'level',
 	        get: function get() {
 	            return this.info.get().level;
 	        }
+
+	        /**
+	         * stores viewport information
+	         * @return {Rectangle} viewport
+	         */
+
 	    }, {
 	        key: 'viewport',
 	        get: function get() {
 	            return this.info.get().viewport;
 	        }
+
+	        /**
+	         * stores distortion information
+	         * @return {Number} distortionFactor
+	         */
+
 	    }, {
 	        key: 'distortionFactor',
 	        get: function get() {
 	            return this.info.get().distortionFactor;
 	        }
+
+	        /**
+	         * stores x offset to center
+	         * @return {Number} offsetToCenter
+	         */
+
 	    }, {
 	        key: 'offsetToCenter',
 	        get: function get() {
 	            return this.info.get().offsetToCenter;
 	        }
+
+	        /**
+	         * stores latlng position of map center
+	         * @return {LatLng} center
+	         */
+
 	    }, {
 	        key: 'centerPosition',
 	        get: function get() {
 	            return this.info.get().center;
 	        }
+
+	        /**
+	         * stores current zoom factor
+	         * @return {Number} zoomFactor
+	         */
+
 	    }, {
 	        key: 'zoomFactor',
 	        get: function get() {
 	            return this.info.get().zoomFactor;
 	        }
+
+	        /**
+	         * stores boundary information
+	         * @return {Bounds} bounds
+	         */
+
 	    }, {
 	        key: 'bounds',
 	        get: function get() {
 	            return this.info.get().bounds;
 	        }
+
+	        /**
+	         * @constructor
+	         * @param  {Number} id = 0 - id of parent instance
+	         * @param  {Number} x  = 0 - position x of element
+	         * @param  {Number} y  = 0 - position y of element
+	         * @param  {Number} w  = 0 - width of element
+	         * @param  {Number} h  = 0 - height of element
+	         * @return {Drawable} instance of Drawable for chaining
+	         */
+
 	    }]);
 
 	    function Drawable() {
@@ -1488,6 +1629,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
+	    /**
+	     * execute on displaying instance
+	     * @return {Drawable} instance of Drawable for chaining
+	     */
+
+
 	    Drawable.prototype.draw = function draw() {
 	        return this;
 	    };
@@ -1503,7 +1650,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1517,141 +1664,148 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var LatLng = exports.LatLng = function () {
-	    _createClass(LatLng, [{
-	        key: "length",
+	  _createClass(LatLng, [{
+	    key: "length",
 
 
-	        /**
-	         * length of a latlng
-	         * @return {number} length of a latlng
-	         */
-	        get: function get() {
-	            return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
-	        }
-
-	        /**
-	         * gets a clone of this latlng
-	         * @return {LatLng} create a copy
-	         */
-
-	    }, {
-	        key: "clone",
-	        get: function get() {
-	            return LatLng.createFromLatLng(this);
-	        }
-
-	        /**
-	         * @constructor
-	         * @param  {number} lat = 0 - representation of latitude
-	         * @param  {number} lng = 0 - representation of longitude
-	         * @return {LatLng} instance of LatLng for chaining
-	         */
-
-	    }]);
-
-	    function LatLng() {
-	        var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	        var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-
-	        _classCallCheck(this, LatLng);
-
-	        this.lat = lat;
-	        this.lng = lng;
-	        return this;
+	    /**
+	     * length of a latlng
+	     * @return {Number} length of latlng
+	     */
+	    get: function get() {
+	      return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
 	    }
 
-	    LatLng.prototype.distance = function distance() {
-	        var latlng = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+	    /**
+	     * gets a clone of this latlng
+	     * @return {LatLng} create a copy
+	     */
 
-	        return this.clone.substract(latlng).length;
-	    };
+	  }, {
+	    key: "clone",
+	    get: function get() {
+	      return LatLng.createFromLatLng(this);
+	    }
 
 	    /**
-	     * substract specified coord from this coordinate
-	     * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
+	     * @constructor
+	     * @param  {Number} lat = 0 - representation of latitude
+	     * @param  {Number} lng = 0 - representation of longitude
 	     * @return {LatLng} instance of LatLng for chaining
 	     */
 
+	  }]);
 
-	    LatLng.prototype.substract = function substract() {
-	        var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
+	  function LatLng() {
+	    var lat = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	    var lng = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-	        this.lat -= coord.lat;
-	        this.lng -= coord.lng;
-	        return this;
-	    };
+	    _classCallCheck(this, LatLng);
 
-	    /**
-	     * add specified coord to this coordinate
-	     * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
-	     * @return {LatLng} instance of LatLng for chaining
-	     */
+	    this.lat = lat;
+	    this.lng = lng;
+	    return this;
+	  }
 
-
-	    LatLng.prototype.add = function add() {
-	        var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
-
-	        this.lat += coord.lat;
-	        this.lng += coord.lng;
-	        return this;
-	    };
-
-	    /**
-	    * divides a latlng with a given factor
-	    * @param  {number} factorLat = 1 - factor to divide lat with
-	    * @param  {number} factorLng = factorLat - factor to divide lng with
-	    * @return {LatLng} instance of LatLng for chaining
-	    */
+	  /**
+	   * calculates distance between this and specified latlng
+	   * @param  {LatLng} latlng = new LatLng() - specified latlng
+	   * @return {Number} distance
+	   */
 
 
-	    LatLng.prototype.divide = function divide() {
-	        var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	        var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+	  LatLng.prototype.distance = function distance() {
+	    var latlng = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
 
-	        this.lat /= factorLat;
-	        this.lng /= factorLng;
-	        return this;
-	    };
+	    return this.clone.substract(latlng).length;
+	  };
 
-	    /**
-	     * multiplicates a latlng with a given factor
-	     * @param  {number} factorLat = 1 - factor to multiplicate lat with
-	     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
-	     * @return {LatLng} instance of LatLng for chaining
-	     */
+	  /**
+	   * substract specified coord from this coordinate
+	   * @param  {LatLng} coord = new LatLng() - specified coordinate to substract from this coord
+	   * @return {LatLng} instance of LatLng for chaining
+	   */
 
 
-	    LatLng.prototype.multiply = function multiply() {
-	        var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
-	        var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+	  LatLng.prototype.substract = function substract() {
+	    var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
 
-	        this.lat *= factorLat;
-	        this.lng *= factorLng;
-	        return this;
-	    };
+	    this.lat -= coord.lat;
+	    this.lng -= coord.lng;
+	    return this;
+	  };
 
-	    /**
-	     * checks if specified coord equals this coord
-	     * @param  {LatLng} coord - specified coord to check against
-	     * @return {Boolean} Returns if specified coord equals this coord
-	     */
-
-
-	    LatLng.prototype.equals = function equals(coord) {
-	        return this.lat === coord.lat && this.lng === coord.lng;
-	    };
-
-	    /**
-	     * converts a LatLng to string
-	     * @return {string} representing LatLng
-	     */
+	  /**
+	   * add specified coord to this coordinate
+	   * @param  {LatLng} coord = new LatLng() - specified coordinate to add to this coord
+	   * @return {LatLng} instance of LatLng for chaining
+	   */
 
 
-	    LatLng.prototype.toString = function toString() {
-	        return "(" + this.lat + ", " + this.lng + ")";
-	    };
+	  LatLng.prototype.add = function add() {
+	    var coord = arguments.length <= 0 || arguments[0] === undefined ? new LatLng() : arguments[0];
 
-	    return LatLng;
+	    this.lat += coord.lat;
+	    this.lng += coord.lng;
+	    return this;
+	  };
+
+	  /**
+	   * divides a latlng with a given factor
+	   * @param  {Number} factorLat = 1 - factor to divide lat with
+	   * @param  {Number} factorLng = factorLat - factor to divide lng with
+	   * @return {LatLng} instance of LatLng for chaining
+	   */
+
+
+	  LatLng.prototype.divide = function divide() {
+	    var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	    var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+
+	    this.lat /= factorLat;
+	    this.lng /= factorLng;
+	    return this;
+	  };
+
+	  /**
+	   * multiplicates a latlng with a given factor
+	   * @param  {Number} factorLat = 1 - factor to multiplicate lat with
+	   * @param  {Number} factorLng = factorLat - factor to multiplicate lng with
+	   * @return {LatLng} instance of LatLng for chaining
+	   */
+
+
+	  LatLng.prototype.multiply = function multiply() {
+	    var factorLat = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+	    var factorLng = arguments.length <= 1 || arguments[1] === undefined ? factorLat : arguments[1];
+
+	    this.lat *= factorLat;
+	    this.lng *= factorLng;
+	    return this;
+	  };
+
+	  /**
+	   * checks if specified coord equals this coord
+	   * @param  {LatLng} coord - specified coord to check against
+	   * @return {Boolean} Returns if specified coord equals this coord
+	   */
+
+
+	  LatLng.prototype.equals = function equals(coord) {
+	    return this.lat === coord.lat && this.lng === coord.lng;
+	  };
+
+	  /**
+	   * converts a LatLng to string
+	   * @return {String} representing LatLng
+	   */
+
+
+	  LatLng.prototype.toString = function toString() {
+	    return "(" + this.lat + ", " + this.lng + ")";
+	  };
+
+	  return LatLng;
 	}();
 
 	/**
@@ -1662,7 +1816,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	LatLng.createFromLatLng = function (latlng) {
-	    return new LatLng(latlng.lat, latlng.lng);
+	  return new LatLng(latlng.lat, latlng.lng);
 		};
 
 /***/ },
@@ -1890,8 +2044,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * enriches marker data with all needed data
 	     * @function
 	     * @memberof module:DataEnrichment
-	     * @param  {object} data - specified data for marker
-	     * @return {object} enriched marker data
+	     * @param  {Object} data - specified data for marker
+	     * @return {Object} enriched marker data
 	     */
 
 	    marker: function marker(data) {
@@ -1917,6 +2071,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return enrichedData;
 	    },
+
+	    /**
+	     * enriches label data with all needed data
+	     * @function
+	     * @memberof module:DataEnrichment
+	     * @param  {Object} data - specified data for label
+	     * @return {Object} enriched label data
+	     */
 	    label: function label(data) {
 	        var enrichedData = [];
 
@@ -1948,8 +2110,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * enriches map data with all needed data
 	     * @function
 	     * @memberof module:DataEnrichment
-	     * @param  {object} data - specified data for mapsettings
-	     * @return {object} enriched mapsettings data
+	     * @param  {Object} data - specified data for mapsettings
+	     * @return {Object} enriched mapsettings data
 	     */
 	    mapSettings: function mapSettings() {
 	        var data = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -1972,6 +2134,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return enrichedData;
 	    },
+
+	    /**
+	     * enriches tooltip data with all needed data
+	     * @function
+	     * @memberof module:DataEnrichment
+	     * @param  {Object} data - specified data for tooltip
+	     * @return {Object} enriched tooltip data
+	     */
 	    tooltip: function tooltip() {
 	        var data = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
@@ -2006,7 +2176,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	DataEnrichment.MAP_SETTINGS = {
 	    level: 0,
-	    center: { "lat": 0, "lng": 0 },
+	    center: {
+	        "lat": 0,
+	        "lng": 0
+	    },
 	    bounds: {
 	        "northWest": [90, -180],
 	        "southEast": [-90, 180]
@@ -2018,6 +2191,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        theme: "dark"
 	    }
 	};
+	/**
+	 * Default initial values for a Label
+	 * @type {Object}
+	 */
 	DataEnrichment.DATA_LABEL = {
 	    "position": [0, 0],
 	    "visibility": {
@@ -2025,6 +2202,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "max": Number.MAX_VALUE
 	    }
 	};
+	/**
+	 * Default initial values for a Label with text
+	 * @type {Object}
+	 */
 	DataEnrichment.DATA_LABEL_TEXT = {
 	    "content": "",
 	    "color": "#333333",
@@ -2033,12 +2214,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    "baseline": "hanging",
 	    "font": "10pt Arial"
 	};
+	/**
+	 * Default initial values for a Label with an icon
+	 * @type {Object}
+	 */
 	DataEnrichment.DATA_LABEL_ICON = {
 	    "type": "circle",
 	    "size": 2,
 	    "color": "#333333",
 	    "offset": [0, 0]
 	};
+	/**
+	 * Default initial values for a ToolTip
+	 * @type {Object}
+	 */
 	DataEnrichment.TOOLTIP = {
 	    image: "/plugin/hbs/image.hbs",
 	    text: "/plugin/hbs/text.hbs",
@@ -2055,7 +2244,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	exports.Bounds = undefined;
 
@@ -2072,51 +2261,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var Bounds = exports.Bounds = function () {
-	  _createClass(Bounds, [{
-	    key: 'width',
+	    _createClass(Bounds, [{
+	        key: 'width',
 
 
-	    /**
-	     * get width of boundaries
-	     * @return {number} distance between east and west boundary
-	     */
-	    get: function get() {
-	      return Math.abs(this.se.lng - this.nw.lng);
+	        /**
+	         * get width of boundaries
+	         * @return {Number} distance between east and west boundary
+	         */
+	        get: function get() {
+	            return Math.abs(this.se.lng - this.nw.lng);
+	        }
+
+	        /**
+	         * get height of boundaries
+	         * @return {Number} distance between north and south boundary
+	         */
+
+	    }, {
+	        key: 'height',
+	        get: function get() {
+	            return Math.abs(this.se.lat - this.nw.lat);
+	        }
+
+	        /**
+	         * @constructor
+	         * @param  {Number} northWest = new LatLng() - representation of northWest boundary
+	         * @param  {Number} southEast = new LatLng() - representation of southEast boundary
+	         * @return {Bounds} instance of Bounds for chaining
+	         */
+
+	    }]);
+
+	    function Bounds() {
+	        var northWest = arguments.length <= 0 || arguments[0] === undefined ? new _LatLng.LatLng() : arguments[0];
+	        var southEast = arguments.length <= 1 || arguments[1] === undefined ? new _LatLng.LatLng() : arguments[1];
+
+	        _classCallCheck(this, Bounds);
+
+	        if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) throw new Error(northWest + ' needs to be top-left corner and ' + southEast + ' bottom-right');
+	        this.nw = northWest;
+	        this.se = southEast;
+	        return this;
 	    }
 
-	    /**
-	     * get height of boundaries
-	     * @return {number} distance between north and south boundary
-	     */
-
-	  }, {
-	    key: 'height',
-	    get: function get() {
-	      return Math.abs(this.se.lat - this.nw.lat);
-	    }
-
-	    /**
-	     * @constructor
-	     * @param  {number} northWest = new LatLng() - representation of northWest boundary
-	     * @param  {number} southEast = new LatLng() - representation of southEast boundary
-	     * @return {Bounds} instance of Bounds for chaining
-	     */
-
-	  }]);
-
-	  function Bounds() {
-	    var northWest = arguments.length <= 0 || arguments[0] === undefined ? new _LatLng.LatLng() : arguments[0];
-	    var southEast = arguments.length <= 1 || arguments[1] === undefined ? new _LatLng.LatLng() : arguments[1];
-
-	    _classCallCheck(this, Bounds);
-
-	    if (northWest.lat < southEast.lat || northWest.lng > southEast.lng) throw new Error(northWest + ' needs to be top-left corner and ' + southEast + ' bottom-right');
-	    this.nw = northWest;
-	    this.se = southEast;
-	    return this;
-	  }
-
-	  return Bounds;
+	    return Bounds;
 	}();
 
 /***/ },
@@ -2221,7 +2410,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * @author Michael Duve <mduve@designmail.net>
-	 * @file
+	 * @file stores and handles all information for a map
 	 * @copyright Michael Duve 2016
 	 */
 
@@ -2280,13 +2469,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return MapInformation.instances[id];
 	    }
 
+	    /**
+	     * gets current data
+	     * @return {Object} map information
+	     */
+
+
 	    MapInformation.prototype.get = function get() {
 	        return this.data;
 	    };
 
+	    /**
+	     * bind all events
+	     * @return {MapInformation} instance of MapInformation for chaining
+	     */
+
+
 	    MapInformation.prototype.bindEvents = function bindEvents() {
 	        this.eventManager.subscribe(_Events.Events.MapInformation.UPDATE, this.update.bind(this));
+	        return this;
 	    };
+
+	    /**
+	     * updates current information
+	     * @param  {Object} obj = {} - new data delivered
+	     * @return {MapInformation} instance of MapInformation for chaining
+	     */
+
 
 	    MapInformation.prototype.update = function update() {
 	        var obj = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -2295,6 +2504,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.data = Object.assign({}, this.data, obj);
 	        var centerUpdateDone = !oldData.center.equals(this.data.center) ? this.centerUpdated() : false;
 	        if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.updateOffsetToCenter();
+	        return this;
 	    };
 
 	    /**
@@ -2322,11 +2532,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new _Point.Point(relativePosition.lng, relativePosition.lat).abs;
 	    };
 
+	    /**
+	     * center position was updated
+	     * @return {Boolean} information was updated
+	     */
+
+
 	    MapInformation.prototype.centerUpdated = function centerUpdated() {
 	        this.data.distortionFactor = this.getDistortionFactorForLatitude(this.data.center);
 	        this.updateOffsetToCenter();
 	        return true;
 	    };
+
+	    /**
+	     * offset to center was updated
+	     * @return {Boolean} information was updated
+	     */
+
 
 	    MapInformation.prototype.updateOffsetToCenter = function updateOffsetToCenter() {
 	        this.data.offsetToCenter = this.offsetToCenter;
@@ -2336,7 +2558,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * get distortion factor for specified latitude
 	     * @param  {LatLng} latlng - lat/lng position
-	     * @return {number} distortion factor
+	     * @return {Number} distortion factor
 	     */
 
 
@@ -2372,7 +2594,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2386,105 +2608,108 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var StateHandler = exports.StateHandler = function () {
-	  _createClass(StateHandler, [{
-	    key: 'current',
+	    _createClass(StateHandler, [{
+	        key: 'current',
 
 
-	    /**
-	     * get current state
-	     * @return {Object} current state from STATES-array
-	     */
-	    get: function get() {
-	      return this.states[this.i];
+	        /**
+	         * get current state
+	         * @return {Object} current state from STATES-array
+	         */
+	        get: function get() {
+	            return this.states[this.i];
+	        }
+
+	        /**
+	         * get number of states
+	         * @return {Number} number of states
+	         */
+
+	    }, {
+	        key: 'length',
+	        get: function get() {
+	            return this.states.length;
+	        }
+
+	        /**
+	         * @constructor
+	         * @param  {Array} states_array = [{value: 0, description: 'Default'}] - [description]
+	         * @return {StateHandler} instance of StateHandler for chaining
+	         */
+
+	    }]);
+
+	    function StateHandler() {
+	        var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{
+	            value: 0,
+	            description: 'Default'
+	        }] : arguments[0];
+
+	        _classCallCheck(this, StateHandler);
+
+	        this.states = states_array;
+	        this.i = 0;
+	        this.lastState = this.current;
+	        return this;
 	    }
 
 	    /**
-	     * get number of states
-	     * @return {number} number of states
-	     */
-
-	  }, {
-	    key: 'length',
-	    get: function get() {
-	      return this.states.length;
-	    }
-
-	    /**
-	     * @constructor
-	     * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
+	     * get the next element
 	     * @return {StateHandler} instance of StateHandler for chaining
 	     */
 
-	  }]);
 
-	  function StateHandler() {
-	    var states_array = arguments.length <= 0 || arguments[0] === undefined ? [{ value: 0, description: 'Default' }] : arguments[0];
+	    StateHandler.prototype.next = function next() {
+	        this.lastState = this.current;
+	        if (this.hasNext()) this.i++;
+	        return this;
+	    };
 
-	    _classCallCheck(this, StateHandler);
-
-	    this.states = states_array;
-	    this.i = 0;
-	    this.lastState = this.current;
-	    return this;
-	  }
-
-	  /**
-	   * get the next element
-	   * @return {StateHandler} instance of StateHandler for chaining
-	   */
+	    /**
+	     * get the previous element
+	     * @return {StateHandler} instance of StateHandler for chaining
+	     */
 
 
-	  StateHandler.prototype.next = function next() {
-	    this.lastState = this.current;
-	    if (this.hasNext()) this.i++;
-	    return this;
-	  };
+	    StateHandler.prototype.previous = function previous() {
+	        this.lastState = this.current;
+	        if (this.hasPrevious()) this.i--;
+	        return this;
+	    };
 
-	  /**
-	   * get the previous element
-	   * @return {StateHandler} instance of StateHandler for chaining
-	   */
-
-
-	  StateHandler.prototype.previous = function previous() {
-	    this.lastState = this.current;
-	    if (this.hasPrevious()) this.i--;
-	    return this;
-	  };
-
-	  /**
-	   * change the state to specified state
-	   * @param {number} state - index of state in array
-	   * @return {StateHandler} instance of StateHandler for chaining
-	   */
+	    /**
+	     * change the state to specified state
+	     * @param {Number} state - index of state in array
+	     * @return {StateHandler} instance of StateHandler for chaining
+	     */
 
 
-	  StateHandler.prototype.changeTo = function changeTo(state) {
-	    if (state >= 0 && state < this.length) this.i = state;
-	    return this;
-	  };
+	    StateHandler.prototype.changeTo = function changeTo(state) {
+	        if (state >= 0 && state < this.length) this.i = state;
+	        return this;
+	    };
 
-	  /**
-	   * checks if there is a next element
-	   * @return {Boolean} wheter there is a next state or not
-	   */
-
-
-	  StateHandler.prototype.hasNext = function hasNext() {
-	    return this.i < this.length - 1;
-	  };
-
-	  /**
-	   * checks if there is a previous element
-	   * @return {Boolean} wheter there is a previous state or not
-	   */
+	    /**
+	     * checks if there is a next element
+	     * @return {Boolean} wheter there is a next state or not
+	     */
 
 
-	  StateHandler.prototype.hasPrevious = function hasPrevious() {
-	    return this.i > 0;
-	  };
+	    StateHandler.prototype.hasNext = function hasNext() {
+	        return this.i < this.length - 1;
+	    };
 
-	  return StateHandler;
+	    /**
+	     * checks if there is a previous element
+	     * @return {Boolean} wheter there is a previous state or not
+	     */
+
+
+	    StateHandler.prototype.hasPrevious = function hasPrevious() {
+	        return this.i > 0;
+	    };
+
+	    return StateHandler;
 	}();
 
 /***/ },
@@ -2740,9 +2965,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(Interact, [{
 	        key: 'timeToLastMove',
 
+
 	        /**
 	         * get time difference to last
-	         * @return {number} difference
+	         * @return {Number} difference
 	         */
 	        get: function get() {
 	            return this.data.timeEnd - this.data.timeLast;
@@ -2750,7 +2976,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * get time difference to start
-	         * @return {number} difference
+	         * @return {Number} difference
 	         */
 
 	    }, {
@@ -2762,30 +2988,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * @constructor
 	         * @param {Object} settings = {} - all the settings
-	         * @param {string|Object} settings.container = ".interact-container" - Container, either string or dom-object
+	         * @param {String|HTMLElement} settings.container = ".interact-container" - Container, either string or dom-object
 	         * @param {Object} settings.timeTreshold = {} - settings for the timing tresholds
-	         * @param {number} settings.timeTreshold.tap = 200 - timing treshold for tap
-	         * @param {number} settings.timeTreshold.hold = 500 - timing treshold for hold
-	         * @param {number} settings.timeTreshold.swipe = 300 - timing treshold for swipe
-	         * @param {number} settings.timeTreshold.flick = 30 - timing treshold for flick
+	         * @param {Number} settings.timeTreshold.tap = 200 - timing treshold for tap
+	         * @param {Number} settings.timeTreshold.hold = 500 - timing treshold for hold
+	         * @param {Number} settings.timeTreshold.swipe = 300 - timing treshold for swipe
+	         * @param {Number} settings.timeTreshold.flick = 30 - timing treshold for flick
 	         * @param {Object} settings.distanceTreshold = {} - settings for the distance tresholds
-	         * @param {number} settings.distanceTreshold.swipe = 200 - distance treshold for swipe
+	         * @param {Number} settings.distanceTreshold.swipe = 200 - distance treshold for swipe
 	         * @param {Boolean|string} settings.overwriteViewportSettings = false - on true prevents pinching, can be a custom string too
 	         * @param {Boolean} settings.stopPropagation = true - on true stops the propagation of events
 	         * @param {Boolean} settings.preventDefault = true - on true prevents the default actions of events
 	         * @param {Boolean} settings.autoFireHold = false - if set to false hold-event is not fired
-	         * @param {number} settings.pinchBalanceTime = 50 - prevents from firing too much pinching events
+	         * @param {Number} settings.pinchBalanceTime = 50 - prevents from firing too much pinching events
 	         * @param {Object} settings.callbacks = {} - settings for the callback-functions
-	         * @param {function} settings.callbacks.tap = null - callback-function for tap
-	         * @param {function} settings.callbacks.tapHold = null - callback-function for tapHold
-	         * @param {function} settings.callbacks.doubletap = null - callback-function for doubletap
-	         * @param {function} settings.callbacks.hold = null - callback-function for hold
-	         * @param {function} settings.callbacks.pan = null - callback-function for pan
-	         * @param {function} settings.callbacks.swipe = null - callback-function for swipe
-	         * @param {function} settings.callbacks.flick = null - callback-function for flick
-	         * @param {function} settings.callbacks.zoom = null - callback-function for zoom
-	         * @param {function} settings.callbacks.wheel = null - callback-function for wheel
-	         * @param {function} settings.callbacks.pinch = null - callback-function for pinch
+	         * @param {Function} settings.callbacks.tap = null - callback-function for tap
+	         * @param {Function} settings.callbacks.tapHold = null - callback-function for tapHold
+	         * @param {Function} settings.callbacks.doubletap = null - callback-function for doubletap
+	         * @param {Function} settings.callbacks.hold = null - callback-function for hold
+	         * @param {Function} settings.callbacks.pan = null - callback-function for pan
+	         * @param {Function} settings.callbacks.swipe = null - callback-function for swipe
+	         * @param {Function} settings.callbacks.flick = null - callback-function for flick
+	         * @param {Function} settings.callbacks.zoom = null - callback-function for zoom
+	         * @param {Function} settings.callbacks.wheel = null - callback-function for wheel
+	         * @param {Function} settings.callbacks.pinch = null - callback-function for pinch
 	         * @param {Object} settings.events = {} - settings all eventnames
 	         * @param {Object} settings.events.start = {} - settings all start eventnames
 	         * @param {Object} settings.events.start.touch = ("MSPointerDown pointerdown" || "touchstart") - settings start touch eventnames
@@ -2799,7 +3025,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param {Object} settings.events.leave = {} - settings all leave eventnames
 	         * @param {Object} settings.events.leave.touch = ("MSPointerLeave pointerleave" || "touchleave") - settings leave touch eventnames
 	         * @param {Object} settings.events.leave.mouse = ("MSPointerLeave pointerleave" || "mouseleave") - settings leave mouse eventnames
-	         * @param {string} settings.events.scroll = ("wheel" || "mousewhell" || "DOMMouseScroll") - settings all scroll eventnames
+	         * @param {String} settings.events.scroll = ("wheel" || "mousewhell" || "DOMMouseScroll") - settings all scroll eventnames
 	         * @return {Interact} new instance
 	         */
 
@@ -2931,7 +3157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles the overwrite of viewport meta
-	     * @param  {Boolean|string} viewport - specified viewport option
+	     * @param  {Boolean|String} viewport - specified viewport option
 	     * @return {Interact} Returns this instance
 	     */
 
@@ -2946,7 +3172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * initializes class settings and bindings
-	     * @param  {Object|string} container - Container, either string or dom-object
+	     * @param  {HTMLElement|String} container - Container, either string or DOM object
 	     * @return {Interact} Returns this instance
 	     */
 
@@ -3028,7 +3254,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * pre handle all events
-	     * @param  {Object} event - original event of Vanilla JS
+	     * @param  {Event} event - event
 	     * @return {Object} normalized Event
 	     */
 
@@ -3041,7 +3267,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles cross-browser and -device scroll
-	     * @param  {Object} event - Event-Object
+	     * @param  {Event} event - event
 	     * @return {Boolean} always returns false
 	     */
 
@@ -3068,8 +3294,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     *
 	     * Solution from http://jsfiddle.net/uNeBr/
-	     * @param  {Object} event - VanillaJS-Event-Object
-	     * @return {number} normalized wheel delta
+	     * @param  {Event} e - event
+	     * @return {Number} normalized wheel delta
 	     */
 
 
@@ -3092,7 +3318,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * check if event is a PointerEvent (IE)
-	     * @param  {Object} event - original event of Vanilla JS
+	     * @param  {Event} e - event
 	     * @return {Boolean} Whether event is PointerEvent
 	     */
 
@@ -3103,7 +3329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * calculation to be made at start-handler
-	     * @param  {Object} e - Event-Object
+	     * @param  {Event} e - event
 	     * @return {Object} calculated data
 	     */
 
@@ -3131,7 +3357,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * handle PointerEvent calculations
 	     * @param  {Object} data - current data
-	     * @param  {Object} e - Event-Object
+	     * @param  {Event} e - event
 	     * @return {Object} manipulated enriched data
 	     */
 
@@ -3145,7 +3371,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * handle TouchEvent calculations for start
 	     * @param  {Object} data - current data
-	     * @param  {Object} e - Event-Object
+	     * @param  {Event} e - event
 	     * @return {Object} manipulated enriched data
 	     */
 
@@ -3229,7 +3455,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles cross-browser and -device start-event
-	     * @param  {Object} event - Event-Object
+	     * @param  {Event} event - event
 	     * @return {Boolean} always returns false
 	     */
 
@@ -3263,7 +3489,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * calculation to be made at move-handler
-	     * @param  {Object} e - Event-Object
+	     * @param  {Event} e - event
 	     * @return {Object} calculated data
 	     */
 
@@ -3289,7 +3515,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * handle PointerEvent at moving (IE)
 	     * @param  {Object} data - specified input data
-	     * @param  {Object} e - Event-Object
+	     * @param  {Event} e - event
 	     * @return {Object} manipulated enriched data
 	     */
 
@@ -3307,7 +3533,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * handle TouchEvent calculations for move
 	     * @param  {Object} data - current data
-	     * @param  {Object} e - Event-Object
+	     * @param  {Event} e - event
 	     * @return {Object} manipulated enriched data
 	     */
 
@@ -3315,6 +3541,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Interact.prototype.handleTouchEventMove = function handleTouchEventMove(data, e) {
 	        return this.handleTouchEvent(data, e, this.handleSingletouchMove.bind(this), this.handleMultitouchMove.bind(this));
 	    };
+
+	    /**
+	     * handles touch events
+	     * @param  {Object} data - current data
+	     * @param  {Event} e - event
+	     * @param  {Function} fnSingle - callback for singletouch
+	     * @param  {Function} fnMulti - callback for multitouch
+	     * @return {Object} manipulated enriched data
+	     */
+
 
 	    Interact.prototype.handleTouchEvent = function handleTouchEvent(data, e, fnSingle, fnMulti) {
 	        var getData = e.length === 1 ? fnSingle(e[0]) : fnMulti(e);
@@ -3357,7 +3593,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles cross-browser and -device move-event
-	     * @param  {Object} event - Event-Object
+	     * @param  {Event} event - event
 	     * @return {Boolean} always returns false
 	     */
 
@@ -3406,7 +3642,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * check if position has been changed
-	     * @param  {Object} e - Event-Object
+	     * @param  {Event} e - event
 	     * @return {Boolean} Whether or not position has changed
 	     */
 
@@ -3417,7 +3653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * calculation to be made at end-handler
-	     * @param  {Object} e - Event-Object
+	     * @param  {Event} e - event
 	     * @return {Object} calculated data
 	     */
 
@@ -3445,7 +3681,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles singletouch for end
-	     * @param  {Object} position - position
+	     * @param  {Point} position - position
 	     * @return {Object} manipulated enriched data
 	     */
 
@@ -3486,7 +3722,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles cross-browser and -device end-event
-	     * @param  {Object} event - Event-Object
+	     * @param  {Event} event - event
 	     * @return {Boolean} always returns false
 	     */
 
@@ -3551,7 +3787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles multitouch for end
-	     * @param  {e} e - Event-Object
+	     * @param  {Event} e - event
 	     * @return {Interact} instance of Interact for chaining
 	     */
 
@@ -3602,7 +3838,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Returns an array of strings, representing the directions
 	     * @param  {Point} direction - the specified direction in pixel
-	     * @return {string[]} returns an array representing the directions as strings
+	     * @return {String[]} returns an array representing the directions as strings
 	     */
 
 
@@ -3613,7 +3849,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Helper for setting a timeout for events
 	     * @param {Function} callback - function to be called
-	     * @param {number} timeout - time in milliseconds
+	     * @param {Number} timeout - time in milliseconds
 	     * @param {Object[]} args - array of arguments
 	     * @param {Boolean} holdTimeout - if true, a different variable will be used
 	     * @return {Interact} Returns this instance
@@ -3645,7 +3881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * get the relative position of clientX and clientY
-	     * @param  {Object} e - event object
+	     * @param  {Event} e - event
 	     * @return {Point} calculated relative position
 	     */
 
@@ -3659,7 +3895,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * get the absolute position of clientX and clientY
-	     * @param  {Object} e - event object
+	     * @param  {Point} point - specified point
 	     * @return {Point} calculated absolute position
 	     */
 
@@ -3671,8 +3907,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * get scroll direction from event
-	     * @param  {Object} event - event object
-	     * @return {string[]} an array with scroll directions
+	     * @param  {Event} event - event
+	     * @return {String[]} an array with scroll directions
 	     */
 
 
@@ -3688,8 +3924,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * checks if direction is down
-	     * @param  {number} axis - what axis is used
-	     * @param  {Object} event - Vanilla JS event
+	     * @param  {Number} axis - what axis is used
+	     * @param  {Event} event - event
 	     * @return {Boolean} Whether or not direction is down
 	     */
 
@@ -3700,8 +3936,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * checks if direction is up
-	     * @param  {number} axis - what axis is used
-	     * @param  {Object} event - Vanilla JS event
+	     * @param  {Number} axis - what axis is used
+	     * @param  {Event} event - event
 	     * @return {Boolean} Whether or not direction is up
 	     */
 
@@ -3712,8 +3948,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * checks if direction is right
-	     * @param  {number} axis - what axis is used
-	     * @param  {Object} event - Vanilla JS event
+	     * @param  {Number} axis - what axis is used
+	     * @param  {Event} event - event
 	     * @return {Boolean} Whether or not direction is right
 	     */
 
@@ -3724,8 +3960,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * checks if direction is left
-	     * @param  {number} axis - what axis is used
-	     * @param  {Object} event - Vanilla JS event
+	     * @param  {Number} axis - what axis is used
+	     * @param  {Event} event - event
 	     * @return {Boolean} Whether or not direction is left
 	     */
 
@@ -3736,8 +3972,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Get event helper, applies event-fix too
-	     * @param  {Object} e - event object
-	     * @return {Object} new fixed and optimized event
+	     * @param  {Event} e - event
+	     * @return {Event} cross-device event
 	     */
 
 
@@ -3799,42 +4035,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var TileMap = exports.TileMap = function () {
 	    _createClass(TileMap, [{
-	        key: 'left',
+	        key: 'width',
 
-
-	        /**
-	         * Returns left offset of container
-	         * @return {number} - left offset of container
-	         */
-	        get: function get() {
-	            return 0;
-	        }
-
-	        /**
-	         * Returns top offset of container
-	         * @return {number} - top offset of container
-	         */
-
-	    }, {
-	        key: 'top',
-	        get: function get() {
-	            return 0;
-	        }
 
 	        /**
 	         * Returns width of container
-	         * @return {number} - width of container
+	         * @return {Number} - width of container
 	         */
-
-	    }, {
-	        key: 'width',
 	        get: function get() {
 	            return this.container.getBoundingClientRect().width;
 	        }
 
 	        /**
 	         * Returns height of container
-	         * @return {number} - height of container
+	         * @return {Number} - height of container
 	         */
 
 	    }, {
@@ -3842,27 +4056,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	            return this.container.getBoundingClientRect().height;
 	        }
-	    }, {
-	        key: 'viewport',
-	        get: function get() {
-	            return new _Rectangle.Rectangle(this.left, this.top, this.width, this.height);
-	        }
-	    }, {
-	        key: 'pixelPerLatLng',
-	        get: function get() {
-	            this.levelHandler.current.instance.pixelPerLatLng();
-	        }
 
 	        /**
-	         * gets data of current zoom level
-	         * @return {Object} data for current level as json
+	         * gets current viewport
+	         * @return {Rectangle} viewport
 	         */
 
 	    }, {
-	        key: 'currentLevelData',
+	        key: 'viewport',
 	        get: function get() {
-	            return this.levelHandler.current.value;
+	            return new _Rectangle.Rectangle(0, 0, this.width, this.height);
 	        }
+
+	        /**
+	         * current view
+	         * @return {View} view
+	         */
+
 	    }, {
 	        key: 'view',
 	        get: function get() {
@@ -3871,9 +4081,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * @constructor
-	         * @param  {Object} container = null - jQuery-object holding the container
-	         * @param  {Object} tilesData={} - json object representing data of TileMap
-	         * @param  {Object} settings={} - json object representing settings of TileMap
+	         * @param  {HTMLElement} container = null - jQuery-object holding the container
+	         * @param  {Object} tilesData = {} - json object representing data of TileMap
+	         * @param  {Object} settings = {} - json object representing settings of TileMap
+	         * @param  {Number} id = 0 - id of parent instance
 	         * @return {TileMap} instance of TileMap for chaining
 	         */
 
@@ -3893,45 +4104,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, TileMap);
 
 	        if (!container) throw Error("You must define a container to initialize a TileMap");
+
 	        this.container = container;
-
 	        this.id = id;
-
-	        this.info = new _MapInformation.MapInformation(this.id);
-	        this.eventManager = new _Publisher.Publisher(this.id);
-
-	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
-	            viewport: this.viewport
-	        });
-
-	        this.imgData = tilesData[_Events.Events.TileMap.IMG_DATA_NAME];
-	        this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
-	        this.labelData = tilesData[_Events.Events.TileMap.LABEL_DATA_NAME];
-
 	        this.settings = settings;
 
-	        this.stateHandler = new _StateHandler.StateHandler([{ value: 0, description: "start" }, { value: 1, description: "view-initialized" }, { value: 2, description: "marker-initialized" }, { value: 3, description: "tooltip-initialized" }]);
-
-	        this.templates = this.settings.tooltip ? this.settings.tooltip.templates : {};
-	        this.templates = _DataEnrichment.DataEnrichment.tooltip(this.templates);
-
-	        this.levels = [];
-	        this.clusterHandlingTimeout = null;
-
-	        this.lastFrameMillisecs = Date.now();
-	        this.deltaTiming = 1.0;
-	        this.bestDeltaTiming = 1000.0 / 60.0;
-
-	        this.velocity = new _Point.Point();
-	        this.drawIsNeeded = false;
-
-	        this.initial = {
-	            bounds: settings.bounds,
-	            center: settings.center,
-	            level: settings.level,
-	            zoom: settings.zoom
-	        };
-
+	        this.initialize(tilesData);
 	        this.initializeCanvas();
 
 	        _Helper.Helper.forEach(this.imgData, function (element, i) {
@@ -3970,6 +4148,68 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
+	    /**
+	     * initialize map
+	     * @param  {Object} tilesData - data of tiles, markers and labels
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.initialize = function initialize(tilesData) {
+	        this.info = new _MapInformation.MapInformation(this.id);
+	        this.eventManager = new _Publisher.Publisher(this.id);
+
+	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
+	            viewport: this.viewport
+	        });
+
+	        this.imgData = tilesData[_Events.Events.TileMap.IMG_DATA_NAME];
+	        this.markerData = tilesData[_Events.Events.TileMap.MARKER_DATA_NAME];
+	        this.labelData = tilesData[_Events.Events.TileMap.LABEL_DATA_NAME];
+
+	        this.stateHandler = new _StateHandler.StateHandler([{
+	            value: 0,
+	            description: "start"
+	        }, {
+	            value: 1,
+	            description: "view-initialized"
+	        }, {
+	            value: 2,
+	            description: "marker-initialized"
+	        }, {
+	            value: 3,
+	            description: "tooltip-initialized"
+	        }]);
+
+	        this.templates = this.settings.tooltip ? this.settings.tooltip.templates : {};
+	        this.templates = _DataEnrichment.DataEnrichment.tooltip(this.templates);
+
+	        this.levels = [];
+	        this.clusterHandlingTimeout = null;
+
+	        this.lastFrameMillisecs = Date.now();
+	        this.deltaTiming = 1.0;
+	        this.bestDeltaTiming = 1000.0 / 60.0;
+
+	        this.velocity = new _Point.Point();
+	        this.drawIsNeeded = false;
+
+	        this.initial = {
+	            bounds: this.settings.bounds,
+	            center: this.settings.center,
+	            level: this.settings.level,
+	            zoom: this.settings.zoom
+	        };
+
+	        return this;
+	    };
+
+	    /**
+	     * check if level can fit boundaries and if not iterate to closer level
+	     * @return {Number} level
+	     */
+
+
 	    TileMap.prototype.checkIfLevelCanFitBounds = function checkIfLevelCanFitBounds() {
 	        var newLevel = this.settings.level;
 	        var fits = false;
@@ -3989,6 +4229,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * resets view to initial state
+	     * @return {TileMap} instance of TileMap for chaining
 	     */
 
 
@@ -4005,7 +4246,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.view.reset(this.initial.center, this.initial.zoom);
 	        this.clusterHandler();
 	        this.redraw();
+	        return this;
 	    };
+
+	    /**
+	     * initialize all labels
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
 
 	    TileMap.prototype.initializeLabels = function initializeLabels() {
 	        var _this2 = this;
@@ -4020,14 +4268,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	            _this2.labels.push(currentLabel);
 	        });
+	        return this;
 	    };
 
 	    /**
 	     * creates a View from specified parameters
-	     * @param  {Bounds} bounds - specified boundaries
-	     * @param  {LatLng} center - specified center
-	     * @param  {object} data - specified data
-	     * @param  {number} zoom - initial zoom level
+	     * @param  {Object} data - specified data
 	     * @return {View} created View
 	     */
 
@@ -4077,6 +4323,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TileMap.prototype.enrichMarkerData = function enrichMarkerData(markerData) {
 	        return _DataEnrichment.DataEnrichment.marker(markerData);
 	    };
+
+	    /**
+	     * enrich label data
+	     * @param  {Object} labelData - data of labels
+	     * @return {Object} enriched label data
+	     */
+
 
 	    TileMap.prototype.enrichLabelData = function enrichLabelData(labelData) {
 	        return _DataEnrichment.DataEnrichment.label(labelData);
@@ -4164,43 +4417,70 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.eventManager.subscribe(_Events.Events.TileMap.RESIZE, function () {
 	            _this4.resize();
 	        });
-
 	        this.eventManager.subscribe(_Events.Events.TileMap.DRAW, function () {
 	            _this4.redraw();
 	        });
-
 	        this.eventManager.subscribe(_Events.Events.View.THUMB_LOADED, function () {
-	            _this4.redraw();
-	            if (_this4.stateHandler.current.value < 2) {
-	                _this4.initializeMarkers();
-	                if (_this4.markerData && _this4.markerData.length) _this4.createTooltipContainer();
-	            }
+	            _this4.thumbLoaded();
 	        });
-
 	        this.eventManager.subscribe(_Events.Events.TileMap.ZOOM_TO_BOUNDS, function (data) {
-	            var zoomIncrease = Math.min(_this4.view.viewport.width / data.boundingBox.width, _this4.view.viewport.height / data.boundingBox.height);
-	            while (zoomIncrease > 0) {
-	                var possibleZoomOnLevel = _this4.view.maxZoom - _this4.view.zoomFactor;
-	                zoomIncrease -= possibleZoomOnLevel;
-	                if (_this4.levelHandler.hasNext()) {
-	                    _this4.changelevel(1);
-	                } else {
-	                    _this4.zoom(possibleZoomOnLevel, _this4.view.viewport.center);
-	                    zoomIncrease = 0;
-	                }
-	            }
-	            _this4.view.setLatLngToPosition(data.center, _this4.view.viewport.center);
+	            _this4.zoomToBounds(data.center, data.boundingBox);
 	        });
-
 	        this.eventManager.subscribe(_Events.Events.TileMap.NEXT_LEVEL, function () {
 	            _this4.changelevel(1);
 	        });
 	        this.eventManager.subscribe(_Events.Events.TileMap.PREVIOUS_LEVEL, function () {
 	            _this4.changelevel(-1);
 	        });
-
 	        return this;
 	    };
+
+	    /**
+	     * zoom to boundaries on specified center
+	     * @param  {LatLng} center - zoom to position
+	     * @param  {Rectangle} boundingBox - specified bounds to toom to
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.zoomToBounds = function zoomToBounds(center, boundingBox) {
+	        var zoomIncrease = Math.min(this.view.viewport.width / boundingBox.width, this.view.viewport.height / boundingBox.height);
+	        while (zoomIncrease > 0) {
+	            var possibleZoomOnLevel = this.view.maxZoom - this.view.zoomFactor;
+	            zoomIncrease -= possibleZoomOnLevel;
+	            if (this.levelHandler.hasNext()) {
+	                this.changelevel(1);
+	            } else {
+	                this.zoom(possibleZoomOnLevel, this.view.viewport.center);
+	                zoomIncrease = 0;
+	            }
+	        }
+	        this.view.setLatLngToPosition(center, this.view.viewport.center);
+	        return this;
+	    };
+
+	    /**
+	     * called when thumbnail image was loaded
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
+
+	    TileMap.prototype.thumbLoaded = function thumbLoaded() {
+	        this.redraw();
+	        if (this.stateHandler.current.value < 2) {
+	            this.initializeMarkers();
+	            if (this.markerData && this.markerData.length) this.createTooltipContainer();
+	        }
+	        return this;
+	    };
+
+	    /**
+	     * set new view to old views position and zoomlevel
+	     * @param {LatLng} center - old center
+	     * @param {Number} zoom - old zoom,
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
 
 	    TileMap.prototype.setViewToOldView = function setViewToOldView(center, zoom) {
 	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
@@ -4208,8 +4488,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        this.view.zoom(0, this.view.viewport.center);
 	        this.view.view.setCenter(center);
-	        this.drawIsNeeded = true;
+	        this.redraw();
+	        return this;
 	    };
+
+	    /**
+	     * change level up or down
+	     * @param  {Number} direction - either 1 or -1
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
 
 	    TileMap.prototype.changelevel = function changelevel(direction) {
 	        var lastLevel = this.levelHandler.current.level,
@@ -4236,6 +4524,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            level: this.levelHandler.current.level
 	        });
+	        return this;
 	    };
 
 	    /**
@@ -4276,7 +4565,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * move view by delta
 	     * @param  {Point} delta - delta of x/y
-	     * @return {MappedJS} instance of MappedJS for chaining
+	     * @return {TileMap} instance of TileMap for chaining
 	     */
 
 
@@ -4288,9 +4577,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * handles zoom by factor and position
-	     * @param  {number} factor - difference in zoom scale
+	     * @param  {Number} factor - difference in zoom scale
 	     * @param  {Point} position - position to zoom to
-	     * @return {MappedJS} instance of MappedJS for chaining
+	     * @return {TileMap} instance of TileMap for chaining
 	     */
 
 
@@ -4302,6 +4591,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return this;
 	    };
+
+	    /**
+	     * handles creation of clusters
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
 
 	    TileMap.prototype.clusterHandler = function clusterHandler() {
 	        var _this5 = this;
@@ -4316,6 +4611,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _this5.eventManager.publish(_Events.Events.MarkerClusterer.UNCLUSTERIZE);
 	            }
 	        }, 150);
+	        return this;
 	    };
 
 	    /**
@@ -4372,6 +4668,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return _this6.mainLoop();
 	        });
 	    };
+
+	    /**
+	     * draw all labels
+	     * @return {TileMap} instance of TileMap for chaining
+	     */
+
 
 	    TileMap.prototype.drawLabels = function drawLabels() {
 	        _Helper.Helper.forEach(this.labels, function (label) {
@@ -4730,6 +5032,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * @constructor
+	     * @param  {HTMLDivElement} container =  null - parent container of
+	     * @param  {Number} id = 0 - id of parent instance
 	     * @return {Cluster} instance of Cluster for chaining
 	     */
 
@@ -4738,7 +5042,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var _ref$container = _ref.container;
 	        var container = _ref$container === undefined ? null : _ref$container;
-	        var id = _ref.id;
+	        var _ref$id = _ref.id;
+	        var id = _ref$id === undefined ? 0 : _ref$id;
 
 	        _classCallCheck(this, Cluster);
 
@@ -4751,13 +5056,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
+	    /**
+	     * initialize a cluster
+	     * @return {Cluster} instance of Cluster for chaining
+	     */
+
+
 	    Cluster.prototype.init = function init() {
 	        if (this.markers.length === 1) {
 	            _Helper.Helper.show(this.markers[0].icon);
 	        } else {
 	            this.createClusterMarker();
 	        }
+	        return this;
 	    };
+
+	    /**
+	     * create cluster for markers
+	     * @return {Cluster} instance of Cluster for chaining
+	     */
+
 
 	    Cluster.prototype.createClusterMarker = function createClusterMarker() {
 	        var p = void 0;
@@ -4801,15 +5119,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.cluster.setAttribute("data-id", 'cluster-' + this.uniqueID);
 	        this.container.appendChild(this.cluster);
 	        this.bindEvents();
+	        return this;
 	    };
+
+	    /**
+	     * bind all events
+	     * @return {Cluster} instance of Cluster for chaining
+	     */
+
 
 	    Cluster.prototype.bindEvents = function bindEvents() {
 	        this.eventManager.subscribe('cluster-' + this.uniqueID, this.action.bind(this));
+	        return this;
 	    };
+
+	    /**
+	     * unbind all events
+	     * @return {Cluster} instance of Cluster for chaining
+	     */
+
 
 	    Cluster.prototype.unbindEvents = function unbindEvents() {
 	        this.eventManager.unsubscribe('cluster-' + this.uniqueID, this.action.bind(this));
+	        return this;
 	    };
+
+	    /**
+	     * execute bound action of cluster
+	     * @return {Cluster} instance of Cluster for chaining
+	     */
+
 
 	    Cluster.prototype.action = function action() {
 	        var center = void 0;
@@ -4843,12 +5182,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	            boundingBox: this.boundingBox,
 	            center: center
 	        });
+	        return this;
 	    };
+
+	    /**
+	     * adds a marker to the cluster
+	     * @param {Marker} marker - specified marker to be added to the cluster
+	     * @return {Cluster} instance of Cluster for chaining
+	     */
+
 
 	    Cluster.prototype.addMarker = function addMarker(marker) {
 	        this.markers.push(marker);
 	        this.boundingBox = !this.boundingBox ? marker.boundingBox : this.boundingBox.extend(marker.boundingBox);
+	        return this;
 	    };
+
+	    /**
+	     * remove this cluster
+	     * @return {Cluster} instance of Cluster for chaining
+	     */
+
 
 	    Cluster.prototype.removeFromDOM = function removeFromDOM() {
 	        if (this.markers.length > 1) {
@@ -4880,10 +5234,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.cluster.parentNode.removeChild(this.cluster);
 	        }
 	        this.unbindEvents();
+	        return this;
 	    };
 
 	    return Cluster;
 	}(_Drawable2.Drawable);
+
+	/**
+	 * counts all clusters
+	 * @type {Number}
+	 */
+
 
 		Cluster.count = 0;
 
@@ -4930,27 +5291,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _createClass(Label, [{
 	        key: 'position',
+
+
+	        /**
+	         * position of label
+	         * @return {Point} position
+	         */
 	        get: function get() {
 	            return this.info.convertLatLngToPoint(this.nearestPositionToCenter).translate(this.view.x, this.view.y).multiply(this.distortionFactor, 1).translate(this.offsetToCenter, 0);
 	        }
+
+	        /**
+	         * find nearest position to mapcenter
+	         * @return {LatLng} nearest position
+	         */
+
 	    }, {
 	        key: 'nearestPositionToCenter',
 	        get: function get() {
 	            return this.latlng instanceof _LatLng.LatLng ? this.latlng : this.getNearestPositionToCenter();
 	        }
-	    }, {
-	        key: 'boundingBox',
-	        get: function get() {
-	            var x = this.position.x + this.offset.x;
-	            var y = this.position.y + this.offset.y;
-	            var sizeX = this.icon.size.x || this.icon.size;
-	            var sizeY = this.icon.size.y || this.icon.size;
-
-	            return new _Rectangle.Rectangle(x, y, sizeX, sizeY).scaleCenter(2);
-	        }
 
 	        /**
+	        /**
 	         * @constructor
+	         * @param  {Object} settings = {} - settings for label
+	         * @param  {CanvasRenderingContext2D} context = null - canvas context
+	         * @param  {Number} id = 0 - id of parent instance
 	         * @return {Label} instance of Label for chaining
 	         */
 
@@ -4959,9 +5326,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function Label(_ref) {
 	        var _ret;
 
-	        var settings = _ref.settings;
-	        var context = _ref.context;
-	        var id = _ref.id;
+	        var _ref$settings = _ref.settings;
+	        var settings = _ref$settings === undefined ? {} : _ref$settings;
+	        var _ref$context = _ref.context;
+	        var context = _ref$context === undefined ? null : _ref$context;
+	        var _ref$id = _ref.id;
+	        var id = _ref$id === undefined ? 0 : _ref$id;
 
 	        _classCallCheck(this, Label);
 
@@ -4987,6 +5357,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
 	    }
 
+	    /**
+	     * find nearest position to mapcenter
+	     * @return {LatLng} nearest position
+	     */
+
+
 	    Label.prototype.getNearestPositionToCenter = function getNearestPositionToCenter() {
 	        var _this2 = this;
 
@@ -5000,9 +5376,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.latlng[0].distance(oldPos) > 0.01 ? this.latlng[0] : oldPos;
 	    };
 
-	    Label.prototype.openToolTip = function openToolTip() {
-	        this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
-	    };
+	    /**
+	     * draw a label
+	     * @return {Label} instance of Label for chaining
+	     */
+
 
 	    Label.prototype.draw = function draw() {
 	        if (this.level >= this.visibility.min && this.level <= this.visibility.max) {
@@ -5015,6 +5393,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return this;
 	    };
+
+	    /**
+	     * currying function for drawing text, icon or both
+	     * @param  {Object} text - data for text
+	     * @param  {Object} icon - data for icon
+	     * @return {Function} function to be called on draw
+	     */
+
 
 	    Label.prototype.decideWhatToDraw = function decideWhatToDraw(text, icon) {
 	        var _this3 = this;
@@ -5035,6 +5421,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
+	    /**
+	     * draw text of label
+	     * @param  {Point} pos - origin of label
+	     */
+
+
 	    Label.prototype.drawText = function drawText(pos) {
 	        this.context.textAlign = this.text.align;
 	        this.context.textBaseline = this.text.baseline;
@@ -5043,11 +5435,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.context.fillText(this.text.content, pos.x, pos.y);
 	    };
 
+	    /**
+	     * draw icon of label
+	     * @param  {Point} pos - origin of label
+	     */
+
+
 	    Label.prototype.drawIcon = function drawIcon(pos) {
 	        this.context.fillStyle = this.icon.color;
 	        this.drawIconType(pos);
 	        this.context.fill();
 	    };
+
+	    /**
+	     * currying function for drawing a circle
+	     * @param  {Number} size - size of circle
+	     * @return {Function} function for drawing circle icon
+	     */
+
 
 	    Label.prototype.drawCircleIcon = function drawCircleIcon(size) {
 	        var _this4 = this;
@@ -5057,6 +5462,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    };
 
+	    /**
+	     * currying function for drawing a square
+	     * @param  {Number} size - size of square
+	     * @return {Function} function for drawing square icon
+	     */
+
+
 	    Label.prototype.drawSquareIcon = function drawSquareIcon(size) {
 	        var _this5 = this;
 
@@ -5065,6 +5477,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    };
 
+	    /**
+	     * currying function for drawing an image
+	     * @param  {Image} image - image to be drawn
+	     * @param  {Point} size - dimension of image
+	     * @param  {Point} offset - offset of image
+	     * @return {Function} function for drawing image icon
+	     */
+
+
 	    Label.prototype.drawImageIcon = function drawImageIcon(image, size, offset) {
 	        var _this6 = this;
 
@@ -5072,10 +5493,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return function (pos) {
 	            return _this6.context.drawImage(image, pos.x + offset.x, pos.y + offset.y, size.x, size.y);
 	        };
-	    };
-
-	    Label.prototype.hit = function hit(point) {
-	        return this.boundingBox.containsPoint(point);
 	    };
 
 	    return Label;
@@ -5130,18 +5547,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * @constructor
-	     * @param  {string|Object} container=".mjs" - Container, either string or dom-object
-	     * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
-	     * @param  {string|Object} markerData={} - data of markers, can be json or path to file
+	     * @param  {String|HTMLElement} container=".mjs" - Container, either string or dom-object
+	     * @param  {String|Object} mapData={} - data of map tiles, can be json or path to file
+	     * @param  {String|Object} markerData={} - data of markers, can be json or path to file
+	     * @param  {String|Object} labelData={} - data of markers, can be json or path to file
 	     * @param  {Object} mapSettings={} - settings for map, must be json
-	     * @param  {Object} events={loaded: "mjs-loaded"} - List of events
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
 
-	    function MappedJS() {
+	    function MappedJS(_ref) {
 	        var _this = this;
-
-	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
 	        var _ref$container = _ref.container;
 	        var container = _ref$container === undefined ? ".mjs" : _ref$container;
@@ -5153,12 +5568,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var labelData = _ref$labelData === undefined ? {} : _ref$labelData;
 	        var _ref$mapSettings = _ref.mapSettings;
 	        var mapSettings = _ref$mapSettings === undefined ? {} : _ref$mapSettings;
-	        var _ref$events = _ref.events;
-	        var events = _ref$events === undefined ? { loaded: "mjs-loaded" } : _ref$events;
 
 	        _classCallCheck(this, MappedJS);
 
-	        this.initializeSettings(container, events, mapSettings);
+	        this.initializeSettings(container, mapSettings);
 
 	        this.id = this.generateUniqueID();
 	        MappedJS.count++;
@@ -5187,9 +5600,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
+	    /**
+	     * generate a unique id for this instance
+	     * @return {Number} unique id
+	     */
+
+
 	    MappedJS.prototype.generateUniqueID = function generateUniqueID() {
 	        return parseInt(Date.now() * (Math.random() * 10), 10);
 	    };
+
+	    /**
+	     * add an information layer to container
+	     * @param {String} type - type of layer
+	     * @param {Object} settings of layer
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
 
 	    MappedJS.prototype.addInformationLayer = function addInformationLayer(type, settings) {
 	        var _this2 = this;
@@ -5212,10 +5639,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            });
 	        });
+
+	        return this;
 	    };
 
 	    /**
 	     * add controls (zoom, home) to DOM
+	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
 
 
@@ -5239,20 +5669,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.controls.appendChild(this.zoomOut);
 	            this.content.appendChild(this.controls);
 	        }
+	        return this;
 	    };
 
 	    /**
 	     * initializes the settings and handles errors
-	     * @param  {string|Object} container - Container, either string or dom-object
-	     * @param  {object} events - List of events
-	     * @param  {object} settings - List of settings
+	     * @param  {String|HTMLElement} container - Container, either string or DOM object
+	     * @param  {Object} settings - list of settings
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
 
 
 	    MappedJS.prototype.initializeSettings = function initializeSettings(container) {
-	        var events = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	        var settings = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	        var settings = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	        this.container = typeof container === "string" ? _Helper.Helper.find(container) : container;
 	        this.container.classList.add("mappedJS");
@@ -5260,10 +5689,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.content.classList.add("map-content");
 	        this.container.appendChild(this.content);
 	        this.container.setAttribute("tabindex", MappedJS.count);
-
 	        this.mapSettings = _DataEnrichment.DataEnrichment.mapSettings(settings);
-	        this.events = events;
-
 	        return this;
 	    };
 
@@ -5427,7 +5853,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Keypress handler
-	     * @param  {object} e VanillaJS-Event-Object
+	     * @param  {KeyboardEvent} e - key event
 	     * @return {MappedJS} instance of MappedJS for chaining
 	     */
 
@@ -5486,8 +5912,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    };
 
+	    /**
+	     * key is released
+	     * @return {MappedJS} instance of MappedJS for chaining
+	     */
+
+
 	    MappedJS.prototype.keyRelease = function keyRelease() {
 	        this.keyTicks = 0;
+	        return this;
 	    };
 
 	    /**
@@ -5513,6 +5946,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return MappedJS;
 	}();
+
+	/**
+	 * instance counter
+	 * @type {Number}
+	 */
+
 
 		MappedJS.count = 1;
 
@@ -5559,6 +5998,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _createClass(Marker, [{
 	        key: 'boundingBox',
+
+
+	        /**
+	         * gets bounding box of marker
+	         * @return {Rectangle} current dimension of this marker
+	         */
 	        get: function get() {
 	            var bBox = this.icon.getBoundingClientRect();
 	            var parentBBox = this.container.getBoundingClientRect();
@@ -5568,7 +6013,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * @constructor
 	         * @param  {Object} data = DataEnrichment.DATA_MARKER - enriched data
-	         * @param  {View} _instance = parent instance - instance of parent view
+	         * @param  {HTMLElement} container = null - parent container
+	         * @param  {Number} id = 0 - id of parent instance
 	         * @return {Marker} - instance of Marker for chaining
 	         */
 
@@ -5579,8 +6025,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var _ref$data = _ref.data;
 	        var data = _ref$data === undefined ? _DataEnrichment.DataEnrichment.DATA_MARKER : _ref$data;
-	        var container = _ref.container;
-	        var id = _ref.id;
+	        var _ref$container = _ref.container;
+	        var container = _ref$container === undefined ? null : _ref$container;
+	        var _ref$id = _ref.id;
+	        var id = _ref$id === undefined ? 0 : _ref$id;
 
 	        _classCallCheck(this, Marker);
 
@@ -5607,7 +6055,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * binds all events
+	     * bind all events
 	     * @return {Marker} instance of Marker for chaining
 	     */
 
@@ -5625,6 +6073,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    };
 
+	    /**
+	     * execute bound action of cluster
+	     * @return {Marker} instance of Marker for chaining
+	     */
+
+
 	    Marker.prototype.action = function action() {
 	        this.eventManager.publish(_Events.Events.ToolTip.OPEN, this.content);
 	        this.eventManager.publish(_Events.Events.Marker.DEACTIVATE);
@@ -5632,9 +6086,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    /**
-	     * adds a marker to the DOM
-	     * @param {Object} container - container to append to
-	     * @returns {Object} DOM-selector of append markup
+	     * add a marker to the DOM
+	     * @param {HTMLElement} container - parent container to append to
+	     * @returns {HTMLElement} DOM-selector of appended markup
 	     */
 
 
@@ -5677,6 +6131,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return Marker;
 	}(_Drawable2.Drawable);
 
+	/**
+	 * counts all markers
+	 * @type {Number}
+	 */
+
+
 		Marker.count = 0;
 
 /***/ },
@@ -5706,8 +6166,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var MarkerClusterer = exports.MarkerClusterer = function () {
+
 	    /**
 	     * @constructor
+	     * @param {Array} markers = [] - all markers
+	     * @param {HTMLElement} container = null - parent container
+	     * @param {Number} id = 0 - id of parent instance
 	     * @return {MarkerClusterer} instance of MarkerClusterer for chaining
 	     */
 
@@ -5731,6 +6195,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 
+	    /**
+	     * bind all events
+	     * @return {MarkerClusterer} instance of MarkerClusterer for chaining
+	     */
+
+
 	    MarkerClusterer.prototype.bindEvents = function bindEvents() {
 	        var _this = this;
 
@@ -5741,6 +6211,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this.deleteAllClusters();
 	        });
 	    };
+
+	    /**
+	     * decompose all markers into Cluster
+	     * @return {MarkerClusterer} instance of MarkerClusterer for chaining
+	     */
+
 
 	    MarkerClusterer.prototype.clusterize = function clusterize() {
 	        this.deleteAllClusters();
@@ -5827,7 +6303,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	        }
+
+	        return this;
 	    };
+
+	    /**
+	     * find nearest cluster if there are multiple hits
+	     * @param  {Marker} marker - specified marker
+	     * @param  {Array} hits - array of Clusters hit
+	     * @return {Cluster} closest cluster
+	     */
+
 
 	    MarkerClusterer.prototype.findNearestHit = function findNearestHit(marker, hits) {
 	        var lastDistance = void 0,
@@ -5869,9 +6355,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return minimalHit;
 	    };
 
+	    /**
+	     * gets distance between marker and cluster
+	     * @param  {Marker} marker - specified marker
+	     * @param  {Cluster} cluster - specified cluster
+	     * @return {Number} distance between them
+	     */
+
+
 	    MarkerClusterer.prototype.getDistance = function getDistance(marker, cluster) {
 	        return marker.boundingBox.center.distance(cluster.boundingBox.center);
 	    };
+
+	    /**
+	     * creates a new cluster for marker
+	     * @param  {Marker} marker - specified marker
+	     * @return {Cluster} created cluster
+	     */
+
 
 	    MarkerClusterer.prototype.createCluster = function createCluster(marker) {
 	        var newCluster = new _Cluster.Cluster({
@@ -5881,6 +6382,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        newCluster.addMarker(marker);
 	        return newCluster;
 	    };
+
+	    /**
+	     * delete all clusters
+	     * @return {MarkerClusterer} instance of MarkerClusterer for chaining
+	     */
+
 
 	    MarkerClusterer.prototype.deleteAllClusters = function deleteAllClusters() {
 	        var _iteratorNormalCompletion5 = true;
@@ -5910,6 +6417,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.clusters = [];
 	        _Cluster.Cluster.count = 0;
+	        return this;
 	    };
 
 	    return MarkerClusterer;
@@ -5944,12 +6452,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	/**
-	 * States of a tile
-	 * @type {Array}
-	 */
-	var STATES = [{ value: 0, description: 'Starting' }, { value: 1, description: 'Initialized' }, { value: 2, description: 'Loaded' }, { value: 3, description: 'Drawn' }];
-
-	/**
 	 * @author Michael Duve <mduve@designmail.net>
 	 * @file Represents a part of the background map
 	 * @extends Rectangle
@@ -5961,24 +6463,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _createClass(Tile, [{
 	        key: 'distortedTile',
+
+
+	        /**
+	         * transform original tile to a distorted tile
+	         * @return {Tile} distorted tile
+	         */
 	        get: function get() {
 	            return this.clone.scale(this.zoomFactor).translate(this.view.x, this.view.y).scaleX(this.distortionFactor).translate(this.offsetToCenter, 0);
 	        }
 
 	        /**
 	         * @constructor
-	         * @param  {string} path = null - path to image
-	         * @param  {number} x = 0 - position x of tile
-	         * @param  {number} y = 0 - position y of tile
-	         * @param  {number} w = 0 - tile width
-	         * @param  {number} h = 0 - tile height
+	         * @param  {String} path = null - path to image
+	         * @param  {Number} x = 0 - position x of tile
+	         * @param  {Number} y = 0 - position y of tile
+	         * @param  {Number} w = 0 - tile width
+	         * @param  {Number} h = 0 - tile height
+	         * @param  {CanvasRenderingContext2D} context = null - context of canvas
+	         * @param  {Number} id = 0 - id of parent instance
 	         * @return {Tile} instance of Tile for chaining
 	         */
 
 	    }]);
 
-	    function Tile() {
-	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    function Tile(_ref) {
+	        var _ret;
 
 	        var _ref$path = _ref.path;
 	        var path = _ref$path === undefined ? null : _ref$path;
@@ -5990,18 +6500,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var w = _ref$w === undefined ? 0 : _ref$w;
 	        var _ref$h = _ref.h;
 	        var h = _ref$h === undefined ? 0 : _ref$h;
-	        var context = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-
-	        var _ret;
-
-	        var id = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
+	        var _ref$context = _ref.context;
+	        var context = _ref$context === undefined ? null : _ref$context;
+	        var _ref$id = _ref.id;
+	        var id = _ref$id === undefined ? 0 : _ref$id;
 
 	        _classCallCheck(this, Tile);
 
 	        var _this = _possibleConstructorReturn(this, _Drawable.call(this, id, x, y, w, h));
 
 	        if (!path || typeof path !== "string" || path.length === 0) throw new TypeError('Path ' + path + ' needs to be of type string and should not be empty');
-	        _this.state = new _StateHandler.StateHandler(STATES);
+	        _this.state = new _StateHandler.StateHandler(Tile.STATES);
 	        _this.context = context;
 	        _this.path = path;
 	        return _ret = _this, _possibleConstructorReturn(_this, _ret);
@@ -6045,6 +6554,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return Tile;
 	}(_Drawable2.Drawable);
 
+	/**
+	 * States of a tile
+	 * @type {Array}
+	 */
+
+
+	Tile.STATES = [{
+	    value: 0,
+	    description: 'Starting'
+	}, {
+	    value: 1,
+	    description: 'Initialized'
+	}, {
+	    value: 2,
+	    description: 'Loaded'
+	}, {
+	    value: 3,
+	    description: 'Drawn'
+		}];
+
 /***/ },
 /* 64 */
 /***/ function(module, exports, __webpack_require__) {
@@ -6086,7 +6615,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * checks if all templates were loaded
-	         * @return {boolean} wheter true if all templates were loaded or false
+	         * @return {Boolean} wheter true if all templates were loaded or false
 	         */
 	        get: function get() {
 	            return this.loadedTemplates === Object.keys(this.templates).length;
@@ -6095,8 +6624,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         *
 	         * @constructor
-	         * @param  {string|object} container - Container, either string or dom-object
-	         * @param  {object} templates - defined templates
+	         * @param  {String|HTMLElement} container - Container, either string or DOM object
+	         * @param  {Array} templates = [] - defined templates
+	         * @param  {Number} id = 0 - if of parent instance
 	         * @return {ToolTip} instance of ToolTip for chaining
 	         */
 
@@ -6106,14 +6636,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var container = _ref.container;
 	        var _ref$templates = _ref.templates;
 	        var templates = _ref$templates === undefined ? [] : _ref$templates;
-	        var id = _ref.id;
+	        var _ref$id = _ref.id;
+	        var id = _ref$id === undefined ? 0 : _ref$id;
 
 	        _classCallCheck(this, ToolTip);
 
 	        this.container = container;
 	        this.id = id;
-	        this.container.classList.add(_Events.Events.ToolTip.CLOSE);
+	        this.eventManager = new _Publisher.Publisher(this.id);
 
+	        this.container.classList.add(_Events.Events.ToolTip.CLOSE);
+	        this.setupContainer();
+
+	        this.bindEvents();
+	        this.registerHandlebarHelpers();
+
+	        this.setPosition().initializeTemplates(templates);
+
+	        return this;
+	    }
+
+	    /**
+	     * initialize all container and DOM objects for ToolTip
+	     * @return {ToolTip} instance of ToolTip for chaining
+	     */
+
+
+	    ToolTip.prototype.setupContainer = function setupContainer() {
 	        this.close = document.createElement("div");
 	        this.close.classList.add("close-button");
 
@@ -6125,13 +6674,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.popup.appendChild(this.close);
 	        this.popup.appendChild(this.content);
-
-	        this.eventManager = new _Publisher.Publisher(this.id);
-	        this.bindEvents();
-	        this.registerHandlebarHelpers();
-
-	        return this.setPosition().initializeTemplates(templates);
-	    }
+	        return this;
+	    };
 
 	    /**
 	     * register helpers for handlebars
@@ -6150,7 +6694,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * initialize all templates
-	     * @param  {object} templates = {} - all specified templates
+	     * @param  {Object} templates = {} - all specified templates
 	     * @return {ToolTip} instance of ToolTip for chaining
 	     */
 
@@ -6195,7 +6739,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * inserts content to ToolTip instance container
-	     * @param  {object} content = {} - content object
+	     * @param  {Object} content = {} - content object
 	     * @return {ToolTip} instance of ToolTip for chaining
 	     */
 
@@ -6217,7 +6761,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * opens a tooltip
-	     * @param  {object} data - content object
+	     * @param  {Object} data - content object
 	     * @return {ToolTip} instance of ToolTip for chaining
 	     */
 
@@ -6353,17 +6897,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * @constructor
-	         * @param  {Rectangle} viewport = new Rectangle() - current representation of viewport
-	         * @param  {Rectangle} currentView = new Rectangle() - current representation of map
-	         * @param  {Bounds} bounds = new Bounds() - current bounds of map
-	         * @param  {LatLng} center = new LatLng() - current center of map
-	         * @param  {LatLng} initialCenter = new LatLng() - initial center of view
+	         * @param  {Rectangle} view = new Rectangle() - representation of map
 	         * @param  {Object} data = {} - tile data of current map
-	         * @param  {Object} context = null - canvas context for drawing
-	         * @param  {number} maxZoom = 1.5 - maximal zoom of view
-	         * @param  {number} currentZoom = 1 - initial zoom of view
-	         * @param  {number} minZoom = 0.8 - minimal zoom of view
-	         * @param  {number} limitToBounds - where to limit panning
+	         * @param  {CanvasRenderingContext2D} context = null - canvas context for drawing
+	         * @param  {Number} maxZoom = 1.5 - maximal zoom of view
+	         * @param  {Number} minZoom = 0.8 - minimal zoom of view
+	         * @param  {Number} limitToBounds - where to limit panning
+	         * @param  {Boolean} centerSmallMap = false - if map is smaller than viewport, center it
+	         * @param  {Number} id = 0 - id of parent instance
 	         * @return {View} instance of View for chaining
 	         */
 
@@ -6385,7 +6926,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _ref$centerSmallMap = _ref.centerSmallMap;
 	        var centerSmallMap = _ref$centerSmallMap === undefined ? false : _ref$centerSmallMap;
 	        var limitToBounds = _ref.limitToBounds;
-	        var id = _ref.id;
+	        var _ref$id = _ref.id;
+	        var id = _ref$id === undefined ? 0 : _ref$id;
 
 	        _classCallCheck(this, View);
 
@@ -6410,6 +6952,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return _ret = _this.loadThumb(), _possibleConstructorReturn(_this, _ret);
 	    }
 
+	    /**
+	     * initializes the view
+	     * @return {View} instance of View for chaining
+	     */
+
+
 	    View.prototype.init = function init() {
 	        this.eventManager.publish(_Events.Events.MapInformation.UPDATE, {
 	            view: this.originalMapView.clone
@@ -6422,6 +6970,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * resets current View to its initial position
+	     * @return {View} instance of View for chaining
 	     */
 
 
@@ -6429,7 +6978,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.setLatLngToPosition(position, this.viewport.center);
 	        var delta = zoom - this.zoomFactor;
 	        this.zoom(delta, this.view.center);
+	        return this;
 	    };
+
+	    /**
+	     * distorts this view
+	     * @return {View} [distorted View]
+	     */
+
 
 	    View.prototype.getDistortedView = function getDistortedView() {
 	        var nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
@@ -6437,6 +6993,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            limit = new _Rectangle.Rectangle(nw.x + this.view.x, nw.y + this.view.y, se.x - nw.x, se.y - nw.y);
 	        return limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
 	    };
+
+	    /**
+	     * check boundaries of map and bounds
+	     * @return {View} instance of View for chaining
+	     */
+
 
 	    View.prototype.checkBoundaries = function checkBoundaries() {
 	        var offset = new _Point.Point();
@@ -6462,11 +7024,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var diff = _Helper.Helper.clamp(Math.max(diffInHeight, diffInWidth), 0, Number.MAX_VALUE);
 	            this.zoom(diff, this.viewport.center, true);
 	        }
+	        return this;
 	    };
+
+	    /**
+	     * check if viewport is smaller than view
+	     * @param  {Rectangle} view - specified view
+	     * @return {Boolean} true if smaller, else false
+	     */
+
 
 	    View.prototype.viewportIsSmallerThanView = function viewportIsSmallerThanView(view) {
 	        return this.viewport.width > view.width || this.viewport.height > view.height;
 	    };
+
+	    /**
+	     * check x boundaries
+	     * @param  {Number} left - left position
+	     * @param  {Number} right - right position
+	     * @param  {Number} mapWidth - width of map
+	     * @param  {Number} viewWidth - width of viewport
+	     * @return {Number} calculated x to be in viewport
+	     */
+
 
 	    View.prototype.checkX = function checkX(left, right, mapWidth, viewWidth) {
 	        var x = 0;
@@ -6492,6 +7072,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return x;
 	    };
+
+	    /**
+	     * check y boundaries
+	     * @param  {Number} top - top position
+	     * @param  {Number} bottom - bottom position
+	     * @param  {Number} mapHeight - height of map
+	     * @param  {Number} viewHeight - height of viewport
+	     * @return {Number} calculated y to be in viewport
+	     */
+
 
 	    View.prototype.checkY = function checkY(top, bottom, mapHeight, viewHeight) {
 	        var y = 0;
@@ -6562,7 +7152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * receive relative Position to center of viewport
 	     * @param  {Point} pos - specified position
-	     * @return {number} delta of point to center of viewport
+	     * @return {Number} delta of point to center of viewport
 	     */
 
 
@@ -6575,8 +7165,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * zooming handler
-	     * @param  {number} factor - increase/decrease factor
+	     * @param  {Number} factor - increase/decrease factor
 	     * @param  {Point} pos - Position to zoom to
+	     * @param  {Boolean} automatic = false - is resetted by programm in case of beholding boundaries
 	     * @return {View} instance of View for chaining
 	     */
 
@@ -6615,12 +7206,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    };
 
+	    /**
+	     * changes zoom level if its necessary
+	     * @param  {Number} factor - specified zoom change
+	     * @param  {Boolean} viewportIsSmaller - is viewport smaller than view
+	     * @return {View} instance of View for chaining
+	     */
+
+
 	    View.prototype.changeZoomLevelIfNecessary = function changeZoomLevelIfNecessary(factor, viewportIsSmaller) {
 	        if (this.zoomFactor >= this.maxZoom && factor > 0) {
 	            this.eventManager.publish(_Events.Events.TileMap.NEXT_LEVEL);
 	        } else if (this.zoomFactor <= this.minZoom && factor < 0 && !viewportIsSmaller) {
 	            this.eventManager.publish(_Events.Events.TileMap.PREVIOUS_LEVEL);
 	        }
+	        return this;
 	    };
 
 	    /**
@@ -6702,7 +7302,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var currentLevel = this.data.tiles;
 	        _Helper.Helper.forEach(currentLevel, function (currentTileData) {
-	            _this4.tiles.push(new _Tile.Tile(currentTileData, _this4.context, _this4.id));
+	            var tileData = Object.assign({}, currentTileData, {
+	                context: _this4.context,
+	                id: _this4.id
+	            });
+	            _this4.tiles.push(new _Tile.Tile(tileData));
 	        });
 	        return this;
 	    };

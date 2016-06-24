@@ -2,13 +2,27 @@ require('classlist-polyfill');
 import "../../../node_modules/babel-polyfill/node_modules/core-js/es5/index.js";
 import "../../../node_modules/babel-polyfill/node_modules/core-js/es6/object.js";
 import "../../../node_modules/babel-polyfill/node_modules/core-js/es6/array.js";
-import {Helper} from './Helper.js';
-import {Events} from './Events.js';
-import {Publisher} from './Publisher.js';
-import {TileMap} from './TileMap.js';
-import {DataEnrichment} from './DataEnrichment.js';
-import {Interact} from './Interact.js';
-import {Point} from './Point.js';
+import {
+    Helper
+} from './Helper.js';
+import {
+    Events
+} from './Events.js';
+import {
+    Publisher
+} from './Publisher.js';
+import {
+    TileMap
+} from './TileMap.js';
+import {
+    DataEnrichment
+} from './DataEnrichment.js';
+import {
+    Interact
+} from './Interact.js';
+import {
+    Point
+} from './Point.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -19,15 +33,21 @@ export class MappedJS {
 
     /**
      * @constructor
-     * @param  {string|Object} container=".mjs" - Container, either string or dom-object
-     * @param  {string|Object} mapData={} - data of map tiles, can be json or path to file
-     * @param  {string|Object} markerData={} - data of markers, can be json or path to file
+     * @param  {String|HTMLElement} container=".mjs" - Container, either string or dom-object
+     * @param  {String|Object} mapData={} - data of map tiles, can be json or path to file
+     * @param  {String|Object} markerData={} - data of markers, can be json or path to file
+     * @param  {String|Object} labelData={} - data of markers, can be json or path to file
      * @param  {Object} mapSettings={} - settings for map, must be json
-     * @param  {Object} events={loaded: "mjs-loaded"} - List of events
      * @return {MappedJS} instance of MappedJS for chaining
      */
-    constructor({container=".mjs", mapData={}, markerData={}, labelData={}, mapSettings={}, events={loaded:"mjs-loaded"}} = {}) {
-        this.initializeSettings(container, events, mapSettings);
+    constructor({
+        container = ".mjs",
+        mapData = {},
+        markerData = {},
+        labelData = {},
+        mapSettings = {}
+    }) {
+        this.initializeSettings(container, mapSettings);
 
         this.id = this.generateUniqueID();
         MappedJS.count++;
@@ -56,10 +76,20 @@ export class MappedJS {
         return this;
     }
 
+    /**
+     * generate a unique id for this instance
+     * @return {Number} unique id
+     */
     generateUniqueID() {
         return parseInt(Date.now() * (Math.random() * 10), 10);
     }
 
+    /**
+     * add an information layer to container
+     * @param {String} type - type of layer
+     * @param {Object} settings of layer
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     addInformationLayer(type, settings) {
         const infoElement = document.createElement("div");
         infoElement.classList.add("info-container");
@@ -79,10 +109,13 @@ export class MappedJS {
                 }
             });
         });
+
+        return this;
     }
 
     /**
      * add controls (zoom, home) to DOM
+     * @return {MappedJS} instance of MappedJS for chaining
      */
     addControls() {
         if (this.mapSettings.controls) {
@@ -104,26 +137,23 @@ export class MappedJS {
             this.controls.appendChild(this.zoomOut);
             this.content.appendChild(this.controls);
         }
+        return this;
     }
 
     /**
      * initializes the settings and handles errors
-     * @param  {string|Object} container - Container, either string or dom-object
-     * @param  {object} events - List of events
-     * @param  {object} settings - List of settings
+     * @param  {String|HTMLElement} container - Container, either string or DOM object
+     * @param  {Object} settings - list of settings
      * @return {MappedJS} instance of MappedJS for chaining
      */
-    initializeSettings(container, events = {}, settings = {}) {
+    initializeSettings(container, settings = {}) {
         this.container = (typeof container === "string") ? Helper.find(container) : container;
         this.container.classList.add("mappedJS");
         this.content = document.createElement("div");
         this.content.classList.add("map-content");
         this.container.appendChild(this.content);
         this.container.setAttribute("tabindex", MappedJS.count);
-
         this.mapSettings = DataEnrichment.mapSettings(settings);
-        this.events = events;
-
         return this;
     }
 
@@ -268,12 +298,12 @@ export class MappedJS {
 
     /**
      * Keypress handler
-     * @param  {object} e VanillaJS-Event-Object
+     * @param  {KeyboardEvent} e - key event
      * @return {MappedJS} instance of MappedJS for chaining
      */
     keyPress(e) {
         if (this.container !== document.activeElement) return false;
-        switch(e.keyCode) {
+        switch (e.keyCode) {
             case 38: // up
                 this.handleMovementByKeys(new Point(0, 1));
                 break;
@@ -316,8 +346,13 @@ export class MappedJS {
         return this;
     }
 
+    /**
+     * key is released
+     * @return {MappedJS} instance of MappedJS for chaining
+     */
     keyRelease() {
         this.keyTicks = 0;
+        return this;
     }
 
     /**
@@ -339,4 +374,8 @@ export class MappedJS {
 
 }
 
+/**
+ * instance counter
+ * @type {Number}
+ */
 MappedJS.count = 1;

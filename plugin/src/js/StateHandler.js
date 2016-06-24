@@ -15,7 +15,7 @@ export class StateHandler {
 
     /**
      * get number of states
-     * @return {number} number of states
+     * @return {Number} number of states
      */
     get length() {
         return this.states.length;
@@ -23,10 +23,13 @@ export class StateHandler {
 
     /**
      * @constructor
-     * @param  {Array} states_array=[{value: 0, description: 'Default'}] - [description]
+     * @param  {Array} states_array = [{value: 0, description: 'Default'}] - [description]
      * @return {StateHandler} instance of StateHandler for chaining
      */
-    constructor(states_array=[{value: 0, description: 'Default'}]) {
+    constructor(states_array = [{
+        value: 0,
+        description: 'Default'
+    }]) {
         this.states = states_array;
         this.i = 0;
         this.lastState = this.current;
@@ -55,7 +58,7 @@ export class StateHandler {
 
     /**
      * change the state to specified state
-     * @param {number} state - index of state in array
+     * @param {Number} state - index of state in array
      * @return {StateHandler} instance of StateHandler for chaining
      */
     changeTo(state) {
@@ -68,7 +71,7 @@ export class StateHandler {
      * @return {Boolean} wheter there is a next state or not
      */
     hasNext() {
-        return this.i < this.length-1;
+        return this.i < this.length - 1;
     }
 
     /**
@@ -78,6 +81,5 @@ export class StateHandler {
     hasPrevious() {
         return this.i > 0;
     }
-
 
 }

@@ -1,7 +1,13 @@
 import Handlebars from 'Handlebars';
-import {Events} from './Events.js';
-import {Helper} from './Helper.js';
-import {Publisher} from './Publisher.js';
+import {
+    Events
+} from './Events.js';
+import {
+    Helper
+} from './Helper.js';
+import {
+    Publisher
+} from './Publisher.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -12,7 +18,7 @@ export class ToolTip {
 
     /**
      * checks if all templates were loaded
-     * @return {boolean} wheter true if all templates were loaded or false
+     * @return {Boolean} wheter true if all templates were loaded or false
      */
     get allTemplatesLoaded() {
         return this.loadedTemplates === Object.keys(this.templates).length;
@@ -21,15 +27,36 @@ export class ToolTip {
     /**
      *
      * @constructor
-     * @param  {string|object} container - Container, either string or dom-object
-     * @param  {object} templates - defined templates
+     * @param  {String|HTMLElement} container - Container, either string or DOM object
+     * @param  {Array} templates = [] - defined templates
+     * @param  {Number} id = 0 - if of parent instance
      * @return {ToolTip} instance of ToolTip for chaining
      */
-    constructor({container, templates = [], id}) {
+    constructor({
+        container,
+        templates = [],
+        id = 0
+    }) {
         this.container = container;
         this.id = id;
-        this.container.classList.add(Events.ToolTip.CLOSE);
+        this.eventManager = new Publisher(this.id);
 
+        this.container.classList.add(Events.ToolTip.CLOSE);
+        this.setupContainer();
+
+        this.bindEvents();
+        this.registerHandlebarHelpers();
+
+        this.setPosition().initializeTemplates(templates);
+
+        return this;
+    }
+
+    /**
+     * initialize all container and DOM objects for ToolTip
+     * @return {ToolTip} instance of ToolTip for chaining
+     */
+    setupContainer() {
         this.close = document.createElement("div");
         this.close.classList.add("close-button");
 
@@ -41,12 +68,7 @@ export class ToolTip {
 
         this.popup.appendChild(this.close);
         this.popup.appendChild(this.content);
-
-        this.eventManager = new Publisher(this.id);
-        this.bindEvents();
-        this.registerHandlebarHelpers();
-
-        return this.setPosition().initializeTemplates(templates);
+        return this;
     }
 
     /**
@@ -55,14 +77,14 @@ export class ToolTip {
      */
     registerHandlebarHelpers() {
         if (Handlebars) {
-            Handlebars.registerHelper('getRatio', (w, h) => (h/w * 100 + "%"));
+            Handlebars.registerHelper('getRatio', (w, h) => (h / w * 100 + "%"));
         }
         return this;
     }
 
     /**
      * initialize all templates
-     * @param  {object} templates = {} - all specified templates
+     * @param  {Object} templates = {} - all specified templates
      * @return {ToolTip} instance of ToolTip for chaining
      */
     initializeTemplates(templates) {
@@ -78,9 +100,13 @@ export class ToolTip {
      */
     bindEvents() {
         Helper.addListener(window, Events.Handling.RESIZE, this.resizeHandler.bind(this));
-        Helper.addListener(this.close, Events.Handling.CLICK, () => { this.closeTooltip(); });
+        Helper.addListener(this.close, Events.Handling.CLICK, () => {
+            this.closeTooltip();
+        });
         this.eventManager.subscribe(Events.ToolTip.OPEN, this.open.bind(this));
-        this.eventManager.subscribe(Events.ToolTip.CLOSE, () => { this.closeTooltip(); });
+        this.eventManager.subscribe(Events.ToolTip.CLOSE, () => {
+            this.closeTooltip();
+        });
         return this;
     }
 
@@ -95,7 +121,7 @@ export class ToolTip {
 
     /**
      * inserts content to ToolTip instance container
-     * @param  {object} content = {} - content object
+     * @param  {Object} content = {} - content object
      * @return {ToolTip} instance of ToolTip for chaining
      */
     insertContent(content = {}) {
@@ -111,7 +137,7 @@ export class ToolTip {
 
     /**
      * opens a tooltip
-     * @param  {object} data - content object
+     * @param  {Object} data - content object
      * @return {ToolTip} instance of ToolTip for chaining
      */
     open(data) {

@@ -1,11 +1,27 @@
-import {Helper} from './Helper.js';
-import {Events} from './Events.js';
-import {Point} from './Point.js';
-import {LatLng} from './LatLng.js';
-import {Bounds} from './Bounds.js';
-import {Rectangle} from './Rectangle.js';
-import {Tile} from './Tile.js';
-import {Drawable} from './Drawable.js';
+import {
+    Helper
+} from './Helper.js';
+import {
+    Events
+} from './Events.js';
+import {
+    Point
+} from './Point.js';
+import {
+    LatLng
+} from './LatLng.js';
+import {
+    Bounds
+} from './Bounds.js';
+import {
+    Rectangle
+} from './Rectangle.js';
+import {
+    Tile
+} from './Tile.js';
+import {
+    Drawable
+} from './Drawable.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -27,17 +43,14 @@ export class View extends Drawable {
 
     /**
      * @constructor
-     * @param  {Rectangle} viewport = new Rectangle() - current representation of viewport
-     * @param  {Rectangle} currentView = new Rectangle() - current representation of map
-     * @param  {Bounds} bounds = new Bounds() - current bounds of map
-     * @param  {LatLng} center = new LatLng() - current center of map
-     * @param  {LatLng} initialCenter = new LatLng() - initial center of view
+     * @param  {Rectangle} view = new Rectangle() - representation of map
      * @param  {Object} data = {} - tile data of current map
-     * @param  {Object} context = null - canvas context for drawing
-     * @param  {number} maxZoom = 1.5 - maximal zoom of view
-     * @param  {number} currentZoom = 1 - initial zoom of view
-     * @param  {number} minZoom = 0.8 - minimal zoom of view
-     * @param  {number} limitToBounds - where to limit panning
+     * @param  {CanvasRenderingContext2D} context = null - canvas context for drawing
+     * @param  {Number} maxZoom = 1.5 - maximal zoom of view
+     * @param  {Number} minZoom = 0.8 - minimal zoom of view
+     * @param  {Number} limitToBounds - where to limit panning
+     * @param  {Boolean} centerSmallMap = false - if map is smaller than viewport, center it
+     * @param  {Number} id = 0 - id of parent instance
      * @return {View} instance of View for chaining
      */
     constructor({
@@ -48,7 +61,7 @@ export class View extends Drawable {
         minZoom = 0.8,
         centerSmallMap = false,
         limitToBounds,
-        id
+        id = 0
     }) {
         super(id);
 
@@ -71,6 +84,10 @@ export class View extends Drawable {
         return this.loadThumb();
     }
 
+    /**
+     * initializes the view
+     * @return {View} instance of View for chaining
+     */
     init() {
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             view: this.originalMapView.clone
@@ -83,33 +100,43 @@ export class View extends Drawable {
 
     /**
      * resets current View to its initial position
+     * @return {View} instance of View for chaining
      */
     reset(position, zoom) {
         this.setLatLngToPosition(position, this.viewport.center);
         const delta = zoom - this.zoomFactor;
         this.zoom(delta, this.view.center);
+        return this;
     }
 
+    /**
+     * distorts this view
+     * @return {View} [distorted View]
+     */
     getDistortedView() {
         const nw = this.info.convertLatLngToPoint(this.limitToBounds.nw),
-              se = this.info.convertLatLngToPoint(this.limitToBounds.se),
-              limit = new Rectangle(nw.x + this.view.x, nw.y + this.view.y, se.x - nw.x, se.y - nw.y);
+            se = this.info.convertLatLngToPoint(this.limitToBounds.se),
+            limit = new Rectangle(nw.x + this.view.x, nw.y + this.view.y, se.x - nw.x, se.y - nw.y);
         return limit.getDistortedRect(this.distortionFactor).translate(this.offsetToCenter, 0);
     }
 
+    /**
+     * check boundaries of map and bounds
+     * @return {View} instance of View for chaining
+     */
     checkBoundaries() {
         const offset = new Point();
         const equalizedMap = this.getDistortedView();
         if (!equalizedMap.containsRect(this.viewport)) {
             const distanceLeft = equalizedMap.left - this.viewport.left,
-                  distanceRight = equalizedMap.right - this.viewport.right,
-                  distanceTop = equalizedMap.top - this.viewport.top,
-                  distanceBottom = equalizedMap.bottom - this.viewport.bottom;
+                distanceRight = equalizedMap.right - this.viewport.right,
+                distanceTop = equalizedMap.top - this.viewport.top,
+                distanceBottom = equalizedMap.bottom - this.viewport.bottom;
 
             offset.x = this.checkX(distanceLeft, distanceRight, equalizedMap.width, this.viewport.width);
             offset.y = this.checkX(distanceTop, distanceBottom, equalizedMap.height, this.viewport.height);
         }
-        offset.multiply(1/this.distortionFactor, 1);
+        offset.multiply(1 / this.distortionFactor, 1);
         this.view.translate(offset.x, offset.y);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             view: this.view
@@ -121,12 +148,26 @@ export class View extends Drawable {
             const diff = Helper.clamp(Math.max(diffInHeight, diffInWidth), 0, Number.MAX_VALUE);
             this.zoom(diff, this.viewport.center, true);
         }
+        return this;
     }
 
+    /**
+     * check if viewport is smaller than view
+     * @param  {Rectangle} view - specified view
+     * @return {Boolean} true if smaller, else false
+     */
     viewportIsSmallerThanView(view) {
         return this.viewport.width > view.width || this.viewport.height > view.height;
     }
 
+    /**
+     * check x boundaries
+     * @param  {Number} left - left position
+     * @param  {Number} right - right position
+     * @param  {Number} mapWidth - width of map
+     * @param  {Number} viewWidth - width of viewport
+     * @return {Number} calculated x to be in viewport
+     */
     checkX(left, right, mapWidth, viewWidth) {
         let x = 0;
         if (mapWidth >= viewWidth) {
@@ -152,6 +193,14 @@ export class View extends Drawable {
         return x;
     }
 
+    /**
+     * check y boundaries
+     * @param  {Number} top - top position
+     * @param  {Number} bottom - bottom position
+     * @param  {Number} mapHeight - height of map
+     * @param  {Number} viewHeight - height of viewport
+     * @return {Number} calculated y to be in viewport
+     */
     checkY(top, bottom, mapHeight, viewHeight) {
         let y = 0;
         if (mapHeight >= viewHeight) {
@@ -197,7 +246,7 @@ export class View extends Drawable {
      */
     setLatLngToPosition(latlng, position) {
         const currentPosition = this.view.topLeft.substract(position).multiply(-1),
-              diff = currentPosition.substract(this.info.convertLatLngToPoint(latlng));
+            diff = currentPosition.substract(this.info.convertLatLngToPoint(latlng));
 
         this.view.translate(0, diff.y);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
@@ -215,19 +264,20 @@ export class View extends Drawable {
     /**
      * receive relative Position to center of viewport
      * @param  {Point} pos - specified position
-     * @return {number} delta of point to center of viewport
+     * @return {Number} delta of point to center of viewport
      */
     getDeltaXToCenter(pos) {
         const diffToCenter = pos.clone.substract(this.viewport.center),
-              distanceToCenter = (diffToCenter.x / this.viewport.center.x),
-              delta = distanceToCenter * this.offsetToCenter;
+            distanceToCenter = (diffToCenter.x / this.viewport.center.x),
+            delta = distanceToCenter * this.offsetToCenter;
         return delta / this.distortionFactor;
     }
 
     /**
      * zooming handler
-     * @param  {number} factor - increase/decrease factor
+     * @param  {Number} factor - increase/decrease factor
      * @param  {Point} pos - Position to zoom to
+     * @param  {Boolean} automatic = false - is resetted by programm in case of beholding boundaries
      * @return {View} instance of View for chaining
      */
     zoom(factor, pos, automatic = false) {
@@ -262,12 +312,19 @@ export class View extends Drawable {
         return this;
     }
 
+    /**
+     * changes zoom level if its necessary
+     * @param  {Number} factor - specified zoom change
+     * @param  {Boolean} viewportIsSmaller - is viewport smaller than view
+     * @return {View} instance of View for chaining
+     */
     changeZoomLevelIfNecessary(factor, viewportIsSmaller) {
         if (this.zoomFactor >= this.maxZoom && factor > 0) {
             this.eventManager.publish(Events.TileMap.NEXT_LEVEL);
         } else if (this.zoomFactor <= this.minZoom && factor < 0 && !viewportIsSmaller) {
             this.eventManager.publish(Events.TileMap.PREVIOUS_LEVEL);
         }
+        return this;
     }
 
     /**
@@ -290,7 +347,7 @@ export class View extends Drawable {
     moveView(pos) {
         this.view.translate(0, pos.y);
         this.calculateNewCenter();
-        this.view.translate(pos.x * (1/this.distortionFactor), 0);
+        this.view.translate(pos.x * (1 / this.distortionFactor), 0);
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             view: this.view
         });
@@ -333,7 +390,11 @@ export class View extends Drawable {
     initializeTiles() {
         const currentLevel = this.data.tiles;
         Helper.forEach(currentLevel, (currentTileData) => {
-            this.tiles.push(new Tile(currentTileData, this.context, this.id));
+            const tileData = Object.assign({}, currentTileData, {
+                context: this.context,
+                id: this.id
+            });
+            this.tiles.push(new Tile(tileData));
         });
         return this;
     }

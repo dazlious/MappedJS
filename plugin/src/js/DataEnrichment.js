@@ -1,7 +1,15 @@
-import {Helper} from './Helper.js';
-import {Point} from './Point.js';
-import {LatLng} from './LatLng.js';
-import {Bounds} from './Bounds.js';
+import {
+    Helper
+} from './Helper.js';
+import {
+    Point
+} from './Point.js';
+import {
+    LatLng
+} from './LatLng.js';
+import {
+    Bounds
+} from './Bounds.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -9,13 +17,13 @@ import {Bounds} from './Bounds.js';
  * @copyright Michael Duve 2016
  * @module DataEnrichment
  */
-export var DataEnrichment = {
+export const DataEnrichment = {
     /**
      * enriches marker data with all needed data
      * @function
      * @memberof module:DataEnrichment
-     * @param  {object} data - specified data for marker
-     * @return {object} enriched marker data
+     * @param  {Object} data - specified data for marker
+     * @return {Object} enriched marker data
      */
     marker(data) {
 
@@ -25,8 +33,8 @@ export var DataEnrichment = {
             entry = Object.assign({}, DataEnrichment.DATA_MARKER, entry);
 
             const offset = new Point(entry.offset.x, entry.offset.y),
-                  latlng = new LatLng(entry.position.lat, entry.position.lng),
-                  size = new Point(entry.size.width, entry.size.height);
+                latlng = new LatLng(entry.position.lat, entry.position.lng),
+                size = new Point(entry.size.width, entry.size.height);
 
             enrichedData.push({
                 offset: offset,
@@ -40,6 +48,13 @@ export var DataEnrichment = {
 
         return enrichedData;
     },
+    /**
+     * enriches label data with all needed data
+     * @function
+     * @memberof module:DataEnrichment
+     * @param  {Object} data - specified data for label
+     * @return {Object} enriched label data
+     */
     label(data) {
         const enrichedData = [];
 
@@ -70,13 +85,13 @@ export var DataEnrichment = {
      * enriches map data with all needed data
      * @function
      * @memberof module:DataEnrichment
-     * @param  {object} data - specified data for mapsettings
-     * @return {object} enriched mapsettings data
+     * @param  {Object} data - specified data for mapsettings
+     * @return {Object} enriched mapsettings data
      */
     mapSettings(data = {}) {
         const enrichedData = Object.assign({}, DataEnrichment.MAP_SETTINGS, data),
-              bounds = new Bounds(new LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
-              center = new LatLng(enrichedData.center.lat, enrichedData.center.lng);
+            bounds = new Bounds(new LatLng(enrichedData.bounds.northWest[0], enrichedData.bounds.northWest[1]), new LatLng(enrichedData.bounds.southEast[0], enrichedData.bounds.southEast[1])),
+            center = new LatLng(enrichedData.center.lat, enrichedData.center.lng);
 
         if (typeof data.limitToBounds === "object") {
             const boundsNW = new LatLng(data.limitToBounds.northWest[0], data.limitToBounds.northWest[1]);
@@ -92,6 +107,13 @@ export var DataEnrichment = {
 
         return enrichedData;
     },
+    /**
+     * enriches tooltip data with all needed data
+     * @function
+     * @memberof module:DataEnrichment
+     * @param  {Object} data - specified data for tooltip
+     * @return {Object} enriched tooltip data
+     */
     tooltip(data = {}) {
         return Object.assign({}, DataEnrichment.TOOLTIP, data);
     }
@@ -124,7 +146,10 @@ DataEnrichment.DATA_MARKER = {
  */
 DataEnrichment.MAP_SETTINGS = {
     level: 0,
-    center: {"lat": 0, "lng": 0},
+    center: {
+        "lat": 0,
+        "lng": 0
+    },
     bounds: {
         "northWest": [90, -180],
         "southEast": [-90, 180]
@@ -136,6 +161,10 @@ DataEnrichment.MAP_SETTINGS = {
         theme: "dark"
     }
 };
+/**
+ * Default initial values for a Label
+ * @type {Object}
+ */
 DataEnrichment.DATA_LABEL = {
     "position": [0, 0],
     "visibility": {
@@ -143,6 +172,10 @@ DataEnrichment.DATA_LABEL = {
         "max": Number.MAX_VALUE
     }
 };
+/**
+ * Default initial values for a Label with text
+ * @type {Object}
+ */
 DataEnrichment.DATA_LABEL_TEXT = {
     "content": "",
     "color": "#333333",
@@ -151,12 +184,20 @@ DataEnrichment.DATA_LABEL_TEXT = {
     "baseline": "hanging",
     "font": "10pt Arial"
 };
+/**
+ * Default initial values for a Label with an icon
+ * @type {Object}
+ */
 DataEnrichment.DATA_LABEL_ICON = {
     "type": "circle",
     "size": 2,
     "color": "#333333",
     "offset": [0, 0]
 };
+/**
+ * Default initial values for a ToolTip
+ * @type {Object}
+ */
 DataEnrichment.TOOLTIP = {
     image: "/plugin/hbs/image.hbs",
     text: "/plugin/hbs/text.hbs",

@@ -1,4 +1,6 @@
-import {LatLng} from './LatLng.js';
+import {
+    LatLng
+} from './LatLng.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -9,7 +11,7 @@ export class Bounds {
 
     /**
      * get width of boundaries
-     * @return {number} distance between east and west boundary
+     * @return {Number} distance between east and west boundary
      */
     get width() {
         return Math.abs(this.se.lng - this.nw.lng);
@@ -17,7 +19,7 @@ export class Bounds {
 
     /**
      * get height of boundaries
-     * @return {number} distance between north and south boundary
+     * @return {Number} distance between north and south boundary
      */
     get height() {
         return Math.abs(this.se.lat - this.nw.lat);
@@ -25,8 +27,8 @@ export class Bounds {
 
     /**
      * @constructor
-     * @param  {number} northWest = new LatLng() - representation of northWest boundary
-     * @param  {number} southEast = new LatLng() - representation of southEast boundary
+     * @param  {Number} northWest = new LatLng() - representation of northWest boundary
+     * @param  {Number} southEast = new LatLng() - representation of southEast boundary
      * @return {Bounds} instance of Bounds for chaining
      */
     constructor(northWest = new LatLng(), southEast = new LatLng()) {
