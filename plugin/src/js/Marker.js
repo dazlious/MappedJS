@@ -1,9 +1,21 @@
-import {Events} from './Events.js';
-import {Helper} from './Helper.js';
-import {Point} from './Point.js';
-import {Rectangle} from './Rectangle.js';
-import {DataEnrichment} from './DataEnrichment.js';
-import {Drawable} from './Drawable.js';
+import {
+    Events
+} from './Events.js';
+import {
+    Helper
+} from './Helper.js';
+import {
+    Point
+} from './Point.js';
+import {
+    Rectangle
+} from './Rectangle.js';
+import {
+    DataEnrichment
+} from './DataEnrichment.js';
+import {
+    Drawable
+} from './Drawable.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -12,6 +24,10 @@ import {Drawable} from './Drawable.js';
  */
 export class Marker extends Drawable {
 
+    /**
+     * gets bounding box of marker
+     * @return {Rectangle} current dimension of this marker
+     */
     get boundingBox() {
         const bBox = this.icon.getBoundingClientRect();
         const parentBBox = this.container.getBoundingClientRect();
@@ -21,10 +37,15 @@ export class Marker extends Drawable {
     /**
      * @constructor
      * @param  {Object} data = DataEnrichment.DATA_MARKER - enriched data
-     * @param  {View} _instance = parent instance - instance of parent view
+     * @param  {HTMLElement} container = null - parent container
+     * @param  {Number} id = 0 - id of parent instance
      * @return {Marker} - instance of Marker for chaining
      */
-    constructor({data = DataEnrichment.DATA_MARKER, container, id}) {
+    constructor({
+        data = DataEnrichment.DATA_MARKER,
+        container = null,
+        id = 0
+    }) {
         super(id);
         this.container = container;
 
@@ -37,7 +58,7 @@ export class Marker extends Drawable {
         if (this.hover) this.size.divide(2, 1);
 
         this.img = data.icon;
-        this.offset = data.offset.add(new Point(-(this.size.x/2), -this.size.y));
+        this.offset = data.offset.add(new Point(-(this.size.x / 2), -this.size.y));
         this.latlng = data.latlng;
 
         this.content = data.content;
@@ -47,7 +68,7 @@ export class Marker extends Drawable {
     }
 
     /**
-     * binds all events
+     * bind all events
      * @return {Marker} instance of Marker for chaining
      */
     bindEvents() {
@@ -61,6 +82,10 @@ export class Marker extends Drawable {
         return this;
     }
 
+    /**
+     * execute bound action of cluster
+     * @return {Marker} instance of Marker for chaining
+     */
     action() {
         this.eventManager.publish(Events.ToolTip.OPEN, this.content);
         this.eventManager.publish(Events.Marker.DEACTIVATE);
@@ -68,9 +93,9 @@ export class Marker extends Drawable {
     }
 
     /**
-     * adds a marker to the DOM
-     * @param {Object} container - container to append to
-     * @returns {Object} DOM-selector of append markup
+     * add a marker to the DOM
+     * @param {HTMLElement} container - parent container to append to
+     * @returns {HTMLElement} DOM-selector of appended markup
      */
     addMarkerToDOM(container) {
         const icon = document.createElement("div");
@@ -108,4 +133,8 @@ export class Marker extends Drawable {
 
 }
 
+/**
+ * counts all markers
+ * @type {Number}
+ */
 Marker.count = 0;

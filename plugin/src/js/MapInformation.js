@@ -1,14 +1,28 @@
-import {Events} from './Events.js';
-import {Helper} from './Helper.js';
-import {Publisher} from './Publisher.js';
-import {LatLng} from './LatLng.js';
-import {Bounds} from './Bounds.js';
-import {Point} from './Point.js';
-import {Rectangle} from './Rectangle.js';
+import {
+    Events
+} from './Events.js';
+import {
+    Helper
+} from './Helper.js';
+import {
+    Publisher
+} from './Publisher.js';
+import {
+    LatLng
+} from './LatLng.js';
+import {
+    Bounds
+} from './Bounds.js';
+import {
+    Point
+} from './Point.js';
+import {
+    Rectangle
+} from './Rectangle.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
- * @file
+ * @file stores and handles all information for a map
  * @copyright Michael Duve 2016
  */
 export class MapInformation {
@@ -33,7 +47,7 @@ export class MapInformation {
      * @return {MapInformation} singleton instance of MapInformation for chaining
      */
     constructor(id = 0) {
-        if(!MapInformation.instances[id]) {
+        if (!MapInformation.instances[id]) {
             this.id = id;
             this.data = {
                 center: new LatLng(),
@@ -53,19 +67,34 @@ export class MapInformation {
         return MapInformation.instances[id];
     }
 
+    /**
+     * gets current data
+     * @return {Object} map information
+     */
     get() {
         return this.data;
     }
 
+    /**
+     * bind all events
+     * @return {MapInformation} instance of MapInformation for chaining
+     */
     bindEvents() {
         this.eventManager.subscribe(Events.MapInformation.UPDATE, this.update.bind(this));
+        return this;
     }
 
+    /**
+     * updates current information
+     * @param  {Object} obj = {} - new data delivered
+     * @return {MapInformation} instance of MapInformation for chaining
+     */
     update(obj = {}) {
         const oldData = this.data;
         this.data = Object.assign({}, this.data, obj);
         const centerUpdateDone = (!oldData.center.equals(this.data.center)) ? this.centerUpdated() : false;
         if (!centerUpdateDone && !oldData.viewport.equals(this.data.viewport)) this.updateOffsetToCenter();
+        return this;
     }
 
     /**
@@ -89,12 +118,20 @@ export class MapInformation {
         return new Point(relativePosition.lng, relativePosition.lat).abs;
     }
 
+    /**
+     * center position was updated
+     * @return {Boolean} information was updated
+     */
     centerUpdated() {
         this.data.distortionFactor = this.getDistortionFactorForLatitude(this.data.center);
         this.updateOffsetToCenter();
         return true;
     }
 
+    /**
+     * offset to center was updated
+     * @return {Boolean} information was updated
+     */
     updateOffsetToCenter() {
         this.data.offsetToCenter = this.offsetToCenter;
         return true;
@@ -103,10 +140,10 @@ export class MapInformation {
     /**
      * get distortion factor for specified latitude
      * @param  {LatLng} latlng - lat/lng position
-     * @return {number} distortion factor
+     * @return {Number} distortion factor
      */
     getDistortionFactorForLatitude(latlng) {
-         return (Math.cos(Helper.toRadians(latlng.lat)));
+        return (Math.cos(Helper.toRadians(latlng.lat)));
     }
 
     /**

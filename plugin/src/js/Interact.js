@@ -1,6 +1,10 @@
 /*global PointerEvent,MSPointerEvent*/
-import {Point} from './Point.js';
-import {Helper} from './Helper.js';
+import {
+    Point
+} from './Point.js';
+import {
+    Helper
+} from './Helper.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -8,9 +12,10 @@ import {Helper} from './Helper.js';
  * @copyright Michael Duve 2016
  */
 export class Interact {
+
     /**
      * get time difference to last
-     * @return {number} difference
+     * @return {Number} difference
      */
     get timeToLastMove() {
         return this.data.timeEnd - this.data.timeLast;
@@ -18,7 +23,7 @@ export class Interact {
 
     /**
      * get time difference to start
-     * @return {number} difference
+     * @return {Number} difference
      */
     get time() {
         return this.data.timeEnd - this.data.timeStart;
@@ -27,30 +32,30 @@ export class Interact {
     /**
      * @constructor
      * @param {Object} settings = {} - all the settings
-     * @param {string|Object} settings.container = ".interact-container" - Container, either string or dom-object
+     * @param {String|HTMLElement} settings.container = ".interact-container" - Container, either string or dom-object
      * @param {Object} settings.timeTreshold = {} - settings for the timing tresholds
-     * @param {number} settings.timeTreshold.tap = 200 - timing treshold for tap
-     * @param {number} settings.timeTreshold.hold = 500 - timing treshold for hold
-     * @param {number} settings.timeTreshold.swipe = 300 - timing treshold for swipe
-     * @param {number} settings.timeTreshold.flick = 30 - timing treshold for flick
+     * @param {Number} settings.timeTreshold.tap = 200 - timing treshold for tap
+     * @param {Number} settings.timeTreshold.hold = 500 - timing treshold for hold
+     * @param {Number} settings.timeTreshold.swipe = 300 - timing treshold for swipe
+     * @param {Number} settings.timeTreshold.flick = 30 - timing treshold for flick
      * @param {Object} settings.distanceTreshold = {} - settings for the distance tresholds
-     * @param {number} settings.distanceTreshold.swipe = 200 - distance treshold for swipe
+     * @param {Number} settings.distanceTreshold.swipe = 200 - distance treshold for swipe
      * @param {Boolean|string} settings.overwriteViewportSettings = false - on true prevents pinching, can be a custom string too
      * @param {Boolean} settings.stopPropagation = true - on true stops the propagation of events
      * @param {Boolean} settings.preventDefault = true - on true prevents the default actions of events
      * @param {Boolean} settings.autoFireHold = false - if set to false hold-event is not fired
-     * @param {number} settings.pinchBalanceTime = 50 - prevents from firing too much pinching events
+     * @param {Number} settings.pinchBalanceTime = 50 - prevents from firing too much pinching events
      * @param {Object} settings.callbacks = {} - settings for the callback-functions
-     * @param {function} settings.callbacks.tap = null - callback-function for tap
-     * @param {function} settings.callbacks.tapHold = null - callback-function for tapHold
-     * @param {function} settings.callbacks.doubletap = null - callback-function for doubletap
-     * @param {function} settings.callbacks.hold = null - callback-function for hold
-     * @param {function} settings.callbacks.pan = null - callback-function for pan
-     * @param {function} settings.callbacks.swipe = null - callback-function for swipe
-     * @param {function} settings.callbacks.flick = null - callback-function for flick
-     * @param {function} settings.callbacks.zoom = null - callback-function for zoom
-     * @param {function} settings.callbacks.wheel = null - callback-function for wheel
-     * @param {function} settings.callbacks.pinch = null - callback-function for pinch
+     * @param {Function} settings.callbacks.tap = null - callback-function for tap
+     * @param {Function} settings.callbacks.tapHold = null - callback-function for tapHold
+     * @param {Function} settings.callbacks.doubletap = null - callback-function for doubletap
+     * @param {Function} settings.callbacks.hold = null - callback-function for hold
+     * @param {Function} settings.callbacks.pan = null - callback-function for pan
+     * @param {Function} settings.callbacks.swipe = null - callback-function for swipe
+     * @param {Function} settings.callbacks.flick = null - callback-function for flick
+     * @param {Function} settings.callbacks.zoom = null - callback-function for zoom
+     * @param {Function} settings.callbacks.wheel = null - callback-function for wheel
+     * @param {Function} settings.callbacks.pinch = null - callback-function for pinch
      * @param {Object} settings.events = {} - settings all eventnames
      * @param {Object} settings.events.start = {} - settings all start eventnames
      * @param {Object} settings.events.start.touch = ("MSPointerDown pointerdown" || "touchstart") - settings start touch eventnames
@@ -64,13 +69,13 @@ export class Interact {
      * @param {Object} settings.events.leave = {} - settings all leave eventnames
      * @param {Object} settings.events.leave.touch = ("MSPointerLeave pointerleave" || "touchleave") - settings leave touch eventnames
      * @param {Object} settings.events.leave.mouse = ("MSPointerLeave pointerleave" || "mouseleave") - settings leave mouse eventnames
-     * @param {string} settings.events.scroll = ("wheel" || "mousewhell" || "DOMMouseScroll") - settings all scroll eventnames
+     * @param {String} settings.events.scroll = ("wheel" || "mousewhell" || "DOMMouseScroll") - settings all scroll eventnames
      * @return {Interact} new instance
      */
     constructor(settings = {}) {
         this.settings = Object.assign(this.getDefaultSettings(), settings);
         this.data = this.getDefaultData();
-        this.pointerArray= {};
+        this.pointerArray = {};
         if (this.settings.overwriteViewportSettings) this.handleViewport(this.settings.overwriteViewportSettings);
         this.init(this.settings.container);
     }
@@ -181,7 +186,7 @@ export class Interact {
 
     /**
      * handles the overwrite of viewport meta
-     * @param  {Boolean|string} viewport - specified viewport option
+     * @param  {Boolean|String} viewport - specified viewport option
      * @return {Interact} Returns this instance
      */
     handleViewport(viewport) {
@@ -194,7 +199,7 @@ export class Interact {
 
     /**
      * initializes class settings and bindings
-     * @param  {Object|string} container - Container, either string or dom-object
+     * @param  {HTMLElement|String} container - Container, either string or DOM object
      * @return {Interact} Returns this instance
      */
     init(container) {
@@ -233,7 +238,7 @@ export class Interact {
     bindIEEvents() {
         Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
         this.bindTouchEvents();
-        Helper.addListener(this.container,"contextmenu", (e) => e.preventDefault(), false);
+        Helper.addListener(this.container, "contextmenu", (e) => e.preventDefault(), false);
         return this;
     }
 
@@ -242,10 +247,10 @@ export class Interact {
      * @return {Interact} Returns this instance
      */
     bindTouchEvents() {
-        Helper.addListener(this.container,this.settings.events.start.touch, this.startHandler.bind(this));
-        Helper.addListener(this.container,this.settings.events.move.touch, this.moveHandler.bind(this));
-        Helper.addListener(this.container,this.settings.events.end.touch, this.endHandler.bind(this));
-        Helper.addListener(this.container,this.settings.events.leave.touch, this.endHandler.bind(this));
+        Helper.addListener(this.container, this.settings.events.start.touch, this.startHandler.bind(this));
+        Helper.addListener(this.container, this.settings.events.move.touch, this.moveHandler.bind(this));
+        Helper.addListener(this.container, this.settings.events.end.touch, this.endHandler.bind(this));
+        Helper.addListener(this.container, this.settings.events.leave.touch, this.endHandler.bind(this));
         return this;
     }
 
@@ -254,17 +259,17 @@ export class Interact {
      * @return {Interact} Returns this instance
      */
     bindMouseEvents() {
-        Helper.addListener(this.container,this.settings.events.scroll, this.scrollHandler.bind(this));
-        Helper.addListener(this.container,this.settings.events.start.mouse, this.startHandler.bind(this));
-        Helper.addListener(this.container,this.settings.events.move.mouse, this.moveHandler.bind(this));
-        Helper.addListener(this.container,this.settings.events.end.mouse, this.endHandler.bind(this));
-        Helper.addListener(this.container,this.settings.events.leave.mouse, this.endHandler.bind(this));
+        Helper.addListener(this.container, this.settings.events.scroll, this.scrollHandler.bind(this));
+        Helper.addListener(this.container, this.settings.events.start.mouse, this.startHandler.bind(this));
+        Helper.addListener(this.container, this.settings.events.move.mouse, this.moveHandler.bind(this));
+        Helper.addListener(this.container, this.settings.events.end.mouse, this.endHandler.bind(this));
+        Helper.addListener(this.container, this.settings.events.leave.mouse, this.endHandler.bind(this));
         return this;
     }
 
     /**
      * pre handle all events
-     * @param  {Object} event - original event of Vanilla JS
+     * @param  {Event} event - event
      * @return {Object} normalized Event
      */
     preHandle(event) {
@@ -275,7 +280,7 @@ export class Interact {
 
     /**
      * handles cross-browser and -device scroll
-     * @param  {Object} event - Event-Object
+     * @param  {Event} event - event
      * @return {Boolean} always returns false
      */
     scrollHandler(event) {
@@ -300,20 +305,20 @@ export class Interact {
     /**
      *
      * Solution from http://jsfiddle.net/uNeBr/
-     * @param  {Object} event - VanillaJS-Event-Object
-     * @return {number} normalized wheel delta
+     * @param  {Event} e - event
+     * @return {Number} normalized wheel delta
      */
     normalizeWheelDelta(e) {
         const o = e.originalEvent || e,
             w = o.wheelDelta || (o.deltaY * -1) * 10,
             n = 225,
-            n1 = n-1;
+            n1 = n - 1;
 
         let d = o.detail,
             f;
 
         // Normalize delta
-        d = d ? w && (f = w/d) ? d/f : -d/1.35 : w/120;
+        d = d ? w && (f = w / d) ? d / f : -d / 1.35 : w / 120;
         // Quadratic scale if |d| > 1
         d = d < 1 ? d < -1 ? (-Math.pow(d, 2) - n1) / n : d : (Math.pow(d, 2) + n1) / n;
         // Delta *should* not be greater than 2...
@@ -322,7 +327,7 @@ export class Interact {
 
     /**
      * check if event is a PointerEvent (IE)
-     * @param  {Object} event - original event of Vanilla JS
+     * @param  {Event} e - event
      * @return {Boolean} Whether event is PointerEvent
      */
     isPointerEvent(e) {
@@ -331,7 +336,7 @@ export class Interact {
 
     /**
      * calculation to be made at start-handler
-     * @param  {Object} e - Event-Object
+     * @param  {Event} e - event
      * @return {Object} calculated data
      */
     calculateStart(e) {
@@ -356,7 +361,7 @@ export class Interact {
     /**
      * handle PointerEvent calculations
      * @param  {Object} data - current data
-     * @param  {Object} e - Event-Object
+     * @param  {Event} e - event
      * @return {Object} manipulated enriched data
      */
     handlePointerEventStart(data, e) {
@@ -368,7 +373,7 @@ export class Interact {
     /**
      * handle TouchEvent calculations for start
      * @param  {Object} data - current data
-     * @param  {Object} e - Event-Object
+     * @param  {Event} e - event
      * @return {Object} manipulated enriched data
      */
     handleTouchEventStart(data, e) {
@@ -396,7 +401,7 @@ export class Interact {
      */
     handleMultitouchStart(positionsArray) {
         const pos1 = this.getRelativePosition(positionsArray[0]),
-              pos2 = this.getRelativePosition(positionsArray[1]);
+            pos2 = this.getRelativePosition(positionsArray[1]);
         return {
             multitouch: true,
             distance: pos1.distance(pos2),
@@ -442,7 +447,7 @@ export class Interact {
 
     /**
      * handles cross-browser and -device start-event
-     * @param  {Object} event - Event-Object
+     * @param  {Event} event - event
      * @return {Boolean} always returns false
      */
     startHandler(event) {
@@ -472,7 +477,7 @@ export class Interact {
 
     /**
      * calculation to be made at move-handler
-     * @param  {Object} e - Event-Object
+     * @param  {Event} e - event
      * @return {Object} calculated data
      */
     calculateMove(e) {
@@ -496,7 +501,7 @@ export class Interact {
     /**
      * handle PointerEvent at moving (IE)
      * @param  {Object} data - specified input data
-     * @param  {Object} e - Event-Object
+     * @param  {Event} e - event
      * @return {Object} manipulated enriched data
      */
     handlePointerEventMove(data, e) {
@@ -512,13 +517,21 @@ export class Interact {
     /**
      * handle TouchEvent calculations for move
      * @param  {Object} data - current data
-     * @param  {Object} e - Event-Object
+     * @param  {Event} e - event
      * @return {Object} manipulated enriched data
      */
     handleTouchEventMove(data, e) {
         return this.handleTouchEvent(data, e, this.handleSingletouchMove.bind(this), this.handleMultitouchMove.bind(this));
     }
 
+    /**
+     * handles touch events
+     * @param  {Object} data - current data
+     * @param  {Event} e - event
+     * @param  {Function} fnSingle - callback for singletouch
+     * @param  {Function} fnMulti - callback for multitouch
+     * @return {Object} manipulated enriched data
+     */
     handleTouchEvent(data, e, fnSingle, fnMulti) {
         const getData = (e.length === 1) ? fnSingle(e[0]) : fnMulti(e);
         return Object.assign({}, data, getData);
@@ -556,7 +569,7 @@ export class Interact {
 
     /**
      * handles cross-browser and -device move-event
-     * @param  {Object} event - Event-Object
+     * @param  {Event} event - event
      * @return {Boolean} always returns false
      */
     moveHandler(event) {
@@ -601,7 +614,7 @@ export class Interact {
 
     /**
      * check if position has been changed
-     * @param  {Object} e - Event-Object
+     * @param  {Event} e - event
      * @return {Boolean} Whether or not position has changed
      */
     positionDidNotChange(e) {
@@ -610,7 +623,7 @@ export class Interact {
 
     /**
      * calculation to be made at end-handler
-     * @param  {Object} e - Event-Object
+     * @param  {Event} e - event
      * @return {Object} calculated data
      */
     calculateEnd(e) {
@@ -629,14 +642,14 @@ export class Interact {
         else {
             // singletouch ended
             if (e.length <= 1) {
-                return Object.assign({}, data,  this.handleSingletouchEnd(e[0]));
+                return Object.assign({}, data, this.handleSingletouchEnd(e[0]));
             }
         }
     }
 
     /**
      * handles singletouch for end
-     * @param  {Object} position - position
+     * @param  {Point} position - position
      * @return {Object} manipulated enriched data
      */
     handleSingletouchEnd(position) {
@@ -673,7 +686,7 @@ export class Interact {
 
     /**
      * handles cross-browser and -device end-event
-     * @param  {Object} event - Event-Object
+     * @param  {Event} event - event
      * @return {Boolean} always returns false
      */
     endHandler(event) {
@@ -734,7 +747,7 @@ export class Interact {
 
     /**
      * handles multitouch for end
-     * @param  {e} e - Event-Object
+     * @param  {Event} e - event
      * @return {Interact} instance of Interact for chaining
      */
     handleMultitouchEnd(e) {
@@ -779,7 +792,7 @@ export class Interact {
     /**
      * Returns an array of strings, representing the directions
      * @param  {Point} direction - the specified direction in pixel
-     * @return {string[]} returns an array representing the directions as strings
+     * @return {String[]} returns an array representing the directions as strings
      */
     getSwipeDirections(direction) {
         return [(direction.x < 0) ? "left" : (direction.x > 0) ? "right" : "none", (direction.y < 0) ? "up" : (direction.y > 0) ? "down" : "none"];
@@ -788,7 +801,7 @@ export class Interact {
     /**
      * Helper for setting a timeout for events
      * @param {Function} callback - function to be called
-     * @param {number} timeout - time in milliseconds
+     * @param {Number} timeout - time in milliseconds
      * @param {Object[]} args - array of arguments
      * @param {Boolean} holdTimeout - if true, a different variable will be used
      * @return {Interact} Returns this instance
@@ -816,7 +829,7 @@ export class Interact {
 
     /**
      * get the relative position of clientX and clientY
-     * @param  {Object} e - event object
+     * @param  {Event} e - event
      * @return {Point} calculated relative position
      */
     getRelativePosition(e) {
@@ -828,7 +841,7 @@ export class Interact {
 
     /**
      * get the absolute position of clientX and clientY
-     * @param  {Object} e - event object
+     * @param  {Point} point - specified point
      * @return {Point} calculated absolute position
      */
     getAbsolutePosition(point) {
@@ -838,8 +851,8 @@ export class Interact {
 
     /**
      * get scroll direction from event
-     * @param  {Object} event - event object
-     * @return {string[]} an array with scroll directions
+     * @param  {Event} event - event
+     * @return {String[]} an array with scroll directions
      */
     getScrollDirection(event) {
         const axis = parseInt(event.axis, 10);
@@ -853,8 +866,8 @@ export class Interact {
 
     /**
      * checks if direction is down
-     * @param  {number} axis - what axis is used
-     * @param  {Object} event - Vanilla JS event
+     * @param  {Number} axis - what axis is used
+     * @param  {Event} event - event
      * @return {Boolean} Whether or not direction is down
      */
     isDownDirection(axis, event) {
@@ -863,8 +876,8 @@ export class Interact {
 
     /**
      * checks if direction is up
-     * @param  {number} axis - what axis is used
-     * @param  {Object} event - Vanilla JS event
+     * @param  {Number} axis - what axis is used
+     * @param  {Event} event - event
      * @return {Boolean} Whether or not direction is up
      */
     isUpDirection(axis, event) {
@@ -873,8 +886,8 @@ export class Interact {
 
     /**
      * checks if direction is right
-     * @param  {number} axis - what axis is used
-     * @param  {Object} event - Vanilla JS event
+     * @param  {Number} axis - what axis is used
+     * @param  {Event} event - event
      * @return {Boolean} Whether or not direction is right
      */
     isRightDirection(axis, event) {
@@ -883,8 +896,8 @@ export class Interact {
 
     /**
      * checks if direction is left
-     * @param  {number} axis - what axis is used
-     * @param  {Object} event - Vanilla JS event
+     * @param  {Number} axis - what axis is used
+     * @param  {Event} event - event
      * @return {Boolean} Whether or not direction is left
      */
     isLeftDirection(axis, event) {
@@ -893,8 +906,8 @@ export class Interact {
 
     /**
      * Get event helper, applies event-fix too
-     * @param  {Object} e - event object
-     * @return {Object} new fixed and optimized event
+     * @param  {Event} e - event
+     * @return {Event} cross-device event
      */
     getEvent(e) {
         if (e.touches && e.touches.length === 0) return e.changedTouches || e;

@@ -4,12 +4,12 @@
  * @copyright Michael Duve 2016
  * @module Helper
  */
-export var Helper = {
+export const Helper = {
     /**
      * request json-data from given file and calls callback on success
      * @function
      * @memberof module:Helper
-     * @param  {string} filename - path to file
+     * @param  {String} filename - path to file
      * @param  {Helper~requestJSONCallback} callback - function called when data is loaded successfully
      * @return {Helper} Helper object for chaining
      */
@@ -19,34 +19,83 @@ export var Helper = {
         });
         return this;
     },
-    find(elementString, element = null) {
-        return (element||document).querySelector(elementString);
+    /**
+     * find an element in DOM
+     * @function
+     * @memberof module:Helper
+     * @param  {String} elementString = "*" - element to lookup
+     * @param  {HTMLElement} element = null - element to start looking in for
+     * @return {HTMLElement} reference to HTMLElement or null if not found
+     */
+    find(elementString = "*", element = null) {
+        return (element || document).querySelector(elementString);
     },
-    findAll(elementString, element = null) {
-        return (element||document).querySelectorAll(elementString);
+    /**
+     * find multiple elements in DOM
+     * @function
+     * @memberof module:Helper
+     * @param  {String} elementString = "*" - element to lookup
+     * @param  {HTMLElement} element = null - element to start looking in for
+     * @return {NodeList} list of found elements
+     */
+    findAll(elementString = "*", element = null) {
+        return (element || document).querySelectorAll(elementString);
     },
+    /**
+     * show a HTMLElement
+     * @function
+     * @memberof module:Helper
+     * @param  {HTMLElement} elem - specified element
+     * @return {Helper} reference of Helper for chaining
+     */
     show(elem) {
         elem.style.display = "";
+        return this;
     },
+    /**
+     * hide a HTMLElement
+     * @function
+     * @memberof module:Helper
+     * @param  {HTMLElement} elem - specified element
+     * @return {Helper} reference of Helper for chaining
+     */
     hide(elem) {
         elem.style.display = "none";
     },
+    /**
+     * applies css to given HTMLElement
+     * @function
+     * @memberof module:Helper
+     * @param  {HTMLElement} elem - specified element to apply css to
+     * @param  {Object} css - object containing css property and value
+     * @return {Helper} reference of Helper for chaining
+     */
     css(elem, css) {
         for (const property in css) {
             elem.style[property] = css[property];
         }
     },
-    addListener(el, s, fn) {
-        s.split(" ").forEach(e => el.addEventListener(e, fn, false));
+    /**
+     * adds a listener to given HTMLElement
+     * @function
+     * @memberof module:Helper
+     * @param  {HTMLElement} elem - specified element to bind listener to
+     * @param  {String} bindTo - names of events to bind to, seperated by spaces
+     * @param  {Function} fn~addListenerCallback - callback-function for binding
+     * @return {Helper} reference of Helper for chaining
+     */
+    addListener(elem, bindTo, fn) {
+        bindTo.split(" ").forEach((e) => elem.addEventListener(e, fn, false));
+        return this;
     },
     /**
      * clamps a value to specified min and max
      * @function
      * @memberof module:Helper
-     * @param  {number} v = 0 - specified value to clamp
-     * @param  {number} min = v - minimum value to clamp to
-     * @param  {number} max = v - maximum value to clamp to
-     * @return {number} clamped value
+     * @param  {Number} v = 0 - specified value to clamp
+     * @param  {Number} min = v - minimum value to clamp to
+     * @param  {Number} max = v - maximum value to clamp to
+     * @return {Number} clamped value
      */
     clamp(v = 0, min = v, max = v) {
         return Math.min(Math.max(v, min), max);
@@ -56,7 +105,7 @@ export var Helper = {
      * @function
      * @memberof module:Helper
      * @param {Helper~loadImageCallback} cb - callback-function on success
-     * @return {Helper} Helper object for chaining
+     * @return {Helper} reference of Helper for chaining
      */
     loadImage(path, cb) {
         const img = new Image();
@@ -72,7 +121,7 @@ export var Helper = {
      * @memberof module:Helper
      * @param  {string} url - path to file
      * @param  {Helper~getFileCallback} callback - function called when data is loaded successfully
-     * @return {Helper} Helper object for chaining
+     * @return {Helper} reference of Helper for chaining
      */
     getFile(url, callback) {
         const xhr = new XMLHttpRequest();
@@ -92,7 +141,7 @@ export var Helper = {
      * @memberof module:Helper
      * @param  {Object[]} a - array to iterate over each value
      * @param  {Helper~forEachCallback} cb - callback for each object
-     * @return {Helper} Helper object for chaining
+     * @return {Helper} reference of Helper for chaining
      */
     forEach(a, cb) {
         for (const i in a) {
@@ -104,8 +153,8 @@ export var Helper = {
      * convert degree to radian
      * @function
      * @memberof module:Helper
-     * @param {number} degrees - specified degrees
-     * @return {number} converted radian
+     * @param {Number} degrees - specified degrees
+     * @return {Number} converted radian
      */
     toRadians: degrees => degrees * Math.PI / 180,
     /**
@@ -133,7 +182,7 @@ export var Helper = {
      * gets cross-browser scroll-event
      * @function
      * @memberof module:Helper
-     * @return {string} name of scroll event
+     * @return {String} name of scroll event
      */
     scrollEvent: () => "onwheel" in document.createElement("div") ? "wheel" : document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll"
 };

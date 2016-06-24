@@ -1,16 +1,42 @@
-import {Helper} from './Helper.js';
-import {Events} from './Events.js';
-import {Point} from './Point.js';
-import {Publisher} from './Publisher.js';
-import {StateHandler} from './StateHandler.js';
-import {Rectangle} from './Rectangle.js';
-import {View} from './View.js';
-import {Marker} from './Marker.js';
-import {DataEnrichment} from './DataEnrichment.js';
-import {ToolTip} from './ToolTip.js';
-import {Label} from './Label.js';
-import {MarkerClusterer} from './MarkerClusterer.js';
-import {MapInformation} from './MapInformation.js';
+import {
+    Helper
+} from './Helper.js';
+import {
+    Events
+} from './Events.js';
+import {
+    Point
+} from './Point.js';
+import {
+    Publisher
+} from './Publisher.js';
+import {
+    StateHandler
+} from './StateHandler.js';
+import {
+    Rectangle
+} from './Rectangle.js';
+import {
+    View
+} from './View.js';
+import {
+    Marker
+} from './Marker.js';
+import {
+    DataEnrichment
+} from './DataEnrichment.js';
+import {
+    ToolTip
+} from './ToolTip.js';
+import {
+    Label
+} from './Label.js';
+import {
+    MarkerClusterer
+} from './MarkerClusterer.js';
+import {
+    MapInformation
+} from './MapInformation.js';
 
 /**
  * @author Michael Duve <mduve@designmail.net>
@@ -20,24 +46,8 @@ import {MapInformation} from './MapInformation.js';
 export class TileMap {
 
     /**
-     * Returns left offset of container
-     * @return {number} - left offset of container
-     */
-    get left() {
-        return 0;
-    }
-
-    /**
-     * Returns top offset of container
-     * @return {number} - top offset of container
-     */
-    get top() {
-        return 0;
-    }
-
-    /**
      * Returns width of container
-     * @return {number} - width of container
+     * @return {Number} - width of container
      */
     get width() {
         return this.container.getBoundingClientRect().width;
@@ -45,85 +55,49 @@ export class TileMap {
 
     /**
      * Returns height of container
-     * @return {number} - height of container
+     * @return {Number} - height of container
      */
     get height() {
         return this.container.getBoundingClientRect().height;
     }
 
+    /**
+     * gets current viewport
+     * @return {Rectangle} viewport
+     */
     get viewport() {
-        return new Rectangle(this.left, this.top, this.width, this.height);
-    }
-
-    get pixelPerLatLng() {
-        this.levelHandler.current.instance.pixelPerLatLng();
+        return new Rectangle(0, 0, this.width, this.height);
     }
 
     /**
-     * gets data of current zoom level
-     * @return {Object} data for current level as json
+     * current view
+     * @return {View} view
      */
-    get currentLevelData() {
-        return this.levelHandler.current.value;
-    }
-
     get view() {
         return this.levelHandler.current.instance;
     }
 
     /**
      * @constructor
-     * @param  {Object} container = null - jQuery-object holding the container
-     * @param  {Object} tilesData={} - json object representing data of TileMap
-     * @param  {Object} settings={} - json object representing settings of TileMap
+     * @param  {HTMLElement} container = null - jQuery-object holding the container
+     * @param  {Object} tilesData = {} - json object representing data of TileMap
+     * @param  {Object} settings = {} - json object representing settings of TileMap
+     * @param  {Number} id = 0 - id of parent instance
      * @return {TileMap} instance of TileMap for chaining
      */
-    constructor({container = null, tilesData = {}, settings = {}, id}) {
+    constructor({
+        container = null,
+        tilesData = {},
+        settings = {},
+        id
+    }) {
         if (!container) throw Error("You must define a container to initialize a TileMap");
+
         this.container = container;
-
         this.id = id;
-
-        this.info = new MapInformation(this.id);
-        this.eventManager = new Publisher(this.id);
-
-        this.eventManager.publish(Events.MapInformation.UPDATE, {
-            viewport: this.viewport
-        });
-
-        this.imgData = tilesData[Events.TileMap.IMG_DATA_NAME];
-        this.markerData = tilesData[Events.TileMap.MARKER_DATA_NAME];
-        this.labelData = tilesData[Events.TileMap.LABEL_DATA_NAME];
-
         this.settings = settings;
 
-        this.stateHandler = new StateHandler([
-            {value: 0, description: "start"},
-            {value: 1, description: "view-initialized"},
-            {value: 2, description: "marker-initialized"},
-            {value: 3, description: "tooltip-initialized"}
-        ]);
-
-        this.templates = (this.settings.tooltip) ? this.settings.tooltip.templates : {};
-        this.templates = DataEnrichment.tooltip(this.templates);
-
-        this.levels = [];
-        this.clusterHandlingTimeout = null;
-
-        this.lastFrameMillisecs = Date.now();
-        this.deltaTiming = 1.0;
-        this.bestDeltaTiming = 1000.0 / 60.0;
-
-        this.velocity = new Point();
-        this.drawIsNeeded = false;
-
-        this.initial = {
-            bounds: settings.bounds,
-            center: settings.center,
-            level: settings.level,
-            zoom: settings.zoom
-        };
-
+        this.initialize(tilesData);
         this.initializeCanvas();
 
         Helper.forEach(this.imgData, (element, i) => {
@@ -162,6 +136,64 @@ export class TileMap {
         return this;
     }
 
+    /**
+     * initialize map
+     * @param  {Object} tilesData - data of tiles, markers and labels
+     * @return {TileMap} instance of TileMap for chaining
+     */
+    initialize(tilesData) {
+        this.info = new MapInformation(this.id);
+        this.eventManager = new Publisher(this.id);
+
+        this.eventManager.publish(Events.MapInformation.UPDATE, {
+            viewport: this.viewport
+        });
+
+        this.imgData = tilesData[Events.TileMap.IMG_DATA_NAME];
+        this.markerData = tilesData[Events.TileMap.MARKER_DATA_NAME];
+        this.labelData = tilesData[Events.TileMap.LABEL_DATA_NAME];
+
+        this.stateHandler = new StateHandler([{
+            value: 0,
+            description: "start"
+        }, {
+            value: 1,
+            description: "view-initialized"
+        }, {
+            value: 2,
+            description: "marker-initialized"
+        }, {
+            value: 3,
+            description: "tooltip-initialized"
+        }]);
+
+        this.templates = (this.settings.tooltip) ? this.settings.tooltip.templates : {};
+        this.templates = DataEnrichment.tooltip(this.templates);
+
+        this.levels = [];
+        this.clusterHandlingTimeout = null;
+
+        this.lastFrameMillisecs = Date.now();
+        this.deltaTiming = 1.0;
+        this.bestDeltaTiming = 1000.0 / 60.0;
+
+        this.velocity = new Point();
+        this.drawIsNeeded = false;
+
+        this.initial = {
+            bounds: this.settings.bounds,
+            center: this.settings.center,
+            level: this.settings.level,
+            zoom: this.settings.zoom
+        };
+
+        return this;
+    }
+
+    /**
+     * check if level can fit boundaries and if not iterate to closer level
+     * @return {Number} level
+     */
     checkIfLevelCanFitBounds() {
         let newLevel = this.settings.level;
         let fits = false;
@@ -181,6 +213,7 @@ export class TileMap {
 
     /**
      * resets view to initial state
+     * @return {TileMap} instance of TileMap for chaining
      */
     reset() {
         const newLevel = this.checkIfLevelCanFitBounds();
@@ -195,8 +228,13 @@ export class TileMap {
         this.view.reset(this.initial.center, this.initial.zoom);
         this.clusterHandler();
         this.redraw();
+        return this;
     }
 
+    /**
+     * initialize all labels
+     * @return {TileMap} instance of TileMap for chaining
+     */
     initializeLabels() {
         this.labelData = this.enrichLabelData(this.labelData);
         this.labels = [];
@@ -208,14 +246,12 @@ export class TileMap {
             });
             this.labels.push(currentLabel);
         });
+        return this;
     }
 
     /**
      * creates a View from specified parameters
-     * @param  {Bounds} bounds - specified boundaries
-     * @param  {LatLng} center - specified center
-     * @param  {object} data - specified data
-     * @param  {number} zoom - initial zoom level
+     * @param  {Object} data - specified data
      * @return {View} created View
      */
     createViewFromData(data) {
@@ -241,10 +277,10 @@ export class TileMap {
             const left = (newSize.left + this.view.offsetToCenter).toFixed(4);
             const top = (newSize.top).toFixed(4);
             Helper.css(this.markerContainer, {
-               "width": `${newSize.width}px`,
-               "height": `${newSize.height}px`,
-               "transform": `translate3d(${left}px, ${top}px, 0px)`,
-               "-ms-transform": `translate(${left}px, ${top}px)`
+                "width": `${newSize.width}px`,
+                "height": `${newSize.height}px`,
+                "transform": `translate3d(${left}px, ${top}px, 0px)`,
+                "-ms-transform": `translate(${left}px, ${top}px)`
 
             });
         }
@@ -260,6 +296,11 @@ export class TileMap {
         return DataEnrichment.marker(markerData);
     }
 
+    /**
+     * enrich label data
+     * @param  {Object} labelData - data of labels
+     * @return {Object} enriched label data
+     */
     enrichLabelData(labelData) {
         return DataEnrichment.label(labelData);
     }
@@ -327,52 +368,86 @@ export class TileMap {
      * @return {TileMap} instance of TileMap for chaining
      */
     bindEvents() {
-
-        this.eventManager.subscribe(Events.TileMap.RESIZE, () => { this.resize(); });
-
-        this.eventManager.subscribe(Events.TileMap.DRAW, () => { this.redraw(); });
-
-        this.eventManager.subscribe(Events.View.THUMB_LOADED, () => {
+        this.eventManager.subscribe(Events.TileMap.RESIZE, () => {
+            this.resize();
+        });
+        this.eventManager.subscribe(Events.TileMap.DRAW, () => {
             this.redraw();
-            if (this.stateHandler.current.value < 2) {
-                this.initializeMarkers();
-                if (this.markerData && this.markerData.length) this.createTooltipContainer();
-            }
         });
-
+        this.eventManager.subscribe(Events.View.THUMB_LOADED, () => {
+            this.thumbLoaded();
+        });
         this.eventManager.subscribe(Events.TileMap.ZOOM_TO_BOUNDS, (data) => {
-            let zoomIncrease = Math.min(this.view.viewport.width / data.boundingBox.width, this.view.viewport.height / data.boundingBox.height);
-            while (zoomIncrease > 0) {
-                const possibleZoomOnLevel = this.view.maxZoom - this.view.zoomFactor;
-                zoomIncrease -= possibleZoomOnLevel;
-                if (this.levelHandler.hasNext()) {
-                    this.changelevel(1);
-                } else {
-                    this.zoom(possibleZoomOnLevel, this.view.viewport.center);
-                    zoomIncrease = 0;
-                }
-            }
-            this.view.setLatLngToPosition(data.center, this.view.viewport.center);
+            this.zoomToBounds(data.center, data.boundingBox);
         });
-
-        this.eventManager.subscribe(Events.TileMap.NEXT_LEVEL, () => { this.changelevel(1); });
-        this.eventManager.subscribe(Events.TileMap.PREVIOUS_LEVEL, () => { this.changelevel(-1); });
-
+        this.eventManager.subscribe(Events.TileMap.NEXT_LEVEL, () => {
+            this.changelevel(1);
+        });
+        this.eventManager.subscribe(Events.TileMap.PREVIOUS_LEVEL, () => {
+            this.changelevel(-1);
+        });
         return this;
     }
 
+    /**
+     * zoom to boundaries on specified center
+     * @param  {LatLng} center - zoom to position
+     * @param  {Rectangle} boundingBox - specified bounds to toom to
+     * @return {TileMap} instance of TileMap for chaining
+     */
+    zoomToBounds(center, boundingBox) {
+        let zoomIncrease = Math.min(this.view.viewport.width / boundingBox.width, this.view.viewport.height / boundingBox.height);
+        while (zoomIncrease > 0) {
+            const possibleZoomOnLevel = this.view.maxZoom - this.view.zoomFactor;
+            zoomIncrease -= possibleZoomOnLevel;
+            if (this.levelHandler.hasNext()) {
+                this.changelevel(1);
+            } else {
+                this.zoom(possibleZoomOnLevel, this.view.viewport.center);
+                zoomIncrease = 0;
+            }
+        }
+        this.view.setLatLngToPosition(center, this.view.viewport.center);
+        return this;
+    }
+
+    /**
+     * called when thumbnail image was loaded
+     * @return {TileMap} instance of TileMap for chaining
+     */
+    thumbLoaded() {
+        this.redraw();
+        if (this.stateHandler.current.value < 2) {
+            this.initializeMarkers();
+            if (this.markerData && this.markerData.length) this.createTooltipContainer();
+        }
+        return this;
+    }
+
+    /**
+     * set new view to old views position and zoomlevel
+     * @param {LatLng} center - old center
+     * @param {Number} zoom - old zoom,
+     * @return {TileMap} instance of TileMap for chaining
+     */
     setViewToOldView(center, zoom) {
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             zoomFactor: zoom
         });
         this.view.zoom(0, this.view.viewport.center);
         this.view.view.setCenter(center);
-        this.drawIsNeeded = true;
+        this.redraw();
+        return this;
     }
 
+    /**
+     * change level up or down
+     * @param  {Number} direction - either 1 or -1
+     * @return {TileMap} instance of TileMap for chaining
+     */
     changelevel(direction) {
         const lastLevel = this.levelHandler.current.level,
-              lastCenter = this.view.view.center;
+            lastCenter = this.view.view.center;
         let extrema;
         if (direction < 0) {
             this.levelHandler.previous();
@@ -395,7 +470,7 @@ export class TileMap {
         this.eventManager.publish(Events.MapInformation.UPDATE, {
             level: this.levelHandler.current.level
         });
-
+        return this;
     }
 
     /**
@@ -430,7 +505,7 @@ export class TileMap {
     /**
      * move view by delta
      * @param  {Point} delta - delta of x/y
-     * @return {MappedJS} instance of MappedJS for chaining
+     * @return {TileMap} instance of TileMap for chaining
      */
     moveView(delta) {
         this.view.moveView(delta);
@@ -440,9 +515,9 @@ export class TileMap {
 
     /**
      * handles zoom by factor and position
-     * @param  {number} factor - difference in zoom scale
+     * @param  {Number} factor - difference in zoom scale
      * @param  {Point} position - position to zoom to
-     * @return {MappedJS} instance of MappedJS for chaining
+     * @return {TileMap} instance of TileMap for chaining
      */
     zoom(factor, position) {
         if (factor !== 0) {
@@ -453,6 +528,10 @@ export class TileMap {
         return this;
     }
 
+    /**
+     * handles creation of clusters
+     * @return {TileMap} instance of TileMap for chaining
+     */
     clusterHandler() {
         if (this.clusterHandlingTimeout) {
             this.clusterHandlingTimeout = clearTimeout(this.clusterHandlingTimeout);
@@ -464,6 +543,7 @@ export class TileMap {
                 this.eventManager.publish(Events.MarkerClusterer.UNCLUSTERIZE);
             }
         }, 150);
+        return this;
     }
 
     /**
@@ -511,6 +591,10 @@ export class TileMap {
         window.requestAnimFrame(() => this.mainLoop());
     }
 
+    /**
+     * draw all labels
+     * @return {TileMap} instance of TileMap for chaining
+     */
     drawLabels() {
         Helper.forEach(this.labels, (label) => label.draw());
         return this;
@@ -521,11 +605,11 @@ export class TileMap {
  * request animation frame browser polyfill
  * @return {Function} supported requestAnimationFrame-function
  */
-window.requestAnimFrame = (function(){
-  return window.requestAnimationFrame       ||
-         window.webkitRequestAnimationFrame ||
-         window.mozRequestAnimationFrame    ||
-         function( callback ){
-             window.setTimeout(callback, 1000 / 60);
-         };
+window.requestAnimFrame = (function() {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        function(callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
 })();

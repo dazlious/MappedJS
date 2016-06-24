@@ -7,7 +7,7 @@ export class LatLng {
 
     /**
      * length of a latlng
-     * @return {number} length of a latlng
+     * @return {Number} length of latlng
      */
     get length() {
         return Math.sqrt(Math.pow(this.lat, 2) + Math.pow(this.lng, 2));
@@ -23,8 +23,8 @@ export class LatLng {
 
     /**
      * @constructor
-     * @param  {number} lat = 0 - representation of latitude
-     * @param  {number} lng = 0 - representation of longitude
+     * @param  {Number} lat = 0 - representation of latitude
+     * @param  {Number} lng = 0 - representation of longitude
      * @return {LatLng} instance of LatLng for chaining
      */
     constructor(lat = 0, lng = 0) {
@@ -33,6 +33,11 @@ export class LatLng {
         return this;
     }
 
+    /**
+     * calculates distance between this and specified latlng
+     * @param  {LatLng} latlng = new LatLng() - specified latlng
+     * @return {Number} distance
+     */
     distance(latlng = new LatLng()) {
         return this.clone.substract(latlng).length;
     }
@@ -60,11 +65,11 @@ export class LatLng {
     }
 
     /**
-    * divides a latlng with a given factor
-    * @param  {number} factorLat = 1 - factor to divide lat with
-    * @param  {number} factorLng = factorLat - factor to divide lng with
-    * @return {LatLng} instance of LatLng for chaining
-    */
+     * divides a latlng with a given factor
+     * @param  {Number} factorLat = 1 - factor to divide lat with
+     * @param  {Number} factorLng = factorLat - factor to divide lng with
+     * @return {LatLng} instance of LatLng for chaining
+     */
     divide(factorLat = 1, factorLng = factorLat) {
         this.lat /= factorLat;
         this.lng /= factorLng;
@@ -73,8 +78,8 @@ export class LatLng {
 
     /**
      * multiplicates a latlng with a given factor
-     * @param  {number} factorLat = 1 - factor to multiplicate lat with
-     * @param  {number} factorLng = factorLat - factor to multiplicate lng with
+     * @param  {Number} factorLat = 1 - factor to multiplicate lat with
+     * @param  {Number} factorLng = factorLat - factor to multiplicate lng with
      * @return {LatLng} instance of LatLng for chaining
      */
     multiply(factorLat = 1, factorLng = factorLat) {
@@ -94,7 +99,7 @@ export class LatLng {
 
     /**
      * converts a LatLng to string
-     * @return {string} representing LatLng
+     * @return {String} representing LatLng
      */
     toString() {
         return `(${this.lat}, ${this.lng})`;

@@ -7,7 +7,7 @@ export class Point {
 
     /**
      * length of a point
-     * @return {number} length of a point
+     * @return {Number} length of a point
      */
     get length() {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
@@ -31,8 +31,8 @@ export class Point {
 
     /**
      * @constructor
-     * @param  {number} x = 0 - representation of x coordinate
-     * @param  {number} y = 0 - representation of y coordinate
+     * @param  {Number} x = 0 - representation of x coordinate
+     * @param  {Number} y = 0 - representation of y coordinate
      * @return {Point} instance of Point for chaining
      */
     constructor(x = 0, y = 0) {
@@ -65,8 +65,8 @@ export class Point {
 
     /**
      * multiplicates a point with a given x and y
-     * @param  {number} x = 1 - factor to multiplicate x with
-     * @param  {number} y = x - factor to multiplicate y with
+     * @param  {Number} x = 1 - factor to multiplicate x with
+     * @param  {Number} y = x - factor to multiplicate y with
      * @return {Point} instance of Point for chaining
      */
     multiply(x = 1, y = x) {
@@ -77,8 +77,8 @@ export class Point {
 
     /**
      * divide a point with a given x and y
-     * @param  {number} x = 1 - factor to divide x with
-     * @param  {number} y = x - factor to divide y with
+     * @param  {Number} x = 1 - factor to divide x with
+     * @param  {Number} y = x - factor to divide y with
      * @return {Point} instance of Point for chaining
      */
     divide(x = 1, y = x) {
@@ -107,8 +107,8 @@ export class Point {
 
     /**
      * translates a point by x and y
-     * @param  {number} x = 0 - value to move x
-     * @param  {number} y = x - value to move y
+     * @param  {Number} x = 0 - value to move x
+     * @param  {Number} y = x - value to move y
      * @return {Point} instance of Point for chaining
      */
     translate(x = 0, y = x) {
@@ -119,8 +119,8 @@ export class Point {
 
     /**
      * positions a point by x and y
-     * @param  {number} x = 0 - value to position x
-     * @param  {number} y = x - value to position y
+     * @param  {Number} x = 0 - value to position x
+     * @param  {Number} y = x - value to position y
      * @return {Point} instance of Point for chaining
      */
     position(x = 0, y = x) {
