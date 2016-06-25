@@ -456,6 +456,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    /**
+	     * loads a js script
+	     * @function
+	     * @memberof module:Helper
+	     * @param  {String} url - url to be loaded
+	     * @param  {Helper~loadScriptCallback} callback - function called when script is loaded successfully
+	     * @return {Helper} reference of Helper for chaining
+	     */
+	    loadScript: function loadScript(url, callback) {
+	        var head = Helper.find('head');
+	        var script = document.createElement('script');
+	        script.type = 'text/javascript';
+	        script.src = url;
+	        script.onreadystatechange = callback;
+	        script.onload = callback;
+	        head.appendChild(script);
+	        return this;
+	    },
+
+	    /**
 	     * for each helper
 	     * @function
 	     * @memberof module:Helper
@@ -6633,6 +6652,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 
 	    function ToolTip(_ref) {
+	        var _this = this;
+
 	        var container = _ref.container;
 	        var _ref$templates = _ref.templates;
 	        var templates = _ref$templates === undefined ? [] : _ref$templates;
@@ -6644,7 +6665,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.container = container;
 	        this.id = id;
 	        this.eventManager = new _Publisher.Publisher(this.id);
+	        if (_Handlebars2.default === undefined) {
+	            _Helper.Helper.loadScript("https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js", function () {
+	                _this.boot(templates);
+	            });
+	        } else {
+	            this.boot(templates);
+	        }
+	        return this;
+	    }
 
+	    /**
+	     * initialize boot up after Handlebars is loaded
+	     * @param  {Array} templates = [] - defined templates
+	     * @return {ToolTip} instance of ToolTip for chaining
+	     */
+
+
+	    ToolTip.prototype.boot = function boot(templates) {
 	        this.container.classList.add(_Events.Events.ToolTip.CLOSE);
 	        this.setupContainer();
 
@@ -6652,9 +6690,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.registerHandlebarHelpers();
 
 	        this.setPosition().initializeTemplates(templates);
-
 	        return this;
-	    }
+	    };
 
 	    /**
 	     * initialize all container and DOM objects for ToolTip
@@ -6684,8 +6721,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    ToolTip.prototype.registerHandlebarHelpers = function registerHandlebarHelpers() {
-	        if (_Handlebars2.default) {
-	            _Handlebars2.default.registerHelper('getRatio', function (w, h) {
+	        if (_Handlebars2.default || window.Handlebars) {
+	            (_Handlebars2.default || window.Handlebars).registerHelper('getRatio', function (w, h) {
 	                return h / w * 100 + "%";
 	            });
 	        }
@@ -6713,15 +6750,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    ToolTip.prototype.bindEvents = function bindEvents() {
-	        var _this = this;
+	        var _this2 = this;
 
 	        _Helper.Helper.addListener(window, _Events.Events.Handling.RESIZE, this.resizeHandler.bind(this));
 	        _Helper.Helper.addListener(this.close, _Events.Events.Handling.CLICK, function () {
-	            _this.closeTooltip();
+	            _this2.closeTooltip();
 	        });
 	        this.eventManager.subscribe(_Events.Events.ToolTip.OPEN, this.open.bind(this));
 	        this.eventManager.subscribe(_Events.Events.ToolTip.CLOSE, function () {
-	            _this.closeTooltip();
+	            _this2.closeTooltip();
 	        });
 	        return this;
 	    };
@@ -6745,15 +6782,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    ToolTip.prototype.insertContent = function insertContent() {
-	        var _this2 = this;
+	        var _this3 = this;
 
 	        var content = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
 	        this.content.innerHTML = "";
 	        _Helper.Helper.forEach(content, function (data) {
-	            if (_this2.templates[data.type]) {
-	                var html = _this2.templates[data.type](data.content);
-	                _this2.content.innerHTML += html;
+	            if (_this3.templates[data.type]) {
+	                var html = _this3.templates[data.type](data.content);
+	                _this3.content.innerHTML += html;
 	            }
 	        });
 	        return this;
@@ -6818,13 +6855,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    ToolTip.prototype.compileTemplates = function compileTemplates() {
-	        var _this3 = this;
+	        var _this4 = this;
 
 	        _Helper.Helper.forEach(this.templates, function (template, type) {
 	            _Helper.Helper.getFile(template, function (html) {
-	                _this3.templates[type] = _Handlebars2.default.compile(html);
-	                _this3.loadedTemplates++;
-	                if (_this3.allTemplatesLoaded) _this3.container.appendChild(_this3.popup);
+	                _this4.templates[type] = (_Handlebars2.default || window.Handlebars).compile(html);
+	                _this4.loadedTemplates++;
+	                if (_this4.allTemplatesLoaded) _this4.container.appendChild(_this4.popup);
 	            });
 	        });
 	        return this;

@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">27.91% </span>
+        <span class="strong">23.53% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>12/43</span>
+        <span class='fraction'>12/51</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">43.86% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>25/57</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">35% </span>
+        <span class="strong">33.33% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>7/20</span>
+        <span class='fraction'>7/21</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">28.95% </span>
+        <span class="strong">23.91% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>11/38</span>
+        <span class='fraction'>11/46</span>
       </div>
     </div>
   </div>
@@ -231,7 +231,25 @@
 186
 187
 188
-189</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -377,6 +395,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -425,7 +461,7 @@
  * @copyright Michael Duve 2016
  * @module Helper
  */
-export const Helper = <span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" >{</span></span></span></span></span></span></span></span></span>
+export const Helper = <span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" ><span class="fstat-no" title="function not covered" >{</span></span></span></span></span></span></span></span></span></span>
     /**
      * request json-data from given file and calls callback on success
      * @function
@@ -557,6 +593,24 @@ export const Helper = <span class="fstat-no" title="function not covered" ><span
 <span class="cstat-no" title="statement not covered" >        return this;</span>
     },
     /**
+     * loads a js script
+     * @function
+     * @memberof module:Helper
+     * @param  {String} url - url to be loaded
+     * @param  {Helper~loadScriptCallback} callback - function called when script is loaded successfully
+     * @return {Helper} reference of Helper for chaining
+     */
+    loadScript(url, callback) {
+<span class="cstat-no" title="statement not covered" >        const head = Helper.find('head');</span>
+<span class="cstat-no" title="statement not covered" >        const script = document.createElement('script');</span>
+<span class="cstat-no" title="statement not covered" >        script.type = 'text/javascript';</span>
+<span class="cstat-no" title="statement not covered" >        script.src = url;</span>
+<span class="cstat-no" title="statement not covered" >        script.onreadystatechange = callback;</span>
+<span class="cstat-no" title="statement not covered" >        script.onload = callback;</span>
+<span class="cstat-no" title="statement not covered" >        head.appendChild(script);</span>
+<span class="cstat-no" title="statement not covered" >        return this;</span>
+    },
+    /**
      * for each helper
      * @function
      * @memberof module:Helper
@@ -613,7 +667,7 @@ export const Helper = <span class="fstat-no" title="function not covered" ><span
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jun 24 2016 17:19:39 GMT+0200 (CEST)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Jun 25 2016 16:39:49 GMT+0200 (CEST)
 </div>
 </div>
 <script src="prettify.js"></script>

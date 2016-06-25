@@ -135,6 +135,7 @@ Helper for general purposes
     * [.clamp(v, min, max)](#module_Helper.clamp) ⇒ <code>Number</code>
     * [.loadImage(cb)](#module_Helper.loadImage) ⇒ <code>Helper</code>
     * [.getFile(url, callback)](#module_Helper.getFile) ⇒ <code>Helper</code>
+    * [.loadScript(url, callback)](#module_Helper.loadScript) ⇒ <code>Helper</code>
     * [.forEach(a, cb)](#module_Helper.forEach) ⇒ <code>Helper</code>
     * [.toRadians(degrees)](#module_Helper.toRadians) ⇒ <code>Number</code>
     * [.isMouse()](#module_Helper.isMouse) ⇒ <code>Boolean</code>
@@ -260,6 +261,18 @@ request data from given file and calls callback on success
 
 - url <code>string</code> - path to file
 - callback <code>Helper~getFileCallback</code> - function called when data is loaded successfully
+
+<a name="module_Helper.loadScript"></a>
+
+### Helper.loadScript(url, callback) ⇒ <code>Helper</code>
+loads a js script
+
+**Kind**: static method of <code>[Helper](#module_Helper)</code>  
+**Returns**: <code>Helper</code> - reference of Helper for chaining  
+**Params**
+
+- url <code>String</code> - url to be loaded
+- callback <code>Helper~loadScriptCallback</code> - function called when script is loaded successfully
 
 <a name="module_Helper.forEach"></a>
 
@@ -2927,6 +2940,7 @@ draw all labels
 * [ToolTip](#ToolTip)
     * [new ToolTip(container, templates, id)](#new_ToolTip_new)
     * [.allTemplatesLoaded](#ToolTip+allTemplatesLoaded) ⇒ <code>Boolean</code>
+    * [.boot(templates)](#ToolTip+boot) ⇒ <code>[ToolTip](#ToolTip)</code>
     * [.setupContainer()](#ToolTip+setupContainer) ⇒ <code>[ToolTip](#ToolTip)</code>
     * [.registerHandlebarHelpers()](#ToolTip+registerHandlebarHelpers) ⇒ <code>[ToolTip](#ToolTip)</code>
     * [.initializeTemplates(templates)](#ToolTip+initializeTemplates) ⇒ <code>[ToolTip](#ToolTip)</code>
@@ -2955,6 +2969,17 @@ checks if all templates were loaded
 
 **Kind**: instance property of <code>[ToolTip](#ToolTip)</code>  
 **Returns**: <code>Boolean</code> - wheter true if all templates were loaded or false  
+<a name="ToolTip+boot"></a>
+
+### toolTip.boot(templates) ⇒ <code>[ToolTip](#ToolTip)</code>
+initialize boot up after Handlebars is loaded
+
+**Kind**: instance method of <code>[ToolTip](#ToolTip)</code>  
+**Returns**: <code>[ToolTip](#ToolTip)</code> - instance of ToolTip for chaining  
+**Params**
+
+- templates <code>Array</code> - = [] - defined templates
+
 <a name="ToolTip+setupContainer"></a>
 
 ### toolTip.setupContainer() ⇒ <code>[ToolTip](#ToolTip)</code>

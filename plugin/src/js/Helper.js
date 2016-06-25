@@ -136,6 +136,24 @@ export const Helper = {
         return this;
     },
     /**
+     * loads a js script
+     * @function
+     * @memberof module:Helper
+     * @param  {String} url - url to be loaded
+     * @param  {Helper~loadScriptCallback} callback - function called when script is loaded successfully
+     * @return {Helper} reference of Helper for chaining
+     */
+    loadScript(url, callback) {
+        const head = Helper.find('head');
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = url;
+        script.onreadystatechange = callback;
+        script.onload = callback;
+        head.appendChild(script);
+        return this;
+    },
+    /**
      * for each helper
      * @function
      * @memberof module:Helper
